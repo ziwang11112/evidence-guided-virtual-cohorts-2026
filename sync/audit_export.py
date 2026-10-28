@@ -18,6 +18,7 @@ LOCAL_FILES = {
     "sync/INSULIN_PILOT_REVISION.json", "sync/INSULIN_EXPORT_RECEIPT.json",
     "sync/audit_insulin_export.py", "docs/INSULIN_EXPORT.md",
     "sync/DESIGN_REVIEW_SYNC_2026-10-28.json",
+    "sync/DESIGN_REVIEW_SYNC_2026-10-28_v2.json",
 }
 GENERATED_AUDIT = {"sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv"}
 ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf", ".txt"}
