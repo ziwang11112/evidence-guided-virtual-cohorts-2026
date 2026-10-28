@@ -1,0 +1,81 @@
+"""Refresh only a reviewed exact-path allowlist. Never upload or push anything."""
+from __future__ import annotations
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+ALLOWLIST = ROOT / "sync/source_allowlist.json"
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def under(root, relative):
+    path = root / relative
+    if Path(relative).is_absolute() or ".." in Path(relative).parts:
+        raise ValueError("Only repository-relative paths are allowed")
+    if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
+        raise ValueError("Path escapes declared root")
+    return path
+
+
+def normalize_review(value, workspace):
+    if isinstance(value, dict):
+        return {normalize_review(k, workspace): normalize_review(v, workspace) for k, v in value.items()}
+    if isinstance(value, list):
+        return [normalize_review(v, workspace) for v in value]
+    if isinstance(value, str):
+        portable = value.replace("\\", "/")
+        prefix = workspace.as_posix().rstrip("/") + "/"
+        if portable.lower().startswith(prefix.lower()):
+            return portable[len(prefix):]
+    return value
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--workspace", type=Path, required=True)
+    args = parser.parse_args()
+    workspace = args.workspace.resolve(strict=True)
+    if workspace == ROOT:
+        raise ValueError("Source workspace must differ from export root")
+    allowlist_bytes = ALLOWLIST.read_bytes()
+    items = json.loads(allowlist_bytes)["files"]
+    destinations = [item["destination"] for item in items]
+    if len(destinations) != len(set(destinations)):
+        raise ValueError("Duplicate destination")
+    prepared = []
+    for item in items:
+        source = under(workspace, item["source"])
+        destination = under(ROOT, item["destination"])
+        raw = source.read_bytes()
+        if item["transform"] == "none":
+            exported = raw
+        elif item["transform"] == "normalize_review_workspace_paths":
+            obj = normalize_review(json.loads(raw.decode("utf-8-sig")), workspace)
+            exported = (json.dumps(obj, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+        else:
+            raise ValueError("Unknown reviewed transformation")
+        prepared.append((item, source, destination, raw, exported))
+    records = []
+    for item, source, destination, raw, exported in prepared:
+        # Detect source edits during preparation; never silently mix snapshots.
+        if source.read_bytes() != raw:
+            raise ValueError(f"Source changed during refresh: {item['source']}")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(exported)
+        records.append({**item, "source_bytes": len(raw), "export_bytes": len(exported),
+                        "source_sha256": sha(raw), "export_sha256": sha(exported)})
+    manifest = {"schema_version": 1, "allowlist_sha256": sha(allowlist_bytes),
+                "source_file_count": len(records), "source_workspace": "supplied locally; intentionally not recorded",
+                "scope": "Sanitized code and aggregate evidence export; full clinical replay is not self-contained",
+                "files": records}
+    (ROOT / "sync/EXPORT_MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"copied_reviewed_files": len(records), "export_bytes": sum(r['export_bytes'] for r in records)}))
+
+
+if __name__ == "__main__":
+    main()
