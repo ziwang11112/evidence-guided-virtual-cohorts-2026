@@ -1,0 +1,134 @@
+{
+  "parameters": {
+    "family": "lognormal",
+    "mean_intercept": 2.0,
+    "mean_slope": 1.0,
+    "group_multiplier": 1.25,
+    "conditional_cv": 0.5,
+    "interpolation": "linear_mean_constant_cv",
+    "residual_dependence": "conditional_iid"
+  },
+  "assumptions": [
+    {
+      "id": "A_FAMILY",
+      "description": "Use a conditional lognormal family. Positivity and the first two moments motivate this admissible choice, but the sources do not identify family, tails, quantiles, or the absence of an atom at zero."
+    },
+    {
+      "id": "A_INTERPOLATION",
+      "description": "Within task range 0<=x<=2, interpolate the conditional mean linearly and retain CV=0.5. Source constraints only cover x=0,1,2; no continuous interpolation or derivative is reported."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Transfer both conditional mean and individual SD from the fictional group-specific sources to the invented target rows, treating x and group as sufficient for the assigned outcome distribution. This is not validated by a real target outcome."
+    },
+    {
+      "id": "A_IID",
+      "description": "Generate independent residual draws conditional on x and group; unreported clustering, dependence, latent covariates, and measurement heterogeneity are not modeled. Independence is a construction assumption, not a source result."
+    },
+    {
+      "id": "A_FIXED_MOMENTS",
+      "description": "Treat reported fictional moments as fixed constraints. Their estimation uncertainty, sample sizes, and rounding uncertainty are unavailable; do not reinterpret individual SD as SE or infer statistical precision."
+    },
+    {
+      "id": "A_REPLAY_REPLICATION",
+      "description": "Each replay source context contains 20000 covariate-only Monte Carlo replication rows at each exact x stratum. These are artificial population draws conditional on the reported strata, not a reconstruction of an unknown source sample size or source x frequencies; comparisons are within each stratum."
+    }
+  ],
+  "parameter_provenance": {
+    "family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FAMILY"
+      ],
+      "derivation": "Conditional lognormal is one nonnegative distribution compatible with each specified positive mean and SD; it is not uniquely identified."
+    },
+    "mean_intercept": {
+      "evidence_ids": [
+        "A_x0_mean_y_reported"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_FIXED_MOMENTS"
+      ],
+      "derivation": "At group=0,x=0 the reported mean is 2 u."
+    },
+    "mean_slope": {
+      "evidence_ids": [
+        "A_x0_mean_y_reported",
+        "A_x1_mean_y_reported",
+        "A_x2_mean_y_reported"
+      ],
+      "assumption_ids": [
+        "A_INTERPOLATION",
+        "A_TRANSPORT",
+        "A_FIXED_MOMENTS"
+      ],
+      "derivation": "At group=0, both successive mean differences per x_unit equal 1: (3-2)/(1-0)=(4-3)/(2-1)=1 u/x_unit. Linear extension between these strata is assumed."
+    },
+    "group_multiplier": {
+      "evidence_ids": [
+        "A_x0_mean_y_reported",
+        "A_x1_mean_y_reported",
+        "A_x2_mean_y_reported",
+        "B_x0_mean_y_derived",
+        "B_x1_mean_y_derived",
+        "B_x2_mean_y_derived"
+      ],
+      "assumption_ids": [
+        "A_INTERPOLATION",
+        "A_TRANSPORT",
+        "A_FIXED_MOMENTS"
+      ],
+      "derivation": "After converting B to y units, its means divided by A's at each matching x are 2.5/2=3.75/3=5/4=1.25. Use this ratio across the task x range; it encodes a group-by-x interaction on the additive scale."
+    },
+    "conditional_cv": {
+      "evidence_ids": [
+        "A_x0_mean_y_reported",
+        "A_x0_sd_y_reported",
+        "A_x1_mean_y_reported",
+        "A_x1_sd_y_reported",
+        "A_x2_mean_y_reported",
+        "A_x2_sd_y_reported",
+        "B_x0_mean_y_derived",
+        "B_x0_sd_y_derived",
+        "B_x1_mean_y_derived",
+        "B_x1_sd_y_derived",
+        "B_x2_mean_y_derived",
+        "B_x2_sd_y_derived"
+      ],
+      "assumption_ids": [
+        "A_INTERPOLATION",
+        "A_TRANSPORT",
+        "A_FIXED_MOMENTS"
+      ],
+      "derivation": "SD/mean equals 0.5 in all six source strata. For lognormal y with mean m and CV c, log variance=ln(1+c^2), log location=ln(m)-ln(1+c^2)/2, so SD(y)=c*m."
+    },
+    "interpolation": {
+      "evidence_ids": [
+        "A_x0_mean_y_reported",
+        "A_x0_sd_y_reported",
+        "A_x1_mean_y_reported",
+        "A_x1_sd_y_reported",
+        "A_x2_mean_y_reported",
+        "A_x2_sd_y_reported",
+        "B_x0_mean_y_derived",
+        "B_x0_sd_y_derived",
+        "B_x1_mean_y_derived",
+        "B_x1_sd_y_derived",
+        "B_x2_mean_y_derived",
+        "B_x2_sd_y_derived"
+      ],
+      "assumption_ids": [
+        "A_INTERPOLATION"
+      ],
+      "derivation": "Use m(x,g)=(2+x)*1.25**g and s(x,g)=0.5*m(x,g) over 0<=x<=2. Source-point equality does not establish the relationship between strata."
+    },
+    "residual_dependence": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_IID"
+      ],
+      "derivation": "Use NumPy default_rng(seed) for independent conditional lognormal draws in input row order; random seeds represent individual residual variation only."
+    }
+  }
+}

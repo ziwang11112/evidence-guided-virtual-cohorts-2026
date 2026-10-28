@@ -1,0 +1,263 @@
+{
+  "parameters": {
+    "model_family": "conditional_lognormal_with_arithmetic_mean",
+    "column_map": {
+      "age": "age",
+      "sex": "sex",
+      "bmi": "bmi",
+      "outcome": "tg_mg_dl",
+      "male_code": 1
+    },
+    "mean_anchor": {
+      "male": 142.0,
+      "female": 97.0
+    },
+    "bmi_reference": {
+      "male": 24.4,
+      "female": 23.0
+    },
+    "bmi_response": {
+      "slope": 6.8,
+      "bend_at": 35.0,
+      "bend_scale": 10.0
+    },
+    "age_response": {
+      "minimum": 20.0,
+      "maximum": 80.0,
+      "male_reference": 43.9,
+      "male_slope": -0.3,
+      "female_amplitude": 60.0,
+      "female_midpoint": 50.0,
+      "female_width": 4.0,
+      "female_center": 0.32
+    },
+    "positive_mean": {
+      "floor": 20.0,
+      "softness": 10.0
+    },
+    "residual_log_sd": {
+      "male": 0.65,
+      "female": 0.48
+    },
+    "source_recipe": {
+      "seed": 83017,
+      "oh_replications": 8,
+      "oh_counts": {
+        "male": 1029,
+        "female": 1643
+      },
+      "oh_age": {
+        "male": [
+          43.9,
+          13.6
+        ],
+        "female": [
+          43.3,
+          12.7
+        ]
+      },
+      "oh_bmi": {
+        "male": [
+          24.4,
+          3.1
+        ],
+        "female": [
+          23.0,
+          3.2
+        ]
+      },
+      "oh_age_bounds": [
+        20,
+        79
+      ],
+      "oh_bmi_bounds": [
+        16,
+        40
+      ],
+      "wh_rows": 16000,
+      "wh_age_origin": 45,
+      "wh_age_mean": 54.5,
+      "wh_age_sd": 7.2,
+      "wh_age_upper": 100,
+      "wh_bmi_mean": 25.9,
+      "wh_bmi_sd": 5.0
+    },
+    "uncertainty_mode": "residual_sampling_only"
+  },
+  "assumptions": [
+    {
+      "id": "A_scale",
+      "description": "Oh Table 1 mean/SD and Table 2 TG levels are provisionally interpreted as arithmetic mg/dL summaries; Table 3 coefficient provisionally mg/dL per BMI. General geometric-average/log statement is unresolved, not silently ignored."
+    },
+    {
+      "id": "A_transport",
+      "description": "Transport Korean untreated family/twin relationships and US older healthy trial-volunteer female evidence to US adults. Fasting >=12 vs >=8 hours and plasma vs target serum are treated as comparable without a measured conversion. No population-specific offset is identified."
+    },
+    {
+      "id": "A_family",
+      "description": "Conditional TG is lognormal with mean on arithmetic scale and sex-specific constant log residual SD; independent residual draws absorb omitted metabolic, behavioral, treatment and family factors. No residual family linkage is known for target."
+    },
+    {
+      "id": "A_age",
+      "description": "Female age pattern is approximated by a smooth midlife rise from marginal Oh age strata, with midpoint50,width4,amplitude60 mg/dL and baseline logistic value .32; male modest slope -.3 mg/dL/year. These are conditional modeling assumptions because age-BMI joint dependence and confounding are unknown. Age response flat beyond20-80."
+    },
+    {
+      "id": "A_bmi",
+      "description": "Common conditional arithmetic BMI slope rounded to6.8 from Oh6.813, not a causal effect. Above BMI35 effect bends with effectiveBMI=35+10*log(1+(BMI-35)/10); no source identifies this extreme-range extension."
+    },
+    {
+      "id": "A_anchor",
+      "description": "Source-sex mean anchors rounded to142 and97 mg/dL and centered at published sex-specific BMI means. No recentering to target or generated-sample moments; not all source estimates are exactly fitted."
+    },
+    {
+      "id": "A_dispersion",
+      "description": "Conditional residual log SD=.65 men/.48 women are rounded construction choices informed by Oh marginal CVs and expected covariate contribution. Reported marginal SD is not conditional SD. Bansal median/IQR suggests right skew of similar order; no formal pooled estimate or certainty weight."
+    },
+    {
+      "id": "A_positive",
+      "description": "Conditional arithmetic mean uses20+10*log(1+exp((linearMean-20)/10)) for positivity. Floor/softness are assumptions affecting low predictions; outcomes themselves are untruncated lognormal positive draws."
+    },
+    {
+      "id": "A_oh_context",
+      "description": "Oh source covariates use independent truncated normals within sex, based on Table1 mean/SD: ages20-79 rounded, BMI16-40. Rejection changes marginal moments; tails, distributional shapes, unknown age-BMI dependence, medication exclusions and family dependence are not reconstructed. Sex counts are8 times reported, only to reduce Monte Carlo noise."
+    },
+    {
+      "id": "A_wh_context",
+      "description": "WHS source covariates: all women; age45+Gamma with moments9.5 and7.2, rounded/clipped45-100; BMI lognormal with arithmetic mean25.9 SD5.0; independent age and BMI. Unreported joint structure, trial selection, medications and hormone use are not represented.16000 synthetic rows are Monte Carlo integration, not evidence."
+    },
+    {
+      "id": "A_threshold",
+      "description": "Source integer TG categories are applied literally to continuous generated TG, including91-147; gaps between90/91 and147/148 are not reassigned. This rounding approximation can change proportions. Oh BMI intervals assigned [20,23),[23,25),[25,30],>30; endpoints are ambiguous in article."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Seeds vary only individual residual noise. Evidence interpretation, parameter uncertainty, model selection, unobserved confounding and transport uncertainty are not calibrated or sampled."
+    }
+  ],
+  "parameter_provenance": {
+    "model_family": {
+      "evidence_ids": [
+        "wh_median",
+        "wh_q25",
+        "wh_q75"
+      ],
+      "assumption_ids": [
+        "A_family",
+        "A_transport"
+      ],
+      "derivation": "Right skew and positive support motivate lognormal residuals; not proof of lognormality."
+    },
+    "column_map": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_transport"
+      ],
+      "derivation": "Task names and male code1; female2."
+    },
+    "mean_anchor": {
+      "evidence_ids": [
+        "oh_male_tg_mg_dl_mean",
+        "oh_female_tg_mg_dl_mean"
+      ],
+      "assumption_ids": [
+        "A_scale",
+        "A_anchor"
+      ],
+      "derivation": "Round141.6 to142 and97.2 to97; conditional-mean anchors, not fitted sample means."
+    },
+    "bmi_reference": {
+      "evidence_ids": [
+        "oh_male_bmi_mean",
+        "oh_female_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_anchor"
+      ],
+      "derivation": "Published BMI centers; fixed for all contexts."
+    },
+    "bmi_response": {
+      "evidence_ids": [
+        "oh_bmi_slope",
+        "wh_spearman_bmi"
+      ],
+      "assumption_ids": [
+        "A_scale",
+        "A_bmi",
+        "A_transport"
+      ],
+      "derivation": "Round6.813 to6.8; WHS rank association is qualitative corroboration only. Bend35/scale10 are extrapolation assumptions."
+    },
+    "age_response": {
+      "evidence_ids": [
+        "oh_male_age0",
+        "oh_male_age1",
+        "oh_male_age2",
+        "oh_male_age3",
+        "oh_male_age4",
+        "oh_female_age0",
+        "oh_female_age1",
+        "oh_female_age2",
+        "oh_female_age3",
+        "oh_female_age4",
+        "wh_spearman_age"
+      ],
+      "assumption_ids": [
+        "A_age",
+        "A_transport"
+      ],
+      "derivation": "Smooth approximation of sex-specific marginal age shapes; no rank-to-Pearson conversion or claim of identified conditional effects."
+    },
+    "positive_mean": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_positive"
+      ],
+      "derivation": "Smooth positive extension with floor20 and softness10 mg/dL."
+    },
+    "residual_log_sd": {
+      "evidence_ids": [
+        "oh_male_tg_mg_dl_mean",
+        "oh_male_tg_mg_dl_sd",
+        "oh_female_tg_mg_dl_mean",
+        "oh_female_tg_mg_dl_sd",
+        "wh_median",
+        "wh_q25",
+        "wh_q75"
+      ],
+      "assumption_ids": [
+        "A_scale",
+        "A_dispersion",
+        "A_family"
+      ],
+      "derivation": "Marginal lognormal-equivalent log SD sqrt(log(1+(SD/mean)^2)) is about.68 men/.58 women; choose.65/.48 for conditional residual after covariate variation. These are assumed conditional spreads, not published estimates."
+    },
+    "source_recipe": {
+      "evidence_ids": [
+        "oh_male_age_mean",
+        "oh_male_age_sd",
+        "oh_male_bmi_mean",
+        "oh_male_bmi_sd",
+        "oh_female_age_mean",
+        "oh_female_age_sd",
+        "oh_female_bmi_mean",
+        "oh_female_bmi_sd",
+        "wh_age_mean",
+        "wh_age_sd",
+        "wh_bmi_mean",
+        "wh_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_oh_context",
+        "A_wh_context"
+      ],
+      "derivation": "Fixed source-only covariate recipes. Gamma age shape=((54.5-45)/7.2)^2,scale=7.2^2/(54.5-45); lognormal BMI from arithmetic moments. No TG generated or input."
+    },
+    "uncertainty_mode": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_uncertainty"
+      ],
+      "derivation": "No target outcome or requested favorable result conditions this construction."
+    }
+  }
+}

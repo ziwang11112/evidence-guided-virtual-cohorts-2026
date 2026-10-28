@@ -4,7 +4,7 @@ At the harness project root supplied with the task (the directory containing `co
 
 ## Available boundary
 
-The original validation/source-check/freeze/verify commands never execute Agent code. Separate explicit adapters now provide task-bound screened literature retrieval and generator-only WSL/bubblewrap execution when that configured runtime is available. No local execution fallback is provided. The calling environment still launches the LLM; its general file/tool access is not isolated by the generator sandbox. Generic independent target evaluation and automatic source-population replay remain later work.
+The original validation/source-check/freeze/verify commands never execute Agent code. Separate explicit adapters provide task-bound screened literature retrieval, generator-only WSL/bubblewrap execution, and execution-backed source replay for enrichment programs. No local execution fallback is provided. The calling environment still launches the LLM; its general file/tool access is not isolated by the generator sandbox. Generic independent target evaluation remains later work; any case-specific evaluator must keep target outcomes out of feedback.
 
 Approved source artifacts enter through the supplied registry with their hashes. Agents may cite admitted artifacts and explicit assumptions; they must not manufacture approval records to admit their own evidence. A hash establishes which bytes were used, not their scientific truth or applicability.
 
@@ -20,6 +20,8 @@ The task bundle contains its task description, allowed inputs and source registr
   checks.json
   generator.py OR generated.csv
   source_checks.json             optional
+  source_replay.json             optional execution-backed recipe
+  source_contexts/*.csv          optional covariate-only source inputs
 ```
 
 Submit exactly one of `generator.py` or `generated.csv`. This is an output-route choice, not a statement that either route is better. Whole-cohort, enrichment and completion tasks follow their own task-defined preservation and output requirements.
@@ -74,3 +76,16 @@ python -m cohort_harness verify-execution --bundle PATH --run-id NEW_RUN
 The runtime configuration is trusted controller input, not a scientific parameter. Each run has a new directory under `executions/`, preserving failures, limits, runtime information and file hashes. Read the execution status; starting a command does not prove success. An intact failed-run receipt can pass integrity verification while the recorded run remains failed. Direct-row submissions are copied and validated without executing generated code. Generator receipts do not by themselves link a source-check table to the appropriate source population or validate target scientific utility.
 
 If a command rejects an artifact, fix its declared contract or record the limitation; do not bypass source approval or inspect hidden outcomes to make it pass. Preserve command outcomes honestly, including unsupported operators and failed checks.
+
+## Execution-backed source feedback
+
+For a supplied enrichment-program replay, read `docs/SOURCE_REPLAY.md` in the harness project. Put the recipe and covariate-only input files inside the candidate before freezing. Source inputs have exactly the task identifier and observed columns; generated outcomes are prohibited. The current adapter supports identity measurement mapping only; retain original reported values and explicit derivations if preparing source evidence in task units. Unsupported statistics remain unreplayed rather than relabelled.
+
+```text
+python -m cohort_harness source-replay --bundle PATH --candidate NAME --replay-id NEW_ID --seed SEED --runtime CONFIG
+python -m cohort_harness verify-source-replay --bundle PATH --replay-id NEW_ID --candidate NAME
+```
+
+These commands keep feedback under `source_replays/`, outside the frozen candidate. They derive source execution tasks changing only row count and declared population, execute identical code/specification, verify output linkage and recompute diagnostics. `generation_link_verified` concerns those bytes and execution; it does not verify the source-population assumptions or establish scientific validity. Large numerical discrepancies are retained feedback, not automatically execution failures.
+
+After feedback, the builder may re-extract, revise or retain as the task allows. Bind a copy of the verified feedback in the new candidate's `checks.json` auxiliary artifacts. Keep the previous candidate intact and preserve source/target separation. The controller's target evaluator is never a generator tuning tool.

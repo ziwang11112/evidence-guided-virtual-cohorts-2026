@@ -1,0 +1,111 @@
+{
+  "version": "1.1",
+  "preparation_amendment": "Before any target analyses or builder access, supersede v1 preparation because pandas 3.0.3 XPORT reader decoded 325 true zero fasting weights as 5.397605346934028e-79. ReadStat 1.3.7 correctly decodes 2711 positive and 325 zero weights, matching official documentation. Statistical analysis plan unchanged.",
+  "case_id": "nhanes_2017_2018_reference_fasting_tg_whole_column",
+  "purpose": "Exploratory evidence-guided virtual-column analytical utility; no exact individual recovery claim.",
+  "selection_before_outcome_analysis": {
+    "cycle": "2017-2018",
+    "files": [
+      "DEMO_J",
+      "BMX_J",
+      "TRIGLY_J"
+    ],
+    "target": "LBXTR reference-method fasting serum triglycerides, mg/dL",
+    "domain": "RIDAGEYR 20 through 79 inclusive; RIAGENDR in 1,2; finite positive BMXBMI and LBXTR; finite positive WTSAF2YR; nonmissing SDMVSTRA and SDMVPSU; MEC examined RIDSTATR=2",
+    "age_rationale": "Exclude topcoded age 80+ so age association has an unambiguous year scale.",
+    "fasting": "Use WTSAF2YR>0. TRIGLY_J documentation assigns zero to participants not meeting 8 to <24 hour fasting or without qualifying lab specimen. No inclusion/reweighting of zero-weight records.",
+    "missingness": "Complete cases form a prespecified analysis domain. No outcome imputation, item-nonresponse reweighting, outlier removal, winsorization, or data-selected transformation. Inference does not establish representativeness after item nonresponse.",
+    "survey_universe": "All linked records with WTSAF2YR>0 and valid design variables remain in the variance-design table, including observations outside the complete-case adult domain. Their estimating-function contributions are zero."
+  },
+  "visible": {
+    "schema": [
+      "record_id",
+      "age",
+      "sex",
+      "bmi"
+    ],
+    "id": "Opaque random-order IDs; SEQN mapping stays custodial",
+    "sex": "1=male, 2=female, as recorded by NHANES RIAGENDR",
+    "age_unit": "years",
+    "bmi_unit": "kg/m^2",
+    "output": "Append finite positive tg_mg_dl; preserve all input cells and row order"
+  },
+  "transforms": {
+    "outcome": "natural logarithm of TG in mg/dL",
+    "rationale": "A priori multiplicative concentration/ratio estimand. No outcome distribution inspection used to choose transformation.",
+    "B": "(bmi-25)/5",
+    "A": "(age-50)/10",
+    "F": "1 if sex=2 else 0"
+  },
+  "models": {
+    "adjusted": "log(TG)=intercept+b_B*B+b_A*A+b_F*F+error",
+    "curvature": "log(TG)=intercept+b_B*B+b_A*A+b_F*F+b_Q*B^2+error",
+    "interaction": "log(TG)=intercept+b_B*B+b_A*A+b_F*F+b_I*B*F+error"
+  },
+  "endpoints": [
+    {
+      "id": "adjusted_bmi_per5",
+      "tier": "primary",
+      "model": "adjusted",
+      "contrast": "b_B",
+      "meaning": "TG geometric-mean ratio per 5 kg/m^2 higher BMI, adjusted for age and sex"
+    },
+    {
+      "id": "adjusted_age_per10",
+      "tier": "reserved_secondary",
+      "model": "adjusted",
+      "contrast": "b_A",
+      "meaning": "TG ratio per 10 years, adjusted for BMI and sex"
+    },
+    {
+      "id": "adjusted_female_vs_male",
+      "tier": "reserved_secondary",
+      "model": "adjusted",
+      "contrast": "b_F",
+      "meaning": "Female/male TG ratio, adjusted for BMI and age"
+    },
+    {
+      "id": "bmi_curvature_second_difference",
+      "tier": "reserved_secondary",
+      "model": "curvature",
+      "contrast": "2*b_Q",
+      "meaning": "log(TG at BMI35)-2*log(TG at BMI30)+log(TG at BMI25), age/sex held constant"
+    },
+    {
+      "id": "bmi_sex_interaction",
+      "tier": "reserved_secondary",
+      "model": "interaction",
+      "contrast": "b_I",
+      "meaning": "Female minus male log-TG slope per 5 kg/m^2; exponentiation is a ratio of BMI ratios"
+    }
+  ],
+  "estimation": {
+    "point": "Weighted least squares using WTSAF2YR (normalized by its domain mean for numerical stability; invariant to global weight rescaling)",
+    "variance": "With-replacement first-stage Taylor linearization. H=sum_domain(w*x*x'); score_i=domain_i*w_i*x_i*(y_i-x_i'b); u_hj=sum_i_in_PSU(score_i). Meat=sum_h m_h/(m_h-1)*sum_j (u_hj-mean_j(u_hj))*(u_hj-mean_j(u_hj))'. V=H^-1 Meat H^-1. Include every positive-weight design PSU, even with zero domain score; no finite population correction.",
+    "interval": "Two-sided 95% t interval with df equal to represented-domain PSUs minus represented-domain strata; report df and full design support. No parameter-count subtraction; this is an explicit NHANES nominal design-df convention.",
+    "singleton": "If a full-design stratum has fewer than two PSUs or domain design df<=0, stop and report non-estimable; no automatic lonely-PSU fix.",
+    "implementation": "Python NumPy/pandas/SciPy custom implementation; validate against analytic invented fixtures, WLS point estimate, weight rescaling and PSD covariance. R not found in PATH or standard installation locations; no claim of R survey cross-validation."
+  },
+  "comparison": {
+    "gate": "No evaluation until root confirms every initial/final generated target table is committed and its hashes are recorded. Custodian evaluates all committed outputs using identical frozen models, domain, rows, weights and survey design.",
+    "report": "Reference and each generated endpoint: log-scale coefficient, SE, 95% interval, exp-scale ratio interval and direction category (positive, negative, or interval includes zero). Report signed difference and absolute log-scale error, initial-to-final changes for matched seeds, and summaries across seeds.",
+    "limits": "Same-person generated and reference estimates are dependent; do not use independent-sample difference intervals. No scientific pass threshold is chosen. No equivalence or absence-of-association claim follows from nonsignificance. CI overlap or a generated point falling inside a reference CI is descriptive, not a calibrated coverage/equivalence test. Secondary intervals are unadjusted exploratory intervals. Draw variation is simulation sensitivity, not source/model/transport uncertainty. No post-evaluation builder revision."
+  },
+  "boundary": {
+    "type": "procedural only, not OS isolation",
+    "builder_excluded": [
+      "custodian directory",
+      "NHANES outcome tables or APIs",
+      "NHANES-derived studies as construction evidence",
+      "previous target outcome results"
+    ],
+    "release": "Only observed.csv, task_metadata.json, README.md, preparation_counts.json, and visible input hashes may be shared before commitment; protocol may be inspected by controller without outcomes."
+  },
+  "official_documentation": [
+    "https://wwwn.cdc.gov/nchs/data/nhanes/public/2017/datafiles/TRIGLY_J.htm",
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.htm",
+    "https://wwwn.cdc.gov/nchs/data/nhanes/public/2017/datafiles/DEMO_J.htm",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/varianceestimation.aspx",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/weighting.aspx"
+  ]
+}

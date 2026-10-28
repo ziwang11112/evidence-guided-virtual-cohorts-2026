@@ -1,0 +1,15 @@
+# Final decision: retain the initial scientific construction
+
+Retain generator.py and model_spec.json byte for byte. Retain the evidence, source replay plan, covariate recipes, and protocol seeds. The initial candidate remains frozen and unchanged. This consumes the one permitted feedback decision and claims no improvement in generated data.
+
+The supplied source-only feedback (SHA256 f63a0131b557789fd4f51d551fdb11c6d0d3d1fdf9d0aa620ea4b177cf8cb562) reports successful execution, linked generator/specification hashes, and all 12 planned source checks with 20000 used rows per stratum and no missing-row deletion. Its copy is bound in checks.json. Source B's original z evidence and derived y evidence remain intact.
+
+Across the six means, relative replay differences range from -0.486149% to 0.214411%; the maximum absolute difference is 1.3750 conditional Monte Carlo standard errors. Across the six sample SDs, relative differences range from -1.164526% to -0.836628%; the maximum absolute difference is 1.2418 approximate Monte Carlo standard errors. The outcome model analytically has exactly the prescribed conditional means and individual SDs. The supplied differences are compatible with finite simulation noise and do not indicate a justified model or extraction correction.
+
+For the mean, the Monte Carlo SE is sigma/sqrt(n). For sample SD, a delta-method calculation uses the lognormal fourth central moment, yielding kurtosis 8.03515625; SE(S) approximately equals sigma*sqrt((kurtosis-(n-3)/(n-1))/(4*n)). These are model-dependent simulation scales calculated after viewing feedback, not source-reported precision, preregistered thresholds, or inferential validation. Source estimation uncertainty remains unknown.
+
+Both contexts used the same fixed source seed with the same ordering and distributional shape, so B's replayed moments equal 1.25 times A's at matching x. Their relative errors coincide; they do not provide independent replication evidence. The fictional source cohorts being nonoverlapping does not make the Monte Carlo noise independent across those seeded runs. No seed search, rescaling to realized moments, or parameter adjustment is warranted.
+
+The initial construction rationale and initial static check records are preserved under initial_records/. Current static checks revalidate contracts, source covariate inputs, replay/evidence mappings, actual feedback hashes, and byte-identical scientific artifacts. The review reads only the allowed feedback and the candidate's permitted inputs; it does not locally execute the generator or read target reference outcomes.
+
+Unresolved assumptions remain the lognormal family and tails, lack of a zero atom, interpolation between x strata, conditional independence, transport to target rows, and fixed source moments despite unavailable source sample sizes/uncertainty. Source moment consistency cannot identify individual outcomes, causal effects, target predictive calibration, or clinical utility. The final stopping reason is that the only allowed source-feedback round revealed no substantive correction to make; no improvement is asserted.

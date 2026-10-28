@@ -31,11 +31,15 @@ Where source context is sufficient, submit a source-statistic check using a simu
 
 Use `source-checks` to calculate these submitted checks. Its result concerns numerical consistency of the supplied table and operator; the harness does not certify that the table came from the generator. Reproducing a fitted source statistic is not independent target validation.
 
+When the execution-backed `source-replay` adapter is supplied for an enrichment program, freeze a source-context recipe and covariate-only inputs with the candidate. It executes the same generator and specification and binds statistics to verified output. Read the project's `docs/SOURCE_REPLAY.md` for its schema. Declare any unreported joint-distribution or measurement assumptions; this linkage does not establish that an approximated source population is correct. Do not substitute Pearson for Spearman, arithmetic for geometric means, or a different adjustment set simply to make an available operator fit.
+
 ## Revise and preserve decisions
 
 Use permitted source checks or review findings to decide whether to re-extract, revise, investigate sensitivity, retain or stop. When the literature adapter is supplied, use the bundle's fixed session and task-allowed actions; do not replace a session or change the task to reset budgets. It admits source artifacts and appends their registration. If a source has multiple versions, explicitly select and record one rather than assuming the largest number is best. Prefer a change tied to a concrete finding over decorative revisions. A justified no-op is valid.
 
 Keep previous candidates unchanged. Submit a new candidate and a truthful revision record when revising, then use `freeze` and `verify` as the interface describes. Do not fit a hidden answer, desired p-value or a favorable random draw. Respect the task budget and stop when no useful permitted action remains.
+
+Bind the actual feedback report in the next candidate's check artifacts, including when retaining the model. Distinguish a discrepancy caused by Monte Carlo sampling, approximate source covariates, extraction, or model structure before changing the generator. Keep initial and final candidates for the task's fixed evaluation schedule; a better source fit alone is not evidence of better unreported target analyses.
 
 ## State what the output supports
 

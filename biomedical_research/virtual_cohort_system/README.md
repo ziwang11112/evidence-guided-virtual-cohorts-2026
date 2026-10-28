@@ -1,10 +1,10 @@
 # Evidence-guided virtual cohort system
 
-Version 0.2.0 — M2 adapter development, 28 October 2026. The original milestone 1 report remains a historical snapshot.
+Version 0.3.0 — source feedback and one reserved public-data pilot, 28 October 2026. M1/M2 reports remain historical snapshots.
 
-See [M2 progress and actual checks](MILESTONE_2_PROGRESS.md), [machine-readable validation](m2_validation.json), and the [interactive architecture document](docs/system-explorer/index.html). The HTML retains its labeled M1 snapshot and links to this newer progress record.
+See [M3 results and limitations](MILESTONE_3_RESULTS.md), [current validation](m3_validation.json), [historical M2 progress](MILESTONE_2_PROGRESS.md), and the [interactive architecture document](docs/system-explorer/index.html). The HTML retains its labelled M1 snapshot and links to newer progress.
 
-The objective is to let a capable Agent integrate permitted research evidence into reusable virtual data for biomedical analysis. The system supports three task contracts: whole-cohort generation, enrichment with an entirely unmeasured variable, and completion of missing cells. Program generation and direct row submission are both legitimate routes. M1 supplied contracts and checks; M2 adds task-bound literature access and explicit generator-only execution. No scientific improvement is established by these software changes.
+The objective is to let a capable Agent integrate permitted research evidence into reusable virtual data for biomedical analysis. The system supports three task contracts: whole-cohort generation, enrichment with an entirely unmeasured variable, and completion of missing cells. Program generation and direct row submission are both legitimate routes. M1 supplied contracts/checks; M2 added literature access and explicit execution. M3 links enrichment-program execution to source feedback and Agent revision. One TG pilot showed partial improvement and a worsened sex contrast; general superiority remains unestablished.
 
 ## Responsibilities
 
@@ -52,9 +52,11 @@ python -m cohort_harness.literature --bundle PATH search --query QUERY
 python -m cohort_harness.literature --bundle PATH fetch --pmcid PMCID --version N
 python -m cohort_harness execute --bundle PATH --candidate NAME --run-id NEW_RUN --seed SEED --runtime CONFIG
 python -m cohort_harness verify-execution --bundle PATH --run-id NEW_RUN
+python -m cohort_harness source-replay --bundle PATH --candidate NAME --replay-id NEW_ID --seed SEED --runtime CONFIG
+python -m cohort_harness verify-source-replay --bundle PATH --replay-id NEW_ID --candidate NAME
 ```
 
-See [literature access](docs/LITERATURE_ADAPTER.md) and [execution](docs/EXECUTION_ADAPTER.md). `validate` remains static. Execution requires a frozen candidate, writes a new `executions/NEW_RUN/` directory and preserves failures. Failure to obtain the configured isolated runtime does not permit execution on the host. A successful integrity verification of a failed-run receipt does not change that run's failed status. Resource limits include wall-clock termination and per-process limits; they are not an aggregate cgroup memory guarantee.
+See [literature access](docs/LITERATURE_ADAPTER.md), [execution](docs/EXECUTION_ADAPTER.md), and [source replay](docs/SOURCE_REPLAY.md). `validate` remains static. Execution requires a frozen candidate, writes a new `executions/NEW_RUN/` directory and preserves failures. Failure to obtain the configured isolated runtime does not permit execution on the host. A successful integrity verification of a failed-run receipt does not change that run's failed status. Resource limits include wall-clock termination and per-process limits; they are not an aggregate cgroup memory guarantee.
 
 On this Windows account the default pytest temporary directory was inaccessible. If needed, use `--basetemp .pytest_runs/NEW_UNIQUE_NAME` with a fresh directory name inside this project. Never point that option at an existing data or source directory, since pytest manages its contents.
 

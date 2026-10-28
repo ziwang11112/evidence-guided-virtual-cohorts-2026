@@ -75,6 +75,19 @@ def main(argv=None):
     execution_verify = subs.add_parser("verify-execution", help="Verify recorded execution commitments")
     execution_verify.add_argument("--bundle", required=True)
     execution_verify.add_argument("--run-id", required=True)
+    replay = subs.add_parser("source-replay", help="Execute a frozen source-context plan and compute linked diagnostics")
+    replay.add_argument("--bundle", required=True)
+    replay.add_argument("--candidate", required=True)
+    replay.add_argument("--replay-id", required=True)
+    replay.add_argument("--seed", required=True, type=int)
+    replay.add_argument("--runtime", required=True)
+    replay.add_argument("--timeout-seconds", type=int, default=30)
+    replay.add_argument("--memory-mb", type=int, default=1024)
+    replay.add_argument("--output-bytes", type=int, default=20_000_000)
+    replay_verify = subs.add_parser("verify-source-replay", help="Recheck source replay provenance and numerical diagnostics")
+    replay_verify.add_argument("--bundle", required=True)
+    replay_verify.add_argument("--replay-id", required=True)
+    replay_verify.add_argument("--candidate")
     for name in ("validate", "source-checks", "freeze", "verify"):
         command = subs.add_parser(name)
         command.add_argument("--bundle", required=True)
@@ -96,6 +109,18 @@ def main(argv=None):
         elif args.command == "verify-execution":
             from .execution import verify_execution
             result = verify_execution(Path(args.bundle).resolve(), args.run_id)
+        elif args.command == "source-replay":
+            from .source_replay import run_source_replay
+            bundle = Path(args.bundle).resolve()
+            result = run_source_replay(bundle, candidate_path(bundle, args.candidate), args.replay_id,
+                                       args.seed, runtime=read(args.runtime),
+                                       timeout_seconds=args.timeout_seconds, memory_mb=args.memory_mb,
+                                       output_bytes=args.output_bytes)
+        elif args.command == "verify-source-replay":
+            from .source_replay import verify_source_replay
+            bundle = Path(args.bundle).resolve()
+            candidate = candidate_path(bundle, args.candidate) if args.candidate else None
+            result = verify_source_replay(bundle, args.replay_id, candidate=candidate)
         else:
             bundle = Path(args.bundle).resolve()
             candidate = candidate_path(bundle, args.candidate)
@@ -121,7 +146,7 @@ def main(argv=None):
                 result = freeze_candidate(bundle, candidate, parent_receipt=parent,
                                           revision=read(args.revision) if args.revision else None)
         print(json.dumps(result, indent=2, allow_nan=False))
-        return 2 if args.command == "execute" and result.get("status") in {"failed", "timeout", "error"} else 0
+        return 2 if args.command in {"execute", "source-replay"} and result.get("status") in {"failed", "timeout", "error"} else 0
     except (ValueError, KeyError, TypeError, OSError, pd.errors.ParserError) as exc:
         print(json.dumps({"status": "error", "type": type(exc).__name__, "message": str(exc)}), file=sys.stderr)
         return 2
