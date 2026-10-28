@@ -1,8 +1,10 @@
 # Evidence-guided virtual cohorts
 
-Start with [Stage 1 results](stage1/RESULTS.md) for the completed new construction experiment, [RESULTS.md](RESULTS.md) for the earlier completion replay, or [METHODS_AND_EXPERIMENT_PLAN.md](METHODS_AND_EXPERIMENT_PLAN.md) for the method-paper design.
+Start with [the current research scope](CURRENT_RESEARCH_SCOPE.md): evidence-guided whole-cohort generation, enrichment with variables never measured in the original cohort, and missing-cell completion. Scientific conclusions and relationships from downstream analyses are the main evaluation target; exact reconstruction of a complete real table is not universally required. This amendment supersedes the earlier task hierarchy and mandatory scenario policy; it reports no new experimental results.
 
-The intended use is biomedical research rehearsal: preparing analyses, exploring evidence-compatible scenarios and evaluating study-design choices. Whole-cohort synthesis and partial-record completion are separate tracks. Exact numerical replication is not required; analytical interpretation, magnitude, uncertainty and practical usefulness remain visible.
+See [Stage 1 results](stage1/RESULTS.md) for the completed restricted construction experiment, [RESULTS.md](RESULTS.md) for the earlier completion replay, and [METHODS_AND_EXPERIMENT_PLAN.md](METHODS_AND_EXPERIMENT_PLAN.md) for the earlier design and its execution record.
+
+The intended use is biomedical research rehearsal: preparing and running analyses on richer virtual data, exploring evidence-compatible relationships and evaluating study-design choices. Whole-cohort synthesis, never-measured-variable enrichment, and partial-record completion are separate use cases. Added synthetic columns retain their provenance. Evidence consistency, independent analytical validation, and currently unvalidated exploration are reported separately.
 
 ## Delivered
 

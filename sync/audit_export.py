@@ -13,6 +13,7 @@ LOCAL_FILES = {
     "docs/EARLIER_LIMITATIONS.md", "docs/STAGE1_EXPORT.md", "sync/source_allowlist.json",
     "sync/sync_export.py", "sync/audit_export.py", "sync/EXPORT_MANIFEST.json",
     "sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv", "sync/TEST_RESULTS.json",
+    "sync/CURRENT_SCOPE_REVISION.json",
 }
 GENERATED_AUDIT = {"sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv"}
 ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf"}
@@ -117,13 +118,34 @@ def main():
         report_output_count = len(report_manifest["generated_files"])
     delivery_path = stage_eval.parents[2] / "delivery_stage1.json"
     delivery_count = 0
+    delivery_revision_count = 0
     if delivery_path.is_file():
         delivery = json.loads(delivery_path.read_text(encoding="utf-8"))
+        receipt_path = ROOT / "sync/CURRENT_SCOPE_REVISION.json"
+        revisions = {}
+        if receipt_path.is_file():
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            revisions = {r["path"]: r for r in receipt["revised_delivery_documents"]}
+            permitted_revision_documents = {"README.md", "METHODS_AND_EXPERIMENT_PLAN.md", "AGENT_STRATEGIES.md", "MANUSCRIPT_SKELETON.md"}
+            if not set(revisions).issubset(permitted_revision_documents) or len(revisions) != len(receipt["revised_delivery_documents"]):
+                findings.append({"file": "sync/CURRENT_SCOPE_REVISION.json", "rule": "invalid_revision_document_scope"})
+            if receipt["historical_delivery_manifest_sha256"] != sha(delivery_path):
+                findings.append({"file": "sync/CURRENT_SCOPE_REVISION.json", "rule": "historical_delivery_manifest_changed"})
+        used_revisions = set()
         for entry in delivery["artifacts"]:
             path = delivery_path.parent / entry["path"]
-            if not path.is_file() or sha(path) != entry["sha256"]:
+            actual = sha(path) if path.is_file() else None
+            if actual == entry["sha256"]:
+                delivery_count += 1
+                continue
+            revision = revisions.get(entry["path"])
+            if revision and revision["historical_sha256"] == entry["sha256"] and revision["current_sha256"] == actual:
+                delivery_revision_count += 1
+                used_revisions.add(entry["path"])
+            else:
                 findings.append({"file": path.relative_to(ROOT).as_posix(), "rule": "delivery_artifact_hash_mismatch"})
-        delivery_count = len(delivery["artifacts"])
+        if used_revisions != set(revisions):
+            findings.append({"file": "sync/CURRENT_SCOPE_REVISION.json", "rule": "unused_or_unmatched_document_revision"})
     with (ROOT / "sync/FILE_INVENTORY.tsv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["file", "bytes", "sha256"], delimiter="\t", lineterminator="\n")
         writer.writeheader()
@@ -135,6 +157,7 @@ def main():
              "stage1_output_hashes_verified": stage_output_count,
              "reporting_output_hashes_verified": report_output_count,
              "delivery_artifact_hashes_verified": delivery_count,
+             "documented_delivery_revisions_verified": delivery_revision_count,
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}

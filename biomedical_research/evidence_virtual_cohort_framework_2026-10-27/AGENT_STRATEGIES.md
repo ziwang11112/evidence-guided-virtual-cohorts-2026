@@ -1,5 +1,7 @@
 # Shared Agent strategy specification
 
+**Historical specification:** The policies below describe the executed Stage 1 comparison. For the current broader workflow, including autonomous evidence acquisition and never-measured-variable enrichment, use [CURRENT_RESEARCH_SCOPE.md](CURRENT_RESEARCH_SCOPE.md). Multiple scenarios, a fixed marginal-only packet, and program-only generation are not mandatory features of the new design. No frozen Stage 1 instructions are retroactively changed.
+
 27 October 2026. Originally proposed as an extension to the population framework; now implemented and executed in [Stage 1](stage1/README.md). Nine fresh initial builders and eighteen fresh paired revision contexts used the frozen protocol. The results do not establish a general improvement from multiple scenarios. Do not use the evaluation results as hidden numerical targets in any subsequent confirmation prompts.
 
 ## Common task and isolation

@@ -1,5 +1,7 @@
 # Evidence-Guided Virtual Cohorts for Biomedical Analysis and Study Planning
 
+**Scope revision pending new evidence:** [CURRENT_RESEARCH_SCOPE.md](CURRENT_RESEARCH_SCOPE.md) is the current research definition. The future manuscript must include enrichment with variables never measured in the original cohort, and distinguish evidence consistency from independently validated and unvalidated analyses. The scenario-centred approach below describes the earlier tested policy; it is not the required future mechanism or evidence that the broader enrichment task has been tested.
+
 Working manuscript scaffold, 27 October 2026. This is not a completed paper. The retrospective completion replay and frozen three-case Stage 1 construction experiment are complete; independent confirmation and study-planning utility remain unrun. Do not fill their result placeholders with expected improvements.
 
 ## Abstract scaffold

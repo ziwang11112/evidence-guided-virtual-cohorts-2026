@@ -1,5 +1,7 @@
 # Evidence-guided virtual cohorts for biomedical research rehearsal
 
+**Current scope amendment:** [CURRENT_RESEARCH_SCOPE.md](CURRENT_RESEARCH_SCOPE.md) supersedes this document's two-track hierarchy, required scenario mechanism, and prospective expansion rules. The project includes adding variables never measured in the original cohort (for example, synthetic insulin conditional on observed BMI and applicable evidence). Its main evaluation is downstream scientific conclusions and relationships, with exact numerical errors as optional diagnostics. The earlier plan below remains an execution record; frozen experiments and their results are unchanged.
+
 27 October 2026. Working method-paper plan following the user's decision to evaluate scientific conclusion preservation and practical research use, rather than demand exact reproduction of every value. This document separates implemented machinery, retrospective development results and proposed experiments. It does not preregister already inspected data.
 
 **Execution update:** Stage 0 and the bounded three-case Stage 1 are complete. Stage 1 generated all 420 scheduled cohorts and produced all 7,700 analysis records under `stage1_v3`; see [results](stage1/RESULTS.md) and [decision](stage1/DECISION.md). The scenario policy is implemented, but it did not show consistent reserved-analysis improvement. Stage 2 expansion and Stage 3 study-planning claims remain conditional and unrun. The design below is retained to distinguish the intended paper from the evidence actually obtained.
