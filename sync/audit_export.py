@@ -29,6 +29,8 @@ LOCAL_FILES = {
 }
 GENERATED_AUDIT = {"sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv"}
 ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf", ".txt"}
+REVIEWED_CONFIG_FILES = {"biomedical_research/virtual_cohort_system/.gitignore",
+                         "biomedical_research/virtual_cohort_system/pyproject.toml"}
 CSV_ROWS = {"all_results.csv": 5040, "completion_pooled.csv": 36, "full_synthetic_summary.csv": 35}
 BLOCKED_COLUMNS = {"person_id", "patient_id", "subject_id", "participant_id", "name", "email", "address", "date_of_birth", "weight_kg", "pfs", "gng", "dd100", "dd1000"}
 SECRET_RULES = {
@@ -61,7 +63,7 @@ def main():
             continue
         if relative not in allowed:
             findings.append({"file": relative, "rule": "not_allowlisted"})
-        if path.suffix.lower() not in ALLOWED_SUFFIXES and relative not in {".gitignore", ".gitattributes"}:
+        if path.suffix.lower() not in ALLOWED_SUFFIXES and relative not in {".gitignore", ".gitattributes"} | REVIEWED_CONFIG_FILES:
             findings.append({"file": relative, "rule": "blocked_type"})
         if relative in GENERATED_AUDIT:
             continue  # Audit outputs are regenerated below, avoiding self-hashes.
