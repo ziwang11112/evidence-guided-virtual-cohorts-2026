@@ -1,0 +1,1207 @@
+{
+  "run_id": "case_a_build_01_ordinary_v1",
+  "lineage_id": "case_a_build_01",
+  "branch": "ordinary",
+  "action": "revise",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Parent Gaussian-copula random-intercept population with a moment-matched beta-binomial PFS aggregate on the 1/15 lattice; other parametric marginals and outcome-independent correlated attendance retained",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use all 25 visit-specific means and sample SDs as population marginal parameter inputs and all denominators as exact count constraints, scaled by n/75. These same-population reconstruction inputs are not held-out validation. They do not identify any joint distribution."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Use five scheduled visits, numeric units, bounded scores, integer No-Go errors and baseline enrollment weight cap. Revise PFS to values 1+K/15, K=0,...,60, corresponding to the declared average of 15 integer 1-5 items. Complete integer item scoring is assumed; item-level responses and any missing-item/prorating rules are unavailable. Age, BMI, height, pregnancy and contraindication eligibility cannot be regenerated from the outcome-only schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "parametric_marginals",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "A0 same-population reconstruction. Weight remains lognormal with baseline parameters solving truncated-lognormal moments for weight <=180 kg; subsequent weight has no upper cap. AUC outcomes remain beta on [0,1]; errors remain negative binomial conditioned on <=512. PFS now follows 1+K/15 for K~BetaBinomial(60,a,b). Its a,b solve the supplied mean and variance analytically; this describes only the aggregate distribution and makes no item-level claim. Distribution shapes, endpoint mass, and applicability of complete integer item scoring remain assumptions. Finite cohort sample moments fluctuate rather than being forced to match inputs."
+    },
+    {
+      "name": "longitudinal_gaussian_copula",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Stable person factors provide repeated-measure continuity. Latent variance from person factors is 0.90 for weight and 0.60 for every behavioral endpoint; remaining variance is independent visit noise. The two discounting endpoints each split their 0.60 person variance into 0.30 shared discounting-domain and 0.30 endpoint-specific person variance. Thus their latent cross-endpoint correlation is 0.30. These fixed values are qualitative modeling choices and are not estimated or selected against reserved results. Pearson correlations after marginal transformations need not equal latent values."
+    },
+    {
+      "name": "cross_domain_completion",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Independent factors for weight, food responsiveness, inhibition and the discounting domain complete the unspecified joint law parsimoniously. This is an explicit unvalidated independence assumption, not evidence that any association is absent. The model supplies no additional behavior-weight coupling or causal treatment response mechanism."
+    },
+    {
+      "name": "exact_count_attendance",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Independent Gaussian attendance factors have variance fractions 0.60 person, 0.30 person-visit and 0.10 endpoint-visit. Ranking them separately for each supplied denominator yields exact observed counts, shared visit nonresponse and persistent but potentially intermittent missingness. Attendance factors are independent of outcome factors, a conditional-count MCAR assumption. Individual masks, missingness causes and informative attrition remain unknown."
+    },
+    {
+      "name": "sampling_and_interface",
+      "evidence_ids": [
+        "E_design",
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "n counts persons, each with exactly five rows; counts round(n_observed*n/75). New ordinal synthetic keys have no source linkage. A local default_rng(seed) supplies all randomness. Input evidence is read-only; there is no generator filesystem or network access. Marginal sample moments fluctuate across cohorts and are not forcibly matched."
+    },
+    {
+      "name": "pfs_measurement_mapping_revision",
+      "evidence_ids": [
+        "E_design",
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "The measurement definition supplies a 15-item 1-5 average. The beta-binomial count K represents 60 possible unit increments above the minimum sum, not 60 observed items. With p=(mean-1)/4 and R=(15*sd)^2/[60*p*(1-p)], use precision=(60-R)/(R-1), a=p*precision, b=(1-p)*precision. All five supplied PFS moments are admissible. This corrects continuous support while retaining stochastic sampling and the original copula uniform draws."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "The sole target completion preserves the parent within-person persistence, common stable discounting component, independent other domains and outcome-independent correlated attendance. PFS uses a full 15-integer-item aggregate lattice with a beta-binomial shape matching supplied population moments.",
+      "inclusion_rationale": "Select the narrow measurement-mapping revision because it uses an explicit source measurement constraint. No source joint summaries distinguish alternative dependence or attrition parameters, so these parent assumptions are retained without claiming they are correct. Twenty target cohorts are a fixed resource allocation, not a posterior probability.",
+      "unresolved_dependencies": [
+        "All actual within-person correlations, temporal lag effects and random slope heterogeneity",
+        "All actual cross-domain correlations and behavior-weight associations",
+        "Whether discounting endpoints share person, visit or other components and their strengths",
+        "Informative missingness, actual mask overlap, dropout and intermittent return",
+        "Distributional shape and endpoint atoms; PFS item response dependence, missing-item rules and rounding conventions"
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs, gng, dd100 and dd1000",
+        "Categorical-visit random-intercept trajectories for all five outcomes",
+        "Four exploratory standardized weight associations"
+      ]
+    }
+  ],
+  "changes_from_parent": "Replace only the continuous PFS beta quantile with a moment-matched beta-binomial aggregate quantile on 1/15 increments. Keep the random draw schedule, non-PFS quantiles, latent variance fractions, cross-domain completion, attendance factors, exact scaled counts, keys and interface. Parent source feedback was valid with 25/25, 22/25 and 23/25 marginal envelopes; its five misses are not evidence for a different joint model. No numerical parameters were tuned to eliminate those misses.",
+  "source_check_results": {
+    "local_generator_static_contract": "passed",
+    "local_decision_schema": "passed",
+    "pfs_analytic_moments": "all five means/SDs match to 1e-12",
+    "scheduled_source_seeds": [
+      {
+        "seed": 810101,
+        "frame_contract": "passed",
+        "evidence_not_mutated": true,
+        "global_numpy_rng_unchanged": true,
+        "pfs_lattice": "passed",
+        "marginals_in_envelope": 25,
+        "total_marginals": 25,
+        "outside_envelope": []
+      },
+      {
+        "seed": 810102,
+        "frame_contract": "passed",
+        "evidence_not_mutated": true,
+        "global_numpy_rng_unchanged": true,
+        "pfs_lattice": "passed",
+        "marginals_in_envelope": 22,
+        "total_marginals": 25,
+        "outside_envelope": [
+          "gng_month3",
+          "dd100_month6",
+          "gng_month12"
+        ]
+      },
+      {
+        "seed": 810103,
+        "frame_contract": "passed",
+        "evidence_not_mutated": true,
+        "global_numpy_rng_unchanged": true,
+        "pfs_lattice": "passed",
+        "marginals_in_envelope": 23,
+        "total_marginals": 25,
+        "outside_envelope": [
+          "dd1000_month0",
+          "dd1000_month12"
+        ]
+      }
+    ],
+    "interpretation": "Source diagnostic envelopes concern reconstruction inputs, not held-out validation. PFS lattice passes on all three scheduled cohorts. Remaining envelope misses are inherited non-PFS sampling deviations; no fitting or seed selection followed them. Controller will attach its own source feedback."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "parent_continuous_pfs",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "evaluation_origin": "Existing parent/source_feedback.json only; no parent generator cohort re-executed in this branch",
+        "disposition": "rejected_for_final",
+        "reason": "Source-compatible on declared frame checks, but its continuous PFS aggregate ignores the complete 15-item integer-score lattice supplied by the measurement definition. Rejection is based on mapping, not marginal diagnostic ranking or reserved outcomes."
+      },
+      {
+        "id": "pfs_lattice_revision",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Chosen before new diagnostics to honor the explicit PFS measurement lattice with analytic population moments. No evidence identifies a replacement dependence model. Local checks verify implementation only."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "pfs_lattice_revision"
+    },
+    "numerical_budget": "Two examined structures. Conservatively charge three inherited parent structure/seed cohorts and three retained structure/seed cohorts: six unique pairs, below the nine-pair maximum. Only seeds 810101, 810102, 810103; no new seeds or candidate selection by seed. Controller may reuse the three retained pairs, not add unique source cohorts.",
+    "inherited_source_feedback": {
+      "status": "valid",
+      "errors": [],
+      "target_results_loaded": false,
+      "checks": [
+        {
+          "seed": 810101,
+          "context": "target",
+          "marginals_in_envelope": 25,
+          "total_marginals": 25,
+          "outside_envelope": []
+        },
+        {
+          "seed": 810102,
+          "context": "target",
+          "marginals_in_envelope": 22,
+          "total_marginals": 25,
+          "outside_envelope": [
+            "gng_month3",
+            "dd100_month6",
+            "gng_month12"
+          ]
+        },
+        {
+          "seed": 810103,
+          "context": "target",
+          "marginals_in_envelope": 23,
+          "total_marginals": 25,
+          "outside_envelope": [
+            "dd1000_month0",
+            "dd1000_month12"
+          ]
+        }
+      ]
+    },
+    "diagnostic_calls": [
+      {
+        "structure": "pfs_lattice_revision",
+        "seed": 810101,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "source_checks.call_checked",
+          "source_checks.source_diagnostics",
+          "PFS lattice assertion"
+        ],
+        "result": {
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "pfs_lattice": "passed",
+          "source_diagnostics": "computed, but lost on diagnostic-log serialization failure; same cohort repeated below"
+        }
+      },
+      {
+        "structure": "pfs_lattice_revision",
+        "seed": 810101,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "source_checks.call_checked",
+          "source_checks.source_diagnostics",
+          "PFS lattice assertion"
+        ],
+        "duplicate_of_existing_pair": true,
+        "result": {
+          "seed": 810101,
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "pfs_lattice": "passed",
+          "marginals_in_envelope": 25,
+          "total_marginals": 25,
+          "outside_envelope": []
+        },
+        "source_diagnostics": [
+          {
+            "id": "weight_kg_month0",
+            "n": 75,
+            "mean": 85.72917053313147,
+            "sd": 14.274313450024454,
+            "expected_mean": 86.41866666666667,
+            "expected_sd": 16.764577709139164,
+            "mean_tolerance": 5.807420071933137,
+            "sd_tolerance": 4.1341193969766685,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month0",
+            "n": 75,
+            "mean": 2.5591111111111116,
+            "sd": 0.8302749885167904,
+            "expected_mean": 2.663999866666666,
+            "expected_sd": 0.8086952041531175,
+            "mean_tolerance": 0.28014023628609697,
+            "sd_tolerance": 0.19942300890220752,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.6,
+            "sd": 10.940873032016354,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month0",
+            "n": 75,
+            "mean": 0.7359541416601226,
+            "sd": 0.22990426751457568,
+            "expected_mean": 0.7504182666666667,
+            "expected_sd": 0.22572169611782186,
+            "mean_tolerance": 0.078192289209338,
+            "sd_tolerance": 0.05566262738192627,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month0",
+            "n": 75,
+            "mean": 0.9012840929461351,
+            "sd": 0.12543682696288136,
+            "expected_mean": 0.8781306666666667,
+            "expected_sd": 0.1538764855535319,
+            "mean_tolerance": 0.05330437821377111,
+            "sd_tolerance": 0.03794570759266213,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month3",
+            "n": 70,
+            "mean": 80.78976413978486,
+            "sd": 12.024402774516977,
+            "expected_mean": 80.62785714285715,
+            "expected_sd": 14.537686247425048,
+            "mean_tolerance": 5.212757554934874,
+            "sd_tolerance": 3.712590108072665,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month3",
+            "n": 70,
+            "mean": 2.342857142857143,
+            "sd": 0.8217875112190396,
+            "expected_mean": 2.371429,
+            "expected_sd": 0.7746853391850532,
+            "mean_tolerance": 0.27777782418776825,
+            "sd_tolerance": 0.19783678627929988,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month3",
+            "n": 69,
+            "mean": 11.057971014492754,
+            "sd": 10.246784370734263,
+            "expected_mean": 11.434782608695652,
+            "expected_sd": 9.886827631440266,
+            "mean_tolerance": 3.5707025361686737,
+            "sd_tolerance": 2.543365425509801,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month3",
+            "n": 69,
+            "mean": 0.8078442224994454,
+            "sd": 0.1798903516914578,
+            "expected_mean": 0.8244397101449276,
+            "expected_sd": 0.16943323041116168,
+            "mean_tolerance": 0.06119209195237618,
+            "sd_tolerance": 0.04358633893745839,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month3",
+            "n": 69,
+            "mean": 0.927442259532315,
+            "sd": 0.08138840543714286,
+            "expected_mean": 0.9163852173913043,
+            "expected_sd": 0.0949202282663881,
+            "mean_tolerance": 0.03428115796483522,
+            "sd_tolerance": 0.024418027273634298,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month6",
+            "n": 67,
+            "mean": 82.36655939280809,
+            "sd": 12.766038106577994,
+            "expected_mean": 81.64328358208955,
+            "expected_sd": 14.746835550439153,
+            "mean_tolerance": 5.404838115632879,
+            "sd_tolerance": 3.8506418480769016,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month6",
+            "n": 68,
+            "mean": 2.3098039215686272,
+            "sd": 0.8230320278438118,
+            "expected_mean": 2.350980294117647,
+            "expected_sd": 0.8233432491671782,
+            "mean_tolerance": 0.2995351043343102,
+            "sd_tolerance": 0.21337807091132752,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month6",
+            "n": 68,
+            "mean": 11.897058823529411,
+            "sd": 10.609963925666799,
+            "expected_mean": 11.058823529411764,
+            "expected_sd": 10.44085310310571,
+            "mean_tolerance": 3.79841824991142,
+            "sd_tolerance": 2.705856999571856,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month6",
+            "n": 66,
+            "mean": 0.8398941129247307,
+            "sd": 0.15313070744395532,
+            "expected_mean": 0.8278160606060606,
+            "expected_sd": 0.16446156295273923,
+            "mean_tolerance": 0.06073145697793218,
+            "sd_tolerance": 0.04327269979664033,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month6",
+            "n": 67,
+            "mean": 0.9262987538217851,
+            "sd": 0.09649807881372548,
+            "expected_mean": 0.9208113432835822,
+            "expected_sd": 0.09393000635378876,
+            "mean_tolerance": 0.03442613005387977,
+            "sd_tolerance": 0.024526672994957026,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month9",
+            "n": 66,
+            "mean": 81.79844217519917,
+            "sd": 12.405161838255646,
+            "expected_mean": 81.01969696969695,
+            "expected_sd": 14.45899208847049,
+            "mean_tolerance": 5.339336682684626,
+            "sd_tolerance": 3.8044124886869803,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month9",
+            "n": 66,
+            "mean": 2.3848484848484848,
+            "sd": 0.8184033197537713,
+            "expected_mean": 2.381818636363636,
+            "expected_sd": 0.7536621226985072,
+            "mean_tolerance": 0.2783081831328241,
+            "sd_tolerance": 0.1983016225682052,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month9",
+            "n": 65,
+            "mean": 10.107692307692307,
+            "sd": 10.133673872483076,
+            "expected_mean": 11.292307692307693,
+            "expected_sd": 11.678938143249416,
+            "mean_tolerance": 4.3457819786451735,
+            "sd_tolerance": 3.0968461343062077,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month9",
+            "n": 66,
+            "mean": 0.8390232336687046,
+            "sd": 0.16839081215121243,
+            "expected_mean": 0.8433148484848486,
+            "expected_sd": 0.16060871688425712,
+            "mean_tolerance": 0.05930869927668222,
+            "sd_tolerance": 0.04225894893418499,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month9",
+            "n": 66,
+            "mean": 0.9224971000056486,
+            "sd": 0.07665475523628862,
+            "expected_mean": 0.9268869696969697,
+            "expected_sd": 0.08388404223358112,
+            "mean_tolerance": 0.030976235483714445,
+            "sd_tolerance": 0.022071351579855552,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month12",
+            "n": 66,
+            "mean": 84.82261650306826,
+            "sd": 14.597478921319665,
+            "expected_mean": 83.37424242424244,
+            "expected_sd": 15.469974000336768,
+            "mean_tolerance": 5.712666495338895,
+            "sd_tolerance": 4.070419426639981,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month12",
+            "n": 65,
+            "mean": 2.316923076923077,
+            "sd": 0.8002630443616275,
+            "expected_mean": 2.3107690769230773,
+            "expected_sd": 0.7730958078436234,
+            "mean_tolerance": 0.2876722000137406,
+            "sd_tolerance": 0.2049979830874193,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month12",
+            "n": 52,
+            "mean": 12.846153846153847,
+            "sd": 14.536478273753872,
+            "expected_mean": 12.25,
+            "expected_sd": 13.663856717345833,
+            "mean_tolerance": 5.684508001728862,
+            "sd_tolerance": 4.0587702468795905,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month12",
+            "n": 55,
+            "mean": 0.81382639206374,
+            "sd": 0.17347708804589282,
+            "expected_mean": 0.8379603636363636,
+            "expected_sd": 0.15253350284037345,
+            "mean_tolerance": 0.061702839981609796,
+            "sd_tolerance": 0.04403262946266308,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month12",
+            "n": 56,
+            "mean": 0.9181210894174836,
+            "sd": 0.07880104709265438,
+            "expected_mean": 0.9130969642857142,
+            "expected_sd": 0.10554443991073821,
+            "mean_tolerance": 0.04231190713124272,
+            "sd_tolerance": 0.030189802487330487,
+            "within_source_diagnostic_envelope": true
+          }
+        ]
+      },
+      {
+        "structure": "pfs_lattice_revision",
+        "seed": 810102,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "source_checks.call_checked",
+          "source_checks.source_diagnostics",
+          "PFS lattice assertion"
+        ],
+        "duplicate_of_existing_pair": false,
+        "result": {
+          "seed": 810102,
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "pfs_lattice": "passed",
+          "marginals_in_envelope": 22,
+          "total_marginals": 25,
+          "outside_envelope": [
+            "gng_month3",
+            "dd100_month6",
+            "gng_month12"
+          ]
+        },
+        "source_diagnostics": [
+          {
+            "id": "weight_kg_month0",
+            "n": 75,
+            "mean": 84.66085666118406,
+            "sd": 16.147468612384237,
+            "expected_mean": 86.41866666666667,
+            "expected_sd": 16.764577709139164,
+            "mean_tolerance": 5.807420071933137,
+            "sd_tolerance": 4.1341193969766685,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month0",
+            "n": 75,
+            "mean": 2.7066666666666666,
+            "sd": 0.7237705740383784,
+            "expected_mean": 2.663999866666666,
+            "expected_sd": 0.8086952041531175,
+            "mean_tolerance": 0.28014023628609697,
+            "sd_tolerance": 0.19942300890220752,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 16.52,
+            "sd": 12.63239079894607,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month0",
+            "n": 75,
+            "mean": 0.7737102307768332,
+            "sd": 0.21221221927794434,
+            "expected_mean": 0.7504182666666667,
+            "expected_sd": 0.22572169611782186,
+            "mean_tolerance": 0.078192289209338,
+            "sd_tolerance": 0.05566262738192627,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month0",
+            "n": 75,
+            "mean": 0.880903271339723,
+            "sd": 0.1688458372089788,
+            "expected_mean": 0.8781306666666667,
+            "expected_sd": 0.1538764855535319,
+            "mean_tolerance": 0.05330437821377111,
+            "sd_tolerance": 0.03794570759266213,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month3",
+            "n": 70,
+            "mean": 78.93944591572343,
+            "sd": 13.184738542661808,
+            "expected_mean": 80.62785714285715,
+            "expected_sd": 14.537686247425048,
+            "mean_tolerance": 5.212757554934874,
+            "sd_tolerance": 3.712590108072665,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month3",
+            "n": 70,
+            "mean": 2.471428571428571,
+            "sd": 0.7924215463137925,
+            "expected_mean": 2.371429,
+            "expected_sd": 0.7746853391850532,
+            "mean_tolerance": 0.27777782418776825,
+            "sd_tolerance": 0.19783678627929988,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month3",
+            "n": 69,
+            "mean": 15.18840579710145,
+            "sd": 9.990105932310698,
+            "expected_mean": 11.434782608695652,
+            "expected_sd": 9.886827631440266,
+            "mean_tolerance": 3.5707025361686737,
+            "sd_tolerance": 2.543365425509801,
+            "within_source_diagnostic_envelope": false
+          },
+          {
+            "id": "dd100_month3",
+            "n": 69,
+            "mean": 0.8622777683522137,
+            "sd": 0.12826924145886984,
+            "expected_mean": 0.8244397101449276,
+            "expected_sd": 0.16943323041116168,
+            "mean_tolerance": 0.06119209195237618,
+            "sd_tolerance": 0.04358633893745839,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month3",
+            "n": 69,
+            "mean": 0.9225413165458635,
+            "sd": 0.08742503286183645,
+            "expected_mean": 0.9163852173913043,
+            "expected_sd": 0.0949202282663881,
+            "mean_tolerance": 0.03428115796483522,
+            "sd_tolerance": 0.024418027273634298,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month6",
+            "n": 67,
+            "mean": 79.5646153550063,
+            "sd": 13.560688435512857,
+            "expected_mean": 81.64328358208955,
+            "expected_sd": 14.746835550439153,
+            "mean_tolerance": 5.404838115632879,
+            "sd_tolerance": 3.8506418480769016,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month6",
+            "n": 68,
+            "mean": 2.4,
+            "sd": 0.812505899965822,
+            "expected_mean": 2.350980294117647,
+            "expected_sd": 0.8233432491671782,
+            "mean_tolerance": 0.2995351043343102,
+            "sd_tolerance": 0.21337807091132752,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month6",
+            "n": 68,
+            "mean": 13.470588235294118,
+            "sd": 11.025710236351168,
+            "expected_mean": 11.058823529411764,
+            "expected_sd": 10.44085310310571,
+            "mean_tolerance": 3.79841824991142,
+            "sd_tolerance": 2.705856999571856,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month6",
+            "n": 66,
+            "mean": 0.8473686867004206,
+            "sd": 0.11867070495295359,
+            "expected_mean": 0.8278160606060606,
+            "expected_sd": 0.16446156295273923,
+            "mean_tolerance": 0.06073145697793218,
+            "sd_tolerance": 0.04327269979664033,
+            "within_source_diagnostic_envelope": false
+          },
+          {
+            "id": "dd1000_month6",
+            "n": 67,
+            "mean": 0.939734214006826,
+            "sd": 0.0823753661114326,
+            "expected_mean": 0.9208113432835822,
+            "expected_sd": 0.09393000635378876,
+            "mean_tolerance": 0.03442613005387977,
+            "sd_tolerance": 0.024526672994957026,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month9",
+            "n": 66,
+            "mean": 79.7338851808862,
+            "sd": 12.925759814553018,
+            "expected_mean": 81.01969696969695,
+            "expected_sd": 14.45899208847049,
+            "mean_tolerance": 5.339336682684626,
+            "sd_tolerance": 3.8044124886869803,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month9",
+            "n": 66,
+            "mean": 2.457575757575758,
+            "sd": 0.7630694976704666,
+            "expected_mean": 2.381818636363636,
+            "expected_sd": 0.7536621226985072,
+            "mean_tolerance": 0.2783081831328241,
+            "sd_tolerance": 0.1983016225682052,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month9",
+            "n": 65,
+            "mean": 12.307692307692308,
+            "sd": 9.751479177737403,
+            "expected_mean": 11.292307692307693,
+            "expected_sd": 11.678938143249416,
+            "mean_tolerance": 4.3457819786451735,
+            "sd_tolerance": 3.0968461343062077,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month9",
+            "n": 66,
+            "mean": 0.8706002305338086,
+            "sd": 0.14034463468573435,
+            "expected_mean": 0.8433148484848486,
+            "expected_sd": 0.16060871688425712,
+            "mean_tolerance": 0.05930869927668222,
+            "sd_tolerance": 0.04225894893418499,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month9",
+            "n": 66,
+            "mean": 0.9214759783376474,
+            "sd": 0.10056378601673865,
+            "expected_mean": 0.9268869696969697,
+            "expected_sd": 0.08388404223358112,
+            "mean_tolerance": 0.030976235483714445,
+            "sd_tolerance": 0.022071351579855552,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month12",
+            "n": 66,
+            "mean": 80.88813976769202,
+            "sd": 14.981840377463245,
+            "expected_mean": 83.37424242424244,
+            "expected_sd": 15.469974000336768,
+            "mean_tolerance": 5.712666495338895,
+            "sd_tolerance": 4.070419426639981,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month12",
+            "n": 65,
+            "mean": 2.216410256410257,
+            "sd": 0.6995068470428499,
+            "expected_mean": 2.3107690769230773,
+            "expected_sd": 0.7730958078436234,
+            "mean_tolerance": 0.2876722000137406,
+            "sd_tolerance": 0.2049979830874193,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month12",
+            "n": 52,
+            "mean": 17.076923076923077,
+            "sd": 22.15263110460498,
+            "expected_mean": 12.25,
+            "expected_sd": 13.663856717345833,
+            "mean_tolerance": 5.684508001728862,
+            "sd_tolerance": 4.0587702468795905,
+            "within_source_diagnostic_envelope": false
+          },
+          {
+            "id": "dd100_month12",
+            "n": 55,
+            "mean": 0.8447075831626719,
+            "sd": 0.13288105756679186,
+            "expected_mean": 0.8379603636363636,
+            "expected_sd": 0.15253350284037345,
+            "mean_tolerance": 0.061702839981609796,
+            "sd_tolerance": 0.04403262946266308,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month12",
+            "n": 56,
+            "mean": 0.9078032090267543,
+            "sd": 0.11720009205534211,
+            "expected_mean": 0.9130969642857142,
+            "expected_sd": 0.10554443991073821,
+            "mean_tolerance": 0.04231190713124272,
+            "sd_tolerance": 0.030189802487330487,
+            "within_source_diagnostic_envelope": true
+          }
+        ]
+      },
+      {
+        "structure": "pfs_lattice_revision",
+        "seed": 810103,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "source_checks.call_checked",
+          "source_checks.source_diagnostics",
+          "PFS lattice assertion"
+        ],
+        "duplicate_of_existing_pair": false,
+        "result": {
+          "seed": 810103,
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "pfs_lattice": "passed",
+          "marginals_in_envelope": 23,
+          "total_marginals": 25,
+          "outside_envelope": [
+            "dd1000_month0",
+            "dd1000_month12"
+          ]
+        },
+        "source_diagnostics": [
+          {
+            "id": "weight_kg_month0",
+            "n": 75,
+            "mean": 86.9852469725766,
+            "sd": 15.73075631733233,
+            "expected_mean": 86.41866666666667,
+            "expected_sd": 16.764577709139164,
+            "mean_tolerance": 5.807420071933137,
+            "sd_tolerance": 4.1341193969766685,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month0",
+            "n": 75,
+            "mean": 2.699555555555556,
+            "sd": 0.7836446253876173,
+            "expected_mean": 2.663999866666666,
+            "expected_sd": 0.8086952041531175,
+            "mean_tolerance": 0.28014023628609697,
+            "sd_tolerance": 0.19942300890220752,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.066666666666666,
+            "sd": 11.81310922448233,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month0",
+            "n": 75,
+            "mean": 0.7749229753644475,
+            "sd": 0.2354646810681995,
+            "expected_mean": 0.7504182666666667,
+            "expected_sd": 0.22572169611782186,
+            "mean_tolerance": 0.078192289209338,
+            "sd_tolerance": 0.05566262738192627,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month0",
+            "n": 75,
+            "mean": 0.8361778150354833,
+            "sd": 0.21621866577219198,
+            "expected_mean": 0.8781306666666667,
+            "expected_sd": 0.1538764855535319,
+            "mean_tolerance": 0.05330437821377111,
+            "sd_tolerance": 0.03794570759266213,
+            "within_source_diagnostic_envelope": false
+          },
+          {
+            "id": "weight_kg_month3",
+            "n": 70,
+            "mean": 81.04860383326422,
+            "sd": 15.510248296570309,
+            "expected_mean": 80.62785714285715,
+            "expected_sd": 14.537686247425048,
+            "mean_tolerance": 5.212757554934874,
+            "sd_tolerance": 3.712590108072665,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month3",
+            "n": 70,
+            "mean": 2.1857142857142855,
+            "sd": 0.6545658154206315,
+            "expected_mean": 2.371429,
+            "expected_sd": 0.7746853391850532,
+            "mean_tolerance": 0.27777782418776825,
+            "sd_tolerance": 0.19783678627929988,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month3",
+            "n": 69,
+            "mean": 10.884057971014492,
+            "sd": 9.574070730338853,
+            "expected_mean": 11.434782608695652,
+            "expected_sd": 9.886827631440266,
+            "mean_tolerance": 3.5707025361686737,
+            "sd_tolerance": 2.543365425509801,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month3",
+            "n": 69,
+            "mean": 0.8048361924808548,
+            "sd": 0.18885494834208646,
+            "expected_mean": 0.8244397101449276,
+            "expected_sd": 0.16943323041116168,
+            "mean_tolerance": 0.06119209195237618,
+            "sd_tolerance": 0.04358633893745839,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month3",
+            "n": 69,
+            "mean": 0.9085768591510812,
+            "sd": 0.10121328359820506,
+            "expected_mean": 0.9163852173913043,
+            "expected_sd": 0.0949202282663881,
+            "mean_tolerance": 0.03428115796483522,
+            "sd_tolerance": 0.024418027273634298,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month6",
+            "n": 67,
+            "mean": 82.33670031193697,
+            "sd": 13.924388602275922,
+            "expected_mean": 81.64328358208955,
+            "expected_sd": 14.746835550439153,
+            "mean_tolerance": 5.404838115632879,
+            "sd_tolerance": 3.8506418480769016,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month6",
+            "n": 68,
+            "mean": 2.2568627450980387,
+            "sd": 0.8447881150448566,
+            "expected_mean": 2.350980294117647,
+            "expected_sd": 0.8233432491671782,
+            "mean_tolerance": 0.2995351043343102,
+            "sd_tolerance": 0.21337807091132752,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month6",
+            "n": 68,
+            "mean": 11.514705882352942,
+            "sd": 10.907333760500316,
+            "expected_mean": 11.058823529411764,
+            "expected_sd": 10.44085310310571,
+            "mean_tolerance": 3.79841824991142,
+            "sd_tolerance": 2.705856999571856,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month6",
+            "n": 66,
+            "mean": 0.8375002609662303,
+            "sd": 0.16578870622167208,
+            "expected_mean": 0.8278160606060606,
+            "expected_sd": 0.16446156295273923,
+            "mean_tolerance": 0.06073145697793218,
+            "sd_tolerance": 0.04327269979664033,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month6",
+            "n": 67,
+            "mean": 0.9029033134816961,
+            "sd": 0.11536490629560558,
+            "expected_mean": 0.9208113432835822,
+            "expected_sd": 0.09393000635378876,
+            "mean_tolerance": 0.03442613005387977,
+            "sd_tolerance": 0.024526672994957026,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month9",
+            "n": 66,
+            "mean": 82.22379586465499,
+            "sd": 14.693074306402924,
+            "expected_mean": 81.01969696969695,
+            "expected_sd": 14.45899208847049,
+            "mean_tolerance": 5.339336682684626,
+            "sd_tolerance": 3.8044124886869803,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month9",
+            "n": 66,
+            "mean": 2.261616161616162,
+            "sd": 0.6913690721974726,
+            "expected_mean": 2.381818636363636,
+            "expected_sd": 0.7536621226985072,
+            "mean_tolerance": 0.2783081831328241,
+            "sd_tolerance": 0.1983016225682052,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month9",
+            "n": 65,
+            "mean": 9.861538461538462,
+            "sd": 10.72653969582707,
+            "expected_mean": 11.292307692307693,
+            "expected_sd": 11.678938143249416,
+            "mean_tolerance": 4.3457819786451735,
+            "sd_tolerance": 3.0968461343062077,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month9",
+            "n": 66,
+            "mean": 0.8465467873273791,
+            "sd": 0.16035461267010812,
+            "expected_mean": 0.8433148484848486,
+            "expected_sd": 0.16060871688425712,
+            "mean_tolerance": 0.05930869927668222,
+            "sd_tolerance": 0.04225894893418499,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month9",
+            "n": 66,
+            "mean": 0.9100641485407583,
+            "sd": 0.10480199596496081,
+            "expected_mean": 0.9268869696969697,
+            "expected_sd": 0.08388404223358112,
+            "mean_tolerance": 0.030976235483714445,
+            "sd_tolerance": 0.022071351579855552,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "weight_kg_month12",
+            "n": 66,
+            "mean": 83.37863244655965,
+            "sd": 14.66109977262266,
+            "expected_mean": 83.37424242424244,
+            "expected_sd": 15.469974000336768,
+            "mean_tolerance": 5.712666495338895,
+            "sd_tolerance": 4.070419426639981,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "pfs_month12",
+            "n": 65,
+            "mean": 2.283076923076923,
+            "sd": 0.8517979978021956,
+            "expected_mean": 2.3107690769230773,
+            "expected_sd": 0.7730958078436234,
+            "mean_tolerance": 0.2876722000137406,
+            "sd_tolerance": 0.2049979830874193,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "gng_month12",
+            "n": 52,
+            "mean": 11.25,
+            "sd": 12.459935794377111,
+            "expected_mean": 12.25,
+            "expected_sd": 13.663856717345833,
+            "mean_tolerance": 5.684508001728862,
+            "sd_tolerance": 4.0587702468795905,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd100_month12",
+            "n": 55,
+            "mean": 0.8378625033105901,
+            "sd": 0.1629914774901472,
+            "expected_mean": 0.8379603636363636,
+            "expected_sd": 0.15253350284037345,
+            "mean_tolerance": 0.061702839981609796,
+            "sd_tolerance": 0.04403262946266308,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "dd1000_month12",
+            "n": 56,
+            "mean": 0.8886647627768419,
+            "sd": 0.13765018730739806,
+            "expected_mean": 0.9130969642857142,
+            "expected_sd": 0.10554443991073821,
+            "mean_tolerance": 0.04231190713124272,
+            "sd_tolerance": 0.030189802487330487,
+            "within_source_diagnostic_envelope": false
+          }
+        ]
+      }
+    ],
+    "noncohort_calls": [
+      {
+        "call": "source_checks.load_generator",
+        "result": "passed AST/import/interface contract"
+      },
+      {
+        "call": "Analytic beta-binomial parameter admissibility and scipy moment identity for five PFS summaries",
+        "result": [
+          {
+            "month": 0,
+            "mean_absolute_error": 0.0,
+            "sd_absolute_error": 0.0
+          },
+          {
+            "month": 3,
+            "mean_absolute_error": 0.0,
+            "sd_absolute_error": 1.1102230246251565e-16
+          },
+          {
+            "month": 6,
+            "mean_absolute_error": 0.0,
+            "sd_absolute_error": 0.0
+          },
+          {
+            "month": 9,
+            "mean_absolute_error": 0.0,
+            "sd_absolute_error": 1.1102230246251565e-16
+          },
+          {
+            "month": 12,
+            "mean_absolute_error": 0.0,
+            "sd_absolute_error": 1.1102230246251565e-16
+          }
+        ],
+        "cohorts_generated": 0
+      },
+      {
+        "call": "source_checks.load_generator (harness-repair retry)",
+        "result": "passed; same generator structure"
+      },
+      {
+        "call": "source_checks.validate_decision",
+        "result": "passed identities, evidence-use fields, single target allocation and budget"
+      }
+    ],
+    "failures": [
+      {
+        "phase": "Diagnostic log persistence after first seed 810101 completed",
+        "type": "TypeError",
+        "message": "NumPy boolean in source_diagnostics could not be serialized by the standard JSON encoder. Exception-handler persistence failed for the same reason. Generator and frame/lattice checks succeeded.",
+        "resolution": "Convert NumPy scalars to native scalar values in the harness JSON serializer; generator unchanged. Repeat seed 810101 to recover the lost diagnostics; no additional unique structure/seed cohort."
+      }
+    ],
+    "rejected_options": [
+      {
+        "structure": "parent_continuous_pfs",
+        "reason": "Continuous PFS approximation superseded by source-supported discrete aggregate mapping; all dependence assumptions retained."
+      }
+    ],
+    "scope": "Only allowlisted packet and parent files read. No web, reference data, ancestors, siblings, target analyses, or evaluator results. No controller run. Only generator.py and decision.json written."
+  },
+  "intended_uses": [
+    "Rehearsal of long-format data handling and analyses on synthetic cohorts",
+    "Examination of how an explicitly chosen joint-law completion interacts with supplied marginal reconstruction inputs"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions",
+    "New empirical evidence or causal effects",
+    "Recovering original individual records or missingness masks",
+    "Claiming true correlations, mixed-model uncertainty or exploratory weight coefficients",
+    "Generalization beyond the described population or source marginal regime",
+    "Recovering PFS item-level responses or validating its shape, complete-item scoring or endpoint probabilities"
+  ],
+  "next_information_request": "Request baseline cross-outcome covariance and per-outcome within-person covariance matrices with pairwise observed denominators, and visit-by-endpoint missingness overlap counts. Also request the PFS scoring rule for incomplete items and a per-visit aggregate score frequency table to distinguish discrete families and endpoint atoms. Do not request regression conclusions, directions or significance results."
+}

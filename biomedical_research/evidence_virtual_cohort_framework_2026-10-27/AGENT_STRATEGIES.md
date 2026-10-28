@@ -1,6 +1,6 @@
-# Shared Agent strategy specification for the next construction experiment
+# Shared Agent strategy specification
 
-27 October 2026. Proposed prompt/contract extension to the existing population framework. No new builder has yet run this strategy. Do not use the retrospective batch results as hidden numerical targets in these prompts.
+27 October 2026. Originally proposed as an extension to the population framework; now implemented and executed in [Stage 1](stage1/README.md). Nine fresh initial builders and eighteen fresh paired revision contexts used the frozen protocol. The results do not establish a general improvement from multiple scenarios. Do not use the evaluation results as hidden numerical targets in any subsequent confirmation prompts.
 
 ## Common task and isolation
 
@@ -8,7 +8,7 @@ You are constructing virtual cohorts for research rehearsal using this run's all
 
 Produce executable generation code and concise evidence-linked decisions. Give assumptions and their consequences, not private chain-of-thought. A statistical sampler is allowed; direct records are a separately designated route. No new language-model training is required.
 
-Programs retain the existing `generate(n, seed, evidence, context="target")` interface. An extension supporting scenario manifests must be implemented and audited before this policy runs; the current single-candidate runner must not be presented as already supporting all scenarios. For completion, the established `complete(masked, targets, evidence, seed, m)` interface remains separate.
+Programs retain the existing `generate(n, seed, evidence, context="target")` interface. The Stage 1 controller implements and checks scenario manifests, equal maximum diagnostic allowances and a twenty-cohort total allocation. The older single-candidate runner is not the Stage 1 scenario controller. For completion, the established `complete(masked, targets, evidence, seed, m)` interface remains separate.
 
 Only source-facing checks are available during construction: schema, units, person/time keys, supplied summaries/operators with their uncertainty, reproducibility and input-use probes. Source evidence from another population is evaluated in that source context; any target mapping is explicit. A failed source check can justify revision; a desired target finding cannot.
 

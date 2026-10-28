@@ -52,11 +52,24 @@ def main():
         source = under(workspace, item["source"])
         destination = under(ROOT, item["destination"])
         raw = source.read_bytes()
+        if item.get("reviewed_sha256") and sha(raw) != item["reviewed_sha256"]:
+            raise ValueError(f"Source changed since content review: {item['source']}")
+        if item.get("required_candidate_manifest"):
+            candidate_path = under(workspace, item["required_candidate_manifest"])
+            candidate = json.loads(candidate_path.read_text(encoding="utf-8-sig"))
+            key = source.relative_to(candidate_path.parent).as_posix()
+            if candidate["files"].get(key) != sha(raw):
+                raise ValueError(f"Candidate commitment mismatch: {item['source']}")
         if item["transform"] == "none":
             exported = raw
         elif item["transform"] == "normalize_review_workspace_paths":
             obj = normalize_review(json.loads(raw.decode("utf-8-sig")), workspace)
             exported = (json.dumps(obj, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+        elif item["transform"] == "normalize_workspace_paths_text":
+            text = raw.decode("utf-8-sig")
+            for prefix in (str(workspace).rstrip("\\/") + "\\", workspace.as_posix().rstrip("/") + "/"):
+                text = text.replace(prefix, "")
+            exported = text.encode("utf-8")
         else:
             raise ValueError("Unknown reviewed transformation")
         prepared.append((item, source, destination, raw, exported))

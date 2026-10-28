@@ -1,0 +1,1350 @@
+{
+  "run_id": "case_b_build_03_proposed_v1",
+  "lineage_id": "case_b_build_03",
+  "branch": "proposed",
+  "action": "revise",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "reason": "Exact executing model identifier, provider configuration and token accounting were not supplied by the tool; none inferred."
+  },
+  "model_family": "Positive lognormal marginal distributions with three prespecified Gaussian factor dependence structures and finite-cohort sampling variation",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "Units specified per endpoint; serum leptin is raw ng/mL, not a log transformation",
+      "provenance": "source_packet_B",
+      "action": "qualify",
+      "reason": "Use rounded arithmetic means and sample SDs as plug-in population marginal moments with analytic lognormal conversion. Raw units are retained, including raw leptin. These target-derived reconstruction inputs provide no independent validation of means, pairing, change SDs or change correlations. Cohort moments fluctuate; shape, rounding uncertainty and marginal-parameter uncertainty remain assumed or unmodeled."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_B",
+      "action": "use",
+      "reason": "Use the paired visit design, population description and exact complete-pair counts; scale counts by requested persons. All four endpoint pairs are complete here. No control arm or unprovided age, adiposity or energy-intake covariates are fabricated. The short interval makes persistent person factors a reasonable sensitivity assumption but does not identify their magnitude."
+    }
+  ],
+  "components": [
+    {
+      "name": "raw_positive_marginals",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. For each mean m and SD s, use log variance log(1+(s/m)^2) and log mean log(m)-log_variance/2. Lognormal shape is assumed; arithmetic population moments equal the supplied plug-in values, while sample moments fluctuate. No exact row or marginal matching is performed."
+    },
+    {
+      "name": "dependence_sensitivity_set",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Each latent standard normal is a sum of independent standard-normal common person, endpoint person, common visit and endpoint visit factors with square-root variance weights. The three weight rows are (0.20,0.70,0,0.10), (0.20,0.30,0,0.50), and (0.20,0.30,0.35,0.15). Every row sums to one, giving a positive-semidefinite joint model. All weights are chosen assumptions, not source estimates. Common visit factors are independent between pre and post and shared across endpoints within visit. They may represent shared physiological state or measurement-episode effects, which the packet cannot distinguish."
+    },
+    {
+      "name": "counts_keys_randomness",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Each complete-pair count is round(endpoint_n*n/packet_n). Generalized missing pairs are randomly placed without replacement independently by endpoint, an unvalidated MCAR convention; this packet has no missing pairs. Keys are new and include scenario, seed and row. Only local np.random.default_rng(seed) is used; evidence is not mutated. Output order is the supplied paired-wide schema."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 7,
+      "assumption": "Retain the parent strong-stability structure: common person variance 0.20, endpoint person variance 0.70, independent endpoint/visit variance 0.10. Latent within-endpoint correlation is 0.90 and cross-endpoint correlation is 0.20 at all visits.",
+      "inclusion_rationale": "Preserve the source-compatible parent as a reference for high person persistence across the short paired interval. No evidence disproves it, but neither the interval duration nor the source checks validate the numerical strength. Retention was committed before branch diagnostic cohorts.",
+      "unresolved_dependencies": [
+        "Actual four pre/post covariances and change SDs are absent.",
+        "Cross-endpoint covariance at and across visits, including six change correlations, is absent.",
+        "Marginal distribution shape, extreme tails, heterogeneity and small-sample parameter uncertainty are not identified.",
+        "No control group supports a validated causal effect interpretation."
+      ],
+      "affected_analysis_classes": [
+        "Four paired change means and paired t intervals: population mean differences use reconstruction inputs; finite-cohort means and interval widths depend on joint sampling and change variability.",
+        "Four paired covariance and change-SD diagnostics depend directly on assumed temporal stability.",
+        "Six endpoint-change correlations depend on the location and strength of shared variation and raw-scale transformation."
+      ],
+      "scientific_scenario_differences": "High persistence and little independent visit fluctuation, with no common visit component. Shared person factors need not imply zero raw change correlation because marginal scales differ across visits."
+    },
+    {
+      "id": "moderate_individual",
+      "n_cohorts": 7,
+      "assumption": "Common person variance 0.20, endpoint person variance 0.30, independent endpoint/visit variance 0.50. Latent pre/post correlation is 0.50; cross-endpoint correlation remains 0.20 at all visits.",
+      "inclusion_rationale": "The packet does not report repeatability. Larger endpoint-specific transient or heterogeneous changes are compatible with the same source marginals and provide a direct sensitivity to paired uncertainty. Holding cross-endpoint latent levels at 0.20 separates the persistence change from a shared visit component.",
+      "unresolved_dependencies": [
+        "Actual four pre/post covariances and change SDs are absent.",
+        "Cross-endpoint covariance at and across visits, including six change correlations, is absent.",
+        "Marginal distribution shape, extreme tails, heterogeneity and small-sample parameter uncertainty are not identified.",
+        "No control group supports a validated causal effect interpretation."
+      ],
+      "affected_analysis_classes": [
+        "Four paired change means and paired t intervals: population mean differences use reconstruction inputs; finite-cohort means and interval widths depend on joint sampling and change variability.",
+        "Four paired covariance and change-SD diagnostics depend directly on assumed temporal stability.",
+        "Six endpoint-change correlations depend on the location and strength of shared variation and raw-scale transformation."
+      ],
+      "scientific_scenario_differences": "Compared with target, reduce stable endpoint variance and increase endpoint-specific visit fluctuations. This changes paired covariance and change variability without introducing shared visit variation."
+    },
+    {
+      "id": "moderate_shared",
+      "n_cohorts": 6,
+      "assumption": "Common person variance 0.20, endpoint person variance 0.30, common visit variance 0.35, independent endpoint/visit variance 0.15. Latent pre/post correlation is 0.50; cross-endpoint correlation is 0.55 within visit and 0.20 across visits.",
+      "inclusion_rationale": "A shared physiological state or visit-level measurement influence can coordinate changes across endpoints while leaving every marginal and each within-endpoint pre/post distribution identical to moderate_individual. Missing cross-endpoint evidence cannot select between these explanations, so both merit retention for the six change-correlation analyses.",
+      "unresolved_dependencies": [
+        "Actual four pre/post covariances and change SDs are absent.",
+        "Cross-endpoint covariance at and across visits, including six change correlations, is absent.",
+        "Marginal distribution shape, extreme tails, heterogeneity and small-sample parameter uncertainty are not identified.",
+        "No control group supports a validated causal effect interpretation."
+      ],
+      "affected_analysis_classes": [
+        "Four paired change means and paired t intervals: population mean differences use reconstruction inputs; finite-cohort means and interval widths depend on joint sampling and change variability.",
+        "Four paired covariance and change-SD diagnostics depend directly on assumed temporal stability.",
+        "Six endpoint-change correlations depend on the location and strength of shared variation and raw-scale transformation."
+      ],
+      "scientific_scenario_differences": "Reallocate 0.35 of independent visit variance to a common visit factor, preserving temporal correlation and the population distribution of each endpoint pair relative to moderate_individual. Cross-endpoint dependence of changes differs. Same-visit co-movement is a deliberate sensitivity assumption, not an inferred positive association."
+    }
+  ],
+  "changes_from_parent": {
+    "action": "Expand the single parent dependence assumption into a prespecified three-scenario sensitivity set; retain its marginal family and target structure.",
+    "preserved": [
+      "Positive raw lognormal marginals",
+      "Analytic source-moment parameter conversion",
+      "Complete-pair counts and n scaling",
+      "Paired-wide schema and local RNG"
+    ],
+    "changed": [
+      "Scenario context dispatch",
+      "Weaker endpoint stability alternative",
+      "Shared visit variation alternative at the same weaker stability",
+      "New scenario-aware synthetic identifiers",
+      "Fixed final allocation from target=20 to target=7, moderate_individual=7, moderate_shared=6"
+    ],
+    "parent_feedback_review": {
+      "kind": "source_only",
+      "status": "valid",
+      "errors": [],
+      "source_cohorts": 3,
+      "marginal_envelopes_passed": 24,
+      "interpretation": "Parent source feedback is valid with all 24 marginal envelopes passing; these checks constrain marginal plausibility and mechanics, not unknown dependence. No target feedback was read.",
+      "historical_parent_issue": "Parent decision recorded one diagnostic-log serialization failure for a NumPy boolean at seed 810101. Supplied parent source feedback subsequently contains all three source checks; branch serialization will normalize NumPy values."
+    }
+  },
+  "source_check_results": {
+    "local_source_only_checks": [
+      {
+        "context": "target",
+        "seed": 810101,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.3089086915162441
+      },
+      {
+        "context": "target",
+        "seed": 810102,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.39167101206436583
+      },
+      {
+        "context": "target",
+        "seed": 810103,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.35512710958368243
+      },
+      {
+        "context": "moderate_individual",
+        "seed": 810101,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.48454154066486343
+      },
+      {
+        "context": "moderate_individual",
+        "seed": 810102,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.4297497831288076
+      },
+      {
+        "context": "moderate_individual",
+        "seed": 810103,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.3447026217569772
+      },
+      {
+        "context": "moderate_shared",
+        "seed": 810101,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.3823356729364247
+      },
+      {
+        "context": "moderate_shared",
+        "seed": 810102,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.46098137934587474
+      },
+      {
+        "context": "moderate_shared",
+        "seed": 810103,
+        "frame_contract_passed": true,
+        "source_envelopes_passed": 8,
+        "source_envelopes_total": 8,
+        "minimum_positive_measurement": 0.5132580220007896
+      }
+    ],
+    "source_envelopes_passed": 72,
+    "source_envelopes_total": 72,
+    "frame_contract_passed_cohorts": 9,
+    "unique_structure_seed_cohorts": 9,
+    "interpretation": "These are source-only mechanical and marginal diagnostic checks on reconstruction inputs. They do not validate joint relationships, interval coverage, target findings or causal effects. No parameter, structure, scenario, allocation or seed was selected based on these results.",
+    "controller_feedback": "not yet run; controller will attach"
+  },
+  "calibration_log": {
+    "precommitment": "The three structures, factor weights, retained dispositions, order and allocation were fixed before any branch diagnostic cohort. No candidate search, seed selection, result-based tuning or second scientific revision is planned.",
+    "examined_structures": [
+      {
+        "id": "strong_stability",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Preserve the parent high-persistence sensitivity assumption; source evidence does not identify pre/post covariance.",
+        "scenario": "target",
+        "source_calls": [
+          {
+            "seed": 810101,
+            "context": "target",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 8.647702744179673,
+                "sd": 4.896743422637006,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.340806937804711,
+                "sd": 3.8732247995448112,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.96194371880256,
+                "sd": 11.650281094587427,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 91.8122243383569,
+                "sd": 11.240414682563948,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.052163816338893,
+                "sd": 0.4560849071871636,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.0043572984746785,
+                "sd": 0.3196534800527308,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.2986125883233663,
+                "sd": 0.6854500214921627,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.9421584292218294,
+                "sd": 0.4644444622884553,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "target",
+              "seed": 810101,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.3089086915162441
+            }
+          },
+          {
+            "seed": 810102,
+            "context": "target",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 10.221234948229087,
+                "sd": 4.670981572435613,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.905561135585969,
+                "sd": 4.979356696182475,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.4521082761969,
+                "sd": 13.168505251229803,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 90.64679684113621,
+                "sd": 13.95140933853535,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.13357478765066,
+                "sd": 0.6739542870407279,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.063515674737428,
+                "sd": 0.4768850752126306,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.4098024441594224,
+                "sd": 0.5497932489564483,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 1.0602592171127252,
+                "sd": 0.4043606635758238,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "target",
+              "seed": 810102,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.39167101206436583
+            }
+          },
+          {
+            "seed": 810103,
+            "context": "target",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 8.759836441257493,
+                "sd": 3.183216179450075,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.119437580813894,
+                "sd": 3.284193208049405,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.15355007546658,
+                "sd": 12.76697666593032,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 90.62906811047169,
+                "sd": 11.597438515693204,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.199624968384472,
+                "sd": 0.4118626783278125,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.035068653560534,
+                "sd": 0.2911558694014718,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.3668989659375652,
+                "sd": 0.5882747848561196,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 1.000256182619867,
+                "sd": 0.4762991594716624,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "target",
+              "seed": 810103,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.35512710958368243
+            }
+          }
+        ],
+        "failed_attempts": []
+      },
+      {
+        "id": "moderate_endpoint_fluctuation",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Probe unresolved endpoint repeatability with larger endpoint-specific transient variation at unchanged cross-endpoint latent covariance.",
+        "scenario": "moderate_individual",
+        "source_calls": [
+          {
+            "seed": 810101,
+            "context": "moderate_individual",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 8.14308344544277,
+                "sd": 4.761324459910044,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 5.826897346010958,
+                "sd": 2.588441472252811,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.96440944759213,
+                "sd": 10.85356208782949,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 92.26562711407473,
+                "sd": 9.649722078157993,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.100364175999492,
+                "sd": 0.4214615786374012,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.031806609245126,
+                "sd": 0.4382114425599006,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.4121834876119361,
+                "sd": 0.6741520708502586,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.9824096561639437,
+                "sd": 0.36642730909342097,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "moderate_individual",
+              "seed": 810101,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.48454154066486343
+            }
+          },
+          {
+            "seed": 810102,
+            "context": "moderate_individual",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 10.729009993255168,
+                "sd": 5.169945717007144,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.280019322111303,
+                "sd": 4.953780509034954,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.76876223131053,
+                "sd": 10.611398745582889,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 90.41529681043194,
+                "sd": 11.093552582139493,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.102886031864187,
+                "sd": 0.7532492292724109,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.01717461069421,
+                "sd": 0.44230462967242457,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.318303330207243,
+                "sd": 0.527437936409801,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.988262106981709,
+                "sd": 0.439978408936411,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "moderate_individual",
+              "seed": 810102,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.4297497831288076
+            }
+          },
+          {
+            "seed": 810103,
+            "context": "moderate_individual",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 9.215522390501507,
+                "sd": 3.3786150183493584,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.323049391939478,
+                "sd": 3.8561750680747693,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 91.57540399968758,
+                "sd": 13.97291168101751,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 90.08311742310866,
+                "sd": 11.602708412780247,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.181383917837439,
+                "sd": 0.5190860996784742,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 4.902664853384988,
+                "sd": 0.30091479597784915,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.3446216534647324,
+                "sd": 0.3299668820361431,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.9750846796420433,
+                "sd": 0.4642606022865839,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "moderate_individual",
+              "seed": 810103,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.3447026217569772
+            }
+          }
+        ],
+        "failed_attempts": []
+      },
+      {
+        "id": "moderate_common_visit_fluctuation",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Probe coordinated endpoint changes by adding common visit variation while holding within-endpoint paired distributions equal to moderate_endpoint_fluctuation.",
+        "scenario": "moderate_shared",
+        "source_calls": [
+          {
+            "seed": 810101,
+            "context": "moderate_shared",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 8.953517390965226,
+                "sd": 4.205010658970236,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 5.485892713926361,
+                "sd": 3.856610211746789,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 93.09652993809243,
+                "sd": 10.10505673817165,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 89.80567884614652,
+                "sd": 9.454881557097705,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.0710597889244395,
+                "sd": 0.6683625857934792,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.009863729863776,
+                "sd": 0.6314017706006041,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.4494583603426214,
+                "sd": 0.8246466113963855,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.989206409472715,
+                "sd": 0.5652094560546138,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "moderate_shared",
+              "seed": 810101,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.3823356729364247
+            }
+          },
+          {
+            "seed": 810102,
+            "context": "moderate_shared",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 9.471111631803558,
+                "sd": 7.160255311084086,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.501404130413802,
+                "sd": 3.0590378415889057,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 93.70408867530335,
+                "sd": 7.966810426705098,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 92.1428105068447,
+                "sd": 9.9586675099961,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.158915436906333,
+                "sd": 0.5937243078019453,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.04918802949704,
+                "sd": 0.4478987437565515,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.2054446876668135,
+                "sd": 0.3604527490636364,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.9892582687039838,
+                "sd": 0.3414824101490712,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "moderate_shared",
+              "seed": 810102,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.46098137934587474
+            }
+          },
+          {
+            "seed": 810103,
+            "context": "moderate_shared",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "frame_contract_passed": true,
+            "evidence_unchanged": true,
+            "global_numpy_rng_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 8.65271461859066,
+                "sd": 3.777950635140969,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.88803029313025,
+                "sd": 4.703687269823751,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 91.86821874022188,
+                "sd": 10.131503640684972,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 91.91051096579396,
+                "sd": 9.069700907152,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 4.842316048905375,
+                "sd": 0.31042463199321146,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.001129159447587,
+                "sd": 0.3367508711377754,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.2568010070364573,
+                "sd": 0.8892306482066731,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 0.9853732505284855,
+                "sd": 0.3036880904898105,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ],
+            "status": "completed",
+            "same_cohort_summary": {
+              "context": "moderate_shared",
+              "seed": 810103,
+              "frame_contract_passed": true,
+              "source_envelopes_passed": 8,
+              "source_envelopes_total": 8,
+              "minimum_positive_measurement": 0.5132580220007896
+            }
+          }
+        ],
+        "failed_attempts": []
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "strong_stability",
+      "moderate_individual": "moderate_endpoint_fluctuation",
+      "moderate_shared": "moderate_common_visit_fluctuation"
+    },
+    "scheduled_source_seeds": [
+      810101,
+      810102,
+      810103
+    ],
+    "unique_structure_seed_budget": 9,
+    "final_cohort_allocation": {
+      "target": 7,
+      "moderate_individual": 7,
+      "moderate_shared": 6
+    },
+    "allocation_interpretation": "Twenty total controller cohorts. Frequencies are resource allocation, not posterior scenario probabilities.",
+    "source_calibration": "Analytic marginal conversion only; no numerical fitting. All planned source checks concern support, counts, schema, RNG isolation, input immutability and marginal diagnostic envelopes.",
+    "options_not_examined": "No additional candidate structures were examined. Negative or antagonistic cross-endpoint dependence, heterogeneous endpoint-specific persistence, other marginal families and non-Gaussian copulas remain possible; the three retained structures do not exhaust compatible models.",
+    "calls_and_access_log": [
+      {
+        "operation": "Read exact REQUEST.md",
+        "result": "success",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "Read the exact allowlisted evidence.json, schema.json, task.json, source_checks.py, decision_template.json, parent/generator.py, parent/decision.json and parent/source_feedback.json",
+        "result": "tool output truncated; no file or model mutation",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "Reread parent/generator.py and selected parent/decision.json fields to resolve truncation",
+        "result": "success",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "Write generator.py",
+        "result": "success",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "Read allowlisted template, evidence and parent source feedback; write precommitted decision.json",
+        "result": "success",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "source_checks.load_generator",
+        "result": "passed AST/import/no-I/O/local-RNG source contract",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "source_checks.validate_decision before diagnostics",
+        "result": "passed",
+        "cohorts_generated": 0
+      },
+      {
+        "operation": "Evaluate source_checks.call_checked and source_checks.source_diagnostics for each of three declared structures at each of seeds 810101, 810102 and 810103",
+        "result": "See per-structure source_calls for every call and outcome; all decisions and factor weights remain precommitted",
+        "cohorts_generated": 9
+      },
+      {
+        "operation": "source_checks.validate_decision after diagnostics and final decision.json persistence",
+        "result": "passed with exactly twenty final allocated cohorts",
+        "cohorts_generated": 0
+      }
+    ],
+    "failed_attempts": [],
+    "revision_limits": "One scheduled source-only branch revision performed; no second scientific round and no controller run.",
+    "environment_scope": "Only exact allowlisted packet files and the two authored artifacts are accessed. No ancestor, sibling, external source, reference rows, reserved result or environment history is consulted.",
+    "unique_structure_seed_cohorts_evaluated": 9,
+    "source_parameters_changed_after_diagnostics": false,
+    "decision_contract_validation": "passed before and after all nine diagnostic cohorts"
+  },
+  "intended_uses": [
+    "Synthetic rehearsal of schema and paired-analysis software.",
+    "Sensitivity demonstration for missing within-person covariance and cross-endpoint change dependence, conditional on supplied reconstruction marginals.",
+    "Comparison of prespecified scientific assumptions using the fixed twenty-cohort resource budget."
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions, patient-level inference or identification of real participants.",
+    "New empirical findings, validated causal effects or transport to other populations.",
+    "Claims that paired t intervals have valid coverage or that synthetic paired covariances, change SDs or six change correlations recover the actual study.",
+    "Treating supplied target-derived means or SDs as independent validation successes.",
+    "Posterior probabilities, exhaustive uncertainty bounds, parameter uncertainty or selection of the true dependence model from this limited scenario set."
+  ],
+  "next_information_request": "Request a blinded covariance summary with matching raw units and complete-pair counts: four pre/post covariances distinguish high versus moderate stability, and the 4-by-4 change covariance matrix distinguishes endpoint-specific versus shared visit fluctuations. A full 8-by-8 pre/post covariance matrix would additionally separate same-visit from cross-visit shared variation. No paper findings or reserved test statistics are requested."
+}

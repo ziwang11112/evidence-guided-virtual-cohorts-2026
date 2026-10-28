@@ -1,0 +1,323 @@
+{
+  "run_id": "case_a_build_03_ordinary_v1",
+  "lineage_id": "case_a_build_03",
+  "branch": "ordinary",
+  "action": "no_op",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "reason": "Exact runtime model identifier, provider settings and token metadata were not supplied; none inferred."
+  },
+  "model_family": "Conditional marginal reconstruction using randomized stratified lognormal/beta/negative-binomial quantiles and independent-endpoint Gaussian random-intercept copulas",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use each of 25 visit/outcome means and sample SDs to parameterize a marginal distribution and scale each observed count by n/75. These target-derived inputs are reconstruction constraints, not independent validation. The source does not identify distribution shape, dependence, or missingness mechanism."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Use five visits, adult weight-management population, baseline weight cap, positive weight, PFS range and fifteen-item averaging, integer No-Go errors, and AUC support. Height, BMI, age, contraindications, and pregnancy cannot be reconstructed because those fields are outside the schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "marginal_outcomes",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. Lognormal weight; beta-distributed PFS on [1,5] rounded to 1/15; negative-binomial integer gng on [0,512]; beta dd100 and dd1000 on [0,1]. Distributional shapes are assumptions. Beta and negative-binomial parameters match source population-style moments; randomized finite cohorts need not match exactly. Weight is truncated at 180 kg only at baseline. Truncation and PFS rounding slightly alter fitted moments."
+    },
+    {
+      "name": "conditional_quantile_sampling",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "At each observed visit/outcome margin, sample one uniform value per equal-probability stratum and assign quantiles by stochastic Gaussian latent ranks. This produces stochastic cohorts conditional on supplied marginals with less finite-cohort marginal variability than iid sampling. It does not reproduce individual rows and does not provide a sampling-uncertainty model."
+    },
+    {
+      "name": "longitudinal_and_cross_endpoint_dependence",
+      "evidence_ids": [],
+      "source_to_target_assumptions": "Working latent persistent variance fractions are weight 0.85, pfs 0.60, gng 0.45, dd100 0.60, dd1000 0.60. Gaussian random intercept plus independent visit innovations, followed by within-observed-margin rank transformation, gives persistent subject rankings. These numbers are unestimated modeling choices and are not exact observed-scale ICCs. Outcome processes are independent across endpoints as a parsimonious unidentified-dependence closure; this is an imposed assumption, not evidence that any true correlation or weight association is zero."
+    },
+    {
+      "name": "missingness",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Exact visit/outcome observed counts at n=75; int(round(n_observed*n/75)) at other n. Rank availability scores composed of independent normal person (variance 0.50), shared person-visit (0.30), and endpoint-visit (0.20) components. The overlap and persistent absence are assumed; no monotone dropout is enforced. Scores are independent of all outcome latent variables, giving a conditional-count MCAR mechanism. Source individual masks and informative missingness are unknown."
+    },
+    {
+      "name": "synthetic_identity",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "New numeric person IDs 1 through n; every person has one row at each declared visit. Local default_rng(seed), no file or network I/O, and no evidence mutation."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "The unchanged parent working reconstruction: assumed positive within-endpoint persistence, independent cross-endpoint outcome processes and outcome-independent shared missingness. Twenty cohorts are a fixed resource allocation, not a posterior probability.",
+      "inclusion_rationale": "A justified no-op. The parent obeys support and missing-count constraints, and its source feedback has only one marginal-envelope miss out of 75 checks, barely beyond a transparent diagnostic envelope. Marginal summaries do not distinguish alternative joint structures. Retaining the parent avoids converting a single stochastic tail draw into seed-specific calibration or pretending that changing unknown dependence constitutes evidence-based improvement.",
+      "scientific_scenario_differences": "One retained target scenario only. No scientific difference from the common parent; no alternative executable structure was examined.",
+      "unresolved_dependencies": [
+        "Cross-endpoint covariance, including between discounting conditions, remains unidentified; independence is assumed.",
+        "Within-person lag covariance and random slope/change covariance are unprovided; fixed latent persistence is assumed.",
+        "Missing-mask overlap and outcome-dependent attrition are unprovided; correlated MCAR masks are assumed.",
+        "Distribution shape, boundary masses, PFS item completeness, and individual measurement error are unprovided."
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs/gng/dd100/dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially standard errors and covariance assumptions",
+        "Four exploratory standardized weight associations, whose covariance structure is unvalidated"
+      ]
+    }
+  ],
+  "changes_from_parent": {
+    "generator": "Byte-identical copy of parent/generator.py; no parameter, family, mapping, dependence or missingness changes.",
+    "decision": "Reidentified for ordinary revision; selected no_op; incorporated allowed parent source feedback and local source-only checks; documented why the available marginal evidence does not warrant structural revision.",
+    "reason": "The only supplied parent diagnostic departure is baseline gng SD on seed 810102: absolute discrepancy 2.863410709960723 against tolerance 2.8087778510947756, a tolerance fraction 1.0194507582166576. The envelope is neither a validity test nor a hard moment-equality constraint. Further source fitting would not identify dependence and could be driven by this scheduled random seed."
+  },
+  "source_check_results": {
+    "scope": "Source-only contracts and marginal diagnostic envelopes; no reserved-target analysis executed.",
+    "parent_feedback": {
+      "status": "valid",
+      "target_results_loaded": false,
+      "errors": [],
+      "interpretation": "Inherited feedback agrees with local checks; model remains unchanged."
+    },
+    "local_cohorts": [
+      {
+        "structure_id": "parent_retained",
+        "seed": 810101,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.10879492525503665,
+        "max_sd_fraction_of_tolerance": 0.7378826803889714
+      },
+      {
+        "structure_id": "parent_retained",
+        "seed": 810102,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 24,
+        "outside_envelope": [
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.8,
+            "sd": 14.253496489007958,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": false
+          }
+        ],
+        "max_mean_fraction_of_tolerance": 0.12165322306914268,
+        "max_sd_fraction_of_tolerance": 1.0194507582166576
+      },
+      {
+        "structure_id": "parent_retained",
+        "seed": 810103,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.054128221404337575,
+        "max_sd_fraction_of_tolerance": 0.39936872525926853
+      }
+    ],
+    "generator_identical_to_parent": true,
+    "total_source_margins_within_envelope": 74,
+    "total_source_margins_checked": 75,
+    "controller": "not yet run; controller will attach",
+    "limitations": "Source means and SDs are reconstruction inputs, not validation successes. Independence and persistent latent variance fractions are unestimated assumptions, not zero-evidence estimates. Marginal fit cannot validate baseline correlations, longitudinal covariance, model uncertainty, missingness mechanisms or standardized weight associations. Conditional stratification suppresses cohort marginal variability relative to iid sampling."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "parent_retained",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained_no_op",
+        "reason": "Only examined executable structure. Source feedback supports procedural compatibility and close marginal reconstruction, but does not identify better dependence or missingness. No scientific basis to prefer an untested alternative."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "parent_retained"
+    },
+    "diagnostic_calls": [
+      {
+        "call": "read_allowlisted_packet",
+        "result": "Read REQUEST.md, evidence.json, schema.json, task.json, source_checks.py, decision_template.json and the three allowed parent files only. No target outcomes, external sources, siblings or ancestor files read."
+      },
+      {
+        "call": "inspect_parent_source_feedback",
+        "result": "Source-only status valid; target_results_loaded false; no errors; input mean perturbation changed output. Scheduled seed envelope counts 25/25, 24/25, 25/25. These are inherited checks, not newly generated cohorts."
+      },
+      {
+        "call": "copy_parent_generator_and_compare_bytes",
+        "result": "Byte-identical",
+        "sha256": "f8891e5d4887e073fd85194ee81630d4a3d80025041ebc3f0263b6d388480c75"
+      },
+      {
+        "call": "python_runtime_version",
+        "result": "Python 3.12.10; no cohort generated"
+      },
+      {
+        "call": "load_generator",
+        "structure_id": "parent_retained",
+        "result": "passed AST/import contract; no cohort generated"
+      },
+      {
+        "structure_id": "parent_retained",
+        "seed": 810101,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.10879492525503665,
+        "max_sd_fraction_of_tolerance": 0.7378826803889714
+      },
+      {
+        "structure_id": "parent_retained",
+        "seed": 810102,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 24,
+        "outside_envelope": [
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.8,
+            "sd": 14.253496489007958,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": false
+          }
+        ],
+        "max_mean_fraction_of_tolerance": 0.12165322306914268,
+        "max_sd_fraction_of_tolerance": 1.0194507582166576
+      },
+      {
+        "structure_id": "parent_retained",
+        "seed": 810103,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.054128221404337575,
+        "max_sd_fraction_of_tolerance": 0.39936872525926853
+      },
+      {
+        "call": "validate_decision",
+        "result": "passed required fields, identities, evidence coverage and three-unique-cohort budget",
+        "allocation": {
+          "target": 20
+        },
+        "cohort_generated": false
+      }
+    ],
+    "failed_attempts": [],
+    "rejected_options": [],
+    "unexamined_revision_ideas": [
+      {
+        "idea": "Tune the gng family or tail quantiles to remove the seed-810102 SD departure",
+        "reason_not_examined": "A one-seed minor diagnostic-envelope departure does not establish distributional misspecification; optimizing it risks scheduled-seed fitting."
+      },
+      {
+        "idea": "Change cross-endpoint covariance, longitudinal persistence or missingness mechanism",
+        "reason_not_examined": "The packet supplies no joint moments or individual masks to choose among those alternatives. Unknown dependence remains unknown."
+      }
+    ],
+    "construction_budget": "One examined structure; three unique structure/seed source cohorts on 810101, 810102 and 810103. Controller may recheck those same scheduled seeds, not additional unique source cohorts. No alternative structure, extra n, perturbation cohort, target evaluation or seed selection."
+  },
+  "intended_uses": [
+    "Synthetic analysis rehearsal and code-path testing at the supplied design and measurement scales",
+    "Sensitivity discussion of unidentified joint structure; only one working scenario is implemented"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or individual prediction",
+    "New empirical findings or causal claims",
+    "Reconstruction of true source participants or their missingness masks",
+    "Validation of correlations, weight-association signs or magnitudes, trajectory uncertainty, p values, confidence intervals, or random-effects parameters",
+    "Population sampling uncertainty from the randomized stratified cohorts",
+    "External transportability beyond the supplied population"
+  ],
+  "next_information_request": "Request privacy-preserving baseline covariance across all five outcomes, lagged within-outcome covariance summaries, cross-endpoint change covariances, and cross-tabulated visit/outcome missingness counts with attrition summaries by previously observed outcomes. These would discriminate the independent-endpoint, random-intercept and MCAR closures without supplying reserved analysis results."
+}

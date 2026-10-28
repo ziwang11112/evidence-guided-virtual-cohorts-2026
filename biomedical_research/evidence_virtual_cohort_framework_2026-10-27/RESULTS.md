@@ -1,5 +1,7 @@
 # Expanded development replay and paper-design decision
 
+**Stage 1 update:** the new three-case paired construction experiment is now complete: 420/420 cohorts, 7,700 retained analysis records, and no generation or analysis-status failures. Its results are reported separately in [stage1/RESULTS.md](stage1/RESULTS.md), with the [advance/stop decision](stage1/DECISION.md). The expanded scenario policy did not consistently improve reserved analyses. This does not erase the earlier completion findings below. Model-fit warnings and assumption limits remain visible in the Stage 1 report.
+
 27 October 2026. **The expanded completion results preserve the reference evidence state for all 18 affected case-by-analysis comparisons. Missing-only also preserves all 18; MICE–PMM preserves 17.** This supports a limited conclusion-preservation use case, not a demonstrated Agent advantage. Whole-cohort generation remains less consistent on unprovided relationships. The method-paper direction is retained, with separate synthesis/completion tracks and independent-case validation required.
 
 ## Executed scope
@@ -64,9 +66,9 @@ Seven implementation tests pass. An independent source audit reran all 35 analys
 
 Ready: [method and experiment plan](METHODS_AND_EXPERIMENT_PLAN.md), [paired Agent strategy specification](AGENT_STRATEGIES.md), [manuscript scaffold](MANUSCRIPT_SKELETON.md), broad development evaluator and retained outputs.
 
-Not yet run: the proposed multiple-structure policy, the three-case paired-policy experiment, new confirmation cohorts, autonomous evidence-acquisition comparison, or the research-design utility task. This batch broadens analysis coverage on old outputs; it is not that prospective large experiment.
+The retrospective batch described above broadens analysis coverage on old outputs. Separately, the multiple-structure policy and three-case paired-policy experiment have now run as Stage 1. New confirmation cohorts, autonomous evidence-acquisition comparison, and the research-design utility task remain unrun.
 
-The next implementation is the common policy/scenario interface and audited case adapters, followed by nine fresh initial lineages across three development studies, two paired policy branches and twenty final cohorts per branch: 360 Agent-generated cohorts plus 60 statistical-reference cohorts. Proceed only after the shared interface and evidence/analysis ledgers are fixed. Two additional candidate study designs have public data routes, but their analysis adapters and prior-exposure audits must be completed before they can serve as confirmation.
+Stage 1 executed the common policy/scenario interface and audited adapters with nine fresh initial lineages, two paired branches per lineage and twenty final cohorts per branch: 360 Agent-generated cohorts plus 60 statistical-reference cohorts. Two additional candidate study designs have public data routes, but their adapters and exposure audits remain incomplete. Expansion is held under the original stop rule because unconstrained scenario diversification has not shown consistent independent analytical or decision benefit.
 
 Do not promise patient-recruitment savings from these results. The intended near-term benefit is useful research preparation and transparent exploration, measured by reserved-analysis behavior and a concrete planning task. This is a credible method-paper objective with substantial prior art, not yet an established new method advantage or a journal-level result.
 

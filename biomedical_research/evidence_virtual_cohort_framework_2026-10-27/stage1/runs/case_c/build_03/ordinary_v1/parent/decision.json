@@ -1,0 +1,384 @@
+{
+  "run_id": "case_c_build_03_initial_v3",
+  "lineage_id": "case_c_build_03",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Gaussian factor copula with normal log10-leptin and arithmetic-moment-parameterized lognormal positive endpoints",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "44 completers aged 7-14 with simple obesity; before/after 3-month home diet/exercise program with professional follow-up; no randomized parallel arm; 43 glucose and triglyceride pairs.",
+      "measurement": "units specified per endpoint; pediatric leptin already log10(pg/mL)",
+      "provenance": "source_packet_C",
+      "action": "qualify",
+      "reason": "Use the supplied rounded means and sample SDs as plug-in population moments in a same-population A0 reconstruction. Convert arithmetic moments analytically to lognormal parameters for the three positive endpoints; leptin remains on its supplied log10 scale. Finite samples fluctuate rather than having moments forced exactly. These target-derived inputs supply no independent validation or information about joint dependence."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "44 completers aged 7-14 with simple obesity; before/after 3-month home diet/exercise program with professional follow-up; no randomized parallel arm; 43 glucose and triglyceride pairs.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_C",
+      "action": "use",
+      "reason": "Generate one paired record per synthetic completer and no parallel control arm. At n=44 retain 44 leptin/body-mass pairs and 43 glucose/triglyceride pairs, with both unavailable pairs on the final synthetic record as required by the schema. For other n, round endpoint n times requested n divided by 44. Both-null fields encode an unavailable analysis pair, not native cell-level missingness; synthetic row order has no clinical meaning."
+    }
+  ],
+  "components": [
+    {
+      "name": "marginal_measurements",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Rounded source means and SDs approximate population moments for independent synthetic persons. Leptin is Gaussian on log10(pg/mL). Body mass, glucose and triglycerides follow lognormal marginals on their declared measurement scales. No extra log10 transformation is applied to leptin.",
+      "implementation": "For a positive marginal, log-variance=log(1+(sd/mean)^2) and log-mean=log(mean)-log-variance/2. Realized means and SDs remain stochastic."
+    },
+    {
+      "name": "unidentified_joint_dependence",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Each latent measurement combines independent standard normal factors with variance shares 0.15 stable common-person, 0.50 stable endpoint-person, 0.10 common visit-person, and 0.25 endpoint-visit residual. This yields latent within-endpoint pre/post correlation 0.65, cross-endpoint same-visit correlation 0.25 and cross-endpoint cross-visit correlation 0.15. The shared visit factor imposes positively associated latent changes. All shares and signs are construction assumptions, not estimates or conclusions from the evidence.",
+      "unresolved_dependencies": [
+        "Actual pre/post covariance for every endpoint",
+        "Actual cross-endpoint covariance at and across visits",
+        "Actual associations among endpoint changes",
+        "Whether a common visit factor exists or has mixed endpoint signs"
+      ]
+    },
+    {
+      "name": "pair_availability_and_identity",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "New synthetic IDs and exchangeable persons; fixed trailing complete-pair gaps imposed by the schema. No age, sex, adherence, intervention-effect heterogeneity, dropout mechanism or causal control group is inferred. Shared final-row gaps do not establish common native missingness."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One fixed positive-persistence Gaussian factor copula with the explicit 0.15/0.50/0.10/0.25 variance shares, normal log10-leptin and lognormal positive endpoints. Dependence uncertainty is not resolved or exhaustively represented by this single model.",
+      "inclusion_rationale": "A parsimonious paired repeated-measurement construction with stable participant variation and modest shared visit variation is a plausible rehearsal model. The factor construction is positive semidefinite without estimating unsupported covariance. It was selected before numerical diagnostics; no reserved outcome, coefficient, direction, p value or interval was consulted. Twenty cohorts are resource allocation, not a posterior scenario probability.",
+      "unresolved_dependencies": [
+        "Paired covariance and change SD for each endpoint",
+        "Six endpoint-change correlations",
+        "Nonlinear tail dependence",
+        "Missing-pair mechanism and native overlap",
+        "Sampling uncertainty in the rounded source marginals"
+      ],
+      "affected_analysis_classes": [
+        "Four paired endpoint change means and paired t intervals",
+        "Paired covariance and SD diagnostics",
+        "Six correlations between endpoint changes"
+      ]
+    }
+  ],
+  "changes_from_parent": "Initial build; no parent artifacts exist in the supplied task. No scientific alternatives examined.",
+  "source_check_results": {
+    "builder_source_only": [
+      {
+        "seed": 810101,
+        "structural_contracts": "passed",
+        "source_marginals_within_envelope": "unavailable after reporting serialization failure; controller will attach"
+      },
+      {
+        "seed": 810102,
+        "structural_contracts": "passed",
+        "source_marginals_within_envelope": "8/8"
+      },
+      {
+        "seed": 810103,
+        "structural_contracts": "passed",
+        "source_marginals_within_envelope": "8/8"
+      }
+    ],
+    "interpretation": "Source diagnostic envelopes are descriptive marginal compatibility checks, not independent validation, joint-dependence evidence or reserved-result feedback. No coefficients, change SDs, correlations, paired tests or intervals were calculated for model selection.",
+    "controller": "not yet run; controller will attach"
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "model_1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Selected once before diagnostics as an explicit, source-compatible repeated-measurement factor model. No parameter tuning, selection between seeds or reserved feedback is used."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "model_1"
+    },
+    "diagnostic_calls": [
+      {
+        "operation": "load_generator (first diagnostic process)",
+        "result": "passed source AST/import contract",
+        "cohort_generated": false
+      },
+      {
+        "operation": "validate_decision before cohort diagnostics (first process)",
+        "result": "passed",
+        "cohort_generated": false,
+        "allocation": {
+          "target": 20
+        }
+      },
+      {
+        "operation": "call_checked then source_diagnostics (first process)",
+        "structure": "model_1",
+        "seed": 810101,
+        "context": "target",
+        "n": 44,
+        "cohort_generated": true,
+        "result": "structural contracts passed; source_diagnostics completed",
+        "marginal_diagnostics": "Computed but not persisted because JSON serialization of a numpy boolean failed. Envelope counts unavailable to the builder after process exit. Cohort not regenerated; controller will attach diagnostics."
+      },
+      {
+        "operation": "load_generator (reporting repair process)",
+        "result": "passed source AST/import contract",
+        "cohort_generated": false
+      },
+      {
+        "operation": "call_checked then source_diagnostics",
+        "structure": "model_1",
+        "seed": 810102,
+        "context": "target",
+        "n": 44,
+        "cohort_generated": true,
+        "result": "structural contracts passed",
+        "within_source_envelope": 8,
+        "marginals_checked": 8,
+        "marginal_diagnostics": [
+          {
+            "id": "leptin_log10_pre",
+            "n": 44,
+            "mean": 3.505721192295853,
+            "sd": 0.19065734900212117,
+            "expected_mean": 3.485,
+            "expected_sd": 0.174,
+            "mean_tolerance": 0.0786944609347963,
+            "sd_tolerance": 0.05628870761219485,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "leptin_log10_post",
+            "n": 44,
+            "mean": 3.647009742914142,
+            "sd": 0.16635659900490837,
+            "expected_mean": 3.626,
+            "expected_sd": 0.174,
+            "mean_tolerance": 0.0786944609347963,
+            "sd_tolerance": 0.05628870761219485,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "body_mass_pre",
+            "n": 44,
+            "mean": 55.7483012554377,
+            "sd": 9.608993329405282,
+            "expected_mean": 56.664,
+            "expected_sd": 9.841,
+            "mean_tolerance": 4.450759712984657,
+            "sd_tolerance": 3.183546963285112,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "body_mass_post",
+            "n": 44,
+            "mean": 56.78899242883609,
+            "sd": 11.461522061882759,
+            "expected_mean": 56.83,
+            "expected_sd": 9.793,
+            "mean_tolerance": 4.429050896175059,
+            "sd_tolerance": 3.1680190439438167,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "glucose_pre",
+            "n": 43,
+            "mean": 4.947286860288773,
+            "sd": 0.3792073538049892,
+            "expected_mean": 4.962,
+            "expected_sd": 0.364,
+            "mean_tolerance": 0.1665284388032043,
+            "sd_tolerance": 0.11914696806885185,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "glucose_post",
+            "n": 43,
+            "mean": 4.867433582465585,
+            "sd": 0.347547007263079,
+            "expected_mean": 4.848,
+            "expected_sd": 0.359,
+            "mean_tolerance": 0.16424096024821522,
+            "sd_tolerance": 0.1175103338920819,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "triglycerides_pre",
+            "n": 43,
+            "mean": 1.433588471846462,
+            "sd": 0.6437185885842336,
+            "expected_mean": 1.292,
+            "expected_sd": 0.63,
+            "mean_tolerance": 0.28822229792862286,
+            "sd_tolerance": 0.2062159062730128,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "triglycerides_post",
+            "n": 43,
+            "mean": 1.3196770173098598,
+            "sd": 0.5118810193755303,
+            "expected_mean": 1.233,
+            "expected_sd": 0.528,
+            "mean_tolerance": 0.2415577354068458,
+            "sd_tolerance": 0.17282856906690597,
+            "within_source_diagnostic_envelope": true
+          }
+        ]
+      },
+      {
+        "operation": "call_checked then source_diagnostics",
+        "structure": "model_1",
+        "seed": 810103,
+        "context": "target",
+        "n": 44,
+        "cohort_generated": true,
+        "result": "structural contracts passed",
+        "within_source_envelope": 8,
+        "marginals_checked": 8,
+        "marginal_diagnostics": [
+          {
+            "id": "leptin_log10_pre",
+            "n": 44,
+            "mean": 3.465664997480586,
+            "sd": 0.19335615501729764,
+            "expected_mean": 3.485,
+            "expected_sd": 0.174,
+            "mean_tolerance": 0.0786944609347963,
+            "sd_tolerance": 0.05628870761219485,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "leptin_log10_post",
+            "n": 44,
+            "mean": 3.632192314155498,
+            "sd": 0.20860298053513113,
+            "expected_mean": 3.626,
+            "expected_sd": 0.174,
+            "mean_tolerance": 0.0786944609347963,
+            "sd_tolerance": 0.05628870761219485,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "body_mass_pre",
+            "n": 44,
+            "mean": 56.502646996060754,
+            "sd": 9.789899823883106,
+            "expected_mean": 56.664,
+            "expected_sd": 9.841,
+            "mean_tolerance": 4.450759712984657,
+            "sd_tolerance": 3.183546963285112,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "body_mass_post",
+            "n": 44,
+            "mean": 58.81246601197382,
+            "sd": 9.312390150478063,
+            "expected_mean": 56.83,
+            "expected_sd": 9.793,
+            "mean_tolerance": 4.429050896175059,
+            "sd_tolerance": 3.1680190439438167,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "glucose_pre",
+            "n": 43,
+            "mean": 4.897979339858009,
+            "sd": 0.3786185920442309,
+            "expected_mean": 4.962,
+            "expected_sd": 0.364,
+            "mean_tolerance": 0.1665284388032043,
+            "sd_tolerance": 0.11914696806885185,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "glucose_post",
+            "n": 43,
+            "mean": 4.862218472925226,
+            "sd": 0.38372296926919003,
+            "expected_mean": 4.848,
+            "expected_sd": 0.359,
+            "mean_tolerance": 0.16424096024821522,
+            "sd_tolerance": 0.1175103338920819,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "triglycerides_pre",
+            "n": 43,
+            "mean": 1.1444427357865772,
+            "sd": 0.5697636390980106,
+            "expected_mean": 1.292,
+            "expected_sd": 0.63,
+            "mean_tolerance": 0.28822229792862286,
+            "sd_tolerance": 0.2062159062730128,
+            "within_source_diagnostic_envelope": true
+          },
+          {
+            "id": "triglycerides_post",
+            "n": 43,
+            "mean": 1.1902714126290685,
+            "sd": 0.4827156422419827,
+            "expected_mean": 1.233,
+            "expected_sd": 0.528,
+            "mean_tolerance": 0.2415577354068458,
+            "sd_tolerance": 0.17282856906690597,
+            "within_source_diagnostic_envelope": true
+          }
+        ]
+      },
+      {
+        "operation": "validate_decision after cohort diagnostics",
+        "result": "passed",
+        "cohort_generated": false
+      }
+    ],
+    "failed_attempts": [
+      {
+        "operation": "save first diagnostic call to decision.json",
+        "structure": "model_1",
+        "seed": 810101,
+        "error": "TypeError: Object of type bool is not JSON serializable (numpy boolean returned by source_diagnostics)",
+        "impact": "Reporting-only failure after successful generation, structural validation and marginal diagnostic calculation. No generator change, scientific retry, alternative structure or seed replacement.",
+        "resolution": "Convert numpy scalar values during JSON serialization and record the lost first-call metrics as unavailable."
+      }
+    ],
+    "numerical_calibration": "Analytic marginal parameter conversion only; one unchanged structure and exactly three unique diagnostic cohorts, seeds 810101, 810102, 810103, each generated once. No tuning, alternative structures, regenerated cohorts or seed selection. One reporting serialization failure is recorded separately."
+  },
+  "intended_uses": [
+    "Synthetic analysis rehearsal with declared assumptions",
+    "Checking paired-data analysis code and schema handling",
+    "Illustrating uncertainty conditional on one fully specified generative model"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions",
+    "New empirical or biological evidence",
+    "Recovering native individuals or reserved outcome statistics",
+    "Estimating intervention causality without a randomized comparator",
+    "Claiming that matched source moments validate joint dependence",
+    "Treating generated paired t intervals or change correlations as source-study estimates"
+  ],
+  "next_information_request": "Request the within-endpoint pre/post covariance or change SD for each endpoint and an anonymized joint covariance summary for the four changes, with pairwise sample sizes and overlap of unavailable pairs. Those summaries would distinguish the assumed persistent/common-visit factor structure without requesting significance findings."
+}

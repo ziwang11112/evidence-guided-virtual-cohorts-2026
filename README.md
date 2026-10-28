@@ -6,10 +6,15 @@ Start with [the current results](biomedical_research/evidence_virtual_cohort_fra
 
 The completed retrospective batch has 144 input tables and 5,040 analysis records, with 36 pooled completion outputs and no analysis/pooling failures. Those inputs are one already examined clinical cohort, masks/completions of it, and draws from one existing generator. They are not 144 independent studies. Most completion outputs are unchanged-data preservation controls. Current results do not establish an Agent advantage, clinical validity, population coverage or recruitment savings.
 
+The subsequent frozen Stage 1 construction experiment includes nine initial lineages across three previously exposed development cases, eighteen paired Agent revision arms and three fixed statistical arms. Its 420 final cohorts yield 7,700 analysis records. Cohorts and scenarios are analyzed separately; CSV and JSON versions of the analysis table contain the same records. The export includes the construction code, decisions, source-only diagnostics and aggregate evaluation, with participant-level and generated cohort tables omitted.
+
+Read [the completed Stage 1 report](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/RESULTS.md), [all-term comparisons and figures](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/reporting/README.md), [independent post-run review](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1_review/postrun/POSTRUN_REVIEW.md), and [the advance/stop decision](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/DECISION.md). The unchanged scenario policy did not show consistent analytical improvement and is not being advanced to the planned broad expansion. The complete outputs, uncertainty discrepancies and fit warnings remain available.
+
 ## Contents
 
 - `biomedical_research/evidence_virtual_cohort_framework_2026-10-27/`: plan, strategy contract, manuscript skeleton, expanded retrospective batch, aggregate outputs and independent review.
 - `biomedical_research/population_framework/`: generic runner, observers, common builder request and artificial-fixture tests; selected prior policy-comparison summaries preserve negative results.
+- The method project's `stage1/` and `stage1_review/` contain the frozen three-case protocol, candidate construction bundles and source audits. See [the Stage 1 export boundary](docs/STAGE1_EXPORT.md) for path transformations and reproduction limits.
 - `biomedical_research/obesity_paper_replay_2026-10-27/paper_analysis.py` and `biomedical_research/obesity_masked_completion_2026-10-27/custodian/`: unchanged analytical and validation modules used by the archived batch.
 - `docs/`: export/data policy, local reproduction limits and earlier limitations.
 - `sync/`: exact source allowlist, content hashes, refresh/audit scripts and file inventory.
@@ -25,6 +30,8 @@ From the repository root:
 ```shell
 python -B -m unittest discover -s biomedical_research/population_framework/tests -v
 python -B -m unittest discover -s biomedical_research/evidence_virtual_cohort_framework_2026-10-27/development_batch/attempt_02 -p test_batch.py -v
+python -B biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/test_stage1.py
+python -B biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/test_reporting.py
 python -B sync/audit_export.py
 ```
 

@@ -1,0 +1,198 @@
+{
+  "run_id": "case_a_build_02_initial_v3",
+  "lineage_id": "case_a_build_02",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Source-conditioned stratified marginal sampling with a Gaussian random-intercept rank copula and outcome-independent correlated missingness",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use all 25 outcome-visit means and sample SDs to parameterize marginal distributions, and all 25 nonmissing counts exactly at n=75. Stratified quantiles stabilize finite-sample margins. These target-derived summaries are construction inputs, not independent validation. Marginal shapes, all joint associations, and individual missingness remain unidentified. Moment estimates are used as distribution parameters; exact finite-sample moment equality is not claimed."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Generate five visits per new synthetic person, positive weight, a baseline-only weight limit of 180 kg, PFS on the 1/15 measurement lattice within 1-5, integer No-Go errors within 0-512, and discounting AUC in 0-1. Eligibility describes the intended population; age, BMI, pregnancy and contraindications cannot be represented or verified because their component measurements are outside this bounded schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "outcome-specific marginal distributions",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. Weight uses a lognormal distribution with baseline upper truncation; PFS uses a scaled beta rounded to a 1/15 lattice; No-Go errors use an overdispersed negative binomial truncated at 512; each discounting condition uses beta margins. Sample SDs parameterize distribution SDs before truncation/rounding. Each observed margin has independently jittered stratified quantiles assigned according to latent ranks. These choices favor valid support and source-compatible moments but assume unreported distribution shapes and suppress unconditional sampling variation of the margins."
+    },
+    {
+      "name": "longitudinal rank dependence",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Gaussian random-intercept latent repeatabilities are 0.94 for weight, 0.60 for PFS, 0.50 for No-Go errors, and 0.65 for both discounting conditions. Their directions and magnitudes are working assumptions, not source measurements. Discounting person factors correlate 0.70 and discounting same-visit occasion factors correlate 0.50. Other domain factors are independent as a parsimonious working restriction, not because absent evidence means a true zero correlation. Observed correlations differ from latent parameters after transformations, ranks, and missingness. No individual treatment-response factor or causal effect is inferred."
+    },
+    {
+      "name": "exact marginal missingness with shared attendance",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Each outcome-visit nonmissing count is round(source observed count times n/75). Select observations by latent availability ranks independent of all outcome factors. Availability-score variance fractions are 0.60 persistent person, 0.30 shared visit, and 0.10 endpoint-specific. This permits strongly overlapping missingness and intermittent return without forcing permanent dropout. Missingness-outcome independence, overlap and persistence are unreported assumptions, and observed-margin stratification does not recover individual missingness mechanisms."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One support-respecting reconstruction with persistent outcome ranks, a shared discounting domain, independent weight/PFS/No-Go domains, and outcome-independent correlated missingness. The chosen dependence is provisional and uncalibrated to any reserved result.",
+      "inclusion_rationale": "Repeated measures on the same adults justify modeling persistence, and the two reward conditions share a measurement family. Separate remaining domains limit unsupported directional structure. A single committed model provides executable rehearsal data while explicitly preserving the uncertainty of all unreported joint summaries. The twenty-cohort allocation is computational, not a posterior probability.",
+      "unresolved_dependencies": [
+        "All baseline cross-endpoint correlations; in particular, independence between distinct domains is unverified",
+        "Within-person correlation magnitudes, time decay, and heterogeneous individual changes",
+        "Cross-condition discounting dependence and its stability over time",
+        "Individual missingness-mask overlap, dropout versus intermittent absence, and outcome-dependent selection",
+        "Tail shapes, floor/ceiling masses and whether PFS item averaging ever involves partial questionnaires",
+        "Transport of target-derived sample marginals beyond the supplied source population"
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs, gng, dd100, dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially standard errors and estimated random-effect variance",
+        "Four exploratory standardized weight associations"
+      ]
+    }
+  ],
+  "changes_from_parent": "Initial build; no parent or prior-run materials inspected.",
+  "source_check_results": {
+    "scope": "Source-only checks; no reserved outcomes or reference records accessed.",
+    "decision_contract": "passed",
+    "generator_static_contract": "passed",
+    "fixed_seed_results": [
+      {
+        "structure": "model_1",
+        "seed": 810101,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": []
+      },
+      {
+        "structure": "model_1",
+        "seed": 810102,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": []
+      },
+      {
+        "structure": "model_1",
+        "seed": 810103,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": []
+      }
+    ],
+    "interpretation": "Reconstruction diagnostics only; source compatibility does not validate the assumed joint distribution. Controller may attach its own reports for the same scheduled seeds."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "model_1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "One independently selected source-compatible structure. Bounded/discrete margins honor measurement definitions; persistent ranks make longitudinal rehearsal plausible. All numerical dependence parameters are explicit assumptions selected before diagnostics. No alternative model, seed search, or reserved-target calibration is planned."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "model_1"
+    },
+    "diagnostic_calls": [
+      {
+        "structure": "model_1",
+        "seed": 810101,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": []
+      },
+      {
+        "structure": "model_1",
+        "seed": 810102,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": []
+      },
+      {
+        "structure": "model_1",
+        "seed": 810103,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": []
+      }
+    ],
+    "budget": "Initial construction allows at most three unique cohorts: one structure at seeds 810101, 810102, 810103. Controller checks reuse those same structure/seed cohorts."
+  },
+  "intended_uses": [
+    "Synthetic analysis rehearsal and execution checks for the declared analysis classes",
+    "Support, visit-layout, and missing-count reconstruction from supplied marginals",
+    "Illustrating consequences of an explicitly assumed joint distribution"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or individual prediction",
+    "New empirical findings or independent confirmation of source means",
+    "Recovery of actual participants, covariances, regression effects, statistical significance, or missingness masks",
+    "Calibrated inferential coverage, power, or conclusions about direction of weight associations",
+    "Causal treatment-effect interpretation or extrapolation to other populations"
+  ],
+  "next_information_request": "Request a deidentified baseline correlation matrix, per-outcome repeat-measure correlation matrices or random-intercept variance summaries, and visit-by-endpoint missingness-overlap counts. These would discriminate the present independent-domain and shared-attendance assumptions without disclosing reserved regression coefficients, p values, intervals or conclusions."
+}

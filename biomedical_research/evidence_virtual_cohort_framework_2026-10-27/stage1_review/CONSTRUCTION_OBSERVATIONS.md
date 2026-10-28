@@ -1,0 +1,14 @@
+# Construction observations recorded before reserved evaluation
+
+Recorded during the frozen Stage 1 run, before opening the reserved evaluator. These observations qualify interpretation; they do not change the protocol, included arms, seeds, or metrics.
+
+1. Several ordinary revisions selected a justified no-op. Marginal-only evidence does not identify a preferred joint distribution. A no-op is an observed policy outcome, not a failed implementation.
+2. The proposed revisions examined distinct dependence assumptions while retaining source-compatible marginals. Their allocations are a computational budget, not posterior weights. Variation across these assumptions demonstrates sensitivity only across the examined set; neither completeness nor calibrated coverage is established.
+3. Marginal construction differs between initial lineages. Some programs condition each finite cohort on exact source moments; others use plug-in population moments or stratified quantiles. This can change Monte Carlo variation and nominal inference. Supplied-moment fit must not count as independent success. Comparisons with the fixed plug-in statistical family do not isolate the effect of language-model priors from conditioning choices. The common-parent ordinary/proposed pairing is the main policy comparison.
+4. The Ross build_01 ordinary Agent changed continuous PFS to a 1/15-lattice beta-binomial aggregate using the source's 15-item measurement description. Its proposed sibling retained the continuous parent approximation and listed granularity as unresolved. The frozen validator required bounded PFS, not its score lattice. Preserve both outcomes and disclose this mapping difference. The paired policy comparison is therefore not universally a pure dependence-only ablation.
+5. Source-only checks verify columns, pairing, counts, bounds, reproducibility, unchanged evidence and local random-state use. They do not validate the assumed clinical correlations, missingness mechanism, source-parameter uncertainty, or confidence-interval coverage.
+6. Numerical diagnostic allowances are equal, but actual search and model output lengths can differ. Provider model IDs, token counts and exact inference costs are unavailable. No matched-token, time-saving or cheapest-model claim follows.
+7. Builders receive source-restricted fresh contexts and code has no permitted file/network I/O. This is procedural information isolation, not an operating-system security sandbox. The studies themselves remain previously exposed development cases.
+8. Root reviewed each completed generator or its changes against the copied parent before final execution. The controller then froze code/decisions, reused scheduled source-check seeds and saved all twenty scheduled final draws. No reserved result was used for generator changes or draw replacement.
+
+Post-run numerical verification and scientific interpretation will be recorded separately after the full inventory gate passes.

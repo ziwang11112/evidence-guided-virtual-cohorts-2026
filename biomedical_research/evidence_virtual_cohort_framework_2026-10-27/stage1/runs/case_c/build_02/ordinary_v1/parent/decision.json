@@ -1,0 +1,113 @@
+{
+  "run_id": "case_c_build_02_initial_v3",
+  "lineage_id": "case_c_build_02",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Paired Gaussian copula with separable exchangeable dependence, normal leptin_log10 margins, and lognormal positive endpoint margins",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "44 completers aged 7-14 with simple obesity; before/after 3-month home diet/exercise program with professional follow-up; no randomized parallel arm; 43 glucose and triglyceride pairs.",
+      "measurement": "units specified per endpoint; pediatric leptin already log10(pg/mL)",
+      "provenance": "source_packet_C",
+      "action": "qualify",
+      "reason": "Use every supplied marginal mean, sample SD, distribution and endpoint pair count as a same-population reconstruction input. Treat the rounded sample moments as plug-in population moments; finite synthetic samples fluctuate. For positive endpoints convert arithmetic mean and SD to lognormal parameters; leptin remains on the supplied log10 scale. These target-derived moments provide no independent validation or information about joint covariance."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "44 completers aged 7-14 with simple obesity; before/after 3-month home diet/exercise program with professional follow-up; no randomized parallel arm; 43 glucose and triglyceride pairs.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_C",
+      "action": "use",
+      "reason": "Generate one wide paired record per synthetic person with both visits. At n=44 preserve 44 leptin and body-mass pairs and 43 glucose and triglyceride pairs, placing unavailable analysis pairs in the final row as required by the schema. For other n use round(endpoint_n*n/44) observed pairs and put the remainder last. Both-null representation describes unavailable complete pairs, not a claim about which original measurements were missing. The cohort is a single completer group; no untreated arm, age records, or causal treatment effect is fabricated."
+    }
+  ],
+  "components": [
+    {
+      "name": "Marginal measurement distributions",
+      "evidence_ids": ["E_marginals"],
+      "source_to_target_assumptions": "Same-population A0 plug-in reconstruction. Normal leptin_log10 with supplied means/SDs; lognormal body_mass, glucose and triglycerides with exact population arithmetic moments equal to the supplied values. Lognormal log variance is log(1+(sd/mean)^2); log mean is log(mean)-log_variance/2. No realized marginal moment matching, target-dependent calibration or seed selection."
+    },
+    {
+      "name": "Separable paired Gaussian copula",
+      "evidence_ids": ["E_design"],
+      "source_to_target_assumptions": "Assume latent within-endpoint pre/post correlation 0.80 and contemporaneous cross-endpoint correlation 0.25. Generate a pre endpoint vector from one shared and four endpoint-specific standard normals; generate an independent innovation vector with the same cross-endpoint structure; post=0.80*pre+sqrt(1-0.80^2)*innovation. This yields cross-endpoint/cross-visit latent correlation 0.20 and a positive definite covariance without specifying reserved observed-scale change correlations. These positive dependence assumptions are structural choices for a persistent paired cohort, not source estimates."
+    },
+    {
+      "name": "Complete-pair accounting and synthetic identity",
+      "evidence_ids": ["E_design", "E_marginals"],
+      "source_to_target_assumptions": "Exact scaled observed counts and declared schema order. New synthetic seed-prefixed identifiers have no connection to source participants. Rows are generated exchangeably before deterministic last-row analysis-pair masking, so the representation is independent of simulated measurements. This does not identify a clinical missingness mechanism. All randomness is local to numpy.random.default_rng(seed); evidence is read without mutation and the generator performs no I/O."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One retained working joint model with latent temporal correlation 0.80 and exchangeable contemporaneous cross-endpoint correlation 0.25. All four endpoints share these dependence constants; no endpoint-specific covariance information is supplied.",
+      "inclusion_rationale": "A parsimonious positive definite model preserves paired persistence and permits nonzero shared endpoint variation while avoiding a claim that missing covariance evidence means independence. Equal treatment of endpoint dependence avoids unsupported endpoint-specific rankings. Numerical values are explicit unvalidated modeling choices. Allocation of twenty cohorts is a resource rule, not a posterior probability.",
+      "unresolved_dependencies": [
+        "Actual four within-endpoint paired covariances and whether persistence differs by endpoint",
+        "Actual cross-endpoint and cross-visit covariance and all six endpoint-change correlations, including their signs",
+        "Distribution tails and departures from the normal/lognormal families beyond supplied marginal summaries",
+        "Relationship of unavailable analysis pairs to observed or unobserved outcomes; deterministic masking is only a required synthetic convention",
+        "Sampling uncertainty and rounding in marginal reconstruction inputs"
+      ],
+      "affected_analysis_classes": [
+        "Four paired endpoint-change means and paired t intervals",
+        "Paired covariance and change-SD diagnostics",
+        "Six cross-endpoint change correlations"
+      ]
+    }
+  ],
+  "changes_from_parent": "Initial build; no parent model, previous runs or external evidence inspected. There is one scenario and no within-branch scientific scenario contrast.",
+  "source_check_results": {
+    "source_checks_validate_decision": "passed before diagnostics and after calibration-log updates; target allocation confirmed as 20",
+    "generator_import_and_static_policy": "passed source_checks.load_generator",
+    "schema_support_complete_pair_counts_evidence_immutability_and_global_rng": "passed for all three fixed source seeds",
+    "source_marginal_envelopes": "all eight endpoint-visit marginal mean/SD envelopes passed at each of seeds 810101, 810102 and 810103",
+    "n_persons": 44,
+    "unique_diagnostic_cohorts": 3,
+    "interpretation": "Procedural and marginal compatibility only. Marginals are target-derived reconstruction inputs; this does not validate dependence, paired intervals or change correlations. Controller will attach its scheduled source feedback."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "separable_gaussian_copula_1",
+        "source_seeds_evaluated": [810101, 810102, 810103],
+        "disposition": "retained",
+        "reason": "Selected as one coherent source-compatible paired model before numerical diagnostics. All scheduled source diagnostic envelopes and procedural checks passed. Dependence parameters remained fixed modeling assumptions; no tuning, generator changes after diagnostics or alternative structures examined."
+      }
+    ],
+    "final_scenario_to_structure": {"target": "separable_gaussian_copula_1"},
+    "diagnostic_calls": [
+      {"call": 1, "structure": "separable_gaussian_copula_1", "seed": 810101, "n": 44, "context": "target", "result": "Frame, evidence and RNG checks passed; source_diagnostics computed. Batched console JSON serialization subsequently failed on a NumPy boolean."},
+      {"call": 2, "structure": "separable_gaussian_copula_1", "seed": 810102, "n": 44, "context": "target", "result": "Frame, evidence and RNG checks passed; source_diagnostics computed. Batched console JSON serialization subsequently failed on a NumPy boolean."},
+      {"call": 3, "structure": "separable_gaussian_copula_1", "seed": 810103, "n": 44, "context": "target", "result": "Frame, evidence and RNG checks passed; source_diagnostics computed. Batched console JSON serialization subsequently failed on a NumPy boolean."},
+      {"call": 4, "structure": "separable_gaussian_copula_1", "seed": 810101, "n": 44, "context": "target", "repeats_call": 1, "result": "Same deterministic cohort repeated only to recover diagnostic console output. Frame, evidence and RNG checks passed; all eight marginal envelopes passed."},
+      {"call": 5, "structure": "separable_gaussian_copula_1", "seed": 810102, "n": 44, "context": "target", "repeats_call": 2, "result": "Same deterministic cohort repeated only to recover diagnostic console output. Frame, evidence and RNG checks passed; all eight marginal envelopes passed."},
+      {"call": 6, "structure": "separable_gaussian_copula_1", "seed": 810103, "n": 44, "context": "target", "repeats_call": 3, "result": "Same deterministic cohort repeated only to recover diagnostic console output. Frame, evidence and RNG checks passed; all eight marginal envelopes passed."}
+    ],
+    "budget": "At most three unique initial cohorts, restricted to seeds 810101, 810102 and 810103. Controller checks reuse these seeds; no additional diagnostic cohorts or reserved-outcome inspection."
+  },
+  "intended_uses": [
+    "Synthetic rehearsal of paired endpoint summaries, paired t intervals and cross-endpoint change-correlation analysis code",
+    "Inspection of how a stated dependence assumption propagates to paired uncertainty and change statistics",
+    "Source-only checks of schema, support, complete-pair accounting and marginal simulation behavior"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or new empirical evidence",
+    "Validation of reserved effect estimates, confidence intervals, significance tests or correlation directions",
+    "Causal attribution of before/after changes to the program without a randomized comparison arm",
+    "Recovering individual source records or the true missing-data mechanism",
+    "Treating matching reconstruction inputs as independent validation",
+    "Interpreting fixed working covariance choices or scenario allocation as an estimated posterior"
+  ],
+  "next_information_request": "Request an independently shareable, deidentified joint-summary packet containing the four pre/post covariances and an eight-variable covariance matrix with its pairwise sample sizes and measurement scales, plus clarification of complete-pair availability. This directly distinguishes shared versus endpoint-specific persistence and cross-endpoint variation without requesting reserved tests, p values or paper conclusions."
+}

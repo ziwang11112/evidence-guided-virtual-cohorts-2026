@@ -1,0 +1,26 @@
+# Independent review of frozen Stage 1 execution
+
+Completed source-only audit on 2026-10-28 UTC before this reviewer opened any reference rows or reserved analysis outputs. This review supplements, rather than changes, the frozen protocol and construction observations.
+
+The final source snapshot passes **3,030/3,030 checks**: 30 committed candidates (nine initial, eighteen Agent revisions, three fixed statistical arms), 21 final arms, and 420 requested and saved cohorts. `audit_source_execution.py` independently verifies the protocol's non-custodian hashes, staged inputs, candidate and final artifact hashes, copied parent equality, sibling parent identities, chronology, declared allocations, scheduled seeds, draw logs, and saved-count accounting. Custodian hashes were deferred until the post-evaluation phase. It imports no generator and produces no cohorts. The machine-readable evidence is `source_execution_audit.json`.
+
+The eight ordinary no-op generators are byte-identical to their copied parents. The remaining ordinary branch, case_a/build_01, changes the PFS margin to a 1/15-lattice beta-binomial aggregate. All nine proposed branches retain three named scenarios allocated 7/7/6. Ordinary allocations are twenty each, and statistical contexts are rho=0/.4/.8 with 7/7/6. No duplicate or repair final arm appears in the audited inventory.
+
+The retained calibration logs obey the equal maximum allowance of three structures and nine unique structure/seed diagnostic cohorts per revision. Actual union counts differ: ordinary branches use three each except case_a/build_01 with six; every proposed branch uses nine. The controller reuses the three scheduled diagnostic seeds. Initial branches use three each; fixed arms use nine each. These are verified declared/calculated budgets, not a complete forensic record of every interactive builder calculation. The protocol provides no provider tokens or isolated inference timing. Equal allowance therefore does not imply matched actual search or model cost.
+
+Manual review of the frozen programs and scenario declarations found no file/network inputs, participant rows, hard-coded reserved estimates, global random-state writes, or target-dependent selection. Constructors use delivered marginal moments and explicit fixed dependence assumptions. This establishes no evidence of hidden-input use in the saved code; neither static review nor retained manifests prove that an undeclared interactive action never occurred. The isolation remains procedural.
+
+The paired-case proposed programs implement the described differences in persistent versus visit-specific factors, positive shared innovations, or signed response components. The Ross programs implement persistent versus occasion factors and, in one lineage, a bundled attendance sensitivity. All use valid factor constructions or positive-definite correlation matrices; latent correlations need not equal observed-scale correlations after nonlinear margins, exact-moment conditioning, rank assignment, or unequal visit scales.
+
+The case_a/build_02 `state_selection` comment says baseline behavioral ranks affect later observation. Its code applies the attendance-score transform at every visit, but each baseline endpoint has 75/75 observations. Thus no baseline cell can be removed by this mechanism for the fixed packet; the substantive later-missingness description is accurate for this run. A future packet with baseline missingness would require more precise wording. The scenario also changes persistence and occasion correlation, so its result cannot isolate a missingness effect.
+
+No blocking execution defect was found. Interpretation must retain these qualifications:
+
+- The common-parent comparison is not always a pure dependence ablation: the case_a/build_01 PFS measurement mapping differs between ordinary and proposed siblings.
+- The first two case_b lineages condition each realized margin on exact sample mean and SD. Other lineages use plug-in distributions or stratified quantiles. Cohort-to-cohort variability and nominal confidence intervals consequently have different construction meanings. Fixed-statistical comparisons do not isolate language-model priors.
+- Source-envelope deviations are retained descriptive discrepancies, not hidden acceptance tests. Counts in the audit are diagnostic cells over the three source-check seeds, not final-cohort accuracy or clinical validity.
+- Eight no-ops are legitimate observed policy outcomes. Stronger persistence, independence, positive shared response, and signed dependence are hypotheses, not inferred biology.
+- The scenario set is finite and investigator/model chosen; it is neither exhaustive nor probabilistically calibrated. Common `target` anchors use seven proposed draws versus twenty ordinary draws, and every scenario must remain visible.
+- Supplied moment reconstruction, source checks, reproducibility, and execution success do not validate confidence-interval coverage, clinical relations, causal claims, new empirical findings, or superiority. All three studies are exposed development cases.
+
+Numerical result accounting and independent recomputation are recorded separately after the evaluator commits its complete manifest. The frozen code, protocol, decisions, and production outputs were not modified by this reviewer.

@@ -1,0 +1,270 @@
+{
+  "run_id": "case_b_build_01_ordinary_v1",
+  "lineage_id": "case_b_build_01",
+  "branch": "ordinary",
+  "action": "no_op",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Endpoint-independent paired Gaussian latent scores with positive exponential marginal projection conditional on supplied arithmetic sample means and sample SDs",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "Units specified per endpoint; serum leptin is raw ng/mL, not a log transformation",
+      "provenance": "source_packet_B",
+      "action": "qualify",
+      "reason": "Use each rounded arithmetic mean and sample SD as a finite-cohort construction constraint, in the original units, with a monotone positive projection. These target-derived A0 marginals are reconstruction inputs and do not independently validate paired changes, uncertainty, or dependence. Rounding uncertainty is not estimated from the packet."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_B",
+      "action": "use",
+      "reason": "Generate one synthetic key per person and paired pre/post columns, with 12 complete pairs for every endpoint at the declared size. For other sizes, scale endpoint complete-pair counts by n/12 and round. Retain strictly positive raw measurements; do not invent demographic columns, a control group, or a causal interpretation."
+    }
+  ],
+  "components": [
+    {
+      "name": "pairing_and_counts",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 rehearsal with unique synthetic row keys and paired missingness. Every endpoint is complete in this packet. If scaled endpoint counts leave missing pairs, their locations are exchangeable within endpoint; that contingency is a software generalization rather than observed missingness evidence."
+    },
+    {
+      "name": "positive_marginal_projection",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Exponential transforms of Gaussian scores provide positive, potentially skewed measurements. For each realized margin, solve its exponential shape to reproduce the reported sample coefficient of variation, then rescale to the reported arithmetic mean. This exact finite-cohort moment conditioning induces dependence among synthetic people within a margin and is not an unconditional iid population sample. With one observed person only the mean can be represented; sample SD is undefined."
+    },
+    {
+      "name": "assumed_latent_dependence",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Use pre/post latent Gaussian correlations of 0.98 for body mass and 0.80 for each biochemical endpoint, selected before diagnostics. Stronger body-mass persistence represents stable individual size over three days; common biochemical persistence avoids unsupported endpoint-specific tuning. These are modeling judgments without empirical joint support. Independent endpoint score pairs supply a simple cross-endpoint working assumption, not evidence that true cross-endpoint covariances vanish. Raw and change correlations remain induced quantities, not fitted inputs. Retained unchanged from the common parent. The current marginal-only feedback cannot estimate or select these values. The study design supplies pairing but does not identify the strength or sign of any empirical covariance."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One source-conditioned positive model with high within-person persistence and independent endpoint latent processes. The latent pre/post correlations are body_mass=0.98 and leptin=glucose=triglycerides=0.80. No empirical joint correlation or change SD is supplied.",
+      "inclusion_rationale": "Retain the sole common-parent working model because source feedback is valid with no source contract failures, while all supplied moments are already reconstruction constraints. No new joint evidence identifies a better persistence, cross-endpoint dependence, or family. This no-op is a source-only continuity decision, not a conclusion that the retained covariance assumptions are true or optimal. Twenty cohorts are resource allocation, not a posterior probability.",
+      "unresolved_dependencies": [
+        "True within-person pre/post covariance for all four endpoints",
+        "Cross-endpoint covariance within and between visits, including shared responses",
+        "Distributional shapes and tail behavior beyond the reported two marginal moments",
+        "Sampling uncertainty and rounding uncertainty of the reported moments",
+        "External validity and causal effects in an uncontrolled study",
+        "Exact finite-cohort moment conditioning induces dependence among people; nominal iid paired-t calibration is unvalidated"
+      ],
+      "affected_analysis_classes": [
+        "Four paired endpoint mean changes are fixed by supplied marginal reconstruction constraints, rather than independently validated",
+        "Paired t confidence intervals, change SDs, and paired covariance diagnostics depend on unvalidated latent persistence and conditioning assumptions",
+        "Six correlations among endpoint changes depend on the unvalidated cross-endpoint model and finite-cohort random variation"
+      ]
+    }
+  ],
+  "changes_from_parent": "Justified no-op: generator.py is an exact byte copy of the allowlisted parent/generator.py. No scientific parameters, mapping, support, counts, missingness, family, RNG sequence or scenario changed. Branch identity and explanatory decision metadata were updated. Source feedback reports valid checks, no errors, and input responsiveness, but supplies no joint evidence capable of justifying a replacement dependence model. Matching reconstructed moments cannot discriminate alternatives or establish paired uncertainty or change correlations.",
+  "source_check_results": {
+    "status": "passed on three fixed source seeds",
+    "scope": "Local source-only implementation and marginal/count/support checks. Exact marginal agreement is imposed using inputs and is not independent validation. No paired t tests, intervals, empirical change correlations, reserved outcomes, or evaluator results were inspected or optimized.",
+    "parent_feedback": {
+      "kind": "source_only",
+      "status": "valid",
+      "target_results_loaded": false,
+      "errors": [],
+      "input_use_probes": [
+        {
+          "context": "target",
+          "mean_perturbation_changes_output": true
+        }
+      ]
+    },
+    "cohorts": [
+      {
+        "structure": "parent_retained",
+        "context": "target",
+        "seed": 810101,
+        "n_persons": 12,
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_preservation": "passed",
+        "exact_complete_pair_counts": "passed",
+        "strict_positive_support": "passed",
+        "all_source_envelopes_satisfied": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sd_error": 2.5490720645393594e-13
+      },
+      {
+        "structure": "parent_retained",
+        "context": "target",
+        "seed": 810102,
+        "n_persons": 12,
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_preservation": "passed",
+        "exact_complete_pair_counts": "passed",
+        "strict_positive_support": "passed",
+        "all_source_envelopes_satisfied": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sd_error": 1.7763568394002505e-15
+      },
+      {
+        "structure": "parent_retained",
+        "context": "target",
+        "seed": 810103,
+        "n_persons": 12,
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_preservation": "passed",
+        "exact_complete_pair_counts": "passed",
+        "strict_positive_support": "passed",
+        "all_source_envelopes_satisfied": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sd_error": 3.552713678800501e-15
+      }
+    ],
+    "decision_contract": "passed",
+    "generator_identity": "byte-identical to parent/generator.py",
+    "generalization": "Inherited formula scales complete-pair counts using round(endpoint_n * n / evidence_n). No additional n/seed cohorts were generated. With one observed person only the mean is represented because sample SD is undefined.",
+    "remaining_controller_checks": "not yet run; controller will attach"
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "parent_retained",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained_no_op",
+        "reason": "The only examined scientific structure is the common parent. Its source contracts pass; no evidence supports selecting different unobserved covariances. Keeping the existing working assumptions avoids claiming an evidence-based improvement where the packet cannot discriminate one.",
+        "parameters": {
+          "latent_pre_post_correlations": {
+            "leptin": 0.8,
+            "body_mass": 0.98,
+            "glucose": 0.8,
+            "triglycerides": 0.8
+          },
+          "cross_endpoint_score_pairs": "independent working assumption, not observed zero covariance",
+          "marginal_family": "positive exponential projection of Gaussian scores conditional on arithmetic mean and sample SD"
+        }
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "parent_retained"
+    },
+    "budget": {
+      "structure_limit": 3,
+      "structures_examined": 1,
+      "unique_structure_seed_cohorts_used": 3,
+      "unique_structure_seed_cohort_limit": 9,
+      "fixed_seeds": [
+        810101,
+        810102,
+        810103
+      ],
+      "controller_note": "Controller may reuse these same three structure/seed cohorts; final twenty controller cohorts are separate from source calibration."
+    },
+    "selection_rule": "Retain parent unless allowlisted source evidence establishes a source-contract defect or discriminating scientific information. Do not use target analyses or choose among seeds.",
+    "rejected_options": [],
+    "alternative_search_note": "No additional structure was instantiated, numerically evaluated, or selected. No numerical dependence calibration was attempted.",
+    "calls": [
+      {
+        "call": "source_checks.load_generator",
+        "path": "generator.py",
+        "result": "passed"
+      },
+      {
+        "call": "source_checks.call_checked",
+        "structure": "parent_retained",
+        "context": "target",
+        "n_persons": 12,
+        "seed": 810101,
+        "result": "passed"
+      },
+      {
+        "call": "source_checks.source_diagnostics",
+        "structure": "parent_retained",
+        "seed": 810101,
+        "result": "passed",
+        "generated_new_cohort": false
+      },
+      {
+        "call": "source_checks.call_checked",
+        "structure": "parent_retained",
+        "context": "target",
+        "n_persons": 12,
+        "seed": 810102,
+        "result": "passed"
+      },
+      {
+        "call": "source_checks.source_diagnostics",
+        "structure": "parent_retained",
+        "seed": 810102,
+        "result": "passed",
+        "generated_new_cohort": false
+      },
+      {
+        "call": "source_checks.call_checked",
+        "structure": "parent_retained",
+        "context": "target",
+        "n_persons": 12,
+        "seed": 810103,
+        "result": "passed"
+      },
+      {
+        "call": "source_checks.source_diagnostics",
+        "structure": "parent_retained",
+        "seed": 810103,
+        "result": "passed",
+        "generated_new_cohort": false
+      },
+      {
+        "call": "source_checks.validate_decision",
+        "result": "passed"
+      },
+      {
+        "call": "byte_identity_check",
+        "result": "passed",
+        "generated_new_cohort": false
+      }
+    ],
+    "failures": [],
+    "packet_reads": [
+      "REQUEST.md",
+      "evidence.json",
+      "schema.json",
+      "task.json",
+      "decision_template.json",
+      "source_checks.py",
+      "parent/generator.py",
+      "parent/decision.json",
+      "parent/source_feedback.json"
+    ],
+    "read_note": "All model/data reads remained on this allowlist. A combined read display was truncated; parent generator and decision were subsequently read separately in full. This was an output-display limitation, not a candidate failure. No sibling, ancestor, web, evaluator, or reserved result was inspected."
+  },
+  "intended_uses": [
+    "Synthetic rehearsal of paired-wide data processing and declared paired analyses",
+    "Demonstration of dependence assumptions required beyond marginal reconstruction inputs"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or patient-level prediction",
+    "New empirical evidence or independent confirmation of supplied marginal changes",
+    "Validated paired confidence intervals, p values, or cross-endpoint correlations",
+    "Causal inference from the uncontrolled intervention",
+    "Population sampling variability or uncertainty in the rounded source moments",
+    "Nominal repeated-sampling coverage of paired-t intervals under exact finite-cohort conditioning"
+  ],
+  "next_information_request": "Request a raw-scale 8-by-8 pre/post covariance matrix with the number of observed pairs for every element, or minimally the four endpoint pre/post covariances and six between-endpoint change covariances with pairwise counts. These summaries would discriminate persistence and shared-response assumptions. Marginal quantiles or skewness and precision of the rounded moments would separately inform distributional tails and conditioning. Do not request target test conclusions or reserved findings."
+}

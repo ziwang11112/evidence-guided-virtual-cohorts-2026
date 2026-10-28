@@ -1,6 +1,6 @@
 # Evidence-Guided Virtual Cohorts for Biomedical Analysis and Study Planning
 
-Working manuscript scaffold, 27 October 2026. This is not a completed paper. Prospective experiments below have not been run. Do not fill result placeholders with expected improvements.
+Working manuscript scaffold, 27 October 2026. This is not a completed paper. The retrospective completion replay and frozen three-case Stage 1 construction experiment are complete; independent confirmation and study-planning utility remain unrun. Do not fill their result placeholders with expected improvements.
 
 ## Abstract scaffold
 
@@ -8,9 +8,11 @@ Working manuscript scaffold, 27 October 2026. This is not a completed paper. Pro
 
 **Approach.** We propose an evidence-guided Agent workflow that constructs executable cohort generators, records study and measurement applicability, separates observed constraints from unidentified dependence, and reports the sensitivity of planned analyses across an examined, prespecified set of evidence-compatible scenarios. This finite set is not exhaustive. Whole-cohort synthesis and partial-record completion are evaluated separately.
 
-**Evaluation.** The planned evaluation replays prespecified analyses on real and generated cohorts, reserves relationships not supplied to the Agent, retains uncertain findings, and evaluates one research-design decision. Comparisons use the same available information and distinguish independent Agent constructions from repeated samples of a generator.
+**Evaluation.** The completed development evaluation replays prespecified analyses on real and generated cohorts, reserves relationships not supplied to the Agent, and retains uncertain findings. Nine fresh initial constructions across three historically exposed studies produced eighteen paired revision branches. With a fixed statistical reference, 420 cohorts yielded 7,700 analysis records. A separate independent-case comparison and research-design decision evaluation remain planned, subject to the advance/stop rule. Independent Agent constructions and repeated samples of a generator are distinct units.
 
 **Current development evidence.** In an exposed 75-person longitudinal completion pilot, two selected qualitative findings were retained in all three masks. The statistical comparator and missing-only analysis also retained those findings. Agent completion did not improve primary coefficient recovery over missing-only. Earlier whole-cohort pilots showed incomplete preservation of unprovided dependence. These motivate broader evaluation; they are not confirmation of the proposed policy.
+
+**Completed Stage 1 evidence.** All scheduled cohorts and analyses executed, with model-fit warnings retained. Multiple source-compatible dependence scenarios exposed differences in downstream interpretation but did not consistently improve reserved relations over ordinary revision. Paired mean-direction agreement sometimes coexisted with substantial standard-error distortion. Exact marginal conditioning varied among lineages, one policy pair differed in PFS measurement mapping, actual diagnostic use differed under equal maximum budgets, and all studies remained development cases. These findings support a qualified research-rehearsal benchmark, not a validated accuracy or recruitment-saving claim. See [Stage 1 results](stage1/RESULTS.md) and [independent audit](stage1_review/postrun/POSTRUN_REVIEW.md).
 
 **Confirmation results.** [Insert only after frozen independent-case experiments and the research-use evaluation.]
 
@@ -66,4 +68,4 @@ Existing Ross results belong in development evidence or a clearly labelled initi
 
 **If performance remains inconsistent:** report the benchmark and failure structure, narrow the supported uses, and do not label the scenario policy a validated solution.
 
-Sources and execution plan: [Methods and experiment plan](METHODS_AND_EXPERIMENT_PLAN.md). Results are linked only after execution and independent audit.
+Sources and execution plan: [Methods and experiment plan](METHODS_AND_EXPERIMENT_PLAN.md). The [Stage 1 decision](stage1/DECISION.md) retains the complete benchmark and stops expansion of the unchanged policy as an accuracy improvement. Confirmation placeholders remain unfilled.

@@ -1,0 +1,262 @@
+{
+  "run_id": "case_a_build_02_ordinary_v1",
+  "lineage_id": "case_a_build_02",
+  "branch": "ordinary",
+  "action": "no_op",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "reason": "Exact provider, model identifier, settings and token counts were not supplied by the task tools; no values inferred."
+  },
+  "model_family": "Source-conditioned stratified marginal sampling with a Gaussian random-intercept rank copula and outcome-independent correlated missingness",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use all 25 outcome-visit means and sample SDs to parameterize marginal distributions, and all 25 nonmissing counts exactly at n=75. Stratified quantiles stabilize finite-sample margins. These target-derived summaries are construction inputs, not independent validation. Marginal shapes, all joint associations, and individual missingness remain unidentified. Moment estimates are used as distribution parameters; exact finite-sample moment equality is not claimed."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Generate five visits per new synthetic person, positive weight, a baseline-only weight limit of 180 kg, PFS on the 1/15 measurement lattice within 1-5, integer No-Go errors within 0-512, and discounting AUC in 0-1. Eligibility describes the intended population; age, BMI, pregnancy and contraindications cannot be represented or verified because their component measurements are outside this bounded schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "outcome-specific marginal distributions",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. Weight uses a lognormal distribution with baseline upper truncation; PFS uses a scaled beta rounded to a 1/15 lattice; No-Go errors use an overdispersed negative binomial truncated at 512; each discounting condition uses beta margins. Sample SDs parameterize distribution SDs before truncation/rounding. Each observed margin has independently jittered stratified quantiles assigned according to latent ranks. These choices favor valid support and source-compatible moments but assume unreported distribution shapes and suppress unconditional sampling variation of the margins."
+    },
+    {
+      "name": "longitudinal rank dependence",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Gaussian random-intercept latent repeatabilities are 0.94 for weight, 0.60 for PFS, 0.50 for No-Go errors, and 0.65 for both discounting conditions. Their directions and magnitudes are working assumptions, not source measurements. Discounting person factors correlate 0.70 and discounting same-visit occasion factors correlate 0.50. Other domain factors are independent as a parsimonious working restriction, not because absent evidence means a true zero correlation. Observed correlations differ from latent parameters after transformations, ranks, and missingness. No individual treatment-response factor or causal effect is inferred."
+    },
+    {
+      "name": "exact marginal missingness with shared attendance",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Each outcome-visit nonmissing count is round(source observed count times n/75). Select observations by latent availability ranks independent of all outcome factors. Availability-score variance fractions are 0.60 persistent person, 0.30 shared visit, and 0.10 endpoint-specific. This permits strongly overlapping missingness and intermittent return without forcing permanent dropout. Missingness-outcome independence, overlap and persistence are unreported assumptions, and observed-margin stratification does not recover individual missingness mechanisms."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One support-respecting reconstruction with persistent outcome ranks, a shared discounting domain, independent weight/PFS/No-Go domains, and outcome-independent correlated missingness. The chosen dependence is provisional and uncalibrated to any reserved result.",
+      "inclusion_rationale": "Retain the parent as the single committed working model. Supplied source feedback reports valid support, exact missing counts and 25/25 marginal envelopes at each of the three prescribed seeds. No cross-endpoint, longitudinal or missingness-overlap evidence identifies a better joint structure. Changing a numerical dependence parameter merely to obtain a different analysis would be unsupported. The same-person visit design motivates persistence as a working assumption but does not identify its magnitude or direction; common discounting measurement likewise does not establish its correlation. This no-op preserves transparent assumptions rather than treating compatibility as proof. The twenty-cohort allocation is computational, not a posterior probability.",
+      "unresolved_dependencies": [
+        "All baseline cross-endpoint correlations; in particular, independence between distinct domains is unverified",
+        "Within-person correlation magnitudes, time decay, and heterogeneous individual changes",
+        "Cross-condition discounting dependence and its stability over time",
+        "Individual missingness-mask overlap, dropout versus intermittent absence, and outcome-dependent selection",
+        "Tail shapes, floor/ceiling masses and whether PFS item averaging ever involves partial questionnaires",
+        "Transport of target-derived sample marginals beyond the supplied source population"
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs, gng, dd100, dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially standard errors and estimated random-effect variance",
+        "Four exploratory standardized weight associations"
+      ]
+    }
+  ],
+  "changes_from_parent": {
+    "generator": "No change: generator.py is copied byte for byte from the allowed parent/generator.py.",
+    "decision": "Updated branch identity, no-op rationale, source diagnostic log and uncertainty qualifications. No inherited source feedback is represented as a new ordinary-branch generation call.",
+    "scientific_scenario_differences": "None. One target scenario retains all parent marginal families, numerical rank-copula assumptions and missingness assumptions.",
+    "reason": "Allowed source diagnostics show no contract or marginal-envelope failure. The evidence identifies univariate reconstruction targets but provides no basis to select a different dependence or missingness mechanism. Marginal shape alternatives are also unidentified. A numerical improvement in already close supplied margins would not establish improved target inference."
+  },
+  "source_check_results": {
+    "scope": "Source-only construction diagnostics; no reserved target evaluation.",
+    "decision_contract": "passed",
+    "generator_static_contract": "passed",
+    "fixed_seed_results": [
+      {
+        "structure": "parent_retained",
+        "seed": 810101,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": [],
+        "maximum_absolute_mean_error_in_source_sd_units": 0.025352897865616297,
+        "maximum_absolute_relative_sd_error": 0.1012021511221406
+      },
+      {
+        "structure": "parent_retained",
+        "seed": 810102,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": [],
+        "maximum_absolute_mean_error_in_source_sd_units": 0.022241565010805812,
+        "maximum_absolute_relative_sd_error": 0.11597995684016449
+      },
+      {
+        "structure": "parent_retained",
+        "seed": 810103,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": [],
+        "maximum_absolute_mean_error_in_source_sd_units": 0.03239536949495402,
+        "maximum_absolute_relative_sd_error": 0.15666641784177204
+      }
+    ],
+    "n_generalization": "Static review only: per-visit observed counts scale as round(source_n_observed * n / evidence.n_persons), with n new keys and five visits. No additional cohort sizes were generated.",
+    "interpretation": "Means and SDs are reconstruction inputs. Source-envelope agreement does not validate distribution shapes, covariance, regression effects, coverage or missingness mechanisms. Controller may attach checks of the same retained structure/seed cohorts.",
+    "generator_identical_to_parent": true
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "parent_retained",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained_no_op",
+        "reason": "The one examined structure passes supplied source diagnostics; no evidence identifies an improvement to the unreported joint distribution. Retain its fully disclosed provisional dependence and support-respecting marginal families."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "parent_retained"
+    },
+    "diagnostic_calls": [
+      {
+        "structure": "parent_retained",
+        "seed": 810101,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": [],
+        "maximum_absolute_mean_error_in_source_sd_units": 0.025352897865616297,
+        "maximum_absolute_relative_sd_error": 0.1012021511221406
+      },
+      {
+        "structure": "parent_retained",
+        "seed": 810102,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": [],
+        "maximum_absolute_mean_error_in_source_sd_units": 0.022241565010805812,
+        "maximum_absolute_relative_sd_error": 0.11597995684016449
+      },
+      {
+        "structure": "parent_retained",
+        "seed": 810103,
+        "n": 75,
+        "context": "target",
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_numpy_rng_unchanged": "passed",
+        "marginal_envelope_passed": 25,
+        "marginal_envelope_total": 25,
+        "outside_envelope": [],
+        "maximum_absolute_mean_error_in_source_sd_units": 0.03239536949495402,
+        "maximum_absolute_relative_sd_error": 0.15666641784177204
+      }
+    ],
+    "failures": [],
+    "rejected_options": [],
+    "alternative_search": "No alternative executable structure was examined or generated. No direction, coefficient, p value, interval or target outcome was accessed or used for selection.",
+    "budget": {
+      "maximum_structures": 3,
+      "maximum_unique_structure_seed_cohorts": 9,
+      "allowed_seeds": [
+        810101,
+        810102,
+        810103
+      ],
+      "planned_unique_structure_seed_cohorts": 3,
+      "controller_reuses_retained_structure_seeds": true,
+      "no_seed_selection": true
+    },
+    "inherited_feedback": {
+      "path": "parent/source_feedback.json",
+      "kind": "source_only",
+      "status": "valid",
+      "target_results_loaded": false,
+      "errors": [],
+      "scheduled_checks": [
+        {
+          "seed": 810101,
+          "total": 25,
+          "passed": 25
+        },
+        {
+          "seed": 810102,
+          "total": 25,
+          "passed": 25
+        },
+        {
+          "seed": 810103,
+          "total": 25,
+          "passed": 25
+        }
+      ],
+      "interpretation": "Allowed existing parent feedback only; not new branch diagnostic calls."
+    },
+    "administrative_notes": [
+      "Only REQUEST.md and its exact file allowlist were inspected. No outside provenance, reference records, reserved results, web sources, sibling runs or controller were used.",
+      "Some long allowed-file read displays were truncated; targeted reads and compact summaries recovered the required content. These display truncations were not generation failures.",
+      "Only generator.py and decision.json are written; Python runs with -B to avoid bytecode files."
+    ]
+  },
+  "intended_uses": [
+    "Synthetic analysis rehearsal and execution checks for the declared analysis classes",
+    "Support, visit-layout, and missing-count reconstruction from supplied marginals",
+    "Illustrating consequences of an explicitly assumed joint distribution"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or individual prediction",
+    "New empirical findings or independent confirmation of source means",
+    "Recovery of actual participants, covariances, regression effects, statistical significance, or missingness masks",
+    "Calibrated inferential coverage, power, or conclusions about direction of weight associations",
+    "Causal treatment-effect interpretation or extrapolation to other populations"
+  ],
+  "next_information_request": "Request a deidentified baseline correlation matrix, per-outcome repeat-measure correlation matrices or random-intercept variance summaries, and visit-by-endpoint missingness-overlap counts. These would discriminate the present independent-domain and shared-attendance assumptions without disclosing reserved regression coefficients, p values, intervals or conclusions."
+}

@@ -1,0 +1,152 @@
+{
+  "run_id": "case_b_build_01_initial_v3",
+  "lineage_id": "case_b_build_01",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Endpoint-independent paired Gaussian latent scores with positive exponential marginal projection conditional on supplied arithmetic sample means and sample SDs",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "Units specified per endpoint; serum leptin is raw ng/mL, not a log transformation",
+      "provenance": "source_packet_B",
+      "action": "qualify",
+      "reason": "Use each rounded arithmetic mean and sample SD as a finite-cohort construction constraint, in the original units, with a monotone positive projection. These target-derived A0 marginals are reconstruction inputs and do not independently validate paired changes, uncertainty, or dependence. Rounding uncertainty is not estimated from the packet."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_B",
+      "action": "use",
+      "reason": "Generate one synthetic key per person and paired pre/post columns, with 12 complete pairs for every endpoint at the declared size. For other sizes, scale endpoint complete-pair counts by n/12 and round. Retain strictly positive raw measurements; do not invent demographic columns, a control group, or a causal interpretation."
+    }
+  ],
+  "components": [
+    {
+      "name": "pairing_and_counts",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 rehearsal with unique synthetic row keys and paired missingness. Every endpoint is complete in this packet. If scaled endpoint counts leave missing pairs, their locations are exchangeable within endpoint; that contingency is a software generalization rather than observed missingness evidence."
+    },
+    {
+      "name": "positive_marginal_projection",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Exponential transforms of Gaussian scores provide positive, potentially skewed measurements. For each realized margin, solve its exponential shape to reproduce the reported sample coefficient of variation, then rescale to the reported arithmetic mean. This exact finite-cohort moment conditioning induces dependence among synthetic people within a margin and is not an unconditional iid population sample. With one observed person only the mean can be represented; sample SD is undefined."
+    },
+    {
+      "name": "assumed_latent_dependence",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Use pre/post latent Gaussian correlations of 0.98 for body mass and 0.80 for each biochemical endpoint, selected before diagnostics. Stronger body-mass persistence represents stable individual size over three days; common biochemical persistence avoids unsupported endpoint-specific tuning. These are modeling judgments without empirical joint support. Independent endpoint score pairs supply a simple cross-endpoint working assumption, not evidence that true cross-endpoint covariances vanish. Raw and change correlations remain induced quantities, not fitted inputs."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One source-conditioned positive model with high within-person persistence and independent endpoint latent processes. The latent pre/post correlations are body_mass=0.98 and leptin=glucose=triglycerides=0.80. No empirical joint correlation or change SD is supplied.",
+      "inclusion_rationale": "A single transparent rehearsal model represents stable person-level measurements and preserves all supplied marginal sample moments without seeking reserved findings. The 20-cohort allocation is computational allocation, not a posterior model probability.",
+      "unresolved_dependencies": [
+        "True within-person pre/post covariance for all four endpoints",
+        "Cross-endpoint covariance within and between visits, including shared responses",
+        "Distributional shapes and tail behavior beyond the reported two marginal moments",
+        "Sampling uncertainty and rounding uncertainty of the reported moments",
+        "External validity and causal effects in an uncontrolled study"
+      ],
+      "affected_analysis_classes": [
+        "Four paired endpoint mean changes are fixed by supplied marginal reconstruction constraints, rather than independently validated",
+        "Paired t confidence intervals, change SDs, and paired covariance diagnostics depend on unvalidated latent persistence and conditioning assumptions",
+        "Six correlations among endpoint changes depend on the unvalidated cross-endpoint model and finite-cohort random variation"
+      ]
+    }
+  ],
+  "changes_from_parent": "initial build; no parent or prior model inspected",
+  "source_check_results": {
+    "status": "passed for all three permitted source diagnostic cohorts",
+    "implementation_checks": "source_checks.load_generator and validate_decision passed; call_checked passed for each listed seed",
+    "diagnostics_scope": "Source marginal/count/support checks only. Exact marginal agreement is construction by input conditioning, not independent validation. No paired tests, change correlations, or reserved evaluation results were consulted.",
+    "cohorts": [
+      {
+        "seed": 810101,
+        "frame_contract": "passed",
+        "all_source_envelopes_satisfied": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sd_error": 2.5490720645393594e-13,
+        "context": "target",
+        "n_persons": 12,
+        "evidence_immutability": "passed",
+        "global_numpy_rng_preservation": "passed",
+        "exact_complete_pair_counts": "passed",
+        "strict_positive_support": "passed"
+      },
+      {
+        "seed": 810102,
+        "frame_contract": "passed",
+        "all_source_envelopes_satisfied": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sd_error": 1.7763568394002505e-15,
+        "context": "target",
+        "n_persons": 12,
+        "evidence_immutability": "passed",
+        "global_numpy_rng_preservation": "passed",
+        "exact_complete_pair_counts": "passed",
+        "strict_positive_support": "passed"
+      },
+      {
+        "seed": 810103,
+        "frame_contract": "passed",
+        "all_source_envelopes_satisfied": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sd_error": 3.552713678800501e-15,
+        "context": "target",
+        "n_persons": 12,
+        "evidence_immutability": "passed",
+        "global_numpy_rng_preservation": "passed",
+        "exact_complete_pair_counts": "passed",
+        "strict_positive_support": "passed"
+      }
+    ],
+    "diagnostic_logging_note": "Initial serialization of full diagnostic records failed because a checker field was a NumPy boolean. Successful printed cohort summaries were retained here without regenerating cohorts. This logging correction did not change the generator or its parameters."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "model_1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Selected one positive source-conditioned model with explicit unestimated dependence parameters. No alternative structure, reserved outcome, or seed selection was used. Numerical root solving enforces supplied marginal constraints; it does not fit dependence or target findings."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "model_1"
+    }
+  },
+  "intended_uses": [
+    "Synthetic rehearsal of paired-wide data processing and declared paired analyses",
+    "Demonstration of dependence assumptions required beyond marginal reconstruction inputs"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or patient-level prediction",
+    "New empirical evidence or independent confirmation of supplied marginal changes",
+    "Validated paired confidence intervals, p values, or cross-endpoint correlations",
+    "Causal inference from the uncontrolled intervention",
+    "Population sampling variability or uncertainty in the rounded source moments"
+  ],
+  "next_information_request": "Request the raw-scale 8-by-8 pre/post covariance matrix, or at minimum four pre/post covariances and six change covariances with their pairwise observation counts. These joint summaries would discriminate latent persistence and cross-endpoint assumptions without requesting significance conclusions or reserved findings."
+}

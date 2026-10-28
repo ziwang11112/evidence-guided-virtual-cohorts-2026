@@ -2,6 +2,8 @@
 
 27 October 2026. Working method-paper plan following the user's decision to evaluate scientific conclusion preservation and practical research use, rather than demand exact reproduction of every value. This document separates implemented machinery, retrospective development results and proposed experiments. It does not preregister already inspected data.
 
+**Execution update:** Stage 0 and the bounded three-case Stage 1 are complete. Stage 1 generated all 420 scheduled cohorts and produced all 7,700 analysis records under `stage1_v3`; see [results](stage1/RESULTS.md) and [decision](stage1/DECISION.md). The scenario policy is implemented, but it did not show consistent reserved-analysis improvement. Stage 2 expansion and Stage 3 study-planning claims remain conditional and unrun. The design below is retained to distinguish the intended paper from the evidence actually obtained.
+
 ## 1. Intended contribution and use
 
 **Research question:** Can an Agent turn limited study evidence and, when available, partial individual records into reusable virtual cohorts that support credible *unprovided* analyses, and indicate when the evidence cannot support a research decision?
@@ -73,9 +75,9 @@ Reuse `../population_framework/runner.py`, its staged evidence delivery and gene
 | Modeling Agent | Select dependence/trajectory/missingness model and generate executable code or literal records | Implemented in prior pilots; keep actual decisions and rejected options |
 | Numerical executor | Run submitted programs, enforce schema and evidence contracts, retain all outcomes | Implemented; context isolation is procedural, not an adversarial security sandbox |
 | Source-only reviewer | Check evidence extraction, formula/code consistency and allowed-source discrepancies | Implemented; reviewer agreement is not statistical validation |
-| Evidence-compatible scenario policy | Retain distinct plausible joint structures where evidence does not identify one; qualify analysis sensitivity | Proposed; not yet implemented or validated |
+| Evidence-compatible scenario policy | Retain distinct plausible joint structures where evidence does not identify one; qualify analysis sensitivity | Implemented and tested in Stage 1; sensitivity demonstrated, consistent accuracy gain not established |
 | Reserved evaluator | Same real/synthetic analysis, study-level reporting, independent audit | Existing selected analyses; broader development batch implemented separately here |
-| Research-use report | Explain supported, assumption-sensitive and unvalidated analysis uses | Proposed output contract; numerical calibration remains to be tested |
+| Research-use report | Explain supported, assumption-sensitive and unvalidated analysis uses | Stage 1 analytical report implemented; decision utility and calibrated uncertainty remain untested |
 
 ### Proposed mechanism to test
 

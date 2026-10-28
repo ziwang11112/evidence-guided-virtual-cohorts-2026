@@ -1,0 +1,274 @@
+{
+  "run_id": "case_a_build_03_initial_v3",
+  "lineage_id": "case_a_build_03",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "reason": "No exact runtime model identifier, provider configuration, or token-usage metadata supplied by a tool."
+  },
+  "model_family": "Conditional marginal reconstruction using randomized stratified lognormal/beta/negative-binomial quantiles and independent-endpoint Gaussian random-intercept copulas",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use each of 25 visit/outcome means and sample SDs to parameterize a marginal distribution and scale each observed count by n/75. These target-derived inputs are reconstruction constraints, not independent validation. The source does not identify distribution shape, dependence, or missingness mechanism."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Use five visits, adult weight-management population, baseline weight cap, positive weight, PFS range and fifteen-item averaging, integer No-Go errors, and AUC support. Height, BMI, age, contraindications, and pregnancy cannot be reconstructed because those fields are outside the schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "marginal_outcomes",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. Lognormal weight; beta-distributed PFS on [1,5] rounded to 1/15; negative-binomial integer gng on [0,512]; beta dd100 and dd1000 on [0,1]. Distributional shapes are assumptions. Beta and negative-binomial parameters match source population-style moments; randomized finite cohorts need not match exactly. Weight is truncated at 180 kg only at baseline. Truncation and PFS rounding slightly alter fitted moments."
+    },
+    {
+      "name": "conditional_quantile_sampling",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "At each observed visit/outcome margin, sample one uniform value per equal-probability stratum and assign quantiles by stochastic Gaussian latent ranks. This produces stochastic cohorts conditional on supplied marginals with less finite-cohort marginal variability than iid sampling. It does not reproduce individual rows and does not provide a sampling-uncertainty model."
+    },
+    {
+      "name": "longitudinal_and_cross_endpoint_dependence",
+      "evidence_ids": [],
+      "source_to_target_assumptions": "Working latent persistent variance fractions are weight 0.85, pfs 0.60, gng 0.45, dd100 0.60, dd1000 0.60. Gaussian random intercept plus independent visit innovations, followed by within-observed-margin rank transformation, gives persistent subject rankings. These numbers are unestimated modeling choices and are not exact observed-scale ICCs. Outcome processes are independent across endpoints as a parsimonious unidentified-dependence closure; this is an imposed assumption, not evidence that any true correlation or weight association is zero."
+    },
+    {
+      "name": "missingness",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Exact visit/outcome observed counts at n=75; int(round(n_observed*n/75)) at other n. Rank availability scores composed of independent normal person (variance 0.50), shared person-visit (0.30), and endpoint-visit (0.20) components. The overlap and persistent absence are assumed; no monotone dropout is enforced. Scores are independent of all outcome latent variables, giving a conditional-count MCAR mechanism. Source individual masks and informative missingness are unknown."
+    },
+    {
+      "name": "synthetic_identity",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "New numeric person IDs 1 through n; every person has one row at each declared visit. Local default_rng(seed), no file or network I/O, and no evidence mutation."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One selected working reconstruction with assumed positive within-endpoint persistence, independent cross-endpoint processes, and outcome-independent shared missingness propensity. Resource allocation of 20 cohorts is not a posterior probability.",
+      "inclusion_rationale": "The packet identifies marginal scales, counts, eligibility, and measurement support. This one transparent conventional distribution/correlation construction provides reproducible rehearsal cohorts without attempting to recover reserved analyses.",
+      "scientific_scenario_differences": "Only one scenario is committed; no alternative scientific scenarios were examined.",
+      "unresolved_dependencies": [
+        "Cross-endpoint covariance, including between discounting conditions, remains unidentified; independence is assumed.",
+        "Within-person lag covariance and random slope/change covariance are unprovided; fixed latent persistence is assumed.",
+        "Missing-mask overlap and outcome-dependent attrition are unprovided; correlated MCAR masks are assumed.",
+        "Distribution shape, boundary masses, PFS item completeness, and individual measurement error are unprovided."
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs/gng/dd100/dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially standard errors and covariance assumptions",
+        "Four exploratory standardized weight associations, whose covariance structure is unvalidated"
+      ]
+    }
+  ],
+  "changes_from_parent": "Initial build; no parent inspected and no parent changes apply.",
+  "source_check_results": {
+    "scope": "Source-only procedural and marginal diagnostics, not validation of unidentified joint properties or reserved analyses.",
+    "local_cohorts": [
+      {
+        "seed": 810101,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "seed": 810102,
+        "frame_contract": "passed",
+        "within_source_envelope": "24/25",
+        "outside_envelope": [
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.8,
+            "sd": 14.253496489007958,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": false
+          }
+        ]
+      },
+      {
+        "seed": 810103,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      }
+    ],
+    "controller": "not yet run; controller will attach",
+    "interpretation": "Supplied means and SDs parameterize the generator and are not independent validation successes. The single retained structure and its parameters were not changed after diagnostics. Any marginal-envelope failure is retained transparently.",
+    "execution_note": "Three unique structure/seed cohorts. Seed 810102 executed twice because output logging failed after its first diagnostics. This retry used identical generator, inputs, and seed."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "model_1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Single structure chosen from measurement support and marginal summaries before diagnostics. No reserved findings used, no seed selection, and no alternative structures examined."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "model_1"
+    },
+    "diagnostic_calls": [
+      {
+        "call": "load_generator",
+        "structure_id": "model_1",
+        "result": "passed AST/import contract; no cohort generated"
+      },
+      {
+        "call": "validate_decision",
+        "result": "passed initial metadata and budget contract; no cohort generated"
+      },
+      {
+        "structure_id": "model_1",
+        "seed": 810101,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.10879492525503665,
+        "max_sd_fraction_of_tolerance": 0.7378826803889714
+      },
+      {
+        "structure_id": "model_1",
+        "seed": 810102,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "logging_failed_after_diagnostics",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "failure": "Diagnostic records included a numpy boolean; json.dumps could not serialize it. Source diagnostics were computed but output was not saved. Same seed will be retried without changing generator."
+      },
+      {
+        "call": "load_generator",
+        "structure_id": "model_1",
+        "result": "passed unchanged-generator AST/import contract for resumed diagnostics; no cohort generated"
+      },
+      {
+        "structure_id": "model_1",
+        "seed": 810102,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "retry_after_logging_failure": true,
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 24,
+        "outside_envelope": [
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.8,
+            "sd": 14.253496489007958,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": false
+          }
+        ],
+        "max_mean_fraction_of_tolerance": 0.12165322306914268,
+        "max_sd_fraction_of_tolerance": 1.0194507582166576
+      },
+      {
+        "structure_id": "model_1",
+        "seed": 810103,
+        "context": "target",
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "retry_after_logging_failure": false,
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.054128221404337575,
+        "max_sd_fraction_of_tolerance": 0.39936872525926853
+      },
+      {
+        "call": "validate_decision",
+        "result": "passed final metadata and three-unique-cohort budget contract; no additional cohort generated"
+      }
+    ],
+    "failed_attempts": [
+      {
+        "stage": "diagnostic_result_serialization",
+        "structure_id": "model_1",
+        "seed": 810102,
+        "error": "TypeError: Object of type bool is not JSON serializable (numpy boolean in diagnostic envelope record). Exception-report print also failed for the same reason.",
+        "resolution": "Convert numpy scalars via item() during logging; retry only identical seed 810102; no generator or model alteration."
+      }
+    ],
+    "construction_budget": "One initial structure; only seeds 810101, 810102, 810103; no further cohorts or structures planned."
+  },
+  "intended_uses": [
+    "Synthetic analysis rehearsal and code-path testing at the supplied design and measurement scales",
+    "Sensitivity discussion of unidentified joint structure; only one working scenario is implemented"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or individual prediction",
+    "New empirical findings or causal claims",
+    "Reconstruction of true source participants or their missingness masks",
+    "Validation of correlations, weight-association signs or magnitudes, trajectory uncertainty, p values, confidence intervals, or random-effects parameters",
+    "Population sampling uncertainty from the randomized stratified cohorts",
+    "External transportability beyond the supplied population"
+  ],
+  "next_information_request": "Request privacy-preserving baseline covariance across all five outcomes, lagged within-outcome covariance summaries, and cross-tabulated visit/outcome missingness counts with attrition summaries by previously measured outcomes. These would discriminate the independent-endpoint, random-intercept, and MCAR assumptions without requesting reserved analysis findings."
+}

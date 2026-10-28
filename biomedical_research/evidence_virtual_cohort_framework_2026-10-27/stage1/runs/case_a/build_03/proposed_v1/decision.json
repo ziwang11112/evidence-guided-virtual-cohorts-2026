@@ -1,0 +1,523 @@
+{
+  "run_id": "case_a_build_03_proposed_v1",
+  "lineage_id": "case_a_build_03",
+  "branch": "proposed",
+  "action": "revise",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "reason": "Exact provider/model identifier and token counts were not supplied by tools; no values are inferred."
+  },
+  "model_family": "Conditional stratified marginal reconstruction with independent, shared-trait, or shared-state Gaussian copula structure",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use each of 25 visit/outcome means and sample SDs to parameterize a marginal distribution and scale each observed count by n/75. These target-derived inputs are reconstruction constraints, not independent validation. The source does not identify distribution shape, dependence, or missingness mechanism."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Use five visits, adult weight-management population, baseline weight cap, positive weight, PFS range and fifteen-item averaging, integer No-Go errors, and AUC support. Height, BMI, age, contraindications, and pregnancy cannot be reconstructed because those fields are outside the schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "marginal_outcomes",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. Lognormal weight; beta-distributed PFS on [1,5] rounded to 1/15; negative-binomial integer gng on [0,512]; beta dd100 and dd1000 on [0,1]. Distributional shapes are assumptions. Beta and negative-binomial parameters match source population-style moments; randomized finite cohorts need not match exactly. Weight is truncated at 180 kg only at baseline. Truncation and PFS rounding slightly alter fitted moments."
+    },
+    {
+      "name": "conditional_quantile_sampling",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "At each observed visit/outcome margin, sample one uniform value per equal-probability stratum and assign quantiles by stochastic Gaussian latent ranks. This produces stochastic cohorts conditional on supplied marginals with less finite-cohort marginal variability than iid sampling. It does not reproduce individual rows and does not provide a sampling-uncertainty model."
+    },
+    {
+      "name": "longitudinal_and_cross_endpoint_dependence",
+      "evidence_ids": [],
+      "source_to_target_assumptions": "All scenarios use parent latent persistent variance fractions weight=0.85, pfs=0.60, gng=0.45, dd100=0.60, dd1000=0.60. Target retains independent endpoints. Shared_trait correlates person intercepts using one standard normal factor. Shared_state correlates visit innovations using one independent standard normal factor per person/visit. Signed factor loadings in endpoint order are [0.65,0.70,0.65,-0.75,-0.75]. Each correlated component is loading*common+sqrt(1-loading^2)*independent, so positive semidefiniteness and unit component variances follow by construction. These loadings and persistence values are explicit sensitivity choices, not estimated quantities, exact observed-scale correlations, or empirical directional claims. Marginal rank assignment and masking alter observed-scale dependence."
+    },
+    {
+      "name": "missingness",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Exact visit/outcome observed counts at n=75; int(round(n_observed*n/75)) at other n. Rank availability scores composed of independent normal person (variance 0.50), shared person-visit (0.30), and endpoint-visit (0.20) components. The overlap and persistent absence are assumed; no monotone dropout is enforced. Scores are independent of all outcome latent variables, giving a conditional-count MCAR mechanism. Source individual masks and informative missingness are unknown."
+    },
+    {
+      "name": "synthetic_identity",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "New numeric person IDs 1 through n; every person has one row at each declared visit. Local default_rng(seed), no file or network I/O, and no evidence mutation."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 7,
+      "assumption": "Parent independent-endpoint Gaussian random-intercept processes with the stated persistence and shared outcome-independent missingness. Zero cross-endpoint latent correlation is a working closure, not evidence of independence.",
+      "inclusion_rationale": "Preserve the parent as a transparent reference compatible with the only supplied univariate evidence. Its source feedback was valid with one transparent marginal SD envelope exception; this does not identify the joint structure.",
+      "scientific_scenario_differences": "No shared outcome factor; parent generator behavior and RNG order are preserved exactly for target.",
+      "unresolved_dependencies": [
+        "No baseline or cross-visit covariance is supplied, including the relation between the two discounting conditions.",
+        "No weight/cognitive association sign, magnitude, or time pattern is supplied.",
+        "Individual missingness overlap and dependence on outcomes are unknown; all three scenarios retain the parent conditional-count MCAR assumption.",
+        "Distribution shapes, boundary masses, measurement errors, random slopes, and item-level missingness remain unresolved."
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs/gng/dd100/dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially covariance and standard errors",
+        "Four exploratory standardized weight associations"
+      ]
+    },
+    {
+      "id": "shared_trait",
+      "n_cohorts": 7,
+      "assumption": "A persistent person-level factor makes weight, PFS and No-Go ranks covary positively and discounting AUC ranks covary in the opposite direction; both discounting conditions share the same sign. Shared residual innovations are absent.",
+      "inclusion_rationale": "A stable common individual propensity is an evidence-compatible explanation of cross-outcome dependence that the independent parent excludes. It produces cross-endpoint, cross-visit covariance and can materially affect standardized associations and random-intercept trajectory uncertainty. The loading signs are hypotheses solely for sensitivity.",
+      "scientific_scenario_differences": "Adds a common factor to person intercepts only. Before rank transformation, cross-endpoint covariance at every pair of visits is sqrt(f_i*f_j)*loading_i*loading_j. Within-endpoint persistence and marginal component variances are unchanged.",
+      "unresolved_dependencies": [
+        "No baseline or cross-visit covariance is supplied, including the relation between the two discounting conditions.",
+        "No weight/cognitive association sign, magnitude, or time pattern is supplied.",
+        "Individual missingness overlap and dependence on outcomes are unknown; all three scenarios retain the parent conditional-count MCAR assumption.",
+        "Distribution shapes, boundary masses, measurement errors, random slopes, and item-level missingness remain unresolved."
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs/gng/dd100/dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially covariance and standard errors",
+        "Four exploratory standardized weight associations"
+      ]
+    },
+    {
+      "id": "shared_state",
+      "n_cohorts": 6,
+      "assumption": "A shared person-visit state with the same signed loadings links concurrent measurements; endpoint-specific person intercepts remain independent. State shocks are independent across visits.",
+      "inclusion_rationale": "Transient context or measurement-session effects are an evidence-compatible alternative to a stable common trait. Concurrent associations may be present while cross-endpoint cross-visit covariance is absent at the latent level. This changes what repeated-measure associations mean without introducing an unsupported marginal trend.",
+      "scientific_scenario_differences": "Adds a common factor to visit innovations only. Before rank transformation, cross-endpoint covariance at a common visit is sqrt((1-f_i)*(1-f_j))*loading_i*loading_j; it is zero at different visits. Within-endpoint persistence and marginal component variances are unchanged.",
+      "unresolved_dependencies": [
+        "No baseline or cross-visit covariance is supplied, including the relation between the two discounting conditions.",
+        "No weight/cognitive association sign, magnitude, or time pattern is supplied.",
+        "Individual missingness overlap and dependence on outcomes are unknown; all three scenarios retain the parent conditional-count MCAR assumption.",
+        "Distribution shapes, boundary masses, measurement errors, random slopes, and item-level missingness remain unresolved."
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs/gng/dd100/dd1000",
+        "Categorical-visit random-intercept trajectories of all five outcomes, especially covariance and standard errors",
+        "Four exploratory standardized weight associations"
+      ]
+    }
+  ],
+  "changes_from_parent": {
+    "action": "revise",
+    "preserved": "All marginal families, support rules, PFS rounding, exact counts, randomized quantile strata, within-endpoint persistence, and conditional-count MCAR mechanism. Target output is source-code preserved, including RNG draw order.",
+    "changed": "Retain two explicit alternative cross-outcome structures through context dispatch. Reduce final resource allocation from 20 target cohorts to 7 target, 7 shared_trait, and 6 shared_state.",
+    "motivation": "Source feedback does not constrain covariance. Scientifically distinct stable and transient cross-outcome factors are warranted by the declared analysis sensitivity to unprovided joint relationships.",
+    "parent_feedback_review": "Allowed source_feedback.json reports valid contracts, no errors and a successful mean-input-use probe. 74/75 marginal envelopes passed; gng_month0 seed 810102 SD=14.253496489007958 versus expected 11.390085779047235, tolerance 2.8087778510947756, was outside. This is retained; no source seed was selected or rejected."
+  },
+  "source_check_results": {
+    "scope": "Source-only procedural and marginal diagnostics, not validation of reserved findings or dependence.",
+    "local": [
+      {
+        "context": "target",
+        "seed": 810101,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "target",
+        "seed": 810102,
+        "frame_contract": "passed",
+        "within_source_envelope": "24/25",
+        "outside_envelope": [
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.8,
+            "sd": 14.253496489007958,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": false
+          }
+        ]
+      },
+      {
+        "context": "target",
+        "seed": 810103,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "shared_trait",
+        "seed": 810101,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "shared_trait",
+        "seed": 810102,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "shared_trait",
+        "seed": 810103,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "shared_state",
+        "seed": 810101,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "shared_state",
+        "seed": 810102,
+        "frame_contract": "passed",
+        "within_source_envelope": "25/25",
+        "outside_envelope": []
+      },
+      {
+        "context": "shared_state",
+        "seed": 810103,
+        "frame_contract": "passed",
+        "within_source_envelope": "24/25",
+        "outside_envelope": [
+          {
+            "id": "gng_month9",
+            "n": 65,
+            "mean": 11.892307692307693,
+            "sd": 14.776589462858002,
+            "expected_mean": 11.292307692307693,
+            "expected_sd": 11.678938143249416,
+            "mean_tolerance": 4.3457819786451735,
+            "sd_tolerance": 3.0968461343062077,
+            "within_source_diagnostic_envelope": false
+          }
+        ]
+      }
+    ],
+    "controller": "not yet run; controller will attach",
+    "interpretation": "Reconstruction envelopes compare generated marginal summaries with inputs already used by the model. They are not independent validation. All scenarios and fixed seeds are retained as precommitted; no adjustments or seed selection followed diagnostics. Unidentified joint properties were not validated.",
+    "unique_structure_seed_cohorts": 9
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "independent_parent",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Parent reference; independence is an explicit unidentified closure."
+      },
+      {
+        "id": "persistent_shared_factor",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Retained before diagnostics to represent stable cross-endpoint covariance."
+      },
+      {
+        "id": "transient_shared_factor",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Retained before diagnostics to represent same-visit dependence without stable cross-endpoint covariance."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "independent_parent",
+      "shared_trait": "persistent_shared_factor",
+      "shared_state": "transient_shared_factor"
+    },
+    "precommitment": "These three structures, numerical parameters, inclusion rationales and order were committed before any branch cohort was generated. Source diagnostics will not select seeds or change scientific assumptions. Retain all scheduled seeds and report exceptions.",
+    "construction_budget": "Exactly three structures, each using seeds 810101,810102,810103, at most nine unique structure/seed cohorts. Controller reuses those source seeds; final twenty cohorts use controller seeds. Allocation 7/7/6 is resource allocation, not posterior probability. No second scientific revision is scheduled.",
+    "diagnostic_calls": [
+      {
+        "call": "load_generator",
+        "result": "passed permitted-import/AST contract; no cohort generated"
+      },
+      {
+        "call": "validate_decision",
+        "stage": "pre_generation",
+        "result": "passed precommitted metadata/budget/allocation contract",
+        "allocation": {
+          "target": 7,
+          "shared_trait": 7,
+          "shared_state": 6
+        }
+      },
+      {
+        "structure_id": "independent_parent",
+        "context": "target",
+        "seed": 810101,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.10879492525503665,
+        "max_sd_fraction_of_tolerance": 0.7378826803889714
+      },
+      {
+        "structure_id": "independent_parent",
+        "context": "target",
+        "seed": 810102,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 24,
+        "outside_envelope": [
+          {
+            "id": "gng_month0",
+            "n": 75,
+            "mean": 13.8,
+            "sd": 14.253496489007958,
+            "expected_mean": 13.32,
+            "expected_sd": 11.390085779047235,
+            "mean_tolerance": 3.9456414543755094,
+            "sd_tolerance": 2.8087778510947756,
+            "within_source_diagnostic_envelope": false
+          }
+        ],
+        "max_mean_fraction_of_tolerance": 0.12165322306914268,
+        "max_sd_fraction_of_tolerance": 1.0194507582166576
+      },
+      {
+        "structure_id": "independent_parent",
+        "context": "target",
+        "seed": 810103,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.054128221404337575,
+        "max_sd_fraction_of_tolerance": 0.39936872525926853
+      },
+      {
+        "structure_id": "persistent_shared_factor",
+        "context": "shared_trait",
+        "seed": 810101,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.10146990316602379,
+        "max_sd_fraction_of_tolerance": 0.8123079465256455
+      },
+      {
+        "structure_id": "persistent_shared_factor",
+        "context": "shared_trait",
+        "seed": 810102,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.04860283550058857,
+        "max_sd_fraction_of_tolerance": 0.33189037830810786
+      },
+      {
+        "structure_id": "persistent_shared_factor",
+        "context": "shared_trait",
+        "seed": 810103,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.06089424907987973,
+        "max_sd_fraction_of_tolerance": 0.26906841727754643
+      },
+      {
+        "structure_id": "transient_shared_factor",
+        "context": "shared_state",
+        "seed": 810101,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.06089424907987973,
+        "max_sd_fraction_of_tolerance": 0.3375209659840863
+      },
+      {
+        "structure_id": "transient_shared_factor",
+        "context": "shared_state",
+        "seed": 810102,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 25,
+        "outside_envelope": [],
+        "max_mean_fraction_of_tolerance": 0.043718142892626904,
+        "max_sd_fraction_of_tolerance": 0.23600105152867298
+      },
+      {
+        "structure_id": "transient_shared_factor",
+        "context": "shared_state",
+        "seed": 810103,
+        "n": 75,
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "status": "completed",
+        "frame_contract": "passed",
+        "evidence_immutability": "passed",
+        "global_rng_unchanged": "passed",
+        "margins_evaluated": 25,
+        "margins_within_envelope": 24,
+        "outside_envelope": [
+          {
+            "id": "gng_month9",
+            "n": 65,
+            "mean": 11.892307692307693,
+            "sd": 14.776589462858002,
+            "expected_mean": 11.292307692307693,
+            "expected_sd": 11.678938143249416,
+            "mean_tolerance": 4.3457819786451735,
+            "sd_tolerance": 3.0968461343062077,
+            "within_source_diagnostic_envelope": false
+          }
+        ],
+        "max_mean_fraction_of_tolerance": 0.13806491051515052,
+        "max_sd_fraction_of_tolerance": 1.000260001713827
+      },
+      {
+        "call": "validate_decision",
+        "stage": "final",
+        "result": "passed final decision, fixed allocation and nine-unique-cohort budget contract",
+        "allocation": {
+          "target": 7,
+          "shared_trait": 7,
+          "shared_state": 6
+        }
+      }
+    ],
+    "tool_calls": [
+      {
+        "stage": "allowed_packet_read",
+        "calls": 4,
+        "detail": "Four exec batches read only REQUEST and the exact allowlist. The first two broad outputs and the attempted feedback summary were truncated, so targeted rereads recovered required generator/decision/check and feedback summary text. No cohort generation occurred."
+      },
+      {
+        "stage": "artifact_construction",
+        "detail": "One Python stdin call reads allowed parent generator/decision/template and writes only generator.py and decision.json. No cohorts are generated."
+      },
+      {
+        "stage": "source_diagnostics",
+        "detail": "One Python stdin call loads and validates source artifacts, evaluates all nine fixed structure/seed cohorts once, records contracts and source marginal envelopes, and validates final metadata. No controller or reserved-target analyses run."
+      }
+    ],
+    "failed_attempts": [],
+    "options_not_examined": "No fourth model was numerically examined. Alternative factor signs, stronger/weaker persistence, informative dropout, random slopes, additional marginal families, and joint distributions outside these three are untested. The examined set is not exhaustive.",
+    "assumptions": "Factor direction/magnitude and stable-versus-transient placement are scientific sensitivity assumptions. Parent marginal families and noninformative correlated missingness are held fixed to keep the comparison interpretable. Missing evidence is never interpreted as observed zero.",
+    "construction_outcome": "All three precommitted structures retained unchanged after nine scheduled source diagnostic cohorts. No failures triggered retries, no alternative parameters were tried, and no extra cohort generation was performed."
+  },
+  "intended_uses": [
+    "Synthetic analysis rehearsal using supplied design, support and observed counts",
+    "Sensitivity comparison among three explicit assumptions about the source of cross-endpoint dependence"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or individual prediction",
+    "New empirical findings or causal claims",
+    "Reconstruction of true source participants or their missingness masks",
+    "Validation of correlations, weight-association signs or magnitudes, trajectory uncertainty, p values, confidence intervals, or random-effects parameters",
+    "Population sampling uncertainty from the randomized stratified cohorts",
+    "External transportability beyond the supplied population",
+    "Claims that the three scenarios cover every evidence-compatible model, or that scenario allocation gives posterior probability",
+    "Attribution of generated correlations or association signs to real participants"
+  ],
+  "next_information_request": "Request privacy-preserving baseline covariance among all five endpoints, same-visit and cross-visit cross-endpoint covariance tables, and each outcome lag covariance. Comparing concurrent versus lagged cross-endpoint covariance would discriminate shared-state from persistent-trait dependence. Also request missingness overlap by visit/outcome and attrition summaries by previous observed outcomes. No reserved analysis coefficients, p values or findings are requested."
+}

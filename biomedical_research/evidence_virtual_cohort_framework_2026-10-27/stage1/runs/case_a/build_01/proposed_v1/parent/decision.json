@@ -1,0 +1,231 @@
+{
+  "run_id": "case_a_build_01_initial_v3",
+  "lineage_id": "case_a_build_01",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable"
+  },
+  "model_family": "Gaussian-copula random-intercept population with support-constrained parametric marginals and outcome-independent correlated attendance",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "per-visit arithmetic mean, sample SD, nonmissing count",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A; supplied target-derived marginals, reconstruction regime A0",
+      "action": "use",
+      "reason": "Use all 25 visit-specific means and sample SDs as population marginal parameter inputs and all denominators as exact count constraints, scaled by n/75. These same-population reconstruction inputs are not held-out validation. They do not identify any joint distribution."
+    },
+    {
+      "id": "E_design",
+      "operator": "study eligibility and measurement dictionary",
+      "population": "75 adults with overweight or obesity; 12-week internet behavioral weight-management program, then 9 months without additional intervention; measurements at months 0,3,6,9,12.",
+      "measurement": "Clinic weight in kg; PFS total average of 15 1-5 items; No-Go errors integer; delay-discounting AUC separately for $100 and $1000 conditions.",
+      "provenance": "source_packet_A",
+      "action": "use",
+      "reason": "Use five scheduled visits, numeric units, bounded scores, integer errors and baseline enrollment weight cap. The continuous aggregate PFS approximation does not reconstruct its 15 item responses. Age, BMI, height, pregnancy and contraindication eligibility cannot be regenerated from the supplied outcome-only schema."
+    }
+  ],
+  "components": [
+    {
+      "name": "parametric_marginals",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "A0 same-population reconstruction. Weight uses lognormal marginals; baseline parameters solve truncated-lognormal moment equations for weight <=180 kg. Later weight is positive without that cap. PFS is beta on [1,5], AUC outcomes beta on [0,1], and errors negative binomial conditioned on <=512. Beta and untruncated count parameters match supplied moments at population level; the distant count truncation may make a negligible moment change. Shapes, absence of endpoint atoms and continuous PFS are assumptions, not source facts."
+    },
+    {
+      "name": "longitudinal_gaussian_copula",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Stable person factors provide repeated-measure continuity. Latent variance from person factors is 0.90 for weight and 0.60 for every behavioral endpoint; remaining variance is independent visit noise. The two discounting endpoints each split their 0.60 person variance into 0.30 shared discounting-domain and 0.30 endpoint-specific person variance. Thus their latent cross-endpoint correlation is 0.30. These fixed values are qualitative modeling choices and are not estimated or selected against reserved results. Pearson correlations after marginal transformations need not equal latent values."
+    },
+    {
+      "name": "cross_domain_completion",
+      "evidence_ids": [
+        "E_marginals",
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Independent factors for weight, food responsiveness, inhibition and the discounting domain complete the unspecified joint law parsimoniously. This is an explicit unvalidated independence assumption, not evidence that any association is absent. The model supplies no additional behavior-weight coupling or causal treatment response mechanism."
+    },
+    {
+      "name": "exact_count_attendance",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Independent Gaussian attendance factors have variance fractions 0.60 person, 0.30 person-visit and 0.10 endpoint-visit. Ranking them separately for each supplied denominator yields exact observed counts, shared visit nonresponse and persistent but potentially intermittent missingness. Attendance factors are independent of outcome factors, a conditional-count MCAR assumption. Individual masks, missingness causes and informative attrition remain unknown."
+    },
+    {
+      "name": "sampling_and_interface",
+      "evidence_ids": [
+        "E_design",
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "n counts persons, each with exactly five rows; counts round(n_observed*n/75). New ordinal synthetic keys have no source linkage. A local default_rng(seed) supplies all randomness. Input evidence is read-only; there is no generator filesystem or network access. Marginal sample moments fluctuate across cohorts and are not forcibly matched."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "The single selected completion uses positive within-person persistence, a common stable discounting component, independence across other domains and outcome-independent correlated missingness.",
+      "inclusion_rationale": "One parsimonious executable population recognizes repeat measurements and the common discounting construct while deriving marginal distributions from the only supplied numerical evidence. No alternative structures or target outcomes are examined; 20 cohorts are resource allocation, not a posterior probability.",
+      "unresolved_dependencies": [
+        "All actual within-person correlations, temporal lag effects and random slope heterogeneity",
+        "All actual cross-domain correlations and behavior-weight associations",
+        "Whether discounting endpoints share person, visit or other components and their strengths",
+        "Informative missingness, actual mask overlap, dropout and intermittent return",
+        "Distributional shape, endpoint atoms and PFS item-level granularity"
+      ],
+      "affected_analysis_classes": [
+        "Baseline pairwise correlations among pfs, gng, dd100 and dd1000",
+        "Categorical-visit random-intercept trajectories for all five outcomes",
+        "Four exploratory standardized weight associations"
+      ]
+    }
+  ],
+  "changes_from_parent": "Initial build; no parent files or prior studies inspected.",
+  "source_check_results": {
+    "local_decision_schema": "passed",
+    "local_generator_static_contract": "passed",
+    "scheduled_source_seeds": [
+      {
+        "seed": 810101,
+        "frame_contract": "passed",
+        "evidence_not_mutated": true,
+        "global_numpy_rng_unchanged": true,
+        "marginals_in_envelope": 25,
+        "total_marginals": 25,
+        "outside_envelope": []
+      },
+      {
+        "seed": 810102,
+        "frame_contract": "passed",
+        "evidence_not_mutated": true,
+        "global_numpy_rng_unchanged": true,
+        "marginals_in_envelope": 22,
+        "total_marginals": 25,
+        "outside_envelope": [
+          "gng_month3",
+          "dd100_month6",
+          "gng_month12"
+        ]
+      },
+      {
+        "seed": 810103,
+        "frame_contract": "passed",
+        "evidence_not_mutated": true,
+        "global_numpy_rng_unchanged": true,
+        "marginals_in_envelope": 23,
+        "total_marginals": 25,
+        "outside_envelope": [
+          "dd1000_month0",
+          "dd1000_month12"
+        ]
+      }
+    ],
+    "interpretation": "Diagnostic envelopes concern supplied reconstruction inputs only. No target analyses, reference rows or evaluator outputs were used. No scientific tuning followed these diagnostics. Controller will attach its source feedback."
+  },
+  "calibration_log": {
+    "examined_structures": [
+      {
+        "id": "model_1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Single source-only model committed before diagnostics. Fixed dependence and attendance values are qualitative assumptions, not estimates. Retention is based on executable support/count compatibility, not reserved target performance."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "model_1"
+    },
+    "numerical_budget": "One initial structure, at most the unique cohorts (model_1,810101), (model_1,810102), (model_1,810103). Controller reuses these same source cohorts.",
+    "diagnostic_calls": [
+      {
+        "structure": "model_1",
+        "seed": 810101,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "result": {
+          "seed": 810101,
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "marginals_in_envelope": 25,
+          "total_marginals": 25,
+          "outside_envelope": []
+        }
+      },
+      {
+        "structure": "model_1",
+        "seed": 810102,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "result": {
+          "seed": 810102,
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "marginals_in_envelope": 22,
+          "total_marginals": 25,
+          "outside_envelope": [
+            "gng_month3",
+            "dd100_month6",
+            "gng_month12"
+          ]
+        }
+      },
+      {
+        "structure": "model_1",
+        "seed": 810103,
+        "n_persons": 75,
+        "context": "target",
+        "calls": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "result": {
+          "seed": 810103,
+          "frame_contract": "passed",
+          "evidence_not_mutated": true,
+          "global_numpy_rng_unchanged": true,
+          "marginals_in_envelope": 23,
+          "total_marginals": 25,
+          "outside_envelope": [
+            "dd1000_month0",
+            "dd1000_month12"
+          ]
+        }
+      }
+    ],
+    "noncohort_calculations": "Analytic beta/negative-binomial moment parameterization and deterministic two-parameter baseline truncated-lognormal least-squares solve. These do not inspect patient rows or simulate extra cohorts."
+  },
+  "intended_uses": [
+    "Rehearsal of long-format data handling and analyses on synthetic cohorts",
+    "Examination of how an explicitly chosen joint-law completion interacts with supplied marginal reconstruction inputs"
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions",
+    "New empirical evidence or causal effects",
+    "Recovering original individual records or missingness masks",
+    "Claiming true correlations, mixed-model uncertainty or exploratory weight coefficients",
+    "Generalization beyond the described population or source marginal regime"
+  ],
+  "next_information_request": "Request an anonymized source covariance summary: the baseline cross-outcome covariance matrix and per-outcome within-person covariance matrices with pairwise observed denominators, plus overlap counts for missingness masks. These would discriminate the assumed independent domains, persistent person factors and MCAR overlap without providing regression conclusions or significance results."
+}

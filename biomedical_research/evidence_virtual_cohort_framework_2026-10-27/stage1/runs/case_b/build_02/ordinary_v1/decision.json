@@ -1,0 +1,259 @@
+{
+  "run_id": "case_b_build_02_ordinary_v1",
+  "lineage_id": "case_b_build_02",
+  "branch": "ordinary",
+  "action": "no_op",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "availability_note": "Exact model identity, provider settings, and token counts were not supplied to this builder by a metadata tool; none are inferred."
+  },
+  "model_family": "Positive exponential-rank marginal reconstruction with a Gaussian stable-person factor and endpoint-specific repeated-measure persistence",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "Units specified per endpoint; serum leptin is raw ng/mL, not a log transformation",
+      "provenance": "source_packet_B",
+      "action": "qualify",
+      "reason": "Use each supplied raw-scale arithmetic mean and sample SD as an exact finite-cohort reconstruction constraint. The rounded moments are target-derived A0 inputs, not independent validation or information about within-person or cross-endpoint dependence. No log-scale leptin evidence is substituted. Marginal matching does not validate paired intervals, change SDs, or change correlations."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_B",
+      "action": "use",
+      "reason": "Generate one row per synthetic man with ordered fasting pre/post measures and the exact supplied endpoint complete-pair counts. Scale pair counts by round(endpoint_n * requested_n / source_n), using shared masks within each endpoint. All 12 source participants have all four pairs; age, sex, energy intake, and follow-up duration define applicability but are not invented as extra columns. The uncontrolled design does not identify a causal effect."
+    }
+  ],
+  "components": [
+    {
+      "name": "synthetic_person_keys_and_pair_counts",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "Same eligible source population and two fasting visits. Unique seed-prefixed synthetic keys. Counts scale with n; random complete-pair masks are used if a scaled endpoint count is smaller than n.",
+      "implementation": "A local numpy.default_rng(seed) supplies every draw. Endpoint pair masks are shared across visits. No evidence mutation or external I/O occurs."
+    },
+    {
+      "name": "raw_scale_positive_marginal_constraints",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Condition the finite cohort on the rounded supplied arithmetic means and sample SDs. Within each marginal, a monotone exponential transform of latent normal scores is calibrated to its sample coefficient of variation and rescaled to its arithmetic mean.",
+      "implementation": "A scalar brentq solve determines positive dispersion. Positivity is automatic and no values are clipped or hand-authored. The transform preserves latent ranks but does not preserve latent Pearson correlations.",
+      "limitations": "Conditional finite-sample exponential marginals are not independent lognormal draws. Conditioning removes marginal sampling variation by design. For n=1 only the supplied mean is used because sample SD is undefined; n=0 returns an empty schema. Infeasible positive moments raise an error."
+    },
+    {
+      "name": "unidentified_joint_dependence",
+      "evidence_ids": [
+        "E_design",
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Each normal score has a shared stable-person component with variance 0.20, an endpoint-specific stable component with variance rho_e - 0.20, and an independent visit component with variance 1 - rho_e. rho_e is 0.995 for body_mass and 0.75 for each biomarker.",
+      "implementation": "These coefficients imply latent within-endpoint pre/post correlations rho_e and latent cross-endpoint level correlations 0.20 before finite-sample marginal reconstruction.",
+      "scientific_rationale": "The three-day repeated-measure design motivates persistent person-level variation. Strong body-mass persistence encodes the assumption that person ordering is mostly stable over this short interval; biomarker persistence is lower to allow heterogeneous short-term responses. A modest shared stable factor allows shared person characteristics.",
+      "limitations": "The packet identifies none of these numerical dependence parameters. A shared transient response factor is omitted as an explicit simplifying assumption, not a finding of absent response coupling. The positive level factor does not constitute evidence of any reserved change-correlation direction."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One source-compatible reconstruction with latent shared stable variance 0.20, body-mass persistence 0.995, biomarker persistence 0.75, and no extra common visit-response factor; exact supplied marginal sample moments.",
+      "inclusion_rationale": "Retain the common-parent joint model after source-only review. The supplied parent feedback establishes procedural compatibility and marginal reconstruction, but supplies no within-person or cross-endpoint information that could justify choosing different dependence parameters or a new family. The source-only diagnostics cannot rank alternative joint models. This is a transparent reference construction for rehearsal, not an estimated or scientifically validated dependence model.",
+      "unresolved_dependencies": [
+        "All within-person Pearson covariances and paired change SDs remain unidentified by the supplied marginals.",
+        "All cross-endpoint level, cross-visit, and change covariances remain unidentified.",
+        "The stable shared factor and omission of a common transient response factor are unvalidated assumptions.",
+        "Marginal shape, outliers, rounding uncertainty, and dependence heterogeneity are not identified.",
+        "Marginal calibration changes latent Pearson correlations; the chosen latent coefficients are not claimed to be observed coefficients."
+      ],
+      "affected_analysis_classes": [
+        "Four paired endpoint change means with paired t intervals: means are constrained reconstruction inputs while interval widths depend on assumed pairing.",
+        "Paired covariance and paired change SD diagnostics.",
+        "Six correlations between endpoint changes."
+      ],
+      "scientific_scenario_differences": "Exactly one retained target model. No scientific scenario differences are claimed because no alternative structure is submitted. The twenty-cohort allocation is fixed computational resource allocation, not a posterior probability."
+    }
+  ],
+  "changes_from_parent": "Justified no-op: generator.py is copied byte-for-byte from the supplied common parent. Source feedback is valid, has no errors, and shows all eight supplied marginal means and sample SDs reconstructed at each of the three scheduled seeds. Neither that feedback nor the evidence supplies joint covariances, change SDs, measurement reliability, or a marginal-family comparison. Altering the shared stable variance 0.20, body-mass persistence 0.995, biomarker persistence 0.75, absence of extra shared transient variation, or marginal transform would therefore introduce another unranked assumption rather than a source-supported correction. The ordinary branch selects one retained structure; preserving it does not validate those choices. Decision identity, source review rationale, current branch call accounting, and limitations are updated.",
+  "source_check_results": {
+    "status": "Three scheduled source-only diagnostic cohorts completed; controller may attach the same scheduled-seed checks.",
+    "interpretation": "Passing source contracts and reconstructing the provided A0 marginals are construction checks. They provide no independent validation of paired covariance, interval coverage, or endpoint change correlations. Exact marginal conditioning removes marginal sampling variation by design.",
+    "diagnostic_cohorts": [
+      {
+        "seed": 810101,
+        "n_persons": 12,
+        "frame_contract": "pass",
+        "evidence_immutability": "pass",
+        "global_numpy_rng_unchanged": "pass",
+        "all_marginal_envelopes": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sample_sd_error": 6.2727600891321345e-15,
+        "minimum_measurement": 0.26943598109925426,
+        "complete_pairs": {
+          "leptin": 12,
+          "body_mass": 12,
+          "glucose": 12,
+          "triglycerides": 12
+        }
+      },
+      {
+        "seed": 810102,
+        "n_persons": 12,
+        "frame_contract": "pass",
+        "evidence_immutability": "pass",
+        "global_numpy_rng_unchanged": "pass",
+        "all_marginal_envelopes": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sample_sd_error": 2.41229258790554e-12,
+        "minimum_measurement": 0.5054646583425697,
+        "complete_pairs": {
+          "leptin": 12,
+          "body_mass": 12,
+          "glucose": 12,
+          "triglycerides": 12
+        }
+      },
+      {
+        "seed": 810103,
+        "n_persons": 12,
+        "frame_contract": "pass",
+        "evidence_immutability": "pass",
+        "global_numpy_rng_unchanged": "pass",
+        "all_marginal_envelopes": true,
+        "max_absolute_mean_error": 1.4210854715202004e-14,
+        "max_absolute_sample_sd_error": 1.2310152897043736e-12,
+        "minimum_measurement": 0.5141756932638222,
+        "complete_pairs": {
+          "leptin": 12,
+          "body_mass": 12,
+          "glucose": 12,
+          "triglycerides": 12
+        }
+      }
+    ],
+    "reserved_results_accessed": false,
+    "analysis_targets_calibrated": false,
+    "generator_byte_identical_to_parent": true,
+    "decision_contract": "pass; allocation {\"target\": 20}"
+  },
+  "calibration_log": {
+    "budget": "Ordinary revision: at most three examined structures and nine unique structure/seed cohorts, using only 810101, 810102, 810103. One retained structure uses three unique cohorts.",
+    "examined_structures": [
+      {
+        "id": "stable_factor_positive_moments_v1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained_no_op",
+        "reason": "Source feedback contains no procedural deficiency or identifying dependence evidence. Retain the parent rather than selecting an arbitrary replacement; a no-op is explicitly allowed.",
+        "parameters_preselected": {
+          "shared_stable_variance": 0.2,
+          "latent_persistence": {
+            "leptin": 0.75,
+            "body_mass": 0.995,
+            "glucose": 0.75,
+            "triglycerides": 0.75
+          }
+        },
+        "numerical_tuning": "No parameter tuning, target-analysis calibration, or seed selection. Existing scalar per-marginal root solving reconstructs the supplied moments."
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "stable_factor_positive_moments_v1"
+    },
+    "calls": [
+      {
+        "structure_id": "stable_factor_positive_moments_v1",
+        "seed": 810101,
+        "context": "target",
+        "n": 12,
+        "generator_invocations": 1,
+        "checks": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "purpose": "Source-only frame contract, evidence immutability, local RNG isolation, positive support, pair counts and input marginal reconstruction. No paired inferential or change-correlation analysis is computed.",
+        "status": "passed"
+      },
+      {
+        "structure_id": "stable_factor_positive_moments_v1",
+        "seed": 810102,
+        "context": "target",
+        "n": 12,
+        "generator_invocations": 1,
+        "checks": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "purpose": "Source-only frame contract, evidence immutability, local RNG isolation, positive support, pair counts and input marginal reconstruction. No paired inferential or change-correlation analysis is computed.",
+        "status": "passed"
+      },
+      {
+        "structure_id": "stable_factor_positive_moments_v1",
+        "seed": 810103,
+        "context": "target",
+        "n": 12,
+        "generator_invocations": 1,
+        "checks": [
+          "call_checked",
+          "source_diagnostics"
+        ],
+        "purpose": "Source-only frame contract, evidence immutability, local RNG isolation, positive support, pair counts and input marginal reconstruction. No paired inferential or change-correlation analysis is computed.",
+        "status": "passed"
+      }
+    ],
+    "failures": [],
+    "rejected_options": [],
+    "rejected_options_note": "No additional candidate structures were constructed or numerically evaluated. The packet cannot discriminate alternatives; no unlogged candidate search occurred.",
+    "source_review": {
+      "parent_feedback_status": "valid",
+      "parent_feedback_errors": [],
+      "parent_target_results_loaded": false,
+      "allowlist_only": true,
+      "external_sources_or_evaluator_results_accessed": false,
+      "parent_feedback_is_inherited_evidence_not_new_branch_calls": true,
+      "read_operations": [
+        "REQUEST.md",
+        "evidence.json",
+        "schema.json",
+        "task.json",
+        "decision_template.json",
+        "source_checks.py",
+        "parent/generator.py",
+        "parent/decision.json",
+        "parent/source_feedback.json"
+      ],
+      "reread_note": "The parent generator and decision were reread after combined console output truncation. All reads stayed within the exact allowlist."
+    },
+    "noncohort_operations": [
+      "Load generator with source_checks.load_generator",
+      "Validate completed decision with source_checks.validate_decision"
+    ],
+    "unique_diagnostic_cohorts": 3,
+    "controller_budget_note": "Controller checks the same three scheduled seeds for the retained structure; these are not additional unique diagnostic cohorts. No controller run was requested by this builder."
+  },
+  "intended_uses": [
+    "Synthetic paired-analysis rehearsal and executable pipeline testing in this source population and protocol.",
+    "Demonstrate how exactly reconstructed marginals coexist with unvalidated paired uncertainty and cross-endpoint changes.",
+    "Generate twenty controller-seeded target-context synthetic cohorts under one transparently assumed joint model."
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or patient-specific prediction.",
+    "New empirical findings or independently validated endpoint-change means.",
+    "Claims about observed paired covariance, paired interval coverage, change SDs, or any of the six change correlations.",
+    "Causal attribution to the energy-restriction protocol without a control arm.",
+    "Generalization outside the stated eligible population or protocol.",
+    "Treating 0.20, 0.75, or 0.995 as estimated source parameters or treating omitted transient coupling as known zero.",
+    "Model uncertainty quantification or calibrated probabilities over alternative dependence assumptions."
+  ],
+  "next_information_request": "Request an independent, protocol-matched repeated-measure covariance summary for the eight raw-scale endpoint/visit measurements, including complete-pair counts and measurement reliability, without target test statistics, target findings, or reserved target outcomes. Within-person persistence and the cross-endpoint covariance of repeat-measure deviations would discriminate stable-person variation from a shared transient response."
+}

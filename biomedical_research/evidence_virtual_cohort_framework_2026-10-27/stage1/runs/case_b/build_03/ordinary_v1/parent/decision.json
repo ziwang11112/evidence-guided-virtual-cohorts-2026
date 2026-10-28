@@ -1,0 +1,368 @@
+{
+  "run_id": "case_b_build_03_initial_v3",
+  "lineage_id": "case_b_build_03",
+  "branch": "initial",
+  "action": "build",
+  "model_metadata": {
+    "model_id": "unavailable",
+    "provider_settings": "unavailable",
+    "token_counts": "unavailable",
+    "reason": "No executing model identifier, provider settings or token accounting were supplied by the tool."
+  },
+  "model_family": "Lognormal marginal distributions joined by a stable-person Gaussian factor copula, with finite-cohort sampling variation",
+  "evidence_use": [
+    {
+      "id": "E_marginals",
+      "operator": "arithmetic means and sample SDs on complete endpoint pairs",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "Units specified per endpoint; serum leptin is raw ng/mL, not a log transformation",
+      "provenance": "source_packet_B",
+      "action": "qualify",
+      "reason": "Use each rounded arithmetic mean and sample SD as a plug-in population marginal parameter, with lognormal parameters solved analytically. Outputs retain raw measurement units, including raw leptin. These are target-derived reconstruction inputs, not independent validation evidence. Cohort moments fluctuate and parameter uncertainty and rounding uncertainty are not modeled; the supplied SD is not paired-change variability."
+    },
+    {
+      "id": "E_design",
+      "operator": "eligibility, pairing and missing-count description",
+      "population": "12 adult men aged 35-55 with abdominal overweight/obesity; fasting measurements before/after 3 days at approximately 50% usual energy intake; no control arm.",
+      "measurement": "fasting measures at pre/post visits",
+      "provenance": "source_packet_B",
+      "action": "use",
+      "reason": "Represent one pre/post pair per synthetic person with exactly the supplied endpoint complete-pair counts scaled to n. All four endpoints are complete in this packet. Eligibility and the intervention define the intended population and visit interpretation; no unprovided age, adiposity, intake or control-arm variables are invented."
+    }
+  ],
+  "components": [
+    {
+      "name": "positive_raw_marginals",
+      "evidence_ids": [
+        "E_marginals"
+      ],
+      "source_to_target_assumptions": "Same-population A0 reconstruction. The positive lognormal family is a modeling assumption, not supplied shape evidence. For each mean m and SD s, log variance is log(1+(s/m)^2), and log mean is log(m) minus half that variance. This reproduces population arithmetic moments, not exact small-cohort sample moments."
+    },
+    {
+      "name": "stable_person_dependence",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "A common normal person factor has variance weight 0.20, an independent endpoint-specific stable person factor has weight 0.70, and independent visit fluctuations have weight 0.10. The resulting latent normal correlations are 0.90 within an endpoint and 0.20 across endpoints at either visit. Stability over a short paired interval motivates this simple shared structure; every numerical weight is explicitly assumed and is not estimated from the packet. No shared intervention-response factor, treatment-effect heterogeneity distribution, or direction constraint on individual changes is claimed as known."
+    },
+    {
+      "name": "counts_keys_and_randomness",
+      "evidence_ids": [
+        "E_design"
+      ],
+      "source_to_target_assumptions": "n denotes persons; each complete-pair count is round(packet endpoint n times requested n divided by packet person count). If generalized inputs introduce missing pairs, their synthetic positions are sampled without replacement independently by endpoint, an unvalidated missing-completely-at-random convention. This packet introduces none. New synthetic keys incorporate the input seed and row number. Only a local numpy default_rng is used and evidence is read without mutation."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "target",
+      "n_cohorts": 20,
+      "assumption": "One fixed lognormal factor model with latent within-endpoint correlation 0.90 and cross-endpoint correlation 0.20. These are transparent working assumptions, not inferred correlations or evidence of correct uncertainty coverage.",
+      "inclusion_rationale": "A positive-support stochastic model preserves visit pairing and allows modest shared person variation while applying one consistent dependence rule to all endpoints. This single initial structure was selected before source diagnostics; no reserved results or seed selection are used. Twenty cohorts are resource allocation, not posterior probability.",
+      "unresolved_dependencies": [
+        "All four actual within-person pre/post covariances and change SDs are unknown.",
+        "All cross-endpoint covariances, including the six change correlations, are unknown.",
+        "Tail shape, individual response heterogeneity and uncertainty in the rounded small-sample marginal estimates are unknown.",
+        "No control arm permits an independently validated causal effect interpretation."
+      ],
+      "affected_analysis_classes": [
+        "Four paired endpoint change means and paired t intervals: marginal mean differences are reconstruction inputs, whereas finite-cohort means and interval widths depend on assumed sampling and pairing.",
+        "Paired covariance and change-SD diagnostics depend on the assumed lognormal factor structure.",
+        "Six correlations between endpoint changes depend on assumed shared-person factors, marginal transformations and visit fluctuations."
+      ],
+      "scientific_scenario_differences": "No alternate scenario is proposed in this initial submission."
+    }
+  ],
+  "changes_from_parent": "Initial build; no parent supplied or inspected.",
+  "source_check_results": {
+    "local_source_only_checks": [
+      {
+        "seed": 810101,
+        "frame_contract_passed": true,
+        "marginal_envelope_result": "not retained after harness serialization failure; controller can attach its scheduled check"
+      },
+      {
+        "seed": 810102,
+        "frame_contract_passed": true,
+        "source_envelope_passed": 8,
+        "source_envelope_total": 8,
+        "minimum_positive_measurement": 0.39167101206436583
+      },
+      {
+        "seed": 810103,
+        "frame_contract_passed": true,
+        "source_envelope_passed": 8,
+        "source_envelope_total": 8,
+        "minimum_positive_measurement": 0.35512710958368243
+      }
+    ],
+    "frame_contracts": "All three scheduled cohorts pass schema, n, complete-pair counts, finite positive support, evidence immutability and global NumPy RNG isolation.",
+    "interpretation": "Diagnostic envelopes compare only reconstruction inputs, not reserved outcomes or joint correctness. No parameters or structures were changed after these diagnostics.",
+    "diagnostic_persistence_limitation": "First seed diagnostics were computed but not retained due to a harness-only JSON serialization error; logged and not rerun. Subsequent seeds were serialized with NumPy scalar conversion.",
+    "controller_feedback": "not yet run; controller will attach"
+  },
+  "calibration_log": {
+    "budget": "One initial structure; at most the three unique diagnostic cohorts at seeds 810101, 810102 and 810103. Controller reuses these scheduled seeds.",
+    "examined_structures": [
+      {
+        "id": "model_1",
+        "source_seeds_evaluated": [
+          810101,
+          810102,
+          810103
+        ],
+        "disposition": "retained",
+        "reason": "Selected a positive lognormal factor model using only packet marginal moments and explicit stable-person dependence assumptions; no structure search or outcome fitting.",
+        "diagnostic_calls": [
+          {
+            "seed": 810101,
+            "context": "target",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "status": "cohort checks completed; diagnostic result persistence failed",
+            "frame_contract_passed": true,
+            "global_numpy_rng_unchanged": true,
+            "evidence_unchanged": true,
+            "marginal_diagnostics": "Computed but not retained because the harness JSON serializer did not convert NumPy boolean results; not rerun."
+          },
+          {
+            "seed": 810102,
+            "context": "target",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "status": "completed",
+            "frame_contract_passed": true,
+            "global_numpy_rng_unchanged": true,
+            "evidence_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 10.221234948229087,
+                "sd": 4.670981572435613,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.905561135585969,
+                "sd": 4.979356696182475,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.4521082761969,
+                "sd": 13.168505251229803,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 90.64679684113621,
+                "sd": 13.95140933853535,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.13357478765066,
+                "sd": 0.6739542870407279,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.063515674737428,
+                "sd": 0.4768850752126306,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.4098024441594224,
+                "sd": 0.5497932489564483,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 1.0602592171127252,
+                "sd": 0.4043606635758238,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ]
+          },
+          {
+            "seed": 810103,
+            "context": "target",
+            "n": 12,
+            "calls": [
+              "source_checks.call_checked",
+              "source_checks.source_diagnostics"
+            ],
+            "status": "completed",
+            "frame_contract_passed": true,
+            "global_numpy_rng_unchanged": true,
+            "evidence_unchanged": true,
+            "marginal_diagnostics": [
+              {
+                "id": "leptin_pre",
+                "n": 12,
+                "mean": 8.759836441257493,
+                "sd": 3.183216179450075,
+                "expected_mean": 9.331,
+                "expected_sd": 4.463,
+                "mean_tolerance": 3.86507137708995,
+                "sd_tolerance": 2.854544391285268,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "leptin_post",
+                "n": 12,
+                "mean": 6.119437580813894,
+                "sd": 3.284193208049405,
+                "expected_mean": 6.767,
+                "expected_sd": 4.231,
+                "mean_tolerance": 3.66415348341196,
+                "sd_tolerance": 2.706156692701763,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_pre",
+                "n": 12,
+                "mean": 92.15355007546658,
+                "sd": 12.76697666593032,
+                "expected_mean": 93.083,
+                "expected_sd": 9.841,
+                "mean_tolerance": 8.52255599864266,
+                "sd_tolerance": 6.294324748966686,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "body_mass_post",
+                "n": 12,
+                "mean": 90.62906811047169,
+                "sd": 11.597438515693204,
+                "expected_mean": 91.517,
+                "expected_sd": 9.662,
+                "mean_tolerance": 8.367537451365248,
+                "sd_tolerance": 6.179835964283725,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_pre",
+                "n": 12,
+                "mean": 5.199624968384472,
+                "sd": 0.4118626783278125,
+                "expected_mean": 5.125,
+                "expected_sd": 0.578,
+                "mean_tolerance": 0.5005626833874056,
+                "sd_tolerance": 0.36969004216062845,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "glucose_post",
+                "n": 12,
+                "mean": 5.035068653560534,
+                "sd": 0.2911558694014718,
+                "expected_mean": 5.072,
+                "expected_sd": 0.426,
+                "mean_tolerance": 0.3689268220121709,
+                "sd_tolerance": 0.27247051550247015,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_pre",
+                "n": 12,
+                "mean": 1.3668989659375652,
+                "sd": 0.5882747848561196,
+                "expected_mean": 1.364,
+                "expected_sd": 0.668,
+                "mean_tolerance": 0.578504969728005,
+                "sd_tolerance": 0.42725423557664327,
+                "within_source_diagnostic_envelope": true
+              },
+              {
+                "id": "triglycerides_post",
+                "n": 12,
+                "mean": 1.000256182619867,
+                "sd": 0.4762991594716624,
+                "expected_mean": 1.05,
+                "expected_sd": 0.563,
+                "mean_tolerance": 0.4875723023306389,
+                "sd_tolerance": 0.360096009924626,
+                "within_source_diagnostic_envelope": true
+              }
+            ]
+          }
+        ],
+        "failed_attempts": [
+          {
+            "stage": "diagnostic_log_serialization",
+            "seed": 810101,
+            "error": "TypeError: Object of type bool is not JSON serializable (NumPy boolean returned by source_diagnostics).",
+            "cohort_generated": true,
+            "generator_or_structure_changed": false,
+            "resolution": "Convert NumPy scalars to native JSON values when saving remaining diagnostics. No repeat cohort or diagnostic call for this seed."
+          }
+        ]
+      }
+    ],
+    "final_scenario_to_structure": {
+      "target": "model_1"
+    },
+    "source_calibration": "Analytic marginal parameter conversion only; no numerical fitting or diagnostic-driven parameter tuning.",
+    "decision_contract_validation": "passed before and after diagnostics"
+  },
+  "intended_uses": [
+    "Synthetic rehearsal of the supplied paired-wide schema and downstream analysis code.",
+    "Illustrating one assumption-dependent joint distribution consistent in population marginal moments with the source packet."
+  ],
+  "unvalidated_uses": [
+    "Clinical decisions or individual prediction.",
+    "New empirical findings or recreation/identification of actual participants.",
+    "Claims of validated paired t interval coverage, significance, paired covariance, change SD, or change correlations.",
+    "Causal intervention effects, transport to other populations, or a posterior over possible dependence structures.",
+    "Treating agreement with target-derived marginal inputs as external validation."
+  ],
+  "next_information_request": "Request a blinded 8-by-8 pre/post covariance matrix (with variable units and complete-pair sample counts), or at minimum four pre/post covariances and a 4-by-4 change covariance matrix. These joint summaries would directly discriminate the stable-person dependence assumption without requesting paper findings, test statistics or reserved target outcomes."
+}
