@@ -24,13 +24,17 @@ LOCAL_FILES = {
     "sync/GAP_LOOP_EXPORT_RECEIPT_2026-10-28.json",
     "sync/audit_gap_loop_export.py", "docs/GAP_LOOP_EXPORT.md",
     "sync/audit_three_model_review.py",
+    "sync/M2_EXPORT_RECEIPT.json", "docs/M2_EXPORT.md",
     "biomedical_research/three_model_review_2026-10-28/README.md",
     "biomedical_research/three_model_review_2026-10-28/REVIEW_PACKAGE_MANIFEST.json",
 }
 GENERATED_AUDIT = {"sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv"}
 ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf", ".txt"}
 REVIEWED_CONFIG_FILES = {"biomedical_research/virtual_cohort_system/.gitignore",
-                         "biomedical_research/virtual_cohort_system/pyproject.toml"}
+                         "biomedical_research/virtual_cohort_system/pyproject.toml",
+                         "biomedical_research/virtual_cohort_system/docs/system-explorer/index.html",
+                         "biomedical_research/virtual_cohort_system/docs/system-explorer/architecture.drawio",
+                         "biomedical_research/virtual_cohort_system/docs/system-explorer/verify_explorer.cjs"}
 CSV_ROWS = {"all_results.csv": 5040, "completion_pooled.csv": 36, "full_synthetic_summary.csv": 35}
 BLOCKED_COLUMNS = {"person_id", "patient_id", "subject_id", "participant_id", "name", "email", "address", "date_of_birth", "weight_kg", "pfs", "gng", "dd100", "dd1000"}
 SECRET_RULES = {
@@ -51,6 +55,12 @@ def main():
     manifest = json.loads((ROOT / "sync/EXPORT_MANIFEST.json").read_text(encoding="utf-8"))
     allowed = {r["destination"] for r in manifest["files"]} | LOCAL_FILES
     source_records = {r["destination"]: r for r in manifest["files"]}
+    m2_receipt = json.loads((ROOT / "sync/M2_EXPORT_RECEIPT.json").read_text(encoding="utf-8"))
+    runtime_prefix = "/" + "/".join(("home", "zwang", ".cache", "evidence-cohort-runtime", "m2"))
+    runtime_paths = {
+        "biomedical_research/virtual_cohort_system/cohort_harness/execution.py": 1,
+        "biomedical_research/virtual_cohort_system/docs/EXECUTION_ADAPTER.md": 2,
+    }
     findings, inventory, table_audit = [], [], []
     for path in sorted(ROOT.rglob("*")):
         relative = path.relative_to(ROOT).as_posix()
@@ -78,7 +88,15 @@ def main():
         for name, pattern in SECRET_RULES.items():
             if pattern.search(text):
                 findings.append({"file": relative, "rule": name})
-        if ABSOLUTE_PATH.search(text):
+        path_text = text
+        if relative in runtime_paths:
+            exception = m2_receipt["reviewed_runtime_configuration"][relative]
+            if (exception["sha256"] != sha(path) or
+                    exception["prefix_occurrences"] != runtime_paths[relative] or
+                    text.count(runtime_prefix) != runtime_paths[relative]):
+                findings.append({"file": relative, "rule": "runtime_configuration_exception_mismatch"})
+            path_text = text.replace(runtime_prefix, "REVIEWED_RUNTIME_ROOT")
+        if ABSOLUTE_PATH.search(path_text):
             findings.append({"file": relative, "rule": "machine_absolute_path"})
         schema = source_records.get(relative, {}).get("aggregate_table")
         if path.suffix.lower() in {".csv", ".tsv"} and relative != "sync/FILE_INVENTORY.tsv":
@@ -182,6 +200,19 @@ def main():
     insulin_audit = audit_insulin(ROOT, source_records, findings)
     gap_loop_audit = audit_gap_loop(ROOT, source_records, findings)
     review_audit = audit_three_model_review(ROOT, source_records, findings)
+    m2_root = ROOT / "biomedical_research/virtual_cohort_system"
+    m2_validation = json.loads((m2_root / "m2_validation.json").read_text(encoding="utf-8"))
+    for name, expected in m2_validation["code_sha256"].items():
+        if sha(m2_root / name) != expected:
+            findings.append({"file": "biomedical_research/virtual_cohort_system/" + name, "rule": "m2_code_hash_mismatch"})
+    for section in ("historical_m1_files", "agent_authored_specimen"):
+        for name, expected in m2_receipt[section].items():
+            if sha(m2_root / name) != expected:
+                findings.append({"file": "biomedical_research/virtual_cohort_system/" + name, "rule": section + "_hash_mismatch"})
+    current_m2 = {name: item["export_sha256"] for name, item in source_records.items()
+                  if name.startswith("biomedical_research/virtual_cohort_system/")}
+    if current_m2 != m2_receipt["curated_export_sha256"]:
+        findings.append({"file": "sync/M2_EXPORT_RECEIPT.json", "rule": "m2_curated_scope_mismatch"})
     with (ROOT / "sync/FILE_INVENTORY.tsv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["file", "bytes", "sha256"], delimiter="\t", lineterminator="\n")
         writer.writeheader()
@@ -198,6 +229,12 @@ def main():
              "insulin_export": insulin_audit,
              "gap_loop_export": gap_loop_audit,
              "three_model_review": review_audit,
+             "virtual_cohort_m2": {"source_files": len(current_m2),
+                                   "current_code_hashes_verified": len(m2_validation["code_sha256"]),
+                                   "historical_m1_files_preserved": len(m2_receipt["historical_m1_files"]),
+                                   "agent_specimen_hashes_verified": len(m2_receipt["agent_authored_specimen"]),
+                                   "runtime_configuration_exceptions": len(runtime_paths),
+                                   "experiments_or_tests_rerun": False},
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}

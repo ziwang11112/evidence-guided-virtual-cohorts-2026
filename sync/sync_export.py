@@ -71,6 +71,27 @@ def normalize_provider_review(raw, item):
     return text.encode("utf-8")
 
 
+def normalize_explorer_runtime_references(raw, item):
+    """Normalize reviewed GUI/QA setup references, without changing validated harness code."""
+    text = raw.decode("utf-8")
+    if item["source"].endswith("/diagram-build-notes.md"):
+        text, count = re.subn(r"found at `[A-Za-z]:[/]Users[/][^`]+/draw\.io\.exe`",
+                             "using a local `draw.io` executable (machine-local path omitted in export)", text)
+        expected = 1
+    elif item["source"].endswith("/verify_explorer.cjs"):
+        text, count = re.subn(r"require\('[A-Za-z]:[/]Users[/][^']+/node_modules/playwright'\)",
+                             "require('playwright')", text)
+        text, chrome_count = re.subn(r"executablePath:'[A-Za-z]:/Program Files/Google/Chrome/Application/chrome\.exe'",
+                                    "...(process.env.CHROME_EXECUTABLE_PATH ? {executablePath:process.env.CHROME_EXECUTABLE_PATH} : {channel:'chrome'})", text)
+        count += chrome_count
+        expected = 2
+    else:
+        raise ValueError("Unexpected explorer normalization target")
+    if count != expected or count != item["runtime_references_replaced"]:
+        raise ValueError("Unexpected explorer runtime reference count")
+    return text.encode("utf-8")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workspace", type=Path, required=True)
@@ -110,6 +131,8 @@ def main():
                 raise ValueError(f"Candidate commitment mismatch: {item['source']}")
         if item["transform"] == "none":
             exported = raw
+        elif item["transform"] == "normalize_explorer_runtime_references":
+            exported = normalize_explorer_runtime_references(raw, item)
         elif item["transform"] == "normalize_provider_review_references":
             exported = normalize_provider_review(raw, item)
         elif item["transform"] == "normalize_review_workspace_paths":

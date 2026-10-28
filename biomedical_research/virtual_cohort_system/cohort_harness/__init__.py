@@ -1,6 +1,7 @@
 """Contracts and immutable submissions for evidence-guided cohort generation.
 
-This package does not execute Agent code or provide an operating-system sandbox.
+Importing or validating this package never executes Agent code. Explicit
+execution uses the separately configured, generator-only WSL/bubblewrap adapter.
 """
 
 from .contracts import (

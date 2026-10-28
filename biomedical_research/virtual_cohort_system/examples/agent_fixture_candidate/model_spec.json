@@ -1,0 +1,113 @@
+{
+  "parameters": {
+    "distribution_family": "gamma",
+    "group0_mean_intercept": 2.0,
+    "group0_mean_slope": 1.0,
+    "group1_mean_multiplier": 1.25,
+    "individual_coefficient_of_variation": 0.5
+  },
+  "assumptions": [
+    {
+      "id": "A_shape_tails",
+      "description": "Choose a conditional gamma distribution solely to provide positive stochastic values with the supplied mean and SD. Neither the gamma family nor its right-tail decay, skewness, or higher moments is identified by the fictional evidence. Shape 4 follows only after this family choice and CV=0.5."
+    },
+    {
+      "id": "A_interpolation",
+      "description": "Interpolate group=0 arithmetic mean linearly as 2+x and apply a constant group=1 multiplier 1.25 over x in [0,2]. All six reported mean anchors are matched algebraically; behavior between anchors is unidentified. The program rejects x outside [0,2], so no extrapolation is submitted."
+    },
+    {
+      "id": "A_variation",
+      "description": "Use individual CV=0.5 throughout x in [0,2] and both groups. This matches reported anchor SD/mean ratios but assumes proportional variation between strata. Independent conditional residual draws across rows are a construction choice; unreported dependence is not evidence of independence."
+    },
+    {
+      "id": "A_transport",
+      "description": "Transfer each invented source group's stratum means, SDs, exact x measurement, and source B calibration to the matching target group without further selection or instrument effects. This cross-study transfer is an unvalidated fixture assumption. The sources are nonoverlapping, group-specific constraints, not repeated independent confirmations of one population."
+    },
+    {
+      "id": "A_fixed_parameters",
+      "description": "Treat the reported fictional numeric constraints and derived parameters as fixed for execution. No SE, CI, sample size, uncertainty distribution, or parameter posterior is supplied. Sampling changes individual residuals only; seeds do not represent evidence or transport uncertainty."
+    },
+    {
+      "id": "A_execution_scope",
+      "description": "Use only observed record_id, x, and group in their existing order, copying their values and dtypes. Use NumPy default_rng with the supplied seed. Reproducibility is intended for the same input row order, parameters, and NumPy runtime. Generated sample moments will fluctuate and are not forced to equal population constraints."
+    }
+  ],
+  "parameter_provenance": {
+    "distribution_family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_shape_tails",
+        "A_variation",
+        "A_transport",
+        "A_fixed_parameters",
+        "A_execution_scope"
+      ],
+      "derivation": "Assumed conditional gamma: for arithmetic mean m and CV c, shape=1/c^2 and scale=m*c^2. Thus variance=m^2*c^2 and SD=m*c. No fitted source table or target outcomes were used."
+    },
+    "group0_mean_intercept": {
+      "evidence_ids": [
+        "T1_x0_mean"
+      ],
+      "assumption_ids": [
+        "A_interpolation",
+        "A_transport",
+        "A_fixed_parameters"
+      ],
+      "derivation": "Reported group=0 mean at x=0 is 2 u, the intercept of the chosen linear interpolation."
+    },
+    "group0_mean_slope": {
+      "evidence_ids": [
+        "T1_x0_mean",
+        "T1_x1_mean",
+        "T1_x2_mean"
+      ],
+      "assumption_ids": [
+        "A_interpolation",
+        "A_transport",
+        "A_fixed_parameters"
+      ],
+      "derivation": "Derived (4-2)/(2-0)=1 u/x_unit; middle anchor also gives 3 u. This is an interpolation coefficient, not a reported fitted/adjusted regression effect."
+    },
+    "group1_mean_multiplier": {
+      "evidence_ids": [
+        "T1_x0_mean",
+        "T1_x1_mean",
+        "T1_x2_mean",
+        "T2_x0_mean",
+        "T2_x1_mean",
+        "T2_x2_mean",
+        "T2_calibration"
+      ],
+      "assumption_ids": [
+        "A_interpolation",
+        "A_transport",
+        "A_fixed_parameters"
+      ],
+      "derivation": "Convert source B z means (25,37.5,50) du to y means (2.5,3.75,5) u by division by 10. At x=(0,1,2), each divided by source A's (2,3,4) equals 1.25. Extend that ratio between anchors as an assumption; it implies a group-by-x interaction in the mean, not a fixed additive group shift."
+    },
+    "individual_coefficient_of_variation": {
+      "evidence_ids": [
+        "T1_x0_mean",
+        "T1_x0_sd",
+        "T1_x1_mean",
+        "T1_x1_sd",
+        "T1_x2_mean",
+        "T1_x2_sd",
+        "T2_x0_mean",
+        "T2_x0_sd",
+        "T2_x1_mean",
+        "T2_x1_sd",
+        "T2_x2_mean",
+        "T2_x2_sd",
+        "T2_calibration"
+      ],
+      "assumption_ids": [
+        "A_shape_tails",
+        "A_variation",
+        "A_transport",
+        "A_fixed_parameters"
+      ],
+      "derivation": "Each source A individual SD/mean is 0.5. Convert source B SDs (12.5,18.75,25) du to (1.25,1.875,2.5) u by division by 10, yielding the same CV=0.5. These are individual SDs, not SEs. With the assumed gamma family this implies shape=4 and scale=mean/4."
+    }
+  }
+}

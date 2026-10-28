@@ -1,21 +1,23 @@
 # Evidence-guided virtual cohort system
 
-Version 0.1.0 — milestone 1, 28 October 2026.
+Version 0.2.0 — M2 adapter development, 28 October 2026. The original milestone 1 report remains a historical snapshot.
 
-The objective is to let a capable Agent integrate permitted research evidence into reusable virtual data for biomedical analysis. The system supports three task contracts: whole-cohort generation, enrichment with an entirely unmeasured variable, and completion of missing cells. Program generation and direct row submission are both legitimate routes. This milestone implements the interfaces and checks; it does not demonstrate a scientific improvement.
+See [M2 progress and actual checks](MILESTONE_2_PROGRESS.md), [machine-readable validation](m2_validation.json), and the [interactive architecture document](docs/system-explorer/index.html). The HTML retains its labeled M1 snapshot and links to this newer progress record.
+
+The objective is to let a capable Agent integrate permitted research evidence into reusable virtual data for biomedical analysis. The system supports three task contracts: whole-cohort generation, enrichment with an entirely unmeasured variable, and completion of missing cells. Program generation and direct row submission are both legitimate routes. M1 supplied contracts and checks; M2 adds task-bound literature access and explicit generator-only execution. No scientific improvement is established by these software changes.
 
 ## Responsibilities
 
-| Layer | Responsibility | Milestone 1 status |
+| Layer | Responsibility | Current implementation |
 |---|---|---|
 | Task owner / custodian | Define visible inputs, permitted evidence, scientific use, budgets and separately reserved analyses | Typed visible task contract; no target evaluator in the builder package |
-| Agent skill | Select evidence, interpret study context, choose generator/parameters, explain assumptions and revise | Concise reusable skill supplied |
+| Agent skill | Select evidence, interpret study context, choose generator/parameters, explain assumptions and revise | Concise reusable skill supplied; LLM turns still dispatched by the calling environment, not a standalone API launcher |
 | Tool harness | Validate contracts, calculate declared source statistics, bind artifacts and retain revisions | Implemented |
-| Evidence gateway | Search/fetch/screen literature, enforce real query budgets and register provenance | Existing gateway is a reuse candidate; not integrated into this version |
-| Execution environment | Run submitted generation in a bounded process with no reference-data access | Not implemented in this milestone; current local Docker daemon was unavailable at inspection |
+| Evidence gateway | Search/fetch/screen literature, enforce real query budgets and register provenance | Task-bound adapter with a fixed bundle session; screened sources appended to the registry |
+| Execution environment | Run frozen generation with curated filesystem mounts and no network | WSL/bubblewrap adapter; generator process only, no broad workspace mount and no local fallback; not isolation of the LLM's file/tool access |
 | Independent evaluation | Apply locked analyses to generated and real data after freeze | Existing study evaluators remain unchanged; generic adapter is a later milestone |
 
-The harness does not select biological effects, coefficients, distributions, scientific success thresholds or a required number of Agents. Source files are data, not instructions. A registry records approved artifacts; it is not a content filter, authentication system or filesystem sandbox. Task query limits are declarations until a real tool adapter enforces them.
+The harness does not select biological effects, coefficients, distributions, scientific success thresholds or a required number of Agents. Source files are data, not instructions. A registry records approved artifacts; it is not a content filter, authentication system or filesystem sandbox. The supplied literature adapter enforces its task-bound query limits; unrelated LLM tools are not constrained by this adapter.
 
 ## Architecture decisions
 
@@ -42,6 +44,17 @@ python -m pytest -q
 ```
 
 The destination must be new. The demo contains seven invented rows and stated arithmetic, not real patients, a published source or an Agent's scientific performance. Its deterministic direct-row route tests interfaces only; it is not an endorsed scientific generator. The source engine returns a mean and a regression coefficient and retains content hashes.
+
+Explicit adapters (only with supplied task permissions and trusted runtime configuration):
+
+```text
+python -m cohort_harness.literature --bundle PATH search --query QUERY
+python -m cohort_harness.literature --bundle PATH fetch --pmcid PMCID --version N
+python -m cohort_harness execute --bundle PATH --candidate NAME --run-id NEW_RUN --seed SEED --runtime CONFIG
+python -m cohort_harness verify-execution --bundle PATH --run-id NEW_RUN
+```
+
+See [literature access](docs/LITERATURE_ADAPTER.md) and [execution](docs/EXECUTION_ADAPTER.md). `validate` remains static. Execution requires a frozen candidate, writes a new `executions/NEW_RUN/` directory and preserves failures. Failure to obtain the configured isolated runtime does not permit execution on the host. A successful integrity verification of a failed-run receipt does not change that run's failed status. Resource limits include wall-clock termination and per-process limits; they are not an aggregate cgroup memory guarantee.
 
 On this Windows account the default pytest temporary directory was inaccessible. If needed, use `--basetemp .pytest_runs/NEW_UNIQUE_NAME` with a fresh directory name inside this project. Never point that option at an existing data or source directory, since pytest manages its contents.
 
@@ -91,12 +104,12 @@ Each `source_checks.json` entry includes `id`, `evidence_id`, `status`, `table`,
 
 The engine checks statistic kind, unit labels, variable sets and declared adjustment inclusion where representable. A deliberate variable/adjustment mismatch requires an explicit approximation. These checks do not verify that an outcome/exposure was semantically mapped correctly or that the selected rows represent the source population. Publication context still requires substantive review.
 
-The output reports the computed statistic, reported statistic, difference, rows used/dropped and artifact hashes. It does **not** invent an acceptance threshold or p-value. Every computed record states `generation_link_verified: false`: the submitted table has not been independently generated by this harness. A later isolated runner must execute the frozen generator under declared source conditions before a check can certify that link. Source consistency is not target-population validation.
+The output reports the computed statistic, reported statistic, difference, rows used/dropped and artifact hashes. It does **not** invent an acceptance threshold or p-value. Every computed record still states `generation_link_verified: false`: the source-check submission is not automatically linked to a verified execution receipt. The new execution adapter must next be connected to declared source conditions and source-check tables before this link can be certified. Source consistency is not target-population validation.
 
 ## Sequential milestones
 
 1. **Contracts and source-statistic tools — this version.** Validate three task modes, explicit prior-only mode, evidence/model links, check artifacts, revisions and provenance. Run invented integration and adversarial contract tests.
-2. **Bounded execution and evidence gateway.** Integrate existing screened retrieval with task-specific rules and counters. Run frozen Agent-authored code with only required mounts and no custodian data. Preserve outputs, timeouts, failures, seed behavior and real usage counters. Exercise a real Agent turn against a controlled fixture.
+2. **Execution and evidence adapters — current development.** Task-bound retrieval and generator-only WSL execution are implemented. Exercise real Agent submissions on invented fixtures; preserve failures and actual usage. A standalone model launcher and isolation of the builder's general tools are not supplied by these adapters.
 3. **Source-context generation and revision.** Bind source-population recipes, generator execution and operator outputs. Let the Agent retrieve/re-extract/revise or retain. Make ordinary iteration and source-check feedback selectable policies under comparable budgets.
 4. **Fresh scientific confirmation.** Audit public-case eligibility; freeze method and reserved analyses; compare generated-data analytical utility. Keep existing HDL/insulin cases as development evidence. Evaluate uncertainty separately before claiming calibration.
 

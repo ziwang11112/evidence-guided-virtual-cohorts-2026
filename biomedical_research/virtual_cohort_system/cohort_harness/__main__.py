@@ -1,4 +1,8 @@
-"""Milestone 1: inspect, compute declared statistics, and freeze; never exec code."""
+"""Inspect, freeze, retrieve permitted evidence, and explicitly execute candidates.
+
+Validation remains static. Only the execute command invokes the configured
+execution adapter; it never falls back to running Agent code in this process.
+"""
 from __future__ import annotations
 
 import argparse
@@ -59,6 +63,18 @@ def main(argv=None):
     subs = parser.add_subparsers(dest="command", required=True)
     demo = subs.add_parser("demo", help="Create a new invented mechanical fixture")
     demo.add_argument("--destination", required=True)
+    execute = subs.add_parser("execute", help="Run a frozen candidate through the explicit execution adapter")
+    execute.add_argument("--bundle", required=True)
+    execute.add_argument("--candidate", required=True)
+    execute.add_argument("--run-id", required=True)
+    execute.add_argument("--seed", required=True, type=int)
+    execute.add_argument("--runtime", required=True, help="Trusted runtime configuration JSON")
+    execute.add_argument("--timeout-seconds", type=int, default=30)
+    execute.add_argument("--memory-mb", type=int, default=1024)
+    execute.add_argument("--output-bytes", type=int, default=20_000_000)
+    execution_verify = subs.add_parser("verify-execution", help="Verify recorded execution commitments")
+    execution_verify.add_argument("--bundle", required=True)
+    execution_verify.add_argument("--run-id", required=True)
     for name in ("validate", "source-checks", "freeze", "verify"):
         command = subs.add_parser(name)
         command.add_argument("--bundle", required=True)
@@ -71,6 +87,15 @@ def main(argv=None):
         if args.command == "demo":
             from .demo import make_demo
             result = {"created": str(make_demo(args.destination)), "scope": "invented_fixture_only"}
+        elif args.command == "execute":
+            from .execution import run_candidate
+            bundle = Path(args.bundle).resolve()
+            result = run_candidate(bundle, candidate_path(bundle, args.candidate), args.run_id, args.seed,
+                                   runtime=read(args.runtime), timeout_seconds=args.timeout_seconds,
+                                   memory_mb=args.memory_mb, output_bytes=args.output_bytes)
+        elif args.command == "verify-execution":
+            from .execution import verify_execution
+            result = verify_execution(Path(args.bundle).resolve(), args.run_id)
         else:
             bundle = Path(args.bundle).resolve()
             candidate = candidate_path(bundle, args.candidate)
@@ -96,7 +121,7 @@ def main(argv=None):
                 result = freeze_candidate(bundle, candidate, parent_receipt=parent,
                                           revision=read(args.revision) if args.revision else None)
         print(json.dumps(result, indent=2, allow_nan=False))
-        return 0
+        return 2 if args.command == "execute" and result.get("status") in {"failed", "timeout", "error"} else 0
     except (ValueError, KeyError, TypeError, OSError, pd.errors.ParserError) as exc:
         print(json.dumps({"status": "error", "type": type(exc).__name__, "message": str(exc)}), file=sys.stderr)
         return 2
