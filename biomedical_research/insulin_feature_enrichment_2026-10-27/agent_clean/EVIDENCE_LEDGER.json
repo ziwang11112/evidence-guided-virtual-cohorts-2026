@@ -1,0 +1,107 @@
+{
+  "version": "initial-1.0",
+  "retrieval_date": "2026-10-27",
+  "access_route": "Only literature_gateway.py CLI; approved fulltext text files inspected locally. No alternate literature retrieval, target outcome data, target-based summaries or prohibited papers used.",
+  "screening_caveat": "Gateway screening is procedural and automated, not a guarantee of perfect detection or absence of pretrained knowledge. Fetch screening covers complete retrieved article XML, including references, but not supplements. No rejected-source content was accessed.",
+  "source_count": {"approved_primary_fulltexts":6,"numerically_parameterizing":3,"context_or_nonuse_decision":3},
+  "sources": [
+    {
+      "id":"S1", "citation":"Schrank et al. Proposal for fasting insulin and HOMA-IR reference intervals based on an extensive Brazilian laboratory database. Archives of Endocrinology and Metabolism (2024).",
+      "pmid":"39529982", "pmcid":"PMC11554367", "doi":"10.20945/2359-4292-2023-0483", "url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC11554367/",
+      "approved_path":"literature/approved/PMC11554367_bc491a2470ef8a87e4b0360f8de5a34c29a83ffe2fb4c29042467123de0021cf.txt", "sha256":"bc491a2470ef8a87e4b0360f8de5a34c29a83ffe2fb4c29042467123de0021cf",
+      "study_type":"Primary retrospective laboratory database reference-interval study",
+      "population":"Rio de Janeiro laboratory users age20-60, January-December2019; 21684 retained, 18576 women and3108 men. Selected from146497 records.",
+      "eligibility":"BMI18.5 to<25; glucose<100mg/dL, HbA1c<5.7%, triglycerides<150mg/dL, sex-specific HDL threshold; excluded antidiabetic, lipid-lowering and antihypertensive use, more than two exams/year, and statistical outliers. Self-reported weight/height/medications.",
+      "measurement":"Serum, at least8h fast; Roche/Hitachi Cobas e-411 ECLIA; intra/interassay CV1.2%/3.5%. Published uU/mL values used directly. Paper uses6.00pmol/L per uU/mL, but no numeric unit conversion is needed in the generator.",
+      "extractions":[
+        {"section":"Results, Table2; approved text lines269-310","quantity":"Age-bin medians","age_bins":[[20,29],[30,39],[40,49],[50,60]],"n":[5467,8217,5179,2821],"bmi_kg_m2":[22.58,22.83,23.01,23.07],"insulin_uU_mL":[7.25,6.28,6.03,6.37],"uncertainty":"No CI for these medians or their joint conditional relationship supplied in Table2."},
+        {"section":"Results, Table3; lines314-336","quantity":"Selected overall95% reference interval","insulin_uU_mL":[2.52,13.14],"lower_endpoint_90CI":[2.48,2.56],"upper_endpoint_90CI":[13.06,13.22],"use":"Context only; not clipping limits or a target interval."},
+        {"section":"Results/Table1 and Discussion","quantity":"Sex reference partition decision","female_median":6.61,"male_median":6.54,"unit":"uU/mL","finding":"Authors judged separate reference intervals unnecessary; this does not prove zero conditional sex effect."}
+      ],
+      "model_application":"First four median-insulin/BMI age anchors. Assigning each pair to an age-bin midpoint and interpreting it as conditional is A1. No source-derived adjustment for the more inclusive target or Tosoh assay is available.",
+      "applicability_limits":["Healthy normal-BMI reference selection is much stricter than target diabetes-history exclusion.","Mostly female, Brazilian laboratory-attending population, not a U.S. probability sample.","Outlier/truncated distribution cannot establish untrimmed tails.","Roche-to-Tosoh calibration unknown."],
+      "overlap":"Distinct from S2-S6; no duplicate preprint counted."
+    },
+    {
+      "id":"S2", "citation":"Hammel et al. Fasting indices of glucose-insulin-metabolism across life span and prediction of glycemic deterioration in children with obesity from new diagnostic cut-offs. Lancet Regional Health Europe (2023).",
+      "pmid":"37465325", "pmcid":"PMC10350850", "doi":"10.1016/j.lanepe.2023.100652", "url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC10350850/",
+      "approved_path":"literature/approved/PMC10350850_cb1b308e67e13d0672f0bf6dfad939a6e73ef929b08bdcacbb1f2749f31d7825.txt", "sha256":"cb1b308e67e13d0672f0bf6dfad939a6e73ef929b08bdcacbb1f2749f31d7825",
+      "study_type":"Primary pooled cohort reference-distribution construction and pediatric prognostic study; only adult reference distribution used",
+      "population":"Adult LIFE random urban Leipzig sample2011-2014, predominantly Caucasian; reference adults BMI<30, overweight subsampled to reflect German age/sex-specific proportions. Multiple metabolic diseases/medications excluded.",
+      "measurement":"Minimum8h fast. Roche Cobas8000 and DiaSorin LIAISON; method-comparison details are supplementary and were not accessed. FI table in pmol/L.",
+      "extractions":[
+        {"section":"Table1 FI section, lines606-672","quantity":"Age16-23 marginal FI percentiles","n":331,"percentiles":[2.5,25,50,75,97.5],"pmol_L":[22.5,42.5,57.0,71.7,114.6],"median_90CI":[54.8,59.9],"use":"Context only; includes ages16-19 not eligible in target."},
+        {"section":"Table1 FI section, lines606-672","quantity":"Age24-59 marginal FI percentiles","n":2668,"percentiles":[2.5,25,50,75,97.5],"pmol_L":[17.1,30.4,42.1,58.2,107.7],"median_90CI":[41.3,42.8],"p25_90CI":[29.5,31.1],"p75_90CI":[57.2,59.5]},
+        {"section":"Table1 FI section, lines606-672","quantity":"Age60-80 marginal FI percentiles","n":1060,"percentiles":[2.5,25,50,75,97.5],"pmol_L":[18.9,33.8,47.0,63.4,114.3],"median_90CI":[45.6,48.6],"p25_90CI":[32.7,34.5],"p75_90CI":[60.4,65.5]},
+        {"section":"Statistical analyses and Results","quantity":"Reference construction","finding":"One observation per person within age group; nonparametric quantiles after Tukey outlier exclusion on Box-Cox-transformed data; separate sex reference intervals not required by authors' partition assessment."}
+      ],
+      "model_application":"Only dimensionless47/42.1 ratio contributes numerically, multiplied by S1's6.37 at assumed age70. Ratio cancels units. Application as conditional aging contrast is A2, not a source estimate. TableS9/S10 adjusted BMI/age/sex coefficients were unavailable and were not inferred.",
+      "applicability_limits":["Marginal age effects can reflect body-composition and selection differences.","Outlier-removed selected non-obese distribution is not conditional residual noise.","No Tosoh calibration.","German reference sample does not identify a U.S. population age effect."],
+      "overlap":"Multiple component cohorts within this one paper are not counted as independent papers; none identified as overlapping S1/S3-S6."
+    },
+    {
+      "id":"S3", "citation":"Sarkar et al. Impaired compensatory hyperinsulinemia among nonobese type2 diabetes patients: a cross-sectional study. Therapeutic Advances in Endocrinology and Metabolism (2019).",
+      "pmid":"31832130", "pmcid":"PMC6887811", "doi":"10.1177/2042018819889024", "url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6887811/",
+      "approved_path":"literature/approved/PMC6887811_b9c2a704856c5018d7cbc11ef1cb6bdf6d9e200a1f325a4e698ce73a63259552.txt", "sha256":"b9c2a704856c5018d7cbc11ef1cb6bdf6d9e200a1f325a4e698ce73a63259552",
+      "study_type":"Primary community metabolic-screening cross-sectional study",
+      "population":"Six villages, two districts, West Bengal, India; January2017-September2018.650 volunteers total,475 non-T2DM/healthy. Only those475 are used in numerical derivations;175 newly diagnosed T2DM are excluded from these derivations.",
+      "measurement":"EDTA plasma after8-10h overnight fast; Merck Millipore insulin ELISA; uU/mL. Measures reported as arithmetic mean +/- standard error, not SD.",
+      "extractions":[
+        {"section":"Table1, lines227-383","group":"BMI<25, non-DM","n":307,"male_female":[102,205],"age_mean_SE":[42.98,0.89],"bmi_mean_SE":[21.07,0.15],"insulin_mean_SE":[4.29,0.16],"insulin_unit":"uU/mL"},
+        {"section":"Table1, lines227-383","group":"BMI>=25, non-DM","n":168,"male_female":[57,111],"age_mean_SE":[42.65,0.90],"bmi_mean_SE":[28.96,0.38],"insulin_mean_SE":[6.05,0.37],"insulin_unit":"uU/mL"},
+        {"section":"Table4, lines600-676","quantity":"BMI-fasting-insulin partial correlations adjusted for age,sex,fasting glucose","nonobese_healthy_r":0.13,"nonobese_p":0.024,"obese_healthy_r":0.38,"obese_p":"<0.001","use":"Context for association and nonuniformity; not converted into slope or residual variance because partial SDs are missing."}
+      ],
+      "transformations":[
+        {"id":"T1","formula":"beta=ln(6.05/4.29)/(28.96-21.07)","value":0.04357053727538965,"unit":"log insulin per kg/m^2","interpretation":"Agent-created ecological mean-ratio interpolation, used as log-median slope only under A3; not reported regression coefficient or causal effect."},
+        {"id":"T2","formula":"SD_j=SE_j*sqrt(n_j); sigma_j=sqrt(log(1+(SD_j/mean_j)^2))","group_sigma":[0.5963212737377662,0.6982603762701631],"interpretation":"Moment-matched lognormal marginal subgroup widths; source itself does not assume lognormality."},
+        {"id":"T3","formula":"sigma=sqrt(((307-1)*sigma_1^2+(168-1)*sigma_2^2)/(307+168-2))","value":0.6341865562510045,"interpretation":"Agent pooling convention; applying marginal spread as constant conditional residual SD is A5, not fitted residual variation."}
+      ],
+      "model_application":"BMI slope and stochastic width; S1 supplies scale because S3 absolute concentrations differ across population and assay. No CI for the synthetic slope or residual SD is claimed. Reported source SEs are preserved here but not sampled by the generator.",
+      "applicability_limits":["Rural South Asian volunteers differ from target in population and adiposity/metabolic selection.","BMI25 divides groups, unlike BMI30 obesity threshold in other papers.","Unadjusted grouped mean ratio cannot identify individual conditional response.","Raw marginal subgroup variance includes within-group BMI and unobserved variation; partial correlations do not fix this.","Plasma ELISA versus target serum Tosoh transport is unverified."],
+      "overlap":"Independent of other included cohorts."
+    },
+    {
+      "id":"S4", "citation":"Lieb et al. Clinical correlates of plasma insulin levels over the life course and association with incident type2 diabetes: the Framingham Heart Study. BMJ Open Diabetes Research and Care (2022).",
+      "pmid":"35190401", "pmcid":"PMC8862500", "doi":"10.1136/bmjdrc-2021-002581", "url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC8862500/",
+      "approved_path":"literature/approved/PMC8862500_14f7202bd4ad4b46ba4cd4f388a9354cfa32b54edaee89a1a2031181cdfc2149.txt", "sha256":"14f7202bd4ad4b46ba4cd4f388a9354cfa32b54edaee89a1a2031181cdfc2149",
+      "study_type":"Primary community cohort analysis; Offspring and Gen3 cohorts",
+      "population":"7272 without prevalent diabetes/CVD in overall sample;2140 healthy subset after additional exclusion of dyslipidemia, hypertension, abdominal obesity and smoking. European ancestry predominates.",
+      "measurement":"Overnight fast, plasma; differing assays across exams, log insulin standardized within exam. Exact assays in inaccessible supplementary table1; not used for calibration.",
+      "extractions":[
+        {"section":"Table1, lines235-355","quantity":"Healthy male/female medians(IQR), pmol/L","male":[25,19,35],"female":[23,18,30],"bmi_male_mean_SD":[25.4,2.6],"bmi_female_mean_SD":[22.7,2.8],"use":"Scale heterogeneity context only; no conversion or parameter fit."},
+        {"section":"Table3 Model1, lines454-580","quantity":"Cross-sectional standardized log-FI coefficients, glucose-adjusted","n":565,"age_beta_SE":[-0.01,0.04],"male_beta_SE":[-0.14,0.12],"waist_beta_SE":[0.17,0.06],"interpretation":"Continuous effects per1SD of covariate; coefficients cannot be treated as log-unit effects per year or perBMI unit."},
+        {"section":"Results, longitudinal correlates","quantity":"Direction","finding":"Adjusted longitudinal fasting insulin inversely associated with age and male sex; not equivalent to the unadjusted positive older-age contrast in S2."}
+      ],
+      "model_application":"No numeric contribution. Counters overly strong age/sex claims, confirms waist rather than BMI and assay standardization prevent direct slope transfer. A4 zero sex effect remains a choice, not an empirical null conclusion.",
+      "applicability_limits":["Different adjustment sets and longitudinal versus cross-sectional estimands.","Exclusion of abdominal obesity makes healthy sample narrower than target.","Assay standardization blocks direct scale recovery."],
+      "overlap":"Two Framingham cohorts inside one study not counted as two sources; other Framingham search hits were not separately counted."
+    },
+    {
+      "id":"S5", "citation":"Cesarean Delivery and Insulin Sensitivity in the Older Adult: The Microbiome and Insulin Longitudinal Evaluation Study. Journal of the Endocrine Society (2022).",
+      "pmid":"35673403", "pmcid":"PMC9165426", "doi":"10.1210/jendso/bvac072", "url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC9165426/",
+      "approved_path":"literature/approved/PMC9165426_6a5732a148dc6b2c3125f2a8e8fb1f731a6c1672706dcecda0f27039cfea960c.txt", "sha256":"6a5732a148dc6b2c3125f2a8e8fb1f731a6c1672706dcecda0f27039cfea960c",
+      "study_type":"Primary secondary analysis of baseline prospective U.S. cohort",
+      "population":"353 MILES participants, meanage59(SD9),61.8%female,36.5%non-Hispanic Black and63.5%non-Hispanic White.338 with delivery status, only17 cesarean.",
+      "measurement":"OGTT fasting baseline and30/120min measures. Insulin traits log-transformed. Exact fasting duration/assay not established in the inspected main methods; not assumed.",
+      "extractions":[{"section":"Results/Table3","quantity":"Proportion of cesarean-delivery/fasting-insulin association mediated by BMI","value_percent":58.0,"p":0.05,"use":"Not used numerically: neither58% nor the cesarean-delivery beta identifies a continuous BMI-insulin regression slope."}],
+      "model_application":"Reviewed and excluded from parameterization; provides no directly transportable BMI conditional coefficient or residual distribution in the main article.",
+      "applicability_limits":["Small exposed subgroup, wide CIs, different scientific estimand.","Do not invert mediation decomposition to manufacture BMI slope."],
+      "overlap":"MILES distinct from Framingham; no second MILES paper was counted."
+    },
+    {
+      "id":"S6", "citation":"Insulin-mediated muscle microvascular perfusion and its phenotypic predictors in humans. Scientific Reports (2021).",
+      "pmid":"34075130", "pmcid":"PMC8169863", "doi":"10.1038/s41598-021-90935-8", "url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC8169863/",
+      "approved_path":"literature/approved/PMC8169863_0ac3580d921d360cf4b6490c2cab301bcdd9aba3771f1644c6c09cb975e0ab70.txt", "sha256":"0ac3580d921d360cf4b6490c2cab301bcdd9aba3771f1644c6c09cb975e0ab70",
+      "study_type":"Primary controlled physiology study of97 University of Virginia volunteers; only lean and non-diabetic obese fasting values considered",
+      "population":"Age18-46;57 healthy lean,15 classI obese without other comorbidity,25T1D. T1D subjects are not used. Lean group excluded BMI>25, diabetes family history and chronic illness; obese selection BMI30 to<35, although narrative reports33.7+/-1.2. Exclusions include vasoactive drugs, dyslipidemia, recent smoking, pregnancy/lactation.",
+      "measurement":"Baseline before clamp, overnight fast2000-0700; Siemens Immulite2000 plasma insulin. mU/L equals uU/mL dimensionally. NoT1D basal analog insulin measurements.",
+      "extractions":[{"section":"Methods/Results/Table1, lines143-197 and287-318","quantity":"Fasting insulin arithmetic mean+/-SEM","healthy_n":57,"healthy":[3.1,0.2],"obese_n":15,"obese":[8.1,1.1],"unit":"mU/L","healthy_age_mean_SE":[22.9,0.4],"obese_age_mean_SE":[26.5,2.2],"use":"Independent positive obese/lean contrast, not a BMI slope; exact healthy meanBMI is not in the table."}],
+      "model_application":"Context only. Demonstrates positive adiposity contrast but also lower absolute concentrations than S1 anchors. It does not validate the generator or identify its slope. No pooled-sample correlations involving T1D were used.",
+      "applicability_limits":["Young and highly selected, small obese subgroup.","Insulin assay differs from target; no numeric cross-assay correction.","Age/sex and group-selection imbalance confound the contrast."],
+      "overlap":"Authors note portions previously reported; those papers were not fetched or counted. No overlap with S1-S5 identified."
+    }
+  ],
+  "global_unverified_assumptions":"See initial/model_spec.json A1-A9; all numeric assumptions and transformations are listed there and above. No causal identification, calibrated conditional prediction, or inferential coverage is claimed.",
+  "search_record":"SEARCH_LOG.md contains all six substantive queries, duplicate retrieval, screen counts and stop decision.",
+  "evidence_strength":"Feasible source-guided simulation, weakly identified conditional structure. The numerical program embodies assumptions where only aggregate evidence is available, rather than presenting them as measured conditional effects."
+}

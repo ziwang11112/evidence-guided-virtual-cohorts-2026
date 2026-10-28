@@ -1,0 +1,57 @@
+{
+  "version": "initial-1.0",
+  "route": "Agent-authored numerical program; not direct record generation",
+  "output_column": "insulin",
+  "output_unit": "uU/mL",
+  "distribution": "Independent conditional lognormal draws with fixed scientific parameters",
+  "equation": "log(insulin_i) = interp(age_i, age_nodes, log(age_anchor_median_insulin)) + bmi_log_slope * (bmi_i - interp(age_i, age_nodes, age_anchor_bmi)) + female_log_effect * I(sex_i=2) + residual_log_sd * Z_i; Z_i iid N(0,1)",
+  "parameters": {
+    "supported_age_min": 20,
+    "supported_age_max": 79,
+    "age_nodes_years": [24.5, 34.5, 44.5, 55.0, 70.0],
+    "age_anchor_median_insulin": [7.25, 6.28, 6.03, 6.37, 7.111401425178147],
+    "age_anchor_bmi": [22.58, 22.83, 23.01, 23.07, 23.07],
+    "bmi_log_slope": 0.04357053727538965,
+    "female_log_effect": 0.0,
+    "residual_log_sd": 0.6341865562510045
+  },
+  "parameter_provenance": {
+    "supported_age_min,supported_age_max": "shared/schema.json; task eligibility, not fitted outcome data",
+    "age_nodes_years": "A1/A2: age-bin midpoints of S1 Table 2 and S2 Table 1, chosen interpolation locations, not exact sample mean ages",
+    "age_anchor_median_insulin[0:4]": "S1 Table 2: reported age-bin marginal medians 7.25,6.28,6.03,6.37 uU/mL; A1 repurposes them as medians at the corresponding reference BMI",
+    "age_anchor_median_insulin[4]": "S1 age50-60 median6.37 multiplied by S2 age60-80 / age24-59 marginal median ratio47.0/42.1 =7.111401425178147; A2 assumes this transports an older-age effect",
+    "age_anchor_bmi[0:4]": "S1 Table 2 marginal BMI medians22.58,22.83,23.01,23.07 kg/m^2",
+    "age_anchor_bmi[4]": "A2 holds the S1 last BMI anchor23.07 constant because S2 provides no matching adult BMI anchor in its FI quantile table",
+    "bmi_log_slope": "S3 Table 1: log(6.05/4.29)/(28.96-21.07). A3 interprets a between-group arithmetic-mean contrast as a conditional log-median slope under equal log variance; not an estimated individual-level coefficient",
+    "female_log_effect": "A4: exactly zero; pragmatic choice informed by S1/S2 reference-range partition decisions and S4 inconsistent cross-sectional standardized effects, not proof of no conditional sex association",
+    "residual_log_sd": "S3 Table 1: SD_j=SE_j*sqrt(n_j); v_j=log(1+(SD_j/mean_j)^2); sqrt(((307-1)*v_lean+(168-1)*v_heavier)/(307+168-2)). Inputs means4.29,6.05; SE0.16,0.37; n307,168. A5 uses marginal subgroup spread as conditional spread"
+  },
+  "source_values_for_reproduction": {
+    "S3_n": [307, 168],
+    "S3_bmi_mean": [21.07, 28.96],
+    "S3_bmi_sem": [0.15, 0.38],
+    "S3_insulin_mean": [4.29, 6.05],
+    "S3_insulin_sem": [0.16, 0.37],
+    "S3_derived_log_sd": [0.5963212737377662, 0.6982603762701631],
+    "S2_adult_and_older_medians_pmol_L": [42.1, 47.0]
+  },
+  "assumptions": [
+    {"id":"A1","description":"S1 marginal age-bin median insulin is treated as conditional median at the same bin's marginal median BMI. Log-insulin and BMI anchors are linearly interpolated across bin midpoints. Values are held flat below the youngest and above the oldest midpoint. These are modeling assumptions; the paper does not identify the conditional function."},
+    {"id":"A2","description":"Older age is transported by the dimensionless S2 median ratio47/42.1, using the S1 50-60 value as baseline and an assumed age70 anchor. This mixes two selected populations, and can retain BMI/medication confounding. It is not a fitted BMI-adjusted age coefficient."},
+    {"id":"A3","description":"A single BMI log slope derived from two S3 groups is extended continuously over the observed BMI range. Group contrasts are ecological, not causal or individual conditional slopes. Equal log variance makes an arithmetic-mean ratio also a median ratio; it is imposed by this model despite different source group spreads. Extremes outside source support are especially uncertain."},
+    {"id":"A4","description":"No explicit sex effect or interactions. S1/S2 judged separate reference intervals unnecessary, which does not establish a zero conditional effect. Marginal sex differences may still arise from the supplied age/BMI distribution."},
+    {"id":"A5","description":"Moment-matched lognormal subgroup variances are pooled and used as a constant conditional residual variance. Source subgroups retain variation in BMI and unobserved covariates, so this is not a residual SD estimate and may overstate conditional variation. Independent residuals ignore household, sampling-cluster and unobserved disease dependence."},
+    {"id":"A6","description":"S1 serum Roche levels and S3 plasma ELISA variability/relative BMI contrast transport to target serum Tosoh without a numeric assay correction. This is unverified. No source here identifies the calibration factor. Other primary studies show substantial absolute-scale heterogeneity."},
+    {"id":"A7","description":"Healthy external reference populations are used for a target allowing prediabetes, undiagnosed diabetes, some medication use and comorbidity. Missing disease and ethnicity are not imputed as known covariates; model may miss high and low tails and population shifts."},
+    {"id":"A8","description":"No detection-limit censoring, rounding, target-informed clipping, winsorization or target summary matching. Values are latent positive concentrations in the requested unit, not an exact emulator of the source laboratory's reported low-value handling."},
+    {"id":"A9","description":"Parameters are fixed across draws. Draw-to-draw differences represent conditional simulation noise only, not source sampling error, parameter uncertainty, model-form uncertainty or transport uncertainty. These draws are not proper multiple imputations with empirically justified coverage."}
+  ],
+  "sources": {
+    "S1": {"pmid":"39529982","pmcid":"PMC11554367","doi":"10.20945/2359-4292-2023-0483","use":"Age/BMI reference anchors; sex/no-partition context"},
+    "S2": {"pmid":"37465325","pmcid":"PMC10350850","doi":"10.1016/j.lanepe.2023.100652","use":"Older/adult dimensionless median ratio; contextual variation"},
+    "S3": {"pmid":"31832130","pmcid":"PMC6887811","doi":"10.1177/2042018819889024","use":"BMI mean-ratio slope and marginal spread transformation, with assumptions"},
+    "S4": {"pmid":"35190401","pmcid":"PMC8862500","doi":"10.1136/bmjdrc-2021-002581","use":"Contrasting age/sex and scale evidence; no numeric parameters copied"},
+    "S5": {"pmid":"35673403","pmcid":"PMC9165426","doi":"10.1210/jendso/bvac072","use":"Reviewed but no numeric model contribution: mediation effect is not a BMI slope"},
+    "S6": {"pmid":"34075130","pmcid":"PMC8169863","doi":"10.1038/s41598-021-90935-8","use":"Independent U.S. lean/obese primary contrast and scale check; no numeric parameters copied"}
+  }
+}

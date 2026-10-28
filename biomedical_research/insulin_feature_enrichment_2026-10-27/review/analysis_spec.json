@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "purpose": "Reserved evaluator for external-evidence generation of a wholly withheld fasting-insulin column; no individual-value matching score.",
+  "outcome": "natural log of positive insulin in the original documented units",
+  "domain": "observed predictor rows that have a reference outcome; all observed rows must match the reference exactly by row_id",
+  "models": {
+    "A": "log(insulin) ~ centered_BMI/5; input-consistency association check",
+    "B": "log(insulin) ~ centered_BMI/5 + centered_age/10 + sex_indicator; reserved adjusted BMI slope, age and sex secondary questions",
+    "C": "log(insulin) ~ centered_BMI/5 + restricted_cubic_BMI_term + centered_age/10 + sex_indicator; reserved upper-minus-lower BMI slope contrast",
+    "D": "log(insulin) ~ centered_BMI/5 * sex_indicator + centered_age/10; reserved sex difference in BMI slopes"
+  },
+  "knots": "Unweighted visible BMI percentiles 10, 50, 90; exact values frozen before unblinding.",
+  "contrast_locations": "Unweighted visible BMI percentiles 25, 50, 75; upper-minus-lower secant slope, each expressed per 5 BMI units.",
+  "descriptive": "Weighted Pearson correlations of BMI with raw insulin and log insulin; no correlation inference.",
+  "survey_variance": "Taylor linearization using full positive-weight spine; outside-domain PSU scores are zero; stratum-centered PSU score outer products use m/(m-1). No finite-population correction. Singleton strata fail explicitly.",
+  "degrees_freedom": "number of full-spine PSUs minus strata minus (model rank minus 1); two-sided Student t 95% intervals",
+  "synthetic_uncertainty": "Survey-conditioned intervals only, not calibrated uncertainty about unmeasured true insulin. Between-draw spread is descriptive and omits model/transport uncertainty unless independently represented in draws. No Rubin pooling.",
+  "comparison": "Report all prespecified endpoints, true and generated estimates and intervals, signed and absolute differences. No effect-difference tests, equivalence claims, sign constraints, sign-only or significance-only pass, or selection of successful endpoints.",
+  "maximum_draws_per_model_revision": 20,
+  "references": [
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/INS_J.htm",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/varianceestimation.aspx",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/reliabilityofestimates.aspx"
+  ]
+}

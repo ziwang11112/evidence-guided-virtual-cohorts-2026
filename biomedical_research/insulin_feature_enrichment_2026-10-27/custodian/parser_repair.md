@@ -1,0 +1,7 @@
+# XPT zero conversion repair
+
+The first packet build stopped at the required detection-code validation before writing any shared packet or reference. Installed pandas 3.0.3 decoded SAS XPORT numeric zero as approximately 5.397605346934028e-79. This is a parser defect, which would also make a zero fasting weight pass a numerical greater-than-zero check. The original build is retained as `build_packet_initial_parser_failure.py`, and its hash remains in the initial `locked/pre_read_freeze.json`.
+
+The repair adds a zero guard to the IBM-to-IEEE conversion: if the IBM fraction/mantissa bits are all zero, decode as numeric zero. SAS missing values are subsequently handled by pandas' existing missing-value code. No epsilon threshold or modification of nonzero insulin values is used. A synthetic raw-byte regression check covers zero, one, negative one, and two. The main file validates detection codes and complete survey-design variables before any packet is released.
+
+This behavior is independently described in the [pandas issue](https://github.com/pandas-dev/pandas/issues/30051); the [current upstream parser](https://github.com/pandas-dev/pandas/blob/main/pandas/io/sas/sas_xport.py) implements the same mantissa-zero condition. Consulted 2026-10-27. The frozen eligibility JSON was not changed, and the original preread timestamp/hash is preserved. Only technical parsing was repaired; no target mean, percentile, correlation, model fit, or scientific relationship was computed or used to choose eligibility.

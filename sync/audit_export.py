@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import re
 import sys
+from audit_insulin_export import audit_insulin
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_FILES = {
@@ -14,9 +15,11 @@ LOCAL_FILES = {
     "sync/sync_export.py", "sync/audit_export.py", "sync/EXPORT_MANIFEST.json",
     "sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv", "sync/TEST_RESULTS.json",
     "sync/CURRENT_SCOPE_REVISION.json",
+    "sync/INSULIN_PILOT_REVISION.json", "sync/INSULIN_EXPORT_RECEIPT.json",
+    "sync/audit_insulin_export.py", "docs/INSULIN_EXPORT.md",
 }
 GENERATED_AUDIT = {"sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv"}
-ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf"}
+ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf", ".txt"}
 CSV_ROWS = {"all_results.csv": 5040, "completion_pooled.csv": 36, "full_synthetic_summary.csv": 35}
 BLOCKED_COLUMNS = {"person_id", "patient_id", "subject_id", "participant_id", "name", "email", "address", "date_of_birth", "weight_kg", "pfs", "gng", "dd100", "dd1000"}
 SECRET_RULES = {
@@ -26,7 +29,7 @@ SECRET_RULES = {
     "aws_key": re.compile(r"\bAKIA[A-Z0-9]{16}\b"),
     "credential_assignment": re.compile(r'''(?i)(?:api_key|access_token|password|client_secret)\s*[:=]\s*["'][^"'\s]{12,}["']'''),
 }
-ABSOLUTE_PATH = re.compile(r"(?:[A-Za-z]:[\\/](?:Users|AIR-|Codex)|[/](?:home|Users)/[^\s/]+/)")
+ABSOLUTE_PATH = re.compile(r"(?:[A-Za-z]:[\\/]+(?:Users|AIR-|Codex)|[/](?:home|Users)/[^\s/]+/)")
 
 
 def sha(path):
@@ -119,6 +122,7 @@ def main():
     delivery_path = stage_eval.parents[2] / "delivery_stage1.json"
     delivery_count = 0
     delivery_revision_count = 0
+    followup_revision_count = 0
     if delivery_path.is_file():
         delivery = json.loads(delivery_path.read_text(encoding="utf-8"))
         receipt_path = ROOT / "sync/CURRENT_SCOPE_REVISION.json"
@@ -131,7 +135,17 @@ def main():
                 findings.append({"file": "sync/CURRENT_SCOPE_REVISION.json", "rule": "invalid_revision_document_scope"})
             if receipt["historical_delivery_manifest_sha256"] != sha(delivery_path):
                 findings.append({"file": "sync/CURRENT_SCOPE_REVISION.json", "rule": "historical_delivery_manifest_changed"})
+        followup_path = ROOT / "sync/INSULIN_PILOT_REVISION.json"
+        followups = {}
+        if followup_path.is_file():
+            followup = json.loads(followup_path.read_text(encoding="utf-8"))
+            followups = {r["path"]: r for r in followup["revised_delivery_documents"]}
+            if set(followups) != {"README.md"} or len(followup["revised_delivery_documents"]) != 1:
+                findings.append({"file": "sync/INSULIN_PILOT_REVISION.json", "rule": "invalid_followup_revision_scope"})
+            if followup["previous_revision_receipt"] != "sync/CURRENT_SCOPE_REVISION.json" or followup["previous_revision_receipt_sha256"] != sha(receipt_path) or followup["historical_delivery_manifest_sha256"] != sha(delivery_path):
+                findings.append({"file": "sync/INSULIN_PILOT_REVISION.json", "rule": "revision_chain_hash_mismatch"})
         used_revisions = set()
+        used_followups = set()
         for entry in delivery["artifacts"]:
             path = delivery_path.parent / entry["path"]
             actual = sha(path) if path.is_file() else None
@@ -139,13 +153,22 @@ def main():
                 delivery_count += 1
                 continue
             revision = revisions.get(entry["path"])
-            if revision and revision["historical_sha256"] == entry["sha256"] and revision["current_sha256"] == actual:
+            followup = followups.get(entry["path"])
+            expected_current = revision["current_sha256"] if revision else None
+            if followup and revision and followup["previous_sha256"] == expected_current:
+                expected_current = followup["current_sha256"]
+                used_followups.add(entry["path"])
+                followup_revision_count += 1
+            if revision and revision["historical_sha256"] == entry["sha256"] and expected_current == actual:
                 delivery_revision_count += 1
                 used_revisions.add(entry["path"])
             else:
                 findings.append({"file": path.relative_to(ROOT).as_posix(), "rule": "delivery_artifact_hash_mismatch"})
         if used_revisions != set(revisions):
             findings.append({"file": "sync/CURRENT_SCOPE_REVISION.json", "rule": "unused_or_unmatched_document_revision"})
+        if used_followups != set(followups):
+            findings.append({"file": "sync/INSULIN_PILOT_REVISION.json", "rule": "unused_or_unmatched_followup_revision"})
+    insulin_audit = audit_insulin(ROOT, source_records, findings)
     with (ROOT / "sync/FILE_INVENTORY.tsv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["file", "bytes", "sha256"], delimiter="\t", lineterminator="\n")
         writer.writeheader()
@@ -158,6 +181,8 @@ def main():
              "reporting_output_hashes_verified": report_output_count,
              "delivery_artifact_hashes_verified": delivery_count,
              "documented_delivery_revisions_verified": delivery_revision_count,
+             "followup_document_revisions_verified": followup_revision_count,
+             "insulin_export": insulin_audit,
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}

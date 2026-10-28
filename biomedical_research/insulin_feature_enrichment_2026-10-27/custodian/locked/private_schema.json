@@ -1,0 +1,44 @@
+{
+  "reference.csv": {
+    "columns": [
+      "row_id",
+      "bmi",
+      "age",
+      "sex",
+      "insulin_uU_mL",
+      "insulin_below_lod"
+    ],
+    "rows": 1700,
+    "purpose": "Reserved true outcome and observed rows; never generator-visible"
+  },
+  "design_spine.csv": {
+    "columns": [
+      "design_id",
+      "row_id",
+      "in_target_domain",
+      "fasting_weight",
+      "stratum",
+      "psu"
+    ],
+    "rows": 2711,
+    "purpose": "All positive-weight fasting-subsample design records; retain out-of-domain records in Taylor variance estimation. row_id is populated only in domain."
+  },
+  "linkage_private.csv": {
+    "columns": [
+      "SEQN",
+      "design_id",
+      "row_id",
+      "in_target_domain"
+    ],
+    "rows": 2711,
+    "purpose": "Custodian-only identity linkage, unnecessary for evaluator scientific analysis"
+  },
+  "survey_guidance": {
+    "weight": "fasting_weight = WTSAF2YR",
+    "stratum": "stratum = SDMVSTRA",
+    "psu": "psu = SDMVPSU nested in stratum",
+    "domain": "in_target_domain",
+    "method": "Use a survey-aware domain estimator, preserving the complete positive-weight design spine. No weight rescaling for a single two-year cycle."
+  },
+  "blinding": "Parent receives counts and integrity hashes only until evaluation is authorized. Generator receives shared files only. Evaluator may receive reference and design spine after generation/evaluation protocol freeze."
+}

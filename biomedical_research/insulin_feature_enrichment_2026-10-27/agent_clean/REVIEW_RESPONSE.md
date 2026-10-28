@@ -1,0 +1,10 @@
+# Response to independent source and code audit
+
+Date: 2026-10-27. This response records documentation corrections after the initial files were committed. The coordinator relayed that independent source/code review found no blocking numerical extraction or implementation defect and requested no scientific model change. No target outcomes or evaluation results were supplied or inspected for this response.
+
+The audit identified two documentation issues, both accepted:
+
+1. **S2 source locator.** The ledger's age 60–80 fasting-insulin extraction points to lines 606–672, which do not include that age group's values. The correct locator is Table 1, approved-text lines **674–684** in `PMC10350850_cb1b308e67e13d0672f0bf6dfad939a6e73ef929b08bdcacbb1f2749f31d7825.txt`. I verified those lines: the median is 47.0 pmol/L with 90% CI 45.6–48.6, at line 680. The recorded quantities and model ratio 47.0/42.1 are unchanged. The structured correction is in `SOURCE_LOCATOR_CORRECTION.json`.
+2. **Interpretation of simulated concentrations.** The phrase “latent positive concentrations” in the initial model specification and decision record overstates what the construction identifies. Read it as **simulated positive concentrations on borrowed source assay scales, without an explicit target-assay or censoring model**. The borrowed moments are observed assay measurements; the generator does not separate biological concentration from measurement error, estimate an error-free latent concentration, calibrate to Tosoh, or reproduce released low-value handling. Positivity is a property of the simulation distribution, not evidence of measurement-error separation.
+
+This is a justified no-op on generation. The program, model parameters, initial evidence ledger, search log, and initial decision remain unchanged. No model was rerun for this response, and no revised draw set was created. These documentation corrections do not establish or imply any improvement in prediction or scientific-analysis performance. The original files and outputs remain retained for an auditable record.

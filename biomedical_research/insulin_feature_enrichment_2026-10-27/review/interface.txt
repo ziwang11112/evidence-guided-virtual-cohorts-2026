@@ -1,0 +1,64 @@
+Predictor-only freeze (after independent source audit; before target access):
+  python evaluate.py freeze --observed <observed.csv> --output <new_frozen_analysis.json>
+
+Evaluation (only after output freeze and explicit release by root):
+  python evaluate.py evaluate --observed <observed.csv> --reference <reference.csv> --spine <spine.csv> --run-manifest <manifest.json> --output <new_directory>
+
+Test, using only arbitrary toy data under this review directory:
+  python -m unittest test_evaluate.py -v
+
+Observed CSV: row_id,bmi,age,sex. The insulin column may be absent; if present,
+every cell must be missing. Any injected target value prevents freezing.
+Two distinct sex codes are required; lexical sort selects the reference code.
+Codes are not interpreted as named sexes without metadata. Other observed
+columns are retained and tested for exact decoded-cell equality.
+
+Generated CSV: all original columns, with insulin filled. Rows may be reordered
+because matching is explicit by ID; this is recorded. No rows may be dropped,
+added, or duplicated. BMI, age, and numeric sex codes must have exactly equal
+parsed Python float values, allowing equivalent numeric formatting. A one-bit
+value change fails. Row IDs, nonnumeric sex codes, other observed cells and
+missingness must match exactly. Input file/fingerprint binding remains lexical.
+
+Reference CSV: row_id,insulin,weight,stratum,psu. Its ID set must equal observed.
+Optional bmi/age/sex columns are checked against observed if present.
+Spine CSV: row_id,weight,stratum,psu for ALL positive fasting-weight records,
+including outside-domain rows. Each stratum must contain >=2 PSUs.
+
+Example run manifest, with paths relative to its own directory or absolute:
+{
+  "analysis_spec": {"path": "frozen_analysis.json", "sha256": "..."},
+  "observed_sha256": "...",
+  "reference_sha256": "...",
+  "spine_sha256": "...",
+  "outputs_freeze": {"path": "outputs_freeze.json", "sha256": "..."},
+  "draws": [
+    {"model": "generator_revision_1", "draw_id": "1", "path": "draw_01.csv", "sha256": "..."}
+  ],
+  "columns": {
+    "reference": {}, "spine": {}, "generated": {}
+  }
+}
+
+The optional outputs_freeze object is hash-checked if present. Every draw is
+required to have a frozen hash, and ALL draw hashes and observed cells are
+validated before the evaluator opens the reference table. Reference and spine
+commitment hashes are required. Maximum 20 draws per model revision; report all.
+
+Column mappings use canonical-name -> CSV-name, for example
+"reference": {"insulin": "true_insulin", "weight": "WTSAF2YR"}.
+For observed-column mappings, freeze accepts --schema <schema.json> containing
+{"observed": {"bmi": "BMXBMI", "age": "RIDAGEYR", "sex": "RIAGENDR"}}.
+The observed mapping is frozen and reused. A draw may override generated mappings
+using its own "columns" object. Use identical canonical names after renaming.
+
+Outputs: evaluation.json (all models, covariance matrices, diagnostics, warnings),
+endpoints.csv (all eight endpoints for reference and each draw),
+draw_summaries.csv (descriptive mean, SD, range, and error across draws).
+Exponentiated BMI/age/sex estimates are ratios; exponentiating curvature or the
+interaction gives a ratio of ratios. No endpoint is selected by significance.
+Both raw- and log-insulin weighted BMI correlations are descriptive only.
+
+The frozen spec binds the exact evaluator source and static analysis_spec.json.
+Any implementation repair after freezing requires a transparent new revision
+and a new predictor-only freeze; never silently edit a frozen evaluator.

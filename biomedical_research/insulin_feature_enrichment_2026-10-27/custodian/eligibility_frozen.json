@@ -1,0 +1,31 @@
+{
+  "protocol_version": "1.0",
+  "approved_before_outcome_inspection": true,
+  "approval_source": "Parent coordination message in this run on 2026-10-27",
+  "source_cycle": "NHANES 2017-2018",
+  "source_files": ["DEMO_J", "BMX_J", "INS_J", "DIQ_J"],
+  "selection_order": [
+    "Start from DEMO_J and one-to-one left join BMX_J, INS_J, DIQ_J by SEQN privately",
+    "WTSAF2YR finite and greater than zero",
+    "RIDAGEYR between 20 and 79 inclusive",
+    "RIAGENDR is 1 or 2",
+    "BMXBMI finite and greater than zero",
+    "For RIAGENDR=2 and age 20-44 require RIDEXPRG=2; for other women exclude RIDEXPRG=1",
+    "DIQ010 is 2 or 3 (no diagnosed diabetes; borderline retained)",
+    "Exclude DIQ050=1; retain other codes or missing, without interpreting missing as a confirmed no",
+    "LBXIN finite and greater than zero; LBDINLC must be 0 or 1 for any retained observation"
+  ],
+  "insulin_units": "uU/mL, equivalent numeric convention to microIU/mL",
+  "insulin_processing": "Preserve LBXIN exactly as publicly released, including CDC fill values for below-LOD results. No deletion based on magnitude, trimming, winsorization, fitting, or scientific relationship analysis. LLOD=1.0 uU/mL; CDC uses LLOD/sqrt(2) for results below detection. Preserve LBDINLC privately.",
+  "bmi_units": "kg/m^2",
+  "age_definition": "Age in completed years at screening; 80-plus topcoding excluded",
+  "sex_definition": "NHANES RIAGENDR: 1 male; 2 female",
+  "diabetic_pills": "Not an exclusion or generator input; DIQ070 is not inspected",
+  "fasting_definition": "Positive WTSAF2YR as documented for the fasting subsample; no additional outcome-dependent fasting rule",
+  "pregnancy_limitation": "Released pregnancy status is limited to women 20-44. This is an exclusion based on available pregnancy ascertainment, not proof of nonpregnancy at all ages.",
+  "complete_case_limitation": "This is a paired complete-case evaluation cohort. NHANES weights may not adjust for remaining item nonresponse; no claim of unconditional national representativeness is automatic.",
+  "generator_columns": ["row_id", "bmi", "age", "sex"],
+  "generator_blinding": "Entire insulin column, original identifiers, survey design variables, assay comment flags, target summaries and reserved evaluation analyses are withheld",
+  "design_spine": "All INS_J rows with positive finite WTSAF2YR, with SDMVSTRA, SDMVPSU and target domain indicator; target restriction must preserve this design frame",
+  "historical_workspace_analyses_used": false
+}

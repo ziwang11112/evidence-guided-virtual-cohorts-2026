@@ -1,5 +1,7 @@
 # Evidence-guided virtual cohorts
 
+**Latest executed pilot:** [Fasting-insulin feature enrichment](../insulin_feature_enrichment_2026-10-27/RESULTS.md) hides an entire measured column in 1,700 public-cohort adults. An Agent independently retrieved external studies and authored a generator that produced 20 enriched datasets. The broad BMI association was retained; reserved nonlinear and sex-slope structure was not. Independent numerical audit passed. This is a single-construction feasibility result, not method superiority or full validation.
+
 Start with [the current research scope](CURRENT_RESEARCH_SCOPE.md): evidence-guided whole-cohort generation, enrichment with variables never measured in the original cohort, and missing-cell completion. Scientific conclusions and relationships from downstream analyses are the main evaluation target; exact reconstruction of a complete real table is not universally required. This amendment supersedes the earlier task hierarchy and mandatory scenario policy; it reports no new experimental results.
 
 See [Stage 1 results](stage1/RESULTS.md) for the completed restricted construction experiment, [RESULTS.md](RESULTS.md) for the earlier completion replay, and [METHODS_AND_EXPERIMENT_PLAN.md](METHODS_AND_EXPERIMENT_PLAN.md) for the earlier design and its execution record.

@@ -2,9 +2,13 @@
 
 Private research development repository. This is an explicitly allowlisted export of method documents, reusable code, artificial-fixture tests and aggregate analytical results. It is not a complete copy of the research workspace.
 
-Start with [the current research scope](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/CURRENT_RESEARCH_SCOPE.md): whole-cohort generation, enrichment with variables never measured in the original cohort, and missing-cell completion. Evaluation focuses on downstream conclusions and relationships, distinguishing evidence consistency, independent validation and unvalidated exploration. Multiple scenarios are optional. This is a prospective scope amendment; no new experiment or result is reported.
+Start with [the current research scope](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/CURRENT_RESEARCH_SCOPE.md): whole-cohort generation, enrichment with variables never measured in the original cohort, and missing-cell completion. Evaluation focuses on downstream conclusions and relationships, distinguishing evidence consistency, independent validation and unvalidated exploration. Multiple scenarios are optional.
+
+The latest completed [fasting-insulin feature-enrichment pilot](biomedical_research/insulin_feature_enrichment_2026-10-27/RESULTS.md) withholds an entire insulin column for 1,700 adults. One Agent independently retrieved six screened external studies and authored one generator, producing twenty draws. The broad BMI association was retained; reserved curvature and sex-slope structure were not recovered. Its independent computational audit passed 4,237 checks across 84 fits and 168 endpoints. This is one construction in one cohort, with no method-superiority or review-performance-gain claim. See the [aggregate comparison](biomedical_research/insulin_feature_enrichment_2026-10-27/results/report_v3/ALL_ANALYSES.md) and [insulin export boundary](docs/INSULIN_EXPORT.md).
 
 The [current results](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/RESULTS.md), [earlier method plan](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/METHODS_AND_EXPERIMENT_PLAN.md), [historical paired strategies](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/AGENT_STRATEGIES.md), and [manuscript scaffold](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/MANUSCRIPT_SKELETON.md) retain the completed work. Frozen Stage 1 artifacts and historical delivery manifests are unchanged; [the scope revision receipt](sync/CURRENT_SCOPE_REVISION.json) maps the four revised document hashes to their historical delivery versions.
+
+The [pilot revision receipt](sync/INSULIN_PILOT_REVISION.json) extends that unchanged receipt for the framework README's new pilot link. The original Stage 1 delivery and its recorded results remain intact.
 
 The completed retrospective batch has 144 input tables and 5,040 analysis records, with 36 pooled completion outputs and no analysis/pooling failures. Those inputs are one already examined clinical cohort, masks/completions of it, and draws from one existing generator. They are not 144 independent studies. Most completion outputs are unchanged-data preservation controls. Current results do not establish an Agent advantage, clinical validity, population coverage or recruitment savings.
 
@@ -15,6 +19,7 @@ Read [the completed Stage 1 report](biomedical_research/evidence_virtual_cohort_
 ## Contents
 
 - `biomedical_research/evidence_virtual_cohort_framework_2026-10-27/`: plan, strategy contract, manuscript skeleton, expanded retrospective batch, aggregate outputs and independent review.
+- `biomedical_research/insulin_feature_enrichment_2026-10-27/`: source acquisition and parser-repair code, screened-evidence ledger, frozen generator and evaluation code, metadata commitments, final aggregate results and independent audits. No source or enriched participant rows are included.
 - `biomedical_research/population_framework/`: generic runner, observers, common builder request and artificial-fixture tests; selected prior policy-comparison summaries preserve negative results.
 - The method project's `stage1/` and `stage1_review/` contain the frozen three-case protocol, candidate construction bundles and source audits. See [the Stage 1 export boundary](docs/STAGE1_EXPORT.md) for path transformations and reproduction limits.
 - `biomedical_research/obesity_paper_replay_2026-10-27/paper_analysis.py` and `biomedical_research/obesity_masked_completion_2026-10-27/custodian/`: unchanged analytical and validation modules used by the archived batch.
@@ -47,5 +52,7 @@ The fixture tests require no study data. The full batch and original independent
 python -B sync/sync_export.py --workspace PATH_TO_LOCAL_RESEARCH_WORKSPACE
 python -B sync/audit_export.py
 ```
+
+For a bounded refresh, repeat `--only-source` with each exact allowlisted source path. Unselected export files and manifest records must remain unchanged. Frozen metadata retains original source hashes; the export manifest records any reviewed path normalization.
 
 Review `sync/EXPORT_AUDIT.json` and the complete `sync/FILE_INVENTORY.tsv` before an explicit Git commit/push. This repository should remain private. The repository's remote access control must be checked separately; the scripts do not change GitHub visibility.
