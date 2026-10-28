@@ -1,0 +1,32 @@
+{
+  "protocol_version": "1.0",
+  "case": "NHANES 2013-2014 serum HDL cholesterol",
+  "selection_basis": "Official metadata, access feasibility, and filename/metadata novelty checks; no observed target associations were inspected",
+  "files": ["DEMO_H", "BMX_H", "HDL_H"],
+  "outcome": "LBDHDD",
+  "outcome_units": "mg/dL",
+  "generator_columns": ["row_id", "bmi", "age", "sex"],
+  "selection_order": [
+    "Start with DEMO_H and one-to-one left join BMX_H and HDL_H by SEQN privately",
+    "WTMEC2YR finite and positive",
+    "RIDAGEYR 20 through 79 inclusive",
+    "RIAGENDR 1 or 2",
+    "BMXBMI finite and positive",
+    "Women 20-44 require RIDEXPRG=2; other women exclude RIDEXPRG=1",
+    "LBDHDD finite and positive"
+  ],
+  "retained_values": "Preserve released outcome values exactly. No outlier trimming, winsorization, transformation, model fitting, or target distribution summary during preparation.",
+  "age_definition": "Completed years at screening; the 80-plus topcode is excluded",
+  "pregnancy_limitation": "Released pregnancy ascertainment is limited to women 20-44; this rule does not establish nonpregnancy at all ages",
+  "no_fasting_restriction": "HDL is an examination-sample assay; use WTMEC2YR, not fasting-subsample weights",
+  "no_disease_or_treatment_exclusions": "No diabetes, lipid therapy, smoking or alcohol information is supplied or used for eligibility",
+  "full_design_spine": "All DEMO_H records with positive finite WTMEC2YR; SDMVSTRA and SDMVPSU retained privately with domain membership",
+  "complete_case_limitation": "A paired complete-case benchmark; source weights do not automatically correct remaining item nonresponse",
+  "blinding": "Procedural role separation, checksum locks and read-only files; shared filesystem is not an access-control sandbox",
+  "metadata_search": {
+    "scope": "biomedical_research filename inventory; contents limited to JSON, manifest, metadata and README candidates",
+    "patterns": ["HDL_H", "DEMO_H", "BMX_H", "nhanes2013_2014", "NHANES 2013.?2014"],
+    "prior_matching_metadata_files": [],
+    "qualification": "No prior exact-case analysis was found by this check; this is not proof that no broader workspace document ever mentions the cycle"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "summary": "Execution is allowed. The frozen generator implements the stated mean/SD-matched lognormal model, source arithmetic and provenance are consistent, and artificial-input checks passed. No blocking extraction or implementation error was found. The main remaining issues are openly assumed scientific bridges: source category summaries to individual conditional moments, a common age pattern despite related evidence of heterogeneity, and severe-BMI extrapolation. These limit analytical validity but do not invalidate pilot execution. Gap/action records link genuine registered artifacts and the claimed focused sensitivity is present and reproducible. Static checking is not a sandbox.",
+  "execution_allowed": true,
+  "generator_sha256": "9ceb0ed108284457864602a58b6a753f2b1ffce191b04bd1d69229913ab166ba",
+  "model_spec_sha256": "153db948978adb85f7c46944df62e7c7de2b6803df61814c8424a2019fbffa07",
+  "evidence_sha256": "d3d3420e532aa9a219baf65b8ef70d2791aef946575d04330d8d90a90ff893bf",
+  "candidate_freeze_sha256": "191f5cfd3ecd74f93088d4b9b6830d7a25db2ae0d2dd131f03b092eec186afe2",
+  "findings": [
+    {
+      "id": "F1",
+      "type": "applicability",
+      "severity": "material",
+      "evidence_location": "initial/model_spec.json A_AGE and age_effect_mg_dl; initial/gaps.json G_AGE; E_TW_AGE and E_TW_ADJUSTED; approved Taiwan source 47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt, Tables 3 and 5; E_DALLAS_AGE, Dallas Table 2.",
+      "issue": "The common age pattern is honestly marked provisional, but the existing Taiwan source already reports BMI-stratified adjusted age contrasts in Table 5, whereas the ledger records only its sex contrasts. These strata differ from the pooled Table 3 age pattern, and Dallas supplies a differently adjusted sex-specific age result. A common conditional pattern and a varying pattern could therefore give different age analyses while both remaining compatible with the aggregate information used here. Neither the differences between point estimates nor separate p-values establish a formal interaction. This is an unvalidated scientific choice, not a coding defect.",
+      "suggested_action": "First re-extract and assess the already approved Table 5 age rows, their stratum sizes and richer adjustment conditions, and record why they do or do not change G_AGE. If further retrieval is chosen, target compatible age-stratified HDL summaries or model-specific age/HDL scales and adjustment information. A justified common-effect retention is acceptable; do not add interactions or convert standardized Dallas effects merely to satisfy this review."
+    },
+    {
+      "id": "F2",
+      "type": "uncertainty",
+      "severity": "limitation",
+      "evidence_location": "E_TW_CELLS; initial/model_spec.json A_BMI_POINTS, A_SCALE, A_AGE, A_TRANSPORT and A_MEASUREMENT; initial/artificial_checks.json source_operator_check; Taiwan Table 2 and Methods 2.2/2.4.",
+      "issue": "The eight sex/BMI means and SE-derived SDs are extracted correctly, but they average over within-cell continuous BMI, age and omitted covariates. Applying their SD as the residual scale after adding a separate age curve does not reproduce the source cell variance, and the representative-BMI/source-age mixing check matches a constructed operator rather than the published integrated cells. The candidate explicitly discloses this limitation and does not disguise population/assay uncertainty as individual noise. Consequently, correct numerical moment recovery does not validate correlations, subgroup spread or threshold prevalence in the target.",
+      "suggested_action": "Retain the clear distinction between reported cell moments and assumed conditional moments in the final candidate. If a usable source joint distribution, residual variance or conditional quantiles become available, evaluate the corresponding source operator and revise only what it identifies. Otherwise record a reasoned unresolved disposition; do not invent within-cell covariances, deduct an unsupported residual component, or treat Monte Carlo checks as source validation."
+    },
+    {
+      "id": "F3",
+      "type": "evidence_gap",
+      "severity": "material",
+      "evidence_location": "initial/model_spec.json A_TAIL, tail_asymptote_by_sex and tail_decay_per_bmi; initial/gaps.json G_SHAPE; initial/actions.json G_SHAPE sensitivity; E_TW_CELLS open BMI >=27 bin and E_UK_SHAPE qualitative results.",
+      "issue": "The assumed continuation above BMI 30 is consequential and is not numerically identified by the open Taiwan obesity bin or the UK/Malawi qualitative inverse associations. The existing flat-versus-declining sensitivity is real: at invented age 50 and BMI 40 the selected mean is about 4.3 mg/dL below the flat alternative in both sexes, with larger separation at BMI 70. Agreement at central anchors therefore leaves severe-obesity and low-HDL analyses unresolved. The transparent assumption and sensitivity make this a scientific limitation rather than an execution bug.",
+      "suggested_action": "Use remaining retrieval only if there is a concrete lead to within-obesity BMI-stratified HDL summaries, source predictor support or conditional slope/shape estimates under described measurement and adjustment. Explain the final choice or justified retention using those conditions, keep the countermodel interpretation explicit, and do not present the finite pair as a calibrated uncertainty interval. No particular slope, asymptote or model family is required."
+    }
+  ],
+  "tests": [
+    "Read generator before import; loop_control.source_check passed before importing it. Static checks are defense in depth, not an execution sandbox.",
+    "Validated evidence/spec/gap/action schemas and all evidence/assumption references; checked every initial candidate freeze commitment without reading run_commitment inputs; all unchanged.",
+    "Verified 21 source/action artifact references against actual hashes and accepted artifact_approved events in this run literature audit. Confirmed six searches, three downloads and the unavailable PDF supplement in the own-session records.",
+    "Compared Taiwan Tables 2/3/5, Methods 2.2/2.4, Dallas Tables 1/2 and Methods, and UK/Malawi relevant Methods/Results with the ledger: numerical values, units, SE meaning, quantile versus mean distinction, standardized age coefficients, sample restrictions and adjustment context checked. No material extraction error found.",
+    "Recomputed all eight SE*sqrt(n) SDs and age centering independently: agreement within 1e-12; age center 0.6827657205750841 mg/dL.",
+    "Executed 84 invented rows covering both sex codes, BMI 12 to 80 and ages 20 to 79 with nonstandard indices. Exact observed values/order/index/schema preserved; finite positive HDL; input, spec and global NumPy RNG unchanged at import and generation; same-seed results identical, different-seed draws different.",
+    "Empty invented frame passed; invalid sex, NaN BMI, infinite age, zero BMI, negative age and missing column each raised ValueError.",
+    "Ran ten 100000-row repeated artificial-input experiments across both sexes, all four BMI anchors and BMI 42 at age 50. Maximum mean error 1.539 Monte Carlo standard errors; maximum SD relative error 0.00478. Confirms selected lognormal arithmetic moments, not biological validity.",
+    "Checked continuity immediately on both sides of all BMI anchors/tail join; maximum adjacent mean difference at epsilon 1e-7 was 2.65e-7 mg/dL.",
+    "Independently recomputed the declared flat-versus-declining tail sensitivity at invented BMI 40 and 70, age 50; matched recorded differences. Detailed actual checks saved in initial_review_checks.json and script in initial_review_checks.py."
+  ],
+  "review_scope": "Own approved evidence and artificial inputs only; no real outcomes, observed rows, other runs or new retrieval"
+}

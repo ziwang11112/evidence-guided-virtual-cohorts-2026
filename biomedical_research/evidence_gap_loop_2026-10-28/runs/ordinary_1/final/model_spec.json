@@ -1,0 +1,230 @@
+{
+  "model_id": "ordinary_1_final_cross_sectional_tail_lognormal",
+  "outcome": "hdl",
+  "unit": "mg/dL",
+  "family": "Conditional heteroskedastic lognormal with interpolated arithmetic means",
+  "parameters": {
+    "bmi_knots": [
+      17.0,
+      21.25,
+      25.5,
+      30.5
+    ],
+    "age_knots": [
+      35.0,
+      45.0,
+      55.5,
+      65.5
+    ],
+    "source_hdl_means": {
+      "male": [
+        61.83,
+        51.92,
+        46.75,
+        43.25
+      ],
+      "female": [
+        66.55,
+        60.72,
+        54.66,
+        51.06
+      ]
+    },
+    "source_cell_counts": {
+      "male": [
+        75,
+        2192,
+        2308,
+        1609
+      ],
+      "female": [
+        333,
+        4766,
+        1963,
+        1291
+      ]
+    },
+    "source_mean_standard_errors": {
+      "male": [
+        1.52,
+        0.25,
+        0.21,
+        0.21
+      ],
+      "female": [
+        0.79,
+        0.19,
+        0.27,
+        0.3
+      ]
+    },
+    "source_age_counts_by_bmi": [
+      [
+        183,
+        99,
+        81,
+        45
+      ],
+      [
+        2156,
+        1966,
+        1846,
+        990
+      ],
+      [
+        941,
+        1209,
+        1355,
+        766
+      ],
+      [
+        832,
+        813,
+        859,
+        396
+      ]
+    ],
+    "age_contrasts": [
+      0.0,
+      0.75841,
+      1.18484,
+      0.87361
+    ],
+    "tail_additive_slope": -0.33
+  },
+  "assumptions": [
+    {
+      "id": "A01",
+      "description": "Transport Taiwan Biobank mean/variability patterns and an Italian clinic cross-sectional obesity slope to the target without target-outcome calibration. Geography, ancestry, selection, medication/disease exclusions, fasting and plasma/serum assay differences remain unresolved. Transportability is an assumption, not validation."
+    },
+    {
+      "id": "A02",
+      "description": "Treat source BMI-category HDL means as values at representative BMI anchors 17, 21.25, 25.5 and 30.5 kg/m^2. The two closed-bin anchors are midpoints; the open-bin anchors are assumed. Piecewise linear interpolation between anchors supplies a continuous model. For BMI below 17 use the underweight anchor."
+    },
+    {
+      "id": "A03",
+      "description": "Use a common additive age pattern across sex and BMI. Within each source BMI category assume the pooled age distribution also applies to each sex, so count-weighted category age contrasts can center sex-BMI means. This does not establish actual sex-specific source age distributions."
+    },
+    {
+      "id": "A04",
+      "description": "Convert reported SEM to SD as SEM*sqrt(n) under the conventional independent unweighted mean formula; use that broad-cell marginal SD as an approximate conditional variability scale rather than claiming it is a measured regression residual SD. This retains some variation due to unmodeled within-cell predictor variation."
+    },
+    {
+      "id": "A05",
+      "description": "Use a lognormal conditional distribution with exact arithmetic mean correction and source-derived coefficient of variation. Interpolate log variance across BMI anchors; hold CV constant with age and beyond extreme BMI anchors. This positive, right-skewed family and its tail behavior are not estimated from source quantiles."
+    },
+    {
+      "id": "A06",
+      "description": "Interpolate age contrasts at representative ages 35, 45, 55.5 and 65.5, hold the nearest value outside this knot range, and do not impose a menopausal discontinuity. Treat an adjusted source age contrast as a provisional age association in a model omitting other source covariates."
+    },
+    {
+      "id": "A07",
+      "description": "For BMI above 30.5, let m0 be the sex- and age-specific mean at the last anchor and use m=m0*exp(beta*(BMI-30.5)/m0), with beta=-0.33 mg/dL per BMI unit. The right derivative at the anchor equals beta for every age/sex. The source reports a common-sex linear association among BMI>30 clinic patients, not this exponential curvature or target-tail behavior. Exponential continuation maintains a positive mean; it is an assumption especially above the source upper BMI of about 64.6. No sex interaction in the additive tail slope is asserted."
+    },
+    {
+      "id": "A08",
+      "description": "Draw participants independently conditional on the three observed predictors using a local seed-controlled RNG; no unobserved family, household, race, lifestyle or clinical covariates are reconstructed. Draw-to-draw Monte Carlo variation does not represent epistemic parameter uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "bmi_knots": {
+      "evidence_ids": [
+        "G01"
+      ],
+      "assumption_ids": [
+        "A02"
+      ],
+      "derivation": "Midpoints of [18.5,24) and [24,27) are 21.25 and 25.5; 17 and 30.5 are assumed representatives of open-ended bins, not reported source means."
+    },
+    "age_knots": {
+      "evidence_ids": [
+        "G03"
+      ],
+      "assumption_ids": [
+        "A06"
+      ],
+      "derivation": "Representative centers of printed age categories; boundary overlap is unresolved and no individual age distribution is inferred."
+    },
+    "source_hdl_means": {
+      "evidence_ids": [
+        "G01"
+      ],
+      "assumption_ids": [
+        "A01",
+        "A02",
+        "A03"
+      ],
+      "derivation": "Exact printed Table 2 sex-BMI arithmetic means; age centering and interpolation described in equations."
+    },
+    "source_cell_counts": {
+      "evidence_ids": [
+        "G02"
+      ],
+      "assumption_ids": [
+        "A04"
+      ],
+      "derivation": "Exact Table 2 counts; used only in SEM-to-SD conversion."
+    },
+    "source_mean_standard_errors": {
+      "evidence_ids": [
+        "G02"
+      ],
+      "assumption_ids": [
+        "A04",
+        "A05"
+      ],
+      "derivation": "Exact printed Table 2 SEMs, transformed to source SD=SEM*sqrt(n) then log variance=log(1+(SD/source_mean)^2)."
+    },
+    "source_age_counts_by_bmi": {
+      "evidence_ids": [
+        "G04"
+      ],
+      "assumption_ids": [
+        "A03"
+      ],
+      "derivation": "Exact Table 2 age counts; each row weights the corresponding age contrasts to center the sex-BMI mean anchor."
+    },
+    "age_contrasts": {
+      "evidence_ids": [
+        "G03"
+      ],
+      "assumption_ids": [
+        "A01",
+        "A03",
+        "A06"
+      ],
+      "derivation": "Exact adjusted Table 3 contrasts, reference fixed to zero, used as additive mg/dL age function."
+    },
+    "tail_additive_slope": {
+      "evidence_ids": [
+        "L02"
+      ],
+      "assumption_ids": [
+        "A01",
+        "A07"
+      ],
+      "derivation": "Exact coefficient -0.33 mg/dL per kg/m^2, from the age- and sex-adjusted BMI>30 model in Table rev2 of the published author response embedded in the accepted PMC7644056 JATS. It is a pooled-sex additive cross-sectional slope. Use as the local mean derivative at the final BMI knot via m=m0*exp(beta*excess/m0), rather than asserting this positive curved continuation is the source linear model."
+    }
+  },
+  "equations": [
+    "Let j index four BMI categories and s sex. c_j=sum_k(n_jk*a_k)/sum_k(n_jk).",
+    "m0(b,age,s)=linear_interpolate_BMI(m_js-c_j)+linear_interpolate_age(a_k). Interpolation clamps outside knots.",
+    "m=m0*exp(tail_additive_slope*max(b-30.5,0)/m0). For b>30.5, m0 holds BMI fixed at the final anchor; the right derivative there is tail_additive_slope.",
+    "v_js=log(1+(SEM_js*sqrt(n_js)/m_js)^2); v(b,s)=linear_interpolate_BMI(v_js).",
+    "HDL=exp(log(m)-v/2+sqrt(v)*Z), Z~N(0,1) independently, so E[HDL|x]=m and Var[HDL|x]=m^2*(exp(v)-1)."
+  ],
+  "uncertainty": "Fixed scenario parameters; stochastic residual draws only. Source uncertainty and transport uncertainty are not resolved by repeated draws.",
+  "alternatives_considered": [
+    "Fully adjusted BMI contrasts: rejected as the sole BMI relationship because conditioning on TG, WHR and lifestyle changes the estimand.",
+    "Categorical step function: avoids midpoint assumptions but introduces discontinuities and zero within-category continuous BMI association.",
+    "Unbounded linear HDL mean: rejected for extreme BMI extrapolation because it can create nonpositive means.",
+    "Gaussian residuals with clipping: rejected because it introduces an arbitrary positive point mass; lognormal distribution is explicitly assumed.",
+    "Flat obesity tail: plausible sensitivity alternative, retained for checks because the selected longitudinal tail bridge is weak.",
+    "Initial longitudinal percentage tail: replaced because newly retrieved age- and sex-adjusted cross-sectional BMI>30 evidence aligns more closely with the needed estimand; retained as a numerical sensitivity only.",
+    "Source linear additive tail: its local slope is used, but a globally linear decline can become nonpositive; the exponential continuation is explicitly an assumed curvature, not claimed as a fitted source relationship.",
+    "Representative BMI knots and source-age centering retained: no source supplements supply within-bin or joint sex-age-BMI distributions; alternative knot positions and zero age effects are checked without choosing based on outcomes.",
+    "Residual spread and family retained: no retrieved conditional residual SD or quantile evidence justifies a numerical change. SD scaling and a matched-moment gamma distribution are checked as unvalidated alternatives."
+  ],
+  "target_outcome_access": false,
+  "revision_scope": "Single post-review revision responding to F1-F3. Source-compatible implementation checks only; no target outcome access or accuracy selection."
+}

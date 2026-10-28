@@ -1,0 +1,307 @@
+{
+  "sources": [
+    {
+      "id": "S_TW",
+      "identifier": "PMC6627528; doi:10.3390/genes10060440",
+      "population": "Taiwan Biobank 2012-2016 participants aged 30-70; 6184 men, 8353 women; genotype-selected analytic sample.",
+      "measurement": "HDL-C in mg/dL; BMI from biobank physical examination. Specific HDL assay and fasting protocol not stated in this article.",
+      "cohort_overlap": "No known overlap with the target. All evidence items from this paper share one cohort and are not independent confirmations.",
+      "approved_artifacts": [
+        {
+          "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+          "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+        },
+        {
+          "path": "literature/approved/23728f05bcc689d1e4d9549f25d163243c4dd6b3a174225f34a7758c1514eaa8.xml",
+          "sha256": "23728f05bcc689d1e4d9549f25d163243c4dd6b3a174225f34a7758c1514eaa8"
+        }
+      ]
+    },
+    {
+      "id": "S_UK_MW",
+      "identifier": "PMC7364601; doi:10.1186/s12916-020-01648-0",
+      "population": "Urban Malawi MEIRU and UK ALSPAC adolescents and parents; adult analytic samples 2277 and 6323, respectively; adults mainly middle-aged.",
+      "measurement": "Fasting serum enzymatic lipids in Malawi (Beckman AU480); fasting plasma enzymatic lipids in UK (Technicon RA500); BMI measured.",
+      "cohort_overlap": "No known target overlap. The two countries are distinct cohorts. ALSPAC parent/child records can be related; not counted as independent replications.",
+      "approved_artifacts": [
+        {
+          "path": "literature/approved/ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a.txt",
+          "sha256": "ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a"
+        },
+        {
+          "path": "literature/approved/4a057ec880a83b63313481262caf810bbf820486609fbff354ee2006dd7c4c70.xml",
+          "sha256": "4a057ec880a83b63313481262caf810bbf820486609fbff354ee2006dd7c4c70"
+        }
+      ]
+    },
+    {
+      "id": "S_DALLAS",
+      "identifier": "PMC4669058; doi:10.1016/j.amjcard.2015.01.015",
+      "population": "Dallas Heart Study probability sample, baseline 2000-2002; 1977 adults, 51% women, 46% Black; selected to exclude lipid therapy, hormone therapy, malignancy, connective tissue disease, HIV; survival at least one year.",
+      "measurement": "Fasting EDTA plasma; HDL-C reported in mg/dL separately from NMR HDL particles; specific cholesterol assay not fully stated.",
+      "cohort_overlap": "No known overlap with target, Taiwan Biobank or ALSPAC/MEIRU.",
+      "approved_artifacts": [
+        {
+          "path": "literature/approved/cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c.txt",
+          "sha256": "cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c"
+        },
+        {
+          "path": "literature/approved/73b5a9e3b9cb6b5677b965894f2cef6416421a771bc3a294606c5cc80d2b8c47.xml",
+          "sha256": "73b5a9e3b9cb6b5677b965894f2cef6416421a771bc3a294606c5cc80d2b8c47"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E_TW_CELLS",
+      "source_id": "S_TW",
+      "locator": "Methods 2.2 and 2.4; Table 2, Sex rows; BMI columns underweight/normal/overweight/obese",
+      "estimand": "Unadjusted arithmetic mean and standard error of HDL within sex by BMI category.",
+      "variables": [
+        "hdl",
+        "bmi_category",
+        "sex"
+      ],
+      "adjustment": "None; each mean marginalizes the source age and unmeasured factors within its sex/BMI cell.",
+      "reported": {
+        "unit": "mg/dL",
+        "bmi_intervals": [
+          "<18.5",
+          "18.5 to <24",
+          "24 to <27",
+          ">=27"
+        ],
+        "n_by_sex": {
+          "1": [
+            75,
+            2192,
+            2308,
+            1609
+          ],
+          "2": [
+            333,
+            4766,
+            1963,
+            1291
+          ]
+        },
+        "mean_by_sex": {
+          "1": [
+            61.83,
+            51.92,
+            46.75,
+            43.25
+          ],
+          "2": [
+            66.55,
+            60.72,
+            54.66,
+            51.06
+          ]
+        },
+        "standard_error_by_sex": {
+          "1": [
+            1.52,
+            0.25,
+            0.21,
+            0.21
+          ],
+          "2": [
+            0.79,
+            0.19,
+            0.27,
+            0.3
+          ]
+        }
+      },
+      "uncertainty": "SEs explicitly identified in Methods and table, rounded to two decimals. Approximate individual cell SD = SE * sqrt(n); this is not regression residual SD.",
+      "applicability": "Directly relevant predictor/outcome combination, but Taiwanese ethnicity, selection, ages 30-70 and unspecified assay limit U.S. transport.",
+      "model_use": "Anchor sex-specific conditional location and scale curves using reported cell means and converted cell SDs.",
+      "bridge_assumptions": [
+        "Place cell means at assumed BMI representatives rather than treating those representatives as observed means.",
+        "Use within-cell SD as a conditional SD proxy without fitting unavailable within-cell age/BMI distributions.",
+        "Transport the level/scale without an empirically estimated U.S. shift."
+      ]
+    },
+    {
+      "id": "E_TW_AGE",
+      "source_id": "S_TW",
+      "locator": "Table 3, Age rows; Table 2, age stratum counts summed across BMI columns",
+      "estimand": "Adjusted HDL arithmetic mean contrasts for age strata versus age 30-40.",
+      "variables": [
+        "hdl",
+        "age_category"
+      ],
+      "adjustment": "Multivariable model includes exercise, WHR, BMI category, body fat category, sex, smoking, drinking, coffee and vegetarian diet.",
+      "reported": {
+        "age_categories": [
+          "30-40",
+          "40-50 (article label)",
+          "51-60",
+          "61-70"
+        ],
+        "contrasts_mg_dl": [
+          0,
+          0.75841,
+          1.18484,
+          0.87361
+        ],
+        "p_values": [
+          null,
+          0.003,
+          "<0.0001",
+          0.0068
+        ],
+        "n_age": [
+          4112,
+          4087,
+          4141,
+          2197
+        ]
+      },
+      "uncertainty": "No confidence intervals or coefficient SEs in Table 3. The overlapping 40 label is a source labeling ambiguity; no participant recoding inferred.",
+      "applicability": "Supplies modest cross-sectional age variation under a richer adjustment set, not a longitudinal aging effect or a sex-specific age slope.",
+      "model_use": "Common piecewise linear age pattern, centered on source age-stratum weighted contrast.",
+      "bridge_assumptions": [
+        "Treat category effects as point effects at approximate midpoints.",
+        "Use the same age pattern in both sexes and BMI groups; this is a parsimonious assumption, not evidence of no interaction.",
+        "Clamp outside source representative ages."
+      ]
+    },
+    {
+      "id": "E_TW_ADJUSTED",
+      "source_id": "S_TW",
+      "locator": "Tables 3 and 5",
+      "estimand": "Covariate-adjusted sex and BMI contrasts, including sex contrasts within BMI categories.",
+      "variables": [
+        "hdl",
+        "bmi_category",
+        "sex"
+      ],
+      "adjustment": "Exercise, WHR, body fat, age, smoking, drinking, coffee, vegetarian diet; Table 5 stratified by BMI.",
+      "reported": {
+        "male_vs_female_overall_mg_dl": -9.87778,
+        "bmi_vs_normal_mg_dl": {
+          "underweight": 5.64809,
+          "overweight": -4.31095,
+          "obese": -6.4423
+        },
+        "male_vs_female_by_bmi_mg_dl": [
+          -6.10877,
+          -10.93384,
+          -9.12807,
+          -7.89031
+        ]
+      },
+      "uncertainty": "Table 5 p-values do not test a formal sex-by-BMI interaction; no coefficient covariance or CIs supplied.",
+      "applicability": "Supports preserving sex differences and considering possible modification; adjusted BMI effects cannot replace marginal cell contrasts for the available predictor set.",
+      "model_use": "Context for sex-specific curves; no second independent numerical weight or additional sex offset.",
+      "bridge_assumptions": [
+        "Table 2 cell contrasts are used instead of stacking Table 3 adjusted effects onto them."
+      ]
+    },
+    {
+      "id": "E_UK_SHAPE",
+      "source_id": "S_UK_MW",
+      "locator": "Statistical analysis; Results paragraphs beginning The majority of the associations and Inverse associations; supplementary listing",
+      "estimand": "Shape and population differences of age- and confounder-adjusted BMI-HDL associations.",
+      "variables": [
+        "hdl",
+        "bmi",
+        "sex",
+        "population"
+      ],
+      "adjustment": "Initially age, then socioeconomic, behavioral, ethnicity and medication factors; HIV/physical activity in Malawi only.",
+      "reported": {
+        "qualitative": "Most associations linear; BMI-HDL inverse in each sex/age/country group; inverse BMI-HDL association stronger in UK; UK adult women stronger than men.",
+        "numerical_supplement": "Named supplement is PDF and gateway reports unsupported_supplement_format."
+      },
+      "uncertainty": "Exact HDL slopes and quintile locations unavailable through supported supplement route. Results also contain an apparent HDL/LDL labeling inconsistency in one positive adult-male example; that numeric example is not used.",
+      "applicability": "Independent population comparison demonstrates imperfect transport and supplies no evidence for an exact high-BMI plateau.",
+      "model_use": "Motivates declining rather than automatically flat extrapolation; qualitative support only.",
+      "bridge_assumptions": [
+        "Neither qualitative linearity nor the unavailable supplement determines the high-BMI decay constant."
+      ]
+    },
+    {
+      "id": "E_DALLAS_AGE",
+      "source_id": "S_DALLAS",
+      "locator": "Table 2, HDL-C Age rows; Methods standardized coefficient definition",
+      "estimand": "Sex-specific standardized adjusted age coefficient in HDL-C regression.",
+      "variables": [
+        "hdl",
+        "age",
+        "sex"
+      ],
+      "adjustment": "Sex-stratified model of age, ethnicity, hypertension, diabetes, smoking, insulin resistance, exercise, alcohol, log triglycerides, family history, CRP; menopause for women.",
+      "reported": {
+        "male_standardized_beta": -0.0038,
+        "male_p": 0.91,
+        "female_standardized_beta": 0.25,
+        "female_p": "<0.00010",
+        "model_R2_male": 0.29,
+        "model_R2_female": 0.21
+      },
+      "uncertainty": "SD(age) and SD(HDL) needed for an unstandardized conversion are not supplied for these regression samples; R2 includes many unavailable predictors.",
+      "applicability": "U.S. population, but selection and adjustment differ substantially. Counters universal common-age assumptions.",
+      "model_use": "Age-by-sex remains an important gap; do not use beta as mg/dL/year or treat non-significant male beta as known zero.",
+      "bridge_assumptions": []
+    },
+    {
+      "id": "E_DALLAS_DISTRIBUTION",
+      "source_id": "S_DALLAS",
+      "locator": "Table 1, HDL-C columns; table footnote",
+      "estimand": "Sex/ethnicity-specific marginal median and interquartile range of HDL-C.",
+      "variables": [
+        "hdl",
+        "sex",
+        "ethnicity"
+      ],
+      "adjustment": "None.",
+      "reported": {
+        "men": {
+          "Black": [
+            48,
+            40,
+            57
+          ],
+          "White": [
+            41,
+            35,
+            48
+          ],
+          "Hispanic": [
+            41,
+            36,
+            49
+          ]
+        },
+        "women": {
+          "Black": [
+            52,
+            45,
+            62
+          ],
+          "White": [
+            53,
+            44,
+            63
+          ],
+          "Hispanic": [
+            48,
+            40,
+            55
+          ]
+        },
+        "format": "[median,Q1,Q3] mg/dL"
+      },
+      "uncertainty": "Quantiles, not means or standard deviations; sampling uncertainty not stated.",
+      "applicability": "Marginal variability broadly contextualizes the model but joint BMI and age distributions are unavailable.",
+      "model_use": "Transport and scale context; no pooled target calibration.",
+      "bridge_assumptions": [
+        "Cannot match source marginals without corresponding source predictor/ethnicity distributions."
+      ]
+    }
+  ]
+}

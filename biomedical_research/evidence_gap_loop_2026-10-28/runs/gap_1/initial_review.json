@@ -1,0 +1,48 @@
+{
+  "summary": "Execution allowed: no blocking implementation, extraction, unit or arithmetic defect was found. The Taiwan sex-by-BMI means/SEs, adjusted age coefficients and MIDUS sex means/SDs and cell predictor summaries agree with the approved sources. The generator implements its declared lognormal arithmetic-mean model and passes independent invented-input checks. Parameter bridges and transport limitations are openly documented; this approval does not validate their individual conditional relationships. The most consequential attainable source check is missing: MIDUS Table 2 also reports cell HDL-C moments, and the current declared closure does not reproduce several of them despite matching pooled sex moments. Two additional limitations concern combining marginal BMI contrasts with a heavily adjusted age coefficient and converting category ratios to a continuous extreme-BMI slope. Gap/action records link to genuine approved artifacts; the present calculations are reproducible, while the reported pre-freeze switch from a Taiwan-only intermediate candidate has no retained intermediate specification for independent reconstruction.",
+  "execution_allowed": true,
+  "generator_sha256": "0e711e25a265f79cd1874a1370b928fc282bee42016b0a712e18ae2080ce2ad8",
+  "model_spec_sha256": "4078359f9094b2975f321e0173338a399de1e1d29625463d30663d69ad960a91",
+  "evidence_sha256": "cfa120d4c88d908bdb43048c3e362462a60c32da33a1ba6fe5874a464c1c8568",
+  "candidate_freeze_sha256": "abab9b38a229aac04b9c885534334c8ebea38953978aed28487283acc48a52aa",
+  "findings": [
+    {
+      "id": "F1",
+      "type": "evidence_gap",
+      "severity": "material",
+      "evidence_location": "initial/model_spec.json: A_SOURCE_MOMENT_CLOSURE, A_RESIDUAL and calibration_details; initial/gaps.json: G_LOCATION, G_JOINT, G_VARIANCE; initial/actions.json: MIDUS source_check actions; approved PMC8818198 Table 2 (literature/approved/7ce280d9f0e58c111cc32cf2811a59e31c88b67e87465251c0abe983e180d078.txt, HDL-C rows around lines 606-625). Independent calculations: initial_review_checks.json.additional_same_source_cell_diagnostics.",
+      "issue": "The calibration uses the table's sex/race/diabetes counts and predictor moments, but checks only pooled sex HDL moments even though the same table supplies cell HDL means and SDs. Under the candidate's own independent-normal closure, the model predicts about 51.00 mg/dL for African American nondiabetic men versus the reported 58, and 48.31 for White diabetic men versus 42; corresponding female discrepancies also occur. These are not exact empirical lack-of-fit tests because the source joint law remains unknown. They do show that pooled moment matching is insufficient to support the allocation of location/variance to BMI, age and a sex-only residual law. A compatible alternative interpretation is that omitted source composition changes both conditional location and variation, which need not transfer to the target at fixed BMI/age/sex. The existing disclosure is honest, but the readily available constraint has not yet been used operationally.",
+      "suggested_action": "Re-extract and register the Table 2 cell HDL-C moments from the already approved source, then check them using the same declared closure and inspect plausible closure sensitivity. Record whether discrepancies alter the parameter/structure choice, source weighting rationale, or qualification; do not present assumed closure predictions as actual source integrals. Any chosen revision should reassess the pooled moments and residual decomposition. No target latent race/diabetes labels or particular model are required, and retaining the candidate with a specific evidence-based reason is an allowed outcome."
+    },
+    {
+      "id": "F2",
+      "type": "applicability",
+      "severity": "material",
+      "evidence_location": "initial/evidence.json: E_TW_BMI and E_TW_AGE; initial/model_spec.json: A_BMI_BRIDGE and A_AGE_BRIDGE; approved PMC6627528 Methods 2.4 and Tables 2-3 (literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt).",
+      "issue": "The BMI component is derived from within-sex marginal category means, whereas the age contrasts are conditional on BMI, WHR, body fat and multiple lifestyle variables in the source regression. Adding these components does not identify E[HDL|BMI,age,sex] in either source or target. For example, an age pattern mediated through omitted body-composition/lifestyle variables and a direct age pattern can yield the same reported adjusted coefficient but different age associations after those variables are omitted. The specification explicitly acknowledges transport and extra adjustment, so this is an unvalidated scientific bridge rather than an extraction or execution error.",
+      "suggested_action": "Make the estimand compatibility issue explicit in the gap/action disposition and prioritize any remaining retrieval around a concrete already-discovered lead that reports comparable age/BMI/sex adjustment or joint summaries. Alternatively perform a bounded, explicitly assumed sensitivity to this bridge and state which intended association interpretation it changes. Do not infer zero omitted-variable effects, require an age-by-sex term, or replace the model solely because a richer one is possible."
+    },
+    {
+      "id": "F3",
+      "type": "uncertainty",
+      "severity": "limitation",
+      "evidence_location": "initial/model_spec.json: bmi_log_slopes_by_sex, A_BMI_BRIDGE, A_MEAN_FORM; initial/artificial_checks.json: taiwan_shape_diagnostics; initial/gaps.json: G_BMI; PMC6627528 Table 2.",
+      "issue": "The selected normal and obese category means fix each slope only after assigning representative BMI values, especially 30 to an open-ended obese category. The current check correctly labels point predictions as assumption-dependent, but it does not quantify how the unknown representative BMI or category integration changes extrapolated individual predictions. The unused underweight male category already differs from its representative-point prediction by about 5.09 mg/dL; that discrepancy can reflect shape, within-category distributions or composition and does not uniquely diagnose curvature. This is openly disclosed and does not block execution.",
+      "suggested_action": "If this gap remains consequential after F1, quantify the effect of the representative-BMI bridge using a small justified assumption sensitivity or obtain actual category BMI summaries through an allowed lead. Preserve the distinction between category averages and point conditional means. A sensitivity set is not a confidence interval, and no particular slope, knot or nonlinear family is required."
+    }
+  ],
+  "tests": [
+    "Read generator before importing it, then ran loop_control.source_check: pass. This is a conservative static review, not a sandbox or proof of absence of side effects.",
+    "Verified all 13 assigned-run initial freeze commitment entries without opening any run_commitment target/shared-row files; verified all evidence and action artifact path/hash pairs against accepted events in the assigned literature audit, and verified the frozen audit prefix.",
+    "Validated ledger, parameter/assumption reference IDs, gap/action schemas, actual artifact links and final-code/spec agreement; manually re-extracted Taiwan Table 2 sex means/counts/SEs, Table 3 age contrasts/adjustment, and MIDUS sex means/SDs and Table 2 predictor cells from approved text.",
+    "Invented four-row input with duplicate and nonmonotone index and nullable integer sex: exact columns, observed values/dtypes/index/order, input/spec immutability, seed reproducibility, changed-seed variation, global NumPy RNG preservation and empty-input behavior all passed.",
+    "Independent scalar reconstruction of the mean equation and sequential RNG draws matched the vectorized generator draw-for-draw to relative tolerance 1e-14.",
+    "Invented 84-profile grid spanning BMI 8-110, ages 20-79, both sex codes and every age knot produced positive finite HDL.",
+    "Four independent invented profiles, each with 120000 draws and seeds 192301-192304: absolute mean Monte Carlo z at most 0.929, variance ratios 0.99765-1.00455.",
+    "Recomputed both BMI log-ratio slopes and all age relative means. Independent adaptive age integration split at the age knots plus analytic BMI exponential moments reproduced the declared closure calibration within 2.11e-5 relative for the intercepts and 6.49e-6 for log SD; the tiny quadrature difference is not material.",
+    "Used the same declared closure to check all eight already-published MIDUS Table 2 cell HDL means/SDs. Results expose the F1 scientific limitation; they are not true source joint-distribution validation.",
+    "Recomputed all four existing gamma-versus-lognormal invented-profile tail comparisons with the same means/variances: published check values reproduced within 1e-12.",
+    "Reproducible independent script and detailed results retained at runs/gap_1/initial_review_checks.py and runs/gap_1/initial_review_checks.json. Initial files and freeze were not changed."
+  ],
+  "review_scope": "Own approved evidence and artificial inputs only; no real outcomes, observed rows, other runs or new retrieval"
+}

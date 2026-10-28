@@ -1,0 +1,178 @@
+{
+  "version": "initial-1",
+  "family": "Sex-specific lognormal conditional distribution with smooth log-linear BMI mean and interpolated age profile",
+  "outcome": {
+    "name": "hdl",
+    "unit": "mg/dL",
+    "synthetic": true
+  },
+  "parameters": {
+    "bmi_reference": 27.0,
+    "bmi_log_slopes_by_sex": {
+      "male": -0.020880781602050997,
+      "female": -0.019802482431318477
+    },
+    "age_knots_years": [
+      35.0,
+      45.0,
+      55.5,
+      65.5
+    ],
+    "age_relative_means": [
+      1.0,
+      1.0137892727272728,
+      1.0215425454545455,
+      1.0158838181818182
+    ],
+    "age_reference": 50.0,
+    "conditional_means_at_reference_by_sex": {
+      "male": 52.926304884955414,
+      "female": 66.1551236433133
+    },
+    "residual_log_sd_by_sex": {
+      "male": 0.29912207299083493,
+      "female": 0.25212356938288677
+    }
+  },
+  "parameter_provenance": {
+    "bmi_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CENTER"
+      ],
+      "derivation": "Algebraic reference BMI 27 kg/m^2."
+    },
+    "bmi_log_slopes_by_sex": {
+      "evidence_ids": [
+        "E_TW_BMI",
+        "E_UK_SHAPE"
+      ],
+      "assumption_ids": [
+        "A_BMI_BRIDGE",
+        "A_MEAN_FORM",
+        "A_TRANSPORT"
+      ],
+      "derivation": "male=log(43.25/51.92)/(30-21.25); female=log(51.06/60.72)/(30-21.25). UK article is qualitative context only, not a numeric source for either coefficient."
+    },
+    "age_knots_years": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE_BRIDGE"
+      ],
+      "derivation": "Chosen representative centers of printed source age categories: 35,45,55.5,65.5; not observed category mean ages."
+    },
+    "age_relative_means": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE_BRIDGE",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Ratios=1+[0,0.75841,1.18484,0.87361]/55; 55 mg/dL is an assumed conversion scale, not a reported intercept."
+    },
+    "age_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CENTER"
+      ],
+      "derivation": "Algebraic age reference 50 years."
+    },
+    "conditional_means_at_reference_by_sex": {
+      "evidence_ids": [
+        "E_US_MOMENTS",
+        "E_US_COVARIATES",
+        "E_TW_BMI",
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_SOURCE_MOMENT_CLOSURE",
+        "A_MEAN_FORM",
+        "A_AGE_BRIDGE",
+        "A_TRANSPORT",
+        "A_NUMERICS"
+      ],
+      "derivation": "Let T=exp(beta*(BMI-27)+g(age)-g(50)). Under documented four-cell source moment closure, base=reported sex-specific marginal mean/E[T]. Calibration details and rebuild script preserve the transformation."
+    },
+    "residual_log_sd_by_sex": {
+      "evidence_ids": [
+        "E_US_MOMENTS",
+        "E_US_COVARIATES",
+        "E_US_MEASUREMENT"
+      ],
+      "assumption_ids": [
+        "A_SOURCE_MOMENT_CLOSURE",
+        "A_RESIDUAL",
+        "A_TRANSPORT",
+        "A_NUMERICS"
+      ],
+      "derivation": "sigma=sqrt(log((source_SD^2+source_mean^2)/(base^2*E[T^2]))). HDL draw is lognormal(log(base*T)-sigma^2/2,sigma). Marginal log-normalization mentioned by source is contextual, not proof of conditional family."
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_TRANSPORT",
+      "description": "Transfer Taiwan within-sex BMI dependence and modest adjusted age pattern to U.S. adults; transfer MIDUS sex-specific location/variance after covariate adjustment. No ethnicity, disease, medication, fasting or temporal transport adjustment is identifiable. These bridges may fail."
+    },
+    {
+      "id": "A_BMI_BRIDGE",
+      "description": "Treat Taiwan normal-category mean as representative at BMI 21.25 (midpoint 18.5-24) and obese-category mean at assumed BMI 30.0. The true mean BMI of either category is unknown. A log ratio over this assumed 8.75-unit gap estimates a continuous log-mean slope; this is not a reported adjusted slope."
+    },
+    {
+      "id": "A_MEAN_FORM",
+      "description": "Log conditional mean is linear in BMI, with sex-specific slopes. Thus absolute decline gradually attenuates while relative decline is constant. Extrapolate this form to BMI 14.1-77.5; no target HDL has informed it. This functional form is not identified by category means."
+    },
+    {
+      "id": "A_AGE_BRIDGE",
+      "description": "Convert the additive Taiwan age contrasts to ratios around assumed HDL 55 mg/dL. Use bin centers 35,45,55.5,65.5, interpolate log ratios and hold endpoint values outside these centers. Center at age 50. Apply same age function in both sexes; unknown age-by-sex interaction is not evidence of zero."
+    },
+    {
+      "id": "A_SOURCE_MOMENT_CLOSURE",
+      "description": "For source-only calibration, approximate each reported MIDUS sex/race/diabetes cell's BMI and age as independent normal marginal distributions with the reported means/SDs and cell weights. This is a mathematical moment closure, not claimed source microdata. Independence, normality and sufficient moments are unverified; true source expectation operator cannot be computed from available aggregates."
+    },
+    {
+      "id": "A_RESIDUAL",
+      "description": "Conditional HDL is lognormal with sex-specific constant log SD. Solve this SD from source sex-specific marginal variance after subtracting model-implied covariate mean variance under moment closure. It represents individual variation including unmeasured determinants, not between-source uncertainty. No residual family or homoscedastic log scale is established by the article."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "Treat source fasting plasma/serum HDL-C and target direct serum HDL-C as comparable in mg/dL with no estimated assay correction. Lack of calibration evidence does not establish equality."
+    },
+    {
+      "id": "A_CENTER",
+      "description": "BMI 27 and age 50 are algebraic centering points; re-centering with corresponding intercept transformation changes no predictions."
+    },
+    {
+      "id": "A_NUMERICS",
+      "description": "Source-only age integration uses 128-point Gauss-Hermite quadrature; BMI exponential moments are analytic. Integration order is numerical, not a biological parameter. Rounded source SDs are treated as population moment estimates for calibration."
+    }
+  ],
+  "equation": "E[HDL|bmi,age,sex]=base_sex*exp(beta_sex*(bmi-27)+g(age)-g(50)); log HDL ~ Normal(log E[HDL]-sigma_sex^2/2,sigma_sex^2). g interpolates log age_relative_means with endpoint holding.",
+  "calibration_details": {
+    "method": "Assumption-dependent source moment closure; not the actual unknown source joint distribution",
+    "hermite_nodes": 128,
+    "sex_moments": {
+      "male": {
+        "mean_multiplier": 0.952267499300267,
+        "second_multiplier": 0.91807342058898,
+        "marginal_mean": 50.4,
+        "marginal_sd": 16.5,
+        "implied_mean_variance": 31.541526670566892,
+        "average_conditional_variance": 240.70847332943322
+      },
+      "female": {
+        "mean_multiplier": 0.9492839940651757,
+        "second_multiplier": 0.9214254223857977,
+        "marginal_mean": 62.8,
+        "marginal_sd": 18.8,
+        "implied_mean_variance": 88.77871514028574,
+        "average_conditional_variance": 264.66128485971484
+      }
+    }
+  },
+  "uncertainty": "Fixed scientific specification, stochastic individual residual only. Sampling multiple draws does not quantify evidence/transport uncertainty.",
+  "focused_countermodel": "Gamma conditional family with identical mean and variance. First two source moments cannot discriminate its low-HDL and extreme-high tail from lognormal.",
+  "applicability": "Source-informed virtual association scenarios; not target validation, national estimation, patient reconstruction or causal effects."
+}

@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 import sys
 from audit_insulin_export import audit_insulin
+from audit_gap_loop_export import audit_gap_loop
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_FILES = {
@@ -19,6 +20,8 @@ LOCAL_FILES = {
     "sync/audit_insulin_export.py", "docs/INSULIN_EXPORT.md",
     "sync/DESIGN_REVIEW_SYNC_2026-10-28.json",
     "sync/DESIGN_REVIEW_SYNC_2026-10-28_v2.json",
+    "sync/GAP_LOOP_EXPORT_RECEIPT_2026-10-28.json",
+    "sync/audit_gap_loop_export.py", "docs/GAP_LOOP_EXPORT.md",
 }
 GENERATED_AUDIT = {"sync/EXPORT_AUDIT.json", "sync/FILE_INVENTORY.tsv"}
 ALLOWED_SUFFIXES = {".md", ".py", ".json", ".csv", ".tsv", ".png", ".svg", ".pdf", ".txt"}
@@ -171,6 +174,7 @@ def main():
         if used_followups != set(followups):
             findings.append({"file": "sync/INSULIN_PILOT_REVISION.json", "rule": "unused_or_unmatched_followup_revision"})
     insulin_audit = audit_insulin(ROOT, source_records, findings)
+    gap_loop_audit = audit_gap_loop(ROOT, source_records, findings)
     with (ROOT / "sync/FILE_INVENTORY.tsv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["file", "bytes", "sha256"], delimiter="\t", lineterminator="\n")
         writer.writeheader()
@@ -185,6 +189,7 @@ def main():
              "documented_delivery_revisions_verified": delivery_revision_count,
              "followup_document_revisions_verified": followup_revision_count,
              "insulin_export": insulin_audit,
+             "gap_loop_export": gap_loop_audit,
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}

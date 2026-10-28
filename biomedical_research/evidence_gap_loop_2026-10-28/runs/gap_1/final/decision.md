@@ -1,0 +1,35 @@
+# Final revision decision
+
+The generator and model specification are retained **byte for byte** from the initial candidate. The evidence ledger, source diagnostics, sensitivities and scientific qualifications have changed. This is a justified numerical no-op, not a claim of improved target accuracy. No target rows or target outcome results were read in this revision.
+
+The selected model remains a sex-specific lognormal HDL distribution. At BMI 27 and age 50 its conditional arithmetic mean is 52.9263 mg/dL for men and 66.1551 for women. Log-mean BMI slopes are -0.0208808 and -0.0198025 per kg/m²; a modest interpolated age profile is shared across sexes. Conditional log SDs are 0.299122 and 0.252124. These parameters remain assumption-dependent bridges between Taiwan BMI/age results and U.S. MIDUS marginal moments, fully specified in `model_spec.json`.
+
+## F1: subgroup constraints changed the assessment
+
+I re-extracted all eight sex/race/diabetes HDL-C means and SDs in the already-approved MIDUS Table 2, checking alignment against the JATS table rather than the neighboring non-HDL-C or HDLperox rows. The new record is **E_US_CELL_MOMENTS**. It uses the same participants as the existing MIDUS records and supplies an additional constraint, not independent corroboration.
+
+Under the candidate's original source-distribution closure, African American nondiabetic men have predicted HDL 51.00 versus reported 58 mg/dL, and White diabetic men 48.31 versus 42. White diabetic women have predicted 58.81 versus 54; African American diabetic women 55.42 versus 59. Several cell SDs also differ. Thus pooled sex moment matching does not establish the model's allocation of variation to BMI, age and a sex-only residual law.
+
+I evaluated six source-distribution scenarios: normal or lognormal BMI marginals with the reported means/SDs, and dependence -0.5, 0 or +0.5 with normal age marginals. For normal margins the dependence is the within-cell Pearson correlation; for lognormal BMI it is a Gaussian-copula correlation, not raw Pearson correlation. Each scenario separately recalibrates the intercept and residual SD to the same pooled sex moments. The largest change in a cell mean is **0.0375 mg/dL**, compared with discrepancies of 6-7 mg/dL. Numerical quadrature differences between 64 and 128 nodes are at most 0.0054 mg/dL for cell means. These scenarios do not explain away the discrepancy. They are assumed closure integrals, not empirical source integrals or calibrated uncertainty intervals.
+
+The whole-number Table 2 cell summaries pool only approximately to the more precise Results sex moments: differences are 0.062 mg/dL in male mean and 0.171 in female mean. I retain the Results anchors; rounding is too small to explain the large cell discrepancies.
+
+The finding materially weakens conditional transport support. It does not identify a replacement E[HDL|BMI,age,sex]. A model with source-stratum-specific location and variance could reproduce cell moments, but application would additionally require unverified predictor densities, within-cell regressions and transportable stratum priors. I therefore retain the direct marginal sex anchors and the existing conditional scenario, without assigning latent race or diabetes labels to target rows. The omitted-heterogeneity gap remains unresolved rather than being marked repaired by pooled matching.
+
+## F2 and F3: bounded assumption checks
+
+The Taiwan within-sex BMI means are marginal within BMI categories; its age coefficients condition on BMI, WHR, body fat and lifestyle variables. Combining them does not identify a common conditional estimand. I evaluated assumed multipliers -1, 0, 1 and 2 of the log-age profile, reanchoring pooled U.S. moments and residual decomposition each time. At invented BMI 27, the female age-55.5 minus age-20 mean contrast ranges from -1.41 to +2.79 mg/dL, with the retained candidate at +1.40. The age association can change direction while satisfying the pooled constraints. No zero omitted-variable effect or established marginal age sign is inferred.
+
+For the representative-BMI bridge, I held the Taiwan normal-to-obese mean ratios and normal representative BMI 21.25 fixed, and used assumed obese representative BMIs 28, 30 and 33. All satisfy the source category >=27, but none is a reported category mean. After reanchoring pooled moments, invented BMI-77.5 conditional means span 13.65-23.88 mg/dL for men and 18.29-31.09 for women at age 50. This exposes substantial extrapolation dependence. The unused underweight category discrepancy still does not uniquely identify curvature. I retain representative BMI 30 because no evidence selects either alternative, and do not interpret point predictions as category-integrated means.
+
+Every sensitivity recomputes pooled means, SDs and the division between mean-function variance and average residual variance. All residual components remain positive. The initial gamma-versus-lognormal tail challenge is retained: first two moments do not identify the residual family or tail probabilities. None of these finite scenarios is a confidence interval or a distribution of scientific uncertainty.
+
+## Verification, scope and stopping
+
+Source pooling and variance assertions passed: mean/SD errors below 1e-10 and variance decomposition errors below 1e-9. All six source artifacts match registered gateway acceptance events and hashes. All evidence/provenance IDs resolve, and every final gap has a linked action and non-open disposition. Initial files are unchanged. The final generator/spec are byte-identical, so the initial invented-input, RNG, positivity and stochastic moment checks remain applicable; `artificial_checks.json` labels those earlier tests separately from the new revision calculations. `revise_gap1.py` and `revision_diagnostics.json` in this run reproduce the new checks.
+
+The earlier mention of a switch from a Taiwan-only candidate described an unsaved modeling consideration. No such intermediate specification was retained, so no independently reconstructable numerical before/after result is claimed for that choice.
+
+The most concrete review lead was already-accessible MIDUS Table 2. It has now been used operationally. The already-read Taiwan tables do not give a compatible BMI/age/sex adjustment set, and the identified UK numerical supplement remains an unsupported PDF. I stopped after re-extraction and focused sensitivities rather than using the remaining budget on another unfocused search. No new query or download was used; totals remain 6/12 queries and 3/12 downloads.
+
+The output remains usable for explicit source-informed association scenarios involving the observed predictors. Age interpretation, nonlinear and extreme-BMI effects, absolute subgroup/threshold estimates and conditional spread require the documented assumptions; the new diagnostics make several limitations more concrete. It is not an observed patient measurement, a causal estimate, target validation, a survey-weighted national estimate or added independent biomedical evidence. Repeated draws sample residual variation only.

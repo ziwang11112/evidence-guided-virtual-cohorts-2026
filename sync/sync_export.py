@@ -88,6 +88,13 @@ def main():
             if count != item["runtime_paths_replaced"]:
                 raise ValueError("Unexpected local runtime command count")
             exported = text.encode("utf-8")
+        elif item["transform"] == "normalize_python_runtime_metadata":
+            obj = json.loads(raw.decode("utf-8-sig"))
+            executable = obj.get("python_executable", "")
+            if not re.fullmatch(r"[A-Za-z]:[\\/]Users[\\/].+[\\/]python\.exe", executable, flags=re.I):
+                raise ValueError("Unexpected runtime executable metadata")
+            obj["python_executable"] = "python"
+            exported = (json.dumps(obj, indent=2) + "\n").encode("utf-8")
         else:
             raise ValueError("Unknown reviewed transformation")
         prepared.append((item, source, destination, raw, exported))

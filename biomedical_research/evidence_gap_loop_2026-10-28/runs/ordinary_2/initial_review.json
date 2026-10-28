@@ -1,0 +1,47 @@
+{
+  "summary": "Execution is allowed for this frozen pilot implementation. The approved XML tables support the extracted numerical quantities, units, adjustment labels and sample counts. The lognormal equations, age-ratio arithmetic and variance partition agree with the code, and independent invented-input checks passed. No blocking extraction or implementation defect was found. Individual conditional associations remain unvalidated: the pooled adjusted rank association, differently selected MESA marginal scales and Lithuanian adjusted age-group contrasts require the explicitly disclosed bridges. Successful execution and reference-moment algebra do not establish target analytical validity.",
+  "execution_allowed": true,
+  "generator_sha256": "960b8ca7f2e182df599d82b2bc387bbb85b04cfccc99b76bf9a9f6275d0461fd",
+  "model_spec_sha256": "0be59b96f9a2af44cf558260371c7199bfb236bd23398f45943be4b062105e19",
+  "evidence_sha256": "25583e43f4f4966b37f5bd7058a09f2396d857433a964d4707ab1b5b018d2a4d",
+  "candidate_freeze_sha256": "f46e74b178769daa4e953327ba2e8acdb895a0641716efe6cd7fbb31dd7ebe3b",
+  "findings": [
+    {
+      "id": "F1",
+      "type": "evidence_gap",
+      "severity": "material",
+      "evidence_location": "initial/model_spec.json A2-A3 and parameter_provenance.partial_spearman_bmi_hdl; initial/evidence.json E1-E3; approved PMC3411890 Table 2 and study-population methods (e7839fbeef50bc3befcedba8e376bdb99bef51f30a67a28b99a00f5f17f2c6d1.xml); approved PMC5568454 Tables 1-2 (19f955e472c013056510ccaa524d6e95aaa102ba52239836de097691388a85cf.xml)",
+      "issue": "The numerical extraction of the age-, sex- and ethnicity-adjusted Spearman correlation is correct, but the unadjusted bivariate Gaussian-copula identity is not an exact inversion of an arbitrary partial Spearman statistic. Further, the association comes from 5598 participants excluding lipid-lowering therapy and high triglycerides, while the scale source includes lipid-lowering therapy (16% in Table 1). Rounded marginal sex-specific BMI and HDL SDs do not supply the residual scales after the original adjustment. Thus equal latent rank dependence within each sex, the derived unequal sex-specific slopes, and the residual variance are a constructed joint model, not an empirically recovered MESA conditional relationship. A different residual BMI scale or covariate structure could be compatible with the same reported rank association. These limitations are substantially disclosed and are not code errors.",
+      "suggested_action": "Use the remaining gateway budget only if a focused search can obtain matched-population regression estimates, residual scales or covariance information relevant to the proposed conversion. Otherwise retain the bridge explicitly as an assumption and, if useful, quantify on invented inputs how residual-scale or covariance alternatives compatible with the reported aggregate evidence affect the generated conditional relation. Keep reference-moment and bivariate-copula checks distinct from reproducing the source's adjusted statistic; a justified no-op is acceptable. No particular coefficient, interaction or model family is required."
+    },
+    {
+      "id": "F2",
+      "type": "applicability",
+      "severity": "material",
+      "evidence_location": "initial/model_spec.json A4-A5 and log_hdl_age_slope_per_year; initial/decision.md alternatives paragraph; initial/evidence.json E4; approved PMC3599926 Table 1 footnote and Statistical methods (92a2fe323f66568a55c158cc010e6a6b4133aa5c72bad94739f4bfbc3fba553b.xml)",
+      "issue": "The endpoint means and log-ratio arithmetic are correct, and declining to use the conflicting SD/SE descriptions is appropriate. However, age/BMI-adjusted means within separate broad age groups, without common standardization values or group mean ages, do not identify a per-year conditional age coefficient. Differences in adjustment reference, composition, cohort or selection could explain some of the between-group contrast while preserving the published means. The middle-group agreement checks the chosen interpolation only and cannot distinguish those interpretations. The decision statement that a flat age alternative 'discards' the cross-age evidence is stronger than warranted; the evidence is real but its individual conditional interpretation is uncertain. The candidate already discloses this uncertainty, so execution remains permissible.",
+      "suggested_action": "Clarify that the selected slope is one conditional interpretation of the group contrasts and that an alternative conditional interpretation need not deny the table. If a feasible focused retrieval remains, seek the standardization reference values, actual within-group age summaries or a directly estimated age coefficient in an applicable sample. If unavailable, retain or revise the slope with an explicit reason and keep source-only sensitivity distinct from validation. Do not infer a zero effect solely from missing information and do not select an alternative using target outcomes."
+    },
+    {
+      "id": "F3",
+      "type": "uncertainty",
+      "severity": "limitation",
+      "evidence_location": "initial/model_spec.json A1, A5-A6; initial/evidence.json S1-S3 and E1 uncertainty; initial/decision.md applicability paragraphs; shared/target_description.md; approved PMC5568454 Laboratory measurements and Table 2; approved PMC3411890 study population and Table 4 HDL-C quartile range",
+      "issue": "The older disease-free MESA sources, differing therapy eligibility, fasting plasma precipitation assay, and the Lithuanian serum source do not validate the level, tail or residual distribution for the younger unrestricted target population or extreme BMI. The HDL upper-range discrepancy between the two MESA articles also remains unexplained; avoiding a cap is reasonable but does not resolve whether the scale estimates have different inclusion or reporting conventions. These differences are transparently described rather than silently added as numerical residual noise. Repeated draws of the fixed parameter set therefore quantify conditional stochastic variation only and cannot express uncertainty in assay equivalence, source transport or unsupported predictor regions.",
+      "suggested_action": "Preserve the existing applicability and fixed-parameter uncertainty qualifications in the final candidate. If clarification of the source range or assay comparability is obtainable within the remaining budget, record whether it changes numerical calibration or only qualification. Do not claim that positive support, numerical boundary tests, or repeated draws validate tails or transport. A qualified no-op is acceptable when distinguishing evidence is unavailable."
+    }
+  ],
+  "tests": [
+    "Direct approved XML extraction checked PMC5568454 Tables 1-2: sex ordering, Exam 1 sample counts, arithmetic HDL means/SDs/medians in mg/dL, and BMI/age means/SDs. All E1-E2 numbers matched.",
+    "Direct approved XML extraction checked PMC3411890 Table 2: BMI-HDL Spearman -0.26, n=5598, age/sex/ethnicity adjustment and p<0.0001. Study-population and assay descriptions matched the ledger.",
+    "Direct approved XML extraction checked PMC3599926 Table 1: total HDL means across the three age groups and sex-specific sample sizes. Confirmed within-age-group age/BMI adjustment and the caption SD versus methods SE inconsistency; the generator does not use those parenthetical dispersions.",
+    "Ran loop_control.source_check before importing candidate code; pass. Static AST review is not an execution sandbox or proof of no side effects.",
+    "Validated ledger/spec schema, all parameter reference IDs, 11 allowed frozen candidate/source commitments, all six source-file hashes and their registration in the frozen gateway audit prefix. No run_commitment participant file was opened.",
+    "Independent 40-row invented grid spanning BMI 14.1-77.5, ages 20-79 and both sex codes: output contract, exact predictor dtypes/values/order, nonmonotone duplicated index preservation, finite positive HDL, unchanged input/spec, same-seed reproduction, changed-seed variation and unchanged global RNG all passed.",
+    "Independent scalar implementation of the specified equations exactly matched all 40 vectorized seeded draws. Recomputed endpoint age slopes, latent rho, both BMI slopes, residual SDs and analytic reference means/SDs; all matched.",
+    "Four invented repeated predictor cells, 100000 draws each: conditional sample means were within 0.60 Monte Carlo SE of analytic means; all relative SD errors were below 0.21%; every within-cell draw was unique. These tests check the implemented distribution only.",
+    "Empty valid input returned the required five-column empty frame. Zero/negative BMI, NaN age, invalid/nonfinite sex and a missing age column were rejected.",
+    "Reproducible independent test script and detailed output are runs/ordinary_2/initial_review_checks.py and runs/ordinary_2/initial_review_checks.json. Initial candidate and freeze files were not modified."
+  ],
+  "review_scope": "Own approved evidence and artificial inputs only; no real outcomes, observed participant rows, custodian files, other runs or new retrieval. Shared descriptive metadata, the common contract and root controller were read. Execution permission is not target scientific validation."
+}

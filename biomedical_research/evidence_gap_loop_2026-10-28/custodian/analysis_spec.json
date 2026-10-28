@@ -1,0 +1,29 @@
+{
+  "version": "1.0",
+  "fixed_before_target_file_parsing": true,
+  "outcome": "Serum HDL cholesterol in mg/dL, raw scale",
+  "predictors": "b=(BMI-25)/5; a=(age-50)/10; female=1 for source sex code 2",
+  "models": {
+    "A": "HDL ~ 1 + b",
+    "B": "HDL ~ 1 + b + a + female",
+    "C": "HDL ~ 1 + b + b^2 + a + female",
+    "D": "HDL ~ 1 + b + a + female + b*female"
+  },
+  "endpoints": [
+    {"model": "A", "name": "crude_bmi_per_5", "role": "secondary", "contrast": [0, 1]},
+    {"model": "B", "name": "adjusted_bmi_per_5", "role": "primary", "contrast": [0, 1, 0, 0]},
+    {"model": "B", "name": "adjusted_age_per_10", "role": "secondary", "contrast": [0, 0, 1, 0]},
+    {"model": "B", "name": "adjusted_female_minus_male", "role": "secondary", "contrast": [0, 0, 0, 1]},
+    {"model": "C", "name": "bmi_slope_at_35_minus_25_per_5", "role": "shape", "contrast": [0, 0, 4, 0, 0]},
+    {"model": "D", "name": "female_minus_male_bmi_slope_per_5", "role": "interaction", "contrast": [0, 0, 0, 0, 1]},
+    {"model": "D", "name": "male_bmi_slope_per_5", "role": "supporting", "contrast": [0, 1, 0, 0, 0]},
+    {"model": "D", "name": "female_bmi_slope_per_5", "role": "supporting", "contrast": [0, 1, 0, 0, 1]}
+  ],
+  "estimation": "Survey weighted least squares with WTMEC2YR; stratified PSU Taylor linearized covariance, full positive-weight MEC spine retained; no FPC",
+  "confidence_intervals": "Two-sided 95% t intervals; df = domain PSUs minus domain strata minus (model rank minus 1). Degrees of freedom and full/domain design counts are reported; no CI if df<=0.",
+  "comparison": "Report every frozen endpoint for true and all generated draws, differences and absolute differences in mg/dL; between-draw median/range is descriptive, not inferential superiority. No thresholds or composite success score.",
+  "secondary_distribution_checks": "After unlock only: weighted mean, SD, 10th/50th/90th weighted quantiles and weighted BMI-HDL correlation; same definitions for true and generated data",
+  "prohibitions": "No target-dependent exclusions, transformations, model changes, sign filters, selective endpoints, significance-based claim, or calibration to held-out labels",
+  "uncertainty": "Synthetic survey intervals condition on generated outcomes; they are not calibrated uncertainty about the unobserved true feature. Draw spread does not automatically include evidence, model or transport uncertainty.",
+  "claims": "A descriptive pilot of analysis recovery, not a causal analysis, individual outcome recovery, or proof of autonomous scientific discovery"
+}

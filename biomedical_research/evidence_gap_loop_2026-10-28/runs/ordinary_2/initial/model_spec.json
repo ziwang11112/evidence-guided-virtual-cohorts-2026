@@ -1,0 +1,45 @@
+{
+  "model_id": "ordinary_2_initial_mesa_log_normal",
+  "family": "Sex-specific conditional lognormal with linear BMI and age terms on the log scale",
+  "outcome": {"name": "hdl", "unit": "mg/dL", "status": "entirely virtual"},
+  "parameters": {
+    "reference_hdl_mean_mgdl": {"1": 45.0, "2": 56.0},
+    "reference_hdl_sd_mgdl": {"1": 11.0, "2": 14.0},
+    "reference_bmi_mean": {"1": 28.0, "2": 29.0},
+    "reference_bmi_sd": {"1": 4.0, "2": 6.0},
+    "reference_age_mean_years": 62.0,
+    "reference_age_sd_years": 10.0,
+    "partial_spearman_bmi_hdl": -0.26,
+    "log_hdl_age_slope_per_year": {"1": 0.0031897134612191274, "2": 0.0009686157621623261}
+  },
+  "assumptions": [
+    {"id": "A1", "description": "MESA baseline sex-specific HDL and predictor moments are transported to a source reference population for target generation without a calendar-year or assay offset. MESA is older, excludes clinical cardiovascular disease and extreme body weight, and its examination population is not nationally representative. This is a strong applicability assumption, not target calibration."},
+    {"id": "A2", "description": "Within sex, HDL is lognormal and reference BMI and age are independent normal variables with the reported moments. These normal predictor distributions are a moment-calibration device only: actual observed predictors are used unchanged. Residual log HDL is independent Gaussian with variance constant within sex."},
+    {"id": "A3", "description": "The age-, sex-, and ethnicity-adjusted Spearman correlation is interpreted as a Gaussian-copula partial rank association. Its latent Gaussian correlation is 2*sin(pi*r_s/6). It is assumed equal within each sex, and reported marginal sex-specific BMI SDs are used as proxies for BMI residual SDs after age and ethnicity. This bridge is approximate because a partial Spearman correlation is not itself a regression coefficient and ethnicity is unavailable."},
+    {"id": "A4", "description": "The youngest and oldest Lithuanian reference-group HDL means are mapped to age-group midpoints 34.5 and 69.5. Their log ratio divided by 35 years gives a sex-specific linear age slope. Although Table 1 says values were adjusted for age and BMI within each age group, common adjustment reference values are unknown. Transport of the between-group contrast as a conditional age slope is assumed; it is not a longitudinal aging or causal effect."},
+    {"id": "A5", "description": "Log-linear age and BMI relations are extrapolated across target ages 20-79 and BMI 14.1-77.5. There is no BMI curvature, menopause knot, or age-BMI interaction. The retrieved aggregate evidence cannot identify those terms. Positive lognormal support prevents negative HDL without an artificial upper cap, but does not establish realistic extreme-obesity behavior."},
+    {"id": "A6", "description": "One fixed parameter set is used. Conditional randomness represents unresolved person-level variation, including omitted behaviors and clinical factors, rather than parameter uncertainty. Repeated draws are not independent scientific models. Other unmeasured covariates receive no preserved conditional association with HDL beyond BMI, age and sex."}
+  ],
+  "parameter_provenance": {
+    "reference_hdl_mean_mgdl": {"evidence_ids": ["E1"], "assumption_ids": ["A1", "A2"], "derivation": "Direct Table 2 Exam 1 mean HDL-C: men 45 and women 56 mg/dL. These are marginal sex-specific source means, not individual conditional intercepts."},
+    "reference_hdl_sd_mgdl": {"evidence_ids": ["E1"], "assumption_ids": ["A1", "A2", "A6"], "derivation": "Direct Table 2 Exam 1 between-person SD: men 11, women 14 mg/dL. Convert total log variance with log(1+(SD/mean)^2), then remove modeled reference age and BMI variance; do not interpret these SDs as SEs or residual SDs."},
+    "reference_bmi_mean": {"evidence_ids": ["E2"], "assumption_ids": ["A1", "A2"], "derivation": "Table 1 Exam 1 rounded means: men 28, women 29 kg/m^2."},
+    "reference_bmi_sd": {"evidence_ids": ["E2", "E3"], "assumption_ids": ["A2", "A3"], "derivation": "Table 1 Exam 1 rounded BMI SDs: men 4, women 6 kg/m^2. They proxy residual BMI scales needed to translate the rank association into a log-HDL slope."},
+    "reference_age_mean_years": {"evidence_ids": ["E2"], "assumption_ids": ["A1", "A2", "A4"], "derivation": "MESA Table 1 reports mean age 62 for both sexes. Age slopes are anchored at this age while the intercept includes the lognormal mean correction."},
+    "reference_age_sd_years": {"evidence_ids": ["E2"], "assumption_ids": ["A2", "A4"], "derivation": "MESA Table 1 reports age SD 10 for both sexes. Used only in the reference variance decomposition, not to alter target ages."},
+    "partial_spearman_bmi_hdl": {"evidence_ids": ["E3"], "assumption_ids": ["A3"], "derivation": "Mackey Table 2 reports age-, sex-, ethnicity-adjusted Spearman r=-0.26 for BMI versus HDL-C. The assumed Gaussian-copula conversion gives rho=-0.27143114486860875."},
+    "log_hdl_age_slope_per_year": {"evidence_ids": ["E4"], "assumption_ids": ["A4", "A5"], "derivation": "Table 1 total HDL means for ages 25-44 versus 65-74 are 1.27 versus 1.42 mmol/L in men and 1.45 versus 1.50 in women. gamma_m=log(1.42/1.27)/(69.5-34.5); gamma_f=log(1.50/1.45)/35. Units cancel in the ratio; no mmol/L-to-mg/dL conversion is used. Middle-age observations are reserved for a source-only interpolation check, not a fitted precision weight."}
+  },
+  "equations": [
+    "For sex s: tau_s^2 = log(1 + (SD_s / M_s)^2).",
+    "rho = 2*sin(pi*partial_spearman_bmi_hdl/6).",
+    "V_s = tau_s^2 - (gamma_s*reference_age_sd_years)^2.",
+    "beta_s = rho*sqrt(V_s)/reference_bmi_sd_s; sigma_s = sqrt((1-rho^2)*V_s).",
+    "log(HDL_i) = log(M_s)-tau_s^2/2 + beta_s*(BMI_i-B_s) + gamma_s*(age_i-62) + sigma_s*Z_i, Z_i iid N(0,1)."
+  ],
+  "derived_values": {
+    "bmi_log_slopes_per_kg_m2": {"1": -0.016203455615831464, "2": -0.01113003770542389},
+    "residual_log_sd": {"1": 0.22982098440139986, "2": 0.23679358426970576}
+  },
+  "uncertainty": "Reported uncertainty does not determine parameter distributions. Source transport, partial-correlation conversion, age contrasts, tail behavior and model family are structural uncertainties retained explicitly. No target outcomes were used."
+}

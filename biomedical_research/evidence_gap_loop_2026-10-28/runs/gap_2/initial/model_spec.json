@@ -1,0 +1,178 @@
+{
+  "model_name": "sex-specific interpolated HDL moments with modest age pattern and positive stochastic residuals",
+  "version": "initial",
+  "family": "conditional lognormal",
+  "parameters": {
+    "bmi_anchor_kg_m2": [
+      17.5,
+      21.25,
+      25.5,
+      30.0
+    ],
+    "mean_hdl_by_sex": {
+      "1": [
+        61.83,
+        51.92,
+        46.75,
+        43.25
+      ],
+      "2": [
+        66.55,
+        60.72,
+        54.66,
+        51.06
+      ]
+    },
+    "sd_hdl_by_sex": {
+      "1": [
+        13.163586137523469,
+        11.704699910719626,
+        10.088746205550024,
+        8.423591870455263
+      ],
+      "2": [
+        14.416147196806781,
+        13.116882251510836,
+        11.96255407511289,
+        10.779146533933009
+      ]
+    },
+    "age_knots_years": [
+      35,
+      45,
+      55.5,
+      65.5
+    ],
+    "age_effect_mg_dl": [
+      0,
+      0.75841,
+      1.18484,
+      0.87361
+    ],
+    "age_center_mg_dl": 0.6827657205750841,
+    "tail_asymptote_by_sex": {
+      "1": 30.0,
+      "2": 38.0
+    },
+    "tail_decay_per_bmi": 0.04
+  },
+  "assumptions": [
+    {
+      "id": "A_TRANSPORT",
+      "description": "Conditional HDL location and individual variability from Taiwan are provisionally transported without a U.S. offset; population differences are model uncertainty and not extra per-person random noise."
+    },
+    {
+      "id": "A_BMI_POINTS",
+      "description": "BMI category representative locations are assumed as 17.5, 21.25, 25.5 and 30 kg/m2. The two closed intervals use their midpoints; open-bin representatives are assumptions. Linearly interpolate mean and SD between representatives; hold below 17.5."
+    },
+    {
+      "id": "A_SCALE",
+      "description": "SE*sqrt(n) is the approximate within-sex/BMI-cell SD. Use it as conditional SD, retaining omitted-factor heterogeneity; no claimed residual-variance decomposition. Endpoint SD is retained above BMI 30."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Use the adjusted age contrasts as a common additive pattern at ages 35,45,55.5,65.5, with constant endpoint extrapolation. Assume every sex/BMI cell has the overall source age mixing weights when centering. This does not establish age-sex or age-BMI independence in the target."
+    },
+    {
+      "id": "A_TAIL",
+      "description": "Above BMI 30, continue the mean downward exponentially toward 30 mg/dL in men and 38 mg/dL in women, at decay 0.04 per BMI unit. These are explicitly assumed extrapolation values, not measured biological asymptotes. Alternative flat continuation is tested."
+    },
+    {
+      "id": "A_FAMILY",
+      "description": "Conditional HDL is lognormal matched to specified arithmetic mean and SD, chosen for positivity and right skew. Tail form and latent-factor mixtures are not identified by mean/SE evidence; independent local RNG draws represent residual individual variability only."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "Treat reported HDL-C mg/dL as comparable to direct serum HDL with no estimated assay or fasting shift; this is a measurement bridge because assays/fasting differ or are incompletely reported. Continuous unrounded values are generated."
+    }
+  ],
+  "parameter_provenance": {
+    "bmi_anchor_kg_m2": {
+      "evidence_ids": [
+        "E_TW_CELLS"
+      ],
+      "assumption_ids": [
+        "A_BMI_POINTS"
+      ],
+      "derivation": "Closed BMI interval midpoints; assumed representatives for the two open categories. No source BMI means were reported."
+    },
+    "mean_hdl_by_sex": {
+      "evidence_ids": [
+        "E_TW_CELLS"
+      ],
+      "assumption_ids": [
+        "A_BMI_POINTS",
+        "A_TRANSPORT",
+        "A_MEASUREMENT"
+      ],
+      "derivation": "Exact Table 2 sex-row arithmetic means at assumed representative BMI points; no outcome fitting."
+    },
+    "sd_hdl_by_sex": {
+      "evidence_ids": [
+        "E_TW_CELLS"
+      ],
+      "assumption_ids": [
+        "A_SCALE",
+        "A_TRANSPORT"
+      ],
+      "derivation": "For each sex/BMI cell, reported SE multiplied by sqrt(reported n); preserve full computation precision. Rounded SE limits precision."
+    },
+    "age_knots_years": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "Approximate age-category midpoints. Article age label 40-50 retained as an acknowledged ambiguity."
+    },
+    "age_effect_mg_dl": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Table 3 contrasts [0,0.75841,1.18484,0.87361] in mg/dL, not slopes per year."
+    },
+    "age_center_mg_dl": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "sum(n_age * contrast)/sum(n_age), with n_age=[4112,4087,4141,2197]. This exact centering holds only under assumed source-category midpoint mixing."
+    },
+    "tail_asymptote_by_sex": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TAIL"
+      ],
+      "derivation": "Assumed men 30 and women 38 mg/dL; not a fitted floor or individual HDL lower bound."
+    },
+    "tail_decay_per_bmi": {
+      "evidence_ids": [
+        "E_UK_SHAPE"
+      ],
+      "assumption_ids": [
+        "A_TAIL"
+      ],
+      "derivation": "0.04 is assumed, with e-fold distance 25 BMI units. Qualitative inverse/mostly linear source associations motivate allowing continued decline but do not estimate this value."
+    }
+  },
+  "equations": [
+    "m0(b,sex) is linear interpolation of Table 2 means at assumed BMI anchors.",
+    "For b>30: m0=L_sex+(M_sex,30-L_sex)*exp(-0.04*(b-30)).",
+    "m=m0+interp(age;age_knots,contrasts)-weighted_source_age_contrast.",
+    "s=linear interpolation of SE*sqrt(n) at the BMI anchors, constant beyond endpoints.",
+    "v=log(1+(s/m)^2); log(HDL) ~ Normal(log(m)-v/2,v)."
+  ],
+  "interpretation": "Associational virtual data. Fixed selected parameters do not quantify epistemic uncertainty. Source population differences are not individual residual noise.",
+  "unsupported_exact_operators": [
+    "Taiwan published cell means after integrating over actual within-cell BMI and age: unavailable joint distributions.",
+    "Dallas marginal quantiles: missing source BMI/age/ethnicity joint distribution.",
+    "UK/Malawi numerical slope: unsupported PDF supplement."
+  ]
+}

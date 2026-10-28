@@ -1,0 +1,46 @@
+{
+  "summary": "Execution is allowed for the submitted scenario. Direct source checks confirm the G2019 sex-by-BMI means, SEMs, counts, pooled age counts and adjusted age contrasts; the D2019 abstract percentages and contextual H2019/K2017 quantities are correctly represented. The local-RNG implementation agrees with its stated equations and passes independent invented-input checks. No blocking implementation or extraction defect was found. The principal scientific bridges are openly disclosed but unvalidated: longitudinal changes used as a cross-sectional tail, broad-bin summaries used as exact-predictor means, and marginal source variability used as conditional variability in a different population/measurement setting. Execution permission does not establish analytical validity.",
+  "execution_allowed": true,
+  "generator_sha256": "d78d6e24dc0ad180fa02b22373270f770b2c22cdfd45fa095f0d2819a8463fa9",
+  "model_spec_sha256": "665fc32558063d10875bee5ee6167458a6fcdc41f2ef183427f356b71376ef11",
+  "evidence_sha256": "6119260eb6a96f37e702d08cfef960042391c3c824278d63c0a6e5a40dc7ccc6",
+  "candidate_freeze_sha256": "a73d9950a98538f915fadb2efcb1cbdceb9cbbdda1b6ddb33ee8b984ee2b4d62",
+  "findings": [
+    {
+      "id": "F1",
+      "type": "applicability",
+      "severity": "material",
+      "evidence_location": "initial/evidence.json D01; initial/model_spec.json A07 and tail_log_slopes; initial/generator.py tail multiplier; literature/approved/a7cadad1cc84d15551e08f90d13dd983524b4d57a4d2dda477354bfcfef08537.json, accepted[0].abstractText Results",
+      "issue": "The abstract correctly supplies longitudinal HDL percent changes per change in BMI, but it does not estimate a between-person conditional HDL mean slope above BMI 30.5. A within-person weight-change association can coexist with a flatter, steeper, or otherwise different cross-sectional tail because participant selection, baseline HDL and other covariate differences need not transport. The candidate acknowledges this; nevertheless it is consequential: at invented BMI 80 the submitted multiplier gives 0.6831 (male) and 0.8123 (female) of its own flat-tail mean. These are model consequences, not target estimates.",
+      "suggested_action": "Use remaining gateway budget, if feasible, to clarify this source's eligibility, total-HDL adjustment, baseline dependence and whether any relevant cross-sectional subgroup summaries are obtainable, or seek eligible aggregate evidence that directly distinguishes tail interpretations. Otherwise retain or revise the tail with an explicit justification and preserve the existing flat-tail sensitivity as an unresolved scientific alternative. No particular slope or model family is required."
+    },
+    {
+      "id": "F2",
+      "type": "evidence_gap",
+      "severity": "material",
+      "evidence_location": "initial/evidence.json G01/G03/G04; initial/model_spec.json A02/A03/A06 and equations; literature/approved/23728f05bcc689d1e4d9549f25d163243c4dd6b3a174225f34a7758c1514eaa8.xml, Table 2 sex/age rows and Table 3 age rows",
+      "issue": "The source identifies averages over BMI categories, not conditional means at the selected knots, and its age coefficients condition on variables absent from this generator. Pooled age counts do not identify sex-specific age mixtures within BMI categories. The source-weighted centering identity passes algebraically only at the assumed age representatives and BMI anchors; it does not show that the generated continuous conditional relationship reproduces the source's actual within-bin distributions. Different within-bin BMI/age/covariate mixtures could yield the same reported cell means but different individual associations.",
+      "suggested_action": "Prioritize obtainable source information that distinguishes this ambiguity, such as within-category BMI summaries and sex-by-age-by-BMI summaries or an aggregate model conditioning on the available predictors. If unavailable, keep the bridge labeled as assumed and evaluate a feasible sensitivity to representative values or age marginalization without tuning to target outcomes. A justified retention is acceptable; the review does not require interactions or additional complexity."
+    },
+    {
+      "id": "F3",
+      "type": "uncertainty",
+      "severity": "limitation",
+      "evidence_location": "initial/evidence.json G02 and source G2019 measurement/applicability; initial/model_spec.json A01/A04/A05/A08; initial/decision.md Evidence and transformations/Applicability; shared/target_description.md",
+      "issue": "SEM*sqrt(n) and the lognormal arithmetic-mean correction are implemented correctly. The resulting broad-cell SD still includes within-cell predictor and unmeasured-covariate mixture variation; it is not an estimated residual SD conditional on exact BMI, age and sex. Constant source-derived CV with age and in the extrapolated tail, lognormal shape, and transport from the Taiwan cohort to the target direct-serum measurement remain assumptions. The candidate already discloses these points and does not claim that residual draws quantify source or transport uncertainty.",
+      "suggested_action": "Preserve this separation in the final scientific claims. If conditional spread, quantiles, assay details or relevant measurement-comparability information are obtainable within budget, use them to assess the variance bridge. Otherwise keep the variability proxy explicit and consider a clearly labeled variance/distribution sensitivity; do not infer absence of extra uncertainty from missing information or from successful Monte Carlo checks."
+    }
+  ],
+  "tests": [
+    "Read the complete generator before execution; loop_control.source_check passed before importing it. This conservative static check is not a sandbox or a proof of no side effects.",
+    "Validated ledger and parameter-provenance schemas; verified all 12 own initial-candidate commitment hashes and all 7 linked source artifacts against accepted entries in the own literature audit. Did not verify/read the broader run commitment's participant CSV.",
+    "Parsed the approved G2019 XML directly: all eight sex-BMI means, SEMs and counts, 16 age counts and three nonreference age coefficients exactly match the specification; BMI and sex margins agree. Manually checked D2019 abstract percentages and H2019/K2017 contextual quantities and qualifications.",
+    "Six invented rows with nonsequential index: exact observed-field/order/index preservation, no input or specification mutation, unchanged global RNG on import and generation, exact same-seed repeatability and different-seed variation.",
+    "Empty input passes; zero/NaN BMI, infinite age and invalid sex are rejected. The first reviewer harness attempt failed while inserting infinity into an integer Pandas column; only the review harness was corrected to float before the completed passing run.",
+    "Independent scalar equation calculation on 120 invented BMI/age/sex combinations (BMI 13-80; age 20-79) agrees with generated values within 1.12e-15 maximum relative error; all generated values finite and positive.",
+    "Six fixed invented predictor cells, 120000 draws per cell: conditional means within 6 Monte Carlo standard errors and SDs within 2.5% of analytic moments. Largest observed absolute mean discrepancy was 2.967 MC SE; largest SD relative error was 0.002890. Checks verify implementation only.",
+    "Recomputed all SEM-to-SD transformations and source-age representative centering; maximum arithmetic mean centering error 7.11e-15. Quantified the selected-versus-flat tail mean ratio at invented BMI 80 without selecting a preferred target value.",
+    "Reproducible details: initial_review_checks.py and initial_review_checks.json, outside the frozen initial directory."
+  ],
+  "review_scope": "Own approved evidence and artificial inputs only; no real outcomes, observed participant rows, other runs, target results or new retrieval."
+}
