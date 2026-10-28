@@ -17,7 +17,7 @@ def records_digest(records):
     return digest(json.dumps(records, sort_keys=True, separators=(",", ":")).encode("utf-8"))
 
 
-def audit_m3_export(root, manifest, m2_receipt, m2_validation, receipt, findings):
+def audit_m3_export(root, manifest, m2_receipt, m2_validation, receipt, findings, *, read_bytes=None):
     if receipt is None:
         return {"status": "not_exported"}
 
@@ -25,9 +25,14 @@ def audit_m3_export(root, manifest, m2_receipt, m2_validation, receipt, findings
         if not condition:
             findings.append({"file": path, "rule": rule})
 
+    if read_bytes is None:
+        read_bytes = lambda path: (root / path).read_bytes()
+
     def file_hash(path):
-        full = root / path
-        return digest(full.read_bytes()) if full.is_file() else None
+        try:
+            return digest(read_bytes(path))
+        except FileNotFoundError:
+            return None
 
     receipt_path = "sync/M3_EXPORT_RECEIPT.json"
     prior = m2_receipt["curated_export_sha256"]
@@ -61,15 +66,15 @@ def audit_m3_export(root, manifest, m2_receipt, m2_validation, receipt, findings
         if current.get(PREFIX + path) != old}
     check(receipt["historical_m2_code_revisions"] == expected_code_revisions,
           receipt_path, "historical_m2_code_revision_mismatch")
-    validation = json.loads((root / PREFIX / "m3_validation.json").read_text(encoding="utf-8"))
+    validation = json.loads(read_bytes(PREFIX + "m3_validation.json"))
     hashes = validation["code_sha256"]
     check(bool(hashes), PREFIX + "m3_validation.json", "m3_code_hashes_missing")
     for path, expected in hashes.items():
         check(current.get(PREFIX + path) == expected == file_hash(PREFIX + path),
               PREFIX + path, "m3_current_code_hash_mismatch")
     curated = PREFIX + "reports/source_feedback_2026-10-28/"
-    curated_hashes = json.loads((root / curated / "curated_file_hashes.json").read_text(encoding="utf-8"))
-    audited_hashes = json.loads((root / curated / "curated_file_hashes_at_audit.json").read_text(encoding="utf-8"))
+    curated_hashes = json.loads(read_bytes(curated + "curated_file_hashes.json"))
+    audited_hashes = json.loads(read_bytes(curated + "curated_file_hashes_at_audit.json"))
     check(set(path.removeprefix(curated) for path in current if path.startswith(curated)) ==
           set(curated_hashes) | {"curated_file_hashes.json"}, receipt_path, "m3_curated_manifest_scope_mismatch")
     for path, expected in curated_hashes.items():

@@ -35,7 +35,31 @@ def exact_keys(obj, required, optional=()):
 
 
 def finite(value):
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
+def check_statistic_definition(item, operator, *, approximate):
+    """Match explicit quantile definitions without converting reported statistics.
+
+    A missing source interpolation convention can only support a declared
+    approximation. The caller validates that approximate checks name existing
+    assumptions. Even an approximation cannot change the quantile probability.
+    """
+    kind = operator.get("kind")
+    if kind in {"median", "quantile"}:
+        require(operator.get("method") == "linear", "Quantile method must be explicitly linear")
+        require(item.get("method") in {"linear", "not_reported"}, "Invalid source quantile method")
+        require(item["method"] == "linear" or approximate,
+                "Unreported source quantile method requires explicit approximation and assumptions")
+        if kind == "quantile":
+            q = operator.get("q")
+            require(finite(q) and 0 <= q <= 1, "Quantile q must be finite and in [0,1]")
+            require(q == item.get("q"), "Source/operator quantile probability mismatch")
 
 
 def bound_file(root, relative):
@@ -80,22 +104,32 @@ def apply_operator(frame, operator):
     """Return value and row accounting; invalid inputs fail rather than drop silently."""
     require(isinstance(frame, pd.DataFrame) and frame.columns.is_unique, "Expected table with unique columns")
     exact_keys(operator, ("kind", "unit", "selection", "missing_policy"),
-               ("column", "x", "y", "outcome", "predictors", "term", "include_intercept", "event"))
+               ("column", "x", "y", "outcome", "predictors", "term", "include_intercept", "event", "q", "method"))
     kind = operator["kind"]
-    require(kind in {"mean", "sd", "correlation", "ols_coefficient", "proportion"}, "Operator not implemented")
+    require(kind in {"mean", "sd", "median", "quantile", "correlation", "spearman_correlation",
+                     "ols_coefficient", "proportion"}, "Operator not implemented")
     require(isinstance(operator["unit"], str) and operator["unit"].strip(), "Unit label required")
     require(operator["missing_policy"] in {"error", "complete_cases"}, "Explicit missing policy required")
     require(isinstance(operator["selection"], list), "Selection must be a list")
     base_fields = {"kind", "unit", "selection", "missing_policy"}
-    fields = {"mean": {"column"}, "sd": {"column"}, "correlation": {"x", "y"},
+    fields = {"mean": {"column"}, "sd": {"column"}, "median": {"column", "method"},
+              "quantile": {"column", "q", "method"}, "correlation": {"x", "y"},
+              "spearman_correlation": {"x", "y"},
               "ols_coefficient": {"outcome", "predictors", "term", "include_intercept"}, "proportion": {"event"}}[kind]
     require(set(operator) == base_fields | fields, "Operator fields do not match its kind")
+    if kind in {"median", "quantile"}:
+        require(operator["method"] == "linear", "Quantile method must be explicitly linear")
+        if kind == "quantile":
+            require(finite(operator["q"]) and 0 <= operator["q"] <= 1,
+                    "Quantile q must be finite and in [0,1]")
+    if kind == "spearman_correlation":
+        require(operator["unit"] == "1", "Spearman correlation unit must be 1")
     selected = frame.copy(deep=False)
     for selection in operator["selection"]:
         selected = selected.loc[condition(selected, selection)]
-    if kind in {"mean", "sd"}:
+    if kind in {"mean", "sd", "median", "quantile"}:
         columns = [operator["column"]]
-    elif kind == "correlation":
+    elif kind in {"correlation", "spearman_correlation"}:
         columns = [operator["x"], operator["y"]]
         require(columns[0] != columns[1], "Correlation requires distinct variables")
     elif kind == "ols_coefficient":
@@ -127,6 +161,9 @@ def apply_operator(frame, operator):
                 require(np.isfinite(used[col].to_numpy(dtype=float)).all(), "Nonfinite event values")
     if kind == "mean":
         value = float(used[columns[0]].mean())
+    elif kind in {"median", "quantile"}:
+        q = 0.5 if kind == "median" else operator["q"]
+        value = float(np.quantile(used[columns[0]].to_numpy(dtype=float), q, method="linear"))
     elif kind == "sd":
         if len(used) < 2:
             raise NotComputable("Sample SD requires at least two rows")
@@ -135,6 +172,13 @@ def apply_operator(frame, operator):
         if len(used) < 2 or any(used[c].std(ddof=1) == 0 for c in columns):
             raise NotComputable("Pearson correlation requires nonconstant variables")
         value = float(np.corrcoef(used[columns].to_numpy(dtype=float), rowvar=False)[0, 1])
+    elif kind == "spearman_correlation":
+        if len(used) < 2 or any(used[c].nunique() < 2 for c in columns):
+            raise NotComputable("Spearman correlation requires at least two rows and nonconstant ranks")
+        # Rank only the complete selected pairs. Average ties, then compute the
+        # Pearson correlation of those ranks; the no-ties shortcut is not valid.
+        ranks = used[columns].rank(method="average").to_numpy(dtype=float)
+        value = float(np.corrcoef(ranks, rowvar=False)[0, 1])
     elif kind == "ols_coefficient":
         matrix = used[operator["predictors"]].to_numpy(dtype=float)
         terms = list(operator["predictors"])
@@ -199,9 +243,10 @@ def run_source_checks(bundle, candidate):
         require(finite(item["estimate"]), "Numeric source estimate required")
         operator = check["operator"]
         kind = operator["kind"]
-        if kind in {"mean", "sd"}:
+        check_statistic_definition(item, operator, approximate=check["status"] == "approximate")
+        if kind in {"mean", "sd", "median", "quantile"}:
             used_variables = {operator.get("column")}
-        elif kind == "correlation":
+        elif kind in {"correlation", "spearman_correlation"}:
             used_variables = {operator.get("x"), operator.get("y")}
         elif kind == "proportion":
             used_variables = {operator.get("event", {}).get("column")}

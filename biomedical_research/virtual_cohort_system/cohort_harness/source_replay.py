@@ -12,11 +12,11 @@ import csv
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import execution
+from . import execution, source_checks
 from .contracts import exact_keys, require, string_list, text, validate_input
 from .lifecycle import (_bundle, _candidate, _files, _path, freeze_candidate,
                         read_json, read_table, sha256, verify_candidate)
-from .source_checks import NotComputable, apply_operator, finite
+from .source_checks import NotComputable, apply_operator, check_statistic_definition, finite
 
 
 def _check_metadata(check, evidence, assumptions, context_assumptions):
@@ -37,9 +37,10 @@ def _check_metadata(check, evidence, assumptions, context_assumptions):
     require(operator.get("unit") == item["unit"], "Source/operator unit-label mismatch")
     require(finite(item["estimate"]), "Numeric source estimate required")
     kind = operator["kind"]
-    if kind in {"mean", "sd"}:
+    check_statistic_definition(item, operator, approximate=check["status"] == "approximate")
+    if kind in {"mean", "sd", "median", "quantile"}:
         variables = {operator.get("column")}
-    elif kind == "correlation":
+    elif kind in {"correlation", "spearman_correlation"}:
         variables = {operator.get("x"), operator.get("y")}
     elif kind == "ols_coefficient":
         require(isinstance(operator.get("predictors"), list), "OLS predictors must be a list")
@@ -231,11 +232,12 @@ def run_source_replay(bundle, candidate, replay_id, seed, *, runtime=None,
         records.append(_context_record(root, frozen, context, source, task, child,
                                        evidence, assumptions, limits))
     report = {
-        "schema_version": 1, "kind": "execution_backed_source_replay", "replay_id": replay_id,
+        "schema_version": 2, "kind": "execution_backed_source_replay", "replay_id": replay_id,
         "created_utc": datetime.now(timezone.utc).isoformat(),
         "status": "success" if all(r["status"] == "success" for r in records) else "failed",
         "scope": "source_statistic_diagnostics_only", "parent": parent, "limits": limits,
         "contexts": records, "engine_sha256": sha256(__file__),
+        "operator_engine_sha256": sha256(source_checks.__file__),
         "files": {name: sha256(_path(replay, name)) for name in _files(replay)},
         "limitations": [
             "Covariate population and identity measurement mapping are declarations requiring substantive review.",
@@ -253,12 +255,17 @@ def verify_source_replay(bundle, replay_id, *, candidate=None):
     replay_id = execution._name(replay_id)
     replay = _path(root, "source_replays/" + replay_id, file=False)
     report = read_json(_path(replay, "replay.json"))
+    require(isinstance(report, dict) and type(report.get("schema_version")) is int and report["schema_version"] == 2,
+            "Source replay report version changed; use the recorded engine version for historical reports")
     exact_keys(report, {"schema_version", "kind", "replay_id", "created_utc", "status", "scope", "parent",
-                        "limits", "contexts", "engine_sha256", "files", "limitations"}, where="source replay report")
-    require(report["schema_version"] == 1 and report["kind"] == "execution_backed_source_replay" and
+                        "limits", "contexts", "engine_sha256", "operator_engine_sha256", "files", "limitations"},
+               where="source replay report")
+    require(report["kind"] == "execution_backed_source_replay" and
             report["replay_id"] == replay_id, "Invalid source replay identity")
     require(report["scope"] == "source_statistic_diagnostics_only", "Source replay overstates its scope")
     require(report["engine_sha256"] == sha256(__file__), "Source replay engine changed; use the recorded engine version")
+    require(report["operator_engine_sha256"] == sha256(source_checks.__file__),
+            "Source statistic operator engine changed; use the recorded engine version")
     limits = report["limits"]
     require(isinstance(limits, dict), "Source replay limits must be an object")
     execution._limits(**limits)

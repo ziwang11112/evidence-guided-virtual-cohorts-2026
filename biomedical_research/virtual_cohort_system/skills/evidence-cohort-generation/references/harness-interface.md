@@ -1,6 +1,6 @@
 # Harness interface: contracts and explicit adapters
 
-At the harness project root supplied with the task (the directory containing `cohort_harness/`), read `README.md` and `cohort_harness/contracts.py` for the authoritative field schemas. Current examples and validation messages also help. This skill may be installed outside that project, so do not infer the project location from the skill's parent folders. Do not infer unavailable tools from a proposed future architecture.
+At the harness project root supplied with the task (the directory containing `cohort_harness/`), read `cohort_harness/contracts.py` for authoritative field schemas and the task-approved interface documents for supplied adapters. Project README files, milestone reports and other cases can contain target results: do not open them as interface documentation unless the task explicitly admits their contents. This skill may be installed outside the project, so do not infer its location from the skill's parent folders. Do not infer unavailable tools from a proposed future architecture.
 
 ## Available boundary
 
@@ -80,6 +80,8 @@ If a command rejects an artifact, fix its declared contract or record the limita
 ## Execution-backed source feedback
 
 For a supplied enrichment-program replay, read `docs/SOURCE_REPLAY.md` in the harness project. Put the recipe and covariate-only input files inside the candidate before freezing. Source inputs have exactly the task identifier and observed columns; generated outcomes are prohibited. The current adapter supports identity measurement mapping only; retain original reported values and explicit derivations if preparing source evidence in task units. Unsupported statistics remain unreplayed rather than relabelled.
+
+`docs/SOURCE_CHECKS.md` defines available estimators, including explicitly typed quantiles and Spearman correlation. If a fixed-seed source portfolio is supplied, `docs/SOURCE_PORTFOLIO.md` explains its scope. These are source interfaces; validation-design and result documents belong to the evaluator. Inspect every scheduled diagnostic and any trade-offs, without interpreting repeated generator draws as new source-study evidence.
 
 ```text
 python -m cohort_harness source-replay --bundle PATH --candidate NAME --replay-id NEW_ID --seed SEED --runtime CONFIG

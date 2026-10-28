@@ -1,10 +1,10 @@
 # Evidence-guided virtual cohort system
 
-Version 0.3.0 — source feedback and one reserved public-data pilot, 28 October 2026. M1/M2 reports remain historical snapshots.
+Version 0.4.0 — broader source diagnostics and a retention decision, 28 October 2026. M1–M3 reports remain historical snapshots.
 
-See [M3 results and limitations](MILESTONE_3_RESULTS.md), [current validation](m3_validation.json), [historical M2 progress](MILESTONE_2_PROGRESS.md), and the [interactive architecture document](docs/system-explorer/index.html). The HTML retains its labelled M1 snapshot and links to newer progress.
+See [M4 source-only development results](MILESTONE_4_RESULTS.md), [current validation](m4_validation.json), [M3 target results and limitations](MILESTONE_3_RESULTS.md), [historical M2 progress](MILESTONE_2_PROGRESS.md), and the [interactive architecture document](docs/system-explorer/index.html). The HTML retains its labelled M1 snapshot and links to newer progress.
 
-The objective is to let a capable Agent integrate permitted research evidence into reusable virtual data for biomedical analysis. The system supports three task contracts: whole-cohort generation, enrichment with an entirely unmeasured variable, and completion of missing cells. Program generation and direct row submission are both legitimate routes. M1 supplied contracts/checks; M2 added literature access and explicit execution. M3 links enrichment-program execution to source feedback and Agent revision. One TG pilot showed partial improvement and a worsened sex contrast; general superiority remains unestablished.
+The objective is to let a capable Agent integrate permitted research evidence into reusable virtual data for biomedical analysis. The system supports three task contracts: whole-cohort generation, enrichment with an entirely unmeasured variable, and completion of missing cells. Program generation and direct row submission are both legitimate routes. M1 supplied contracts/checks; M2 added literature access and explicit execution. M3 links enrichment-program execution to source feedback and Agent revision. One TG pilot showed partial improvement and a worsened sex contrast; general superiority remains unestablished. M4 adds median/quantile/Spearman source checks and fixed-seed feedback portfolios. The Agent retained the inherited model; no new target evaluation or performance gain is claimed.
 
 ## Responsibilities
 
@@ -116,3 +116,7 @@ The output reports the computed statistic, reported statistic, difference, rows 
 4. **Fresh scientific confirmation.** Audit public-case eligibility; freeze method and reserved analyses; compare generated-data analytical utility. Keep existing HDL/insulin cases as development evidence. Evaluate uncertainty separately before claiming calibration.
 
 Do not start a large experiment matrix, new training job or compulsory multi-Agent system merely because the contracts pass. The milestone report records what was actually exercised and what remains unimplemented.
+
+## Current source-feedback interfaces
+
+See [source statistic definitions](docs/SOURCE_CHECKS.md) and [fixed-seed source portfolios](docs/SOURCE_PORTFOLIO.md). Blinded builders must receive only task-approved interface/source inputs; this README and milestone reports contain target results and are evaluator/controller material.

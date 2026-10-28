@@ -261,15 +261,27 @@ def validate_evidence(evidence: dict, task: dict) -> set[str]:
     for item in evidence["items"]:
         exact_keys(item, {"id", "source_id", "locator", "variables", "kind", "estimate", "unit",
                           "uncertainty", "adjustment", "selection", "applicability"},
-                   {"statistic_name"}, where="evidence item")
+                   {"statistic_name", "q", "method"}, where="evidence item")
         for field in ("id", "source_id", "locator", "selection", "applicability"):
             text(item[field], f"item.{field}")
         text(item["unit"], "item.unit", empty=True)
         require(item["id"] not in item_ids, "Duplicate evidence ID")
         item_ids.add(item["id"])
         require(item["source_id"] in source_ids, "Unknown evidence source")
-        require(item["kind"] in {"mean", "sd", "correlation", "ols_coefficient", "proportion", "contextual", "reported_other"},
+        require(item["kind"] in {"mean", "sd", "median", "quantile", "correlation", "spearman_correlation",
+                                 "ols_coefficient", "proportion", "contextual", "reported_other"},
                 "Invalid evidence kind")
+        if item["kind"] in {"median", "quantile"}:
+            require(isinstance(item.get("method"), str) and item["method"] in {"linear", "not_reported"},
+                    "Median/quantile evidence requires method linear or not_reported")
+        else:
+            require("method" not in item, "method only applies to median or quantile evidence")
+        if item["kind"] == "quantile":
+            require("q" in item, "Quantile evidence requires q")
+            number(item["q"], "item.q")
+            require(0 <= item["q"] <= 1, "Quantile q outside [0,1]")
+        else:
+            require("q" not in item, "q only applies to quantile evidence")
         if item["kind"] == "reported_other":
             require("statistic_name" in item, "reported_other requires statistic_name")
             text(item["statistic_name"], "item.statistic_name")
@@ -283,8 +295,10 @@ def validate_evidence(evidence: dict, task: dict) -> set[str]:
             number(item["estimate"], "item.estimate")
             if item["kind"] == "sd":
                 require(item["estimate"] >= 0, "SD cannot be negative")
-            if item["kind"] == "correlation":
+            if item["kind"] in {"correlation", "spearman_correlation"}:
                 require(-1 <= item["estimate"] <= 1, "Correlation outside [-1,1]")
+            if item["kind"] == "spearman_correlation":
+                require(item["unit"] == "1", "Spearman correlation unit must be '1'")
             if item["kind"] == "proportion":
                 require(item["unit"] in {"1", "%"}, "Proportion unit must be '1' or '%'")
                 maximum = 1 if item["unit"] == "1" else 100

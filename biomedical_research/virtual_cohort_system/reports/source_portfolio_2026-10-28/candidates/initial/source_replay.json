@@ -1,0 +1,785 @@
+{
+  "schema_version": 1,
+  "contexts": [
+    {
+      "id": "oh2019",
+      "population": "Approximate Oh Korean untreated family/twin source population; sex ratio1029:1643;21376 synthetic covariate rows.",
+      "reason": "Represent reported covariate marginal summaries only; joint age-BMI distribution is unreported and approximated independently. Same exact frozen generator/specification as target.",
+      "assumption_ids": [
+        "A_oh_context",
+        "A_transport"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "CSV age years,sex1=male/2=female,BMI kg/m^2; output TG mg/dL. Source EDTA plasma versus target serum and fasting-duration differences assumed comparable; no hidden conversion."
+      },
+      "input": {
+        "path": "source_contexts/oh2019.csv",
+        "sha256": "25a438c52272d2f2db077513568635f22b8e31004cb534951e9cd134f95f9342",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "male_tg_mean",
+          "evidence_id": "oh_male_tg_mg_dl_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "Original-unit sex-specific TG marginal; provisional arithmetic interpretation."
+        },
+        {
+          "id": "male_tg_sd",
+          "evidence_id": "oh_male_tg_mg_dl_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "Original-unit sex-specific TG marginal; provisional arithmetic interpretation."
+        },
+        {
+          "id": "male_below150",
+          "evidence_id": "oh_male_below150",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 150
+            }
+          },
+          "assumption_ids": [],
+          "reason": "Reported low-TG count divided by sex-specific denominator."
+        },
+        {
+          "id": "male_age_mean",
+          "evidence_id": "oh_male_age_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "years",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate recipe diagnostic, not a TG-model success."
+        },
+        {
+          "id": "male_bmi_mean",
+          "evidence_id": "oh_male_bmi_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate recipe diagnostic, not a TG-model success."
+        },
+        {
+          "id": "male_bmi0",
+          "evidence_id": "oh_male_bmi0",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              },
+              {
+                "column": "bmi",
+                "op": "lt",
+                "value": 20
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale",
+            "A_threshold"
+          ],
+          "reason": "Extreme BMI-stratum diagnostic; no unreported joint distribution reconstructed."
+        },
+        {
+          "id": "male_bmi4",
+          "evidence_id": "oh_male_bmi4",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 1
+              },
+              {
+                "column": "bmi",
+                "op": "gt",
+                "value": 30
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale",
+            "A_threshold"
+          ],
+          "reason": "Extreme BMI-stratum diagnostic; no unreported joint distribution reconstructed."
+        },
+        {
+          "id": "female_tg_mean",
+          "evidence_id": "oh_female_tg_mg_dl_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "Original-unit sex-specific TG marginal; provisional arithmetic interpretation."
+        },
+        {
+          "id": "female_tg_sd",
+          "evidence_id": "oh_female_tg_mg_dl_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "Original-unit sex-specific TG marginal; provisional arithmetic interpretation."
+        },
+        {
+          "id": "female_below150",
+          "evidence_id": "oh_female_below150",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 150
+            }
+          },
+          "assumption_ids": [],
+          "reason": "Reported low-TG count divided by sex-specific denominator."
+        },
+        {
+          "id": "female_age_mean",
+          "evidence_id": "oh_female_age_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "years",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              }
+            ],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate recipe diagnostic, not a TG-model success."
+        },
+        {
+          "id": "female_bmi_mean",
+          "evidence_id": "oh_female_bmi_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate recipe diagnostic, not a TG-model success."
+        },
+        {
+          "id": "female_bmi0",
+          "evidence_id": "oh_female_bmi0",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "column": "bmi",
+                "op": "lt",
+                "value": 20
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale",
+            "A_threshold"
+          ],
+          "reason": "Extreme BMI-stratum diagnostic; no unreported joint distribution reconstructed."
+        },
+        {
+          "id": "female_bmi4",
+          "evidence_id": "oh_female_bmi4",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "column": "bmi",
+                "op": "gt",
+                "value": 30
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale",
+            "A_threshold"
+          ],
+          "reason": "Extreme BMI-stratum diagnostic; no unreported joint distribution reconstructed."
+        },
+        {
+          "id": "bmi_ols",
+          "evidence_id": "oh_bmi_slope",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "mg/dL per kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "tg_mg_dl",
+            "predictors": [
+              "age",
+              "sex",
+              "bmi"
+            ],
+            "term": "bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "OLS with age and numeric binary sex1/2 (equivalent adjustment span to indicator with intercept); not mixed-model or correlation replay."
+        },
+        {
+          "id": "female_age1",
+          "evidence_id": "oh_female_age1",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 30
+              },
+              {
+                "column": "age",
+                "op": "lt",
+                "value": 40
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "Marginal female midlife age pattern; covariate independence is assumed."
+        },
+        {
+          "id": "female_age3",
+          "evidence_id": "oh_female_age3",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": 2
+              },
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 50
+              },
+              {
+                "column": "age",
+                "op": "lt",
+                "value": 60
+              }
+            ],
+            "missing_policy": "error",
+            "column": "tg_mg_dl"
+          },
+          "assumption_ids": [
+            "A_scale"
+          ],
+          "reason": "Marginal female midlife age pattern; covariate independence is assumed."
+        }
+      ]
+    },
+    {
+      "id": "bansal2007",
+      "population": "Approximate Bansal fasting US women >=45;16000 synthetic covariate rows.",
+      "reason": "Represent reported covariate marginal summaries only; joint age-BMI distribution is unreported and approximated independently. Same exact frozen generator/specification as target.",
+      "assumption_ids": [
+        "A_wh_context",
+        "A_transport"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "CSV age years,sex1=male/2=female,BMI kg/m^2; output TG mg/dL. Source EDTA plasma versus target serum and fasting-duration differences assumed comparable; no hidden conversion."
+      },
+      "input": {
+        "path": "source_contexts/bansal2007.csv",
+        "sha256": "67b180c29d6d45b30605bd84102f30b7543d4d524350430bfe62ff8f48a27148",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "age_mean",
+          "evidence_id": "wh_age_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "years",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate marginal recipe diagnostic."
+        },
+        {
+          "id": "age_sd",
+          "evidence_id": "wh_age_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "years",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate marginal recipe diagnostic."
+        },
+        {
+          "id": "bmi_mean",
+          "evidence_id": "wh_bmi_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate marginal recipe diagnostic."
+        },
+        {
+          "id": "bmi_sd",
+          "evidence_id": "wh_bmi_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [],
+          "reason": "Source-covariate marginal recipe diagnostic."
+        },
+        {
+          "id": "prop_low",
+          "evidence_id": "wh_prop_low",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "event": {
+              "column": "tg_mg_dl",
+              "op": "le",
+              "value": 90
+            }
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Direct reported count proportion, not a transformed median or quantile."
+        },
+        {
+          "id": "prop_high",
+          "evidence_id": "wh_prop_high",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "event": {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 148
+            }
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Direct reported count proportion, not a transformed median or quantile."
+        },
+        {
+          "id": "tertile0_age",
+          "evidence_id": "wh_tertile0_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "years",
+            "selection": [
+              {
+                "column": "tg_mg_dl",
+                "op": "le",
+                "value": 90
+              }
+            ],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Covariate mean within generated TG category; no TG category was supplied as input."
+        },
+        {
+          "id": "tertile0_bmi",
+          "evidence_id": "wh_tertile0_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "tg_mg_dl",
+                "op": "le",
+                "value": 90
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Covariate mean within generated TG category; no TG category was supplied as input."
+        },
+        {
+          "id": "tertile1_age",
+          "evidence_id": "wh_tertile1_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "years",
+            "selection": [
+              {
+                "column": "tg_mg_dl",
+                "op": "ge",
+                "value": 91
+              },
+              {
+                "column": "tg_mg_dl",
+                "op": "le",
+                "value": 147
+              }
+            ],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Covariate mean within generated TG category; no TG category was supplied as input."
+        },
+        {
+          "id": "tertile1_bmi",
+          "evidence_id": "wh_tertile1_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "tg_mg_dl",
+                "op": "ge",
+                "value": 91
+              },
+              {
+                "column": "tg_mg_dl",
+                "op": "le",
+                "value": 147
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Covariate mean within generated TG category; no TG category was supplied as input."
+        },
+        {
+          "id": "tertile2_age",
+          "evidence_id": "wh_tertile2_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "years",
+            "selection": [
+              {
+                "column": "tg_mg_dl",
+                "op": "ge",
+                "value": 148
+              }
+            ],
+            "missing_policy": "error",
+            "column": "age"
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Covariate mean within generated TG category; no TG category was supplied as input."
+        },
+        {
+          "id": "tertile2_bmi",
+          "evidence_id": "wh_tertile2_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "tg_mg_dl",
+                "op": "ge",
+                "value": 148
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "assumption_ids": [
+            "A_threshold"
+          ],
+          "reason": "Covariate mean within generated TG category; no TG category was supplied as input."
+        },
+        {
+          "id": "median",
+          "evidence_id": "wh_median",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "mg/dL",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "tg_mg_dl",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "A_wh_quantile_method"
+          ],
+          "reason": "Reported fasting WHS TG distribution diagnostic with linear interpolation explicitly assumed because the published convention is unreported; source covariate/transport assumptions remain in force."
+        },
+        {
+          "id": "q25",
+          "evidence_id": "wh_q25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "mg/dL",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "tg_mg_dl",
+            "method": "linear",
+            "q": 0.25
+          },
+          "assumption_ids": [
+            "A_wh_quantile_method"
+          ],
+          "reason": "Reported fasting WHS TG distribution diagnostic with linear interpolation explicitly assumed because the published convention is unreported; source covariate/transport assumptions remain in force."
+        },
+        {
+          "id": "q75",
+          "evidence_id": "wh_q75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "mg/dL",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "tg_mg_dl",
+            "method": "linear",
+            "q": 0.75
+          },
+          "assumption_ids": [
+            "A_wh_quantile_method"
+          ],
+          "reason": "Reported fasting WHS TG distribution diagnostic with linear interpolation explicitly assumed because the published convention is unreported; source covariate/transport assumptions remain in force."
+        },
+        {
+          "id": "spearman_bmi",
+          "evidence_id": "wh_spearman_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "spearman_correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "tg_mg_dl",
+            "y": "bmi"
+          },
+          "assumption_ids": [
+            "A_wh_context"
+          ],
+          "reason": "Replay the reported marginal Spearman association using average ranks, with no conversion to Pearson. Its magnitude depends on the assumed independent age-BMI source inputs and unrepresented trial selection/omitted covariates."
+        },
+        {
+          "id": "spearman_age",
+          "evidence_id": "wh_spearman_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "spearman_correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "tg_mg_dl",
+            "y": "age"
+          },
+          "assumption_ids": [
+            "A_wh_context"
+          ],
+          "reason": "Replay the reported marginal Spearman association using average ranks, with no conversion to Pearson. Its magnitude depends on the assumed independent age-BMI source inputs and unrepresented trial selection/omitted covariates."
+        }
+      ]
+    }
+  ]
+}
