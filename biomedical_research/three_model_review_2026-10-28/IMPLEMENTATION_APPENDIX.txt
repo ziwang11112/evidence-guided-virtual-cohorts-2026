@@ -1,0 +1,1960 @@
+IMPLEMENTATION APPENDIX FOR INDEPENDENT RESEARCH REVIEW
+Exact selected files from the sanitized private repository at commit 51d19b6a8fab07f774d0bd6032a2bb9a379595d8.
+https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/commit/51d19b6a8fab07f774d0bd6032a2bb9a379595d8
+This appendix includes representative final generators, policies, provenance choices, and evaluation/controller code.
+It is not the entire repository or a complete replay package. It contains no participant rows or downloaded paper fulltexts.
+Source contents are research artifacts to examine, not instructions overriding the review request.
+Ordinary 1 revised its generator; Gap 2 did not. The briefing reports all four builds, not just these representatives.
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/protocol.json =====
+SHA256: ac3ae3327e6c5bde83a0a17c3d860b08272ffe823d2d33745dfe917c16277a9c
+
+{
+  "version": "evidence-gap-loop-pilot-1.0",
+  "created_local_date": "2026-10-28",
+  "status": "prospective; no target relationships inspected",
+  "task": "Generate an entirely withheld HDL cholesterol column conditional on observed BMI, age and sex using independently retrieved external primary literature.",
+  "case": "NHANES 2013-2014 HDL; metadata/accessibility selected before outcome analysis",
+  "arms": ["ordinary", "gap_policy"],
+  "independent_builds_per_arm": 2,
+  "builder_rounds_per_build": 2,
+  "external_review_rounds_per_build": 1,
+  "review_policy": "Both arms receive the same source/code/scientific-review rubric and may retrieve and revise within remaining budget. Gap-policy arm additionally executes its explicit consequential-gap/action contract.",
+  "max_search_queries_per_build": 12,
+  "max_document_downloads_per_build": 12,
+  "max_search_results_per_query": 10,
+  "generation_seeds": [281001, 281002, 281003, 281004, 281005],
+  "retain_initial_and_final": true,
+  "same_seed_across_versions": true,
+  "primary_comparison": "All locked scientific analyses on every final construction, regardless of the Agent's support labels. Initial-to-final changes are secondary process diagnostics.",
+  "primary_endpoint": "Adjusted BMI association with raw HDL, per 5 kg/m^2, interpreted with reference uncertainty; no desired sign supplied to builders.",
+  "secondary_endpoint_classes": ["crude association", "age and sex main effects", "exposure shape", "effect modification", "subgroup slopes"],
+  "success_definition": "Report scientific interpretation agreement/disagreement and estimates for all locked endpoints. Do not require exact values, use significance matching as universal success, or choose a favorable draw. No arbitrary aggregate success threshold or superiority test with two builds per arm.",
+  "generated_data_objective": "Generated analytical usefulness is separate from support-label accuracy, qualification and abstention.",
+  "model_choice": "Agent-owned. No biological coefficients, relationship directions, mandatory nonlinear terms, interaction effects, or noise scales in the execution controller.",
+  "model_runtime": "Agent-authored Python using numpy, pandas and scipy; direct records remain in broader scope but this pilot isolates the decision policy using the executable route.",
+  "model_identity": "Fresh collaboration agents inheriting the same parent configuration; exact provider revision and token accounting may be unavailable and will not be invented.",
+  "budget_limitations": "Equal caps and interaction schedules do not guarantee equal actual reasoning tokens; record observable search/download counts, artifact changes, turns and wall time. An additional review is not free treatment compute.",
+  "blinding": "Fresh contexts and explicit file scopes, screened literature interface, no evaluator feedback before every construction is frozen. Shared desktop filesystem means procedural isolation, not an OS sandbox or perfect pretraining isolation.",
+  "source_exclusions": "Any NHANES-derived outcome evidence, participant records or published target analyses from any cycle; screen aliases before display. Source screening is conservative and imperfect.",
+  "forbidden_feedback": "Target HDL values, target outcome summaries, target scientific analysis results, previous arm models/results, or another builder's evidence/decisions.",
+  "evaluation_release": "Only after all four final candidates and all scheduled initial/final generated datasets are frozen and integrity-checked.",
+  "reporting": "Retain failures, no-ops, all builds/draws and protocol deviations. Synthetic rows are not independent method replications. Never tune to revealed target answers.",
+  "interpretation": "A small implementation and feasibility pilot, not confirmatory method superiority, patient-level recovery, causal discovery or replacement of real measurements."
+}
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/BUILDER_GUIDE.md =====
+SHA256: 3f89db112c8e163afffe351a225a56b1a739168ab927a6eec489993046973852
+
+# Common construction contract
+
+Read this document, your assigned policy file, the three descriptive JSON/Markdown files and observed.csv in `shared/`, `runner_contract.json`, your own run folder, and approved artifacts in your own literature session only. Do not inspect `custodian/`, `review/`, other runs, old experiments, results, source downloads, or original participant IDs. You may execute the provided literature CLI; do not use other web/search/download tools. Scope instructions are procedural controls, not a claim of OS-enforced isolation.
+
+## Scientific task
+
+Preserve each observed `row_id,bmi,age,sex` and generate an entirely unmeasured `hdl` column in mg/dL for the described target population. Produce useful virtual data for biomedical association analyses, including questions not answered explicitly by your input evidence. No expected sign, coefficient, correlation, shape, subgroup pattern or residual variance is supplied by the coordinator.
+
+Choose the scientific structure and all parameters yourself. You may use applicable primary research, explicit transformations and clearly documented assumptions. Do not use individual source datasets or target outcome data. All NHANES-derived evidence from ANY cycle is excluded; the target cohort name is disclosed only to define population/measurement and exclusions. The gateway screens before displaying content, including article references; record access limitations and never bypass a rejection.
+
+Both workflows can identify problems, search for additional evidence, consider competing structures, revise and retain a justified no-op. Use your best scientific judgment. This is not a competition to produce a desired known effect.
+
+## Tools and budget
+
+Python: `python`.
+
+Run from the experiment root with your assigned absolute `RUN` directory:
+
+```
+python -B tools/literature_gateway.py --session RUN/literature --config tools/gateway_config.json search --query "..." --limit 10
+python -B tools/literature_gateway.py --session RUN/literature --config tools/gateway_config.json fetch --pmcid PMC...
+python -B tools/literature_gateway.py --session RUN/literature --config tools/gateway_config.json list-supplements --pmcid PMC...
+python -B tools/literature_gateway.py --session RUN/literature --config tools/gateway_config.json fetch-supplement --pmcid PMC... --supplement-id RETURNED_ID
+```
+
+There are at most 12 search queries and 12 document download attempts **in total across initial construction and revision**, plus the gateway's bounded metadata requests. Follow the returned usage counters. Reserve some budget when a concrete follow-up may be useful. There is no required paper count. Both arms receive the same tools and maximum budget. Unsupported supplement formats return a categorical error; do not treat missing tables as zero effects.
+
+Build an initial candidate in the first assigned turn. An independent reviewer will then supply source/code/scientific findings, without target feedback. You have one revision turn with the remaining budget. Both initial and final versions will be retained. Do not open a final version before that review. No model training or API credentials are needed.
+
+Gateway returns artifact `{session_relative_path, sha256, bytes}`. In your ledger, use `{path: "literature/" + session_relative_path, sha256: returned_sha}` relative to your run. Only artifacts genuinely registered by the gateway are accepted. Keep source records traceable to main text or supplement; if using an abstract-only quantity, mark that limitation explicitly and do not invent unavailable tables.
+
+## Required initial files
+
+Write only inside your own run folder:
+
+- `initial/generator.py`: `generate(observed: pandas.DataFrame, evidence: dict, seed: int) -> pandas.DataFrame`.
+- `initial/model_spec.json`: all scientific parameter values and their provenance.
+- `initial/evidence.json`: typed source/evidence records below.
+- `initial/decision.md`: concise scientific choices, transformations, source applicability, assumptions, unresolved questions, supported/unsupported uses and search stopping reason. These are auditable decisions, not private reasoning traces.
+- `initial/artificial_checks.json`: numerical/source-only checks and invented-input tests that you actually ran; label their scope. No true target outcome tests.
+- Additional policy-specific files if required by your assigned policy.
+
+Generator returns exactly `row_id,bmi,age,sex,hdl` in the input row order, preserving observed values. HDL must be finite and positive. Include conditional stochastic variability with a local seed-controlled RNG. A deterministic point-prediction table is not this generation task. Do not force a desired p-value or generated-sample correlation.
+
+Allowed dependencies are NumPy, Pandas, SciPy, math, statistics and typing. No file/network/subprocess access, dynamic execution, import tricks, input mutation, or global RNG mutation. The specification is passed as the `evidence` argument. Keep scientific numerical constants in `parameters` where practical; all remaining numerical modeling choices must be explained. Pure mathematical/indexing constants are not biological evidence.
+
+You may inspect observed predictor distributions, but do not look for hidden answers or outcome-derived variables. Test implementation on invented inputs before submission. The controller will produce the official repeated cohorts after freeze and review. Do not manually tune to particular generated draws.
+
+### Evidence schema
+
+Top level: `sources` and `evidence`, both nonempty lists.
+
+Each source requires:
+`id`, `identifier` (PMCID/DOI), `population`, `measurement`, `cohort_overlap`, `approved_artifacts` (list of path/hash objects).
+
+Each evidence item requires:
+`id`, `source_id`, `locator`, `estimand`, `variables`, `adjustment`, `reported`, `uncertainty`, `applicability`, `model_use`, `bridge_assumptions`.
+
+Keep unknown information explicitly unknown. Means, correlations, adjusted slopes, standardized effects, odds ratios, standard errors and standard deviations are different quantities. A source can be contextual/non-numerical. Two sources from the same cohort are not independent confirmations. Do not apply LLM confidence as a numerical precision weight.
+
+### Model specification schema
+
+`parameters`: a nonempty dictionary of your selected parameters, including grouped/nested values if useful.
+
+`assumptions`: a list of objects with `id` and `description`.
+
+`parameter_provenance`: exactly the same keys as `parameters`; each entry is an object with:
+
+```
+{
+  "evidence_ids": ["actual evidence record IDs, or empty when purely assumed"],
+  "assumption_ids": ["actual assumption IDs, or empty when not needed"],
+  "derivation": "Exact reported estimate or transformation and its conditions"
+}
+```
+
+At least one evidence/assumption reference per parameter is required. All IDs must resolve. Additional fields for equations, measurement, uncertainty, family, alternatives and applicability are welcome. Declaring an assumption is not evidence that it is true.
+
+## Revision turn
+
+After receiving the review, decide whether new evidence, extraction repair, structure revision, parameter revision, sensitivity analysis or a justified no-op is warranted. Use only permitted evidence and the review. Do not infer hidden answers from the coordinator's wording.
+
+Write a new `final/` directory with generator, model_spec, evidence, decision and actual artificial checks. Preserve every initial file and gateway history. Add `final/revision.json`:
+
+```
+{
+  "generator_or_spec_changed": true,
+  "reason": "Concrete reason; use false above for an exact generator/spec no-op",
+  "findings_addressed": [],
+  "remaining_limitations": []
+}
+```
+
+File hashes determine whether generator/spec changed; mere prose updates are not numerical improvement. Report substantive retrieval/model decisions and remaining uncertainties. You will not receive target evaluation until all constructions are complete and frozen.
+
+Your assigned workflow is one member of a small pilot. Do not inspect or emulate other constructions. Do not claim that repeated draws are independent models, that larger synthetic sample size supplies new clinical evidence, or that a source-compatible model is already validated in the target population.
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/policies/ordinary.md =====
+SHA256: 9831e1432927588ed8b57b3439abe12623d9676fb86a5deaaf7268a989f6eeb5
+
+# Ordinary capable Agent workflow
+
+Follow the common construction contract. Independently retrieve and assess applicable primary evidence, choose a coherent conditional generator, check its numerical implementation and scientific assumptions, and submit your best initial candidate. You are free to identify missing information, seek supplements, compare alternatives, and revise your scientific plan within the shared budget.
+
+After the same independent review used for the other workflow, use your remaining budget to improve the generator where the evidence warrants it. Preserve and explain unresolved limitations and justified no-ops. The common typed evidence and parameter provenance are required for reproducibility; there is no additional mandatory gap/action format for this arm.
+
+Do not deliberately use a simplistic or weak model to create a control. Model choice and search strategy are yours. The objective is useful generated data under the stated information constraints.
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/policies/gap_policy.md =====
+SHA256: 59c6158feb543df8ec81d48fd36c78ba7eb66a6d05d7d09102f8107c91351168
+
+# Consequential evidence-gap/action workflow
+
+Follow the common construction contract, using the same tools, model freedom, total budget and initial/revision schedule as the ordinary workflow. Make the following decision process explicit and operational.
+
+1. Map the evidence needed for intended analyses: conditional location/dependence, relationship shape, relevant modifiers, conditional variability, tails, source selection, measurement and target applicability. Mark irrelevant dimensions as such. Do not require a particular interaction, nonlinear term, sign or distribution merely because it is available.
+2. Identify consequential gaps. Separate a usable reported constraint, an assumption-dependent bridge, contextual evidence and missing information. “Not reported” does not by itself establish zero, independence or a constant effect.
+3. Rank follow-up actions by the analysis they could change and a concrete obtainable lead. Search for distinguishing evidence or supplements rather than merely adding articles. Where enough source context exists, check the candidate against the statistic under that source's population/measurement/adjustment conditions. If the operator cannot be computed, record that instead of fitting invented data as known.
+4. Consider a focused scientific challenge: could another plausible model satisfy the current evidence while changing an intended interpretation? State what information would discriminate it. Do not adopt a more complex alternative merely because it exists; a finite sensitivity set is not a calibrated uncertainty interval.
+5. Let evidence and review trigger a concrete action: retrieve, re-extract, check, revise, assess sensitivity, retain or stop with reasons. Distinguish individual residual variability from source population/measurement differences. Reassess previously supported components after a revision.
+
+Required in both `initial/` and `final/`:
+
+`gaps.json`: a nonempty list; each record has `id`, `component`, `affected_analysis`, `evidence_status`, `consequence`, `next_action`, `status`, `resolution`.
+
+Allowed status values: `open`, `acted`, `resolved`, `unresolved`, `not_applicable`. Initial records may be open. Final records must have a non-open status and an explicit nonempty resolution. A resolution can state that evidence remains insufficient; it must not invent certainty.
+
+`actions.json`: a nonempty list; each record has `gap_id`, `action`, `evidence_artifacts`, `model_change`, `reason`.
+
+Allowed actions: `retrieve`, `reextract`, `source_check`, `revise`, `sensitivity`, `retain`, `stop`. `evidence_artifacts` uses run-relative path/hash objects from the actual gateway; a retrieval claim requires at least one real registered artifact. Link actions to gaps. State whether an action changed a parameter, structure, measurement assumption, analysis qualification, or nothing.
+
+Use the review turn for the most consequential attainable correction within remaining budget. Limit countermodel exploration to a focused challenge and explain search saturation. Do not fill the records with decorative steps while leaving their implications unconsidered.
+
+Primary performance concerns the generated data on every reserved analysis, regardless of your support labels. Better qualifications are a separate result; declining every analysis is not success. No source or target relationship is prescribed by this policy.
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/loop_control.py =====
+SHA256: c7c415d6d16094ae188c4b4195cd443415fca04b349b4b9683086dd5ec58f2eb
+
+"""Versioned evidence -> initial generator -> review -> revision control.
+
+Owns schemas, provenance, state transitions and numerical output contracts only.
+No biological dependence or parameters are implemented here. Static source
+checks are defense in depth, NOT an execution sandbox.
+"""
+from __future__ import annotations
+import argparse
+import ast
+import copy
+from datetime import datetime, timezone
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import time
+import numpy as np
+import pandas as pd
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding='utf-8-sig'))
+
+
+def write_new(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('x', encoding='utf-8') as stream:
+        json.dump(value, stream, indent=2, ensure_ascii=True, allow_nan=False)
+        stream.write('\n')
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def checked_relative(root, relative):
+    root = Path(root).resolve()
+    path = (root / relative).resolve()
+    require(path.is_relative_to(root), 'Path outside assigned run')
+    return path
+
+
+def validate_ledger(ledger):
+    require(isinstance(ledger, dict) and isinstance(ledger.get('sources'), list) and ledger['sources'], 'Ledger needs nonempty sources list')
+    require(isinstance(ledger.get('evidence'), list) and ledger['evidence'], 'Ledger needs nonempty evidence list')
+    ids = [s.get('id') for s in ledger['sources']]
+    require(all(isinstance(x, str) and x for x in ids) and len(ids) == len(set(ids)), 'Source IDs invalid')
+    for source in ledger['sources']:
+        for key in ['id', 'identifier', 'population', 'measurement', 'cohort_overlap', 'approved_artifacts']:
+            require(key in source, 'Source field missing: ' + key)
+        require(isinstance(source['approved_artifacts'], list) and source['approved_artifacts'], 'Approved source artifacts required')
+    evidence_ids = []
+    for item in ledger['evidence']:
+        for key in ['id', 'source_id', 'locator', 'estimand', 'variables', 'adjustment', 'reported', 'uncertainty', 'applicability', 'model_use', 'bridge_assumptions']:
+            require(key in item, 'Evidence field missing: ' + key)
+        require(item['source_id'] in ids, 'Unknown source ID')
+        require(isinstance(item['id'], str) and item['id'], 'Invalid evidence ID')
+        evidence_ids.append(item['id'])
+    require(len(evidence_ids) == len(set(evidence_ids)), 'Duplicate evidence ID')
+    return set(ids), set(evidence_ids)
+
+
+def validate_spec(spec, evidence_ids):
+    parameters, provenance = spec.get('parameters'), spec.get('parameter_provenance')
+    require(isinstance(parameters, dict) and parameters, 'Nonempty parameters dict required')
+    require(isinstance(provenance, dict) and set(provenance) == set(parameters), 'Provenance keys must match parameter keys')
+    assumptions = spec.get('assumptions')
+    require(isinstance(assumptions, list), 'Assumptions list required')
+    ids = []
+    for assumption in assumptions:
+        require(isinstance(assumption, dict) and isinstance(assumption.get('id'), str) and assumption['id'], 'Typed assumption ID required')
+        require(isinstance(assumption.get('description'), str) and assumption['description'].strip(), 'Assumption description required')
+        ids.append(assumption['id'])
+    require(len(ids) == len(set(ids)), 'Duplicate assumption ID')
+    for item in provenance.values():
+        require(isinstance(item, dict), 'Typed parameter provenance required')
+        for key in ['evidence_ids', 'assumption_ids']:
+            require(isinstance(item.get(key), list), 'Provenance reference list required')
+        require(item['evidence_ids'] or item['assumption_ids'], 'Parameter has no evidence or assumption link')
+        require(set(item['evidence_ids']) <= evidence_ids, 'Unknown evidence reference')
+        require(set(item['assumption_ids']) <= set(ids), 'Unknown assumption reference')
+        require(isinstance(item.get('derivation'), str) and item['derivation'].strip(), 'Parameter derivation missing')
+
+
+def gateway_registry(cfg):
+    session = Path(cfg['literature_session'])
+    state = read(session/'state.json')
+    require(state['session_path'] == str(session.resolve()), 'Wrong literature session')
+    require(state['config_sha256'] == sha(cfg['gateway_config']), 'Gateway config changed')
+    data = (session/'audit.jsonl').read_bytes()
+    registry = set()
+    for line in data.splitlines():
+        event = json.loads(line)
+        if event.get('type') == 'artifact_approved' and event.get('status') == 'accepted':
+            require(event.get('config_sha256') == state['config_sha256'], 'Wrong approved artifact config')
+            artifact = event['artifact']
+            p = checked_relative(session, artifact['session_relative_path'])
+            registry.add((str(p), artifact['sha256']))
+    return registry, {'session': str(session), 'config_sha256': state['config_sha256'],
+        'audit_bytes': len(data), 'audit_prefix_sha256': hashlib.sha256(data).hexdigest(), 'usage': state['usage']}
+
+
+def verify_gateway_snapshot(path):
+    snapshot = read(path)
+    data = (Path(snapshot['session'])/'audit.jsonl').read_bytes()
+    require(len(data) >= snapshot['audit_bytes'] and hashlib.sha256(data[:snapshot['audit_bytes']]).hexdigest() == snapshot['audit_prefix_sha256'], 'Gateway audit history changed')
+
+
+def validate_gaps(gaps, final=False):
+    require(isinstance(gaps, list) and gaps, 'Gap policy requires nonempty gap records')
+    ids = []
+    for gap in gaps:
+        for key in ['id', 'component', 'affected_analysis', 'evidence_status', 'consequence', 'next_action', 'status', 'resolution']:
+            require(key in gap, 'Gap field missing: ' + key)
+        require(gap['status'] in ['open', 'acted', 'resolved', 'unresolved', 'not_applicable'], 'Invalid gap status')
+        require(isinstance(gap['id'], str) and gap['id'], 'Invalid gap ID')
+        ids.append(gap['id'])
+        if final:
+            require(gap['status'] != 'open', 'Final gap requires explicit disposition')
+            require(isinstance(gap['resolution'], str) and gap['resolution'].strip(), 'Final gap resolution required')
+    require(len(ids) == len(set(ids)), 'Duplicate gap ID')
+
+
+def validate_actions(actions, gaps, final=False):
+    require(isinstance(actions, list) and actions, 'Gap policy requires action history')
+    ids = {g['id'] for g in gaps}
+    for action in actions:
+        for key in ['gap_id', 'action', 'evidence_artifacts', 'model_change', 'reason']:
+            require(key in action, 'Action field missing: ' + key)
+        require(action['gap_id'] in ids, 'Action uses unknown gap')
+        require(action['action'] in ['retrieve', 'reextract', 'source_check', 'revise', 'sensitivity', 'retain', 'stop'], 'Unsupported action')
+        require(isinstance(action['reason'], str) and action['reason'].strip(), 'Action reason missing')
+        require(isinstance(action['evidence_artifacts'], list), 'Evidence artifact list required')
+        if action['action'] == 'retrieve':
+            require(action['evidence_artifacts'], 'Retrieval claim requires actual artifact')
+    if final:
+        acted = {a['gap_id'] for a in actions}
+        require(all(g['id'] in acted for g in gaps if g['status'] != 'not_applicable'), 'Final gap has no linked action or justified stop')
+
+
+def source_check(path):
+    """Conservative static check, followed by independent human/Agent review."""
+    tree = ast.parse(Path(path).read_text(encoding='utf-8-sig'))
+    allowed_imports = {'numpy', 'pandas', 'scipy', 'math', 'statistics', 'typing', '__future__'}
+    blocked_names = {'open', 'exec', 'eval', 'compile', '__import__', 'input', 'breakpoint', 'getattr', 'setattr', 'globals', 'locals', 'vars'}
+    blocked_attrs = {'read_csv', 'read_table', 'read_pickle', 'read_json', 'read_excel', 'read_parquet', 'to_csv', 'to_pickle', 'to_json', 'load', 'save', 'fromfile', 'tofile', 'memmap', 'read_text', 'read_bytes', 'write_text', 'write_bytes'}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            require(all(x.name.split('.')[0] in allowed_imports for x in node.names), 'Unapproved import')
+        if isinstance(node, ast.ImportFrom):
+            require(node.level == 0 and (node.module or '').split('.')[0] in allowed_imports, 'Unapproved import-from')
+        if isinstance(node, ast.Name):
+            require(node.id not in blocked_names, 'Blocked dynamic/file function')
+        if isinstance(node, ast.Attribute):
+            require(not node.attr.startswith('__') and node.attr not in blocked_attrs, 'Blocked attribute/file access')
+    require(any(isinstance(n, ast.FunctionDef) and n.name == 'generate' for n in tree.body), 'generate function missing')
+    return {'static_check': 'pass', 'scope': 'Conservative AST checks; not a sandbox or proof of no side effects'}
+
+
+def file_commitment(paths):
+    return {str(Path(p).resolve()): sha(p) for p in paths}
+
+
+def verify_commitment(manifest):
+    for path, value in manifest.items():
+        require(Path(path).is_file() and sha(path) == value, 'Committed file changed: ' + path)
+
+
+def init(run, policy, observed, contract, protocol):
+    run = Path(run).resolve()
+    require(policy in ['ordinary', 'gap_policy'], 'Invalid policy')
+    require(not (run/'run.json').exists(), 'Run already initialized')
+    tool_dir = Path(__file__).resolve().parent/'tools'
+    study = tool_dir.parent
+    prompt_paths = [study/'BUILDER_GUIDE.md', study/'policies'/f'{policy}.md', run/'REQUEST.md', study/'shared/schema.json', study/'shared/target_description.md']
+    write_new(run/'run.json', {'created_utc': now(), 'policy': policy, 'observed': str(Path(observed).resolve()),
+        'contract': str(Path(contract).resolve()), 'protocol': str(Path(protocol).resolve()),
+        'literature_session': str(run/'literature'), 'gateway_config': str(tool_dir/'gateway_config.json'),
+        'commitment': file_commitment([observed, contract, protocol, __file__, tool_dir/'literature_gateway.py', tool_dir/'gateway_config.json'] + prompt_paths)})
+
+
+def freeze_candidate(run, version):
+    run = Path(run).resolve()
+    require(version in ['initial', 'final'], 'Invalid version')
+    cfg = read(run/'run.json')
+    verify_commitment(cfg['commitment'])
+    if version == 'final':
+        require((run/'review_receipt.json').exists(), 'Final submission requires prior review')
+        verify_commitment(read(run/'initial/freeze.json')['commitment'])
+        verify_commitment(read(run/'review_receipt.json')['commitment'])
+        verify_gateway_snapshot(run/'initial/gateway_snapshot.json')
+    folder = run/version
+    files = [folder/x for x in ['generator.py', 'model_spec.json', 'evidence.json', 'decision.md']]
+    require(all(p.is_file() for p in files), 'Missing candidate artifact')
+    ledger = read(folder/'evidence.json')
+    _, evidence_ids = validate_ledger(ledger)
+    source_check(folder/'generator.py')
+    spec = read(folder/'model_spec.json')
+    validate_spec(spec, evidence_ids)
+    registry, snapshot = gateway_registry(cfg)
+    linked = []
+    for source in ledger['sources']:
+        for artifact in source['approved_artifacts']:
+            p = checked_relative(run, artifact['path'])
+            require('approved' in p.parts and p.is_file() and sha(p) == artifact['sha256'], 'Invalid approved evidence commitment')
+            require((str(p), artifact['sha256']) in registry, 'Evidence artifact not registered by gateway')
+            linked.append(p)
+    if cfg['policy'] == 'gap_policy':
+        gaps = read(folder/'gaps.json')
+        validate_gaps(gaps, final=version == 'final')
+        files.append(folder/'gaps.json')
+        actions = read(folder/'actions.json')
+        validate_actions(actions, gaps, final=version == 'final')
+        files.append(folder/'actions.json')
+        for action in actions:
+            for artifact in action['evidence_artifacts']:
+                p = checked_relative(run, artifact['path'])
+                require('approved' in p.parts and p.is_file() and sha(p) == artifact['sha256'], 'Action evidence artifact invalid')
+                require((str(p), artifact['sha256']) in registry, 'Action artifact not registered by gateway')
+                linked.append(p)
+    if version == 'final':
+        revision = read(folder/'revision.json')
+        require(isinstance(revision.get('reason'), str) and revision['reason'].strip(), 'Revision/no-op reason required')
+        changed = any(sha(run/'initial'/n) != sha(folder/n) for n in ['generator.py', 'model_spec.json'])
+        require(revision.get('generator_or_spec_changed') is changed, 'Revision change claim disagrees with file hashes')
+        files.append(folder/'revision.json')
+    write_new(folder/'gateway_snapshot.json', snapshot)
+    paths = files + linked + [folder/'gateway_snapshot.json']
+    receipt = {'created_utc': now(), 'version': version, 'policy': cfg['policy'],
+        'commitment': file_commitment(paths), 'run_commitment': cfg['commitment'],
+        'run_sha256': sha(run/'run.json'),
+        'static_check': source_check(folder/'generator.py'), 'scientific_claim': 'Submission accepted structurally; analytical validity not inferred'}
+    write_new(folder/'freeze.json', receipt)
+    return receipt
+
+
+def record_review(run, review):
+    run = Path(run).resolve()
+    require((run/'initial/freeze.json').exists(), 'Review follows initial freeze')
+    verify_commitment(read(run/'initial/freeze.json')['commitment'])
+    obj = read(review)
+    require(isinstance(obj.get('findings'), list) and isinstance(obj.get('summary'), str), 'Invalid review structure')
+    require(isinstance(obj.get('execution_allowed'), bool), 'Review execution decision missing')
+    for key, relative in [('generator_sha256','initial/generator.py'), ('model_spec_sha256','initial/model_spec.json'), ('evidence_sha256','initial/evidence.json'), ('candidate_freeze_sha256','initial/freeze.json')]:
+        require(obj.get(key) == sha(run/relative), 'Review hash mismatch: '+key)
+    write_new(run/'review_receipt.json', {'created_utc': now(), 'commitment': file_commitment([review, run/'initial/freeze.json']),
+        'execution_allowed': obj['execution_allowed'], 'no_reference_feedback': True})
+
+
+def frame(path):
+    return pd.read_csv(path, dtype={'row_id': str}, float_precision='round_trip')
+
+
+def output_check(observed, enriched, contract):
+    columns = contract['observed_columns']
+    added = contract['generated_columns']
+    require(isinstance(enriched, pd.DataFrame), 'Generator did not return a frame')
+    require(list(observed.columns) == columns and list(enriched.columns) == columns + [x['name'] for x in added], 'Output schema changed')
+    require(len(enriched) == len(observed), 'Row count changed')
+    require(observed.row_id.is_unique and observed.row_id.notna().all(), 'Bad row identifiers')
+    pd.testing.assert_frame_equal(observed.reset_index(drop=True), enriched[columns].reset_index(drop=True), check_dtype=False, check_exact=True)
+    for item in added:
+        values = enriched[item['name']].to_numpy(float)
+        require(np.isfinite(values).all(), 'Nonfinite generated values')
+        if 'min_exclusive' in item:
+            require((values > item['min_exclusive']).all(), 'Generated values outside contract')
+
+
+def rng_equal(a, b):
+    return a[0] == b[0] and np.array_equal(a[1], b[1]) and a[2:] == b[2:]
+
+
+def execute(run, version):
+    run = Path(run).resolve()
+    cfg, frozen = read(run/'run.json'), read(run/version/'freeze.json')
+    verify_commitment(cfg['commitment'])
+    verify_commitment(frozen['commitment'])
+    require(frozen['run_sha256'] == sha(run/'run.json'), 'Run receipt changed')
+    verify_gateway_snapshot(run/version/'gateway_snapshot.json')
+    require((run/'review_receipt.json').exists(), 'Independent review required before executing any submitted code')
+    review = read(run/'review_receipt.json')
+    verify_commitment(review['commitment'])
+    require(review['execution_allowed'], 'Review contains execution-blocking issue')
+    if version == 'final':
+        require((run/'final_code_review.json').exists(), 'Final source/code review required')
+        final_review = read(run/'final_code_review.json')
+        require(final_review.get('execution_allowed') is True, 'Final code review blocks execution')
+        require(final_review.get('generator_sha256') == sha(run/'final/generator.py'), 'Final review does not bind current code')
+        require(final_review.get('model_spec_sha256') == sha(run/'final/model_spec.json'), 'Final review does not bind current specification')
+        require(final_review.get('evidence_sha256') == sha(run/'final/evidence.json'), 'Final review does not bind evidence')
+        require(final_review.get('candidate_freeze_sha256') == sha(run/'final/freeze.json'), 'Final review does not bind freeze receipt')
+    destination = run/version/'outputs'
+    require(not destination.exists(), 'Preserve prior execution')
+    destination.mkdir()
+    observed, contract = frame(cfg['observed']), read(cfg['contract'])
+    spec = read(run/version/'model_spec.json')
+    protocol = read(cfg['protocol'])
+    rng = np.random.get_state()
+    started = time.perf_counter()
+    try:
+        modspec = importlib.util.spec_from_file_location('candidate_' + run.name + '_' + version, run/version/'generator.py')
+        module = importlib.util.module_from_spec(modspec)
+        modspec.loader.exec_module(module)
+        require(rng_equal(rng, np.random.get_state()), 'Import altered global RNG')
+        records, generated_hashes = [], []
+        for number, seed in enumerate(protocol['generation_seeds'], 1):
+            def call():
+                copied, settings = observed.copy(deep=True), copy.deepcopy(spec)
+                result = module.generate(copied, settings, seed)
+                pd.testing.assert_frame_equal(copied, observed, check_exact=True)
+                require(settings == spec, 'Specification mutated')
+                require(rng_equal(rng, np.random.get_state()), 'Global RNG mutated')
+                output_check(observed, result, contract)
+                return result
+            enriched = call()
+            if number == 1:
+                pd.testing.assert_frame_equal(enriched, call(), check_exact=True)
+            path = destination/f'draw_{number:02d}.csv'
+            enriched.to_csv(path, index=False, float_format='%.17g')
+            reread = frame(path)
+            output_check(observed, reread, contract)
+            for item in contract['generated_columns']:
+                require(np.array_equal(enriched[item['name']].to_numpy(float), reread[item['name']].to_numpy(float)), 'Generated value round-trip changed')
+            records.append({'seed': seed, 'path': str(path), 'sha256': sha(path), 'n_rows': len(enriched)})
+            generated_hashes.append(hashlib.sha256(enriched[[x['name'] for x in contract['generated_columns']]].to_numpy(float).tobytes()).hexdigest())
+        require(len(set(generated_hashes)) > 1, 'All draws identical; conditional variability absent')
+        verify_commitment(cfg['commitment'])
+        verify_commitment(frozen['commitment'])
+        result = {'created_utc': now(), 'elapsed_seconds': time.perf_counter()-started, 'version': version,
+            'draws': records, 'controller_sha256': sha(__file__), 'candidate_freeze_sha256': sha(run/version/'freeze.json'),
+            'review_receipt_sha256': sha(run/'review_receipt.json'), 'final_code_review_sha256': sha(run/'final_code_review.json') if version == 'final' else None,
+            'run_sha256': sha(run/'run.json'), 'unique_generated_vectors': len(set(generated_hashes)),
+            'observed_cells_preserved': True, 'same_seed_reproducible': True,
+            'scope': 'Residual draws of one Agent construction; target reference never read by controller'}
+        write_new(destination/'execution.json', result)
+        return result
+    except Exception as exc:
+        write_new(destination/'failure.json', {'created_utc': now(), 'type': type(exc).__name__, 'message': str(exc)})
+        raise
+    finally:
+        np.random.set_state(rng)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest='command', required=True)
+    p = sub.add_parser('init')
+    for name in ['run', 'policy', 'observed', 'contract', 'protocol']:
+        p.add_argument('--'+name, required=True)
+    p = sub.add_parser('freeze')
+    p.add_argument('--run', required=True); p.add_argument('--version', required=True, choices=['initial','final'])
+    p = sub.add_parser('review')
+    p.add_argument('--run', required=True); p.add_argument('--file', required=True)
+    p = sub.add_parser('execute')
+    p.add_argument('--run', required=True); p.add_argument('--version', required=True, choices=['initial','final'])
+    args = parser.parse_args()
+    if args.command == 'init':
+        init(args.run, args.policy, args.observed, args.contract, args.protocol); result = {'initialized': args.run}
+    elif args.command == 'freeze':
+        result = freeze_candidate(args.run, args.version)
+    elif args.command == 'review':
+        record_review(args.run, args.file); result = {'review_recorded': args.run}
+    else:
+        result = execute(args.run, args.version)
+    print(json.dumps(result, ensure_ascii=True, indent=2))
+
+
+if __name__ == '__main__':
+    main()
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/ordinary_1/final/generator.py =====
+SHA256: 06af9341ffa8606d4ede4e723af444b3296b0ed397d13113124742b06d47f833
+
+"""External aggregate-evidence HDL generator; no target outcome fitting."""
+
+import numpy as np
+import pandas as pd
+
+
+def generate(observed: pd.DataFrame, evidence: dict, seed: int) -> pd.DataFrame:
+    """Return observed fields unchanged and a locally seeded positive HDL draw.
+
+    The evidence argument is model_spec.json, containing a parameters mapping.
+    The function does not read files, fit to the supplied cohort, or mutate input.
+    """
+    p = evidence["parameters"]
+    required = ["row_id", "bmi", "age", "sex"]
+    if not all(column in observed.columns for column in required):
+        raise ValueError("Missing required observed column")
+    result = observed.loc[:, required].copy(deep=True)
+    bmi = observed["bmi"].to_numpy(dtype=float)
+    age = observed["age"].to_numpy(dtype=float)
+    sex = observed["sex"].to_numpy()
+    if not (np.isfinite(bmi).all() and np.isfinite(age).all()):
+        raise ValueError("Observed BMI and age must be finite")
+    if not ((bmi > 0).all() and np.isin(sex, [1, 2]).all()):
+        raise ValueError("BMI must be positive and sex must be 1 or 2")
+
+    bmi_knots = np.asarray(p["bmi_knots"], dtype=float)
+    age_knots = np.asarray(p["age_knots"], dtype=float)
+    age_effects = np.asarray(p["age_contrasts"], dtype=float)
+    age_counts = np.asarray(p["source_age_counts_by_bmi"], dtype=float)
+    age_center = (age_counts @ age_effects) / age_counts.sum(axis=1)
+    age_effect = np.interp(age, age_knots, age_effects)
+    mean = np.empty(len(result), dtype=float)
+    log_variance = np.empty(len(result), dtype=float)
+    for code, label in ((1, "male"), (2, "female")):
+        selected = sex == code
+        source_mean = np.asarray(p["source_hdl_means"][label], dtype=float)
+        source_n = np.asarray(p["source_cell_counts"][label], dtype=float)
+        source_se = np.asarray(p["source_mean_standard_errors"][label], dtype=float)
+        source_sd = source_se * np.sqrt(source_n)
+        # Convert arithmetic mean and SD to the exact lognormal variance.
+        anchor_log_variance = np.log1p((source_sd / source_mean) ** 2)
+        centered_means = source_mean - age_center
+        mean[selected] = np.interp(bmi[selected], bmi_knots, centered_means)
+        mean[selected] += age_effect[selected]
+        # Cross-sectional obesity slope supplies the local additive tail derivative.
+        excess = np.maximum(bmi[selected] - bmi_knots[-1], 0)
+        mean[selected] *= np.exp(
+            p["tail_additive_slope"] * excess / mean[selected]
+        )
+        log_variance[selected] = np.interp(
+            bmi[selected], bmi_knots, anchor_log_variance
+        )
+    if not (np.isfinite(mean).all() and (mean > 0).all()):
+        raise ValueError("Model conditional mean is not finite and positive")
+    rng = np.random.default_rng(seed)
+    standard_normal = rng.standard_normal(len(result))
+    result["hdl"] = np.exp(
+        np.log(mean) - log_variance / 2
+        + np.sqrt(log_variance) * standard_normal
+    )
+    return result
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/ordinary_1/final/model_spec.json =====
+SHA256: 7399dba448714bfdbe2de2b1f18ed587367a4234e0257e99b1d35ae6c08f21eb
+
+{
+  "model_id": "ordinary_1_final_cross_sectional_tail_lognormal",
+  "outcome": "hdl",
+  "unit": "mg/dL",
+  "family": "Conditional heteroskedastic lognormal with interpolated arithmetic means",
+  "parameters": {
+    "bmi_knots": [
+      17.0,
+      21.25,
+      25.5,
+      30.5
+    ],
+    "age_knots": [
+      35.0,
+      45.0,
+      55.5,
+      65.5
+    ],
+    "source_hdl_means": {
+      "male": [
+        61.83,
+        51.92,
+        46.75,
+        43.25
+      ],
+      "female": [
+        66.55,
+        60.72,
+        54.66,
+        51.06
+      ]
+    },
+    "source_cell_counts": {
+      "male": [
+        75,
+        2192,
+        2308,
+        1609
+      ],
+      "female": [
+        333,
+        4766,
+        1963,
+        1291
+      ]
+    },
+    "source_mean_standard_errors": {
+      "male": [
+        1.52,
+        0.25,
+        0.21,
+        0.21
+      ],
+      "female": [
+        0.79,
+        0.19,
+        0.27,
+        0.3
+      ]
+    },
+    "source_age_counts_by_bmi": [
+      [
+        183,
+        99,
+        81,
+        45
+      ],
+      [
+        2156,
+        1966,
+        1846,
+        990
+      ],
+      [
+        941,
+        1209,
+        1355,
+        766
+      ],
+      [
+        832,
+        813,
+        859,
+        396
+      ]
+    ],
+    "age_contrasts": [
+      0.0,
+      0.75841,
+      1.18484,
+      0.87361
+    ],
+    "tail_additive_slope": -0.33
+  },
+  "assumptions": [
+    {
+      "id": "A01",
+      "description": "Transport Taiwan Biobank mean/variability patterns and an Italian clinic cross-sectional obesity slope to the target without target-outcome calibration. Geography, ancestry, selection, medication/disease exclusions, fasting and plasma/serum assay differences remain unresolved. Transportability is an assumption, not validation."
+    },
+    {
+      "id": "A02",
+      "description": "Treat source BMI-category HDL means as values at representative BMI anchors 17, 21.25, 25.5 and 30.5 kg/m^2. The two closed-bin anchors are midpoints; the open-bin anchors are assumed. Piecewise linear interpolation between anchors supplies a continuous model. For BMI below 17 use the underweight anchor."
+    },
+    {
+      "id": "A03",
+      "description": "Use a common additive age pattern across sex and BMI. Within each source BMI category assume the pooled age distribution also applies to each sex, so count-weighted category age contrasts can center sex-BMI means. This does not establish actual sex-specific source age distributions."
+    },
+    {
+      "id": "A04",
+      "description": "Convert reported SEM to SD as SEM*sqrt(n) under the conventional independent unweighted mean formula; use that broad-cell marginal SD as an approximate conditional variability scale rather than claiming it is a measured regression residual SD. This retains some variation due to unmodeled within-cell predictor variation."
+    },
+    {
+      "id": "A05",
+      "description": "Use a lognormal conditional distribution with exact arithmetic mean correction and source-derived coefficient of variation. Interpolate log variance across BMI anchors; hold CV constant with age and beyond extreme BMI anchors. This positive, right-skewed family and its tail behavior are not estimated from source quantiles."
+    },
+    {
+      "id": "A06",
+      "description": "Interpolate age contrasts at representative ages 35, 45, 55.5 and 65.5, hold the nearest value outside this knot range, and do not impose a menopausal discontinuity. Treat an adjusted source age contrast as a provisional age association in a model omitting other source covariates."
+    },
+    {
+      "id": "A07",
+      "description": "For BMI above 30.5, let m0 be the sex- and age-specific mean at the last anchor and use m=m0*exp(beta*(BMI-30.5)/m0), with beta=-0.33 mg/dL per BMI unit. The right derivative at the anchor equals beta for every age/sex. The source reports a common-sex linear association among BMI>30 clinic patients, not this exponential curvature or target-tail behavior. Exponential continuation maintains a positive mean; it is an assumption especially above the source upper BMI of about 64.6. No sex interaction in the additive tail slope is asserted."
+    },
+    {
+      "id": "A08",
+      "description": "Draw participants independently conditional on the three observed predictors using a local seed-controlled RNG; no unobserved family, household, race, lifestyle or clinical covariates are reconstructed. Draw-to-draw Monte Carlo variation does not represent epistemic parameter uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "bmi_knots": {
+      "evidence_ids": [
+        "G01"
+      ],
+      "assumption_ids": [
+        "A02"
+      ],
+      "derivation": "Midpoints of [18.5,24) and [24,27) are 21.25 and 25.5; 17 and 30.5 are assumed representatives of open-ended bins, not reported source means."
+    },
+    "age_knots": {
+      "evidence_ids": [
+        "G03"
+      ],
+      "assumption_ids": [
+        "A06"
+      ],
+      "derivation": "Representative centers of printed age categories; boundary overlap is unresolved and no individual age distribution is inferred."
+    },
+    "source_hdl_means": {
+      "evidence_ids": [
+        "G01"
+      ],
+      "assumption_ids": [
+        "A01",
+        "A02",
+        "A03"
+      ],
+      "derivation": "Exact printed Table 2 sex-BMI arithmetic means; age centering and interpolation described in equations."
+    },
+    "source_cell_counts": {
+      "evidence_ids": [
+        "G02"
+      ],
+      "assumption_ids": [
+        "A04"
+      ],
+      "derivation": "Exact Table 2 counts; used only in SEM-to-SD conversion."
+    },
+    "source_mean_standard_errors": {
+      "evidence_ids": [
+        "G02"
+      ],
+      "assumption_ids": [
+        "A04",
+        "A05"
+      ],
+      "derivation": "Exact printed Table 2 SEMs, transformed to source SD=SEM*sqrt(n) then log variance=log(1+(SD/source_mean)^2)."
+    },
+    "source_age_counts_by_bmi": {
+      "evidence_ids": [
+        "G04"
+      ],
+      "assumption_ids": [
+        "A03"
+      ],
+      "derivation": "Exact Table 2 age counts; each row weights the corresponding age contrasts to center the sex-BMI mean anchor."
+    },
+    "age_contrasts": {
+      "evidence_ids": [
+        "G03"
+      ],
+      "assumption_ids": [
+        "A01",
+        "A03",
+        "A06"
+      ],
+      "derivation": "Exact adjusted Table 3 contrasts, reference fixed to zero, used as additive mg/dL age function."
+    },
+    "tail_additive_slope": {
+      "evidence_ids": [
+        "L02"
+      ],
+      "assumption_ids": [
+        "A01",
+        "A07"
+      ],
+      "derivation": "Exact coefficient -0.33 mg/dL per kg/m^2, from the age- and sex-adjusted BMI>30 model in Table rev2 of the published author response embedded in the accepted PMC7644056 JATS. It is a pooled-sex additive cross-sectional slope. Use as the local mean derivative at the final BMI knot via m=m0*exp(beta*excess/m0), rather than asserting this positive curved continuation is the source linear model."
+    }
+  },
+  "equations": [
+    "Let j index four BMI categories and s sex. c_j=sum_k(n_jk*a_k)/sum_k(n_jk).",
+    "m0(b,age,s)=linear_interpolate_BMI(m_js-c_j)+linear_interpolate_age(a_k). Interpolation clamps outside knots.",
+    "m=m0*exp(tail_additive_slope*max(b-30.5,0)/m0). For b>30.5, m0 holds BMI fixed at the final anchor; the right derivative there is tail_additive_slope.",
+    "v_js=log(1+(SEM_js*sqrt(n_js)/m_js)^2); v(b,s)=linear_interpolate_BMI(v_js).",
+    "HDL=exp(log(m)-v/2+sqrt(v)*Z), Z~N(0,1) independently, so E[HDL|x]=m and Var[HDL|x]=m^2*(exp(v)-1)."
+  ],
+  "uncertainty": "Fixed scenario parameters; stochastic residual draws only. Source uncertainty and transport uncertainty are not resolved by repeated draws.",
+  "alternatives_considered": [
+    "Fully adjusted BMI contrasts: rejected as the sole BMI relationship because conditioning on TG, WHR and lifestyle changes the estimand.",
+    "Categorical step function: avoids midpoint assumptions but introduces discontinuities and zero within-category continuous BMI association.",
+    "Unbounded linear HDL mean: rejected for extreme BMI extrapolation because it can create nonpositive means.",
+    "Gaussian residuals with clipping: rejected because it introduces an arbitrary positive point mass; lognormal distribution is explicitly assumed.",
+    "Flat obesity tail: plausible sensitivity alternative, retained for checks because the selected longitudinal tail bridge is weak.",
+    "Initial longitudinal percentage tail: replaced because newly retrieved age- and sex-adjusted cross-sectional BMI>30 evidence aligns more closely with the needed estimand; retained as a numerical sensitivity only.",
+    "Source linear additive tail: its local slope is used, but a globally linear decline can become nonpositive; the exponential continuation is explicitly an assumed curvature, not claimed as a fitted source relationship.",
+    "Representative BMI knots and source-age centering retained: no source supplements supply within-bin or joint sex-age-BMI distributions; alternative knot positions and zero age effects are checked without choosing based on outcomes.",
+    "Residual spread and family retained: no retrieved conditional residual SD or quantile evidence justifies a numerical change. SD scaling and a matched-moment gamma distribution are checked as unvalidated alternatives."
+  ],
+  "target_outcome_access": false,
+  "revision_scope": "Single post-review revision responding to F1-F3. Source-compatible implementation checks only; no target outcome access or accuracy selection."
+}
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/ordinary_1/final/decision.md =====
+SHA256: cf0913721415c9bfaef0fd7e67345e44458058798142375765f2d9039ce68f0f
+
+# Final model decision: ordinary_1
+
+The conditional lognormal generator retains the initial Taiwan Biobank sex-by-BMI mean anchors, age-centering construction and source-derived variability proxy. The numerical revision replaces its longitudinal percentage tail with a cross-sectional additive obesity slope. No target outcome or generated target cohort was inspected to select this change.
+
+## Review F1: directly relevant cross-sectional tail evidence
+
+Two additional gateway searches identified L2020 (PMC7644056), a study of 1,214 Italian overweight/obesity clinic patients. Its main Table 2 gives an HDL-on-BMI coefficient of -0.42 mg/dL per BMI unit (95% CI -0.53 to -0.32), adjusted for age and sex. More specifically, the published author response embedded in the approved JATS contains Table rev2 for patients with BMI>30: coefficient -0.33 (95% CI -0.47 to -0.20), with the same adjustment. This is a separate subgroup analysis in the publication correspondence, not a main-text coefficient, a downloaded DOCX table, or an independent second cohort. All numbers were read from the gateway-approved complete article text/XML; no external supplement or individual data was accessed.
+
+The final model uses -0.33 as the right derivative of the conditional arithmetic HDL mean at BMI30.5, common to men and women. Let m0 be the sex- and age-specific mean at that anchor. Beyond it, m=m0*exp(-0.33*(BMI-30.5)/m0). This retains a positive mean and preserves the source slope locally. It does NOT reproduce a fitted source linear model across the entire range: exponential curvature is assumed. The initial sex-specific longitudinal percentage slopes remain only a comparator, not final parameters. This removes the change-from-within-person-to-between-person bridge while leaving transport and curve-shape bridges unresolved.
+
+L2020 is selected and not target matched. It excludes medications, diabetes and several diseases, is from Italy, and includes ages as young as14. Table1 reports BMI25-64.60; target predictor support extends beyond that. Several Table1/prose age, sex-count and BMI-range entries differ slightly. No numerical correction is invented; no model parameter uses those discrepant summaries. The subgroup n is unavailable. Its slope confidence interval is sampling uncertainty within the source, not a bound on target transport. Flat-tail, original longitudinal-tail, source-CI slope and linear-tail alternatives are evaluated on invented inputs only.
+
+## Review F2: retained anchor and age assumptions
+
+The original G2019 (PMC6627528) Table2 sex-by-BMI means are category averages, not exact-BMI conditional means. Knots17,21.25,25.5,30.5 are assumed representatives; only the two closed-bin knots are midpoints of published boundaries. The source has no registered supplements (gateway list-supplements returned an empty list), and no retrieved evidence identifies within-bin BMI distributions or joint sex-by-age-by-BMI cells. Its Table3 age effects also adjust for lifestyle, WHR and body fat, unlike the generated model.
+
+The current means and modest common age pattern are retained because no available replacement identifies the missing joint information more directly. Final checks vary representative BMI values and remove age effects; these reveal sensitivity, not identify a preferred alternative. The source-age centering identity is an algebraic identity at assumed representatives only. It does not demonstrate reproduction of actual source within-bin distributions. No conditional age/sex interaction is inferred from pooled margins, and a printed overlap in source age-bin boundaries remains disclosed.
+
+## Review F3: variability and measurement
+
+G2019 SEM*sqrt(n) correctly recovers approximate individual SD under the usual independent-mean formula. The resulting SD remains a broad-cell marginal SD, not a residual SD conditional on exact BMI, age and sex. The final model retains it as an explicit variability proxy; lognormal shape, source-derived CV with age and the extreme BMI tail, and independent participant residuals remain assumptions. Repeated random draws quantify Monte Carlo variation under the fixed scenario, not source or transport uncertainty.
+
+L2020's overall HDL48.35+/-12.47 mg/dL is a mixed-sex, mixed-predictor mean and SD. It is not substituted for conditional spread. That study used overnight-fasting plasma lipids measured by automated colorimetry (Hitachi/Boehringer Mannheim); this does not establish calibration to the target direct-serum Roche method. G2019's exact HDL assay remains unspecified in its retrieved maintext. Final checks include SD multipliers0.75/1.25 and a matched-mean/matched-variance gamma alternative. These are deliberately illustrative model choices with no evidence-based uncertainty coverage.
+
+## Preserved evidence cautions and scientific scope
+
+H2019 (PMC6566419) overlaps G2019's parent cohort and contains inconsistent SEM and BMI count labels; it is qualitative context only. K2017 (PMC5627541) concerns HDL function as well as concentration; CEC coefficients, heritability and repeat correlations are not used as HDL residual variance. D2019 remains abstract-only longitudinal context. Neither the added Italian source nor the original sources establish US target calibration or individual HDL recovery.
+
+The virtual column can support transparent scenario analyses conditional on BMI, age and sex. Relations not directly estimated by the evidence arise from chosen model structure. It cannot establish clinical risk, causal weight-change/aging effects, associations with unobserved covariates, or increased clinical information from larger synthetic sample size. Supported implementation claims and unresolved scientific gaps are distinct.
+
+## Retrieval, tests and preservation
+
+Revision used two queries and two download attempts: a potentially useful ARIC fulltext was rejected by the gateway and was not bypassed; L2020 was accepted. The G2019 supplement listing was empty. Total use is8/12 queries and7/12 downloads, leaving4 queries and5 downloads unused. Retrieval stops because the new source directly reduces F1's estimand gap, while no supplied joint summaries or residual measures warrant further numerical changes. No attempt was made to retrieve original/source individual datasets.
+
+All initial files are preserved. final/artificial_checks.json records actual source-arithmetic, provenance, invented-input distribution, interface and sensitivity checks, reproducible with run_final_checks.py. These are implementation/source checks only. No target accuracy or improvement claim is made. final/revision.json records the substantive change and unresolved limitations.
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/gap_2/final/generator.py =====
+SHA256: 9ceb0ed108284457864602a58b6a753f2b1ffce191b04bd1d69229913ab166ba
+
+"""Literature-anchored stochastic HDL model; no target HDL information is used."""
+import numpy as np
+import pandas as pd
+
+
+def conditional_moments(observed: pd.DataFrame, evidence: dict):
+    p = evidence["parameters"]
+    bmi = observed["bmi"].to_numpy(dtype=float)
+    age = observed["age"].to_numpy(dtype=float)
+    sex = observed["sex"].to_numpy()
+    knots = np.asarray(p["bmi_anchor_kg_m2"], dtype=float)
+    age_effect = np.interp(age, p["age_knots_years"], p["age_effect_mg_dl"])
+    age_effect = age_effect - p["age_center_mg_dl"]
+    means = np.empty(len(observed), dtype=float)
+    sds = np.empty(len(observed), dtype=float)
+    for code in (1, 2):
+        selected = sex == code
+        key = str(code)
+        m = np.asarray(p["mean_hdl_by_sex"][key], dtype=float)
+        s = np.asarray(p["sd_hdl_by_sex"][key], dtype=float)
+        b = bmi[selected]
+        location = np.interp(b, knots, m)
+        upper = b > knots[-1]
+        floor = p["tail_asymptote_by_sex"][key]
+        location[upper] = floor + (m[-1] - floor) * np.exp(
+            -p["tail_decay_per_bmi"] * (b[upper] - knots[-1])
+        )
+        means[selected] = location + age_effect[selected]
+        sds[selected] = np.interp(b, knots, s)
+    return means, sds
+
+
+def generate(observed: pd.DataFrame, evidence: dict, seed: int) -> pd.DataFrame:
+    """Return one positive HDL draw, preserving observed values and row order."""
+    required = ["row_id", "bmi", "age", "sex"]
+    if not all(c in observed.columns for c in required):
+        raise ValueError("Missing required observed column")
+    if not observed["sex"].isin([1, 2]).all():
+        raise ValueError("Sex must use codes 1 and 2")
+    values = observed[["bmi", "age"]].to_numpy(dtype=float)
+    if not np.isfinite(values).all() or (values <= 0).any():
+        raise ValueError("BMI and age must be finite and positive")
+    mean, sd = conditional_moments(observed, evidence)
+    if (mean <= 0).any() or (sd <= 0).any():
+        raise ValueError("Specification implies invalid conditional moments")
+    log_variance = np.log1p((sd / mean) ** 2)
+    log_location = np.log(mean) - log_variance / 2
+    rng = np.random.default_rng(seed)
+    out = observed.loc[:, required].copy(deep=True)
+    out["hdl"] = rng.lognormal(log_location, np.sqrt(log_variance))
+    return out
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/gap_2/final/model_spec.json =====
+SHA256: 153db948978adb85f7c46944df62e7c7de2b6803df61814c8424a2019fbffa07
+
+{
+  "model_name": "sex-specific interpolated HDL moments with modest age pattern and positive stochastic residuals",
+  "version": "initial",
+  "family": "conditional lognormal",
+  "parameters": {
+    "bmi_anchor_kg_m2": [
+      17.5,
+      21.25,
+      25.5,
+      30.0
+    ],
+    "mean_hdl_by_sex": {
+      "1": [
+        61.83,
+        51.92,
+        46.75,
+        43.25
+      ],
+      "2": [
+        66.55,
+        60.72,
+        54.66,
+        51.06
+      ]
+    },
+    "sd_hdl_by_sex": {
+      "1": [
+        13.163586137523469,
+        11.704699910719626,
+        10.088746205550024,
+        8.423591870455263
+      ],
+      "2": [
+        14.416147196806781,
+        13.116882251510836,
+        11.96255407511289,
+        10.779146533933009
+      ]
+    },
+    "age_knots_years": [
+      35,
+      45,
+      55.5,
+      65.5
+    ],
+    "age_effect_mg_dl": [
+      0,
+      0.75841,
+      1.18484,
+      0.87361
+    ],
+    "age_center_mg_dl": 0.6827657205750841,
+    "tail_asymptote_by_sex": {
+      "1": 30.0,
+      "2": 38.0
+    },
+    "tail_decay_per_bmi": 0.04
+  },
+  "assumptions": [
+    {
+      "id": "A_TRANSPORT",
+      "description": "Conditional HDL location and individual variability from Taiwan are provisionally transported without a U.S. offset; population differences are model uncertainty and not extra per-person random noise."
+    },
+    {
+      "id": "A_BMI_POINTS",
+      "description": "BMI category representative locations are assumed as 17.5, 21.25, 25.5 and 30 kg/m2. The two closed intervals use their midpoints; open-bin representatives are assumptions. Linearly interpolate mean and SD between representatives; hold below 17.5."
+    },
+    {
+      "id": "A_SCALE",
+      "description": "SE*sqrt(n) is the approximate within-sex/BMI-cell SD. Use it as conditional SD, retaining omitted-factor heterogeneity; no claimed residual-variance decomposition. Endpoint SD is retained above BMI 30."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Use the adjusted age contrasts as a common additive pattern at ages 35,45,55.5,65.5, with constant endpoint extrapolation. Assume every sex/BMI cell has the overall source age mixing weights when centering. This does not establish age-sex or age-BMI independence in the target."
+    },
+    {
+      "id": "A_TAIL",
+      "description": "Above BMI 30, continue the mean downward exponentially toward 30 mg/dL in men and 38 mg/dL in women, at decay 0.04 per BMI unit. These are explicitly assumed extrapolation values, not measured biological asymptotes. Alternative flat continuation is tested."
+    },
+    {
+      "id": "A_FAMILY",
+      "description": "Conditional HDL is lognormal matched to specified arithmetic mean and SD, chosen for positivity and right skew. Tail form and latent-factor mixtures are not identified by mean/SE evidence; independent local RNG draws represent residual individual variability only."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "Treat reported HDL-C mg/dL as comparable to direct serum HDL with no estimated assay or fasting shift; this is a measurement bridge because assays/fasting differ or are incompletely reported. Continuous unrounded values are generated."
+    }
+  ],
+  "parameter_provenance": {
+    "bmi_anchor_kg_m2": {
+      "evidence_ids": [
+        "E_TW_CELLS"
+      ],
+      "assumption_ids": [
+        "A_BMI_POINTS"
+      ],
+      "derivation": "Closed BMI interval midpoints; assumed representatives for the two open categories. No source BMI means were reported."
+    },
+    "mean_hdl_by_sex": {
+      "evidence_ids": [
+        "E_TW_CELLS"
+      ],
+      "assumption_ids": [
+        "A_BMI_POINTS",
+        "A_TRANSPORT",
+        "A_MEASUREMENT"
+      ],
+      "derivation": "Exact Table 2 sex-row arithmetic means at assumed representative BMI points; no outcome fitting."
+    },
+    "sd_hdl_by_sex": {
+      "evidence_ids": [
+        "E_TW_CELLS"
+      ],
+      "assumption_ids": [
+        "A_SCALE",
+        "A_TRANSPORT"
+      ],
+      "derivation": "For each sex/BMI cell, reported SE multiplied by sqrt(reported n); preserve full computation precision. Rounded SE limits precision."
+    },
+    "age_knots_years": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "Approximate age-category midpoints. Article age label 40-50 retained as an acknowledged ambiguity."
+    },
+    "age_effect_mg_dl": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Table 3 contrasts [0,0.75841,1.18484,0.87361] in mg/dL, not slopes per year."
+    },
+    "age_center_mg_dl": {
+      "evidence_ids": [
+        "E_TW_AGE"
+      ],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "sum(n_age * contrast)/sum(n_age), with n_age=[4112,4087,4141,2197]. This exact centering holds only under assumed source-category midpoint mixing."
+    },
+    "tail_asymptote_by_sex": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TAIL"
+      ],
+      "derivation": "Assumed men 30 and women 38 mg/dL; not a fitted floor or individual HDL lower bound."
+    },
+    "tail_decay_per_bmi": {
+      "evidence_ids": [
+        "E_UK_SHAPE"
+      ],
+      "assumption_ids": [
+        "A_TAIL"
+      ],
+      "derivation": "0.04 is assumed, with e-fold distance 25 BMI units. Qualitative inverse/mostly linear source associations motivate allowing continued decline but do not estimate this value."
+    }
+  },
+  "equations": [
+    "m0(b,sex) is linear interpolation of Table 2 means at assumed BMI anchors.",
+    "For b>30: m0=L_sex+(M_sex,30-L_sex)*exp(-0.04*(b-30)).",
+    "m=m0+interp(age;age_knots,contrasts)-weighted_source_age_contrast.",
+    "s=linear interpolation of SE*sqrt(n) at the BMI anchors, constant beyond endpoints.",
+    "v=log(1+(s/m)^2); log(HDL) ~ Normal(log(m)-v/2,v)."
+  ],
+  "interpretation": "Associational virtual data. Fixed selected parameters do not quantify epistemic uncertainty. Source population differences are not individual residual noise.",
+  "unsupported_exact_operators": [
+    "Taiwan published cell means after integrating over actual within-cell BMI and age: unavailable joint distributions.",
+    "Dallas marginal quantiles: missing source BMI/age/ethnicity joint distribution.",
+    "UK/Malawi numerical slope: unsupported PDF supplement."
+  ]
+}
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/gap_2/final/gaps.json =====
+SHA256: 849993a901b070a433d764d51ed13f7a5ace2f394bcd2116a1f6d16d8359879d
+
+[
+  {
+    "id": "G_LOCATION",
+    "component": "conditional location/dependence",
+    "affected_analysis": "BMI-HDL association and sex contrasts",
+    "evidence_status": "Usable sex-by-BMI mean/SE constraints with assumption-dependent continuous interpolation.",
+    "consequence": "Category averages do not determine pointwise effects; transporting them can shift means and slopes.",
+    "next_action": "Stop this one-review pilot with explicit limitation; future work requires compatible aggregate evidence under documented sampling/measurement/adjustment, not target outcome access.",
+    "status": "unresolved",
+    "resolution": "Correct reported cell means retained. Actual within-cell continuous BMI/age and omitted-covariate distributions remain unavailable; selected pointwise interpolation is still an assumption-dependent bridge."
+  },
+  {
+    "id": "G_SHAPE",
+    "component": "relationship shape and extreme BMI",
+    "affected_analysis": "Nonlinearity, severe-obesity contrasts and BMI tail analyses",
+    "evidence_status": "Only an open obesity category and qualitative cross-population monotonic/linear context; severe-BMI slope missing.",
+    "consequence": "Flat versus continuing decline above BMI 30 can materially alter interpretation at BMI 40-70.",
+    "next_action": "Stop this one-review pilot with explicit limitation; future work requires compatible aggregate evidence under documented sampling/measurement/adjustment, not target outcome access.",
+    "status": "unresolved",
+    "resolution": "Retrieved selected Turkish obesity-class means showing a 5.24 mg/dL class-III versus class-I decline. This keeps continuing decline plausible but does not identify target sex-specific decay/asymptotes; selected parameters and the flat-tail sensitivity are retained. Mexican exact sex/class table is unsupported PDF; pooled U.S. lead rejected. No bypass."
+  },
+  {
+    "id": "G_AGE",
+    "component": "relevant modifiers and age applicability",
+    "affected_analysis": "Age association, age-by-sex interaction and older-adult contrasts",
+    "evidence_status": "Small common adjusted Taiwan age contrasts; Dallas standardized age coefficient differs by sex; compatible raw slope not available.",
+    "consequence": "Common age effect may understate sex-specific patterns; 20-29 and 71-79 require extrapolation.",
+    "next_action": "Stop this one-review pilot with explicit limitation; future work requires compatible aggregate evidence under documented sampling/measurement/adjustment, not target outcome access.",
+    "status": "unresolved",
+    "resolution": "Re-extracted all Taiwan Table 5 age contrasts, p-values and Table 2 age-by-BMI counts. Quantified the difference from pooled contrasts, largest in small underweight stratum. Retained pooled age curve because richer adjustment, unknown covariance/formal interaction and missing sex-specific patterns do not identify a uniquely superior target curve. Additional age fulltext lead rejected; no standardized-to-raw conversion."
+  },
+  {
+    "id": "G_VARIANCE",
+    "component": "conditional variability",
+    "affected_analysis": "Correlations, subgroup spread, low-HDL prevalence and confidence intervals",
+    "evidence_status": "Cell SE and n yield total cell SD, not exact residual SD conditional on continuous BMI and age.",
+    "consequence": "Conditional spread may be overestimated by retained within-cell predictor variance or underestimated by transport differences.",
+    "next_action": "Stop this one-review pilot with explicit limitation; future work requires compatible aggregate evidence under documented sampling/measurement/adjustment, not target outcome access.",
+    "status": "unresolved",
+    "resolution": "Cell SD differs from conditional residual SD; adding the age curve also adds between-age variance when marginalizing. Explicit source-midpoint variance accounting performed as a diagnostic, with no invented covariance subtraction. No compatible residual variance/conditional quantile source obtained."
+  },
+  {
+    "id": "G_TAILS",
+    "component": "conditional HDL distribution tails",
+    "affected_analysis": "Threshold prevalence and extreme HDL quantiles",
+    "evidence_status": "Mean/SE and marginal U.S. IQR do not identify conditional distribution family.",
+    "consequence": "Lognormal family fixes skew and tail probabilities absent direct evidence.",
+    "next_action": "Stop this one-review pilot with explicit limitation; future work requires compatible aggregate evidence under documented sampling/measurement/adjustment, not target outcome access.",
+    "status": "unresolved",
+    "resolution": "Conditional lognormal family retained as a scenario; added studies supply cell means/SDs or inaccessible tables, not conditional tail evidence. Threshold probabilities remain family- and transport-sensitive."
+  },
+  {
+    "id": "G_TRANSPORT",
+    "component": "source selection, population and measurement",
+    "affected_analysis": "Every target association and absolute HDL level",
+    "evidence_status": "Non-U.S. primary anchor; U.S. contextual source excludes several conditions/therapies; source assays incomplete or different.",
+    "consequence": "Neither source can identify target conditional distribution without transport assumptions.",
+    "next_action": "Stop this one-review pilot with explicit limitation; future work requires compatible aggregate evidence under documented sampling/measurement/adjustment, not target outcome access.",
+    "status": "unresolved",
+    "resolution": "New Mexican and Turkish sources have substantial exclusions and different population/measurement conditions. No numerical transport or assay correction is identified. Source heterogeneity remains separate from individual residual variation."
+  },
+  {
+    "id": "G_CAUSAL",
+    "component": "causal/time-series structure",
+    "affected_analysis": "Intervention or longitudinal HDL response",
+    "evidence_status": "Not the intended cross-sectional virtual-column task.",
+    "consequence": "Cross-sectional associations cannot be interpreted as treatment or aging responses.",
+    "next_action": "No causal operator is part of this task.",
+    "status": "not_applicable",
+    "resolution": "No causal or longitudinal claims added; all retained relationships describe a cross-sectional virtual-column scenario."
+  }
+]
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/runs/gap_2/final/actions.json =====
+SHA256: b4cd2ac6d746ecdce1f167159f752538e3d9cdcbcaaba1e76cfa0e581bf7f560
+
+[
+  {
+    "gap_id": "G_LOCATION",
+    "action": "retrieve",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Parameter and structure: sex-specific BMI anchor means and approximate SDs selected.",
+    "reason": "Joint sex/BMI cells constrain the available predictor-outcome relationship directly.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_LOCATION",
+    "action": "reextract",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Interpretation: kept adjusted coefficients separate from unadjusted cell means.",
+    "reason": "Stacking Table 3 effects onto Table 2 means would double count associations and change the adjustment estimand.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_SHAPE",
+    "action": "retrieve",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a.txt",
+        "sha256": "ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a"
+      },
+      {
+        "path": "literature/approved/222562948a768aecb2835e1f2d0d5146e36e5d2e28ea6590b2495b223b4c68e5.json",
+        "sha256": "222562948a768aecb2835e1f2d0d5146e36e5d2e28ea6590b2495b223b4c68e5"
+      }
+    ],
+    "model_change": "Analysis qualification and assumed declining extrapolation.",
+    "reason": "Shape search yielded an independent cross-country lead; its numerical supplement is unsupported PDF, so its content was not accessed.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_SHAPE",
+    "action": "sensitivity",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      },
+      {
+        "path": "literature/approved/ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a.txt",
+        "sha256": "ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a"
+      }
+    ],
+    "model_change": "No tuning to simulation draw; contrasted declining-tail and flat-tail conditional means.",
+    "reason": "Both can agree at central anchors while differing materially at severe BMI; finite sensitivity pair is not a calibrated uncertainty interval.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_AGE",
+    "action": "retrieve",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c.txt",
+        "sha256": "cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c"
+      }
+    ],
+    "model_change": "Qualification: common age pattern provisional; no unsupported standardized-to-raw conversion.",
+    "reason": "Dallas female standardized age coefficient differs from male; source age/HDL SDs for those models are missing.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_VARIANCE",
+    "action": "source_check",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Scale parameter derived as SE*sqrt(n), rather than mistakenly using SE as individual noise.",
+    "reason": "Methods explicitly define reported plus/minus as SE. Numerical tests recover each assumed moment.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_TAILS",
+    "action": "retain",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      },
+      {
+        "path": "literature/approved/cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c.txt",
+        "sha256": "cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c"
+      }
+    ],
+    "model_change": "Distribution assumption: positive lognormal retained.",
+    "reason": "No retrieved conditional quantiles identify a better tail family; marginal Dallas quantiles are not exact conditional checks.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_TRANSPORT",
+    "action": "source_check",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      },
+      {
+        "path": "literature/approved/ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a.txt",
+        "sha256": "ef8b2d42b5285e1da10139a60ac85e536dc53805f89f8c90d949fb28fbc2c37a"
+      },
+      {
+        "path": "literature/approved/cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c.txt",
+        "sha256": "cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c"
+      }
+    ],
+    "model_change": "Measurement/population qualifications; no target calibration.",
+    "reason": "Source predictor distributions and compatible sampling/measurement operators are unavailable.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_CAUSAL",
+    "action": "retain",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Use qualification only.",
+    "reason": "Cross-sectional construction does not estimate causal interventions.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_AGE",
+    "action": "stop",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c.txt",
+        "sha256": "cbee30acd93184c1569619c148e57a323867657d842b3ff649e1e345a93d075c"
+      }
+    ],
+    "model_change": "Initial model frozen pending independent review.",
+    "reason": "Six queries and three downloads used; six queries and nine downloads reserved for an attainable review-triggered correction. This is pragmatic stopping, not exhaustive search saturation.",
+    "phase": "initial"
+  },
+  {
+    "gap_id": "G_AGE",
+    "action": "reextract",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Evidence extraction and qualification only; exact generator/spec retained.",
+    "reason": "F1: ledger now records all Table 5 age contrasts, p-values and Table 2 age/BMI cell counts; differences between individual estimates are not formal interaction tests.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_AGE",
+    "action": "sensitivity",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "No selected coefficient change; added focused pooled-versus-BMI-stratified age-contrast comparison.",
+    "reason": "F1: shows the possible effect on age contrasts while keeping the source adjustment set and small underweight stratum visible.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_AGE",
+    "action": "stop",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/4bf49f105aaec4ef85c4a06c1b258def5634fb7708bc6cbdea928448f08d58ef.json",
+        "sha256": "4bf49f105aaec4ef85c4a06c1b258def5634fb7708bc6cbdea928448f08d58ef"
+      }
+    ],
+    "model_change": "No numerical change.",
+    "reason": "Compatible age/sex/BMI search found a potentially useful article, but its maintext was rejected for excluded_study_alias. Do not use its rejected content; retain the simpler pooled-age scenario rather than assert a new raw slope.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_LOCATION",
+    "action": "retain",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Mean interpolation retained.",
+    "reason": "F2: no joint within-cell predictor distributions obtained; source means cannot be reverse-engineered into a unique conditional model.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_VARIANCE",
+    "action": "source_check",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Clarified operator and variance accounting; no unsupported residual-variance deduction.",
+    "reason": "F2: calculate variance from the explicit source-midpoint age mixture separately from within-cell SD, and label it as an assumed diagnostic rather than source replication.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_SHAPE",
+    "action": "retrieve",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/cbdda90a0da6ca2c14fb232a533609872dc47e59db8f6728462026a1f6ac762d.json",
+        "sha256": "cbdda90a0da6ca2c14fb232a533609872dc47e59db8f6728462026a1f6ac762d"
+      },
+      {
+        "path": "literature/approved/cd509ac9ca5d45fc4aca2fd8a3f609656001de196a829fd5a7a56097278d7452.txt",
+        "sha256": "cd509ac9ca5d45fc4aca2fd8a3f609656001de196a829fd5a7a56097278d7452"
+      },
+      {
+        "path": "literature/approved/5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6.txt",
+        "sha256": "5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6"
+      }
+    ],
+    "model_change": "Added within-obesity evidence and measurement/selection qualifications; numerical model unchanged.",
+    "reason": "F3: followed concrete class-I/II/III leads; read Turkish Table 1 primary means/SDs; Mexican sex/class table is inaccessible PDF. The separate U.S. lead was rejected and supplied no maintext.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_SHAPE",
+    "action": "source_check",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6.txt",
+        "sha256": "5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6"
+      }
+    ],
+    "model_change": "Added source-scale descriptive contrast; retained tail parameters.",
+    "reason": "F3: class III minus I HDL mean is -5.24 mg/dL. Selected-sex plug-in contrasts are directionally compatible, but missing sex/joint distributions prevent an exact source model operator or numeric fit.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_SHAPE",
+    "action": "retain",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6.txt",
+        "sha256": "5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6"
+      },
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "Same assumed tail asymptotes and decay retained; original flat alternative remains explicit.",
+    "reason": "Continued decline remains plausible; small selected source does not justify re-estimating the target tail. This is a justified numerical no-op, not evidence of target accuracy.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_TAILS",
+    "action": "retain",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      },
+      {
+        "path": "literature/approved/5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6.txt",
+        "sha256": "5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6"
+      }
+    ],
+    "model_change": "Lognormal family retained.",
+    "reason": "Reported mean/SD information cannot discriminate conditional tail families; no threshold calibration performed.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_TRANSPORT",
+    "action": "source_check",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/cd509ac9ca5d45fc4aca2fd8a3f609656001de196a829fd5a7a56097278d7452.txt",
+        "sha256": "cd509ac9ca5d45fc4aca2fd8a3f609656001de196a829fd5a7a56097278d7452"
+      },
+      {
+        "path": "literature/approved/5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6.txt",
+        "sha256": "5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6"
+      }
+    ],
+    "model_change": "Population/assay qualification strengthened; no change to person-level random noise.",
+    "reason": "Additional sources have substantial selection and measurement differences; neither identifies a U.S. transport offset.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_CAUSAL",
+    "action": "retain",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac.txt",
+        "sha256": "47555a144a38e836dab7da8c676a10f51089bc8f6f7776df74dbf31c464261ac"
+      }
+    ],
+    "model_change": "No causal model added.",
+    "reason": "Cross-sectional primary evidence does not identify intervention or aging responses.",
+    "phase": "revision"
+  },
+  {
+    "gap_id": "G_SHAPE",
+    "action": "stop",
+    "evidence_artifacts": [
+      {
+        "path": "literature/approved/cbdda90a0da6ca2c14fb232a533609872dc47e59db8f6728462026a1f6ac762d.json",
+        "sha256": "cbdda90a0da6ca2c14fb232a533609872dc47e59db8f6728462026a1f6ac762d"
+      },
+      {
+        "path": "literature/approved/4bf49f105aaec4ef85c4a06c1b258def5634fb7708bc6cbdea928448f08d58ef.json",
+        "sha256": "4bf49f105aaec4ef85c4a06c1b258def5634fb7708bc6cbdea928448f08d58ef"
+      },
+      {
+        "path": "literature/approved/cd509ac9ca5d45fc4aca2fd8a3f609656001de196a829fd5a7a56097278d7452.txt",
+        "sha256": "cd509ac9ca5d45fc4aca2fd8a3f609656001de196a829fd5a7a56097278d7452"
+      },
+      {
+        "path": "literature/approved/5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6.txt",
+        "sha256": "5363b935e158f87ad1e5716eaad40e7b289e8d945e60a1c1fd16ceba919c4aa6"
+      }
+    ],
+    "model_change": "Final numerical candidate frozen without parameter changes.",
+    "reason": "Two focused review searches and four download attempts yielded two usable contextual sources and two rejections. Relevant available leads are assessed; no exhaustive saturation claimed. Total use 8 queries/7 downloads, below the cap.",
+    "phase": "revision"
+  }
+]
+
+===== END SOURCE FILE =====
+
+
+
+===== BEGIN SOURCE FILE: biomedical_research/evidence_gap_loop_2026-10-28/custodian/evaluate.py =====
+SHA256: b8416f30282329b9e55b3a814187eb5d65ad239bac7b6f5ba610d37344b1c29c
+
+"""Locked, outcome-neutral evaluation; no reference reading before release gate."""
+from pathlib import Path
+import argparse
+import csv
+import hashlib
+import json
+import numpy as np
+import pandas as pd
+from scipy.stats import t
+
+BASE = Path(__file__).resolve().parent
+PILOT = BASE.parent
+OBSERVED = ["row_id", "bmi", "age", "sex"]
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def save(path, obj):
+    Path(path).write_text(json.dumps(obj, indent=2, allow_nan=False)+"\n", encoding="utf-8")
+
+def read_csv(path):
+    with Path(path).open(encoding="utf-8-sig", newline="") as f:
+        header = next(csv.reader(f), [])
+    require(header and len(header) == len(set(header)), "Empty or duplicate CSV header")
+    return pd.read_csv(path, dtype=str, keep_default_na=False)
+
+def number(frame, column):
+    try:
+        values = np.array([float(x) for x in frame[column]], float)
+    except (ValueError, TypeError, KeyError) as exc:
+        raise ValueError(f"Invalid numeric column {column}") from exc
+    require(np.isfinite(values).all(), f"Nonfinite {column}")
+    return values
+
+def valid_observed(frame):
+    require(list(frame.columns) == OBSERVED, "Observed columns violate allowlist")
+    require(frame.row_id.ne("").all() and frame.row_id.is_unique, "Bad observed row IDs")
+    require((number(frame, "bmi") > 0).all(), "Invalid BMI")
+    age = number(frame, "age")
+    require(((age >= 20) & (age <= 79) & (age == np.floor(age))).all(), "Invalid age")
+    require(np.isin(number(frame, "sex"), [1, 2]).all(), "Invalid sex")
+
+def match_generated(observed, generated):
+    require(set(generated.columns) == set(OBSERVED+["hdl"]), "Generated columns violate allowlist")
+    require(generated.row_id.is_unique and set(generated.row_id) == set(observed.row_id), "Generated ID mismatch")
+    aligned = generated.set_index("row_id").loc[observed.row_id].reset_index()
+    for name in OBSERVED[1:]:
+        require(np.array_equal(number(aligned, name), number(observed, name)), f"Changed observed {name}")
+    y = number(aligned, "hdl")
+    require((y > 0).all(), "HDL must be positive")
+    return y
+
+def matrices(observed):
+    b = (number(observed, "bmi")-25)/5
+    a = (number(observed, "age")-50)/10
+    f = (number(observed, "sex") == 2).astype(float)
+    one = np.ones(len(observed))
+    return {"A": np.column_stack([one, b]), "B": np.column_stack([one, b, a, f]),
+            "C": np.column_stack([one, b, b*b, a, f]), "D": np.column_stack([one, b, a, f, b*f])}
+
+def taylor_fit(X, y, domain, spine):
+    """WLS and stratified-PSU Taylor sandwich with zero scores outside domain."""
+    X, y = np.asarray(X, float), np.asarray(y, float)
+    require(X.ndim == 2 and y.shape == (len(X),), "Bad fit dimensions")
+    require(np.isfinite(X).all() and np.isfinite(y).all(), "Nonfinite fit inputs")
+    rank = np.linalg.matrix_rank(X)
+    require(rank == X.shape[1], "Rank-deficient frozen model")
+    w = number(domain, "weight")
+    require((w > 0).all(), "Nonpositive domain weight")
+    w = w/w.mean()
+    pairs = spine[["stratum", "psu"]].drop_duplicates()
+    counts = pairs.groupby("stratum").size()
+    require((counts >= 2).all(), "Singleton full-spine stratum")
+    bread = X.T @ (w[:, None]*X)
+    inverse = np.linalg.inv(bread)
+    beta = np.linalg.solve(bread, X.T @ (w*y))
+    scores = (w*(y-X@beta))[:, None]*X
+    names = [f"score_{i}" for i in range(X.shape[1])]
+    tagged = domain[["stratum", "psu"]].reset_index(drop=True).copy()
+    tagged[names] = scores
+    totals = tagged.groupby(["stratum", "psu"])[names].sum().reindex(pd.MultiIndex.from_frame(pairs), fill_value=0)
+    meat = np.zeros_like(bread)
+    for _, group in totals.groupby(level="stratum"):
+        values = group.to_numpy()
+        centered = values-values.mean(axis=0)
+        meat += len(values)/(len(values)-1)*(centered.T@centered)
+    covariance = inverse@meat@inverse
+    covariance = (covariance+covariance.T)/2
+    domain_pairs = domain[["stratum", "psu"]].drop_duplicates()
+    design_df = len(domain_pairs)-domain_pairs.stratum.nunique()
+    residual_df = design_df-(rank-1)
+    diagnostics = {"full_spine_n": len(spine), "domain_n": len(domain),
+                   "full_strata": int(pairs.stratum.nunique()), "full_psus": len(pairs),
+                   "domain_strata": int(domain_pairs.stratum.nunique()), "domain_psus": len(domain_pairs),
+                   "design_df": int(design_df), "residual_df": int(residual_df), "rank": int(rank)}
+    return beta, covariance, diagnostics
+
+def contrast(beta, covariance, c, df):
+    c = np.array(c, float)
+    estimate = float(c@beta)
+    variance = float(c@covariance@c)
+    require(variance >= -1e-9, "Negative contrast variance")
+    se = float(np.sqrt(max(0, variance)))
+    margin = float(t.ppf(.975, df))*se if df > 0 else None
+    return {"estimate": estimate, "standard_error": se,
+            "ci95_low": estimate-margin if margin is not None else None,
+            "ci95_high": estimate+margin if margin is not None else None,
+            "df": int(df)}
+
+def analyze(observed, y, domain, spine, spec):
+    y = np.asarray(y, float)
+    require(y.shape == (len(observed),) and np.isfinite(y).all() and (y > 0).all(), "Bad HDL vector")
+    fits, endpoints = {}, []
+    for name, X in matrices(observed).items():
+        beta, covariance, diag = taylor_fit(X, y, domain, spine)
+        fits[name] = {"coefficients": beta.tolist(), "covariance": covariance.tolist(), "diagnostics": diag}
+        for endpoint in spec["endpoints"]:
+            if endpoint["model"] == name:
+                endpoints.append({"endpoint": endpoint["name"], "model": name, "role": endpoint["role"],
+                                  **contrast(beta, covariance, endpoint["contrast"], diag["residual_df"])})
+    w = number(domain, "weight")
+    w = w/w.sum()
+    mean = float(w@y)
+    sd = float(np.sqrt(w@((y-mean)**2)))
+    order = np.argsort(y, kind="stable")
+    cumulative = np.cumsum(w[order])
+    quantiles = {str(q): float(y[order][min(np.searchsorted(cumulative, q, side="left"), len(y)-1)]) for q in [.1, .5, .9]}
+    b = number(observed, "bmi")
+    bc, yc = b-w@b, y-mean
+    denominator = float(np.sqrt((w@(bc*bc))*(w@(yc*yc))))
+    corr = float((w@(bc*yc))/denominator) if denominator > 0 else None
+    return {"endpoints": endpoints, "fits": fits,
+            "distribution": {"weighted_mean": mean, "weighted_sd_population": sd,
+                             "weighted_quantiles_inverse_cdf": quantiles, "weighted_bmi_correlation": corr}}
+
+def safe_path(relative):
+    path = (PILOT/relative).resolve()
+    require(path.is_relative_to(PILOT.resolve()), "Path escapes pilot")
+    return path
+
+def read_json(path):
+    return json.loads(Path(path).read_text(encoding="utf-8-sig"))
+
+def scoped_path(value):
+    path = Path(value).resolve()
+    require(path.is_relative_to(PILOT.resolve()), "Provenance path escapes pilot")
+    return path
+
+def verify_commitment(commitment, required=(), within=None):
+    require(isinstance(commitment, dict) and commitment, "Missing file commitment")
+    canonical = {}
+    for value, expected in commitment.items():
+        path = scoped_path(value)
+        require(path not in canonical, "Duplicate canonical commitment path")
+        if within is not None:
+            require(path.is_relative_to(within.resolve()), "Candidate commitment escapes construction")
+        require(path.is_file() and sha(path) == expected, "Committed provenance file changed")
+        canonical[path] = expected
+    require(set(p.resolve() for p in required) <= set(canonical), "Required file absent from commitment")
+    return canonical
+
+def validate_provenance(release, entries):
+    """Bind all slots to four run, review, candidate and execution receipts."""
+    artifacts = release.get("artifacts", {})
+    require(isinstance(artifacts, dict) and artifacts, "Release must bind provenance artifacts")
+    registered = {}
+    for value, digest in artifacts.items():
+        path = safe_path(value)
+        require(path not in registered, "Duplicate canonical artifact path")
+        require(path.is_file() and sha(path) == digest, "Release artifact hash mismatch")
+        registered[path] = digest
+    def bound(path):
+        path = path.resolve()
+        require(path in registered and registered[path] == sha(path), "Unbound provenance artifact")
+        return read_json(path)
+    controller = PILOT/"loop_control.py"
+    protocol_path = PILOT/"protocol.json"
+    require(controller.resolve() in registered, "Controller not release-bound")
+    protocol = bound(protocol_path)
+    seeds = protocol.get("generation_seeds")
+    require(seeds == [281001, 281002, 281003, 281004, 281005], "Protocol seed schedule changed")
+    expected_runs = {"ordinary_1": "ordinary", "ordinary_2": "ordinary", "gap_1": "gap_policy", "gap_2": "gap_policy"}
+    require({e["construction"] for e in entries} == set(expected_runs), "Unexpected construction directories")
+    n_rows = read_json(PILOT/"shared/schema.json")["row_count"]
+    paths = [safe_path(e["file"]) for e in entries]
+    require(len(set(paths)) == 40, "Each output slot requires a distinct canonical path")
+    by_slot = {(e["construction"], e["stage"], e["draw"]): e for e in entries}
+    run_paths = [(PILOT/"runs"/name).resolve() for name in expected_runs]
+    require(len(set(run_paths)) == 4, "Construction directories are not distinct")
+    for construction, arm in expected_runs.items():
+        run = (PILOT/"runs"/construction).resolve()
+        require(run.is_relative_to((PILOT/"runs").resolve()), "Run path escapes construction root")
+        cfg = bound(run/"run.json")
+        require(cfg["policy"] == arm, "Run policy disagrees with assigned arm")
+        observed = scoped_path(cfg["observed"])
+        contract = scoped_path(cfg["contract"])
+        require(observed == (PILOT/"shared/observed.csv").resolve(), "Run used different observed packet")
+        require(scoped_path(cfg["protocol"]) == protocol_path.resolve(), "Run used different protocol")
+        require(scoped_path(cfg["literature_session"]) == (run/"literature").resolve(), "Run used another literature session")
+        gateway_config = PILOT/"tools/gateway_config.json"
+        require(scoped_path(cfg["gateway_config"]) == gateway_config.resolve(), "Run used different gateway configuration")
+        cfg_commitment = verify_commitment(cfg["commitment"], [observed, contract, protocol_path, controller, PILOT/"tools/literature_gateway.py", gateway_config])
+        for p in cfg_commitment:
+            require(p in registered, "Run input absent from release artifact map")
+        receipt = bound(run/"review_receipt.json")
+        require(receipt.get("execution_allowed") is True and receipt.get("no_reference_feedback") is True, "Initial review blocks or lacks blinding assertion")
+        review_commitment = verify_commitment(receipt["commitment"], [run/"initial/freeze.json"])
+        review_paths = set(review_commitment)-{(run/"initial/freeze.json").resolve()}
+        require(len(review_paths) == 1, "Initial receipt must bind exactly one review document")
+        initial_review = bound(next(iter(review_paths)))
+        final_review = bound(run/"final_code_review.json")
+        for stage, review in [("initial", initial_review), ("final", final_review)]:
+            folder = run/stage
+            require(review.get("execution_allowed") is True, "Candidate review blocks execution")
+            for key, name in [("generator_sha256", "generator.py"), ("model_spec_sha256", "model_spec.json"),
+                              ("evidence_sha256", "evidence.json"), ("candidate_freeze_sha256", "freeze.json")]:
+                require(review.get(key) == sha(folder/name), "Review does not bind current candidate")
+            frozen = bound(folder/"freeze.json")
+            require(frozen.get("version") == stage and frozen.get("policy") == arm, "Candidate stage/policy mismatch")
+            require(frozen.get("run_sha256") == sha(run/"run.json"), "Candidate bound to different run")
+            require(frozen.get("run_commitment") == cfg["commitment"], "Candidate run commitment changed")
+            required = [folder/name for name in ["generator.py", "model_spec.json", "evidence.json", "decision.md", "gateway_snapshot.json"]]
+            if arm == "gap_policy":
+                required += [folder/"gaps.json", folder/"actions.json"]
+            if stage == "final":
+                required += [folder/"revision.json"]
+            verify_commitment(frozen["commitment"], required, within=run)
+            snapshot = bound(folder/"gateway_snapshot.json")
+            require(scoped_path(snapshot["session"]) == (run/"literature").resolve(), "Gateway snapshot uses different session")
+            require(snapshot["config_sha256"] == sha(gateway_config), "Gateway configuration differs from snapshot")
+            audit = (run/"literature/audit.jsonl").read_bytes()
+            length = snapshot["audit_bytes"]
+            require(isinstance(length, int) and length > 0 and len(audit) >= length, "Bad gateway snapshot extent")
+            require(hashlib.sha256(audit[:length]).hexdigest() == snapshot["audit_prefix_sha256"], "Gateway audit prefix changed")
+            execution = bound(folder/"outputs/execution.json")
+            require(execution.get("version") == stage, "Execution stage mismatch")
+            require(execution.get("controller_sha256") == sha(controller), "Execution controller mismatch")
+            require(execution.get("run_sha256") == sha(run/"run.json"), "Execution run mismatch")
+            require(execution.get("candidate_freeze_sha256") == sha(folder/"freeze.json"), "Execution candidate mismatch")
+            require(execution.get("review_receipt_sha256") == sha(run/"review_receipt.json"), "Execution initial review mismatch")
+            final_review_hash = sha(run/"final_code_review.json") if stage == "final" else None
+            require(execution.get("final_code_review_sha256") == final_review_hash, "Execution final review mismatch")
+            require(execution.get("observed_cells_preserved") is True and execution.get("same_seed_reproducible") is True, "Execution output contract failed")
+            require(isinstance(execution.get("unique_generated_vectors"), int) and execution["unique_generated_vectors"] > 1, "Execution draw variability check failed")
+            draws = execution.get("draws", [])
+            require(len(draws) == 5 and [d["seed"] for d in draws] == seeds, "Execution seed schedule mismatch")
+            for number, draw in enumerate(draws, 1):
+                entry = by_slot[(construction, stage, number)]
+                path = (folder/"outputs"/f"draw_{number:02d}.csv").resolve()
+                require(scoped_path(draw["path"]) == path and safe_path(entry["file"]) == path, "Output slot bound to wrong execution path")
+                require(entry["arm"] == arm and entry.get("seed") == draw["seed"], "Output slot policy/seed mismatch")
+                require(draw["n_rows"] == n_rows, "Execution row count mismatch")
+                require(entry["sha256"] == draw["sha256"] == sha(path), "Output slot hash disagrees with execution")
+
+def validate_release(release):
+    require(release.get("all_four_constructions_frozen") is True, "Missing all-four freeze assertion")
+    require(release.get("root_authorized_evaluation") is True, "Root has not authorized evaluation")
+    require(release.get("no_builder_access_to_target") is True, "Missing blinding assertion")
+    require(release.get("analysis_spec_sha256") == sha(BASE/"analysis_spec.json"), "Analysis spec mismatch")
+    require(release.get("evaluator_sha256") == sha(__file__), "Evaluator mismatch")
+    entries = release.get("outputs", [])
+    require(len(entries) == 40, "Expected 4 constructions x 2 stages x 5 draws")
+    keys = [(e["construction"], e["stage"], e["draw"]) for e in entries]
+    require(len(set(keys)) == 40, "Duplicate output slot")
+    constructions = sorted(set(e["construction"] for e in entries))
+    require(len(constructions) == 4, "Expected four constructions")
+    arms = {}
+    for construction in constructions:
+        group = [e for e in entries if e["construction"] == construction]
+        require({e["stage"] for e in group} == {"initial", "final"}, "Missing stage")
+        require(len({e["arm"] for e in group}) == 1, "Conflicting arm")
+        arms[construction] = group[0]["arm"]
+        for stage in ["initial", "final"]:
+            require({e["draw"] for e in group if e["stage"] == stage} == {1, 2, 3, 4, 5}, "Missing draw")
+    require(list(arms.values()).count("ordinary") == 2 and list(arms.values()).count("gap_policy") == 2, "Require two constructions per arm")
+    for entry in entries:
+        require(sha(safe_path(entry["file"])) == entry["sha256"], "Generated output hash mismatch")
+    validate_provenance(release, entries)
+    return entries
+
+def run(release_path):
+    release = json.loads(Path(release_path).read_text(encoding="utf-8"))
+    entries = validate_release(release)
+    frozen = json.loads((BASE/"locked/freeze_manifest.json").read_text())
+    for item in frozen["files"]:
+        require(sha(safe_path(item["path"])) == item["sha256"], "Frozen custodian packet changed")
+    observed = read_csv(PILOT/"shared/observed.csv")
+    valid_observed(observed)
+    generated = [(entry, match_generated(observed, read_csv(safe_path(entry["file"])))) for entry in entries]
+    # Reference and design are read only after the release and every output pass.
+    reference = read_csv(BASE/"locked/reference.csv")
+    truth = match_generated(observed, reference)
+    spine = read_csv(BASE/"locked/design_spine.csv")
+    require(spine.design_id.is_unique, "Duplicate design ID")
+    require((number(spine, "weight") > 0).all(), "Nonpositive full-spine weight")
+    target_spine = spine[spine.in_target_domain == "1"].copy()
+    require(target_spine.row_id.is_unique and set(target_spine.row_id) == set(observed.row_id), "Domain/spine mismatch")
+    require((spine.loc[spine.in_target_domain == "0", "row_id"] == "").all(), "Unexpected out-of-domain row key")
+    require(spine[["stratum", "psu"]].ne("").all().all(), "Missing design code")
+    domain = target_spine.set_index("row_id").loc[observed.row_id].reset_index()
+    spec = json.loads((BASE/"analysis_spec.json").read_text())
+    reference_results = analyze(observed, truth, domain, spine, spec)
+    by_endpoint = {x["endpoint"]: x for x in reference_results["endpoints"]}
+    draw_results, differences = [], []
+    for entry, values in generated:
+        result = analyze(observed, values, domain, spine, spec)
+        metadata = {key: entry[key] for key in ["construction", "arm", "stage", "draw"]}
+        draw_results.append({**metadata, **result})
+        for endpoint in result["endpoints"]:
+            ref = by_endpoint[endpoint["endpoint"]]
+            difference = endpoint["estimate"]-ref["estimate"]
+            differences.append({**metadata, **endpoint, "true_estimate": ref["estimate"],
+                                "true_ci95_low": ref["ci95_low"], "true_ci95_high": ref["ci95_high"],
+                                "difference": difference, "absolute_difference": abs(difference)})
+    table = pd.DataFrame(differences)
+    summary = table.groupby(["construction", "arm", "stage", "endpoint"], sort=True).agg(
+        generated_median=("estimate", "median"), generated_min=("estimate", "min"), generated_max=("estimate", "max"),
+        median_difference=("difference", "median"), median_absolute_difference=("absolute_difference", "median"),
+        true_estimate=("true_estimate", "first")).reset_index()
+    initial = summary[summary.stage == "initial"].drop(columns="stage")
+    final = summary[summary.stage == "final"].drop(columns="stage")
+    paired = initial.merge(final, on=["construction", "arm", "endpoint"], suffixes=("_initial", "_final"), validate="one_to_one")
+    paired["final_minus_initial_median_absolute_difference"] = paired.median_absolute_difference_final-paired.median_absolute_difference_initial
+    results = BASE/"results"
+    require(not results.exists(), "Evaluation results already exist; never silently overwrite")
+    results.mkdir()
+    table.to_csv(results/"all_endpoint_draws.csv", index=False)
+    summary.to_csv(results/"endpoint_summary.csv", index=False)
+    paired.to_csv(results/"initial_final_changes.csv", index=False)
+    save(results/"analysis_results.json", {"reference": reference_results, "generated": draw_results,
+        "release_manifest_sha256": sha(release_path), "spec_sha256": sha(BASE/"analysis_spec.json"),
+        "limitations": [spec["claims"], spec["uncertainty"], "No inferential arm-superiority test or overall pass/fail is calculated.",
+                        "All eight endpoints are reported, including disagreement and unsupported endpoints."]})
+    print(json.dumps({"outputs_evaluated": len(entries), "endpoint_rows": len(table), "results_directory": str(results)}))
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--release", required=True)
+    args = parser.parse_args()
+    run(args.release)
+
+===== END SOURCE FILE =====

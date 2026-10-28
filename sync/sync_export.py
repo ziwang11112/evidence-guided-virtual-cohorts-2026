@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+from urllib.parse import urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWLIST = ROOT / "sync/source_allowlist.json"
@@ -34,6 +35,40 @@ def normalize_review(value, workspace):
         if portable.lower().startswith(prefix.lower()):
             return portable[len(prefix):]
     return value
+
+
+def normalize_provider_review(raw, item):
+    """Change reviewed transport references only; preserve response prose."""
+    text = raw.decode("utf-8")
+    counts = {"temporary_attachment_links_replaced": 0,
+              "utm_source_parameters_removed": 0,
+              "local_attachment_references_replaced": 0}
+    text, counts["temporary_attachment_links_replaced"] = re.subn(
+        r"sandbox:/workspace/scratch/[A-Za-z0-9_-]+/upload/(REVIEW_BRIEF\.txt|IMPLEMENTATION_APPENDIX\.txt)",
+        lambda match: match.group(1), text)
+
+    def strip_tracking(match):
+        url = match.group(0)
+        parsed = urlsplit(url)
+        if not parsed.query:
+            return url
+        pairs = parsed.query.split("&")
+        kept = [pair for pair in pairs if not pair.lower().startswith("utm_source=")]
+        counts["utm_source_parameters_removed"] += len(pairs) - len(kept)
+        return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "&".join(kept), parsed.fragment))
+
+    text = re.sub(r'https?://[^\s<>\]\)"`]+', strip_tracking, text)
+    target = item.get("attachment_reference_target")
+    if target:
+        if target not in {"GEMINI_REVIEW_USER_SUPPLIED.md", "CLAUDE_REVIEW_USER_SUPPLIED.md"}:
+            raise ValueError("Unexpected reviewed attachment target")
+        uuid = r"[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}"
+        attachment_prefix = r"(?:[A-Za-z]:/" + "/".join(("Codex", "home", "attachments")) + r"/)?"
+        text, counts["local_attachment_references_replaced"] = re.subn(
+            attachment_prefix + uuid + r"/Pasted text\.txt", target, text)
+    if counts != item["review_reference_counts"]:
+        raise ValueError("Unexpected provider review reference counts")
+    return text.encode("utf-8")
 
 
 def main():
@@ -75,6 +110,8 @@ def main():
                 raise ValueError(f"Candidate commitment mismatch: {item['source']}")
         if item["transform"] == "none":
             exported = raw
+        elif item["transform"] == "normalize_provider_review_references":
+            exported = normalize_provider_review(raw, item)
         elif item["transform"] == "normalize_review_workspace_paths":
             obj = normalize_review(json.loads(raw.decode("utf-8-sig")), workspace)
             exported = (json.dumps(obj, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
