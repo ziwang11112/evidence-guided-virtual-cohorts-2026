@@ -1,0 +1,365 @@
+{
+  "parameters": {
+    "structure_id": "s1_tromso_interaction",
+    "reference": {
+      "tg_mean": [
+        141.6,
+        97.2
+      ],
+      "tg_sd": [
+        107.7,
+        61.0
+      ],
+      "age_mean": [
+        43.9,
+        43.3
+      ],
+      "age_sd": [
+        13.6,
+        12.7
+      ],
+      "bmi_mean": [
+        24.4,
+        23.0
+      ],
+      "bmi_sd": [
+        3.1,
+        3.2
+      ]
+    },
+    "assay": {
+      "intercept": 12.45,
+      "slope": 1.022
+    },
+    "bmi_slope": [
+      9.557309727577666,
+      5.2
+    ],
+    "age_slope": [
+      -0.2,
+      1.6
+    ],
+    "residual_cv": [
+      0.7153743796657551,
+      0.5468139785420796
+    ],
+    "positive_mean": {
+      "floor": 15.0,
+      "width": 8.0
+    },
+    "joint_interaction": {
+      "age_knots": [
+        44.5,
+        54.5,
+        64.5,
+        74.5,
+        84.5
+      ],
+      "bmi_knots": [
+        22.5,
+        27.5,
+        32.5
+      ],
+      "relative_differences": [
+        [
+          [
+            1.0,
+            1.32,
+            1.61
+          ],
+          [
+            0.97,
+            1.3,
+            1.58
+          ],
+          [
+            0.92,
+            1.18,
+            1.4
+          ],
+          [
+            0.88,
+            1.08,
+            1.32
+          ],
+          [
+            0.85,
+            1.02,
+            1.15
+          ]
+        ],
+        [
+          [
+            1.0,
+            1.24,
+            1.6
+          ],
+          [
+            1.14,
+            1.44,
+            1.83
+          ],
+          [
+            1.2,
+            1.5,
+            1.74
+          ],
+          [
+            1.17,
+            1.4,
+            1.64
+          ],
+          [
+            1.16,
+            1.49,
+            1.55
+          ]
+        ]
+      ],
+      "transfer_fraction": 1.0
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_shared_source_interpretation",
+      "description": "Oh PMC6911291.1, Bansal admitted publisher snapshot, China-PAR admitted main XML and Tromso PMC10308115 version1 main XML/exact supplement are the permitted scientific sources. Repeated publications, table cells sharing one reference, overlapping China-PAR subcohorts and replay seeds are not independent clinical evidence. No target outcome or target analysis result was supplied to the builder."
+    },
+    {
+      "id": "A_oh_context",
+      "description": "Oh source context has 160320 synthetic rows: 60 times each published sex count. Within each sex, age and BMI are generated separately from maximum-entropy discrete marginal distributions constrained by Table 1 mean/SD and Table 2 stratum counts. Assumed age support 18..85 years and BMI grid 14..45 at 0.05 spacing. Entropy is relative to a uniform grid within each reported stratum. Quantile allocation and independent fixed-seed permutations approximate independence of age and BMI conditional on sex. The joint distribution, tails and family links are unreported; independence is a working approximation, not a discovered fact."
+    },
+    {
+      "id": "A_bansal_context",
+      "description": "Bansal fasting context has 80472 synthetic women (4 times 20118). Age is 45 plus a gamma distribution with excess mean 9.5 and SD 7.2, rounded to integer years and capped at 120 solely to satisfy task support. BMI is lognormal with arithmetic mean 25.9 and SD 5.0. Deterministic stratified marginal quantiles are independently permuted using the one fixed context seed. Age-BMI dependence, hormone use, medication and other risk factors are unknown. TG tertile-specific age/BMI summaries are diagnostics only and are not used to construct covariates conditional on an assigned TG outcome."
+    },
+    {
+      "id": "A_source_measurement",
+      "description": "Existing Oh/Bansal source replay rows use legacy_proxy and identity mg/dL mapping. Bansal explicitly corrected endogenous glycerol; Oh Cobas6000 glycerol blanking is unreported. Both use EDTA plasma, while the target contract represents fasting serum TG. Tromso uses nonfasting serum TG measured by Cobas8000 c702; its dimensionless log-scale interaction contrast is transported without changing the legacy_proxy assay definition. Exact source-to-target assay equivalence remains unverified."
+    },
+    {
+      "id": "A_assay_transfer",
+      "description": "The task-supplied forward equation 12.45 + 1.022 * legacy_proxy TG is applied only to unblanked_2021_2023 rows. It is measurement context, not target-population association evidence. The point equation is treated deterministically because no coefficient covariance is supplied here. It does not establish interchangeability or alter age/BMI/sex biology; backward sensitivity is controlled elsewhere."
+    },
+    {
+      "id": "A_quantile",
+      "description": "Bansal does not report its quantile interpolation convention. Source replay uses explicitly typed linear (Hyndman-Fan type 7) sample quantiles as an approximation, retaining reported 81, 115 and 169 mg/dL without converting them."
+    },
+    {
+      "id": "A_bins",
+      "description": "Continuous TG is compared with Oh thresholds 150, 200 and 500 mg/dL. Oh Table 1 says >500 while prose says 500 and up; a continuous draw has zero exact-threshold mass. For Bansal integer-labeled tertiles and quintiles, half-unit boundaries 90.5/147.5 and 73.5/98.5/132.5/184.5 approximate rounding to reported integer mg/dL. Cumulative proportions are derived from published counts; these preserve every category count without pretending the bins are exact quantile probabilities."
+    },
+    {
+      "id": "A_oh_ols",
+      "description": "Oh Table 3 reports age/sex-adjusted simple linear BMI regression. The source replay estimates ordinary unweighted OLS TG~age+sex+BMI with intercept; sex is coded 1 male, 2 female and the BMI coefficient is invariant to reference coding. Family weighting/correlation and exact analysis details are unavailable, so this is approximate. Table 4 additionally adjusted metabolic model, Table 5 mixed lifestyle model, and Table 6 co-twin estimands are not substituted for Table 3."
+    },
+    {
+      "id": "A_oh_table2",
+      "description": "Oh Table 2 TG summaries have no explicit arithmetic/geometric label and methods mention geometric averages. Count-weighted BMI strata reconstruct 141.5937/97.2021 and age strata 141.6062/97.2153 mg/dL, supporting an arithmetic reading but not resolving contradictory wording. They are retained as reported_other with no arithmetic replay. Only qualitative shape motivates assumptions; no summary is relabeled as a verified conditional arithmetic mean."
+    },
+    {
+      "id": "A_unmeasured",
+      "description": "The generator has only age, sex and BMI as biological predictors. Missing medication, hormonal, diet, alcohol, diabetes, ancestry and family variables are integrated into individual residual variation or a latent state without claiming their actual values or conditional independence in real populations. Neither a nonsignificant result nor an absent association is evidence of zero."
+    },
+    {
+      "id": "A_transport",
+      "description": "The target contract is US noninstitutionalized fasting adults aged40-79. Existing main effects originate in selected Korean families and initially healthy US women; the interaction departure originates in Tromso Norway adults40+ sampled nonfasting. Selection, ancestry, era, age support and missing covariates differ. This is an assumption-dependent virtual distribution, not individual recovery, causal identification, proven measurement savings or validated inference. No cohort name, opaque identifier, row order or row count enters the biological mean."
+    },
+    {
+      "id": "A_monte_carlo",
+      "description": "Source covariate CSVs and biological parameters are fixed. Controller source seeds80201,80202,80203 and target seeds80101,80102,80103 vary individual residual draws only; they quantify Monte Carlo variation, not evidence, structural or transport uncertainty. The builder does not execute these schedules or use resulting outputs for parameter tuning."
+    },
+    {
+      "id": "A_structure",
+      "description": "Let g(a,b) be the inherited positive arithmetic mean including its soft floor for the selected sex. The new legacy mean is g(a,b0)*g(a0,b)/g(a0,b0)*exp(D(a,b)), with a0=44.5 and b0=22.5 from the first interpolation knots. This preserves inherited curves along the reference-age and reference-BMI lines, and replaces the baseline log cross-ratio with the source surface rather than adding another interaction to it. Individual noise remains independent mean-one lognormal with constant within-sex CV. Existing numerical parameters are fixed; published marginal moments, other conditional anchors and the pooled BMI coefficient are not claimed to be preserved."
+    },
+    {
+      "id": "A_s1_revision",
+      "description": "Historical baseline main-effect coefficients and CV are retained numerically, including female BMI slope 5.2 and the variance-weighted male slope 9.557309727577666. This pilot neither repeats that earlier source-conditioned revision nor retunes those values. The original moment derivation described the additive baseline; after replacing its log interaction, marginal mean/SD identities are no longer guaranteed."
+    },
+    {
+      "id": "A_joint_estimand_bridge",
+      "description": "For each sex, D(a,b)=logR(a,b)-logR(a,b0)-logR(a0,b)+logR(a0,b0), where R is the published adjusted log-TG back-transformed coefficient and a0/b0 denotes age40-49/BMI<25. Replace the inherited positive mean g log cross-ratio by D: m=g(a,b0)*g(a0,b)/g(a0,b0)*exp(D). Thus the legacy-scale mean cross-ratio equals exp(D), while inherited positive curves are preserved at reference age/BMI; absolute source means/main effects are not substituted. Within this generator constant within-sex lognormal residual variance makes conditional geometric and arithmetic ratios coincide on the latent legacy_proxy scale only. The nonzero-intercept affine unblanked assay map does not preserve that equality or log cross-ratio. Constant source log dispersion, stability after integrating missing adjustment variables, and nonfasting-to-fasting transport are unverified bridge assumptions; male adjustment ambiguity remains."
+    },
+    {
+      "id": "A_joint_continuity",
+      "description": "Treat source age bands as represented by44.5,54.5,64.5,74.5,84.5 years and BMI bands as represented by22.5,27.5,32.5 kg/m^2. These are chosen numerical support points, not observed stratum means; especially BMI<25, BMI>=30 and age80+ are open-ended. Apply bilinear interpolation to D and clamp D at boundary knots. This is continuous with derivative changes at knots, not a smooth spline. Clamping concerns the interaction only; inherited curves g(a,b0) and g(a0,b) continue globally, an additional extrapolation assumption. The source categorical estimates identify neither this within-bin trajectory nor continuation of those reference-line curves."
+    },
+    {
+      "id": "A_joint_transfer",
+      "description": "Fix transfer_fraction=1 before any source replay or target output: full transfer of the extracted interaction departure is one interpretable sensitivity scenario, not an estimated optimal or calibrated transport weight. Retain observed departures in both sexes; the male interaction P=.32 does not prove zero. Do not add a separate China-PAR per-SD attenuation, since its normalization and longitudinal-to-cross-sectional mapping are unresolved. Existing main effects/CV/assay coefficients remain fixed; no source or target output-based tuning occurs in this pilot."
+    },
+    {
+      "id": "A_joint_uncertainty",
+      "description": "All28 published nonreference CIs are retained as source uncertainty for their own joint ratios. They are not independent and share a reference. Joint covariance is unreported, so no valid uncertainty distribution for D or for the transported surface is constructed. Point-surface replay seeds address residual Monte Carlo variation only. The exact female age40-49/BMI25-29.9 CI asymmetry and inconsistent male sample counts/adjustment descriptions are retained without correction."
+    }
+  ],
+  "parameter_provenance": {
+    "structure_id": {
+      "evidence_ids": [
+        "E_tromso_s1_age40_49_bmilt25_RD",
+        "E_tromso_s1_age40_49_bmi25to29_9_RD",
+        "E_tromso_s1_age40_49_bmige30_RD",
+        "E_tromso_s1_age50_59_bmilt25_RD",
+        "E_tromso_s1_age50_59_bmi25to29_9_RD",
+        "E_tromso_s1_age50_59_bmige30_RD",
+        "E_tromso_s1_age60_69_bmilt25_RD",
+        "E_tromso_s1_age60_69_bmi25to29_9_RD",
+        "E_tromso_s1_age60_69_bmige30_RD",
+        "E_tromso_s1_age70_79_bmilt25_RD",
+        "E_tromso_s1_age70_79_bmi25to29_9_RD",
+        "E_tromso_s1_age70_79_bmige30_RD",
+        "E_tromso_s1_age80plus_bmilt25_RD",
+        "E_tromso_s1_age80plus_bmi25to29_9_RD",
+        "E_tromso_s1_age80plus_bmige30_RD",
+        "E_tromso_s2_age40_49_bmilt25_RD",
+        "E_tromso_s2_age40_49_bmi25to29_9_RD",
+        "E_tromso_s2_age40_49_bmige30_RD",
+        "E_tromso_s2_age50_59_bmilt25_RD",
+        "E_tromso_s2_age50_59_bmi25to29_9_RD",
+        "E_tromso_s2_age50_59_bmige30_RD",
+        "E_tromso_s2_age60_69_bmilt25_RD",
+        "E_tromso_s2_age60_69_bmi25to29_9_RD",
+        "E_tromso_s2_age60_69_bmige30_RD",
+        "E_tromso_s2_age70_79_bmilt25_RD",
+        "E_tromso_s2_age70_79_bmi25to29_9_RD",
+        "E_tromso_s2_age70_79_bmige30_RD",
+        "E_tromso_s2_age80plus_bmilt25_RD",
+        "E_tromso_s2_age80plus_bmi25to29_9_RD",
+        "E_tromso_s2_age80plus_bmige30_RD"
+      ],
+      "assumption_ids": [
+        "A_structure",
+        "A_joint_estimand_bridge",
+        "A_joint_transfer"
+      ],
+      "derivation": "One source-based structural modification: replace the inherited positive mean log cross-ratio by the joint-table interaction surface, retaining reference-age/reference-BMI positive mean curves. This is a sensitivity scenario with no probability or performance ranking."
+    },
+    "reference": {
+      "evidence_ids": [
+        "E_oh_male_tg_mg_dl_mean",
+        "E_oh_male_tg_mg_dl_sd",
+        "E_oh_male_age_mean",
+        "E_oh_male_age_sd",
+        "E_oh_male_bmi_mean",
+        "E_oh_male_bmi_sd",
+        "E_oh_female_tg_mg_dl_mean",
+        "E_oh_female_tg_mg_dl_sd",
+        "E_oh_female_age_mean",
+        "E_oh_female_age_sd",
+        "E_oh_female_bmi_mean",
+        "E_oh_female_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_transport"
+      ],
+      "derivation": "Reported Oh sex-specific marginal moments. They are centering and spread anchors, not individual conditional values. Order is male, female."
+    },
+    "assay": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_assay_transfer",
+        "A_source_measurement"
+      ],
+      "derivation": "Task-supplied technical equation; not counted as an approved biological evidence source."
+    },
+    "bmi_slope": {
+      "evidence_ids": [
+        "E_oh_bmi_age_sex_slope",
+        "E_oh_male_bmi_sd",
+        "E_oh_female_bmi_sd",
+        "E_oh_male_bmi_stratum_1_tg",
+        "E_oh_male_bmi_stratum_5_tg",
+        "E_oh_female_bmi_stratum_1_tg",
+        "E_oh_female_bmi_stratum_5_tg",
+        "E_bansal_spearman_bmi",
+        "E_bansal_tertile1_bmi_mean",
+        "E_bansal_tertile3_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_oh_ols",
+        "A_oh_context",
+        "A_oh_table2",
+        "A_structure",
+        "A_s1_revision"
+      ],
+      "derivation": "Female 5.2 is a deliberately rounded source-conditioned assumption motivated by initial Spearman .439490 vs .33 and excessive reverse-conditional BMI separation; not a conversion of Spearman to a slope. Male=(6.813-(1-w)*5.2)/w=9.55730972758, w=(1029*3.1^2)/(1029*3.1^2+1643*3.2^2)=0.370182544011. Published Table 2 qualitative sex difference motivates allowing heterogeneity without resolving its summary-type ambiguity. Algebra preserves the pooled source slope only under the declared approximate source covariate construction; actual replay remains required. This historical source-only baseline choice is retained without new fitting; interaction-adjusted effective BMI effects now vary by age/BMI and no exact pooled coefficient preservation is claimed."
+    },
+    "age_slope": {
+      "evidence_ids": [
+        "E_oh_male_age_stratum_1_tg",
+        "E_oh_male_age_stratum_5_tg",
+        "E_oh_female_age_stratum_1_tg",
+        "E_oh_female_age_stratum_5_tg",
+        "E_bansal_spearman_age"
+      ],
+      "assumption_ids": [
+        "A_oh_table2",
+        "A_structure"
+      ],
+      "derivation": "Chosen mild male decrease and female increase in mg/dL/year reflect reported sex-specific age shapes; not obtained by replacing marginal Spearman with a coefficient. The female linear slope smooths the stronger middle-age transition."
+    },
+    "residual_cv": {
+      "evidence_ids": [
+        "E_oh_male_tg_mg_dl_mean",
+        "E_oh_male_tg_mg_dl_sd",
+        "E_oh_female_tg_mg_dl_mean",
+        "E_oh_female_tg_mg_dl_sd"
+      ],
+      "assumption_ids": [
+        "A_oh_context",
+        "A_structure",
+        "A_s1_revision"
+      ],
+      "derivation": "Reapply the original analytic independent-covariate moment formula using revised sex-specific BMI slopes and unchanged age slopes: Var(mu)=bBMI(sex)^2 Var(BMI)+bAge(sex)^2 Var(age); CV^2=(reportedTGVar-Var(mu))/(reportedMean^2+Var(mu)). No final generator or simulated TG moments were computed by the builder. These inherited CV values are held fixed after replacing the log interaction; the new candidate does not claim that the old baseline moment formula remains exact."
+    },
+    "positive_mean": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_structure"
+      ],
+      "derivation": "Assumed smooth positive regularization floor+width*log(1+exp((linearMean-floor)/width)); avoids negative means at unsupported covariate extremes. It is not a TG truncation or observed lower bound."
+    },
+    "joint_interaction": {
+      "evidence_ids": [
+        "E_tromso_s1_age40_49_bmilt25_RD",
+        "E_tromso_s1_age40_49_bmi25to29_9_RD",
+        "E_tromso_s1_age40_49_bmige30_RD",
+        "E_tromso_s1_age50_59_bmilt25_RD",
+        "E_tromso_s1_age50_59_bmi25to29_9_RD",
+        "E_tromso_s1_age50_59_bmige30_RD",
+        "E_tromso_s1_age60_69_bmilt25_RD",
+        "E_tromso_s1_age60_69_bmi25to29_9_RD",
+        "E_tromso_s1_age60_69_bmige30_RD",
+        "E_tromso_s1_age70_79_bmilt25_RD",
+        "E_tromso_s1_age70_79_bmi25to29_9_RD",
+        "E_tromso_s1_age70_79_bmige30_RD",
+        "E_tromso_s1_age80plus_bmilt25_RD",
+        "E_tromso_s1_age80plus_bmi25to29_9_RD",
+        "E_tromso_s1_age80plus_bmige30_RD",
+        "E_tromso_s2_age40_49_bmilt25_RD",
+        "E_tromso_s2_age40_49_bmi25to29_9_RD",
+        "E_tromso_s2_age40_49_bmige30_RD",
+        "E_tromso_s2_age50_59_bmilt25_RD",
+        "E_tromso_s2_age50_59_bmi25to29_9_RD",
+        "E_tromso_s2_age50_59_bmige30_RD",
+        "E_tromso_s2_age60_69_bmilt25_RD",
+        "E_tromso_s2_age60_69_bmi25to29_9_RD",
+        "E_tromso_s2_age60_69_bmige30_RD",
+        "E_tromso_s2_age70_79_bmilt25_RD",
+        "E_tromso_s2_age70_79_bmi25to29_9_RD",
+        "E_tromso_s2_age70_79_bmige30_RD",
+        "E_tromso_s2_age80plus_bmilt25_RD",
+        "E_tromso_s2_age80plus_bmi25to29_9_RD",
+        "E_tromso_s2_age80plus_bmige30_RD"
+      ],
+      "assumption_ids": [
+        "A_joint_estimand_bridge",
+        "A_joint_continuity",
+        "A_joint_transfer",
+        "A_joint_uncertainty",
+        "A_transport"
+      ],
+      "derivation": "relative_differences holds exact supplementary RD points in male/female, age ascending, BMI ascending order. Form logR-logR[:,BMIref]-logR[ageRef,:]+logR[ageRef,BMIref]. Age/BMI knots and full-transfer weight1 are explicit assumptions. No individual-CI weighting or independent-error propagation is used."
+    }
+  }
+}

@@ -1,0 +1,3310 @@
+{
+  "schema_version": 1,
+  "scope": "verified_source_generator_seed_diagnostics_only",
+  "parent": {
+    "candidate": "candidates/joint_evidence",
+    "freeze.json_sha256": "1faaa7ca766ee493a78c3c52278080a2c6e37ad67560d708c73c67b8bf4288c6",
+    "generator.py_sha256": "34f6c249f7c43b3b8c56d131e2169c8c1f93642c5296039e4d9076c29193bc52",
+    "model_spec.json_sha256": "d3b2aaa4f2d0a45f81ab35ed6d076bb9d240b0bac7600b7956f9dfe0c88c8f03",
+    "source_replay.json_sha256": "d954364e682b1f5a0e4317335d11c133f8239d828ff02700bd9540fa4a140fcb"
+  },
+  "evidence_sha256": "7871d3c90b2c85508235685aa062ab38c7fc3ed328d87c5060ab9c505709a22f",
+  "source_assumption_definitions": {
+    "A_bansal_context": "Bansal fasting context has 80472 synthetic women (4 times 20118). Age is 45 plus a gamma distribution with excess mean 9.5 and SD 7.2, rounded to integer years and capped at 120 solely to satisfy task support. BMI is lognormal with arithmetic mean 25.9 and SD 5.0. Deterministic stratified marginal quantiles are independently permuted using the one fixed context seed. Age-BMI dependence, hormone use, medication and other risk factors are unknown. TG tertile-specific age/BMI summaries are diagnostics only and are not used to construct covariates conditional on an assigned TG outcome.",
+    "A_bins": "Continuous TG is compared with Oh thresholds 150, 200 and 500 mg/dL. Oh Table 1 says >500 while prose says 500 and up; a continuous draw has zero exact-threshold mass. For Bansal integer-labeled tertiles and quintiles, half-unit boundaries 90.5/147.5 and 73.5/98.5/132.5/184.5 approximate rounding to reported integer mg/dL. Cumulative proportions are derived from published counts; these preserve every category count without pretending the bins are exact quantile probabilities.",
+    "A_monte_carlo": "Source covariate CSVs and biological parameters are fixed. Controller source seeds80201,80202,80203 and target seeds80101,80102,80103 vary individual residual draws only; they quantify Monte Carlo variation, not evidence, structural or transport uncertainty. The builder does not execute these schedules or use resulting outputs for parameter tuning.",
+    "A_oh_context": "Oh source context has 160320 synthetic rows: 60 times each published sex count. Within each sex, age and BMI are generated separately from maximum-entropy discrete marginal distributions constrained by Table 1 mean/SD and Table 2 stratum counts. Assumed age support 18..85 years and BMI grid 14..45 at 0.05 spacing. Entropy is relative to a uniform grid within each reported stratum. Quantile allocation and independent fixed-seed permutations approximate independence of age and BMI conditional on sex. The joint distribution, tails and family links are unreported; independence is a working approximation, not a discovered fact.",
+    "A_oh_ols": "Oh Table 3 reports age/sex-adjusted simple linear BMI regression. The source replay estimates ordinary unweighted OLS TG~age+sex+BMI with intercept; sex is coded 1 male, 2 female and the BMI coefficient is invariant to reference coding. Family weighting/correlation and exact analysis details are unavailable, so this is approximate. Table 4 additionally adjusted metabolic model, Table 5 mixed lifestyle model, and Table 6 co-twin estimands are not substituted for Table 3.",
+    "A_quantile": "Bansal does not report its quantile interpolation convention. Source replay uses explicitly typed linear (Hyndman-Fan type 7) sample quantiles as an approximation, retaining reported 81, 115 and 169 mg/dL without converting them.",
+    "A_shared_source_interpretation": "Oh PMC6911291.1, Bansal admitted publisher snapshot, China-PAR admitted main XML and Tromso PMC10308115 version1 main XML/exact supplement are the permitted scientific sources. Repeated publications, table cells sharing one reference, overlapping China-PAR subcohorts and replay seeds are not independent clinical evidence. No target outcome or target analysis result was supplied to the builder.",
+    "A_source_measurement": "Existing Oh/Bansal source replay rows use legacy_proxy and identity mg/dL mapping. Bansal explicitly corrected endogenous glycerol; Oh Cobas6000 glycerol blanking is unreported. Both use EDTA plasma, while the target contract represents fasting serum TG. Tromso uses nonfasting serum TG measured by Cobas8000 c702; its dimensionless log-scale interaction contrast is transported without changing the legacy_proxy assay definition. Exact source-to-target assay equivalence remains unverified."
+  },
+  "schedule": [
+    {
+      "replay_id": "joint_evidence_80201",
+      "seed": 80201,
+      "sha256": "8c766ace52110cddb62cf638039fcf8da1973cf3efcdf86f77333f42d4c0f30e"
+    },
+    {
+      "replay_id": "joint_evidence_80202",
+      "seed": 80202,
+      "sha256": "1f65f8f53513e16503a38f497de18c9f464371bc17c2e2b0230d7f1871873e1c"
+    },
+    {
+      "replay_id": "joint_evidence_80203",
+      "seed": 80203,
+      "sha256": "100f6c401b65fff77250aff93a29d78bbb0911b5578d377076a5b343eceaf2d1"
+    }
+  ],
+  "checks": [
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_age_mean",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_age_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 43.9
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 43.90001619695497,
+          "difference": 1.6196954973679567e-05,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 43.90001619695497,
+          "difference": 1.6196954973679567e-05,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 43.90001619695497,
+          "difference": 1.6196954973679567e-05,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 43.90001619695497,
+        "minimum": 43.90001619695497,
+        "maximum": 43.90001619695497,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 1.6196954973679567e-05,
+        "mean_absolute_discrepancy": 1.6196954973679567e-05,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_age_sd",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_age_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 13.6
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 13.600089536960175,
+          "difference": 8.953696017499624e-05,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 13.600089536960175,
+          "difference": 8.953696017499624e-05,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 13.600089536960175,
+          "difference": 8.953696017499624e-05,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 13.600089536960175,
+        "minimum": 13.600089536960175,
+        "maximum": 13.600089536960175,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 8.953696017499624e-05,
+        "mean_absolute_discrepancy": 8.953696017499624e-05,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_bmi_mean",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_bmi_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 24.4
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 24.39999919015225,
+          "difference": -8.098477479734356e-07,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 24.39999919015225,
+          "difference": -8.098477479734356e-07,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 24.39999919015225,
+          "difference": -8.098477479734356e-07,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 24.39999919015225,
+        "minimum": 24.39999919015225,
+        "maximum": 24.39999919015225,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": -8.098477479734356e-07,
+        "mean_absolute_discrepancy": 8.098477479734356e-07,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_bmi_sd",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_bmi_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 3.1
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 3.1000016523768656,
+          "difference": 1.6523768655574145e-06,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 3.1000016523768656,
+          "difference": 1.6523768655574145e-06,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 3.1000016523768656,
+          "difference": 1.6523768655574145e-06,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 3.1000016523768656,
+        "minimum": 3.1000016523768656,
+        "maximum": 3.1000016523768656,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 1.6523768655574145e-06,
+        "mean_absolute_discrepancy": 1.6523768655574145e-06,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_tg_mg_dl_mean",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_tg_mg_dl_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "mg/dL",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "column": "tg_mg_dl"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 141.6
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 141.6016337815683,
+          "difference": 0.0016337815683016288,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 141.5120849540469,
+          "difference": -0.08791504595308197,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 140.49735905089295,
+          "difference": -1.102640949107041,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 141.20369259550273,
+        "minimum": 140.49735905089295,
+        "maximum": 141.6016337815683,
+        "generator_seed_draw_sd": 0.6133392660741379,
+        "mean_signed_discrepancy": -0.3963074044972738,
+        "mean_absolute_discrepancy": 0.3973965922094749,
+        "discrepancy_pattern": "straddles_or_touches_reported_value"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_tg_mg_dl_sd",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_tg_mg_dl_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "mg/dL",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "column": "tg_mg_dl"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 107.7
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 106.93450772181819,
+          "difference": -0.7654922781818101,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 107.51754404621931,
+          "difference": -0.18245595378068913,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 106.23451123256281,
+          "difference": -1.4654887674371935,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 106.8955210002001,
+        "minimum": 106.23451123256281,
+        "maximum": 107.51754404621931,
+        "generator_seed_draw_sd": 0.6424042913747745,
+        "mean_signed_discrepancy": -0.8044789997998976,
+        "mean_absolute_discrepancy": 0.8044789997998976,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_tg_below_150",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_tg_below_150",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 150
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.6841593780369291
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.6629251700680272,
+          "difference": -0.021234207968901853,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.6639779721412374,
+          "difference": -0.020181405895691618,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.6677518626498218,
+          "difference": -0.016407515387107274,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.6648850016196954,
+        "minimum": 0.6629251700680272,
+        "maximum": 0.6677518626498218,
+        "generator_seed_draw_sd": 0.002537965164434216,
+        "mean_signed_discrepancy": -0.01927437641723358,
+        "mean_absolute_discrepancy": 0.01927437641723358,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_tg_below_200",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_tg_below_200",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 200
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.8104956268221575
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.8008260447035958,
+          "difference": -0.009669582118561726,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.8008260447035958,
+          "difference": -0.009669582118561726,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.804389374797538,
+          "difference": -0.006106252024619452,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.8020138214015765,
+        "minimum": 0.8008260447035958,
+        "maximum": 0.804389374797538,
+        "generator_seed_draw_sd": 0.0020572895889490665,
+        "mean_signed_discrepancy": -0.008481805420580968,
+        "mean_absolute_discrepancy": 0.008481805420580968,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_male_tg_below_500",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_male_tg_below_500",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 500
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.9902818270165209
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.9863945578231292,
+          "difference": -0.0038872691933916625,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.9861516034985423,
+          "difference": -0.004130223517978648,
+          "n_used": 61740,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.986281179138322,
+          "difference": -0.004000647878198871,
+          "n_used": 61740,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.9862757801533312,
+        "minimum": 0.9861516034985423,
+        "maximum": 0.9863945578231292,
+        "generator_seed_draw_sd": 0.00012156711207427047,
+        "mean_signed_discrepancy": -0.004006046863189727,
+        "mean_absolute_discrepancy": 0.004006046863189727,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_age_mean",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_age_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 43.3
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 43.3,
+          "difference": 0.0,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 43.3,
+          "difference": 0.0,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 43.3,
+          "difference": 0.0,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 43.3,
+        "minimum": 43.3,
+        "maximum": 43.3,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 0.0,
+        "mean_absolute_discrepancy": 0.0,
+        "discrepancy_pattern": "straddles_or_touches_reported_value"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_age_sd",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_age_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 12.7
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 12.700053871703485,
+          "difference": 5.387170348569725e-05,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 12.700053871703485,
+          "difference": 5.387170348569725e-05,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 12.700053871703485,
+          "difference": 5.387170348569725e-05,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 12.700053871703485,
+        "minimum": 12.700053871703485,
+        "maximum": 12.700053871703485,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 5.387170348569725e-05,
+        "mean_absolute_discrepancy": 5.387170348569725e-05,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_bmi_mean",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_bmi_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 23.0
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 22.999997971190908,
+          "difference": -2.028809092280426e-06,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 22.999997971190908,
+          "difference": -2.028809092280426e-06,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 22.999997971190908,
+          "difference": -2.028809092280426e-06,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 22.999997971190908,
+        "minimum": 22.999997971190908,
+        "maximum": 22.999997971190908,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": -2.028809092280426e-06,
+        "mean_absolute_discrepancy": 2.028809092280426e-06,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_bmi_sd",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_bmi_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 3.2
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 3.2000080756822658,
+          "difference": 8.075682265573647e-06,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 3.2000080756822658,
+          "difference": 8.075682265573647e-06,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 3.2000080756822658,
+          "difference": 8.075682265573647e-06,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 3.2000080756822658,
+        "minimum": 3.2000080756822658,
+        "maximum": 3.2000080756822658,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 8.075682265573647e-06,
+        "mean_absolute_discrepancy": 8.075682265573647e-06,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_tg_mg_dl_mean",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_tg_mg_dl_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "mg/dL",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "column": "tg_mg_dl"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 97.2
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 97.16865527182867,
+          "difference": -0.03134472817133371,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 97.48933258213805,
+          "difference": 0.28933258213804436,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 97.67098194896751,
+          "difference": 0.47098194896750556,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 97.44298993431141,
+        "minimum": 97.16865527182867,
+        "maximum": 97.67098194896751,
+        "generator_seed_draw_sd": 0.25434966757797195,
+        "mean_signed_discrepancy": 0.2429899343114054,
+        "mean_absolute_discrepancy": 0.2638864197589612,
+        "discrepancy_pattern": "straddles_or_touches_reported_value"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_tg_mg_dl_sd",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_tg_mg_dl_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "mg/dL",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "column": "tg_mg_dl"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 61.0
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 60.74557693241089,
+          "difference": -0.2544230675891086,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 61.739210190573544,
+          "difference": 0.7392101905735444,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 61.575892002130075,
+          "difference": 0.5758920021300753,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 61.353559708371506,
+        "minimum": 60.74557693241089,
+        "maximum": 61.739210190573544,
+        "generator_seed_draw_sd": 0.53282314098366,
+        "mean_signed_discrepancy": 0.3535597083715037,
+        "mean_absolute_discrepancy": 0.5231750867642427,
+        "discrepancy_pattern": "straddles_or_touches_reported_value"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_tg_below_150",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_tg_below_150",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 150
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.8527084601339014
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.8523331304524244,
+          "difference": -0.0003753296814770213,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.8488740109555691,
+          "difference": -0.003834449178332311,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.8477175897748022,
+          "difference": -0.0049908703590992864,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.8496415770609319,
+        "minimum": 0.8477175897748022,
+        "maximum": 0.8523331304524244,
+        "generator_seed_draw_sd": 0.002401597849614456,
+        "mean_signed_discrepancy": -0.0030668830729695395,
+        "mean_absolute_discrepancy": 0.0030668830729695395,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_tg_below_200",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_tg_below_200",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 200
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.9324406573341448
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.9388922702373707,
+          "difference": 0.006451612903225823,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.9369851896936499,
+          "difference": 0.004544532359505027,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.9353418543315074,
+          "difference": 0.002901196997362576,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.9370731047541759,
+        "minimum": 0.9353418543315074,
+        "maximum": 0.9388922702373707,
+        "generator_seed_draw_sd": 0.0017768399110646314,
+        "mean_signed_discrepancy": 0.004632447420031142,
+        "mean_absolute_discrepancy": 0.004632447420031142,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_female_tg_below_500",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_female_tg_below_500",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "sex",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 500
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.9993913572732805
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.9992493406370461,
+          "difference": -0.00014201663623447658,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.9990261716372489,
+          "difference": -0.00036518563603160636,
+          "n_used": 98580,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.9992493406370461,
+          "difference": -0.00014201663623447658,
+          "n_used": 98580,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.9991749509704471,
+        "minimum": 0.9990261716372489,
+        "maximum": 0.9992493406370461,
+        "generator_seed_draw_sd": 0.00012884668210765243,
+        "mean_signed_discrepancy": -0.00021640630283351983,
+        "mean_absolute_discrepancy": 0.00021640630283351983,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "oh",
+        "check_id": "e_oh_bmi_age_sex_slope",
+        "context_input_sha256": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; Oh assay equivalence is explicitly assumed, especially because glycerol blanking is unreported."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_oh_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_oh_bmi_age_sex_slope",
+        "operator": {
+          "kind": "ols_coefficient",
+          "unit": "mg/dL per kg/m^2",
+          "selection": [],
+          "missing_policy": "error",
+          "outcome": "tg_mg_dl",
+          "predictors": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "term": "bmi",
+          "include_intercept": true
+        },
+        "assumption_ids": [
+          "A_oh_ols"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 6.813
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 6.717626614018162,
+          "difference": -0.09537338598183798,
+          "n_used": 160320,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 6.7075752439019585,
+          "difference": -0.10542475609804125,
+          "n_used": 160320,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 6.710381181318085,
+          "difference": -0.1026188186819148,
+          "n_used": 160320,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 6.711861013079401,
+        "minimum": 6.7075752439019585,
+        "maximum": 6.717626614018162,
+        "generator_seed_draw_sd": 0.005186514902569694,
+        "mean_signed_discrepancy": -0.10113898692059801,
+        "mean_absolute_discrepancy": 0.10113898692059801,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_q25",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_q25",
+        "operator": {
+          "kind": "quantile",
+          "unit": "mg/dL",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "tg_mg_dl",
+          "method": "linear",
+          "q": 0.25
+        },
+        "assumption_ids": [
+          "A_quantile"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 81
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 77.6463768626094,
+          "difference": -3.353623137390599,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 77.46424778624805,
+          "difference": -3.535752213751948,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 77.16815748908924,
+          "difference": -3.831842510910761,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 77.4262607126489,
+        "minimum": 77.16815748908924,
+        "maximum": 77.6463768626094,
+        "generator_seed_draw_sd": 0.2413621876412597,
+        "mean_signed_discrepancy": -3.5737392873511027,
+        "mean_absolute_discrepancy": 3.5737392873511027,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_median",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_median",
+        "operator": {
+          "kind": "median",
+          "unit": "mg/dL",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "tg_mg_dl",
+          "method": "linear"
+        },
+        "assumption_ids": [
+          "A_quantile"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 115
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 113.7139836491462,
+          "difference": -1.2860163508537994,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 113.35863726699844,
+          "difference": -1.6413627330015572,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 113.17150588244132,
+          "difference": -1.8284941175586766,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 113.41470893286198,
+        "minimum": 113.17150588244132,
+        "maximum": 113.7139836491462,
+        "generator_seed_draw_sd": 0.2755513665849122,
+        "mean_signed_discrepancy": -1.5852910671380112,
+        "mean_absolute_discrepancy": 1.5852910671380112,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_q75",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_q75",
+        "operator": {
+          "kind": "quantile",
+          "unit": "mg/dL",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "tg_mg_dl",
+          "method": "linear",
+          "q": 0.75
+        },
+        "assumption_ids": [
+          "A_quantile"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 169
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 165.76764426771877,
+          "difference": -3.232355732281235,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 166.03536601248834,
+          "difference": -2.964633987511661,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 164.9687316018293,
+          "difference": -4.03126839817071,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 165.59058062734547,
+        "minimum": 164.9687316018293,
+        "maximum": 166.03536601248834,
+        "generator_seed_draw_sd": 0.554924221004254,
+        "mean_signed_discrepancy": -3.409419372654535,
+        "mean_absolute_discrepancy": 3.409419372654535,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_spearman_age",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_spearman_age",
+        "operator": {
+          "kind": "spearman_correlation",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "x": "age",
+          "y": "tg_mg_dl"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.18
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.14242869314014361,
+          "difference": -0.03757130685985638,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.14761029145278864,
+          "difference": -0.03238970854721135,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.14737585619060176,
+          "difference": -0.03262414380939824,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.14580494692784468,
+        "minimum": 0.14242869314014361,
+        "maximum": 0.14761029145278864,
+        "generator_seed_draw_sd": 0.0029262701861351528,
+        "mean_signed_discrepancy": -0.03419505307215532,
+        "mean_absolute_discrepancy": 0.03419505307215532,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_spearman_bmi",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_spearman_bmi",
+        "operator": {
+          "kind": "spearman_correlation",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "x": "bmi",
+          "y": "tg_mg_dl"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.33
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.37711220196490053,
+          "difference": 0.04711220196490051,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.379916122920893,
+          "difference": 0.04991612292089298,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.37437143346292295,
+          "difference": 0.04437143346292294,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.3771332527829055,
+        "minimum": 0.37437143346292295,
+        "maximum": 0.379916122920893,
+        "generator_seed_draw_sd": 0.0027724046690616863,
+        "mean_signed_discrepancy": 0.04713325278290548,
+        "mean_absolute_discrepancy": 0.04713325278290548,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile_cum1",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile_cum1",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 90.5
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.32756735261954467
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.343249826026444,
+          "difference": 0.015682473406899322,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.34421910726712396,
+          "difference": 0.016651754647579287,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.3468038572422706,
+          "difference": 0.019236504622725914,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.3447575968452795,
+        "minimum": 0.343249826026444,
+        "maximum": 0.3468038572422706,
+        "generator_seed_draw_sd": 0.0018371888144945992,
+        "mean_signed_discrepancy": 0.01719024422573484,
+        "mean_absolute_discrepancy": 0.01719024422573484,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile_cum2",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile_cum2",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 147.5
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.665672532060841
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.6779003877124963,
+          "difference": 0.012227855651655295,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.6794288696689532,
+          "difference": 0.013756337608112235,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.6829953275673526,
+          "difference": 0.017322795506511612,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.6801081949829341,
+        "minimum": 0.6779003877124963,
+        "maximum": 0.6829953275673526,
+        "generator_seed_draw_sd": 0.002614520069307592,
+        "mean_signed_discrepancy": 0.014435662922093048,
+        "mean_absolute_discrepancy": 0.014435662922093048,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_quintile_cum1",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_quintile_cum1",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 73.5
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.19460184909036685
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.22016353514265832,
+          "difference": 0.025561686052291477,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.22213937767173675,
+          "difference": 0.027537528581369902,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.22328263246843622,
+          "difference": 0.02868078337806937,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.22186184842761042,
+        "minimum": 0.22016353514265832,
+        "maximum": 0.22328263246843622,
+        "generator_seed_draw_sd": 0.0015779603584778973,
+        "mean_signed_discrepancy": 0.027259999337243584,
+        "mean_absolute_discrepancy": 0.027259999337243584,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_quintile_cum2",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_quintile_cum2",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 98.5
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.3924843423799583
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.3993065911124366,
+          "difference": 0.006822248732478331,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.40085992643403917,
+          "difference": 0.008375584054080898,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.40365593001292377,
+          "difference": 0.011171587632965496,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.40127414918646653,
+        "minimum": 0.3993065911124366,
+        "maximum": 0.40365593001292377,
+        "generator_seed_draw_sd": 0.0022040582080095094,
+        "mean_signed_discrepancy": 0.008789806806508241,
+        "mean_absolute_discrepancy": 0.008789806806508241,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_quintile_cum3",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_quintile_cum3",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 132.5
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.5979222586738244
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.6060244557113033,
+          "difference": 0.008102197037478831,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.6093423799582464,
+          "difference": 0.011420121284421936,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.6105974748981012,
+          "difference": 0.012675216224276808,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.608654770189217,
+        "minimum": 0.6060244557113033,
+        "maximum": 0.6105974748981012,
+        "generator_seed_draw_sd": 0.002362780463046476,
+        "mean_signed_discrepancy": 0.010732511515392526,
+        "mean_absolute_discrepancy": 0.010732511515392526,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_quintile_cum4",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_quintile_cum4",
+        "operator": {
+          "kind": "proportion",
+          "unit": "1",
+          "selection": [],
+          "missing_policy": "error",
+          "event": {
+            "column": "tg_mg_dl",
+            "op": "lt",
+            "value": 184.5
+          }
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 0.7993339298140968
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 0.8058827915299731,
+          "difference": 0.00654886171587632,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 0.8039690824137589,
+          "difference": 0.0046351525996620735,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 0.8076473804553137,
+          "difference": 0.008313450641216913,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 0.8058330847996819,
+        "minimum": 0.8039690824137589,
+        "maximum": 0.8076473804553137,
+        "generator_seed_draw_sd": 0.001839652736225977,
+        "mean_signed_discrepancy": 0.006499154985585102,
+        "mean_absolute_discrepancy": 0.006499154985585102,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile1_age_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile1_age_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 90.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 53.1
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 53.36449207153718,
+          "difference": 0.2644920715371768,
+          "n_used": 27622,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 53.31682310469314,
+          "difference": 0.21682310469314103,
+          "n_used": 27700,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 53.31568009172997,
+          "difference": 0.21568009172997193,
+          "n_used": 27908,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 53.332331755986765,
+        "minimum": 53.31568009172997,
+        "maximum": 53.36449207153718,
+        "generator_seed_draw_sd": 0.027857513203534905,
+        "mean_signed_discrepancy": 0.23233175598676326,
+        "mean_absolute_discrepancy": 0.23233175598676326,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile1_age_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile1_age_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 90.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 6.9
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 6.356161786123751,
+          "difference": -0.5438382138762492,
+          "n_used": 27622,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 6.348125335514154,
+          "difference": -0.5518746644858465,
+          "n_used": 27700,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 6.350645674532463,
+          "difference": -0.5493543254675375,
+          "n_used": 27908,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 6.351644265390123,
+        "minimum": 6.348125335514154,
+        "maximum": 6.356161786123751,
+        "generator_seed_draw_sd": 0.004110233859025007,
+        "mean_signed_discrepancy": -0.5483557346098777,
+        "mean_absolute_discrepancy": 0.5483557346098777,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile1_bmi_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile1_bmi_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 90.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 24.2
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 23.84840877347766,
+          "difference": -0.35159122652233776,
+          "n_used": 27622,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 23.816989028303247,
+          "difference": -0.383010971696752,
+          "n_used": 27700,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 23.876709639780707,
+          "difference": -0.3232903602192927,
+          "n_used": 27908,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 23.847369147187205,
+        "minimum": 23.816989028303247,
+        "maximum": 23.876709639780707,
+        "generator_seed_draw_sd": 0.029873876145024566,
+        "mean_signed_discrepancy": -0.35263085281279416,
+        "mean_absolute_discrepancy": 0.35263085281279416,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile1_bmi_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile1_bmi_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 90.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 4.1
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 4.409236082245093,
+          "difference": 0.3092360822450937,
+          "n_used": 27622,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 4.347154585740631,
+          "difference": 0.2471545857406312,
+          "n_used": 27700,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 4.3768768421643545,
+          "difference": 0.2768768421643548,
+          "n_used": 27908,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 4.377755836716693,
+        "minimum": 4.347154585740631,
+        "maximum": 4.409236082245093,
+        "generator_seed_draw_sd": 0.031050080927844254,
+        "mean_signed_discrepancy": 0.27775583671669324,
+        "mean_absolute_discrepancy": 0.27775583671669324,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile2_age_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile2_age_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 90.5
+            },
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 54.8
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 54.434459710360194,
+          "difference": -0.365540289639803,
+          "n_used": 26930,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 54.453827618164965,
+          "difference": -0.3461723818350322,
+          "n_used": 26975,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 54.481444518370665,
+          "difference": -0.3185554816293319,
+          "n_used": 27054,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 54.45657728229861,
+        "minimum": 54.434459710360194,
+        "maximum": 54.481444518370665,
+        "generator_seed_draw_sd": 0.023612783308646405,
+        "mean_signed_discrepancy": -0.34342271770138905,
+        "mean_absolute_discrepancy": 0.34342271770138905,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile2_age_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile2_age_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 90.5
+            },
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 7.3
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 7.045695800010027,
+          "difference": -0.25430419998997245,
+          "n_used": 26930,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 7.06590232676253,
+          "difference": -0.23409767323746955,
+          "n_used": 26975,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 7.09271909398925,
+          "difference": -0.2072809060107499,
+          "n_used": 27054,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 7.068105740253936,
+        "minimum": 7.045695800010027,
+        "maximum": 7.09271909398925,
+        "generator_seed_draw_sd": 0.023588955411901525,
+        "mean_signed_discrepancy": -0.23189425974606395,
+        "mean_absolute_discrepancy": 0.23189425974606395,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile2_bmi_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile2_bmi_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 90.5
+            },
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 25.9
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 25.933703456665427,
+          "difference": 0.03370345666542818,
+          "n_used": 26930,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 25.95542595566265,
+          "difference": 0.055425955662652626,
+          "n_used": 26975,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 25.936417334737932,
+          "difference": 0.036417334737933515,
+          "n_used": 27054,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 25.94184891568867,
+        "minimum": 25.933703456665427,
+        "maximum": 25.95542595566265,
+        "generator_seed_draw_sd": 0.0118361013171322,
+        "mean_signed_discrepancy": 0.04184891568867144,
+        "mean_absolute_discrepancy": 0.04184891568867144,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile2_bmi_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile2_bmi_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 90.5
+            },
+            {
+              "column": "tg_mg_dl",
+              "op": "lt",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 5.0
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 4.632044587131237,
+          "difference": -0.36795541286876343,
+          "n_used": 26930,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 4.644562857862815,
+          "difference": -0.3554371421371849,
+          "n_used": 26975,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 4.639210751127607,
+          "difference": -0.3607892488723934,
+          "n_used": 27054,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 4.638606065373886,
+        "minimum": 4.632044587131237,
+        "maximum": 4.644562857862815,
+        "generator_seed_draw_sd": 0.00628100383480525,
+        "mean_signed_discrepancy": -0.3613939346261139,
+        "mean_absolute_discrepancy": 0.3613939346261139,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile3_age_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile3_age_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 55.6
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 55.777199074074076,
+          "difference": 0.17719907407407476,
+          "n_used": 25920,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 55.817769508082336,
+          "difference": 0.21776950808233408,
+          "n_used": 25797,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 55.814347314778516,
+          "difference": 0.21434731477851443,
+          "n_used": 25510,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 55.80310529897831,
+        "minimum": 55.777199074074076,
+        "maximum": 55.817769508082336,
+        "generator_seed_draw_sd": 0.02250060484395261,
+        "mean_signed_discrepancy": 0.20310529897830776,
+        "mean_absolute_discrepancy": 0.20310529897830776,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile3_age_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile3_age_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "years",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 7.2
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 7.973102678391974,
+          "difference": 0.7731026783919734,
+          "n_used": 25920,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 7.953511651528668,
+          "difference": 0.753511651528668,
+          "n_used": 25797,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 7.9413614723601045,
+          "difference": 0.7413614723601043,
+          "n_used": 25510,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 7.955991934093582,
+        "minimum": 7.9413614723601045,
+        "maximum": 7.973102678391974,
+        "generator_seed_draw_sd": 0.016015301785815762,
+        "mean_signed_discrepancy": 0.7559919340935819,
+        "mean_absolute_discrepancy": 0.7559919340935819,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile3_bmi_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile3_bmi_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 27.6
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 28.051262102276237,
+          "difference": 0.4512621022762353,
+          "n_used": 25920,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 28.078686811722292,
+          "difference": 0.4786868117222909,
+          "n_used": 25797,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 28.074835269266956,
+          "difference": 0.4748352692669542,
+          "n_used": 25510,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 28.068261394421828,
+        "minimum": 28.051262102276237,
+        "maximum": 28.078686811722292,
+        "generator_seed_draw_sd": 0.014847240312923188,
+        "mean_signed_discrepancy": 0.4682613944218268,
+        "mean_absolute_discrepancy": 0.4682613944218268,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_tertile3_bmi_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_tertile3_bmi_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "kg/m^2",
+          "selection": [
+            {
+              "column": "tg_mg_dl",
+              "op": "ge",
+              "value": 147.5
+            }
+          ],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [
+          "A_bins"
+        ],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 5.1
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 5.048900967251075,
+          "difference": -0.051099032748924245,
+          "n_used": 25920,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 5.0722856119063024,
+          "difference": -0.027714388093697195,
+          "n_used": 25797,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 5.086314752877226,
+          "difference": -0.013685247122773525,
+          "n_used": 25510,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 5.069167110678201,
+        "minimum": 5.048900967251075,
+        "maximum": 5.086314752877226,
+        "generator_seed_draw_sd": 0.01890083665217341,
+        "mean_signed_discrepancy": -0.030832889321798323,
+        "mean_absolute_discrepancy": 0.030832889321798323,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_age_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_age_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "years",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 54.5
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 54.49968933293568,
+          "difference": -0.0003106670643191478,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 54.49968933293568,
+          "difference": -0.0003106670643191478,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 54.49968933293568,
+          "difference": -0.0003106670643191478,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 54.49968933293568,
+        "minimum": 54.49968933293568,
+        "maximum": 54.49968933293568,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": -0.0003106670643191478,
+        "mean_absolute_discrepancy": 0.0003106670643191478,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_age_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_age_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "years",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "age"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 7.2
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 7.205858382399278,
+          "difference": 0.005858382399277495,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 7.205858382399278,
+          "difference": 0.005858382399277495,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 7.205858382399278,
+          "difference": 0.005858382399277495,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 7.205858382399278,
+        "minimum": 7.205858382399278,
+        "maximum": 7.205858382399278,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": 0.005858382399277495,
+        "mean_absolute_discrepancy": 0.005858382399277495,
+        "discrepancy_pattern": "above_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_bmi_mean",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_bmi_mean",
+        "operator": {
+          "kind": "mean",
+          "unit": "kg/m^2",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 25.9
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 25.89999123819465,
+          "difference": -8.761805347035079e-06,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 25.89999123819465,
+          "difference": -8.761805347035079e-06,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 25.89999123819465,
+          "difference": -8.761805347035079e-06,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 25.89999123819465,
+        "minimum": 25.89999123819465,
+        "maximum": 25.89999123819465,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": -8.761805347035079e-06,
+        "mean_absolute_discrepancy": 8.761805347035079e-06,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    },
+    {
+      "definition": {
+        "context_id": "bansal",
+        "check_id": "e_bansal_bmi_sd",
+        "context_input_sha256": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b",
+        "measurement": {
+          "mode": "identity",
+          "description": "legacy_proxy output is source mg/dL; endogenous glycerol correction supports but does not prove equivalence to old target method."
+        },
+        "context_assumption_ids": [
+          "A_shared_source_interpretation",
+          "A_bansal_context",
+          "A_source_measurement",
+          "A_monte_carlo"
+        ],
+        "evidence_id": "E_bansal_bmi_sd",
+        "operator": {
+          "kind": "sd",
+          "unit": "kg/m^2",
+          "selection": [],
+          "missing_policy": "error",
+          "column": "bmi"
+        },
+        "assumption_ids": [],
+        "reason": "Compare the retained source statistic with the same statistic from verified generator output under the declared approximate source covariates.",
+        "reported_value": 5.0
+      },
+      "runs": [
+        {
+          "seed": 80201,
+          "status": "approximate",
+          "value": 4.999949016103045,
+          "difference": -5.0983896954903685e-05,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80202,
+          "status": "approximate",
+          "value": 4.999949016103045,
+          "difference": -5.0983896954903685e-05,
+          "n_used": 80472,
+          "computation_error": null
+        },
+        {
+          "seed": 80203,
+          "status": "approximate",
+          "value": 4.999949016103045,
+          "difference": -5.0983896954903685e-05,
+          "n_used": 80472,
+          "computation_error": null
+        }
+      ],
+      "summary": {
+        "n_draws": 3,
+        "mean": 4.999949016103045,
+        "minimum": 4.999949016103045,
+        "maximum": 4.999949016103045,
+        "generator_seed_draw_sd": 0.0,
+        "mean_signed_discrepancy": -5.0983896954903685e-05,
+        "mean_absolute_discrepancy": 5.0983896954903685e-05,
+        "discrepancy_pattern": "below_in_all_draws"
+      }
+    }
+  ],
+  "limitations": [
+    "Fixed source covariates and program/specification; the program determines what a seed varies.",
+    "Residual-only variation requires generator review; ranges/SD are not calibrated confidence intervals.",
+    "Unrepresented source/model/transport uncertainty remains unassessed.",
+    "Checks sharing populations, outcomes or seeds are dependent; no aggregate success score.",
+    "No target outcomes, target analytical conclusions, or automatic acceptance decision."
+  ]
+}

@@ -40,7 +40,7 @@ def historical_bytes(root, path):
 
 
 def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_receipt,
-                    m5_receipt, m6_receipt, receipt, findings):
+                    m5_receipt, m6_receipt, receipt, findings, *, read_bytes=None):
     if receipt is None:
         return {"status": "not_exported"}
 
@@ -48,9 +48,14 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
         if not condition:
             findings.append({"file": path, "rule": rule})
 
+    if read_bytes is None:
+        read_bytes = lambda path: (root / path).read_bytes()
+
     def file_hash(path):
-        full = root / path
-        return digest(full.read_bytes()) if full.is_file() else None
+        try:
+            return digest(read_bytes(path))
+        except FileNotFoundError:
+            return None
 
     baseline_bytes = historical_bytes(root, "sync/EXPORT_MANIFEST.json")
     baseline = json.loads(baseline_bytes)
@@ -100,7 +105,7 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
               RECEIPT, "m7_historical_" + milestone + "_code_revision_mismatch")
 
     validation_path = PREFIX + "m7_validation.json"
-    validation = json.loads((root / validation_path).read_bytes())
+    validation = json.loads(read_bytes(validation_path))
     check(validation["schema_version"] == 1 and validation["milestone"] == "M7",
           validation_path, "m7_validation_identity_mismatch")
     hashes = validation["code_sha256"]
@@ -108,7 +113,7 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
     for path, expected in hashes.items():
         check(current.get(PREFIX + path) == expected == file_hash(PREFIX + path),
               PREFIX + path, "m7_current_code_hash_mismatch")
-    curated_hashes = json.loads((root / CURATED / "file_manifest.json").read_bytes())
+    curated_hashes = json.loads(read_bytes(CURATED + "file_manifest.json"))
     check(set(path.removeprefix(CURATED) for path in current if path.startswith(CURATED)) ==
           set(curated_hashes) | {"file_manifest.json"}, RECEIPT, "m7_curated_manifest_scope_mismatch")
     for path, expected in curated_hashes.items():
@@ -116,7 +121,7 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
     check(not set(curated_hashes) & {"controller.py", "release_guard.py", "protocol.json",
                                    "evaluation_commitment.json"}, RECEIPT,
           "m7_unexecuted_controller_or_release_draft_exported")
-    provenance = json.loads((root / CURATED / "curation_provenance.json").read_bytes())["records"]
+    provenance = json.loads(read_bytes(CURATED + "curation_provenance.json"))["records"]
     original_hashes = {record["curated_relative"]: record["original_sha256"] for record in provenance}
     check(len(original_hashes) == len(provenance) and set(original_hashes) ==
           set(curated_hashes) - {"README.md", "curation_provenance.json", "curation_repair.json"},
@@ -143,7 +148,7 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
     }, RECEIPT, "m7_unexpected_curated_path_normalizations")
     check(receipt["curated_path_normalizations"] == normalized, RECEIPT,
           "m7_curation_normalization_receipt_mismatch")
-    repair = json.loads((root / CURATED / "curation_repair.json").read_bytes())
+    repair = json.loads(read_bytes(CURATED + "curation_repair.json"))
     check(validation["curation_repair_sha256"] == file_hash(CURATED + "curation_repair.json") and
           repair["frozen_candidate_and_custodian_originals_unchanged"] is True and
           repair["scientific_execution_or_target_analysis"] is False,
@@ -158,7 +163,7 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
               CURATED + record["file"], "m7_curation_repair_hash_mismatch")
 
     def read_curated(path):
-        return json.loads((root / CURATED / path).read_bytes())
+        return json.loads(read_bytes(CURATED + path))
 
     retention = read_curated("retention_freeze.json")
     stage = read_curated("stage_decision.json")
@@ -219,7 +224,7 @@ def audit_m7_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
     retry_logs = ("research/supplement_retry_log.jsonl",
                   "candidates/evidence_augmented/research_audit/supplement_retry_log.jsonl")
     for path in retry_logs:
-        rows = [json.loads(line) for line in (root / CURATED / path).read_text(encoding="utf-8-sig").splitlines() if line]
+        rows = [json.loads(line) for line in read_bytes(CURATED + path).decode("utf-8-sig").splitlines() if line]
         check(len(rows) == 4 and all(isinstance(row, list) and len(row) in (3, 4) and
               isinstance(row[0], str) and row[0].startswith("https://") and
               (len(row) == 3 or isinstance(row[3], str) and len(row[3]) <= 128)
