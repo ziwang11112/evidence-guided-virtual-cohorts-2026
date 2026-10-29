@@ -1,0 +1,133 @@
+{
+  "visible": {
+    "schema": [
+      "record_id",
+      "age",
+      "sex",
+      "bmi"
+    ],
+    "id": "Opaque random-order IDs; SEQN mapping stays custodial",
+    "sex": "1=male, 2=female, as recorded by NHANES RIAGENDR",
+    "age_unit": "years",
+    "bmi_unit": "kg/m^2",
+    "output": "Append finite positive tg_mg_dl; preserve all input cells and row order"
+  },
+  "transforms": {
+    "outcome": "natural logarithm of TG in mg/dL",
+    "rationale": "A priori multiplicative concentration/ratio estimand. No outcome distribution inspection used to choose transformation.",
+    "B": "(bmi-25)/5",
+    "A": "(age-50)/10",
+    "F": "1 if sex=2 else 0"
+  },
+  "models": {
+    "adjusted": "log(TG)=intercept+b_B*B+b_A*A+b_F*F+error",
+    "curvature": "log(TG)=intercept+b_B*B+b_A*A+b_F*F+b_Q*B^2+error",
+    "interaction": "log(TG)=intercept+b_B*B+b_A*A+b_F*F+b_I*B*F+error",
+    "raw_curvature": "TG=intercept+b_B*B+b_A*A+b_F*F+b_Q*B^2+error; exactly same covariate basis and domain as log curvature"
+  },
+  "estimation": {
+    "point": "Weighted least squares using WTSAF2YR (normalized by its domain mean for numerical stability; invariant to global weight rescaling)",
+    "variance": "With-replacement first-stage Taylor linearization. H=sum_domain(w*x*x'); score_i=domain_i*w_i*x_i*(y_i-x_i'b); u_hj=sum_i_in_PSU(score_i). Meat=sum_h m_h/(m_h-1)*sum_j (u_hj-mean_j(u_hj))*(u_hj-mean_j(u_hj))'. V=H^-1 Meat H^-1. Include every positive-weight design PSU, even with zero domain score; no finite population correction.",
+    "interval": "Two-sided 95% t interval with df equal to represented-domain PSUs minus represented-domain strata; report df and full design support. No parameter-count subtraction; this is an explicit NHANES nominal design-df convention.",
+    "singleton": "If a full-design stratum has fewer than two PSUs or domain design df<=0, stop and report non-estimable; no automatic lonely-PSU fix.",
+    "implementation": "Python NumPy/pandas/SciPy custom Taylor linearization; validate on invented analytic fixtures, WLS agreement, scaling invariance, full-design empty-domain PSU and covariance checks. No claim of independent survey-package verification."
+  },
+  "boundary": {
+    "type": "procedural only, not OS isolation",
+    "builder_excluded": [
+      "custodian directory",
+      "NHANES outcome tables or APIs",
+      "NHANES-derived studies as construction evidence",
+      "previous target outcome results"
+    ],
+    "release": "Only visible observed.csv, task_metadata.json, README.md, preparation_counts.json and input_hashes.json may be builder input. No rows in reports/messages. Root may inspect protocol and aggregate receipts. No NHANES-derived builder evidence, hidden outcomes, record linking or prior target result reading."
+  },
+  "version": "1.0",
+  "case_id": "nhanes_aug2021_aug2023_structure_robustness",
+  "created_utc": "2026-10-29T00:31:20.634746+00:00",
+  "purpose": "Fresh collection-period temporal replication of source-evidence-compatible generator structures. No presupposed age or curvature sign. No independent-external-cohort or individual-recovery claim.",
+  "selection_before_outcome_analysis": {
+    "cycle": "August 2021-August 2023",
+    "files": [
+      "DEMO_L",
+      "BMX_L",
+      "TRIGLY_L"
+    ],
+    "target": "LBXTLG, reference-method fasting triglycerides in mg/dL, native released measurement; never BIOPRO_L LBXSTR",
+    "domain": "RIDAGEYR 20 through 79 inclusive; RIAGENDR in 1,2; RIDSTATR=2; finite positive BMXBMI and LBXTLG; finite positive WTSAF2YR; nonmissing SDMVSTRA and SDMVPSU",
+    "age_rationale": "Age 80+ is topcoded; exclude to preserve an interpretable per-10-year coefficient.",
+    "fasting": "WTSAF2YR>0 encodes the qualifying fasting subsample, 8 to <24 hours, according to TRIGLY_L; do not substitute MEC weights or decode zero as tiny positive numbers.",
+    "design_universe": "All TRIGLY_L-linked records with finite positive WTSAF2YR and nonmissing design variables remain in variance design, including age/domain/missingness exclusions. Out-of-domain estimating scores are zero.",
+    "missingness": "Complete-case analysis domain; report eligibility/missingness counts. No item-nonresponse adjustment, outlier removal, winsorization or data-selected transformation. Item nonresponse can limit representativeness.",
+    "reader": "pyreadstat.read_xport; verify official 3996 rows, 3361 strictly positive and 635 exactly zero WTSAF2YR; 0 missing weights.",
+    "measurement_caveat": "New non-glycerol-blanked assay in this release differs from previous cycles. Primary uses native LBXTLG; the prespecified auxiliary calibration sensitivity below addresses comparability without changing the primary endpoint."
+  },
+  "endpoints": [
+    {
+      "id": "adjusted_age_per10",
+      "tier": "primary",
+      "model": "adjusted",
+      "contrast": "b_A",
+      "scale": "log_mg_dl",
+      "meaning": "Adjusted natural-log TG coefficient per 10 years, BMI and sex held constant"
+    },
+    {
+      "id": "bmi_curvature_second_difference",
+      "tier": "primary",
+      "model": "curvature",
+      "contrast": "2*b_Q",
+      "scale": "log_mg_dl",
+      "meaning": "Full-domain quadratic projection contrast logTG(BMI35)-2logTG(BMI30)+logTG(BMI25); age and sex adjusted; not a spline/local concavity assertion"
+    },
+    {
+      "id": "raw_bmi_curvature_second_difference",
+      "tier": "secondary",
+      "model": "raw_curvature",
+      "contrast": "2*b_Q",
+      "scale": "mg_dl",
+      "meaning": "Same full-domain quadratic BMI contrast on untransformed TG, with identical covariates/domain; distinguishes scale-dependent curvature"
+    },
+    {
+      "id": "adjusted_bmi_per5",
+      "tier": "secondary",
+      "model": "adjusted",
+      "contrast": "b_B",
+      "scale": "log_mg_dl"
+    },
+    {
+      "id": "adjusted_female_vs_male",
+      "tier": "secondary",
+      "model": "adjusted",
+      "contrast": "b_F",
+      "scale": "log_mg_dl"
+    },
+    {
+      "id": "bmi_sex_interaction",
+      "tier": "secondary",
+      "model": "interaction",
+      "contrast": "b_I",
+      "scale": "log_mg_dl"
+    }
+  ],
+  "calibration_sensitivity": {
+    "tier": "auxiliary",
+    "source": "CDC TRIGLY_L analytic notes",
+    "backward_equation": "old_glycerol_blanked_mg_dl = -12.19 + 0.9785 * native_LBXTLG_mg_dl",
+    "apply": "After release, transform reference and every generated target table by the same equation and repeat all fixed endpoints on unchanged domain. If any transformed target value is nonpositive, report that complete table non-estimable for calibrated-log sensitivity; do not truncate or selectively drop records. Native primary analysis remains unchanged.",
+    "uncertainty": "Calibration coefficient uncertainty is not propagated; auxiliary sensitivity only, not assay equivalence."
+  },
+  "comparison": {
+    "gate": "Before reading hidden outcomes for analysis or fitting, require root-provided manifest with authorize_target_evaluation=true, all_structures_and_seeds_committed=true, complete prespecified structure-by-seed Cartesian grid, candidate freeze paths/hashes, every generated output path/hash, and custodian_lock_sha256. All candidate and output commitments verified before first table load; all generated tables validated before hidden-table load.",
+    "freeze_order": "Protocol saved and hashed before raw data read; preparation receipt and evaluator/survey source hashes frozen before root release. No reference outcome means, associations, plots, distributions or model fits before release.",
+    "report": "For reference, estimate, design-based SE and two-sided 95% t CI; for each generated table, point estimate and sign. Direction stability across every prespecified structure and seed is primary comparison; signed/absolute magnitude errors auxiliary. No omission of unfavorable structures/seeds. Point sign is distinct from reference CI direction category.",
+    "sign_rule": "positive if estimate>0, negative if estimate<0, exactly_zero otherwise; reference CI category positive if low>0, negative if high<0, interval_includes_zero otherwise.",
+    "limits": "All structures/scenarios are sensitivity alternatives, not posterior draws or independent clinical evidence. Seeds represent simulation sensitivity. Reference CI includes survey sampling uncertainty only; generated point estimates do not establish imputation/model/evidence/transport uncertainty. No equivalence criterion, pass threshold, causal interpretation, or claim that CI includes zero means absence. Primary CI reporting is descriptive, without familywise adjustment. No post-release model revision."
+  },
+  "official_documentation": [
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2021/DataFiles/DEMO_L.htm",
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2021/DataFiles/BMX_L.htm",
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2021/DataFiles/TRIGLY_L.htm",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/varianceestimation.aspx",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/weighting.aspx"
+  ]
+}

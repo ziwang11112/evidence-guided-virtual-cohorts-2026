@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "created_by": "scientific_generation_agent",
+  "state": "initial construction; no generator or source replay executed by builder",
+  "source_seed_schedule": [
+    76101,
+    76102,
+    76103
+  ],
+  "target_draw_schedule": [
+    76201,
+    76202,
+    76203,
+    76204,
+    76205
+  ],
+  "feedback_schedule": "Controller freezes all three initial candidates before any source replay; returns complete source-only feedback for all structures together; at most one parent-linked revise/retain per structure. All final structures are evaluated; no source-score winner selection.",
+  "shared_definition": {
+    "evidence_sha256": "44ac852b11b47facbaedcb16b753bb4def21183d6a810fa187ef181cdb6468a8",
+    "source_replay_sha256": "d954364e682b1f5a0e4317335d11c133f8239d828ff02700bd9540fa4a140fcb",
+    "source_assumptions_sha256": "ff725c2254fb4f79903b6b96a253947548691c72ad8db730b1cb055e7b7f0111",
+    "source_context_sha256": {
+      "oh": "e882075e65d15438399e4d9d10c91a53e7a109e692c506c9b9cd3917b55afa6e",
+      "bansal": "b1decf9ac8320aba543944c276dac8f5c9daf3e152798c0d700c1027399d343b"
+    },
+    "oh_rows": 160320,
+    "bansal_rows": 80472,
+    "oh_checks": 19,
+    "bansal_checks": 27,
+    "unreplayed_statistics": 23
+  },
+  "families": [
+    {
+      "id": "s1",
+      "name": "Additive conditional arithmetic mean with lognormal individual noise",
+      "scientific_difference": "One raw-scale BMI slope and sex-specific linear age slopes; constant residual CV. Effects add in arithmetic mean, so BMI slope remains constant away from positive regularization.",
+      "source_compatible_in_principle": "Oh reduced slope and sex-specific moments directly anchor the local mean and residual variance. Female age increase and positive skew can accommodate the Bansal location/rank summaries without treating their marginal correlations as conditional coefficients.",
+      "assumption_limits": "Linear age response, no raw-mean interaction, distribution transport and independent source covariates are not identified by the sources. Positive floor affects unsupported low-mean combinations.",
+      "planned_diagnostic_tradeoffs": "Raw-scale OLS may agree while TG quantile asymmetry, rare tails or female age-TG rank correlation and tertile ages disagree; increasing CV changes both tail mass and rank associations."
+    },
+    {
+      "id": "s2",
+      "name": "Saturating multiplicative log-location model with smooth female age transition",
+      "scientific_difference": "BMI enters a bounded nonlinear function of log TG; female age enters a sigmoid. Arithmetic-scale BMI effects depend on age/sex and saturate at high BMI.",
+      "source_compatible_in_principle": "Positive skew, Table 2 qualitative female age transition and high-BMI flattening, plus Bansal fasting quantiles motivate this alternative. Source moment-equivalent medians and approximate local slope anchor it.",
+      "assumption_limits": "The plateau width and age transition are unreported; they are not measured menopausal state. One lognormal family may miss observed extreme tail/category counts. Marginal-to-conditional centering is approximate.",
+      "planned_diagnostic_tradeoffs": "May better represent age curvature and TG quantiles while changing raw-scale BMI OLS, sex-specific SDs and high-BMI extrapolation. Same source diagnostics expose these tradeoffs without selecting endpoints."
+    },
+    {
+      "id": "s3",
+      "name": "Latent elevated-TG state mixture with gamma components",
+      "scientific_difference": "Age/BMI alter state membership instead of a single continuous TG location; conditional dispersion and tails change with mixture composition, and mean response saturates.",
+      "source_compatible_in_principle": "Source TG spread, skew and metabolic clustering permit latent heterogeneity; two gamma states can represent low and elevated ranges while using the same moment and local-slope anchors. This is compatibility in principle only, not evidence that two biological classes exist.",
+      "assumption_limits": "State prevalence/components are not identified by aggregate source statistics. State is not a diagnosis. Analytic logistic-normal centering is approximate and can leave mean/slope discrepancies.",
+      "planned_diagnostic_tradeoffs": "Could reproduce moderate/high category fractions while distorting median/IQR, rare extreme tail or age/BMI distributions inside TG tertiles. Rank relationships may differ even with similar marginal moments."
+    }
+  ],
+  "uncertainty": "Fixed-source, fixed-covariate, fixed-parameter scenarios do not give calibrated probabilities over scientific structures. Missing source joint distributions remain unknown. Source numerical agreement will not establish target validity or causal or individual recovery claims."
+}

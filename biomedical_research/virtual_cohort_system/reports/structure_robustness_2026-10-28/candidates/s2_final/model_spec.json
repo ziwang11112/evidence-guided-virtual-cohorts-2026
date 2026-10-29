@@ -1,0 +1,217 @@
+{
+  "parameters": {
+    "structure_id": "s2",
+    "reference": {
+      "tg_mean": [
+        141.6,
+        97.2
+      ],
+      "tg_sd": [
+        107.7,
+        61.0
+      ],
+      "age_mean": [
+        43.9,
+        43.3
+      ],
+      "age_sd": [
+        13.6,
+        12.7
+      ],
+      "bmi_mean": [
+        24.4,
+        23.0
+      ],
+      "bmi_sd": [
+        3.1,
+        3.2
+      ]
+    },
+    "assay": {
+      "intercept": 12.45,
+      "slope": 1.022
+    },
+    "reference_median": [
+      112.70435000655708,
+      82.33012396248516
+    ],
+    "log_bmi_slope": [
+      0.048114406779661015,
+      0.07009259259259258
+    ],
+    "bmi_saturation_width": 10.0,
+    "female_age": {
+      "amplitude": 0.58,
+      "midpoint": 50.0,
+      "width": 6.5,
+      "source_center": 0.34
+    },
+    "male_log_age_slope": -0.0014,
+    "residual_log_sd": [
+      0.65,
+      0.49
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_shared_source_interpretation",
+      "description": "The same admitted Oh PMC6911291.1 and Bansal publisher snapshot, extraction, source populations, measurement mapping and diagnostic definitions are used for all structures and revisions. Statistics from each paper share participants; source seeds and repeated tables are not independent clinical evidence. No target outcome evidence is available."
+    },
+    {
+      "id": "A_oh_context",
+      "description": "Oh source context has 160320 synthetic rows: 60 times each published sex count. Within each sex, age and BMI are generated separately from maximum-entropy discrete marginal distributions constrained by Table 1 mean/SD and Table 2 stratum counts. Assumed age support 18..85 years and BMI grid 14..45 at 0.05 spacing. Entropy is relative to a uniform grid within each reported stratum. Quantile allocation and independent fixed-seed permutations approximate independence of age and BMI conditional on sex. The joint distribution, tails and family links are unreported; independence is a working approximation, not a discovered fact."
+    },
+    {
+      "id": "A_bansal_context",
+      "description": "Bansal fasting context has 80472 synthetic women (4 times 20118). Age is 45 plus a gamma distribution with excess mean 9.5 and SD 7.2, rounded to integer years and capped at 120 solely to satisfy task support. BMI is lognormal with arithmetic mean 25.9 and SD 5.0. Deterministic stratified marginal quantiles are independently permuted using the one fixed context seed. Age-BMI dependence, hormone use, medication and other risk factors are unknown. TG tertile-specific age/BMI summaries are diagnostics only and are not used to construct covariates conditional on an assigned TG outcome."
+    },
+    {
+      "id": "A_source_measurement",
+      "description": "All source rows use legacy_proxy and checks use identity mg/dL mapping. Bansal explicitly corrected endogenous glycerol, supporting a glycerol-blanked proxy; Oh reports Cobas 6000 but not glycerol blanking, so its equivalence is weaker and assumed. Both used EDTA plasma, whereas target is fasting serum LBXTLG. Neither source proves equivalence to the exact old NHANES assay. This uncertainty remains common to all structures."
+    },
+    {
+      "id": "A_assay_transfer",
+      "description": "The task-supplied forward equation 12.45 + 1.022 * legacy_proxy TG is applied only to unblanked_2021_2023 rows. It is measurement context, not target-population association evidence. The point equation is treated deterministically because no coefficient covariance is supplied here. It does not establish interchangeability or alter age/BMI/sex biology; backward sensitivity is controlled elsewhere."
+    },
+    {
+      "id": "A_quantile",
+      "description": "Bansal does not report its quantile interpolation convention. Source replay uses explicitly typed linear (Hyndman-Fan type 7) sample quantiles as an approximation, retaining reported 81, 115 and 169 mg/dL without converting them."
+    },
+    {
+      "id": "A_bins",
+      "description": "Continuous TG is compared with Oh thresholds 150, 200 and 500 mg/dL. Oh Table 1 says >500 while prose says 500 and up; a continuous draw has zero exact-threshold mass. For Bansal integer-labeled tertiles and quintiles, half-unit boundaries 90.5/147.5 and 73.5/98.5/132.5/184.5 approximate rounding to reported integer mg/dL. Cumulative proportions are derived from published counts; these preserve every category count without pretending the bins are exact quantile probabilities."
+    },
+    {
+      "id": "A_oh_ols",
+      "description": "Oh Table 3 reports age/sex-adjusted simple linear BMI regression. The source replay estimates ordinary unweighted OLS TG~age+sex+BMI with intercept; sex is coded 1 male, 2 female and the BMI coefficient is invariant to reference coding. Family weighting/correlation and exact analysis details are unavailable, so this is approximate. Table 4 additionally adjusted metabolic model, Table 5 mixed lifestyle model, and Table 6 co-twin estimands are not substituted for Table 3."
+    },
+    {
+      "id": "A_oh_table2",
+      "description": "Oh Table 2 TG summaries have no explicit arithmetic/geometric label and methods mention geometric averages. Count-weighted BMI strata reconstruct 141.5937/97.2021 and age strata 141.6062/97.2153 mg/dL, supporting an arithmetic reading but not resolving contradictory wording. They are retained as reported_other with no arithmetic replay. Only qualitative shape motivates assumptions; no summary is relabeled as a verified conditional arithmetic mean."
+    },
+    {
+      "id": "A_unmeasured",
+      "description": "The generator has only age, sex and BMI as biological predictors. Missing medication, hormonal, diet, alcohol, diabetes, ancestry and family variables are integrated into individual residual variation or a latent state without claiming their actual values or conditional independence in real populations. Neither a nonsignificant result nor an absent association is evidence of zero."
+    },
+    {
+      "id": "A_transport",
+      "description": "A common age/sex/BMI law is transported from selected Korean families and initially healthy middle-aged US women to fasting US adults aged 20-79. Cohort, era, exclusion criteria and covariate support differ. No cohort label or opaque ID is used to switch biological laws, and target covariate frequencies are not calibration outcomes. This is an assumption-dependent virtual distribution, not individual recovery, causal identification or validated inferential utility."
+    },
+    {
+      "id": "A_monte_carlo",
+      "description": "The source covariates and biological parameters are fixed. Seeds 76101,76102,76103 vary individual residual and, in s3, latent-state draws only. Their spread is Monte Carlo variation, not evidence uncertainty. Large source contexts reduce simulation noise but rare >500 events, especially women, remain noisy. Target draw schedule is 76201..76205; builder does not execute it."
+    },
+    {
+      "id": "A_structure",
+      "description": "s2 assumes additive effects on log TG, which are multiplicative on TG: a bounded tanh BMI response, a smooth female age transition, a slight linear male age effect, and sex-specific normal log residuals. This permits age-BMI interaction on the arithmetic scale and BMI saturation; it changes the functional scale and age shape relative to s1. Transition parameters are phenomenological, not inferred menopause status."
+    }
+  ],
+  "parameter_provenance": {
+    "structure_id": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_structure"
+      ],
+      "derivation": "Prespecified scientific sensitivity structure; no probability or ranking among structures."
+    },
+    "reference": {
+      "evidence_ids": [
+        "E_oh_male_tg_mg_dl_mean",
+        "E_oh_male_tg_mg_dl_sd",
+        "E_oh_male_age_mean",
+        "E_oh_male_age_sd",
+        "E_oh_male_bmi_mean",
+        "E_oh_male_bmi_sd",
+        "E_oh_female_tg_mg_dl_mean",
+        "E_oh_female_tg_mg_dl_sd",
+        "E_oh_female_age_mean",
+        "E_oh_female_age_sd",
+        "E_oh_female_bmi_mean",
+        "E_oh_female_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_transport"
+      ],
+      "derivation": "Reported Oh sex-specific marginal moments. They are centering and spread anchors, not individual conditional values. Order is male, female."
+    },
+    "assay": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_assay_transfer",
+        "A_source_measurement"
+      ],
+      "derivation": "Task-supplied technical equation; not counted as an approved biological evidence source."
+    },
+    "reference_median": {
+      "evidence_ids": [
+        "E_oh_male_tg_mg_dl_mean",
+        "E_oh_male_tg_mg_dl_sd",
+        "E_oh_female_tg_mg_dl_mean",
+        "E_oh_female_tg_mg_dl_sd"
+      ],
+      "assumption_ids": [
+        "A_structure"
+      ],
+      "derivation": "Moment-equivalent lognormal marginal median m/sqrt(1+(sd/m)^2), used as a log-location anchor. This does not assert source TG is exactly lognormal or that a marginal median equals a conditional median."
+    },
+    "log_bmi_slope": {
+      "evidence_ids": [
+        "E_oh_bmi_age_sex_slope"
+      ],
+      "assumption_ids": [
+        "A_structure"
+      ],
+      "derivation": "Local log-scale linearization beta/m at each sex-specific source mean; not a reported log slope. Saturation deliberately makes the global OLS coefficient a diagnostic rather than an identity."
+    },
+    "bmi_saturation_width": {
+      "evidence_ids": [
+        "E_oh_female_bmi_stratum_4_tg",
+        "E_oh_female_bmi_stratum_5_tg"
+      ],
+      "assumption_ids": [
+        "A_oh_table2",
+        "A_structure"
+      ],
+      "derivation": "Assumed 10 kg/m^2 tanh width. Female highest BMI categories suggest a possible plateau but do not identify its location or establish saturation in men."
+    },
+    "female_age": {
+      "evidence_ids": [
+        "E_oh_female_age_stratum_1_tg",
+        "E_oh_female_age_stratum_3_tg",
+        "E_oh_female_age_stratum_4_tg",
+        "E_oh_female_age_stratum_5_tg",
+        "E_bansal_spearman_age"
+      ],
+      "assumption_ids": [
+        "A_oh_table2",
+        "A_structure"
+      ],
+      "derivation": "Assumed smooth transition suggested by female age strata: log amplitude .58, midpoint 50, width 6.5; .34 approximates its source-population average. Not a hormone measurement or causal menopause effect."
+    },
+    "male_log_age_slope": {
+      "evidence_ids": [
+        "E_oh_male_age_stratum_1_tg",
+        "E_oh_male_age_stratum_5_tg"
+      ],
+      "assumption_ids": [
+        "A_oh_table2",
+        "A_structure"
+      ],
+      "derivation": "Small negative local log-age trend chosen from the qualitatively flatter male profile; no source says this is a conditional coefficient."
+    },
+    "residual_log_sd": {
+      "evidence_ids": [
+        "E_oh_male_tg_mg_dl_mean",
+        "E_oh_male_tg_mg_dl_sd",
+        "E_oh_female_tg_mg_dl_mean",
+        "E_oh_female_tg_mg_dl_sd",
+        "E_bansal_q25",
+        "E_bansal_q75"
+      ],
+      "assumption_ids": [
+        "A_structure"
+      ],
+      "derivation": "Chosen below sex-specific total moment-equivalent log SDs to reserve dispersion for covariates; Bansal IQR implies total log spread about log(169/81)/(2*0.67449). These are fixed approximations, not SEs or source-fitted estimates."
+    }
+  }
+}

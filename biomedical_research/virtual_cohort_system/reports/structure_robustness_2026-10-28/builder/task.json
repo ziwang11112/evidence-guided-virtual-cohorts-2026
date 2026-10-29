@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "task_id": "tg-structural-robustness-new-period-2026-10-28",
+  "mode": "enrichment",
+  "population": "US fasting adults20-79. Append plausible native-assay TG for biomedical analyses; no individual recovery claim. The tg_assay column is known measurement context, not a biological covariate. Source simulations may use legacy_proxy, explicitly recording source assay equivalence assumptions. The following task-supplied assay information is admitted technical context, not a permitted source of target population associations.\n# Target measurement metadata\n\nThe target is reference-method fasting serum triglycerides in mg/dL, measured in the NHANES August 2021-August 2023 morning-examination subsample. Qualifying fasting is at least 8 and less than 24 hours. The required variable is LBXTLG in TRIGLY_L, not the standard biochemistry-profile triglyceride variable.\n\nCDC documents a change to a non-glycerol-blanked method and a new instrument for this collection period. The official measurement comparison equations are:\n\n- Forward: new-method TG (mg/dL) = 12.45 + 1.022 \u00d7 old-method TG (mg/dL).\n- Backward: old-method TG (mg/dL) = -12.19 + 0.9785 \u00d7 new-method TG (mg/dL).\n\nCDC reports coefficient intervals for the method comparison, but these equations are not population age/BMI/sex relationships. They do not establish assay interchangeability or justify modifying a target relationship to match a desired sign. Native LBXTLG units are the generation target; source-to-target assay transfer must be recorded as a modeling decision. The custodian also prespecifies a separate backward-calibration sensitivity.\n\nSource: [CDC TRIGLY_L analytic notes](https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2021/DataFiles/TRIGLY_L.htm). This excerpt is a measurement-only allowance. Builders must not follow the page into outcome data or use NHANES-derived population association studies.\n",
+  "row_id": "record_id",
+  "n_rows": 2660,
+  "columns": [
+    {
+      "name": "record_id",
+      "kind": "string",
+      "unit": "identifier",
+      "role": "identifier",
+      "nullable": false
+    },
+    {
+      "name": "age",
+      "kind": "integer",
+      "unit": "years",
+      "role": "observed",
+      "nullable": false,
+      "minimum": 0,
+      "maximum": 120
+    },
+    {
+      "name": "sex",
+      "kind": "category",
+      "unit": "1=male;2=female",
+      "role": "observed",
+      "nullable": false,
+      "categories": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "bmi",
+      "kind": "number",
+      "unit": "kg/m^2",
+      "role": "observed",
+      "nullable": false,
+      "minimum": 0
+    },
+    {
+      "name": "tg_assay",
+      "kind": "category",
+      "unit": "measurement_regime",
+      "role": "observed",
+      "nullable": false,
+      "categories": [
+        "legacy_proxy",
+        "unblanked_2021_2023"
+      ]
+    },
+    {
+      "name": "tg_mg_dl",
+      "kind": "number",
+      "unit": "mg/dL",
+      "role": "generated",
+      "nullable": false,
+      "minimum": 0
+    }
+  ],
+  "information_policy": {
+    "mode": "published_evidence",
+    "excluded_cohorts": [
+      "NHANES",
+      "National Health and Nutrition Examination Survey"
+    ],
+    "allowed_tools": [
+      "approved_local_sources",
+      "source_replay"
+    ]
+  },
+  "budget": {
+    "source_queries": 0,
+    "source_downloads": 0,
+    "revisions": 1
+  }
+}

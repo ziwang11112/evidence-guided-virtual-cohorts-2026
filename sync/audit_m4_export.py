@@ -25,7 +25,7 @@ def historical_bytes(root, path):
     return result.stdout
 
 
-def audit_m4_export(root, manifest, m2_receipt, m2_validation, m3_receipt, receipt, findings):
+def audit_m4_export(root, manifest, m2_receipt, m2_validation, m3_receipt, receipt, findings, *, read_bytes=None):
     if receipt is None:
         return {"status": "not_exported"}
 
@@ -33,9 +33,14 @@ def audit_m4_export(root, manifest, m2_receipt, m2_validation, m3_receipt, recei
         if not condition:
             findings.append({"file": path, "rule": rule})
 
+    if read_bytes is None:
+        read_bytes = lambda path: (root / path).read_bytes()
+
     def file_hash(path):
-        full = root / path
-        return digest(full.read_bytes()) if full.is_file() else None
+        try:
+            return digest(read_bytes(path))
+        except FileNotFoundError:
+            return None
 
     baseline_bytes = historical_bytes(root, "sync/EXPORT_MANIFEST.json")
     baseline = json.loads(baseline_bytes)
@@ -91,13 +96,13 @@ def audit_m4_export(root, manifest, m2_receipt, m2_validation, m3_receipt, recei
               RECEIPT, "historical_" + milestone + "_code_revision_mismatch")
 
     validation_path = PREFIX + "m4_validation.json"
-    validation = json.loads((root / validation_path).read_bytes())
+    validation = json.loads(read_bytes(validation_path))
     hashes = validation["code_sha256"]
     check(bool(hashes), validation_path, "m4_code_hashes_missing")
     for path, expected in hashes.items():
         check(current.get(PREFIX + path) == expected == file_hash(PREFIX + path),
               PREFIX + path, "m4_current_code_hash_mismatch")
-    curated_hashes = json.loads((root / CURATED / "curated_file_hashes.json").read_bytes())
+    curated_hashes = json.loads(read_bytes(CURATED + "curated_file_hashes.json"))
     check(set(path.removeprefix(CURATED) for path in current if path.startswith(CURATED)) ==
           set(curated_hashes) | {"curated_file_hashes.json"}, RECEIPT, "m4_curated_manifest_scope_mismatch")
     for path, expected in curated_hashes.items():
