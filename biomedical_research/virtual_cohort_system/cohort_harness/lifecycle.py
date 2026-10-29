@@ -22,10 +22,11 @@ from .contracts import (
     ContractError, _hash, exact_keys, require, string_list, text,
     validate_evidence, validate_input, validate_output, validate_spec, validate_task,
 )
+from .analysis_evidence import validate_analysis_evidence
 
 
 _SUBMISSION_FILES = {"generator.py", "generated.csv", "model_spec.json", "evidence.json",
-                     "decision.md", "checks.json", "freeze.json"}
+                     "decision.md", "checks.json", "freeze.json", "analysis_evidence.json"}
 _RECEIPT_KEYS = {"schema_version", "kind", "created_utc", "candidate", "route", "commitments",
                  "candidate_files", "parent", "revision", "revision_index", "acceptance", "isolation",
                  "registry_snapshot"}
@@ -250,7 +251,10 @@ def _state(bundle: Path, candidate: Path, relative: str, registry_count: int | N
             "Decision record must be nonempty")
     evidence = read_json(_path(candidate, "evidence.json"))
     evidence_ids = validate_evidence(evidence, task)
-    validate_spec(read_json(_path(candidate, "model_spec.json")), evidence_ids)
+    spec = read_json(_path(candidate, "model_spec.json"))
+    validate_spec(spec, evidence_ids)
+    if _path(candidate, "analysis_evidence.json", file=False).exists():
+        validate_analysis_evidence(read_json(_path(candidate, "analysis_evidence.json")), task, evidence, spec)
     for source in evidence["sources"]:
         for artifact in source["artifacts"]:
             require((source["id"], artifact["path"], artifact["sha256"]) in registry,

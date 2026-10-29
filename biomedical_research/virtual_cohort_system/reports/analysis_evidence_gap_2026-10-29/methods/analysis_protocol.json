@@ -1,0 +1,199 @@
+{
+  "version": "1.0",
+  "case_id": "nhanes_2009_2010_analysis_evidence_gap",
+  "created_utc": "2026-10-29T16:05:33.583179+00:00",
+  "purpose": "Prospective specification for adult TG analytical fidelity in an unused NHANES period. No desired directions or target-derived model selection.",
+  "selection": {
+    "cycle": "2009-2010",
+    "files": [
+      "DEMO_F",
+      "BMX_F",
+      "TRIGLY_F",
+      "FASTQX_F"
+    ],
+    "target": "LBXTR in TRIGLY_F, reference-method serum triglycerides, mg/dL; never BIOPRO_F LBXSTR",
+    "domain": "RIDAGEYR 40 through 79 inclusive; RIAGENDR 1 or 2; RIDSTATR=2; PHDSESN=0; finite PHAFSTHR+PHAFSTMN/60 from 8.5 inclusive to 24 exclusive; finite positive BMXBMI and LBXTR; finite positive WTSAF2YR; nonmissing SDMVSTRA and SDMVPSU",
+    "age_reason": "RIDAGEYR is topcoded at 80; restrict to 40-79, matching the source-supported adult age domain before any target outcome inspection; upper bound preserves interpretable age coefficients.",
+    "fasting": "Use positive fasting-subsample WTSAF2YR and explicitly confirm morning session and 8.5 to <24 food-fast hours from FASTQX_F. No eligibility based on TG threshold beyond finite positivity. Other fasting-questionnaire item times remain a measurement limitation; no extra behavior-based exclusion.",
+    "design_universe": "All TRIGLY_F participants with finite positive WTSAF2YR and finite SDMVSTRA/SDMVPSU, including domain exclusions. Out-of-domain estimating scores are zero.",
+    "missingness": "Complete case domain; no imputation or item-nonresponse reweighting. No outlier deletion, winsorization or population-TG-statistic-based choice. Pregnancy, diagnoses and treatment are not additional exclusion criteria.",
+    "reader": "pyreadstat.read_xport encoding WINDOWS-1252; all joins one-to-one by SEQN. Verify TRIGLY_F official row count 3581 and no missing weights, true zeros retained as zero.",
+    "assay": "Roche Modular P glycerol-blanked enzymatic method; native LBXTR mg/dL; LBDTRSI=0.01129*LBXTR subject to published rounding.",
+    "source_informed_age_decision": "Parent specified age40-79 after source research identified Tromso7 age>=40; decision recorded before downloading or parsing target outcomes. Target remains fasting while admitted source may be nonfasting, a transport limitation.",
+    "morning_code": "FASTQX_F PHDSESN 0=morning, 1=afternoon, 2=evening; official codebook lines 334-338. Corrected implementation after eligibility-only attempt1 selected zero rows; no TG analyses were run."
+  },
+  "visible": {
+    "columns": [
+      "record_id",
+      "age",
+      "sex",
+      "bmi",
+      "tg_assay"
+    ],
+    "sex_mapping": {
+      "1": "male",
+      "2": "female"
+    },
+    "age_unit": "years",
+    "bmi_unit": "kg/m^2",
+    "id": "random opaque UUID with randomized row order; no SEQN release",
+    "generated_column": "tg_mg_dl, finite positive mg/dL; preserve observed cells and order",
+    "tg_assay": "Preserved constant legacy_proxy for inherited-generator compatibility. Exact target is glycerol-blanked Roche Modular P NHANES2009-2010; token mapping is a measurement approximation, not assay equivalence."
+  },
+  "transforms": {
+    "A": "(age-50)/10",
+    "B": "(bmi-25)/5",
+    "F": "1 if sex=2, else 0",
+    "outcome": "natural logarithm of TG in mg/dL, with prespecified raw-TG secondary sensitivity"
+  },
+  "models": {
+    "adjusted": "log(TG)=intercept+b_A*A+b_B*B+b_F*F+error",
+    "age_curve": "log(TG)=intercept+b_A*A+b_B*B+b_F*F+b_QA*A^2+error",
+    "bmi_curve": "log(TG)=intercept+b_A*A+b_B*B+b_F*F+b_QB*B^2+error",
+    "raw_age_curve": "TG=intercept+b_A*A+b_B*B+b_F*F+b_QA*A^2+error",
+    "raw_bmi_curve": "TG=intercept+b_A*A+b_B*B+b_F*F+b_QB*B^2+error"
+  },
+  "endpoints": [
+    {
+      "id": "adjusted_age_per10",
+      "tier": "primary",
+      "model": "adjusted",
+      "contrast": "b_A",
+      "scale": "log_mg_dl"
+    },
+    {
+      "id": "adjusted_bmi_per5",
+      "tier": "primary",
+      "model": "adjusted",
+      "contrast": "b_B",
+      "scale": "log_mg_dl"
+    },
+    {
+      "id": "age_curvature_second_difference",
+      "tier": "primary",
+      "model": "age_curve",
+      "contrast": "2*b_QA",
+      "scale": "log_mg_dl",
+      "meaning": "Full-domain quadratic projection logTG(age60)-2logTG(age50)+logTG(age40), at fixed BMI/sex"
+    },
+    {
+      "id": "bmi_curvature_second_difference",
+      "tier": "primary",
+      "model": "bmi_curve",
+      "contrast": "2*b_QB",
+      "scale": "log_mg_dl",
+      "meaning": "Full-domain quadratic projection logTG(BMI35)-2logTG(BMI30)+logTG(BMI25), at fixed age/sex"
+    },
+    {
+      "id": "adjusted_female_vs_male",
+      "tier": "secondary",
+      "model": "adjusted",
+      "contrast": "b_F",
+      "scale": "log_mg_dl"
+    },
+    {
+      "id": "raw_age_curvature_second_difference",
+      "tier": "secondary",
+      "model": "raw_age_curve",
+      "contrast": "2*b_QA",
+      "scale": "mg_dl"
+    },
+    {
+      "id": "raw_bmi_curvature_second_difference",
+      "tier": "secondary",
+      "model": "raw_bmi_curve",
+      "contrast": "2*b_QB",
+      "scale": "mg_dl"
+    }
+  ],
+  "joint_subgroups": {
+    "tier": "descriptive prespecified",
+    "age_bins": [
+      "40<=age<60",
+      "60<=age<80"
+    ],
+    "sex": [
+      1,
+      2
+    ],
+    "bmi_bins": [
+      "0<bmi<25",
+      "25<=bmi<30",
+      "bmi>=30"
+    ],
+    "grid_size": 12,
+    "estimands": [
+      "weighted arithmetic mean TG mg/dL",
+      "exp(weighted mean log(TG)), geometric mean mg/dL",
+      "weighted proportion TG>=150 mg/dL (reserved target-only endpoint)"
+    ],
+    "variance": "Domain intercept-only Taylor linearization for arithmetic mean and mean logTG; exponentiate log-mean CI for geometric mean. Use full positive-weight design with zero score outside each subgroup.",
+    "nonestimable": "Retain empty/df<=0 groups as non-estimable, do not merge or drop. Report n, domain PSU/strata and df; no subgroup-dependent model selection.",
+    "sparse_flags": "Report n<30 and domain df<8 flags for every cell, without discarding or merging; these are diagnostic flags, not certified reliability thresholds.",
+    "threshold_interval": "For TG>=150 proportion, use same domain linearization and untruncated 95% t Wald interval. Explicitly flag if interval crosses [0,1] or SE=0; boundary/degenerate cases do not establish absence or certainty. Never use threshold diagnostics as builder feedback."
+  },
+  "hypotheses": {
+    "age_main": "H0 b_A=0 in adjusted model; two-sided, no expected direction",
+    "bmi_main": "H0 b_B=0 in adjusted model; two-sided, no expected direction",
+    "age_curvature": "H0 2*b_QA=0 in age_curve; two-sided, no expected direction",
+    "bmi_curvature": "H0 2*b_QB=0 in bmi_curve; two-sided, no expected direction",
+    "joint_subgroups": "Estimate all 12 arithmetic/geometric means; no prespecified favorable ordering or omnibus claim."
+  },
+  "estimation": {
+    "point": "Weighted least squares/weighted domain means using WTSAF2YR; normalize by domain mean for numerical stability, invariant to global rescaling",
+    "variance": "H=sum_domain w*x*xT; u_hj=sum_in_PSU domain*w*x*(y-xT*beta); meat=sum_h m_h/(m_h-1)*sum_j (u_hj-mean_h(u))*(u_hj-mean_h(u))T; V=H^-1*meat*H^-1. All positive-weight design PSUs included, no finite-population correction.",
+    "interval": "Two-sided 95% t, df=PSUs represented in domain minus strata represented in domain; no parameter-count subtraction, explicit NHANES nominal design-df convention.",
+    "invalid_design": "Stop for singleton full-design strata; nonestimable for empty/rank-deficient/df<=0 analysis domains.",
+    "implementation": "Custom NumPy/pandas/SciPy Taylor linearization reused from prior custodian methods; invented-fixture validation, no claim of independent survey-package replication.",
+    "multiplicity": "Descriptive 95% intervals without familywise correction; no binary success/equivalence threshold or confirmatory multiplicity claim."
+  },
+  "boundary": {
+    "type": "Procedural role boundary, not OS access isolation or protection against LLM pretraining",
+    "allowed_builder_inputs": "Only visible folder covariates, metadata, public protocol and measurement note. No target outcome rows, distributions, signs or coefficients.",
+    "excluded_builder_evidence": "Exclude NHANES-derived construction evidence (including every publication pooling target 2009-2010 with other cycles), direct/indirect public participant linkage and prior target results. Documentation is measurement-only allowance.",
+    "no_target_analysis_before_release": true,
+    "release_gate": "Require committed campaign variants/seeds, initial/final candidate commitments, successful harness outputs and controller guard hashes before hidden-table parsing; verify every generated table before loading hidden table."
+  },
+  "comparison": {
+    "reference": "Report estimate, survey SE, 95% CI and df; generated tables contribute point estimates only.",
+    "report": "Retain every declared candidate/seed and endpoint/subgroup, including failures; magnitude errors and uncertainty-interval direction categories are distinct.",
+    "limits": "Different period within NHANES, not independent study; complete-case sampling limits representativeness. No causal, individual-recovery, clinical-reliability or uncertainty-calibration claim. Seeds quantify simulation variation, not new clinical evidence. No post-release tuning."
+  },
+  "official_documentation": [
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/DEMO_F.htm",
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/BMX_F.htm",
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/TRIGLY_F.htm",
+    "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2009/DataFiles/FASTQX_F.htm",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/varianceestimation.aspx",
+    "https://wwwn.cdc.gov/nchs/nhanes/tutorials/weighting.aspx"
+  ],
+  "ordered_bmi_contrasts": {
+    "strata": "age40-59/60-79 by sex1/2 (4 strata)",
+    "basis": "Saturated three-BMI-group WLS within each age-sex domain, using full positive-weight design and joint covariance. Group boundaries identical to subgroup means.",
+    "contrasts": [
+      "BMI25-<30 minus BMI<25",
+      "BMI>=30 minus BMI25-<30",
+      "BMI>=30 minus BMI<25"
+    ],
+    "scales": [
+      "arithmetic TG mean difference mg/dL",
+      "mean-logTG difference (exponentiated geometric mean ratio)"
+    ],
+    "count": 24,
+    "direction": "Two-sided differences, no presupposed favorable order. Retain every stratum/contrast; report nonestimability if rank deficient or df<=0."
+  },
+  "campaign": {
+    "variants": [
+      "baseline",
+      "evidence_augmented"
+    ],
+    "seeds": [
+      79101,
+      79102,
+      79103
+    ],
+    "design": "Paired before/after evidence addition; two frozen candidates, augmented revision-linked to baseline. No within-variant revision: initial and final commitments may refer to identical candidate. No ordinary-Agent superiority claim.",
+    "evaluation_conditional": "No release if source applicability review finds evidence unusable.",
+    "primary_assessment": "Directional relation reproduction and ordered BMI-group contrasts within age by sex; magnitude errors secondary and transparent; no exact-row or exact-effect recovery claim."
+  }
+}

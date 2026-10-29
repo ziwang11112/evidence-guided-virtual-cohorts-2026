@@ -17,6 +17,7 @@ import pandas as pd
 from .contracts import validate_task, validate_input, validate_output, validate_evidence, validate_spec
 from .lifecycle import freeze_candidate, verify_candidate, read_json, read_table, validate_program
 from .source_checks import run_source_checks
+from .analysis_evidence import validate_analysis_evidence
 
 
 def read(path):
@@ -40,8 +41,12 @@ def validate_bundle(bundle, candidate):
     else:
         observed = load_table(bundle / "observed.csv", task)
     validate_input(observed, task)
-    ids = validate_evidence(read(candidate / "evidence.json"), task)
-    validate_spec(read(candidate / "model_spec.json"), ids)
+    evidence = read(candidate / "evidence.json")
+    spec = read(candidate / "model_spec.json")
+    ids = validate_evidence(evidence, task)
+    validate_spec(spec, ids)
+    if (candidate / "analysis_evidence.json").exists():
+        validate_analysis_evidence(read(candidate / "analysis_evidence.json"), task, evidence, spec)
     program, rows = candidate / "generator.py", candidate / "generated.csv"
     if program.is_file() == rows.is_file():
         raise ValueError("Submit exactly one route: generator.py or generated.csv")

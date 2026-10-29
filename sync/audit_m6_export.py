@@ -4,6 +4,7 @@ from __future__ import annotations
 from functools import lru_cache
 import csv
 import itertools
+import io
 import json
 import subprocess
 
@@ -32,7 +33,7 @@ def historical_bytes(root, path):
 
 
 def audit_m6_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_receipt,
-                    m5_receipt, receipt, findings):
+                    m5_receipt, receipt, findings, *, read_bytes=None):
     if receipt is None:
         return {"status": "not_exported"}
 
@@ -40,9 +41,14 @@ def audit_m6_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
         if not condition:
             findings.append({"file": path, "rule": rule})
 
+    if read_bytes is None:
+        read_bytes = lambda path: (root / path).read_bytes()
+
     def file_hash(path):
-        full = root / path
-        return digest(full.read_bytes()) if full.is_file() else None
+        try:
+            return digest(read_bytes(path))
+        except FileNotFoundError:
+            return None
 
     baseline_bytes = historical_bytes(root, "sync/EXPORT_MANIFEST.json")
     baseline = json.loads(baseline_bytes)
@@ -90,7 +96,7 @@ def audit_m6_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
               "m6_changed_historical_code_revision_map")
 
     validation_path = PREFIX + "m6_validation.json"
-    validation = json.loads((root / validation_path).read_bytes())
+    validation = json.loads(read_bytes(validation_path))
     check(validation["schema_version"] == 1 and validation["milestone"] == "M6",
           validation_path, "m6_validation_identity_mismatch")
     hashes = validation["code_sha256"]
@@ -98,12 +104,12 @@ def audit_m6_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
     for path, expected in hashes.items():
         check(current.get(PREFIX + path) == expected == file_hash(PREFIX + path),
               PREFIX + path, "m6_current_code_hash_mismatch")
-    curated_hashes = json.loads((root / CURATED / "file_manifest.json").read_bytes())
+    curated_hashes = json.loads(read_bytes(CURATED + "file_manifest.json"))
     check(set(path.removeprefix(CURATED) for path in current if path.startswith(CURATED)) ==
           set(curated_hashes) | {"file_manifest.json"}, RECEIPT, "m6_curated_manifest_scope_mismatch")
     for path, expected in curated_hashes.items():
         check(file_hash(CURATED + path) == expected, CURATED + path, "m6_curated_file_hash_mismatch")
-    provenance = json.loads((root / CURATED / "curation_provenance.json").read_bytes())["records"]
+    provenance = json.loads(read_bytes(CURATED + "curation_provenance.json"))["records"]
     original_hashes = {record["path"]: record["original_sha256"] for record in provenance}
     check(len(original_hashes) == len(provenance) and set(original_hashes) ==
           set(curated_hashes) - {"README.md", "curation_provenance.json"},
@@ -133,7 +139,7 @@ def audit_m6_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
         check(validation["execution"][field] == original_hashes.get(path),
               CURATED + path, "m6_original_execution_hash_mismatch")
     grid_path = CURATED + "results/probe_grid.csv"
-    with (root / grid_path).open(encoding="utf-8-sig", newline="") as stream:
+    with io.StringIO(read_bytes(grid_path).decode("utf-8-sig"), newline="") as stream:
         grid = list(csv.DictReader(stream))
     grid_keys = [(row["label"], int(row["seed"]), int(row["sex"]),
                   int(row["age"]), float(row["bmi"])) for row in grid]

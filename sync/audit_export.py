@@ -13,6 +13,7 @@ from audit_m3_export import audit_m3_export
 from audit_m4_export import audit_m4_export
 from audit_m5_export import audit_m5_export
 from audit_m6_export import audit_m6_export
+from audit_m7_export import audit_m7_export
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_FILES = {
@@ -33,6 +34,7 @@ LOCAL_FILES = {
     "sync/audit_m4_export.py", "sync/M4_EXPORT_RECEIPT.json", "docs/M4_EXPORT.md",
     "sync/audit_m5_export.py", "sync/M5_EXPORT_RECEIPT.json", "docs/M5_EXPORT.md",
     "sync/audit_m6_export.py", "sync/M6_EXPORT_RECEIPT.json", "docs/M6_EXPORT.md",
+    "sync/audit_m7_export.py", "sync/M7_EXPORT_RECEIPT.json", "docs/M7_EXPORT.md",
     "biomedical_research/three_model_review_2026-10-28/README.md",
     "biomedical_research/three_model_review_2026-10-28/REVIEW_PACKAGE_MANIFEST.json",
 }
@@ -43,6 +45,10 @@ REVIEWED_CONFIG_FILES = {"biomedical_research/virtual_cohort_system/.gitignore",
                          "biomedical_research/virtual_cohort_system/docs/system-explorer/index.html",
                          "biomedical_research/virtual_cohort_system/docs/system-explorer/architecture.drawio",
                          "biomedical_research/virtual_cohort_system/docs/system-explorer/verify_explorer.cjs"}
+REVIEWED_JSONL_FILES = {
+    "biomedical_research/virtual_cohort_system/reports/analysis_evidence_gap_2026-10-29/research/supplement_retry_log.jsonl",
+    "biomedical_research/virtual_cohort_system/reports/analysis_evidence_gap_2026-10-29/candidates/evidence_augmented/research_audit/supplement_retry_log.jsonl",
+}
 CSV_ROWS = {"all_results.csv": 5040, "completion_pooled.csv": 36, "full_synthetic_summary.csv": 35}
 BLOCKED_COLUMNS = {"person_id", "patient_id", "subject_id", "participant_id", "name", "email", "address", "date_of_birth", "weight_kg", "pfs", "gng", "dd100", "dd1000"}
 SECRET_RULES = {
@@ -81,7 +87,7 @@ def main():
             continue
         if relative not in allowed:
             findings.append({"file": relative, "rule": "not_allowlisted"})
-        if path.suffix.lower() not in ALLOWED_SUFFIXES and relative not in {".gitignore", ".gitattributes"} | REVIEWED_CONFIG_FILES:
+        if path.suffix.lower() not in ALLOWED_SUFFIXES and relative not in {".gitignore", ".gitattributes"} | REVIEWED_CONFIG_FILES | REVIEWED_JSONL_FILES:
             findings.append({"file": relative, "rule": "blocked_type"})
         if relative in GENERATED_AUDIT:
             continue  # Audit outputs are regenerated below, avoiding self-hashes.
@@ -218,7 +224,9 @@ def main():
     m5_receipt = json.loads(m5_path.read_text(encoding="utf-8")) if m5_path.is_file() else None
     m6_path = ROOT / "sync/M6_EXPORT_RECEIPT.json"
     m6_receipt = json.loads(m6_path.read_text(encoding="utf-8")) if m6_path.is_file() else None
-    latest_receipt = m6_receipt or m5_receipt or m4_receipt or m3_receipt
+    m7_path = ROOT / "sync/M7_EXPORT_RECEIPT.json"
+    m7_receipt = json.loads(m7_path.read_text(encoding="utf-8")) if m7_path.is_file() else None
+    latest_receipt = m7_receipt or m6_receipt or m5_receipt or m4_receipt or m3_receipt
     m2_revisions = latest_receipt["historical_m2_code_revisions"] if latest_receipt else {}
     for name, expected in m2_validation["code_sha256"].items():
         current = sha(m2_root / name)
@@ -233,13 +241,17 @@ def main():
                   if name.startswith("biomedical_research/virtual_cohort_system/")}
     expected_curated = (latest_receipt or m2_receipt)["curated_export_sha256"]
     if current_m2 != expected_curated:
-        findings.append({"file": "sync/M6_EXPORT_RECEIPT.json" if m6_receipt else
+        findings.append({"file": "sync/M7_EXPORT_RECEIPT.json" if m7_receipt else
+                         "sync/M6_EXPORT_RECEIPT.json" if m6_receipt else
                          "sync/M5_EXPORT_RECEIPT.json" if m5_receipt else
                          "sync/M4_EXPORT_RECEIPT.json" if m4_receipt else
                          "sync/M3_EXPORT_RECEIPT.json" if m3_receipt else "sync/M2_EXPORT_RECEIPT.json",
                          "rule": "curated_scope_mismatch"})
-    m6_audit = audit_m6_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
-                             m4_receipt, m5_receipt, m6_receipt, findings)
+    m7_audit = audit_m7_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
+                             m4_receipt, m5_receipt, m6_receipt, m7_receipt, findings)
+    m6_audit = (m7_audit.pop("historical_m6_audit") if m7_receipt else
+                audit_m6_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
+                                m4_receipt, m5_receipt, m6_receipt, findings))
     m5_audit = (m6_audit.pop("historical_m5_audit") if m6_receipt else
                 audit_m5_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
                                 m4_receipt, m5_receipt, findings))
@@ -274,6 +286,7 @@ def main():
              "virtual_cohort_m4": m4_audit,
              "virtual_cohort_m5": m5_audit,
              "virtual_cohort_m6": m6_audit,
+             "virtual_cohort_m7": m7_audit,
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}
