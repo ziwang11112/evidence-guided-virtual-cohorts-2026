@@ -1,0 +1,25 @@
+# M6 export boundary and review status
+
+29 October 2026. This bounded private update preserves the M6 constructive source-identifiability case. Three frozen conditional laws passed all 276 alternative-versus-reference descriptive source comparisons while producing planned conditional differences on synthetic probes. The approximately 9.91 mg/dL analytical separation was known before execution. The result remains conditional on product source covariates and an imperfect inherited anchor; it is not new biological discovery, source admissibility or real-cohort validation. Broad positive-age and negative log-BMI-curvature directions were not reversed.
+
+## Exact included scope
+
+The project now has 448 allowlisted source files: 330 prior files plus 118 additions. Only the project README revises a prior project file. All other 329 project files and nine historical local milestone records remain byte-identical, as do all 838 earlier nonproject source records. The current manifest and `sync/M6_EXPORT_RECEIPT.json` bind the scope. Earlier results, core engine code, tests, receipts and their historical revision maps are unchanged.
+
+The 118 additions are `MILESTONE_6_RESULTS.md`, `m6_validation.json` and 116 curated inspection files. The package's `file_manifest.json` binds all 115 other files. It contains three candidate programs/specifications and certificates, source feedback, fixed protocols, analysis and preparation methods, replay metadata, complete aggregate results and independent review. Eighteen CSVs preserve source-phase and complete-phase aggregates, including duplicated source summaries retained as historical execution evidence. Three PNG/PDF pairs include the repeated source-screen figure and the synthetic-probe figure; they are aggregate plots.
+
+`results/probe_grid.csv` contains 24,840 unique synthetic covariate-cell summaries: three labels, three seeds, two sexes, 60 integer ages and 23 integer BMI values. Every row aggregates ten artificial replicates and reports mean, median, geometric mean and proportions. The export auditor verifies the exact grid, uniqueness and count of ten. It contains no participant identifiers or individual generated outcomes. The complete source/probe input and output tables are omitted. Other retained probe results include all 63 endpoint rows and 36 block records; no seed or unfavorable endpoint was selectively excluded.
+
+## Hashes and copied metadata
+
+The source package records 113 original/copied hash pairs. Six copied files contain disclosed filesystem-prefix normalizations: `analysis/frozen_gate.json` (1 replacement), `curate_results.py` (4), `evaluation_commitment.json` (81), `results/aggregate_report.json` (81), `source_analysis/aggregate_report.json` (72), and `source_commitment.json` (72). All copied hashes verify. Embedded original hashes remain unchanged and are checked through the curation-provenance mapping. This Git export copies the completed curated package byte-for-byte and introduces no further transformations. Original frozen work files remain local.
+
+All 62 bindings in `m6_validation.json` match exported files: 48 unchanged earlier bindings and 14 new inspection Python files. The milestone-report, curated-manifest and independent-audit hashes match. The independent postrun audit records 99 checks and 129 hash comparisons; four invented-data analysis tests are recorded separately. The M4 core-suite result of 258 passed and one skipped remains historical. No generator, target evaluator, experiment or test suite was rerun during export.
+
+## Historical and scientific boundaries
+
+The export audit verifies exact inventory, hashes, table schemas, the synthetic grid, copied-path provenance, credential/path scans and historical snapshots. M5 evidence is verified at Git commit `ecdef87b537e066872552f8b29354ab5b17c0e0b`, with its fixed M4/M3 chain intact. The audit requires those Git objects locally; a source archive without repository history cannot complete historical verification.
+
+Scientific limits and the disclosed incidental historical-summary exposure remain in the report and independent audit. The three-SD source screen is descriptive simulation-scale comparison, not clinical uncertainty or a formal equivalence test. No new real-patient outcome evaluation occurred. The synthetic grid is a chosen probe distribution and does not represent a human population. Export integrity checks do not independently validate scientific conclusions.
+
+This is an inspection archive. Original directory layout, admitted source material, synthetic inputs and execution runtime are needed for full replay. Frozen metadata retains references to those omitted dependencies, and the exported methods preserve original layout assumptions. No one-command reproduction is claimed. Full papers, row-level synthetic execution tables, participant data, work directories, runtime settings, caches and secrets are excluded. The unchanged M2 runtime-path exceptions remain hash-bound. GitHub privacy and the pushed branch identity are verified separately.

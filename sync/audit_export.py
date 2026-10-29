@@ -12,6 +12,7 @@ from audit_three_model_review import audit_three_model_review
 from audit_m3_export import audit_m3_export
 from audit_m4_export import audit_m4_export
 from audit_m5_export import audit_m5_export
+from audit_m6_export import audit_m6_export
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_FILES = {
@@ -31,6 +32,7 @@ LOCAL_FILES = {
     "sync/audit_m3_export.py", "sync/M3_EXPORT_RECEIPT.json", "docs/M3_EXPORT.md",
     "sync/audit_m4_export.py", "sync/M4_EXPORT_RECEIPT.json", "docs/M4_EXPORT.md",
     "sync/audit_m5_export.py", "sync/M5_EXPORT_RECEIPT.json", "docs/M5_EXPORT.md",
+    "sync/audit_m6_export.py", "sync/M6_EXPORT_RECEIPT.json", "docs/M6_EXPORT.md",
     "biomedical_research/three_model_review_2026-10-28/README.md",
     "biomedical_research/three_model_review_2026-10-28/REVIEW_PACKAGE_MANIFEST.json",
 }
@@ -214,7 +216,9 @@ def main():
     m4_receipt = json.loads(m4_path.read_text(encoding="utf-8")) if m4_path.is_file() else None
     m5_path = ROOT / "sync/M5_EXPORT_RECEIPT.json"
     m5_receipt = json.loads(m5_path.read_text(encoding="utf-8")) if m5_path.is_file() else None
-    latest_receipt = m5_receipt or m4_receipt or m3_receipt
+    m6_path = ROOT / "sync/M6_EXPORT_RECEIPT.json"
+    m6_receipt = json.loads(m6_path.read_text(encoding="utf-8")) if m6_path.is_file() else None
+    latest_receipt = m6_receipt or m5_receipt or m4_receipt or m3_receipt
     m2_revisions = latest_receipt["historical_m2_code_revisions"] if latest_receipt else {}
     for name, expected in m2_validation["code_sha256"].items():
         current = sha(m2_root / name)
@@ -229,12 +233,16 @@ def main():
                   if name.startswith("biomedical_research/virtual_cohort_system/")}
     expected_curated = (latest_receipt or m2_receipt)["curated_export_sha256"]
     if current_m2 != expected_curated:
-        findings.append({"file": "sync/M5_EXPORT_RECEIPT.json" if m5_receipt else
+        findings.append({"file": "sync/M6_EXPORT_RECEIPT.json" if m6_receipt else
+                         "sync/M5_EXPORT_RECEIPT.json" if m5_receipt else
                          "sync/M4_EXPORT_RECEIPT.json" if m4_receipt else
                          "sync/M3_EXPORT_RECEIPT.json" if m3_receipt else "sync/M2_EXPORT_RECEIPT.json",
                          "rule": "curated_scope_mismatch"})
-    m5_audit = audit_m5_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
-                             m4_receipt, m5_receipt, findings)
+    m6_audit = audit_m6_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
+                             m4_receipt, m5_receipt, m6_receipt, findings)
+    m5_audit = (m6_audit.pop("historical_m5_audit") if m6_receipt else
+                audit_m5_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
+                                m4_receipt, m5_receipt, findings))
     m4_audit = (m5_audit.pop("historical_m4_audit") if m5_receipt else
                 audit_m4_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt, m4_receipt, findings))
     m3_audit = (m4_audit.pop("historical_m3_audit") if m4_receipt else
@@ -265,6 +273,7 @@ def main():
              "virtual_cohort_m3": m3_audit,
              "virtual_cohort_m4": m4_audit,
              "virtual_cohort_m5": m5_audit,
+             "virtual_cohort_m6": m6_audit,
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}

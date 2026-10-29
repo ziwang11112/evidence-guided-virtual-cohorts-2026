@@ -27,7 +27,7 @@ def historical_bytes(root, path):
 
 
 def audit_m5_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_receipt,
-                    receipt, findings):
+                    receipt, findings, *, read_bytes=None):
     if receipt is None:
         return {"status": "not_exported"}
 
@@ -35,9 +35,14 @@ def audit_m5_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
         if not condition:
             findings.append({"file": path, "rule": rule})
 
+    if read_bytes is None:
+        read_bytes = lambda path: (root / path).read_bytes()
+
     def file_hash(path):
-        full = root / path
-        return digest(full.read_bytes()) if full.is_file() else None
+        try:
+            return digest(read_bytes(path))
+        except FileNotFoundError:
+            return None
 
     baseline_bytes = historical_bytes(root, "sync/EXPORT_MANIFEST.json")
     baseline = json.loads(baseline_bytes)
@@ -85,7 +90,7 @@ def audit_m5_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
               "m5_changed_historical_code_revision_map")
 
     validation_path = PREFIX + "m5_validation.json"
-    validation = json.loads((root / validation_path).read_bytes())
+    validation = json.loads(read_bytes(validation_path))
     check(validation["schema_version"] == 1 and validation["milestone"] == "M5",
           validation_path, "m5_validation_identity_mismatch")
     hashes = validation["code_sha256"]
@@ -93,12 +98,12 @@ def audit_m5_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
     for path, expected in hashes.items():
         check(current.get(PREFIX + path) == expected == file_hash(PREFIX + path),
               PREFIX + path, "m5_current_code_hash_mismatch")
-    curated_hashes = json.loads((root / CURATED / "file_manifest.json").read_bytes())
+    curated_hashes = json.loads(read_bytes(CURATED + "file_manifest.json"))
     check(set(path.removeprefix(CURATED) for path in current if path.startswith(CURATED)) ==
           set(curated_hashes) | {"file_manifest.json"}, RECEIPT, "m5_curated_manifest_scope_mismatch")
     for path, expected in curated_hashes.items():
         check(file_hash(CURATED + path) == expected, CURATED + path, "m5_curated_file_hash_mismatch")
-    provenance = json.loads((root / CURATED / "curation_provenance.json").read_bytes())["records"]
+    provenance = json.loads(read_bytes(CURATED + "curation_provenance.json"))["records"]
     check(len({record["path"] for record in provenance}) == len(provenance) and
           {record["path"] for record in provenance} ==
           set(curated_hashes) - {"README.md", "curation_provenance.json"},
@@ -120,7 +125,7 @@ def audit_m5_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
           "m5_curation_normalization_receipt_mismatch")
     audited_hashes = {}
     if CURATED + "curated_file_hashes_at_audit.json" in current:
-        audited_hashes = json.loads((root / CURATED / "curated_file_hashes_at_audit.json").read_bytes())
+        audited_hashes = json.loads(read_bytes(CURATED + "curated_file_hashes_at_audit.json"))
         for path, expected in audited_hashes.items():
             check(curated_hashes.get(path) == expected, CURATED + path,
                   "m5_scientific_file_changed_after_audit")
