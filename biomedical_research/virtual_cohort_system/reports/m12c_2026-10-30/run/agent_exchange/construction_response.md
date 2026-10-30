@@ -1,0 +1,9 @@
+Created the unfrozen [initial candidate](D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/m12c/run01/candidates/initial).
+
+The additive mean starts with intercept 3, reported x coefficient 2, and composition-derived z contrast approximately 2. Independent symmetric triangular residuals have starting SD 1.004192890506867. The intercept/z contrast require a shared additive source model; residual SD uses an expectation-level sample-variance decomposition. Residual shape, independence, common source relationships and target transfer remain assumptions.
+
+Written artifacts include the generator, model specification, decision and check records, byte-identical evidence, two exact source covariate CSV copies, v2 replay recipe, proposed v1 calibration plan, and two auxiliary check reports. The recipe preserves independent populations, identity measurement, units, adjustment sets and all six source checks. The four-parameter plan preserves the controller's seeds, scales, tolerance, execution limits and nine-trial maximum.
+
+Actual checks passed: nine admitted-input hashes; source headers, composition, row counts and unique IDs; exact copies; source-summary arithmetic; base candidate validation; source-task compilation; six metadata/operator schema preflights on empty typed data; and static calibration-schema/controller matching. An initial CLI candidate-path invocation was rejected, then corrected successfully. No generator execution, freeze, calibration, source diagnostic calculation or target analysis occurred.
+
+A study-specific mean shift could explain the source contrast; endpoint-only source x values leave interior curvature unidentified. Source compatibility would not establish target validity. Ready for controller freezing and isolated execution, then scientific review of verified diagnostics.

@@ -1,0 +1,295 @@
+{
+  "schema_version": 2,
+  "model_domain": {
+    "description": "Computational envelope only: x [-2,2], z {0,1}, y [-100,100]; no scientific transport guarantee.",
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "id",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "x",
+        "kind": "number",
+        "unit": "x_unit",
+        "role": "observed",
+        "nullable": false,
+        "minimum": -2,
+        "maximum": 2
+      },
+      {
+        "name": "z",
+        "kind": "category",
+        "unit": "code",
+        "role": "observed",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "y",
+        "kind": "number",
+        "unit": "y_unit",
+        "role": "generated",
+        "nullable": false,
+        "minimum": -100,
+        "maximum": 100
+      }
+    ],
+    "assumption_ids": [
+      "A_domain"
+    ]
+  },
+  "contexts": [
+    {
+      "id": "study_A",
+      "population": "Invented study A, n=120, z=0:80, z=1:40; x=-1 and +1 balanced within each z; participants distinct from the other study.",
+      "reason": "Use the admitted covariate-only source table without resampling, filtering or clipping, preserving the distinct composition reported in this source.",
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "x",
+          "kind": "number",
+          "unit": "x_unit",
+          "role": "observed",
+          "nullable": false,
+          "minimum": -1,
+          "maximum": 1
+        },
+        {
+          "name": "z",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "y",
+          "kind": "number",
+          "unit": "y_unit",
+          "role": "generated",
+          "nullable": false,
+          "minimum": -100,
+          "maximum": 100
+        }
+      ],
+      "assumption_ids": [
+        "A_shared_additive",
+        "A_residual",
+        "A_moment_start",
+        "A_domain"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Both invented source reports explicitly use identical x_unit/y_unit measurements and numeric z categories; no conversion or measurement-error model is applied."
+      },
+      "input": {
+        "path": "source_contexts/A_covariates.csv",
+        "sha256": "b9df4ef37223fa4130b9c687046eccecb066f67ba7431b1c355a6ca33150184a",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "A_mean",
+          "evidence_id": "A_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A_shared_additive",
+            "A_residual",
+            "A_moment_start",
+            "A_domain"
+          ],
+          "reason": "Scheduled source-only replay of the supplied 120-row population, retaining all rows, exact units and the reported statistic definition. Approximate refers to the assumed conditional/residual model and domain, not a computed result. SD uses n-1; x coefficient includes intercept and adjusts for z."
+        },
+        {
+          "id": "A_sd",
+          "evidence_id": "A_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A_shared_additive",
+            "A_residual",
+            "A_moment_start",
+            "A_domain"
+          ],
+          "reason": "Scheduled source-only replay of the supplied 120-row population, retaining all rows, exact units and the reported statistic definition. Approximate refers to the assumed conditional/residual model and domain, not a computed result. SD uses n-1; x coefficient includes intercept and adjusts for z."
+        },
+        {
+          "id": "A_beta",
+          "evidence_id": "A_beta",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "y_unit/x_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "y",
+            "predictors": [
+              "x",
+              "z"
+            ],
+            "term": "x",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_shared_additive",
+            "A_residual",
+            "A_moment_start",
+            "A_domain"
+          ],
+          "reason": "Scheduled source-only replay of the supplied 120-row population, retaining all rows, exact units and the reported statistic definition. Approximate refers to the assumed conditional/residual model and domain, not a computed result. SD uses n-1; x coefficient includes intercept and adjusts for z."
+        }
+      ]
+    },
+    {
+      "id": "study_B",
+      "population": "Invented study B, n=120, z=0:40, z=1:80; x=-1 and +1 balanced within each z; participants distinct from the other study.",
+      "reason": "Use the admitted covariate-only source table without resampling, filtering or clipping, preserving the distinct composition reported in this source.",
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "x",
+          "kind": "number",
+          "unit": "x_unit",
+          "role": "observed",
+          "nullable": false,
+          "minimum": -1,
+          "maximum": 1
+        },
+        {
+          "name": "z",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "y",
+          "kind": "number",
+          "unit": "y_unit",
+          "role": "generated",
+          "nullable": false,
+          "minimum": -100,
+          "maximum": 100
+        }
+      ],
+      "assumption_ids": [
+        "A_shared_additive",
+        "A_residual",
+        "A_moment_start",
+        "A_domain"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Both invented source reports explicitly use identical x_unit/y_unit measurements and numeric z categories; no conversion or measurement-error model is applied."
+      },
+      "input": {
+        "path": "source_contexts/B_covariates.csv",
+        "sha256": "85b3b7166b40a3ed77ddf83fd1ab70472aeef9227cb5f932f90f8f44f1bdaef9",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "B_mean",
+          "evidence_id": "B_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A_shared_additive",
+            "A_residual",
+            "A_moment_start",
+            "A_domain"
+          ],
+          "reason": "Scheduled source-only replay of the supplied 120-row population, retaining all rows, exact units and the reported statistic definition. Approximate refers to the assumed conditional/residual model and domain, not a computed result. SD uses n-1; x coefficient includes intercept and adjusts for z."
+        },
+        {
+          "id": "B_sd",
+          "evidence_id": "B_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A_shared_additive",
+            "A_residual",
+            "A_moment_start",
+            "A_domain"
+          ],
+          "reason": "Scheduled source-only replay of the supplied 120-row population, retaining all rows, exact units and the reported statistic definition. Approximate refers to the assumed conditional/residual model and domain, not a computed result. SD uses n-1; x coefficient includes intercept and adjusts for z."
+        },
+        {
+          "id": "B_beta",
+          "evidence_id": "B_beta",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "y_unit/x_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "y",
+            "predictors": [
+              "x",
+              "z"
+            ],
+            "term": "x",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_shared_additive",
+            "A_residual",
+            "A_moment_start",
+            "A_domain"
+          ],
+          "reason": "Scheduled source-only replay of the supplied 120-row population, retaining all rows, exact units and the reported statistic definition. Approximate refers to the assumed conditional/residual model and domain, not a computed result. SD uses n-1; x coefficient includes intercept and adjusts for z."
+        }
+      ]
+    }
+  ]
+}

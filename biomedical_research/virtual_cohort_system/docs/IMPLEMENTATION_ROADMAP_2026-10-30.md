@@ -26,7 +26,7 @@ The method must connect evidence meaning, a stochastic generator, and downstream
 | M13: new real-data screen | Frozen candidate/seed schedule, generated tables, same analysis code on real and generated data | Complete results, effect direction and magnitude/shape, reference uncertainty, uncalibrated reuse analysis and retained failures | Universal validity or all three generation modes |
 | M14: targeted improvement | Address the actual observed failure, then evaluate on a new reserved task | Change tied to evidence; improvement without hiding other degradations; comparison appropriate to the claim | Publication readiness merely from adding components |
 
-M12-A and M12-B are implemented: see [independent source contexts](../MILESTONE_12A_RESULTS.md) and [bounded immutable calibration](../MILESTONE_12B_RESULTS.md). The latter has three actual isolated engineering runs, including failure controls. M12-C and the later scientific stages remain proposed until their artifacts and checks exist.
+M12-A and M12-B are implemented: see [independent source contexts](../MILESTONE_12A_RESULTS.md) and [bounded immutable calibration](../MILESTONE_12B_RESULTS.md). The minimum [M12-C source-only integration](../MILESTONE_12C_RESULTS.md) is also complete: an actual Agent constructed a generator, reviewed verified feedback and retained it; selected bytes were promoted with lineage. This exercises retention, not demonstrated structural repair. Automatic retrieval/editing branches and later scientific stages remain proposed.
 
 ## M12-B design and implemented boundary
 
@@ -38,7 +38,7 @@ Keep the expected constraint set fixed. Undefined statistics cannot silently dis
 
 Validate with invented cases covering a source mixture, an adjusted relationship, and an incompatible set of constraints. These are computational checks with known answers, not additional biomedical experiments. Do not hand-code their coefficients into a real-case generator.
 
-This stage now has a bounded coordinate-search tool, immutable trial bundles, a permanent per-bundle reservation ledger and diagnostic replay on separately scheduled seeds. The current tool uses every declared source check in the fixed objective and supports top-level scalar parameters. It deliberately rejects automatic recovery of pending sessions. See [the interface](BOUNDED_CALIBRATION.md) for the exact scope. Next implement M12-C's source-only Agent decision and scientific-release promotion; a better engineering fixture score is not the next research objective.
+This stage now has a bounded coordinate-search tool, immutable trial bundles, a permanent per-bundle reservation ledger and diagnostic replay on separately scheduled seeds. The current tool uses every declared source check in the fixed objective and supports top-level scalar parameters. It deliberately rejects automatic recovery of pending sessions. See [the interface](BOUNDED_CALIBRATION.md) for the exact scope. M12-C now adds recorded Agent decisions and development-candidate promotion; it does not yet create a validated target release. The next priority is real-case evidence admission and a locked real-data evaluation, rather than further improving an invented fixture.
 
 ## Real-case admission, before target outcome analysis
 

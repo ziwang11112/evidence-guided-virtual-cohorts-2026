@@ -1,0 +1,97 @@
+{
+  "parameters": {
+    "intercept": 3.0,
+    "beta_x": 2.0,
+    "beta_z": 1.9999999999999996,
+    "residual_sd": 1.004192890506867,
+    "residual_law": "symmetric_triangular"
+  },
+  "assumptions": [
+    {
+      "id": "A_shared_additive",
+      "description": "Assume a shared additive conditional mean intercept + beta_x*x + beta_z*z in both invented studies. Absence of a source indicator, interaction, and curvature is an explicit parsimonious structural restriction, not an inferred zero from unreported relationships. Study-level effects could instead explain their mean contrast."
+    },
+    {
+      "id": "A_residual",
+      "description": "Assume independent, identically distributed, zero-mean symmetric triangular residuals, independent of x and z, with constant variance residual_sd squared. The triangular half-width is sqrt(6)*residual_sd. Shape, independence, homoskedasticity and symmetry are unreported; choose bounded continuous noise as a computational construction."
+    },
+    {
+      "id": "A_moment_start",
+      "description": "Use exact source summaries to set starting conditional moments under the shared additive and residual assumptions. Residual variance starts at reported sample variance minus the sample variance of conditional means across supplied fixed covariates: for independent mean-zero noise E(sample variance of y)=sample variance of means+residual variance. This is moment matching, not identification or a reported residual SD, and E(SD) is not sqrt(E(variance))."
+    },
+    {
+      "id": "A_transport",
+      "description": "Apply the same equation and residual law to the target x values as a declared transfer and interpolation assumption. The source x values are only -1 and +1, leaving interior shape and target outcomes unassessed; no target validity, causal effect or individual recovery follows."
+    },
+    {
+      "id": "A_domain",
+      "description": "Declare computational x support [-2,2], source support [-1,1], target support [-0.5,0.5], numeric z categories 0 and 1, and generated y support [-100,100] with the task units. These eligibility envelopes do not establish transport or scientific support."
+    },
+    {
+      "id": "A_search",
+      "description": "Four scalar search bounds and step sizes are engineering sensitivity choices around moment-derived starts, not confidence intervals or evidence uncertainty. Source uncertainties are unreported. The fixed controller seeds, scales and tolerance govern numerical consistency only."
+    }
+  ],
+  "parameter_provenance": {
+    "intercept": {
+      "evidence_ids": [
+        "A_mean",
+        "B_mean"
+      ],
+      "assumption_ids": [
+        "A_shared_additive",
+        "A_moment_start",
+        "A_transport"
+      ],
+      "derivation": "Derived starting value: (mean_A*p_B - mean_B*p_A)/(p_B-p_A) = 3, with p_A=1/3 and p_B=2/3 from each source covariate table and E_source(x)=0. Neither study mean is treated as the conditional intercept."
+    },
+    "beta_x": {
+      "evidence_ids": [
+        "A_beta",
+        "B_beta"
+      ],
+      "assumption_ids": [
+        "A_shared_additive",
+        "A_transport"
+      ],
+      "derivation": "Both studies report OLS x coefficient 2 y_unit/x_unit adjusted for z and an intercept. Adopt their common value as the conditional linear coefficient under the additive mean restriction."
+    },
+    "beta_z": {
+      "evidence_ids": [
+        "A_mean",
+        "B_mean"
+      ],
+      "assumption_ids": [
+        "A_shared_additive",
+        "A_moment_start",
+        "A_transport"
+      ],
+      "derivation": "Derived, not reported: (mean_B-mean_A)/(p_B-p_A) = 2 y_unit per z contrast. This attributes all study mean difference to composition under a common source mean function; a study effect is an unidentified alternative."
+    },
+    "residual_sd": {
+      "evidence_ids": [
+        "A_sd",
+        "B_sd",
+        "A_beta",
+        "B_beta",
+        "A_mean",
+        "B_mean"
+      ],
+      "assumption_ids": [
+        "A_shared_additive",
+        "A_residual",
+        "A_moment_start",
+        "A_transport"
+      ],
+      "derivation": "Derived starting residual SD = sqrt(mean over sources of reported_SD^2 - sample_variance(intercept+beta_x*x+beta_z*z)) = 1.004192890506867 y_unit. Sample variances use n-1=119. This is an expectation-level moment equation for independent residuals; finite draws need not reproduce summaries exactly."
+    },
+    "residual_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_residual",
+        "A_domain"
+      ],
+      "derivation": "Assumed symmetric triangular continuous residual law on +/-sqrt(6)*residual_sd; its variance is residual_sd squared. The summaries do not identify shape or tails."
+    }
+  }
+}
