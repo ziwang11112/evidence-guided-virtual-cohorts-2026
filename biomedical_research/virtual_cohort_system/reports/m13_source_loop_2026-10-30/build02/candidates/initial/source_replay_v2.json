@@ -1,0 +1,837 @@
+{
+  "schema_version": 2,
+  "model_domain": {
+    "description": "Computational base-covariate domain is age 18-97, BMI 14-35, male/asian in {0,1}, bodyfat 0-100. Source support is independent of unchanged target eligibility age20-59,BMI18.5-35,asian0. Derived observed columns remain formally unbounded as in task but are recomputed exactly from base covariates; generator recomputes equation terms from base inputs rather than relying on an arbitrary transformed input.",
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "id",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years",
+        "role": "observed",
+        "nullable": false,
+        "minimum": 18,
+        "maximum": 97
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m2",
+        "role": "observed",
+        "nullable": false,
+        "minimum": 14,
+        "maximum": 35
+      },
+      {
+        "name": "male",
+        "kind": "category",
+        "unit": "code",
+        "role": "observed",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "asian",
+        "kind": "category",
+        "unit": "code",
+        "role": "observed",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "inv_bmi",
+        "kind": "number",
+        "unit": "m2/kg",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "male_inv_bmi",
+        "kind": "number",
+        "unit": "m2/kg",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "asian_inv_bmi",
+        "kind": "number",
+        "unit": "m2/kg",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "male_age",
+        "kind": "number",
+        "unit": "years",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "asian_age",
+        "kind": "number",
+        "unit": "years",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "bodyfat",
+        "kind": "number",
+        "unit": "%",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0,
+        "maximum": 100
+      }
+    ],
+    "assumption_ids": [
+      "A_domain"
+    ]
+  },
+  "contexts": [
+    {
+      "id": "thai_development",
+      "population": "Approximate rural Thai DEVELOPMENT cohort, n223 source participants, 8920 integration rows; asian=1",
+      "reason": "Reported marginal moments and exact relative group counts; independent support and fixed unreported copula scenario. All reconstruction errors recorded.",
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 20,
+          "maximum": 84
+        },
+        {
+          "name": "bmi",
+          "kind": "number",
+          "unit": "kg/m2",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 14,
+          "maximum": 29.999999
+        },
+        {
+          "name": "male",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "asian",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            1
+          ]
+        },
+        {
+          "name": "inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "bodyfat",
+          "kind": "number",
+          "unit": "%",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 100
+        }
+      ],
+      "assumption_ids": [
+        "A_domain",
+        "A_asian",
+        "A_measurement",
+        "A_source_shape",
+        "A_covariance",
+        "A_composition",
+        "A_transport",
+        "A_rounding"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Identity transport of untransformed DXA percentage is assumed across Thai Lunar DPX-IQ, US Lunar DPX v3.6, UK Hologic QDR1000 enhanced software, and Japan Lunar DPX-L v1.3z. Device and population equivalence are unproven and may explain disagreement. No BCA or four-compartment correction is invented."
+      },
+      "input": {
+        "path": "source_contexts/thai_development.csv",
+        "sha256": "b858496b37ba6d7bf7210945d281a347152f281bb08fbef8195271fa845a15f4",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "men_mean",
+          "evidence_id": "T_development_men_bodyfat_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "men_sd",
+          "evidence_id": "T_development_men_bodyfat_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "men_bmi_r",
+          "evidence_id": "T_men_bmi_r",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "x": "bmi",
+            "y": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "women_mean",
+          "evidence_id": "T_development_women_bodyfat_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 0
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "women_sd",
+          "evidence_id": "T_development_women_bodyfat_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 0
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "women_bmi_r",
+          "evidence_id": "T_women_bmi_r",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 0
+              }
+            ],
+            "missing_policy": "error",
+            "x": "bmi",
+            "y": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_intercept",
+          "evidence_id": "T_coef_intercept",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "intercept",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_bmi",
+          "evidence_id": "T_coef_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/(kg/m2)",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_age",
+          "evidence_id": "T_coef_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/years",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_male",
+          "evidence_id": "T_coef_male",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/code",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "male",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        }
+      ]
+    },
+    {
+      "id": "gallagher_full",
+      "population": "Approximate complete Gallagher DXA cohort, n1626 source participants, 9756 integration rows, all six sex/ethnicity groups",
+      "reason": "Reported marginal moments and exact relative group counts; independent support and fixed unreported copula scenario. All reconstruction errors recorded.",
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 18,
+          "maximum": 97
+        },
+        {
+          "name": "bmi",
+          "kind": "number",
+          "unit": "kg/m2",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 14,
+          "maximum": 35
+        },
+        {
+          "name": "male",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "asian",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "bodyfat",
+          "kind": "number",
+          "unit": "%",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 100
+        }
+      ],
+      "assumption_ids": [
+        "A_domain",
+        "A_asian",
+        "A_measurement",
+        "A_source_shape",
+        "A_covariance",
+        "A_composition",
+        "A_transport",
+        "A_rounding"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Identity transport of untransformed DXA percentage is assumed across Thai Lunar DPX-IQ, US Lunar DPX v3.6, UK Hologic QDR1000 enhanced software, and Japan Lunar DPX-L v1.3z. Device and population equivalence are unproven and may explain disagreement. No BCA or four-compartment correction is invented."
+      },
+      "input": {
+        "path": "source_contexts/gallagher_full.csv",
+        "sha256": "9925831443ccfcd03a03d0eda477ec0e7d415f8c3a09885a450adf7f094473ad",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "coef_intercept",
+          "evidence_id": "G_coef_intercept",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "intercept",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_inv_bmi",
+          "evidence_id": "G_coef_inv_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/(m2/kg)",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "inv_bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_male",
+          "evidence_id": "G_coef_male",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/code",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "male",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_age",
+          "evidence_id": "G_coef_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/years",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_asian_inv_bmi",
+          "evidence_id": "G_coef_asian_inv_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/(m2/kg)",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "asian_inv_bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_asian_age",
+          "evidence_id": "G_coef_asian_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/years",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "asian_age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_male_inv_bmi",
+          "evidence_id": "G_coef_male_inv_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/(m2/kg)",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "male_inv_bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        },
+        {
+          "id": "coef_male_age",
+          "evidence_id": "G_coef_male_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/years",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "male_age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_measurement",
+            "A_source_shape",
+            "A_covariance",
+            "A_transport"
+          ],
+          "reason": "Source consistency under declared approximate source covariates and measurement transport; no target validation."
+        }
+      ]
+    }
+  ]
+}

@@ -42,7 +42,9 @@ This stage now has a bounded coordinate-search tool, immutable trial bundles, a 
 
 ## Real-case admission, before target outcome analysis
 
-The [30 October admission review](REAL_CASE_ADMISSION_2026-10-30.md) prioritizes body-fat enrichment for a bounded transport pilot and keeps urate as a backup. Source and metadata audits are complete; the screened machine-readable packet, protocol freeze and real-data run remain pending. Source/target scanner differences prevent an exact measurement-equivalence claim, but do not preclude a declared assumption-dependent transport test. No target outcome was read or analysed during this screening.
+Current completed step: [M13-A real-source execution and review](../MILESTONE_13A_RESULTS.md). Two independently instantiated Agents submitted generators; 18 numerical trials/80 isolated source executions retained all 720 diagnostics. A source-context inconsistency was corrected before execution, and both Agents retained imperfect selected candidates after reviewing cross-source trade-offs. The source loop now works on real published summaries. The public target protocol/evaluator freeze and real-outcome evaluation are next; further source-score optimization is not the priority.
+
+The [30 October admission review](REAL_CASE_ADMISSION_2026-10-30.md) prioritized body-fat enrichment for a bounded transport pilot and kept urate as a backup. The screened machine-readable packet and source-only builds are now complete; the real-target protocol freeze and evaluation remain pending. Source/target scanner differences prevent an exact measurement-equivalence claim, but do not preclude a declared assumption-dependent transport test. No target outcome was read or analysed during admission or M13-A.
 
 The next case needs a real scientific use, not merely an available laboratory column. Decide the permitted population and analyses from evidence and metadata before target evaluation.
 

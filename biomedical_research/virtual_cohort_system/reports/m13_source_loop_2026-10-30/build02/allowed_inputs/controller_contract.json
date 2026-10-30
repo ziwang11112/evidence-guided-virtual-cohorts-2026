@@ -1,0 +1,89 @@
+{
+  "scope": "M13-A real published source replay only; invented qualification grid; not target validation",
+  "base_covariates": [
+    "age",
+    "bmi",
+    "male",
+    "asian"
+  ],
+  "derived_columns": {
+    "inv_bmi": "1/bmi",
+    "male_inv_bmi": "male/bmi",
+    "asian_inv_bmi": "asian/bmi",
+    "male_age": "male*age",
+    "asian_age": "asian*age"
+  },
+  "derived_column_role": "Deterministic design columns to match a published source estimator; not assigned biomedical effects",
+  "population_coding": "male=1; source Asian indicator follows original study (Thai/Japanese transport is an assumption); target qualification grid asian=0. Later real primary domain non-Hispanic White/Black only.",
+  "source_contexts": [
+    "Thai development sample only",
+    "Gallagher six sex-by-ethnicity groups"
+  ],
+  "max_contexts": 2,
+  "max_rows_per_context": 12000,
+  "required_checks": {
+    "thai2005": [
+      "male and female bodyfat means",
+      "male and female bodyfat SDs",
+      "male and female Pearson BMI-bodyfat correlations",
+      "adjusted BMI, age, male coefficients and intercept"
+    ],
+    "gallagher2000": [
+      "all eight terms of reported DXA Equation 1 using original design matrix"
+    ]
+  },
+  "not_fitting_targets": [
+    "Thai validation sample",
+    "unreported subgroup quantiles",
+    "unreported source covariance",
+    "any target outcome"
+  ],
+  "fit_seeds": [
+    13101,
+    13102
+  ],
+  "replay_seeds": [
+    23101,
+    23102
+  ],
+  "max_trials_per_session": 9,
+  "max_sessions": 2,
+  "max_scientific_revisions": 1,
+  "loss_scales": {
+    "mean": 2.0,
+    "sd": 1.0,
+    "correlation": 0.1,
+    "coefficient_by_term": {
+      "intercept": 10.0,
+      "bmi": 0.25,
+      "age": 0.05,
+      "male": 2.0,
+      "inv_bmi": 100.0,
+      "male_inv_bmi": 50.0,
+      "asian_inv_bmi": 50.0,
+      "male_age": 0.05,
+      "asian_age": 0.05
+    }
+  },
+  "loss_scale_role": "Fixed engineering unit scales, not source precision, likelihood or clinical equivalence; preserve per-constraint errors",
+  "target_loss": 0.0,
+  "target_loss_role": "Zero stops only at exact source agreement; nonzero loss is retained, not a clinical failure threshold",
+  "execution": {
+    "timeout_seconds": 30,
+    "memory_mb": 1024,
+    "output_bytes": 5000000,
+    "log_bytes": 20000
+  },
+  "budget_limits": {
+    "sessions": 2,
+    "trials": 18,
+    "executions": 80,
+    "reserved_seconds": 2400
+  },
+  "scientific_loop": {
+    "max_actions": 2,
+    "max_promotions": 1
+  },
+  "global_campaign": "Exactly two separately instantiated builders; same information and numerical allowance, no ranking from target outcomes",
+  "measurement_rule": "Untransformed DXA scale is an explicit cross-study transport assumption, not proven device equivalence. No invented BCA correction."
+}

@@ -1,0 +1,813 @@
+{
+  "schema_version": 2,
+  "model_domain": {
+    "description": "Computational domain age 18-97 years, BMI 14-35 kg/m2, male and Asian codes 0/1, bodyfat 0-100%. This deliberately covers source and qualification supports without editing target eligibility. Gallagher minimum age18 and BMI14 and Thai minimum BMI14 are assumed numerical support endpoints; reported Thai age20-84, zero BMI>=30, and Gallagher BMI<=35/max age97 are retained. Domain is not established validity.",
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "id",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years",
+        "role": "observed",
+        "nullable": false,
+        "minimum": 18,
+        "maximum": 97
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m2",
+        "role": "observed",
+        "nullable": false,
+        "minimum": 14,
+        "maximum": 35
+      },
+      {
+        "name": "male",
+        "kind": "category",
+        "unit": "code",
+        "role": "observed",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "asian",
+        "kind": "category",
+        "unit": "code",
+        "role": "observed",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "inv_bmi",
+        "kind": "number",
+        "unit": "m2/kg",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "male_inv_bmi",
+        "kind": "number",
+        "unit": "m2/kg",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "asian_inv_bmi",
+        "kind": "number",
+        "unit": "m2/kg",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "male_age",
+        "kind": "number",
+        "unit": "years",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "asian_age",
+        "kind": "number",
+        "unit": "years",
+        "role": "observed",
+        "nullable": false
+      },
+      {
+        "name": "bodyfat",
+        "kind": "number",
+        "unit": "%",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0,
+        "maximum": 100
+      }
+    ],
+    "assumption_ids": [
+      "A_domain"
+    ]
+  },
+  "contexts": [
+    {
+      "id": "thai_development",
+      "population": "Thai rural development only:98 men/125 women, integration replication40; age20-84, BMI14-29.999 assumed lower bound",
+      "reason": "Reported covariate moments/composition reconstructed with bounded beta marginals and a fixed copula scenario; not source IPD.",
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 20,
+          "maximum": 84
+        },
+        {
+          "name": "bmi",
+          "kind": "number",
+          "unit": "kg/m2",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 14,
+          "maximum": 29.999
+        },
+        {
+          "name": "male",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "asian",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            1
+          ]
+        },
+        {
+          "name": "inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "bodyfat",
+          "kind": "number",
+          "unit": "%",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 100
+        }
+      ],
+      "assumption_ids": [
+        "A_domain",
+        "A_shape",
+        "A_dependence",
+        "A_composition",
+        "A_measurement"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Identity DXA percentage mapping across Thai Lunar DPX-IQ and Gallagher US Lunar DPX3.6, UK Hologic QDR1000, Japanese Lunar DPX-L1.3z is an explicit unverified transport assumption. No device equivalence or BCA correction is claimed; no four-compartment endpoint is substituted."
+      },
+      "input": {
+        "path": "source_contexts/thai_development.csv",
+        "sha256": "88961c31535ae31af51830ea9b8013c2a8f5d7b46ce7d9731659288d648cd716",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "thai_development_men_bodyfat_mean",
+          "evidence_id": "thai_development_men_bodyfat_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_development_men_bodyfat_sd",
+          "evidence_id": "thai_development_men_bodyfat_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_development_men_bmi_bodyfat_r",
+          "evidence_id": "thai_development_men_bmi_bodyfat_r",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "missing_policy": "error",
+            "x": "bmi",
+            "y": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_development_women_bodyfat_mean",
+          "evidence_id": "thai_development_women_bodyfat_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 0
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_development_women_bodyfat_sd",
+          "evidence_id": "thai_development_women_bodyfat_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 0
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_development_women_bmi_bodyfat_r",
+          "evidence_id": "thai_development_women_bmi_bodyfat_r",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "male",
+                "op": "eq",
+                "value": 0
+              }
+            ],
+            "missing_policy": "error",
+            "x": "bmi",
+            "y": "bodyfat"
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_coef_intercept",
+          "evidence_id": "thai_coef_intercept",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "intercept",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_coef_bmi",
+          "evidence_id": "thai_coef_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per kg/m2",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_coef_age",
+          "evidence_id": "thai_coef_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per year",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "thai_coef_male",
+          "evidence_id": "thai_coef_male",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per male-code unit",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "bmi",
+              "age",
+              "male"
+            ],
+            "term": "male",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        }
+      ]
+    },
+    {
+      "id": "gallagher_full",
+      "population": "Gallagher full six sex-by-ethnicity groups; original counts replicated6, adult age18-97 and BMI14-35 with assumed lower bounds",
+      "reason": "Reported covariate moments/composition reconstructed with bounded beta marginals and a fixed copula scenario; not source IPD.",
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 18,
+          "maximum": 97
+        },
+        {
+          "name": "bmi",
+          "kind": "number",
+          "unit": "kg/m2",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 14,
+          "maximum": 35
+        },
+        {
+          "name": "male",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "asian",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_inv_bmi",
+          "kind": "number",
+          "unit": "m2/kg",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "male_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "asian_age",
+          "kind": "number",
+          "unit": "years",
+          "role": "observed",
+          "nullable": false
+        },
+        {
+          "name": "bodyfat",
+          "kind": "number",
+          "unit": "%",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 100
+        }
+      ],
+      "assumption_ids": [
+        "A_domain",
+        "A_shape",
+        "A_dependence",
+        "A_composition",
+        "A_measurement"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Identity DXA percentage mapping across Thai Lunar DPX-IQ and Gallagher US Lunar DPX3.6, UK Hologic QDR1000, Japanese Lunar DPX-L1.3z is an explicit unverified transport assumption. No device equivalence or BCA correction is claimed; no four-compartment endpoint is substituted."
+      },
+      "input": {
+        "path": "source_contexts/gallagher_full.csv",
+        "sha256": "3d9d114a3cb86e801682e7ca4f7948372eb4d94f3eb9ed592b8e60efdafa4363",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "gallagher_coef_intercept",
+          "evidence_id": "gallagher_coef_intercept",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "intercept",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_inv_bmi",
+          "evidence_id": "gallagher_coef_inv_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per m2/kg",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "inv_bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_male",
+          "evidence_id": "gallagher_coef_male",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per male-code unit",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "male",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_age",
+          "evidence_id": "gallagher_coef_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per year",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_asian_inv_bmi",
+          "evidence_id": "gallagher_coef_asian_inv_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per m2/kg",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "asian_inv_bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_asian_age",
+          "evidence_id": "gallagher_coef_asian_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per year",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "asian_age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_male_inv_bmi",
+          "evidence_id": "gallagher_coef_male_inv_bmi",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per m2/kg",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "male_inv_bmi",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        },
+        {
+          "id": "gallagher_coef_male_age",
+          "evidence_id": "gallagher_coef_male_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "% per year",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "bodyfat",
+            "predictors": [
+              "inv_bmi",
+              "male",
+              "age",
+              "asian_inv_bmi",
+              "asian_age",
+              "male_inv_bmi",
+              "male_age"
+            ],
+            "term": "male_age",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A_transport",
+            "A_residual",
+            "A_boundary"
+          ],
+          "reason": "Original statistic and variable/adjustment units retained; covariates and cross-study DXA transport are approximations. Numerical discrepancy remains diagnostic."
+        }
+      ]
+    }
+  ]
+}

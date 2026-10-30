@@ -1,0 +1,191 @@
+{
+  "parameters": {
+    "bridge_male": 0.5,
+    "bridge_female": 0.5,
+    "residual_sd_male": 4.31,
+    "residual_sd_female": 4.31,
+    "gallagher_dxa_coefficients": {
+      "intercept": 76.0,
+      "inv_bmi": -1097.8,
+      "male": -20.6,
+      "age": 0.053,
+      "asian_inv_bmi": 95.0,
+      "asian_age": -0.044,
+      "male_inv_bmi": 154.0,
+      "male_age": 0.034
+    },
+    "thai_coefficients": {
+      "intercept": -10.672,
+      "bmi": 1.648,
+      "age": 0.065,
+      "male": -15.3
+    },
+    "mean_bounds_percent": [
+      0.1,
+      99.9
+    ],
+    "variance_feasibility_fraction": 0.95
+  },
+  "assumptions": [
+    {
+      "id": "A_transport",
+      "description": "A single conditional mean is used for every row. For asian=0 use Gallagher DXA Equation 1. For asian=1 convexly interpolate that equation with Thai BMI-age-sex regression using sex-specific weights. This is partial transport of two disagreeing conditional source relationships, not an asserted universal ethnicity effect. Weights are scenario/fit coefficients, not probabilities or precision weights. Thai/Japanese identity cannot be inferred from IDs and is not modeled."
+    },
+    {
+      "id": "A_asian",
+      "description": "Asian is the supplied contextual source indicator: Thai participants and Japanese participants are coded 1. Non-Asian combines original white and African American groups; their equality conditional on these covariates is an assumption supported only by the selected original equation. Ethnicity can proxy site, device, environment and selection; there is no biological racial-essentialist interpretation and no claim for other ethnic groups."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Identity transport of untransformed DXA percentage is assumed across Thai Lunar DPX-IQ, US Lunar DPX v3.6, UK Hologic QDR1000 enhanced software, and Japan Lunar DPX-L v1.3z. Device and population equivalence are unproven and may explain disagreement. No BCA or four-compartment correction is invented."
+    },
+    {
+      "id": "A_residual",
+      "description": "Individual bodyfat is beta-distributed on 0-100 conditional on a bounded conditional mean. Its desired SD is sex-specific and initially 4.31 percentage points from pooled Gallagher SEE; assigning that value by sex and transporting it is an assumption. Variance is min(sd^2, 0.95*mean*(100-mean)). This ensures valid beta shape parameters, allowing boundary heteroskedasticity without an endpoint atom. Conditional tails, shape, residual-covariate independence of this family, and sex homogeneity of the initial scale are not identified by sources. Seeds vary individuals, not scientific parameters."
+    },
+    {
+      "id": "A_mean_boundary",
+      "description": "Before beta parameterization the interpolated mean is bounded to [0.1,99.9] percent. This regularization is computational, not evidence. It can alter original OLS predictions at extreme low BMI; all reported source checks remain present to expose the effect."
+    },
+    {
+      "id": "A_source_shape",
+      "description": "Each sex/ethnicity covariate marginal is a scaled beta on stated finite supports, using reported mean and SD as population moments. Stratified marginal quantiles reduce simulation noise, but finite-grid moments are approximations recorded in reconstruction_diagnostics.json. Unknown BMI minimum is assumed 14 in both sources; Gallagher adult lower age is assumed 18, upper 97 is reported; Thai ages 20-84 are reported and BMI upper 29.999999 encodes reported absence >=30. These imposed shapes/bounds are not empirical distributions."
+    },
+    {
+      "id": "A_covariance",
+      "description": "No age-BMI joint distribution is reported. All source strata use one fixed Gaussian rank-copula scenario with latent correlation +0.15. Realized Pearson correlations are measured in reconstruction diagnostics. This moderate positive scenario is not established independence and is not tuned in numerical fitting; a change toward zero or negative association would be a separate scientific sensitivity with consequences for nonlinear marginal means and OLS projections."
+    },
+    {
+      "id": "A_composition",
+      "description": "Thai development rows are 40 times each reported sex count (98 men,125 women; 8920 rows); Gallagher rows are 6 times all six reported group counts (9756 rows). These are numerical integration rows, not additional subjects. White/African American source strata retain their different age/BMI margins and exact group proportions even though they share asian=0. Group membership is retained only in reconstruction diagnostics and row ranges, not as an added input covariate."
+    },
+    {
+      "id": "A_domain",
+      "description": "Computational base-covariate domain is age 18-97, BMI 14-35, male/asian in {0,1}, bodyfat 0-100. Source support is independent of unchanged target eligibility age20-59,BMI18.5-35,asian0. Derived observed columns remain formally unbounded as in task but are recomputed exactly from base covariates; generator recomputes equation terms from base inputs rather than relying on an arbitrary transformed input."
+    },
+    {
+      "id": "A_calibration",
+      "description": "Only bridge_male, bridge_female, residual_sd_male, residual_sd_female may be numerically fitted. Bridge bounds [0,1], step0.25 express convex partial transport; residual SD bounds [2,7] percentage points, step0.5 are broad assumptions around Gallagher SEE4.31 and contextual subgroup SEE3.8-5.4, not confidence intervals. All 18 correlated diagnostics receive fixed controller engineering scales, not statistical precision or independent evidence weight."
+    },
+    {
+      "id": "A_rounding",
+      "description": "Published means, SDs, correlations and regression coefficients are rounded and share cohorts. Exact mutual consistency is not expected. Unknown coefficient precision remains unknown; neither residual SD nor instrument CV supplies coefficient uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "bridge_male": {
+      "evidence_ids": [
+        "G_coef_intercept",
+        "G_coef_inv_bmi",
+        "G_coef_male",
+        "G_coef_age",
+        "G_coef_asian_inv_bmi",
+        "G_coef_asian_age",
+        "G_coef_male_inv_bmi",
+        "G_coef_male_age",
+        "T_coef_intercept",
+        "T_coef_bmi",
+        "T_coef_age",
+        "T_coef_male"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_asian",
+        "A_measurement",
+        "A_calibration"
+      ],
+      "derivation": "Initial 0.5 is an equal convex compromise between conditional functions; it is not a claim of equal evidence precision. Numerical interval/step are declared in A_calibration."
+    },
+    "bridge_female": {
+      "evidence_ids": [
+        "G_coef_intercept",
+        "G_coef_inv_bmi",
+        "G_coef_male",
+        "G_coef_age",
+        "G_coef_asian_inv_bmi",
+        "G_coef_asian_age",
+        "G_coef_male_inv_bmi",
+        "G_coef_male_age",
+        "T_coef_intercept",
+        "T_coef_bmi",
+        "T_coef_age",
+        "T_coef_male"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_asian",
+        "A_measurement",
+        "A_calibration"
+      ],
+      "derivation": "Initial 0.5 is an equal convex compromise between conditional functions; it is not a claim of equal evidence precision. Numerical interval/step are declared in A_calibration."
+    },
+    "residual_sd_male": {
+      "evidence_ids": [
+        "G_SEE"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_calibration"
+      ],
+      "derivation": "Initial desired conditional SD 4.31 pp is borrowed from pooled residual SEE, not a marginal outcome SD. Per-sex assignment and bounds are assumptions."
+    },
+    "residual_sd_female": {
+      "evidence_ids": [
+        "G_SEE"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_calibration"
+      ],
+      "derivation": "Initial desired conditional SD 4.31 pp is borrowed from pooled residual SEE, not a marginal outcome SD. Per-sex assignment and bounds are assumptions."
+    },
+    "gallagher_dxa_coefficients": {
+      "evidence_ids": [
+        "G_coef_intercept",
+        "G_coef_inv_bmi",
+        "G_coef_male",
+        "G_coef_age",
+        "G_coef_asian_inv_bmi",
+        "G_coef_asian_age",
+        "G_coef_male_inv_bmi",
+        "G_coef_male_age"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_measurement",
+        "A_rounding"
+      ],
+      "derivation": "Exact printed DXA Equation 1 coefficients; all seven predictors retained, no standalone Asian intercept. Coefficients are fixed during numerical fitting."
+    },
+    "thai_coefficients": {
+      "evidence_ids": [
+        "T_coef_intercept",
+        "T_coef_bmi",
+        "T_coef_age",
+        "T_coef_male"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_measurement",
+        "A_rounding"
+      ],
+      "derivation": "Exact body-text/Table4 linear coefficients; conditional intercept is -10.672, not a marginal bodyfat mean. Fixed during fitting."
+    },
+    "mean_bounds_percent": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_mean_boundary",
+        "A_residual"
+      ],
+      "derivation": "Computational bounded-distribution regularization, fixed rather than optimized."
+    },
+    "variance_feasibility_fraction": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_mean_boundary",
+        "A_residual"
+      ],
+      "derivation": "Computational bounded-distribution regularization, fixed rather than optimized."
+    }
+  }
+}

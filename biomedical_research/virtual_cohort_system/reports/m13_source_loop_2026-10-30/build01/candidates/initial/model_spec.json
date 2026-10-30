@@ -1,0 +1,205 @@
+{
+  "parameters": {
+    "asian_blend": 0.35,
+    "level_shift": 0.0,
+    "male_shift": 0.0,
+    "residual_scale": 1.0,
+    "gallagher_coefficients": {
+      "intercept": 76.0,
+      "inv_bmi": -1097.8,
+      "male": -20.6,
+      "age": 0.053,
+      "asian_inv_bmi": 95.0,
+      "asian_age": -0.044,
+      "male_inv_bmi": 154.0,
+      "male_age": 0.034
+    },
+    "thai_coefficients": {
+      "intercept": -10.672,
+      "bmi": 1.648,
+      "age": 0.065,
+      "male": -15.3
+    },
+    "residual_base_sd": 4.31,
+    "female_sd_ratio": 1.1,
+    "mean_floor": 0.5,
+    "mean_ceiling": 99.5,
+    "variance_fraction_cap": 0.95,
+    "conditional_form": "Gallagher inverse-BMI plus Asian-only convex Thai blend and shared level/male shifts; bounded beta individual variation"
+  },
+  "assumptions": [
+    {
+      "id": "A_domain",
+      "description": "Computational domain age 18-97 years, BMI 14-35 kg/m2, male and Asian codes 0/1, bodyfat 0-100%. This deliberately covers source and qualification supports without editing target eligibility. Gallagher minimum age18 and BMI14 and Thai minimum BMI14 are assumed numerical support endpoints; reported Thai age20-84, zero BMI>=30, and Gallagher BMI<=35/max age97 are retained. Domain is not established validity."
+    },
+    {
+      "id": "A_shape",
+      "description": "Age and Gallagher BMI use bounded beta midpoint quantiles matching reported means/sample SDs. Thai BMI uses a fixed15% upper component uniform on25-29.999 and85% lower component beta on14-24.999, with lower moments derived to match the total group's printed mean/sample SD. Applying the full-cohort rounded15% prevalence to each development sex is an explicit scenario, not an identified subgroup fact or outcome calibration constraint. This avoids a single-beta shape implying more development overweight cases than the entire cohort reports. Female lower-component shape can be strongly U-shaped; source shape is unknown and must be sensitivity-tested. Bounds are assumed supports, not observed minima/maxima."
+    },
+    {
+      "id": "A_dependence",
+      "description": "Unknown within-sex/group age-BMI dependence is fixed as a Gaussian rank-copula scenario: latent correlation -0.15 in Thai development and +0.10 in each Gallagher sex/ethnicity group. Realized Pearson correlations are reported. These are assumptions, not inferred source facts, and cannot be optimized. Alternative copula correlations/shapes would be a separate scientific sensitivity scenario."
+    },
+    {
+      "id": "A_composition",
+      "description": "Thai development reconstruction uses 40 times each reported sex count (98,125), total8920; Gallagher uses six times each of its six sex/ethnicity counts, total9756. These are integration rows, not additional evidence or reconstructed people. Non-Asian White and African-American memberships determine covariate mixtures only and are not additional generator inputs."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Identity DXA percentage mapping across Thai Lunar DPX-IQ and Gallagher US Lunar DPX3.6, UK Hologic QDR1000, Japanese Lunar DPX-L1.3z is an explicit unverified transport assumption. No device equivalence or BCA correction is claimed; no four-compartment endpoint is substituted."
+    },
+    {
+      "id": "A_transport",
+      "description": "One conditional law applies to every row using only age, BMI, male and asian. Gallagher Equation1 is the portable nonlinear baseline. For asian=1, a convex blend toward the Thai age/BMI/sex equation expresses partial transport of Thai evidence; it cannot distinguish Thai from Japanese because no allowed covariate does. Asian here denotes the supplied study indicator, not ancestry biology; Japanese ethnicity is confounded with site/device. Non-Asian White and Black effects are pooled as in the available equation. No source ID, row ID or row count changes the law."
+    },
+    {
+      "id": "A_residual",
+      "description": "A beta distribution on 0-100% preserves the conditional location and adds individual variation with variance anchored to Gallagher SEE4.31 squared. Female SD is fixed at1.10 times male SD as an explicit heteroscedastic scenario suggested, not identified, by Thai larger female marginal variation. Common residual_scale starts1.0. Marginal Thai SD is never used as residual SD. Residual beta form is assumed, not reported. Model/evidence/transport uncertainty is not represented by these draws."
+    },
+    {
+      "id": "A_boundary",
+      "description": "Raw regression location is bounded to [0.5,99.5] percentage points and residual variance capped at95% of mean*(100-mean) to permit a valid beta law across declared support. These numerical physiological guards can bend published linear coefficients near extreme low BMI; replay must retain resulting discrepancies. They are not evidence-derived tail estimates."
+    },
+    {
+      "id": "A_calibration",
+      "description": "Four top-level scalar whitelist entries: asian_blend .35, bounds0-.8, step.15 (partial pooling sensitivity, not probability); level_shift0 pp, bounds-3..3 step1; male_shift0 pp, bounds-3..3 step1 (small shared location discrepancies); residual_scale1, bounds.75..1.4 step.15 (SEE-based residual sensitivity). Bounds/steps are engineering scenario choices, not confidence intervals. Order gives all four a +/- first comparison within9 trials. Context shapes, copula correlations, mixture counts, coefficient structure, female ratio and guards remain fixed."
+    },
+    {
+      "id": "A_limits",
+      "description": "Source agreement only. All18 required diagnostics stay visible, even if incompatible. Thai validation and extra Gallagher summaries are visible contextual evidence, not fitting constraints/holdout. Unknown coefficient covariance/SE and reconstruction error preclude likelihood weights; supplied scales are engineering units. Qualification grid is invented and contains no patient outcomes; no target validation is claimed."
+    }
+  ],
+  "parameter_provenance": {
+    "asian_blend": {
+      "evidence_ids": [
+        "thai_coef_bmi",
+        "gallagher_coef_inv_bmi"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_calibration"
+      ],
+      "derivation": "Explicit fixed scientific scenario; see assumptions."
+    },
+    "level_shift": {
+      "evidence_ids": [
+        "thai_coef_bmi",
+        "gallagher_coef_inv_bmi"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_calibration"
+      ],
+      "derivation": "Explicit fixed scientific scenario; see assumptions."
+    },
+    "male_shift": {
+      "evidence_ids": [
+        "thai_coef_bmi",
+        "gallagher_coef_inv_bmi"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_calibration"
+      ],
+      "derivation": "Explicit fixed scientific scenario; see assumptions."
+    },
+    "residual_scale": {
+      "evidence_ids": [
+        "gallagher_see",
+        "thai_development_men_bodyfat_sd",
+        "thai_development_women_bodyfat_sd"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_calibration"
+      ],
+      "derivation": "SEE anchors4.31 pp. Female/male1.10 and permitted residual scaling are assumptions; outcome SDs are contextual evidence of differing marginal spread, never equated to residual SD."
+    },
+    "gallagher_coefficients": {
+      "evidence_ids": [
+        "gallagher_coef_intercept",
+        "gallagher_coef_inv_bmi",
+        "gallagher_coef_male",
+        "gallagher_coef_age",
+        "gallagher_coef_asian_inv_bmi",
+        "gallagher_coef_asian_age",
+        "gallagher_coef_male_inv_bmi",
+        "gallagher_coef_male_age"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_measurement"
+      ],
+      "derivation": "Exact printed DXA Equation1; original seven predictors, no standalone Asian intercept."
+    },
+    "thai_coefficients": {
+      "evidence_ids": [
+        "thai_coef_intercept",
+        "thai_coef_bmi",
+        "thai_coef_age",
+        "thai_coef_male"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_measurement"
+      ],
+      "derivation": "Exact Thai development BMI-age-sex coefficients; not subgroup marginal means."
+    },
+    "residual_base_sd": {
+      "evidence_ids": [
+        "gallagher_see",
+        "thai_development_men_bodyfat_sd",
+        "thai_development_women_bodyfat_sd"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_calibration"
+      ],
+      "derivation": "SEE anchors4.31 pp. Female/male1.10 and permitted residual scaling are assumptions; outcome SDs are contextual evidence of differing marginal spread, never equated to residual SD."
+    },
+    "female_sd_ratio": {
+      "evidence_ids": [
+        "gallagher_see",
+        "thai_development_men_bodyfat_sd",
+        "thai_development_women_bodyfat_sd"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_calibration"
+      ],
+      "derivation": "SEE anchors4.31 pp. Female/male1.10 and permitted residual scaling are assumptions; outcome SDs are contextual evidence of differing marginal spread, never equated to residual SD."
+    },
+    "mean_floor": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_boundary"
+      ],
+      "derivation": "Fixed bounded-output feasibility guard, not fitted source statistic."
+    },
+    "mean_ceiling": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_boundary"
+      ],
+      "derivation": "Fixed bounded-output feasibility guard, not fitted source statistic."
+    },
+    "variance_fraction_cap": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_boundary"
+      ],
+      "derivation": "Fixed bounded-output feasibility guard, not fitted source statistic."
+    },
+    "conditional_form": {
+      "evidence_ids": [
+        "thai_coef_bmi",
+        "gallagher_coef_inv_bmi"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_calibration"
+      ],
+      "derivation": "Explicit fixed scientific scenario; see assumptions."
+    }
+  }
+}
