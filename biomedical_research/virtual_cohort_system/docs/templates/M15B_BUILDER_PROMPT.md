@@ -1,0 +1,23 @@
+# Literature-enabled virtual-data builder prompt
+
+Template for a future admitted case; not an executed experiment. The controller supplies the exact bundle path, source/target boundaries, approved adapters, task, mode, fixed output schema and budget. Do not launch from this file without that case contract. Historical M15-A prompts and data are not inputs by default.
+
+Your task is to construct useful virtual biomedical data for the supplied analytical use. You may retrieve original papers and supplements through the permitted literature tools, and use all applicable reported statistics. You do not need to withhold an accessible source SD or relationship from yourself to create an artificial test. Results you read or use are not unseen validation evidence.
+
+Read the task and permitted interface documentation. Identify evidence gaps that matter to the requested use: distributions, relationships, conditional variation, subgroups, measurement definitions and transfer assumptions. Search for those gaps, inspect actual methods/tables, and explain which results you adopt and which you cannot use. Retain conflicting evidence with its context. Do not invent a citation, extraction, retrieval or scientific check.
+
+Prepare evidence.json using the registered sources and required schema. Preserve original reported values, populations, units, transformations, adjustment sets, uncertainty and locators; put any conversion or inference in a separate derivation/assumption. An adjusted standardized coefficient is not a raw slope; a marginal SD is not automatically conditional residual variation. Missing joint evidence does not imply zero association.
+
+You choose the scientific structure and any necessary assumptions. No desired association direction, correlation strength, symmetric pairing, distribution family or tail law is prescribed by the controller. Document what each important relationship and variation component depends on. An individual fictional measurement need not be a copy of a source participant; its construction and analytical interpretation do need an honest basis.
+
+Keep an evidence/use record linked to the registered artifact hashes. Log what was returned or inspected separately from what you used. All source content returned to you is potentially exposed. If you encounter a reserved target result, stop using it as an unseen test, record the exposure and notify the controller; continue only within the corrected development/evaluation scope. Do not inspect private reference files or use their outcomes to tune your output.
+
+Follow the declared output route. For direct rows, author the literal generated.csv yourself. Controller diagnostics can check your table and report source discrepancies; do not silently replace direct authorship with a script, optimizer or sampler that populates values. For a separately declared program route, submit generator.py and model_spec.json through the supplied isolated execution interface. Do not import or execute generated code on the host as a fallback.
+
+For enrichment/completion preserve the actual participants and all required observed cells. Extra fictional people belong in a whole-cohort task. If another indicator seems useful, propose its role and evidence before the output schema is bound; after binding, request a declared extension rather than silently adding columns. Extra rows, columns and repeated submissions are not extra empirical observations.
+
+Submit the initial candidate, evidence, model specification, decision and actual checks. After freezing, review permitted source feedback. Within the total budget you may retrieve missing evidence, correct an extraction, revise the direct table or program in its own route, retain or stop. Explain the evidence behind a change and its likely trade-offs. Bind actual feedback to the new version. Do not erase failed attempts, reset budgets or search for a favorable target result.
+
+The final output should be reusable for the scheduled analyses without changing data for each question. Provide a concise description of source-supported uses, assumption-sensitive uses and unassessed extensions. Do not claim target accuracy, equivalence, clinical validity, real sample-size gains, cost savings or recovered individual measurements before the corresponding evaluation. A well-explained limitation or retention decision is valid; unsupported confidence is not.
+
+Return artifact paths and a concise decision record. The controller handles freeze verification and the reserved reference evaluation. Do not request or use target feedback to repair this release.

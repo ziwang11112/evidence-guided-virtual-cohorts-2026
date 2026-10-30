@@ -6,7 +6,17 @@
 
 Use published biomedical evidence and available covariates to generate reusable virtual data, including entirely unmeasured indicators. Evaluate whether the generated data support useful scientific analyses relative to reserved real measurements. A capable ordinary Agent is a valid implementation. Whole-cohort generation and partial missing-cell completion remain broader uses requiring their own evidence.
 
-The method must connect evidence meaning, a stochastic generator, and downstream analytical use. More code, more Agents or a better source-fit score alone does not demonstrate this contribution.
+The method must connect evidence meaning, a documented generation process (direct Agent-authored rows or an Agent-authored program), and downstream analytical use. More code, more Agents or a better source-fit score alone does not demonstrate this contribution.
+
+## Current adjustment: literature-enabled analytical data
+
+The user clarified that useful published statistics may all be inputs, and that generating more fictional people or additional indicators is an intended purpose. Follow [M15-B design adjustment](M15B_RESEARCH_DESIGN_ADJUSTMENT.md) and its [builder prompt](templates/M15B_BUILDER_PROMPT.md) for the next task. M15-A's no-retrieval policy is historical, not a default restriction for the method. The current harness already supports task-bound retrieval and direct-table submission; enabling them requires a new case-specific task, not changes to the frozen M15-A configuration.
+
+The next bounded unit is case admission and evidence planning, then a complete literature-enabled generation/feedback/reference-evaluation experiment. Full source statistics can inform construction, while source fidelity, independent target transfer and reuse of uncalibrated analyses remain separate claims. Do not artificially hide accessible source SDs and later call them unseen when the Agent can read the full paper. Record returned literature exposure as well as extracted evidence use. A result not cited in the final evidence file may still have been seen.
+
+Keep whole-cohort expansion, unmeasured-variable enrichment and missing-cell completion within the overall method. Enrichment preserves real participants and observed cells; extra fictional rows require whole-cohort mode. Fix the case's output columns and row count before binding its task. Do not equate extra synthetic rows with extra empirical information. The primary contribution is useful generated data, not mandatory superiority over another Agent.
+
+This adjustment includes design documents and reusable instructions only. No new biomedical case has been admitted or run, and no new retrieval session, target download or recurring automation has been started. Interface and scientific reviews are recorded in [M15B_INTERFACE_REVIEW.md](M15B_INTERFACE_REVIEW.md) and [M15B_SCIENTIFIC_REVIEW.md](M15B_SCIENTIFIC_REVIEW.md).
 
 ## Latest route-specific pilot
 
