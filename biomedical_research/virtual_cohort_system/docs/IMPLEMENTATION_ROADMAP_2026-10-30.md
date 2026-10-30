@@ -8,6 +8,10 @@ Use published biomedical evidence and available covariates to generate reusable 
 
 The method must connect evidence meaning, a stochastic generator, and downstream analytical use. More code, more Agents or a better source-fit score alone does not demonstrate this contribution.
 
+## Latest route-specific pilot
+
+After the user asked to try direct Agent row output, [M15-A](../MILESTONE_15A_RESULTS.md) completed one128-row fictional whole-cohort source-only run using the existing direct-table interface. No statistical generation program created values. A single feedback review ended in retention. Supplied moments were close, but four unprovided same-source urate SDs were all underestimated. This verifies the direct route and its limited source consistency, not repair efficacy or real-population analytical utility. Do not reopen the exposed M13-B body-fat target. A further measured-data comparison requires a separately specified task and explicit development versus fresh confirmation status; no new execution or recurring automation is scheduled by this result.
+
 ## Starting point
 
 - M10 showed selected association feasibility and relation-specific failures.
