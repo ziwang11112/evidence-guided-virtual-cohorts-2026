@@ -1,0 +1,115 @@
+{
+  "case_id": "nhanes_insulin",
+  "construction_id": "ib",
+  "initial_candidate": "initial",
+  "selected_candidate": "final",
+  "selection_recorded_utc": "2026-10-30T00:48:50.529085+00:00",
+  "target_outcomes_read": false,
+  "target_feedback_used": false,
+  "selection_reason": "Predeclared source retention conditions met; preserve visible systematic secondary discrepancy instead of fitting unsupported corrections. Final source replay reproduced all initial statistics exactly under paired seeds; final binds actual feedback with unchanged code and specification.",
+  "bundle_path": "WORKSPACE\\biomedical_research\\virtual_cohort_system\\work\\m10\\ib\\bundle",
+  "selected_candidate_path": "WORKSPACE\\biomedical_research\\virtual_cohort_system\\work\\m10\\ib\\bundle\\candidates\\final",
+  "source_only_criteria": {
+    "case_id": "nhanes_insulin",
+    "construction_id": "ib",
+    "initial_candidate": "initial",
+    "declared_before_diagnostics": true,
+    "source_seeds": [
+      91101,
+      91102,
+      91103
+    ],
+    "target_execution_seeds": [
+      92101,
+      92102,
+      92103
+    ],
+    "primary_checks": {
+      "taiwan_mean_relative_error": 0.15,
+      "taiwan_glucose_correlation_absolute_error": 0.15,
+      "taiwan_age_correlation_absolute_error": 0.1
+    },
+    "secondary_checks": {
+      "macad_sex_median_relative_error_review_threshold": 0.3
+    },
+    "rule": "Inspect every scheduled diagnostic across all three seeds. Retain initial when each primary discrepancy averaged over seeds is within its stated tolerance and both secondary median errors are below 30%. Otherwise investigate extraction, approximate covariates, Monte Carlo variation and model structure before any revision; at most two documented revisions. A numerical revision must address a persistent source discrepancy, improve failed primary diagnostics without worsening other primary absolute error by more than 0.05 (mean relative error) or 0.05 (correlations), and must not worsen secondary relative errors by over 0.10. If unresolved population mismatch prevents a defensible revision, retain with explicit limitations. Never choose a favorable seed or read target feedback. Retain is represented by a parent-linked final candidate with identical generator/specification and bound actual feedback.",
+    "scope": "These are pragmatic source consistency thresholds, not statistical acceptance tests or target validity criteria; no summed cross-unit score.",
+    "budget": {
+      "max_versions": 3,
+      "max_revisions": 2,
+      "max_source_replays_per_version": 3,
+      "max_contexts": 3
+    }
+  },
+  "actual_source_criteria": {
+    "taiwan_mean_relative_error": 0.004503567462308682,
+    "taiwan_glucose_correlation_absolute_error": 0.004468518931894187,
+    "taiwan_age_correlation_absolute_error": 0.018163023351932987,
+    "macad_men_median_relative_error": 0.20649453945041682,
+    "macad_women_median_relative_error": 0.23942826631359682
+  },
+  "feedback_binding": [
+    {
+      "path": "source_selection_rule.json",
+      "sha256": "140c5d6376083217f2b23149d6c4284e5e04be2badfdbb33c54ac8ff8e86dc37"
+    },
+    {
+      "path": "source_review.json",
+      "sha256": "e9f5dd29815aa2f45df139fb0d029aa01f76442be389e76d89eb96c2af5c9668"
+    },
+    {
+      "path": "initial_source_portfolio.json",
+      "sha256": "7d51602a33740fa0c7d46f6700b833cc0de9a6fb396b441850acf343a9d29542"
+    },
+    {
+      "path": "final_source_portfolio.json",
+      "sha256": "10598b48e18812c0f41d89d0476749247d806445611b322b95bc6f17f50f8bb2"
+    },
+    {
+      "path": "bundle/source_replays/initial91101/replay.json",
+      "sha256": "93aadc77386c5d047344b1b9572ad32e692b028760c478aede22ca6fb1264338"
+    },
+    {
+      "path": "bundle/source_replays/initial91102/replay.json",
+      "sha256": "257b78adb0bbf134530c5d0424d881961649066fd0840abc0a88a0ca4b57a308"
+    },
+    {
+      "path": "bundle/source_replays/initial91103/replay.json",
+      "sha256": "33b8443c341b6a7b46b8ff59d35bb4b3719e344f0101aeb64f4a7944cdc0223f"
+    },
+    {
+      "path": "bundle/source_replays/final91101/replay.json",
+      "sha256": "86ada4509511cda9794701e8830aaf68bf50bdbe709df90ea3619d45aa505a58"
+    },
+    {
+      "path": "bundle/source_replays/final91102/replay.json",
+      "sha256": "a6585dfecb8a245a3115622d0bf885d5e1324ba73f9dd918f06fd8dd79029265"
+    },
+    {
+      "path": "bundle/source_replays/final91103/replay.json",
+      "sha256": "4d714546d83fb39d73613aeace31703f384c868c0e48d6ebf4c027af96fedd57"
+    }
+  ],
+  "initial_freeze_sha256": "10601be1ad9c59cf53ebf8b29e28701c724fca22bc0e0a2a56bdc885311f11ff",
+  "selected_freeze_sha256": "3143e1473481a475bb697dd5f2b90513a887e8dc6784ded39e5cfe8808f28bb6",
+  "scheduled_target_input_executions": [
+    {
+      "run_id": "final92101",
+      "seed": 92101
+    },
+    {
+      "run_id": "final92102",
+      "seed": 92102
+    },
+    {
+      "run_id": "final92103",
+      "seed": 92103
+    }
+  ],
+  "target_execution_statuses": "Recorded separately after this immutable selection in execution_statuses.jsonl",
+  "limitations": [
+    "MACAD sex-specific medians are below the source in all draws by about 21% and 24%, much larger than seed variation, but below the 30% secondary review threshold.",
+    "Missing joint source covariates, family selection, ancestry, assay and repeated-measure differences prevent attributing the MACAD discrepancy solely to a generator coefficient.",
+    "Increasing the shared intercept to force MACAD median agreement would conflict with the primary Taiwan mean anchor; no supported population-specific correction is available."
+  ]
+}

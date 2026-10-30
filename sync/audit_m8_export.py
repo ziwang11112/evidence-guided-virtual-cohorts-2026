@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 from functools import lru_cache
+import io
 import json
 import subprocess
 
@@ -37,7 +38,7 @@ def historical_bytes(root, path):
 
 
 def audit_m8_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_receipt,
-                    m5_receipt, m6_receipt, m7_receipt, receipt, findings):
+                    m5_receipt, m6_receipt, m7_receipt, receipt, findings, *, read_bytes=None):
     if receipt is None:
         return {"status": "not_exported"}
 
@@ -45,12 +46,17 @@ def audit_m8_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
         if not ok:
             findings.append({"file": path, "rule": rule})
 
+    if read_bytes is None:
+        read_bytes = lambda path: (root / path).read_bytes()
+
     def file_hash(path):
-        full = root / path
-        return digest(full.read_bytes()) if full.is_file() else None
+        try:
+            return digest(read_bytes(path))
+        except FileNotFoundError:
+            return None
 
     def curated_json(path):
-        return json.loads((root / CURATED / path).read_bytes())
+        return json.loads(read_bytes(CURATED + path))
 
     base_bytes = historical_bytes(root, "sync/EXPORT_MANIFEST.json")
     base = json.loads(base_bytes)
@@ -90,7 +96,7 @@ def audit_m8_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
         key = "historical_" + milestone + "_code_revisions"
         check(receipt[key] == prior_receipt[key], RECEIPT, "m8_historical_code_revision_changed")
 
-    validation = json.loads((root / PREFIX / "m8_validation.json").read_bytes())
+    validation = json.loads(read_bytes(PREFIX + "m8_validation.json"))
     check(validation["milestone"] == "M8" and validation["new_harness_core_changes"] is False,
           RECEIPT, "m8_validation_identity_or_core_change")
     for path, expected in validation["harness_code_bindings"].items():
@@ -159,7 +165,7 @@ def audit_m8_export(root, manifest, m2_receipt, m2_validation, m3_receipt, m4_re
           "m8_aggregate_table_scope_mismatch")
     table_rows = {}
     for path, (count, fields) in TABLES.items():
-        with (root / CURATED / path).open(encoding="utf-8-sig", newline="") as stream:
+        with io.StringIO(read_bytes(CURATED + path).decode("utf-8-sig"), newline="") as stream:
             reader = csv.DictReader(stream)
             rows = list(reader)
         check(reader.fieldnames == fields and len(rows) == count, CURATED + path,

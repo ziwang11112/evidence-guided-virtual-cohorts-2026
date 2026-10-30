@@ -1,0 +1,122 @@
+{
+  "schema_version": "m9-analysis-preparation-1",
+  "status": "specified_before_target_analysis_not_a_release_authorization",
+  "primary_estimands": [
+    {
+      "id": "adjusted_age_per10",
+      "model": "adjusted",
+      "coefficient": "A",
+      "multiplier": 1
+    },
+    {
+      "id": "adjusted_bmi_per5",
+      "model": "adjusted",
+      "coefficient": "B",
+      "multiplier": 1
+    },
+    {
+      "id": "bmi_curvature_second_difference",
+      "model": "bmi_curve",
+      "coefficient": "B_squared",
+      "multiplier": 2,
+      "meaning": "Quadratic projection contrast at BMI35 minus twice BMI30 plus BMI25, conditional on other covariates; not proof of a full biological curve"
+    },
+    {
+      "id": "female_minus_male_bmi_slope_per5",
+      "model": "sex_bmi",
+      "coefficient": "female_times_B",
+      "multiplier": 1
+    }
+  ],
+  "expected_directions": null,
+  "transforms": {
+    "A": "(age-50)/10",
+    "B": "(bmi-25)/5",
+    "F": "1 if sex=2 else 0"
+  },
+  "secondary_estimands": [
+    "adjusted_female_minus_male",
+    "18 age-sex-BMI cell arithmetic means"
+  ],
+  "cells": {
+    "age": [
+      [
+        20,
+        40
+      ],
+      [
+        40,
+        60
+      ],
+      [
+        60,
+        80
+      ]
+    ],
+    "age_upper_exclusive": true,
+    "sex": [
+      1,
+      2
+    ],
+    "bmi": [
+      "0<bmi<25",
+      "25<=bmi<30",
+      "bmi>=30"
+    ],
+    "empty": "retain as nonestimable",
+    "sparse": "flag n<30 without merging or dropping"
+  },
+  "weighted_fit": "Positive provided design weights normalized by their mean; WLS via weighted least squares; same point estimator for real and generated values",
+  "point_script": "methods/analytical_points.py",
+  "missingness": "Eligibility fixed by preparation; no endpoint-specific outcome imputation, winsorization or favorable-case removal",
+  "reporting": {
+    "direction": "Point-direction agreement for estimable primary contrasts, reported with magnitudes; do not count positive means as sign success",
+    "magnitude": "Difference in the endpoint's scientific units; no universal mixed-unit score or posthoc tolerance",
+    "conclusion": "No supported/absent-effect or equivalence category without an appropriate reference inference procedure and prespecified substantive criterion",
+    "synthetic_uncertainty": "No ordinary synthetic-data standard error interpreted as evidence uncertainty; residual ranges labelled Monte Carlo only",
+    "nonestimable": "Retain every planned endpoint and construction failure",
+    "multiplicity": "Descriptive screen, no confirmatory binary superiority claim; primary family fixed before generation"
+  },
+  "source_overlap_classification": "Must be independently assigned per endpoint after packet admission and before generation: supplied / algebraic consequence / unprovided target analysis / assumption-dependent",
+  "release_gates": [
+    "source packet independently admitted and hashed",
+    "visible task/observations validated and hashed",
+    "endpoint/source-overlap map frozen",
+    "all arms and construction/draw schedule fixed",
+    "initial and final candidates frozen",
+    "isolated generation receipts pass",
+    "evaluation code and inference scope fixed",
+    "custodian reference hashes unchanged"
+  ],
+  "boundaries": "Evaluation-only; builder receives scientific use brief, not this exact endpoint list or hidden answers. Procedural Agent separation, generator sandbox only. No guarantee against pretraining knowledge.",
+  "case_id": "nhanes_insulin",
+  "outcome": "fasting_insulin_uU_ml",
+  "outcome_transform": "natural_log",
+  "covariate_adapter": {
+    "age_years": "age",
+    "bmi_kg_m2": "bmi",
+    "fasting_glucose_mg_dl": "glucose_mg_dl",
+    "sex": "sex",
+    "row_id": "record_id_index"
+  },
+  "sex_value_adapter": {
+    "male": 1,
+    "female": 2
+  },
+  "additional_transform": "G=natural_log(glucose_mg_dl/100)",
+  "models": {
+    "adjusted": "log(insulin)=intercept+A+B+F+G",
+    "bmi_curve": "log(insulin)=intercept+A+B+F+G+B_squared",
+    "sex_bmi": "log(insulin)=intercept+A+B+F+G+F_times_B"
+  },
+  "reference_inference": "NHANES full-design domain Taylor inference planned using positive fasting weights, strata andPSU; adapter must be reviewed and frozen before any reference outcome analysis. Current point module alone does not implement this.",
+  "derived_use": {
+    "name": "HOMA1_IR",
+    "formula": "insulin_uU_ml * glucose_mg_dl / 405",
+    "estimand": "weighted arithmetic mean",
+    "status": "derived use demonstration, not additional independent truth",
+    "algebraic_caveat": "Under log-linear analyses adjusting log glucose, several HOMA1 associations are algebraic re-expressions of insulin associations; do not count twice",
+    "reference": "https://pubmed.ncbi.nlm.nih.gov/3899825/",
+    "universal_threshold": null
+  }
+}

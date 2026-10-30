@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "task_id": "m9_pns_hba1c_enrichment_2026_10_29",
+  "prepared_at_utc": "2026-10-29T23:25:15.119237+00:00",
+  "visible_columns": [
+    "row_id",
+    "age_years",
+    "sex",
+    "bmi_kg_m2"
+  ],
+  "hidden_target": "hba1c_pct",
+  "generation_mode": "enrichment",
+  "counts": {
+    "total_records": 8952,
+    "field_available_numeric_finite": {
+      "Z001": 8952,
+      "C008": 8952,
+      "z004": 8855,
+      "z005": 8855,
+      "P005": 3335,
+      "peso_lab": 8952,
+      "Z034": 8541
+    },
+    "dictionary_valid_measured_anthropometry_count": 8855,
+    "reported_pregnancy_code1_all_source_records": 89,
+    "reported_pregnancy_exclusions_among_otherwise_prior_step_eligible": 0,
+    "selected_unknown_or_inapplicable_pregnancy_status_count": 5061,
+    "selected_explicit_unknown_pregnancy_code3_count": 23,
+    "sequential_eligibility": [
+      {
+        "step": "all_official_lab_records",
+        "remaining": 8952,
+        "excluded_at_step": 0
+      },
+      {
+        "step": "baseline_age_20_to_79",
+        "remaining": 8439,
+        "excluded_at_step": 513
+      },
+      {
+        "step": "documented_sex_code",
+        "remaining": 8439,
+        "excluded_at_step": 0
+      },
+      {
+        "step": "dictionary_valid_measured_weight_height",
+        "remaining": 8352,
+        "excluded_at_step": 87
+      },
+      {
+        "step": "not_reported_pregnant_at_baseline",
+        "remaining": 8352,
+        "excluded_at_step": 0
+      },
+      {
+        "step": "finite_positive_lab_weight",
+        "remaining": 8352,
+        "excluded_at_step": 0
+      },
+      {
+        "step": "hba1c_available_numeric_finite",
+        "remaining": 7979,
+        "excluded_at_step": 373
+      }
+    ],
+    "final_n_rows": 7979
+  },
+  "selection_policy": {
+    "age": "C008 baseline age, inclusive 20-79; no topcoding is declared in the supplied lab dictionary. No lab-date age is inferred.",
+    "anthropometry": "Require weight 30-200 kg and height 120-210 cm per dictionary; remove 999 error and unavailable values. No BMI magnitude trimming beyond these documented source validity limits.",
+    "pregnancy": "Exclude only P005==1 at baseline. Unknown and inapplicable/missing status remain. Baseline status cannot establish pregnancy status at the 2014-2015 blood collection.",
+    "target": "Select only available numeric finite Z034. No target magnitude limits, outlier trimming, clinical threshold selection, diagnostic selection or proxy selection.",
+    "missingness": "Complete-case eligibility on age, sex, valid measured anthropometry, positive finite lab weight and target availability; no imputation or reweighting for these additional restrictions."
+  },
+  "timing": {
+    "interview": "2013",
+    "laboratory_collection": "2014-2015",
+    "anthropometry": "Final measured values in laboratory release, interpreted as baseline survey anthropometry; exact participant measurement dates are not supplied.",
+    "implication": "Age and pregnancy refer to the baseline interview. The covariate-outcome relationship spans a variable lag; this is not asserted to be contemporaneous."
+  },
+  "design": {
+    "weight_field": "peso_lab",
+    "weight_storage": "custodian_only",
+    "strata_available": false,
+    "psu_available": false,
+    "official_record_id_available": false,
+    "estimand": "Lab-complete participant distribution under supplied peso_lab, with unweighted sensitivity. Additional complete-case restrictions are not automatically nationally representative.",
+    "permitted_later_evaluation": "Provided-weight point estimates and unweighted sensitivity only. No complex-survey standard errors or confidence intervals without a valid recovered design.",
+    "weight_interpretation": "Official lab page describes post-stratification using age, education, race/color and macroregion. Calibration adequacy for national generalization remains unresolved.",
+    "methodological_review_pending_url": "https://www.scielo.br/j/rbepid/a/WCZswnbNLN9FyYkQmvJtKTs/?lang=pt"
+  },
+  "information_boundary": {
+    "builder_visible": "Only visible/ and approved external evidence artifacts. Download/preparation scripts are custodian-only because they access raw targets.",
+    "prohibited": "custodian/, raw workbook, reference values, ID mapping, lab weights, target summaries, Z035 and any HbA1c-derived diagnosis/proxy; all other source row-level columns are omitted.",
+    "enforcement": "Procedural custody in a shared filesystem; no OS sandbox or cryptographic confidentiality is claimed. Hashes provide integrity, not access control.",
+    "freshness": "New project case only. No claim that the model has never encountered these public data in pretraining."
+  },
+  "validation": {
+    "task_schema": "passed",
+    "visible_input_contract": "passed",
+    "serialized_visible_input_contract": "passed",
+    "reference_structure_and_observed_preservation": "passed",
+    "opaque_id_uniqueness": "passed",
+    "reference_design_mapping_row_alignment": "passed",
+    "scientific_generator_run": false,
+    "target_distribution_or_association_analysis": false
+  }
+}

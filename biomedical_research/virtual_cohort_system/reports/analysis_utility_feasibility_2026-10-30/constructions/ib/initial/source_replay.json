@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "contexts": [
+    {
+      "id": "taiwan",
+      "population": "Guishan township, Taiwan residents aged 50-90, community health examination in 2014; n=321 (111 men,210 women) after excluding prior diabetes, glucose-lowering drugs/insulin or fasting glucose >=126 mg/dL.",
+      "reason": "Moment-matched reconstruction for source raw insulin mean and Pearson correlations. Source participants are not available.",
+      "assumption_ids": [
+        "A_taiwan_context"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Nominal source insulin activity units map to task uU/mL without assay calibration; source variable names map to task column names under A_measure."
+      },
+      "input": {
+        "path": "source_contexts/taiwan.csv",
+        "sha256": "583f5777e5f11882efc180594e12c6815f9ab3fd5b73eb115a7513f6356a9b4a",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "meanins",
+          "evidence_id": "taiwan_fasting_insulin_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "microU/mL",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_measure"
+          ],
+          "reason": "Execution-linked source statistic under the declared approximate source covariates; not target validation."
+        },
+        {
+          "id": "agecorr",
+          "evidence_id": "taiwan_insulin_r_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "age_years",
+            "y": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_measure"
+          ],
+          "reason": "Execution-linked source statistic under the declared approximate source covariates; not target validation."
+        },
+        {
+          "id": "glucorr",
+          "evidence_id": "taiwan_insulin_r_fasting_glucose",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "fasting_glucose_mg_dl",
+            "y": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_measure"
+          ],
+          "reason": "Execution-linked source statistic under the declared approximate source covariates; not target validation."
+        }
+      ]
+    },
+    {
+      "id": "macad",
+      "population": "MACAD Los Angeles Mexican-American family study; 470 offspring-generation adults from 128 families (adult offspring of CAD probands and spouses), 197 men/273 women; no diabetes or clinically manifested CVD by design.",
+      "reason": "Independent approximate source context assesses sex-specific raw insulin medians; transformed correlations are not relabelled as raw correlation.",
+      "assumption_ids": [
+        "A_macad_context"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Nominal microIU/mL to uU/mL; four-draw RIA versus target assay differences remain uncorrected under A_measure."
+      },
+      "input": {
+        "path": "source_contexts/macad.csv",
+        "sha256": "2047752ba59e99bdc38802677d1b20aace6bd0b550977644984e5cd4ee536cb9",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "medmen",
+          "evidence_id": "macad_men_fasting_insulin_median",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "microIU/mL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "A_measure",
+            "A_quantile"
+          ],
+          "reason": "Execution-linked source statistic under the declared approximate source covariates; not target validation."
+        },
+        {
+          "id": "medwomen",
+          "evidence_id": "macad_women_fasting_insulin_median",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "microIU/mL",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "A_measure",
+            "A_quantile"
+          ],
+          "reason": "Execution-linked source statistic under the declared approximate source covariates; not target validation."
+        }
+      ]
+    }
+  ]
+}

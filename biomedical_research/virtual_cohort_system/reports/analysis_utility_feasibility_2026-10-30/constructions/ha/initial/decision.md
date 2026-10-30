@@ -1,0 +1,9 @@
+# HbA1c construction ha, initial
+
+Use SHIP-Trend because it provides contemporaneous whole-population, sex-specific HbA1c quartiles and age coefficients adjusted for the available BMI covariate, in the admitted adult age range. The two SHIP cohorts are independent; the earlier wave is a temporal sensitivity check, not another fit objective. This is curated evidence use, not autonomous literature discovery.
+
+The generator adds a sex-specific reference location, linear age term, explicitly assumed saturating BMI term, and independent right-skewed residual. All parameters and missing-identification choices are traced in model_spec.json. Residual scales allocate the reported IQR approximately between age and residual dispersion. The exact joint source covariates and conditional residual distribution are unknown. No healthy-reference limits, restricted Hoorn coefficients or prospective DIRECT coefficients are used. Hoorn and DIRECT also share first-wave Hoorn participants; they would not be independent confirmations.
+
+One frozen invented source context checks all 12 admitted SHIP sex/wave quantiles and three admissible age slopes. Approximate population reconstruction, identity measurement mapping and quantile convention are explicit. The three fixed source seeds only vary residuals. Selection is committed in the bundle selection_rule.json before diagnostics; successful source agreement does not certify target utility.
+
+This output supports inspection of an evidence-informed hypothesis about age association. BMI association, skew, extreme tails, subgroup and nonlinear analyses are assumption dependent. Clinical, causal and nationally representative interpretations, imputation accuracy, calibrated parameter uncertainty and measurement replacement remain unassessed. Target HbA1c answers and reserved evaluations were not read.

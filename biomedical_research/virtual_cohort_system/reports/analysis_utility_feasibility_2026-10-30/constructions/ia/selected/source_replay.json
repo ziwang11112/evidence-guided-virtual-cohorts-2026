@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "contexts": [
+    {
+      "id": "tw",
+      "population": "Synthetic approximation to Guishan Taiwan 2014 non-diabetic community examinees, limited to ages 50-79 by original task bounds.",
+      "reason": "Compatible raw insulin moments and Pearson associations with explicit missing joint-distribution assumptions.",
+      "assumption_ids": [
+        "A_joint",
+        "A_context",
+        "A_mapping",
+        "A_tertiles"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Source unit microU/mL and task uU/mL denote identical units; variable labels map identically. No cross-assay numerical correction is attempted."
+      },
+      "input": {
+        "path": "s/tw.csv",
+        "sha256": "212c4258eb2f2e145a2b1742cdb521f948736eeb1c15815e685d355f4d77c2c9",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "insulin_mean",
+          "evidence_id": "taiwan_fasting_insulin_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "microU/mL",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "insulin_sd",
+          "evidence_id": "tw_insulin_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "microU/mL",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "insulin_glucose_r",
+          "evidence_id": "taiwan_insulin_r_fasting_glucose",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "fasting_glucose_mg_dl",
+            "y": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "insulin_age_r",
+          "evidence_id": "taiwan_insulin_r_age",
+          "status": "approximate",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "age_years",
+            "y": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "low_insulin_le4_8_BMI",
+          "evidence_id": "taiwan_low_insulin_le4.8_BMI",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m2",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "le",
+                "value": 4.8
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi_kg_m2"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "low_insulin_le4_8_fasting_glucose",
+          "evidence_id": "taiwan_low_insulin_le4.8_fasting_glucose",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "le",
+                "value": 4.8
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_glucose_mg_dl"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "low_insulin_le4_8_fasting_insulin",
+          "evidence_id": "taiwan_low_insulin_le4.8_fasting_insulin",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "microU/mL",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "le",
+                "value": 4.8
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "middle_insulin_4_9_7_8_BMI",
+          "evidence_id": "taiwan_middle_insulin_4.9_7.8_BMI",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m2",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "ge",
+                "value": 4.9
+              },
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "le",
+                "value": 7.8
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi_kg_m2"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "middle_insulin_4_9_7_8_fasting_glucose",
+          "evidence_id": "taiwan_middle_insulin_4.9_7.8_fasting_glucose",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "ge",
+                "value": 4.9
+              },
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "le",
+                "value": 7.8
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_glucose_mg_dl"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "middle_insulin_4_9_7_8_fasting_insulin",
+          "evidence_id": "taiwan_middle_insulin_4.9_7.8_fasting_insulin",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "microU/mL",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "ge",
+                "value": 4.9
+              },
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "le",
+                "value": 7.8
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "high_insulin_ge7_9_BMI",
+          "evidence_id": "taiwan_high_insulin_ge7.9_BMI",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m2",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "ge",
+                "value": 7.9
+              }
+            ],
+            "missing_policy": "error",
+            "column": "bmi_kg_m2"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "high_insulin_ge7_9_fasting_glucose",
+          "evidence_id": "taiwan_high_insulin_ge7.9_fasting_glucose",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "mg/dL",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "ge",
+                "value": 7.9
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_glucose_mg_dl"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        },
+        {
+          "id": "high_insulin_ge7_9_fasting_insulin",
+          "evidence_id": "taiwan_high_insulin_ge7.9_fasting_insulin",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "microU/mL",
+            "selection": [
+              {
+                "column": "fasting_insulin_uU_ml",
+                "op": "ge",
+                "value": 7.9
+              }
+            ],
+            "missing_policy": "error",
+            "column": "fasting_insulin_uU_ml"
+          },
+          "assumption_ids": [
+            "A_mapping"
+          ],
+          "reason": "Source-only consistency diagnostic under declared synthetic population; not independent target validation."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "declared_before_diagnostics": true,
+  "case_id": "nhanes_insulin",
+  "construction_id": "ia",
+  "source_seeds": [
+    91101,
+    91102,
+    91103
+  ],
+  "source_contexts": [
+    "tw"
+  ],
+  "primary_checks": [
+    "insulin_mean",
+    "insulin_sd",
+    "insulin_glucose_r",
+    "insulin_age_r"
+  ],
+  "retain_rule": "Retain initial model when every scheduled source execution verifies and across-seed average absolute discrepancies are <=20% for mean, <=25% for SD, <=0.15 for glucose Pearson r, and <=0.10 for age Pearson r. These are engineering diagnostic tolerances, not scientific validity thresholds. Inspect all secondary tertile diagnostics and disclose mismatch. Do not tune to one seed.",
+  "revision_rule": "Only if primary rule fails, one scientific revision may correct a documented moment-derivation or source-context implementation error, or recalibrate intercept/residual variance from all three source draws; keep all initial results. If source approximation dominates, retain with limitation. No target information may select any parameter. A no-op final child binds feedback.",
+  "candidate_priority": "Prefer the initial simple model unless a permitted source-only revision is justified. No target output summaries or target evaluation are used.",
+  "final_schedule": [
+    {
+      "run_id": "f92101",
+      "seed": 92101
+    },
+    {
+      "run_id": "f92102",
+      "seed": 92102
+    },
+    {
+      "run_id": "f92103",
+      "seed": 92103
+    }
+  ]
+}

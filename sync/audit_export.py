@@ -15,8 +15,9 @@ from audit_m5_export import audit_m5_export
 from audit_m6_export import audit_m6_export
 from audit_m7_export import audit_m7_export
 from audit_m8_export import audit_m8_export
+from audit_m10_export import audit_m10_export, filesystem_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = filesystem_root(Path(__file__).resolve().parents[1])
 LOCAL_FILES = {
     ".gitignore", ".gitattributes", "README.md", "docs/REPRODUCTION.md",
     "docs/EARLIER_LIMITATIONS.md", "docs/STAGE1_EXPORT.md", "sync/source_allowlist.json",
@@ -37,6 +38,9 @@ LOCAL_FILES = {
     "sync/audit_m6_export.py", "sync/M6_EXPORT_RECEIPT.json", "docs/M6_EXPORT.md",
     "sync/audit_m7_export.py", "sync/M7_EXPORT_RECEIPT.json", "docs/M7_EXPORT.md",
     "sync/audit_m8_export.py", "sync/M8_EXPORT_RECEIPT.json", "docs/M8_EXPORT.md",
+    "sync/audit_m10_export.py", "sync/finalize_m10_export.py", "sync/test_m10_export.py",
+    "sync/M10_EXPORT_PLAN.json", "sync/M10_EXPORT_RECEIPT.json", "docs/M10_EXPORT.md",
+    "sync/M10_PRECOPY_REVIEW.json", "sync/M10_FINALIZATION_LOG.json",
     "biomedical_research/three_model_review_2026-10-28/README.md",
     "biomedical_research/three_model_review_2026-10-28/REVIEW_PACKAGE_MANIFEST.json",
 }
@@ -230,7 +234,9 @@ def main():
     m7_receipt = json.loads(m7_path.read_text(encoding="utf-8")) if m7_path.is_file() else None
     m8_path = ROOT / "sync/M8_EXPORT_RECEIPT.json"
     m8_receipt = json.loads(m8_path.read_text(encoding="utf-8")) if m8_path.is_file() else None
-    latest_receipt = m8_receipt or m7_receipt or m6_receipt or m5_receipt or m4_receipt or m3_receipt
+    m10_path = ROOT / "sync/M10_EXPORT_RECEIPT.json"
+    m10_receipt = json.loads(m10_path.read_text(encoding="utf-8")) if m10_path.is_file() else None
+    latest_receipt = m10_receipt or m8_receipt or m7_receipt or m6_receipt or m5_receipt or m4_receipt or m3_receipt
     m2_revisions = latest_receipt["historical_m2_code_revisions"] if latest_receipt else {}
     for name, expected in m2_validation["code_sha256"].items():
         current = sha(m2_root / name)
@@ -245,15 +251,18 @@ def main():
                   if name.startswith("biomedical_research/virtual_cohort_system/")}
     expected_curated = (latest_receipt or m2_receipt)["curated_export_sha256"]
     if current_m2 != expected_curated:
-        findings.append({"file": "sync/M8_EXPORT_RECEIPT.json" if m8_receipt else
+        findings.append({"file": "sync/M10_EXPORT_RECEIPT.json" if m10_receipt else
+                         "sync/M8_EXPORT_RECEIPT.json" if m8_receipt else
                          "sync/M7_EXPORT_RECEIPT.json" if m7_receipt else
                          "sync/M6_EXPORT_RECEIPT.json" if m6_receipt else
                          "sync/M5_EXPORT_RECEIPT.json" if m5_receipt else
                          "sync/M4_EXPORT_RECEIPT.json" if m4_receipt else
                          "sync/M3_EXPORT_RECEIPT.json" if m3_receipt else "sync/M2_EXPORT_RECEIPT.json",
                          "rule": "curated_scope_mismatch"})
-    m8_audit = audit_m8_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
-                             m4_receipt, m5_receipt, m6_receipt, m7_receipt, m8_receipt, findings)
+    m10_audit = audit_m10_export(ROOT, manifest, m10_receipt, findings)
+    m8_audit = (m10_audit.pop("historical_m8_audit") if m10_receipt else
+                audit_m8_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
+                                m4_receipt, m5_receipt, m6_receipt, m7_receipt, m8_receipt, findings))
     m7_audit = (m8_audit.pop("historical_m7_audit") if m8_receipt else
                 audit_m7_export(ROOT, manifest, m2_receipt, m2_validation, m3_receipt,
                                 m4_receipt, m5_receipt, m6_receipt, m7_receipt, findings))
@@ -296,6 +305,7 @@ def main():
              "virtual_cohort_m6": m6_audit,
              "virtual_cohort_m7": m7_audit,
              "virtual_cohort_m8": m8_audit,
+             "virtual_cohort_m10": m10_audit,
              "excluded_from_self_hash_inventory": sorted(GENERATED_AUDIT),
              "manual_content_review": "Exact allowlist and source prose/code reviewed; earlier patient-bearing reports excluded. Regex alone cannot establish data privacy.",
              "omitted": ["participant reference tables", "masked and completed participant tables", "mask keys", "full synthetic tables", "paper PDFs and HTML", "patient-bearing prompts", "environments", "credentials", "original absolute-path source freezes"]}

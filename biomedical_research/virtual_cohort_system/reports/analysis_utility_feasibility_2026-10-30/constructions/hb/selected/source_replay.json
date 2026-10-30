@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "contexts": [
+    {
+      "id": "trend",
+      "population": "Artificial approximation to whole SHIP-Trend adults 20-79, stratified by sex, including clinical heterogeneity rather than healthy-reference restriction.",
+      "reason": "Inspect whole-population sex-specific quantiles and BMI-adjusted age coefficients using exactly the same generator; source joint covariates are unavailable.",
+      "assumption_ids": [
+        "Asource"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Task HbA1c percent, age years and BMI kg/m2; explicit derived per-year evidence retains original per-decade estimates."
+      },
+      "input": {
+        "path": "source_contexts/trend.csv",
+        "sha256": "ae4145044bd9ffcaeaa434bdbbabb15aa22015a3cc11073037f75f09085a7809",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "male_q25",
+          "evidence_id": "ship_SHIP_Trend_men_quantile_0.25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear",
+            "q": 0.25
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "Sex-specific marginal source quantile under explicitly artificial covariates; no claim of exact SHIP reconstruction."
+        },
+        {
+          "id": "male_median",
+          "evidence_id": "ship_SHIP_Trend_men_median_None",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "Sex-specific marginal source quantile under explicitly artificial covariates; no claim of exact SHIP reconstruction."
+        },
+        {
+          "id": "male_q75",
+          "evidence_id": "ship_SHIP_Trend_men_quantile_0.75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear",
+            "q": 0.75
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "Sex-specific marginal source quantile under explicitly artificial covariates; no claim of exact SHIP reconstruction."
+        },
+        {
+          "id": "male_age",
+          "evidence_id": "trend_men_age_peryear",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/year",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "outcome": "hba1c_pct",
+            "predictors": [
+              "age_years",
+              "bmi_kg_m2"
+            ],
+            "term": "age_years",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "BMI-adjusted age coefficient per year, using explicit division of reported per-decade estimate and SE by ten."
+        },
+        {
+          "id": "female_q25",
+          "evidence_id": "ship_SHIP_Trend_women_quantile_0.25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear",
+            "q": 0.25
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "Sex-specific marginal source quantile under explicitly artificial covariates; no claim of exact SHIP reconstruction."
+        },
+        {
+          "id": "female_median",
+          "evidence_id": "ship_SHIP_Trend_women_median_None",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "Sex-specific marginal source quantile under explicitly artificial covariates; no claim of exact SHIP reconstruction."
+        },
+        {
+          "id": "female_q75",
+          "evidence_id": "ship_SHIP_Trend_women_quantile_0.75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear",
+            "q": 0.75
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "Sex-specific marginal source quantile under explicitly artificial covariates; no claim of exact SHIP reconstruction."
+        },
+        {
+          "id": "female_age",
+          "evidence_id": "trend_women_age_peryear",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "%/year",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "outcome": "hba1c_pct",
+            "predictors": [
+              "age_years",
+              "bmi_kg_m2"
+            ],
+            "term": "age_years",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "Ameasurement"
+          ],
+          "reason": "BMI-adjusted age coefficient per year, using explicit division of reported per-decade estimate and SE by ten."
+        }
+      ]
+    }
+  ]
+}

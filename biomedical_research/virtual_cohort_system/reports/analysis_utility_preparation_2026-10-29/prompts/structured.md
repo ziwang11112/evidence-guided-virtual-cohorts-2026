@@ -1,0 +1,5 @@
+# Structured evidence and review construction
+
+Follow common.md and the task contract. Before choosing a generator, map each used statistic to its population, measurement, selection, adjustment and scale; distinguish individual residual variation from study heterogeneity. Record consequential gaps and scientifically different compatible structures. Choose structures yourself rather than copying a case-specific harness formula.
+
+Check statistics under their source conditions where executable; preserve unsupported operators as noncomputable. A reviewer examines extraction, transformations, dependencies, source-to-target assumptions and whether supplied source facts genuinely constrain the intended uses. Give the reviewer only admitted evidence, the candidate and source diagnostics. Revise, retain or stop based on these findings. Use the same total construction limits as the ordinary Agent; a review role is not permission for extra unlimited generation. Preserve initial and final programs and the actual feedback.

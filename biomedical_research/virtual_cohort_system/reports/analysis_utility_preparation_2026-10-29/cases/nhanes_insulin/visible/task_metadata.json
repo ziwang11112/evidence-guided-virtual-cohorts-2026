@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "task_id": "nhanes_2015_2016_fasting_insulin_analysis_utility",
+  "cycle": "2015-2016",
+  "eligible_rows": 1961,
+  "visible_columns": [
+    "row_id",
+    "age_years",
+    "sex",
+    "bmi_kg_m2",
+    "fasting_glucose_mg_dl"
+  ],
+  "target_column": "fasting_insulin_uU_ml",
+  "selection_rules": [
+    "RIDAGEYR >= 20 and RIDAGEYR <= 79",
+    "RIDSTATR == 2 (interviewed and MEC examined)",
+    "PHDSESN == 0 (morning; FASTQX_I)",
+    "finite PHAFSTHR and PHAFSTMN, 0 <= PHAFSTMN < 60, 8.5 <= PHAFSTHR + PHAFSTMN/60 < 24",
+    "finite WTSAF2YR from INS_I and WTSAF2YR > 0; GLU_I weight must agree",
+    "exclude RIDEXPRG == 1; females aged 20-44 must have RIDEXPRG == 2; retain older females with public pregnancy-ascertainment limitation",
+    "DIQ050 == 2; exclude reported insulin use, refusal, don't know and missing",
+    "finite RIDAGEYR, BMXBMI and LBXGLU; RIAGENDR in {1,2}",
+    "finite LBXIN (including CDC below-LOD substituted measurements); no target-magnitude filter"
+  ],
+  "detection_limit_policy": "Preserve CDC LBXIN values as released, including LLOD/sqrt(2) fill values; retain LBDINLC in custodian reference. LLOD is 1.0 uU/mL per INS_I metadata. No extra imputation.",
+  "pregnancy_limitation": "Pregnancy status is publicly released only for women 20-44. Those women require RIDEXPRG=2. Older women are retained unless recorded pregnant, but complete nonpregnancy cannot be established from public files.",
+  "insulin_use_handling": "DIQ050=2 is required. Yes, refusal, do not know and missing are excluded. This is self-report, not verification of medication administration.",
+  "fasting_definition": "PHAFSTHR + PHAFSTMN/60 from FASTQX_I; morning is PHDSESN=0. Additional intake questions are not used as extra exclusions; reported food-fast duration and positive official fasting weight define this protocol.",
+  "homair_policy": "Any HOMA-IR is a downstream algebraic derivation from generated insulin and observed glucose, never an independently measured validation truth.",
+  "glucose_policy": "Use released LBXGLU mg/dL as-is. CDC already harmonized the minority of C501 measurements forward to C311; do not apply a second instrument correction.",
+  "freshness_status": "No 2015-2016 insulin-specific filename or selected protocol metadata detected in the bounded local inventory. Historical independence is unproven; this is not certified clean or unexposed.",
+  "freshness_inventory": "../freshness_inventory.json",
+  "evidence_policy": {
+    "mode": "published_evidence",
+    "excluded_cohorts": [
+      "NHANES",
+      "National Health and Nutrition Examination Survey",
+      "PNS",
+      "Brazilian National Health Survey"
+    ],
+    "allowed_tools": [
+      "approved_local_sources",
+      "source_replay"
+    ]
+  },
+  "budget": {
+    "source_queries": 0,
+    "source_downloads": 0,
+    "revisions": 2
+  },
+  "source_acquisition_is_custodian_preparation_not_generator_literature_budget": true,
+  "available": true,
+  "source_packet_status": "Prepared separately; no approvals created here",
+  "validation_scope": "Task schema and visible serialized input validated by existing cohort_harness.contracts. No generator run or target evaluation."
+}

@@ -1,0 +1,198 @@
+{
+  "parameters": {
+    "reference": {
+      "age_years": 63.91,
+      "bmi_kg_m2": 24.36,
+      "fasting_glucose_mg_dl": 89.1
+    },
+    "log_intercept": 1.813758496670002,
+    "beta_age_bmi_glucose": [
+      -0.0028033586132177684,
+      0.0522200048407432,
+      0.019602680987194386
+    ],
+    "log_residual_sd": 0.45801402441181727,
+    "male_log_shift": 0.0,
+    "high_glucose_extension": {
+      "threshold_mg_dl": 126.0,
+      "scale_mg_dl": 25.0
+    },
+    "high_bmi_extension": {
+      "threshold_kg_m2": 40.0,
+      "scale_kg_m2": 10.0
+    },
+    "source_context": {
+      "n": 10000,
+      "covariate_seed": 73109,
+      "mean_age_bmi_glucose": [
+        63.91,
+        24.36,
+        89.1
+      ],
+      "covariance_age_bmi_glucose": [
+        [
+          69.22240000000001,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          12.460899999999999,
+          5.119567255752559
+        ],
+        [
+          0.0,
+          5.119567255752559,
+          98.6049
+        ]
+      ],
+      "male_probability": 0.346,
+      "age_min": 50,
+      "age_max": 79,
+      "bmi_min": 12.0,
+      "glucose_min": 40.0,
+      "glucose_max_exclusive": 126.0
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_lognormal",
+      "description": "Conditional natural-log insulin is Gaussian with constant residual variance; source arithmetic moments define unconditional log moments via lognormal identities. Individual residual draws are not parameter or transport uncertainty."
+    },
+    {
+      "id": "A_joint",
+      "description": "Approximate source age/BMI/glucose joint distribution is Gaussian. Age is independent of BMI and glucose. BMI-glucose covariance uses between-insulin-tertile means and n weights; unreported within-tertile covariance is set to zero, an explicit identifiability assumption."
+    },
+    {
+      "id": "A_moment",
+      "description": "BMI-insulin covariance uses only between-tertile mean products with n=110,107,104; within-tertile covariance is assumed zero. Under joint Gaussian log insulin and covariates, Cov(log insulin,X)=Cov(insulin,X)/E(insulin), then beta=Sigma^-1 c. Reported raw Pearson correlations are converted through this model, never copied as regression slopes."
+    },
+    {
+      "id": "A_sex",
+      "description": "Conditional sex difference is set to zero because compatible conditional sex evidence is absent. This is an assumption, not evidence of no sex effect. Sex-stratified generated analyses can reflect observed covariate distributions only."
+    },
+    {
+      "id": "A_transport",
+      "description": "Taiwan older East Asian non-diabetic volunteer relationships and Abbott insulin scale are transferred to heterogeneous US adults with a different Tosoh assay. Unit notation microU/mL equals uU/mL, but cross-assay calibration is not known. Clinical diabetes/medication mechanisms are unmeasured and not identified."
+    },
+    {
+      "id": "A_extrapolation",
+      "description": "Above glucose 126 use 126+25*log(1+(glucose-126)/25); above BMI 40 use 40+10*log(1+(BMI-40)/10). Breakpoints/scales except glucose source exclusion threshold are conservative explicit assumptions that damp unsupported exponential extrapolation. They are not evidence of biological thresholds or validated nonlinear effects."
+    },
+    {
+      "id": "A_context",
+      "description": "Source replay uses 10000 synthetic covariate rows, not patient records. Age rounded and restricted 50-79 to obey task bounds, approximating original 50-90 sample; BMI>=12 and glucose>=40 and <126 are assumed truncations. This changes moments. Sex is Bernoulli(.346) independently. Missing clinical selection criteria and covariate dependencies are not reconstructed."
+    },
+    {
+      "id": "A_mapping",
+      "description": "Evidence variable labels age/BMI/fasting_glucose/fasting_insulin map by identity to task age_years/bmi_kg_m2/fasting_glucose_mg_dl/fasting_insulin_uU_ml. Unit spelling microU/mL is identical to uU/mL; kg/m2 to kg/m^2. Assay differences remain transport uncertainty."
+    },
+    {
+      "id": "A_tertiles",
+      "description": "Source tertiles are defined on reported insulin with low<=4.8, middle4.9-7.8, high>=7.9. Generated continuous values in decimal gaps are excluded in these diagnostic selections; no rounding is imposed."
+    }
+  ],
+  "parameter_provenance": {
+    "reference": {
+      "evidence_ids": [
+        "taiwan_age_mean",
+        "taiwan_BMI_mean",
+        "taiwan_fasting_glucose_mean"
+      ],
+      "assumption_ids": [],
+      "derivation": "Reported Table 1 overall means."
+    },
+    "log_intercept": {
+      "evidence_ids": [
+        "taiwan_fasting_insulin_mean",
+        "tw_insulin_sd"
+      ],
+      "assumption_ids": [
+        "A_lognormal"
+      ],
+      "derivation": "log(7.1)-0.5*log(1+(4.14/7.1)^2)."
+    },
+    "beta_age_bmi_glucose": {
+      "evidence_ids": [
+        "taiwan_low_insulin_le4.8_BMI",
+        "taiwan_low_insulin_le4.8_fasting_glucose",
+        "taiwan_low_insulin_le4.8_fasting_insulin",
+        "taiwan_middle_insulin_4.9_7.8_BMI",
+        "taiwan_middle_insulin_4.9_7.8_fasting_glucose",
+        "taiwan_middle_insulin_4.9_7.8_fasting_insulin",
+        "taiwan_high_insulin_ge7.9_BMI",
+        "taiwan_high_insulin_ge7.9_fasting_glucose",
+        "taiwan_high_insulin_ge7.9_fasting_insulin",
+        "taiwan_insulin_r_age",
+        "taiwan_insulin_r_fasting_glucose",
+        "taiwan_age_mean",
+        "taiwan_BMI_mean",
+        "taiwan_fasting_glucose_mean",
+        "taiwan_fasting_insulin_mean"
+      ],
+      "assumption_ids": [
+        "A_joint",
+        "A_moment",
+        "A_lognormal"
+      ],
+      "derivation": "See static_derivation.json; weighted between-tertile covariance then multivariate Gaussian/lognormal moment inversion, with zero unreported within-tertile covariance."
+    },
+    "log_residual_sd": {
+      "evidence_ids": [
+        "taiwan_fasting_insulin_mean",
+        "tw_insulin_sd"
+      ],
+      "assumption_ids": [
+        "A_lognormal",
+        "A_joint",
+        "A_moment"
+      ],
+      "derivation": "sqrt(log(1+(4.14/7.1)^2)-beta^T Sigma beta)."
+    },
+    "male_log_shift": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_sex"
+      ],
+      "derivation": "Explicit zero assumption, not a published zero effect."
+    },
+    "high_glucose_extension": {
+      "evidence_ids": [
+        "taiwan_fasting_glucose_mean"
+      ],
+      "assumption_ids": [
+        "A_extrapolation"
+      ],
+      "derivation": "126 is source exclusion boundary; 25 mg/dL tail scale is assumed."
+    },
+    "high_bmi_extension": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_extrapolation"
+      ],
+      "derivation": "40 kg/m^2 breakpoint and 10 kg/m^2 scale are assumptions."
+    },
+    "source_context": {
+      "evidence_ids": [
+        "taiwan_age_mean",
+        "taiwan_BMI_mean",
+        "taiwan_fasting_glucose_mean",
+        "taiwan_male_fraction",
+        "taiwan_low_insulin_le4.8_BMI",
+        "taiwan_low_insulin_le4.8_fasting_glucose",
+        "taiwan_low_insulin_le4.8_fasting_insulin",
+        "taiwan_middle_insulin_4.9_7.8_BMI",
+        "taiwan_middle_insulin_4.9_7.8_fasting_glucose",
+        "taiwan_middle_insulin_4.9_7.8_fasting_insulin",
+        "taiwan_high_insulin_ge7.9_BMI",
+        "taiwan_high_insulin_ge7.9_fasting_glucose",
+        "taiwan_high_insulin_ge7.9_fasting_insulin"
+      ],
+      "assumption_ids": [
+        "A_joint",
+        "A_context"
+      ],
+      "derivation": "Reported means/SDs/sex proportion; source row count, fixed covariate seed, truncations and missing dependencies are simulation design assumptions."
+    }
+  }
+}

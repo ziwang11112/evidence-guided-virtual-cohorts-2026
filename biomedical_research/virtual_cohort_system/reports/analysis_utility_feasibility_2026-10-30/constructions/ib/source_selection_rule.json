@@ -1,0 +1,32 @@
+{
+  "case_id": "nhanes_insulin",
+  "construction_id": "ib",
+  "initial_candidate": "initial",
+  "declared_before_diagnostics": true,
+  "source_seeds": [
+    91101,
+    91102,
+    91103
+  ],
+  "target_execution_seeds": [
+    92101,
+    92102,
+    92103
+  ],
+  "primary_checks": {
+    "taiwan_mean_relative_error": 0.15,
+    "taiwan_glucose_correlation_absolute_error": 0.15,
+    "taiwan_age_correlation_absolute_error": 0.1
+  },
+  "secondary_checks": {
+    "macad_sex_median_relative_error_review_threshold": 0.3
+  },
+  "rule": "Inspect every scheduled diagnostic across all three seeds. Retain initial when each primary discrepancy averaged over seeds is within its stated tolerance and both secondary median errors are below 30%. Otherwise investigate extraction, approximate covariates, Monte Carlo variation and model structure before any revision; at most two documented revisions. A numerical revision must address a persistent source discrepancy, improve failed primary diagnostics without worsening other primary absolute error by more than 0.05 (mean relative error) or 0.05 (correlations), and must not worsen secondary relative errors by over 0.10. If unresolved population mismatch prevents a defensible revision, retain with explicit limitations. Never choose a favorable seed or read target feedback. Retain is represented by a parent-linked final candidate with identical generator/specification and bound actual feedback.",
+  "scope": "These are pragmatic source consistency thresholds, not statistical acceptance tests or target validity criteria; no summed cross-unit score.",
+  "budget": {
+    "max_versions": 3,
+    "max_revisions": 2,
+    "max_source_replays_per_version": 3,
+    "max_contexts": 3
+  }
+}

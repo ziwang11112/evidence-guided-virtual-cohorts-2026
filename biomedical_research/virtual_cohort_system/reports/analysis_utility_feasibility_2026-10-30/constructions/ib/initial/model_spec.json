@@ -1,0 +1,255 @@
+{
+  "parameters": {
+    "reference_insulin_mean": 7.1,
+    "total_log_variance": 0.2926725747545357,
+    "log_bmi_center": 3.182551752251715,
+    "glucose_center": 89.1,
+    "age_center": 63.91,
+    "female_center": 0.654,
+    "bmi_log_coefficient": 1.5916055456968394,
+    "glucose_coefficient": 0.016537462304118553,
+    "age_coefficient": -0.002803358613217768,
+    "female_log_shift": 0.08,
+    "residual_log_sd": 0.43844091422068765,
+    "glucose_knots": [
+      50.0,
+      126.0,
+      180.0
+    ],
+    "glucose_tail_scale": 30.0,
+    "glucose_tail_weight": 0.35,
+    "bmi_bounds": [
+      12.0,
+      65.0
+    ],
+    "source_context_recipe": {
+      "seed": 71409,
+      "n_taiwan": 10000,
+      "n_macad": 10000,
+      "log_bmi_glucose_correlation": 0.25,
+      "latent_bmi_insulin_correlation_assumed": 0.5
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_log",
+      "description": "Assume a conditional natural-lognormal distribution with normal independent residuals. Taiwan raw mean 7.1 and SD 4.14 imply total log variance log(1+(4.14/7.1)^2). This is a moment-matched approximation, not a reported log SD."
+    },
+    {
+      "id": "A_cov",
+      "description": "Assume log BMI and raw glucose jointly normal with correlation 0.25 and age independent of both. Assume latent log-insulin/log-BMI correlation 0.50, contextually informed by MACAD transformed-trait R=0.56, but not equal to an identified conditional effect. Convert Taiwan raw insulin/glucose and insulin/age correlations under the joint-normal/lognormal approximation, then solve the two-predictor covariance equations. None of the resulting conditional coefficients is a published regression."
+    },
+    {
+      "id": "A_sex",
+      "description": "Assume female-versus-male log insulin shift 0.08. MACAD female median 12.0 versus male 11.3 provides contextual scale only: unadjusted sex medians and their covariate differences cannot identify an adjusted sex effect. Center using Taiwan reported male fraction and subtract assumed sex contribution from residual variance."
+    },
+    {
+      "id": "A_transport",
+      "description": "Transfer the Taiwan mean/dispersion and approximate conditional structure to the requested adults, despite ancestry, age, diabetes, fasting protocol and assay differences. MACAD informs BMI structure and provides a separate marginal diagnostic. No source specifies a valid target-population conditional distribution."
+    },
+    {
+      "id": "A_tails",
+      "description": "Outside source support, BMI is evaluated on log scale with 12 to 65 kg/m2 caps. Glucose enters linearly from 50 to 126 mg/dL; above 126 its incremental contribution is 0.35*30*(1-exp(-(g-126)/30)), saturated at glucose 180. These explicit bounded extrapolation choices avoid exponential glucose escalation and do not claim evidence for diabetic physiology or beta-cell failure."
+    },
+    {
+      "id": "A_taiwan_context",
+      "description": "Approximate source covariates with 10000 pseudo-person rows: BMI lognormal moment-matched to 24.36 (SD 3.53), glucose normal 89.1 (SD 9.93), age normal 63.91 (SD 8.32), male fraction 0.346; logBMI/glucose correlation 0.25; independent age and sex. Clip glucose to 50-125.9, BMI 12-65, age 50-79 and round age. Original source included ages 80-90, which task contract cannot represent. Repeat simulation rows do not increase evidence sample size above n=321. Full source selection and joint distribution are unobserved."
+    },
+    {
+      "id": "A_macad_context",
+      "description": "Approximate MACAD using 10000 independent pseudo-person rows with male fraction 197/470; sex-specific reported medians/IQR widths; age/glucose normal with SD=IQR/1.3489795003921634; BMI lognormal with log SD=asinh(IQR/(2*median))/0.6744897501960817. Assign correlation 0.25 between log BMI and glucose and independent age; clip age to 20-79, glucose 50-125.9, BMI 12-65. Joint distribution, family dependence, exclusions and source age tails cannot be reconstructed. IQR widths are not reported SDs or endpoints; conversions here are assumptions."
+    },
+    {
+      "id": "A_measure",
+      "description": "For replay, map source fasting_insulin to fasting_insulin_uU_ml, age to age_years, BMI to bmi_kg_m2, and fasting_glucose to fasting_glucose_mg_dl. microU/mL, microIU/mL and uU/mL are nominal insulin activity-unit aliases; assay and four-draw versus single-draw differences remain uncorrected, not established measurement equivalence."
+    },
+    {
+      "id": "A_quantile",
+      "description": "Source median interpolation convention is unreported. Replay uses linear sample quantiles as an approximation."
+    },
+    {
+      "id": "A_seeds",
+      "description": "Seeds vary individual residual draws only, not source estimates, model structure or transport. Source pseudo-covariates are fixed using seed 71409; model uncertainty is not calibrated."
+    }
+  ],
+  "parameter_provenance": {
+    "reference_insulin_mean": {
+      "evidence_ids": [
+        "taiwan_fasting_insulin_mean"
+      ],
+      "assumption_ids": [
+        "A_transport"
+      ],
+      "derivation": "Reported raw arithmetic mean; used to derive log intercept."
+    },
+    "total_log_variance": {
+      "evidence_ids": [
+        "taiwan_fasting_insulin_mean"
+      ],
+      "assumption_ids": [
+        "A_log"
+      ],
+      "derivation": "log(1+(4.14/7.1)^2), where 4.14 is reported raw SD, not SE."
+    },
+    "log_bmi_center": {
+      "evidence_ids": [
+        "taiwan_BMI_mean"
+      ],
+      "assumption_ids": [
+        "A_log",
+        "A_cov"
+      ],
+      "derivation": "log(24.36)-0.5*log(1+(3.53/24.36)^2)."
+    },
+    "glucose_center": {
+      "evidence_ids": [
+        "taiwan_fasting_glucose_mean"
+      ],
+      "assumption_ids": [
+        "A_transport"
+      ],
+      "derivation": "Reported mean glucose 89.1 mg/dL."
+    },
+    "age_center": {
+      "evidence_ids": [
+        "taiwan_age_mean"
+      ],
+      "assumption_ids": [
+        "A_transport"
+      ],
+      "derivation": "Reported mean age 63.91 years."
+    },
+    "female_center": {
+      "evidence_ids": [
+        "taiwan_male_fraction"
+      ],
+      "assumption_ids": [
+        "A_sex"
+      ],
+      "derivation": "1-34.6/100."
+    },
+    "bmi_log_coefficient": {
+      "evidence_ids": [
+        "macad_all_log_BMI_r",
+        "taiwan_BMI_mean",
+        "taiwan_fasting_insulin_mean",
+        "taiwan_insulin_r_fasting_glucose"
+      ],
+      "assumption_ids": [
+        "A_log",
+        "A_cov",
+        "A_transport"
+      ],
+      "derivation": "With sY=sqrt(total_log_variance), sB=sqrt(log(1+(3.53/24.36)^2)), rGI=0.38*(4.14/7.1)/sY, assumed rBI=0.50 and rBG=0.25: ((rBI-rBG*rGI)/(1-rBG^2))*sY/sB."
+    },
+    "glucose_coefficient": {
+      "evidence_ids": [
+        "taiwan_insulin_r_fasting_glucose",
+        "taiwan_fasting_glucose_mean",
+        "taiwan_fasting_insulin_mean"
+      ],
+      "assumption_ids": [
+        "A_log",
+        "A_cov",
+        "A_transport"
+      ],
+      "derivation": "((rGI-0.25*0.50)/(1-0.25^2))*sY/9.93. 9.93 is reported raw glucose SD."
+    },
+    "age_coefficient": {
+      "evidence_ids": [
+        "taiwan_insulin_r_age",
+        "taiwan_age_mean",
+        "taiwan_fasting_insulin_mean"
+      ],
+      "assumption_ids": [
+        "A_log",
+        "A_cov",
+        "A_transport"
+      ],
+      "derivation": "-0.04*(4.14/7.1)/8.32; assumes age independent of other predictors."
+    },
+    "female_log_shift": {
+      "evidence_ids": [
+        "macad_men_fasting_insulin_median",
+        "macad_women_fasting_insulin_median"
+      ],
+      "assumption_ids": [
+        "A_sex"
+      ],
+      "derivation": "0.08 is an explicit adjusted-effect assumption, contextually informed by unadjusted sex medians."
+    },
+    "residual_log_sd": {
+      "evidence_ids": [
+        "taiwan_fasting_insulin_mean",
+        "taiwan_insulin_r_age",
+        "taiwan_insulin_r_fasting_glucose"
+      ],
+      "assumption_ids": [
+        "A_log",
+        "A_cov",
+        "A_sex"
+      ],
+      "derivation": "Square root of total log variance minus the assumed predictor-explained log variance and sex variance; computed from declared covariance assumptions."
+    },
+    "glucose_knots": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_tails"
+      ],
+      "derivation": "Explicit unsupported bounded-extrapolation choice; see A_tails."
+    },
+    "glucose_tail_scale": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_tails"
+      ],
+      "derivation": "Explicit unsupported bounded-extrapolation choice; see A_tails."
+    },
+    "glucose_tail_weight": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_tails"
+      ],
+      "derivation": "Explicit unsupported bounded-extrapolation choice; see A_tails."
+    },
+    "bmi_bounds": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_tails"
+      ],
+      "derivation": "Explicit unsupported bounded-extrapolation choice; see A_tails."
+    },
+    "source_context_recipe": {
+      "evidence_ids": [
+        "taiwan_age_mean",
+        "taiwan_BMI_mean",
+        "taiwan_fasting_glucose_mean",
+        "taiwan_fasting_insulin_mean",
+        "taiwan_male_fraction",
+        "macad_men_age_median",
+        "macad_men_age_iqr",
+        "macad_men_BMI_median",
+        "macad_men_BMI_iqr",
+        "macad_men_fasting_glucose_median",
+        "macad_men_fasting_glucose_iqr",
+        "macad_men_fasting_insulin_median",
+        "macad_men_fasting_insulin_iqr",
+        "macad_women_age_median",
+        "macad_women_age_iqr",
+        "macad_women_BMI_median",
+        "macad_women_BMI_iqr",
+        "macad_women_fasting_glucose_median",
+        "macad_women_fasting_glucose_iqr",
+        "macad_women_fasting_insulin_median",
+        "macad_women_fasting_insulin_iqr"
+      ],
+      "assumption_ids": [
+        "A_cov",
+        "A_taiwan_context",
+        "A_macad_context",
+        "A_seeds"
+      ],
+      "derivation": "Source covariates only; fixed pseudo-population reconstruction. Original source row counts are retained in source records, not replaced by simulation count."
+    }
+  }
+}

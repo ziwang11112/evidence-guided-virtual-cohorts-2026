@@ -1,6 +1,14 @@
 # Evidence-guided virtual cohort system
 
-Version 0.8.0 — a reviewed joint-source generator revision and reserved-data evaluation, 29 October 2026. M1–M7 reports remain historical snapshots.
+Current research stage: M10 analytical-feasibility screen, completed 30 October 2026 UTC (29 October local). The shared harness code is unchanged from the prior stage; milestone reports remain historical snapshots.
+
+Current results: [M10 feasibility report](MILESTONE_10_RESULTS.md). Four independent Agent constructions generated twelve frozen tables across NHANES fasting insulin (1,961 participants) and PNS HbA1c (7,979). Insulin BMI association/curvature and HbA1c age/BMI point directions were stable across both constructions and all residual draws. Interactions and HbA1c curvature were not reliably preserved; magnitudes differed. This supports selected analytical uses, not general synthetic-data validity or Agent-framework superiority. All 48 primary comparison records and secondary analyses are retained.
+
+Study design: [scientific analysis utility and contribution experiments](docs/SCIENTIFIC_ANALYSIS_UTILITY_PLAN.md). The initial 12-table feasibility stage is now complete; larger confirmation and additional modes remain proposed.
+
+[M9 task preparation](MILESTONE_9_PREPARATION.md) provides the two real-data packages, admitted external evidence and reserved analysis specifications. Its original 30-table comparison was superseded before generation by the user's feasibility-first scope.
+
+The primary objective is the evidence-guided data method's feasibility and downstream scientific utility. A capable ordinary Agent is a valid implementation. The earlier 30-table framework-comparison schedule is historical and no longer a requirement. M10 used curated evidence, source-only retention, isolated generator execution and a complete freeze before real-data evaluation; no outcome-informed scientific generator revision occurred.
 
 See [M8 joint-evidence results](MILESTONE_8_RESULTS.md), [current validation](m8_validation.json), [M7 evidence-map and retention report](MILESTONE_7_RESULTS.md), [M6 constructive probe results](MILESTONE_6_RESULTS.md), [M5 new-period results](MILESTONE_5_RESULTS.md), [M4 source-only development results](MILESTONE_4_RESULTS.md), [M3 target results and limitations](MILESTONE_3_RESULTS.md), [historical M2 progress](MILESTONE_2_PROGRESS.md), and the [interactive architecture document](docs/system-explorer/index.html). The HTML retains its labelled M1 snapshot and links to newer progress.
 

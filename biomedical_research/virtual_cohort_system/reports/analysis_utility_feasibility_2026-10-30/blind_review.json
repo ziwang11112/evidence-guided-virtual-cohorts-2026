@@ -1,0 +1,134 @@
+{
+  "schema_version": "m10-independent-blind-review-1",
+  "target_outcomes_read": false,
+  "reference_value_files_read": false,
+  "generated_tables_read": false,
+  "other_constructions_read": false,
+  "scientific_generators_executed": false,
+  "scope": {
+    "evaluator": [
+      "analysis.py",
+      "gates.py",
+      "evaluate.py",
+      "test_evaluator.py",
+      "INFERENCE.md",
+      "FREEZE_INTERFACE.md"
+    ],
+    "controller": "work/m10/freeze_campaign.py",
+    "point_estimator": "work/analysis-utility-preparation-2026-10-29/methods/analytical_points.py",
+    "harness_interfaces": [
+      "cohort_harness/lifecycle.py",
+      "cohort_harness/execution.py"
+    ],
+    "constructions": [
+      "ia",
+      "ha"
+    ],
+    "construction_artifacts": "Candidate generator/specification/decision, selection records, source portfolios and execution receipts only",
+    "exclusions": "No target/reference values, generated.csv, ib/hb contents, older results, project README or other-agent summaries. This is not an audit of all four constructions or a full four-method comparison."
+  },
+  "blocking_implementation_bugs": [],
+  "ready_for_locked_evaluation_within_reviewed_scope": true,
+  "readiness_condition": "Complete the controller's separate admission review for the uninspected constructions before the all-construction gate. The assertion hardening observation was fixed and statically rechecked before release.",
+  "findings": [
+    {
+      "id": "N1",
+      "classification": "nonblocking_implementation_hardening",
+      "severity": "low",
+      "blocking": false,
+      "status": "resolved_before_release",
+      "location": "work/m10/freeze_campaign.py:21",
+      "title": "Optimized Python disables controller assertions",
+      "detail": "The reviewed initial controller used assert for launch integrity, original preparation seals, review readiness, selection blindness, candidate containment and output seed completeness. The controller replaced every assertion with explicit require checks raising ValueError before release. A focused static reread confirms the checks now execute under optimized Python too.",
+      "recommendation": "No further action. No scientific parameter change or generator rerun was needed."
+    },
+    {
+      "id": "L1",
+      "classification": "scientific_limitation",
+      "severity": "informational",
+      "blocking": false,
+      "location": "work/m10/ia/candidates/f/model_spec.json",
+      "title": "Insulin relationships remain conditional on declared reconstruction and transport assumptions",
+      "detail": "The Gaussian/lognormal joint model, zero unreported within-tertile covariance, zero conditional sex shift, synthetic source covariates and damped high-BMI/high-glucose tails are explicitly disclosed assumptions. Their scientific adequacy is unestablished, but the generator implements the declared model. Unsupported relationships are not implementation defects and do not justify audit-driven tuning."
+    },
+    {
+      "id": "L2",
+      "classification": "scientific_limitation",
+      "severity": "informational",
+      "blocking": false,
+      "location": "work/m10/ha/candidates/f/model_spec.json",
+      "title": "HbA1c conditional locations, BMI response and residual structure are only partly source informed",
+      "detail": "Using marginal medians as conditional locations, the tanh BMI term, skewed residual distribution, residual scale allocation and output bounds are explicitly marked assumptions. The code matches them, including the positive arithmetic mean of its median-zero shifted-lognormal residual. Source replay agreement is not target utility or an independent validation of these assumptions."
+    },
+    {
+      "id": "L3",
+      "classification": "uncertainty_limitation",
+      "severity": "informational",
+      "blocking": false,
+      "location": "work/m10/evaluator/analysis.py:265",
+      "title": "Three residual seeds do not quantify source or transport uncertainty",
+      "detail": "The inspected generators vary independent individual residuals with fixed parameters. Candidate decisions, source portfolios and evaluator summaries correctly identify these as residual Monte Carlo variation; they do not supply source-study, model, parameter or transport uncertainty. No additional independent-task or clinical evidence claim is supported."
+    },
+    {
+      "id": "L4",
+      "classification": "inference_limitation",
+      "severity": "informational",
+      "blocking": false,
+      "location": "work/m10/evaluator/INFERENCE.md",
+      "title": "Survey inference and evidence scope remain restricted",
+      "detail": "NHANES uses the declared first-stage with-replacement Taylor approximation and conservative domain residual degrees of freedom. PNS has no released PSU/stratum design here and receives weighted and unweighted point estimates only. No clinical margin, equivalence claim or generated-row standard error is invented."
+    },
+    {
+      "id": "L5",
+      "classification": "custody_limitation",
+      "severity": "informational",
+      "blocking": false,
+      "location": "work/m10/evaluator/FREEZE_INTERFACE.md",
+      "title": "The release gate provides procedural custody",
+      "detail": "The CLI completes verify_manifest and records the gate before loading reserved outcomes, then rehashes bindings. Candidate lineages and successful execution receipts are verified by the existing harness. This provides byte integrity and procedural separation, not cryptographic proof of agent blindness or an adversarially isolated reference service. The documentation states this boundary."
+    }
+  ],
+  "checks": [
+    {
+      "name": "source_versus_individual_variability",
+      "result": "consistent",
+      "evidence": "Both inspected generators sample residuals with fixed parameters; source portfolio limitations and evaluator residual summaries preserve that distinction."
+    },
+    {
+      "name": "generator_parameter_math",
+      "result": "consistent",
+      "evidence": "Static algebra from the ia specification gives total log variance 0.2926725747545357, reconstructed arithmetic insulin mean 7.1000000000000005 and SD 4.140000000000001 under its stated untruncated joint model. HbA1c age slopes are 0.153/10 and 0.191/10. No generator was imported or executed."
+    },
+    {
+      "name": "scientific_model_retention",
+      "result": "confirmed_by_hashes",
+      "evidence": "For both ia and ha, initial and final generator.py and model_spec.json are byte-identical. Candidate final decisions state retention, not scientific improvement."
+    },
+    {
+      "name": "units_transforms_and_observations",
+      "result": "consistent_by_code_review",
+      "evidence": "Generators copy the observed frame and append only their named outcome. Insulin regression uses natural log insulin, while arithmetic means and derived HOMA1 use raw insulin with glucose/405. HbA1c remains percent with coefficient units in percentage points. The evaluator requires exact observed-column/row equality before generated analysis. No generated table was opened to recheck runtime preservation."
+    },
+    {
+      "name": "full_survey_covariance_and_domain_retention",
+      "result": "consistent_by_code_and_existing_test_review",
+      "evidence": "Full positive-fasting-weight records are retained before eligible-domain selection. Weighted influences are joined by ID and reindexed with zero outside the domain. PSU totals are nested within strata and use m/(m-1) times centered outer products. Curvature variance uses the squared contrast multiplier. Reviewed invented-data tests include absent-domain PSUs, multivariate covariance, nesting and permutation. Tests were not rerun."
+    },
+    {
+      "name": "endpoint_parity",
+      "result": "consistent",
+      "evidence": "Reference and generated outcomes share the same frozen point function. All planned endpoints and nonestimable cells are preserved; generated failures receive the complete reference endpoint family. PNS retains the same endpoint family in its unweighted sensitivity."
+    },
+    {
+      "name": "selection_and_receipt_metadata",
+      "result": "consistent_with_blind_source_only_selection",
+      "evidence": "ia/ha pre-execution selection timestamps precede their final 92101-92103 execution receipts. The six inspected final receipts report success and generator entry with scientific validity not assessed. Each inspected source portfolio contains all three 91101-91103 seeds; ia has 13 checks and ha 15, with no recorded computation errors. Receipt verification was not invoked because it would parse generated.csv."
+    },
+    {
+      "name": "freeze_before_reference_loading",
+      "result": "consistent_for_declared_CLI",
+      "evidence": "evaluate.main calls verify_manifest before execute_after_gate/load_case. The current freeze script additionally compares opaque prepared bytes to original preparation seals and binds immutable pre-execution selection when available. Its execution-location adapter is also bound; the evaluator independently requires shared observed-input hash equality. Direct Python helper calls remain a procedural controller responsibility."
+    }
+  ],
+  "verification_limits": "Static source/metadata review and a small specification arithmetic/hash check only. Existing invented-data tests were read but not rerun. The evaluator CLI, scientific generators, target loaders, candidate verifiers and execution verifiers were not executed. No source, generator, harness or evaluator code was changed by this review."
+}

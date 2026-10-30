@@ -1,0 +1,11 @@
+# Initial scientific decision
+
+Use an ordinary conditional lognormal insulin construction derived from the admitted Taiwan source. Preserve every observed row and generate only fasting_insulin_uU_ml. No target insulin, target reserved analysis, other construction, prior result, or literature retrieval was used. The evidence packet was curated upstream.
+
+The complete model uses arithmetic insulin mean/SD and raw Pearson correlations through explicit Gaussian/lognormal moment identities. BMI association and BMI-glucose covariance are reconstructed from insulin-tertile mean contrasts with observed group sizes, assuming zero unreported within-tertile covariance. Tertile summaries are not directly reversed as conditional regression coefficients. The exact static arithmetic and every model coefficient are retained in static_derivation.json and model_spec.json.
+
+The source has older East Asian community volunteers without diabetes, while the target includes broader ages, ancestry, adiposity and glycemia. Source population replay is synthetic and age restricted to 50-79 to satisfy task bounds, so all checks are approximate. Assay equivalence is unestablished. Repeated seeds vary only individual residuals, not evidence, model, source-population, or transport uncertainty. No between-source meta-analysis or independent replication is claimed. FHS standardized coefficients and pmol/L assay values, MACAD transformed/adjusted evidence, and DASA selected reference tails are not used as numerical calibration targets.
+
+Age association is model dependent, and conditional sex effect is assumed zero. Nonlinear tails use declared damped extrapolation above glucose 126 and BMI 40, with assumed scales. These functions allow numerical analyses but do not establish those biological shapes. Cross-sectional association inspection is source-informed; sex interactions, extreme-glycemia behavior, causal effects, clinical decisions, measurement replacement, uncertainty calibration and target conclusions remain unassessed.
+
+The source-only final-selection rule and all fixed seed schedules were written before diagnostics in selection_plan.json. Retain unless the prespecified diagnostic rule or a concrete implementation error warrants a permitted revision; keep all initial results. Source fit is not target utility.
