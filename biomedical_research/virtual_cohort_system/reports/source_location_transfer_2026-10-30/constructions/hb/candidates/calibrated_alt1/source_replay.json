@@ -1,0 +1,838 @@
+{
+  "schema_version": 1,
+  "contexts": [
+    {
+      "id": "alt1",
+      "population": "Published SHIP-Trend baseline approximation; Same margins; assumed moderate positive Gaussian-copula dependence; open>=70 compressed to70-79; original n4420 differs from HbA1c n4402.",
+      "reason": "Fixed source-X sensitivity for marginal-to-conditional location calibration; no target data.",
+      "assumption_ids": [
+        "M11_source_X",
+        "M11_support",
+        "M11_BMI",
+        "M11_dependence",
+        "M11_overlap"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "HbA1c %, age integer years, BMI kg/m^2, sex labels; age slopes divided by10 with originals retained."
+      },
+      "input": {
+        "path": "source_contexts/alt1.csv",
+        "sha256": "ce797504f461faf90f3e3d30d7fd9ab61da098babe747a6de9bf46e83a928749",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "ship_SHIP_Trend_men_quantile_0_25",
+          "evidence_id": "ship_SHIP_Trend_men_quantile_0.25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "q": 0.25,
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_men_median_None",
+          "evidence_id": "ship_SHIP_Trend_men_median_None",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_men_quantile_0_75",
+          "evidence_id": "ship_SHIP_Trend_men_quantile_0.75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "q": 0.75,
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_men_age_beta_per_year",
+          "evidence_id": "ship_SHIP_Trend_men_age_beta_per_year",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "HbA1c percentage points per year",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "outcome": "hba1c_pct",
+            "predictors": [
+              "age_years",
+              "bmi_kg_m2"
+            ],
+            "term": "age_years",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_male_20",
+          "evidence_id": "m11_agebin_male_20",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_male_30",
+          "evidence_id": "m11_agebin_male_30",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_male_40",
+          "evidence_id": "m11_agebin_male_40",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                40,
+                41,
+                42,
+                43,
+                44,
+                45,
+                46,
+                47,
+                48,
+                49
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_male_50",
+          "evidence_id": "m11_agebin_male_50",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_male_60",
+          "evidence_id": "m11_agebin_male_60",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_male_70",
+          "evidence_id": "m11_agebin_male_70",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "male"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "ge",
+              "value": 70
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_women_quantile_0_25",
+          "evidence_id": "ship_SHIP_Trend_women_quantile_0.25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "q": 0.25,
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_women_median_None",
+          "evidence_id": "ship_SHIP_Trend_women_median_None",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_women_quantile_0_75",
+          "evidence_id": "ship_SHIP_Trend_women_quantile_0.75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "q": 0.75,
+            "column": "hba1c_pct",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "ship_SHIP_Trend_women_age_beta_per_year",
+          "evidence_id": "ship_SHIP_Trend_women_age_beta_per_year",
+          "status": "approximate",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "HbA1c percentage points per year",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "outcome": "hba1c_pct",
+            "predictors": [
+              "age_years",
+              "bmi_kg_m2"
+            ],
+            "term": "age_years",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_female_20",
+          "evidence_id": "m11_agebin_female_20",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_female_30",
+          "evidence_id": "m11_agebin_female_30",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36,
+                37,
+                38,
+                39
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_female_40",
+          "evidence_id": "m11_agebin_female_40",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                40,
+                41,
+                42,
+                43,
+                44,
+                45,
+                46,
+                47,
+                48,
+                49
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_female_50",
+          "evidence_id": "m11_agebin_female_50",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_female_60",
+          "evidence_id": "m11_agebin_female_60",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "in",
+              "value": [
+                60,
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68,
+                69
+              ]
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_agebin_female_70",
+          "evidence_id": "m11_agebin_female_70",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "1",
+            "selection": [
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "female"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "age_years",
+              "op": "ge",
+              "value": 70
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_age_years_25",
+          "evidence_id": "m11_ship_age_years_25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "year",
+            "selection": [],
+            "missing_policy": "error",
+            "q": 0.25,
+            "column": "age_years",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_age_years_50",
+          "evidence_id": "m11_ship_age_years_50",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "year",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "age_years",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_age_years_75",
+          "evidence_id": "m11_ship_age_years_75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "year",
+            "selection": [],
+            "missing_policy": "error",
+            "q": 0.75,
+            "column": "age_years",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_grossmann_age_years_mean",
+          "evidence_id": "m11_grossmann_age_years_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "year",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "age_years"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_grossmann_age_years_sd",
+          "evidence_id": "m11_grossmann_age_years_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "year",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "age_years"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_bmi_kg_m2_25",
+          "evidence_id": "m11_ship_bmi_kg_m2_25",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "q": 0.25,
+            "column": "bmi_kg_m2",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_bmi_kg_m2_50",
+          "evidence_id": "m11_ship_bmi_kg_m2_50",
+          "status": "approximate",
+          "operator": {
+            "kind": "median",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "bmi_kg_m2",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_bmi_kg_m2_75",
+          "evidence_id": "m11_ship_bmi_kg_m2_75",
+          "status": "approximate",
+          "operator": {
+            "kind": "quantile",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "q": 0.75,
+            "column": "bmi_kg_m2",
+            "method": "linear"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_grossmann_bmi_kg_m2_mean",
+          "evidence_id": "m11_grossmann_bmi_kg_m2_mean",
+          "status": "approximate",
+          "operator": {
+            "kind": "mean",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "bmi_kg_m2"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_grossmann_bmi_kg_m2_sd",
+          "evidence_id": "m11_grossmann_bmi_kg_m2_sd",
+          "status": "approximate",
+          "operator": {
+            "kind": "sd",
+            "unit": "kg/m^2",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "bmi_kg_m2"
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        },
+        {
+          "id": "m11_ship_male_fraction",
+          "evidence_id": "m11_ship_male_fraction",
+          "status": "approximate",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [],
+            "missing_policy": "error",
+            "event": {
+              "column": "sex",
+              "op": "eq",
+              "value": "male"
+            }
+          },
+          "assumption_ids": [
+            "M11_measurement"
+          ],
+          "reason": "Source-only consistency diagnostic under the fixed approximated source-X distribution; covariate checks describe the approximation, and fitted medians are not independent validation."
+        }
+      ]
+    }
+  ]
+}

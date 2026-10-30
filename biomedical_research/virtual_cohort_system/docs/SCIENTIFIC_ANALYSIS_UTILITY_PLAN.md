@@ -6,6 +6,10 @@ Scope clarified by the user on 29 October 2026 (local time): **the primary objec
 
 Execution update, 30 October UTC: the 12-table Stage B screen is complete; see [M10 results](../MILESTONE_10_RESULTS.md). It showed partial analytical reuse and clear relation-specific failures. The remaining stages below are prospective. The two released targets are now development observations and cannot serve as fresh confirmation of changes inspired by their results.
 
+Post-M10 review update, 29 October local time: see the [PRO review verification and adoption record](PRO_REVIEW_ADOPTION_2026-10-29.md). The immediate decision is to make one study-statistic conversion concrete before expanding cases. Distinguish benefits from additional evidence, from its method of interpretation, and from reuse of a frozen generator. A same-evidence statistical reference is claim-specific; superiority of a special Agent remains outside the primary requirement. This update does not amend frozen historical protocols or announce a new run.
+
+M11 execution update: the proposed source-location conversion has now been tested on a fresh HbA1c endpoint in NHANES 2021–2023; see [M11 results](../MILESTONE_11_RESULTS.md). Source calibration worsened target location and subgroup discrepancies in all paired outputs, while age/BMI slopes were preserved by the additive structure. Stop that scalar-calibration branch. The next proposal must address evidence for source-to-target transport, rather than improve source fit alone; no new confirmation target or successful extension is claimed yet.
+
 ## The paper we want to test
 
 **Can an Agent convert heterogeneous external study evidence into reusable virtual data that support scientific analyses in a target population, including analyses whose answers were not provided to the Agent?**

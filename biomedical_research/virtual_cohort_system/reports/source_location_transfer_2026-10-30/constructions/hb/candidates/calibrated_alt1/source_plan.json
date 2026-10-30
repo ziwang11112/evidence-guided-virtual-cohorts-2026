@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "fixed_before_target_evaluation": true,
+  "scientific_intervention": "Inherited ha/hb generator forms; only two sex-specific location parameters change per calibrated version",
+  "source_covariate_seed": 94000,
+  "source_seeds": [94101,94102,94103],
+  "target_seeds_for_custodian_only": [93101,93102,93103],
+  "source_n": 44200,
+  "sex_order": ["male","female"],
+  "age_bin_lower": [20,30,40,50,60,70],
+  "age_bins_published": ["20-29","30-39","40-49","50-59","60-69",">=70"],
+  "baseline_counts": {"male":[190,309,414,456,408,368],"female":[194,388,465,475,435,318]},
+  "age_recipe": "Each integer age in each ten-year bin occurs the published baseline bin count times; source total is baseline n4420 multiplied by10. Last open >=70 bin is compressed to70-79 for task support, not a claim of source maximum. Within-bin uniform ages assumed.",
+  "bmi_quartiles": [24.5,27.5,31.0],
+  "bmi_bounds_assumed": [15.0,50.0],
+  "bmi_sex_distribution": "Same pooled marginal within both sexes because raw sex-specific quantiles unknown",
+  "scenarios": [
+    {"id":"primary","latent_correlation":0.0,"bmi_quantile_family":"asymmetric_normal","description":"Source sex-age bins; pooled quartile-matched BMI; independent within-sex age and BMI"},
+    {"id":"alt1","latent_correlation":0.35,"bmi_quantile_family":"asymmetric_normal","description":"Same margins; assumed moderate positive Gaussian-copula dependence"},
+    {"id":"alt2","latent_correlation":0.35,"bmi_quantile_family":"asymmetric_log_normal","description":"Same dependence ranks as alt1; log-BMI tail sensitivity with identical published quartile anchors"}
+  ],
+  "copula_recipe": "Within sex use ascending row ranks over the fixed age lattice as latent Gaussian age quantiles. Use one fixed independent normal vector per sex. Rank rho*z_age+sqrt(1-rho^2)*z_noise and assign exactly stratified BMI quantiles (rank+0.5)/n; same latent ranks for alt1/alt2. Integer ages introduce ties; reported correlation is diagnostic, rho is latent not Pearson age-BMI correlation.",
+  "bmi_quantile_recipe": "Normal family:27.5+s_side*Phi^-1(u), s_left=(27.5-24.5)/Phi^-1(.75),s_right=(31-27.5)/Phi^-1(.75). Log family:27.5*exp(t_side*Phi^-1(u)),t_left=log(27.5/24.5)/Phi^-1(.75),t_right=log(31/27.5)/Phi^-1(.75). Clip to15-50; unknown tails are assumed.",
+  "calibration": {"estimator":"Pool verified initial generated rows over all3source seeds within sex/context; type7 median, not average of seed medians","targets_pct":{"male":5.3,"female":5.2},"operation":"new_location=initial_location+published_median-pooled_initial_median","ha_requirement":"Central pooled order statistics must both lie strictly inside3-20 before translating location","candidate_names":["initial","calibrated_primary","calibrated_alt1","calibrated_alt2"],"revision_parent":"initial","keep_all_versions":true,"target_feedback_allowed":false},
+  "evidence_roles": {"masuch2019":"HbA1c medians/quartiles, age slopes, pooled age/BMI quartiles","volzke2015":"Raw sex-age-bin counts; weighted BMI not used","grossmann2024":"Context-only overlapping-cohort age/BMI means/SD; diagnostic cross-check, no fitting"},
+  "unassessed": ["Exact n4402 source subset covariates","Actual within-bin ages and >79 attained-age distribution","Raw sex-specific BMI marginals","Age-BMI dependence","Residual heterogeneity","Target transport","Parameter or model uncertainty"]
+}

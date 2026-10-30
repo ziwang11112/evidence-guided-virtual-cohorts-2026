@@ -1,0 +1,50 @@
+{
+  "schema_version": "m11-protocol-1",
+  "question": "Does source-population calibration of marginal locations improve downstream use of a frozen virtual biomarker generator?",
+  "scope": "Same-evidence paired mechanism screen; not new model training, full framework superiority, or a novel-statistics claim",
+  "target": {
+    "survey": "NHANES August 2021-August 2023",
+    "outcome": "hba1c_pct",
+    "observed": ["age_years", "sex", "bmi_kg_m2"],
+    "row_id": "row_id",
+    "age_range_inclusive": [20, 79],
+    "weight": "WTPH2YR",
+    "eligibility": "Valid observed age/sex, finite positive BMI and phlebotomy weight, finite measured HbA1c for evaluation eligibility only; no selection on HbA1c magnitude or diagnosis",
+    "freshness": "New endpoint evaluation after bounded project audit; survey and some participants/covariates previously used for other outcomes, not an entirely new cohort",
+    "public_metadata_exposure": "Custodian saw official codebook public frequency/range sections before filtered metadata access; no such values sent to builders or used for calibration"
+  },
+  "families": ["ha", "hb"],
+  "family_origin": "Two inherited Agent-authored M10 structures; not two new independent LLM constructions",
+  "arms": ["initial", "calibrated_primary", "calibrated_alt1", "calibrated_alt2"],
+  "source_seeds": [94101, 94102, 94103],
+  "target_seeds": [93101, 93102, 93103],
+  "expected_target_tables": 24,
+  "scientific_change": "Only sex-specific location parameters may change through source-only calibration. Within each family generator code, age/BMI response and residual structure stay fixed. Source scientist defines primary and two alternative source-covariate scenarios before feedback.",
+  "information_contrast": "Same admitted source packet and context scenarios in both initial and calibrated arms; source packet expands M10 evidence but is shared in M11",
+  "calibration": "Generic additive-location calibration using actual frozen source outputs and pooled three-seed source medians by sex; published marginal medians are constraints rather than automatically conditional locations. Check actual replay after adjustment, preserve all failures and scenarios. Clipping/nontranslation must be checked, not assumed away.",
+  "primary": ["median_male", "median_female", "sex_median_mae"],
+  "reuse": ["mean_male_20_39", "mean_male_40_59", "mean_male_60_79", "mean_female_20_39", "mean_female_40_59", "mean_female_60_79", "age_sex_cell_mean_mae", "q90_all"],
+  "preservation": ["age_per_10y", "bmi_per_5"],
+  "estimation": {
+    "target_quantile": "Left inverse weighted empirical CDF with ties aggregated; identical real/generated estimator",
+    "regression": "Weighted least squares HbA1c on intercept, age/10, BMI/5, and female indicator",
+    "errors": "HbA1c percentage points; equal average over the two sex median errors and six cell mean errors; missing cells retained as unassessed, not silently omitted",
+    "uncertainty": "Descriptive point estimates and residual ranges only; no clinical equivalence claim, survey confidence interval or seed-based significance test"
+  },
+  "decision_rule": {
+    "primary_direction": "For each family, compare every paired seed's calibrated_primary sex-median MAE against initial. All three decreases is consistent improvement within that family, not independent replication or clinical equivalence. Retain magnitude and mixed outcomes.",
+    "sensitivity": "Report all alternative-source scenarios; shared improvement is robustness within these chosen assumptions, not posterior probability",
+    "reuse": "Report cell-mean and Q90 changes independently; primary improvement does not imply reusable improvement",
+    "preservation": "Sex-specific additive offsets should leave age/BMI WLS slopes unchanged absent clipping; test numerical difference against 1e-10 as an implementation identity, not a clinical tolerance",
+    "stop": "After fixed scenarios and seeds, no target-informed revision. Source improvement without target improvement is a negative transfer result, not a reason to retune the revealed target."
+  },
+  "release_rule": "Bind protocol, scenario plan, source-admission records, evaluator, visible inputs, sealed reference hash, all candidate freezes and all 24 successful generation receipts before the evaluator opens/parses the sealed reference or computes any target statistics. Prior authorized custodian parsing solely for preparation/eligibility is documented separately. Builders never receive target feedback during construction.",
+  "limits": [
+    "Source covariate distributions remain approximations; same-cohort source papers are not independent evidence",
+    "One new endpoint/survey cycle is a diagnostic screen",
+    "Preservation is partially mathematical by construction",
+    "Residual draws do not estimate source, structure or transport uncertainty",
+    "Only generator process is OS isolated; Agent file access is procedurally restricted",
+    "No participant-level tables are to be uploaded to GitHub"
+  ]
+}

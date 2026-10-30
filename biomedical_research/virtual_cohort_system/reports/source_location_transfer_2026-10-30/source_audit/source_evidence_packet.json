@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "purpose": "Source-only M11 location-calibration design; no target data or experiment result estimates used",
+  "admission_status": "Extraction packet for controller admission; this file is not a registry approval",
+  "sources": [
+    {
+      "id": "masuch2019",
+      "doi": "10.1186/s12902-019-0338-7",
+      "url": "https://link.springer.com/article/10.1186/s12902-019-0338-7",
+      "primary_alternative": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6371438/",
+      "artifact": "work/analysis-utility-preparation-2026-10-29/evidence/sources/PMC6371438.xml",
+      "sha256": "8dc92270618139c256ee6c601584f8aeeba6e416e37fdea858cd7f63a9f07d4e",
+      "population": "SHIP-Trend baseline 2008-2012; n=4402 after excluding pregnancy and missing HbA1c from n=4420; whole population includes self-reported diabetes; northeastern Germany",
+      "measurement": "Bio-Rad Diamat high-performance liquid chromatography; HbA1c percent; fasting blood samples in SHIP-Trend",
+      "overlap": "Same SHIP-Trend baseline cohort as volzke2015 and grossmann2024; not independent replication",
+      "extractions": {
+        "pooled_covariates": {
+          "locator": "Table 1 (XML Tab1)",
+          "age_years": {"q25": 40, "median": 53, "q75": 64},
+          "bmi_kg_m2": {"q25": 24.5, "median": 27.5, "q75": 31.0},
+          "male_percent": 48.6,
+          "statistical_definition": "Raw descriptive medians (25th;75th percentile), not means or confidence intervals; quantile interpolation convention unspecified",
+          "uncertainty": "No sampling uncertainty reported for these descriptive quantiles"
+        },
+        "hba1c_pct_by_sex": {
+          "locator": "Results, Population characteristics (XML Par20)",
+          "male": {"q25": 5.0, "median": 5.3, "q75": 5.8},
+          "female": {"q25": 4.8, "median": 5.2, "q75": 5.6},
+          "statistical_definition": "Unadjusted sex-specific marginal quantiles in the whole analyzed cohort, not conditional intercepts or healthy-reference limits",
+          "uncertainty": "No sampling uncertainty or quantile interpolation convention reported"
+        },
+        "age_slope": {
+          "locator": "Table 2 (XML Tab2), whole SHIP-Trend population, men/women, age per 10 years; Methods Statistical analysis (Par19)",
+          "unit": "HbA1c percentage points per 10 years",
+          "male": {"estimate": 0.153, "se": 0.011},
+          "female": {"estimate": 0.191, "se": 0.011},
+          "adjustment": ["BMI"],
+          "statistical_definition": "Sex-specific multivariable linear-regression conditional-mean coefficients; no spline term in these two whole SHIP-Trend strata",
+          "derived_per_year": {"male": 0.0153, "female": 0.0191, "se_both": 0.0011},
+          "derivation": "Divide estimate and standard error by ten; not a quantile-regression slope"
+        }
+      },
+      "unknown": ["Sex-specific raw BMI distribution", "Sex-specific exact age distribution", "Age-BMI joint distribution or correlation", "Source conditional intercepts", "Conditional residual distribution", "Source BMI coefficient", "Numeric age spline knots for other strata"],
+      "source_support_caution": "Paper describes sampling adults age 20-79; this is not proof that age at examination has a maximum of 79. Other baseline reports include ages above 79."
+    },
+    {
+      "id": "volzke2015",
+      "doi": "10.3238/arztebl.2015.0185",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4390827/",
+      "publisher_url": "https://di.aerzteblatt.de/int/archive/article/168755",
+      "artifact": "work/m11/source_audit/PMC4390827.html",
+      "sha256": "677d4e632665610e923945e4d9e07cc3bd84a92a65188a1e2b663421a8ab9ca3",
+      "retrieval": "Primary PMC HTML retrieved directly with Invoke-WebRequest; web search also located publisher/PMC. Europe PMC fullTextXML request failed HTTP500; web open PMC returned a browser challenge.",
+      "population": "Original whole SHIP-Trend baseline n=4420 (2145 men,2275 women), not exactly the Masuch n=4402 analysis subset",
+      "overlap": "Same baseline cohort; shared participants with masuch2019 and grossmann2024",
+      "extractions": {
+        "age_by_sex": {
+          "locator": "Table 1, HTML section T1, SHIP-Trend Number row",
+          "age_bins_as_published": ["20-29", "30-39", "40-49", "50-59", "60-69", ">=70"],
+          "male_counts": [190,309,414,456,408,368],
+          "female_counts": [194,388,465,475,435,318],
+          "male_total": 2145,
+          "female_total": 2275,
+          "statistical_definition": "Absolute participant counts and unweighted within-sex proportions; >=70 is an open-ended final bin",
+          "uncertainty": "These are baseline cohort counts, not estimated sampling uncertainty",
+          "audit": "Counts sum to reported totals. No within-bin ages recoverable."
+        },
+        "weighted_bmi_for_sensitivity_only": {
+          "locator": "Table 2, HTML section T2, BMI row and footnote; Methods Statistical analysis",
+          "male_median": 27.8,
+          "female_median": 27.0,
+          "male_ci95_as_printed": [27.8,27.88],
+          "female_ci95_as_printed": [27.0,27.01],
+          "statistical_definition": "Weighted medians with 95% confidence intervals, not IQRs; SHIP-Trend uses poststratification weights multiplied by inverse participation-probability weights",
+          "primary_calibration_use": false,
+          "reason": "Weighted population estimands do not equal the unweighted Masuch sample distribution; narrow printed intervals cannot be used as individual BMI spread"
+        }
+      }
+    },
+    {
+      "id": "grossmann2024_context_only",
+      "doi": "10.3390/ijms25031485",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10855893/",
+      "artifact": "work/m11/source_audit/PMC10855893.html",
+      "sha256": "baa67aa5b0ae0ba117bff405967acf1074f2c62593c2c5f6d7e4300af7cc442d",
+      "retrieval": "Primary PMC HTML successfully retrieved directly and Table1 inspected; independent subagent also located indexed primary PDF content",
+      "admission": "Not needed for the proposed primary pair; context cross-check only unless separately admitted by controller",
+      "locator": "Table 1, HTML section ijms-25-01485-t001, whole SHIP-TREND column (not the n203 analyzed subset)",
+      "population": "Whole SHIP-Trend baseline n4420; same cohort as preceding two publications",
+      "age_years": {"mean":51.96,"sd":15.46,"missing":0},
+      "bmi_kg_m2": {"mean":28.12,"sd":5.23,"missing":7},
+      "sex_counts": {"male":2145,"female":2275},
+      "statistical_definition": "Means and standard deviations, not medians or standard errors; pooled across sex",
+      "unknown": ["Sex-specific BMI moments", "Age-BMI correlation"]
+    }
+  ],
+  "bounded_search_conclusion": "Actual source covariate summaries permit an assumption-labelled source-location calibration. They do not uniquely identify a sex-specific conditional location or the source joint covariate/residual law. No raw whole-cohort age-BMI correlation was found; independence remains an assumption.",
+  "read_boundary": {
+    "local_model_inputs": ["work/m10/ha/candidates/f/evidence.json","work/m10/ha/candidates/f/model_spec.json","work/m10/ha/candidates/f/generator.py","work/m10/ha/candidates/f/source_replay.json","work/m10/hb/bundle/candidates/final/evidence.json","work/m10/hb/bundle/candidates/final/model_spec.json","work/m10/hb/bundle/candidates/final/generator.py","work/m10/hb/bundle/candidates/final/source_replay.json"],
+    "local_source_inputs": ["work/analysis-utility-preparation-2026-10-29/evidence/hba1c_evidence.json","work/analysis-utility-preparation-2026-10-29/evidence/sources/PMC6371438.txt","work/analysis-utility-preparation-2026-10-29/evidence/sources/PMC6371438.xml"],
+    "target_data_read": false,
+    "m10_result_estimates_read": false,
+    "generator_execution": false,
+    "candidate_created": false
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "parameters": {
+    "location_pct": {
+      "male": 5.3,
+      "female": 5.2
+    },
+    "age_reference": 49.5,
+    "age_slope_per_year": {
+      "male": 0.0153,
+      "female": 0.0191
+    },
+    "bmi_reference": 27.0,
+    "bmi_scale": 7.5,
+    "bmi_amplitude_pct": 0.18,
+    "residual_log_sigma": 0.4,
+    "residual_scale_pct": {
+      "male": 1.2,
+      "female": 1.05
+    },
+    "output_bounds_pct": [
+      3.0,
+      20.0
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_transport",
+      "description": "Transfer SHIP-Trend age associations and sex-specific marginal central distributions from northeastern Germany to the target adults without claiming population equivalence. HbA1c assay/race/treatment differences and selection can change transport."
+    },
+    {
+      "id": "A_location",
+      "description": "Use reported marginal sex medians as conditional location at age 49.5 and BMI 27. The age reference is the midpoint of the admitted 20-79 range, not an extracted source age mean. Location is only approximately calibrated after covariate mixing."
+    },
+    {
+      "id": "A_bmi",
+      "description": "The permitted sources do not identify a contemporaneous BMI effect given only age and sex. Assume 0.18*tanh((BMI-27)/7.5) percentage points, a smooth saturating association with no sex interaction. Values 0.18, 27 and 7.5 are explicit modeling assumptions, not transplanted Hoorn/DIRECT coefficients."
+    },
+    {
+      "id": "A_residual",
+      "description": "Assume independent individual residuals scale*(exp(0.4*Z)-1), Z standard normal, with scales 1.20 in men and 1.05 in women. The rounded scales are a source-IQR-informed but unestimated allocation of marginal spread to residual variation after age; lognormal skew and tail behavior are assumptions. The median-zero residual has positive arithmetic mean."
+    },
+    {
+      "id": "A_bounds",
+      "description": "Clip output to 3-20 percent as a broad assumed numerical support. These are not extracted reference limits and are not evidence-calibrated tail or disease cutoffs."
+    },
+    {
+      "id": "A_source_context",
+      "description": "Superseded source-X scenario metadata for M11: see M11_source_X, M11_BMI, M11_dependence and source_plan.json. Original M10 artificial replay context is not used."
+    },
+    {
+      "id": "A_quantile",
+      "description": "Published quantile conventions are not reported; compare with harness linear-interpolation quantiles as an explicit estimator approximation."
+    },
+    {
+      "id": "A_mapping",
+      "description": "Map source HbA1c percent, age in years and BMI in kg/m^2 to task names. Original per-decade age coefficients and SEs are divided by ten for per-year replay; no outcome conversion is used."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Fixed generator parameters; seeds vary independent individual residuals only. Between-seed variation is not source-study, parameter, model-selection or transport uncertainty."
+    },
+    {
+      "id": "A_omission",
+      "description": "No diabetes-status or treatment model is identified. Right tail, extreme BMI, subgroup and nonlinear scientific results depend strongly on assumptions; no target association validation is implied. Hoorn fully adjusted and DIRECT prospective estimates are not coefficients in this generator."
+    },
+    {
+      "id": "M11_source_X",
+      "description": "Reported sex-age-bin counts from whole SHIP-Trend n4420, replicated10fold, uniform integer age within each bin; exact n4402 pregnancy/missingHbA1c exclusion covariates unknown. Frozen source covariates use no target rows."
+    },
+    {
+      "id": "M11_support",
+      "description": "Open >=70 bin compressed to70-79 for inherited task support. Sampling age20-79 is not proof of source examination maximum. BMI clipped15-50 is numerical assumption, not published support."
+    },
+    {
+      "id": "M11_BMI",
+      "description": "Both sexes share a pooledBMI marginal matching Masuch quartiles24.5,27.5,31.0. Primary/alt1 asymmetric-normal quantile tails and alt2 log-BMI tails are assumed; no raw sex-specificBMI law identified."
+    },
+    {
+      "id": "M11_dependence",
+      "description": "Primary uses independence within sex; alt1/alt2 fixed Gaussian-copula latent rho+0.35, not a reported correlation. Actual source age-BMI dependence unknown."
+    },
+    {
+      "id": "M11_measurement",
+      "description": "Identity source/task variables and units; published quantile method unknown, replay uses type7 linear interpolation. Mean regression slopes as median-location shifts require additive invariant residual law."
+    },
+    {
+      "id": "M11_overlap",
+      "description": "Masuch2019,Volzke2015,Grossmann2024 share SHIP-Trend baseline participants. Grossmann pooled means/SD are context-only diagnostics; weighted VolzkeBMI is not fit. No independent replication."
+    },
+    {
+      "id": "M11_calibration",
+      "description": "Prospectively fixed operation: sex location shift equals source published median minus pooled verified initial source outcome median over seeds94101/2/3, separately per frozen scenario. No other scientific parameter changes; all versions retained. Initial is the uncalibrated inherited comparator."
+    }
+  ],
+  "parameter_provenance": {
+    "location_pct": {
+      "evidence_ids": [
+        "ship_SHIP_Trend_men_median_None",
+        "ship_SHIP_Trend_women_median_None"
+      ],
+      "assumption_ids": [
+        "A_location",
+        "A_transport"
+      ],
+      "derivation": "Use admitted sex-specific marginal medians as approximate conditional references."
+    },
+    "age_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_location"
+      ],
+      "derivation": "(20+79)/2; midpoint assumption."
+    },
+    "age_slope_per_year": {
+      "evidence_ids": [
+        "ship_SHIP_Trend_men_age_beta",
+        "ship_SHIP_Trend_women_age_beta"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_mapping"
+      ],
+      "derivation": "0.153/10 and 0.191/10; BMI-adjusted sex-specific source coefficients, no spline term in these strata."
+    },
+    "bmi_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "Explicit assumed reference."
+    },
+    "bmi_scale": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "Explicit assumed saturation scale."
+    },
+    "bmi_amplitude_pct": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "Explicit assumed amplitude."
+    },
+    "residual_log_sigma": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_residual"
+      ],
+      "derivation": "Explicit skew assumption."
+    },
+    "residual_scale_pct": {
+      "evidence_ids": [
+        "ship_SHIP_Trend_men_quantile_0.25",
+        "ship_SHIP_Trend_men_quantile_0.75",
+        "ship_SHIP_Trend_women_quantile_0.25",
+        "ship_SHIP_Trend_women_quantile_0.75"
+      ],
+      "assumption_ids": [
+        "A_residual"
+      ],
+      "derivation": "Rounded residual scales informed by 0.8 percentage-point source IQRs and contribution of source age slopes under the assumed age distribution; not residual SD estimates."
+    },
+    "output_bounds_pct": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bounds"
+      ],
+      "derivation": "Explicit broad support assumption, unrelated to quarantined healthy limits."
+    }
+  }
+}

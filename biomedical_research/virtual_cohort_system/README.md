@@ -1,6 +1,8 @@
 # Evidence-guided virtual cohort system
 
-Current research stage: M10 analytical-feasibility screen, completed 30 October 2026 UTC (29 October local). The shared harness code is unchanged from the prior stage; milestone reports remain historical snapshots.
+Current research stage: M11 source-location transfer screen, completed 30 October 2026 UTC (29 October local). The shared harness code is unchanged; milestone reports remain historical snapshots.
+
+Latest: [M11 results](MILESTONE_11_RESULTS.md). On 5,378 reserved NHANES 2021–2023 HbA1c participants, eight frozen versions produced 24 target tables. Source-median calibration improved fitted source medians but worsened target sex medians, age–sex cell means and Q90 in every paired output. Age/BMI slopes remained positive and unchanged as expected from additive location shifts. This is a negative transfer result for the tested mechanism, not a rejection of virtual-data generation. All outputs and failures were retained; independent arithmetic verification passed.
 
 Current results: [M10 feasibility report](MILESTONE_10_RESULTS.md). Four independent Agent constructions generated twelve frozen tables across NHANES fasting insulin (1,961 participants) and PNS HbA1c (7,979). Insulin BMI association/curvature and HbA1c age/BMI point directions were stable across both constructions and all residual draws. Interactions and HbA1c curvature were not reliably preserved; magnitudes differed. This supports selected analytical uses, not general synthetic-data validity or Agent-framework superiority. All 48 primary comparison records and secondary analyses are retained.
 

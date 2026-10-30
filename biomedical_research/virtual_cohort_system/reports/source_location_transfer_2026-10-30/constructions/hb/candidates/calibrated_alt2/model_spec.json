@@ -1,0 +1,153 @@
+{
+  "parameters": {
+    "reference_age": 49.5,
+    "reference_bmi": 27.0,
+    "location_by_sex": {
+      "male": 5.2060905165166265,
+      "female": 5.105950113684042
+    },
+    "age_slope_by_sex": {
+      "male": 0.0153,
+      "female": 0.0191
+    },
+    "bmi_slope": 0.02,
+    "residual_scale": 0.95,
+    "residual_log_sd": 0.5
+  },
+  "assumptions": [
+    {
+      "id": "Atransport",
+      "description": "Transport the SHIP-Trend sex-specific conditional age associations and marginal distribution anchors from northeastern Germany to the supplied target adults. This is unvalidated; assays, ancestry, selection, calendar time and clinical composition may differ."
+    },
+    {
+      "id": "Alocation",
+      "description": "Conditional reference locations at age49.5 and BMI27 calibrated by the fixed additive source-median rule in scenario alt2; see calibration.json. This is conditional on approximated source covariates and inherited residual law, not an identified source intercept."
+    },
+    {
+      "id": "Abmi",
+      "description": "The contemporaneous BMI coefficient is assumed to be +0.02 HbA1c percentage points per kg/m2, identical by sex and linear. Its value and sign are not inferred from Hoorn adjusted-for-glucose or DIRECT prospective coefficients. It is not established by the admitted evidence."
+    },
+    {
+      "id": "Aresidual",
+      "description": "Use a shifted lognormal residual: scale 0.95 times (exp(0.5 Z)-1), Z standard normal. Median residual zero, individual variation right-skewed. Scale/shape are assumptions motivated by approximately 0.8 percentage-point whole-cohort IQR, not a fitted source residual distribution. No separate diabetes component is identified."
+    },
+    {
+      "id": "Aform",
+      "description": "Add age and BMI effects to the sex-specific location, with sex-specific linear age slopes across 20-79. No unreported spline term is used. The conditional residual distribution is constant across age, sex and BMI. Unmodeled interactions/nonlinearities are unassessed, not empirically absent."
+    },
+    {
+      "id": "Asource",
+      "description": "Superseded source-X scenario metadata for M11: see M11_source_X, M11_BMI, M11_dependence and source_plan.json. Original M10 artificial replay context is not used."
+    },
+    {
+      "id": "Ameasurement",
+      "description": "Identity task mapping: hba1c_pct is HbA1c in percent, age_years years, bmi_kg_m2 kg/m2, sex male/female. Published quartile convention is unreported and is approximated with linear type-7 sample quantiles. Assay and population equivalence remain unverified."
+    },
+    {
+      "id": "Auncertainty",
+      "description": "Seeds resample individual residuals only. Source coefficient SEs are retained as evidence but not sampled as independent parameter distributions. No calibrated model/transport uncertainty, causal interpretation or prediction intervals are claimed."
+    },
+    {
+      "id": "M11_source_X",
+      "description": "Reported sex-age-bin counts from whole SHIP-Trend n4420, replicated10fold, uniform integer age within each bin; exact n4402 pregnancy/missingHbA1c exclusion covariates unknown. Frozen source covariates use no target rows."
+    },
+    {
+      "id": "M11_support",
+      "description": "Open >=70 bin compressed to70-79 for inherited task support. Sampling age20-79 is not proof of source examination maximum. BMI clipped15-50 is numerical assumption, not published support."
+    },
+    {
+      "id": "M11_BMI",
+      "description": "Both sexes share a pooledBMI marginal matching Masuch quartiles24.5,27.5,31.0. Primary/alt1 asymmetric-normal quantile tails and alt2 log-BMI tails are assumed; no raw sex-specificBMI law identified."
+    },
+    {
+      "id": "M11_dependence",
+      "description": "Primary uses independence within sex; alt1/alt2 fixed Gaussian-copula latent rho+0.35, not a reported correlation. Actual source age-BMI dependence unknown."
+    },
+    {
+      "id": "M11_measurement",
+      "description": "Identity source/task variables and units; published quantile method unknown, replay uses type7 linear interpolation. Mean regression slopes as median-location shifts require additive invariant residual law."
+    },
+    {
+      "id": "M11_overlap",
+      "description": "Masuch2019,Volzke2015,Grossmann2024 share SHIP-Trend baseline participants. Grossmann pooled means/SD are context-only diagnostics; weighted VolzkeBMI is not fit. No independent replication."
+    },
+    {
+      "id": "M11_calibration",
+      "description": "Applied fixed source-only pooled-median offset to each sex location using scenario alt2 and all3source seeds. Only locations changed; no target information. Fitted source median agreement is mechanical, not independent validation."
+    }
+  ],
+  "parameter_provenance": {
+    "reference_age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "Alocation"
+      ],
+      "derivation": "Assumed midpoint of task/source-supported integer age range 20-79."
+    },
+    "reference_bmi": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "Alocation"
+      ],
+      "derivation": "Assumed centering value; not an admitted source BMI statistic."
+    },
+    "location_by_sex": {
+      "evidence_ids": [
+        "ship_SHIP_Trend_men_median_None",
+        "ship_SHIP_Trend_women_median_None"
+      ],
+      "assumption_ids": [
+        "Alocation",
+        "Atransport",
+        "M11_calibration",
+        "M11_source_X",
+        "M11_BMI",
+        "M11_dependence",
+        "M11_support"
+      ],
+      "derivation": "Initial inherited location + published SHIP-Trend marginal median - pooled verified initial source median, scenario alt2, seeds94101/94102/94103; all inputs and signed offsets bound in calibration.json."
+    },
+    "age_slope_by_sex": {
+      "evidence_ids": [
+        "ship_SHIP_Trend_men_age_beta",
+        "ship_SHIP_Trend_women_age_beta",
+        "trend_men_age_peryear",
+        "trend_women_age_peryear"
+      ],
+      "assumption_ids": [
+        "Atransport",
+        "Aform"
+      ],
+      "derivation": "Reported BMI-adjusted sex-specific linear age effects 0.153 and 0.191 per decade divided by 10. SHIP-Trend strata have no spline term."
+    },
+    "bmi_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "Abmi",
+        "Aform"
+      ],
+      "derivation": "Explicit assumed weak positive contemporaneous BMI relationship; no prohibited coefficient transfer."
+    },
+    "residual_scale": {
+      "evidence_ids": [
+        "ship_SHIP_Trend_men_quantile_0.25",
+        "ship_SHIP_Trend_men_quantile_0.75",
+        "ship_SHIP_Trend_women_quantile_0.25",
+        "ship_SHIP_Trend_women_quantile_0.75"
+      ],
+      "assumption_ids": [
+        "Aresidual",
+        "Aform"
+      ],
+      "derivation": "Assumed residual scale; 0.8 marginal IQR motivates dispersion, with covariate spread also contributing."
+    },
+    "residual_log_sd": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "Aresidual",
+        "Auncertainty"
+      ],
+      "derivation": "Assumed lognormal shape parameter, fixed across individuals and seed draws."
+    }
+  }
+}
