@@ -1,0 +1,24 @@
+# Final retention after source feedback slot1
+
+Decision: retain the initial200 literal urate values and the scientific specification without changes. No rows, assumptions, parameters, source evidence or comparison operators were changed. The final candidate inherits generated.csv,model_spec.json,evidence.json and source_checks.json byte-for-byte from the frozen initial candidate. Copying is used only for authorized retention, not to generate new outcomes. The initial candidate remains untouched.
+
+The builder read the actual controller feedback in visible/feedback/initial_feedback.json, tied to initial freeze SHA256558effb25a1ede3ef7b514a5e0c028b4185881a80466451c4dd0a441a5499a1b and CSV SHA25669b01e7ec84cef431da50d394040edfe661413c5541130b8960490c541607b42. This contains12 numeric approximate source diagnostics and1 noncomputable exact standardized comparison. The numbers below are copied from that feedback, not recomputed by the builder.
+
+| Group | Generated urate mean / source mean, mg/dL | Generated marginal SD / source SD, mg/dL | Generated age-adjusted BMI-on-urate slope / Sun source slope, kg/m^2 per mg/dL |
+|---|---|---|---|
+| White male | 6.130 / 6.1 | 1.2704 / 1.3 | 2.3084 / 1.38 |
+| White female | 4.670 / 4.5 | 1.2034 / 1.2 | 4.5255 / 2.59 |
+| Black male | 6.374 / 6.2 | 1.5218 / 1.5 | 2.5199 / 1.29 |
+| Black female | 4.930 / 4.6 | 1.5672 / 1.7 | 2.2902 / 2.14 |
+
+All mean/SD operators used50 members of the corresponding stratum. Native Sun regressions selected ages20-54 and used46,50,49,49 rows respectively. The operator remained BMI as outcome, urate and age as predictors, with an intercept. No source regression was inverted or reinterpreted as a raw forward coefficient.
+
+The means and SDs are reasonably near the reported source marginal summaries, but there was no predefined fit tolerance and they are not declared passes for scientific validity. The positive mean shifts in the three groups with a more marked BMI-composition difference are compatible with the source-centered positive BMI guide; this compatibility does not prove transport. The Black-female SD discrepancy remains explicitly visible, alongside the larger original difference between Yun and Sun Black-female SDs. There is no basis to replace the adopted broader Yun source with the stricter Sun selection solely to make a diagnostic smaller.
+
+The White-male, White-female and Black-male BMI-on-urate slopes are materially higher than the Sun references. This is a retained discrepancy, not dismissed as sampling error or claimed to be explained quantitatively. A reverse-regression slope depends on the joint distribution and conditional variances, and the fixed observed BMI distributions are broader than Sun's source summaries. Sun additionally excludes treatment/nonfasting and includes age19, conditions that cannot be reproduced here. Thus these diagnostics do not establish that the forward working BMI guide or particular literal rows should be altered. Forcing the native slopes to their source values would add an unsupported transport requirement and could distort the separate location/dispersion assumptions. Their positive signs are related to the source-supported joint dependence, not novel discoveries.
+
+The exact Yun standardized path remains noncomputable with unavailable smoking/alcohol and uncertain standardization details. The feedback does not evaluate the adjusted forward BMI coefficient, age association, curvature, sex interaction, quantiles, residual dependence or clinical realism. Those features retain the limitations already stated in the model: female age0.010 and male age0.005 are modeling priors; the BMI40 hinge and0.5 slope attenuation are extrapolation assumptions; conditional residual scales and shapes are not identified by marginal SDs. Retention does not validate any of these choices. The newly admitted Ferrara evidence and Yun supplement remain as extracted; no additional source was sought in this response.
+
+No new outcome/source statistics were computed by the builder, no second feedback slot was requested, and no measured target outcome, target score or target feedback was available. The actual slot1 feedback is copied and hash-bound in this final candidate. It applies to the identical scientific inputs; no separate execution on a reconstructed source cohort or verified generator replay is claimed. Prior audit records are historical initial-authorship records; their earlier not-yet-executed statements describe that earlier stage. The inherited model's stage label likewise describes its initial authorship history and is retained to preserve model identity.
+
+This is a final retention, not an improvement claim. Remaining source discrepancies and unidentified relationships are reported rather than repaired to approximate references. The controller will validate and freeze this retained final candidate; the builder has not frozen it.

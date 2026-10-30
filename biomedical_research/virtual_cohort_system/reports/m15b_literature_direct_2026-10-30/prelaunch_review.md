@@ -1,0 +1,37 @@
+# Independent prelaunch review: M15-B1
+
+30 October 2026. **PASS for the bounded scientific task and visible-input boundary inspected here.** No serious scientific scope, outcome leakage or preparation/selection mismatch was found. This is not approval of a generated cohort or a completed numerical evaluator: neither was inspected or executed in this review.
+
+## Scope and restrictions
+
+Reviewed the consolidated protocol, visible builder task, seed provenance, task JSON, source registry, preparation report, source/target admission notes, frozen selection rule, pre-download commitments, and preparation/bundle code. The two seed XML/text artifacts were read for hash and full-text-conversion verification. The observed CSV was checked for header/count and byte identity only; no covariate-based calibration was performed.
+
+The private reference CSV, selection mapping and raw XPT data were not opened or hashed. No measured outcome value, outcome summary or association was inspected. No literature search, generation, feedback or reference evaluation was performed. No prior frozen file was modified.
+
+## Checks that passed
+
+1. **Useful scientific question:** direct enrichment of 200 fixed observed people with urate, evaluated by common analysis definitions. The task preserves the overall virtual-data direction while using one unmeasured indicator to isolate construction from covariate-distribution invention. It makes no claim of national representation, extra empirical sample size or framework superiority.
+2. **Full source access:** the builder receives both complete registered original articles, including SDs and native relationship results. Four registry hashes matched. Both text files exactly equal the declared unredacted XML itertext conversion. They are convenience formats; XML table structure remains authoritative.
+3. **Evidence meaning:** Sun's native age-adjusted BMI-on-urate coefficients can constrain a joint structure without reciprocation. Yun's standardized coefficient has additional adjustment/standardization requirements. The prompt identifies these issues and imposes no desired numeric relationship, direction, symmetry or residual law.
+4. **Source dependence/exposure:** the two originals share Bogalusa participants/survey periods and are not independent replications. Sun's incidental pediatric NHANES discussion is an explicit curator admission exception, recorded as exposure and excluded as a generation constraint. This is not an unseen-source or zero-exposure claim. The exception does not silently disable future gateway screening.
+5. **Target preparation:** the code applies the frozen age, diagnosis, race/sex, examination, positive-BMI/weight and valid-design conditions. LBXSUA enters the availability mask and private reference copy, not a source-fit calculation or favorable-outcome ranking. Selection is deterministic within strata using the declared SHA-256 salt and takes 50 per stratum. The code stops if a stratum is too small instead of widening eligibility.
+6. **Preparation integrity:** the current selection rule and preparation script match the pre-download commitment hashes. The visible copies are byte-identical. The schema is exactly `sample_id,race,sex,age,bmi`, with 200 data rows; neither urate nor its SI alias, true SEQN or design fields are visible. The code's checks and preparation report agree on this boundary.
+7. **Chronology:** eligibility/selection were committed before the first acquisition request; the consolidated protocol was written during acquisition and before generation/target statistical analysis. Its wording discloses this and does not claim external preregistration or that every analysis choice preceded downloading.
+8. **Scientific transfer limits:** self-reported no diabetes diagnosis is not laboratory-defined nondiabetes; fasting, medication, pregnancy, era/geography and platform mismatches remain explicit. The same NHANES cycle has appeared in prior work, so this is a new outcome task, not entirely new participants. No old body-fat target is reopened.
+9. **Analysis interpretation:** the 24 fixed estimands comprise four global regression coefficients, four native-orientation group coefficients and 16 group summaries. Using identical unweighted analyses on the same selected people is coherent for this finite equal-quota benchmark. It does not estimate national prevalence. Leave-one-PSU-out ranges are correctly named descriptive sensitivity, not 95% confidence intervals or calibrated survey inference.
+10. **Reuse and feedback:** age, curvature and interaction are reuse candidates whose labels change if matching source constraints are encountered; their numerical definitions and reporting remain. Source feedback may use compatible or explicitly approximate source checks only. A target-shaped direct table is not verified source replay. Initial/final results are retained, including unchanged retention; no target-outcome feedback permits later repair.
+11. **Resources:** 23 remaining queries and nine remaining downloads reconcile the parent-level 24/12 working limits with one admission metadata query and three article acquisition attempts. Two primary originals already count toward the eight-paper cap. Controller assistance and failures remain in the cumulative ledger; this is honestly described as procedural rather than a cross-task software guarantee.
+
+## Operational completion before launch/evaluation
+
+At the reviewed directory snapshot, the bundle contained sources, task, registry and observed inputs, but no initialized gateway session. Initialize the sole task-bound session with the fixed 23/9 limits before dispatching the fresh builder. Bind the final task, protocol, visible inputs, source artifacts and relevant interface/evaluation plan by hash before generation. These are routine controller steps, not requests for another user approval.
+
+Use a fresh-context builder with only the permitted visible files and interfaces. Do not supply this review's private preparation context, admission target summaries, protocol evaluator details or unrelated milestone history as builder input merely because they are available to the parent. The protocol's scientific task and planned analysis types may be provided through the visible task. Continue to describe this as procedural separation; a prompt is not an OS sandbox.
+
+The evaluator implementation, source-check operators proposed by the builder and actual feedback binding will need their own checks before use. The present review verifies the declared analysis definitions and preparation code, not as-yet-unseen evaluator arithmetic. Before opening reference outcomes, verify the frozen release and complete exposure/use record. Do not convert a successful prelaunch audit into a claim of source fidelity, biomedical accuracy or publication readiness.
+
+## Remaining limitations accepted for this pilot
+
+The source and target selections differ; the joint distribution remains partly assumption-dependent; 50 people per group give limited descriptive resolution; exact repeatability of literal Agent values is unestablished; prior model knowledge cannot be excluded; incidental published comparisons may influence the builder despite instructions not to adopt them. These constrain the interpretation but do not prevent an honest bounded pilot. The correct outcome may be partial utility, failure or retention.
+
+Only this review document was added.
