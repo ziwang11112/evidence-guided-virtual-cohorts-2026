@@ -1,0 +1,117 @@
+{
+  "schema_version": 2,
+  "model_domain": {
+    "description": "Declared invented computational support",
+    "columns": [
+      {
+        "name": "sample_id",
+        "kind": "string",
+        "unit": "identifier",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "x",
+        "kind": "number",
+        "unit": "x_unit",
+        "role": "observed",
+        "nullable": false,
+        "minimum": 0,
+        "maximum": 12
+      },
+      {
+        "name": "y",
+        "kind": "number",
+        "unit": "y_unit",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0,
+        "maximum": 40
+      }
+    ],
+    "assumption_ids": [
+      "A1"
+    ]
+  },
+  "contexts": [
+    {
+      "id": "wider_source",
+      "population": "Four invented source rows outside target eligibility",
+      "reason": "Verify independent source support without changing target or generator",
+      "assumption_ids": [
+        "A1"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Identical invented variable units"
+      },
+      "input": {
+        "path": "source_covariates.csv",
+        "sha256": "01bd3481dbb7cb31faa977f96ae1c8197773e214780fa5ae52c81a0af82b2568",
+        "origin": "declared_source_covariates"
+      },
+      "checks": [
+        {
+          "id": "C1",
+          "evidence_id": "E1",
+          "status": "approximate",
+          "assumption_ids": [],
+          "reason": "Arithmetic on the exact invented table",
+          "operator": {
+            "kind": "mean",
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "column": "y"
+          }
+        },
+        {
+          "id": "C2",
+          "evidence_id": "E2",
+          "status": "approximate",
+          "assumption_ids": [],
+          "reason": "Arithmetic on the exact invented table",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "y_unit/x_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "y",
+            "predictors": [
+              "x"
+            ],
+            "term": "x",
+            "include_intercept": true
+          }
+        }
+      ],
+      "columns": [
+        {
+          "name": "sample_id",
+          "kind": "string",
+          "unit": "identifier",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "x",
+          "kind": "number",
+          "unit": "x_unit",
+          "role": "observed",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 10
+        },
+        {
+          "name": "y",
+          "kind": "number",
+          "unit": "y_unit",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 30
+        }
+      ]
+    }
+  ]
+}

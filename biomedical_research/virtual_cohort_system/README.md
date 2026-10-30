@@ -1,6 +1,6 @@
 # Evidence-guided virtual cohort system
 
-Current research stage: M11 source-location transfer screen, completed 30 October 2026 UTC (29 October local). The shared harness code is unchanged; milestone reports remain historical snapshots.
+Current development stage: [M12-A independent source contexts](MILESTONE_12A_RESULTS.md), completed 30 October 2026. Two new modules preserve historical engine bytes. The complete suite has 384 passing tests and one Windows-privilege skip; an invented fixture passed actual isolated execution. This is engineering validation, not new biomedical evidence. Follow the [stepwise implementation plan](docs/IMPLEMENTATION_ROADMAP_2026-10-30.md).
 
 Latest: [M11 results](MILESTONE_11_RESULTS.md). On 5,378 reserved NHANES 2021–2023 HbA1c participants, eight frozen versions produced 24 target tables. Source-median calibration improved fitted source medians but worsened target sex medians, age–sex cell means and Q90 in every paired output. Age/BMI slopes remained positive and unchanged as expected from additive location shifts. This is a negative transfer result for the tested mechanism, not a rejection of virtual-data generation. All outputs and failures were retained; independent arithmetic verification passed.
 
