@@ -42,6 +42,8 @@ This stage now has a bounded coordinate-search tool, immutable trial bundles, a 
 
 ## Real-case admission, before target outcome analysis
 
+The [30 October admission review](REAL_CASE_ADMISSION_2026-10-30.md) prioritizes body-fat enrichment for a bounded transport pilot and keeps urate as a backup. Source and metadata audits are complete; the screened machine-readable packet, protocol freeze and real-data run remain pending. Source/target scanner differences prevent an exact measurement-equivalence claim, but do not preclude a declared assumption-dependent transport test. No target outcome was read or analysed during this screening.
+
 The next case needs a real scientific use, not merely an available laboratory column. Decide the permitted population and analyses from evidence and metadata before target evaluation.
 
 For each source, record the reported statistic, original scale, adjustment set, selection, assay and overlap with other sources. Assign its role: fitting, unused source check, qualitative model clue or deferred evidence. Verify that a selected association can be represented by the available variables or a declared integration model.

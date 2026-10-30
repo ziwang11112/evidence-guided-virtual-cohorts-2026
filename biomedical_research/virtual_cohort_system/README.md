@@ -1,5 +1,7 @@
 # Evidence-guided virtual cohort system
 
+Latest preparation decision: [real-case evidence admission](docs/REAL_CASE_ADMISSION_2026-10-30.md). Body-fat enrichment is the first transport-pilot candidate; serum urate remains a backup. External evidence and public target metadata have been reviewed, including scanner differences, population support and outcome leakage paths. This is literature/metadata screening only: no M13 generator, target acquisition or target evaluation has occurred.
+
 Current development stage: [M12-C actual Agent construction and source review](MILESTONE_12C_RESULTS.md), completed 30 October 2026. One externally launched scientific Agent constructed its own generator from two invented study summaries, reviewed eight actual isolated source executions, and retained its unchanged initial structure/parameters. The controller promoted the selected bytes into a frozen development candidate with complete feedback and lineage. The full suite has 502 passing tests and two Windows-privilege skips. This is a source-only integration result, not biomedical validation or evidence of optimization benefit. Follow the [stepwise implementation plan](docs/IMPLEMENTATION_ROADMAP_2026-10-30.md).
 
 Previous engineering stages: [M12-B bounded calibration](MILESTONE_12B_RESULTS.md) and [M12-A independent source contexts](MILESTONE_12A_RESULTS.md). Their original fixtures, failures and frozen engine bytes are preserved.
