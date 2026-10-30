@@ -1,0 +1,176 @@
+{
+  "schema_version": 2,
+  "model_domain": {
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "id",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "x",
+        "kind": "number",
+        "unit": "x_unit",
+        "role": "observed",
+        "nullable": false,
+        "minimum": -2,
+        "maximum": 2
+      },
+      {
+        "name": "z",
+        "kind": "category",
+        "unit": "code",
+        "role": "observed",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "y",
+        "kind": "number",
+        "unit": "y_unit",
+        "role": "generated",
+        "nullable": false,
+        "minimum": -20,
+        "maximum": 20
+      }
+    ],
+    "assumption_ids": [
+      "A"
+    ],
+    "description": "Fixed computational support for every trial"
+  },
+  "contexts": [
+    {
+      "id": "s",
+      "population": "Twelve invented rows with unbalanced z mixture",
+      "reason": "Fixed source population for numerical fixture only",
+      "assumption_ids": [
+        "A"
+      ],
+      "measurement": {
+        "mode": "identity",
+        "description": "Identical invented units"
+      },
+      "input": {
+        "path": "cov.csv",
+        "sha256": "95fe1d42017c8b0ab75154b9069a199f32aeba1394c9873e59b64d04653a6470",
+        "origin": "declared_source_covariates"
+      },
+      "columns": [
+        {
+          "name": "id",
+          "kind": "string",
+          "unit": "id",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "x",
+          "kind": "number",
+          "unit": "x_unit",
+          "role": "observed",
+          "nullable": false,
+          "minimum": -1,
+          "maximum": 1
+        },
+        {
+          "name": "z",
+          "kind": "category",
+          "unit": "code",
+          "role": "observed",
+          "nullable": false,
+          "categories": [
+            0,
+            1
+          ]
+        },
+        {
+          "name": "y",
+          "kind": "number",
+          "unit": "y_unit",
+          "role": "generated",
+          "nullable": false,
+          "minimum": -20,
+          "maximum": 20
+        }
+      ],
+      "checks": [
+        {
+          "id": "mean",
+          "evidence_id": "M",
+          "status": "approximate",
+          "operator": {
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "kind": "mean",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A"
+          ],
+          "reason": "Declared invented arithmetic context; negative controls are intentional"
+        },
+        {
+          "id": "beta",
+          "evidence_id": "B",
+          "status": "approximate",
+          "operator": {
+            "unit": "y_unit/x_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "kind": "ols_coefficient",
+            "outcome": "y",
+            "predictors": [
+              "x",
+              "z"
+            ],
+            "term": "x",
+            "include_intercept": true
+          },
+          "assumption_ids": [
+            "A"
+          ],
+          "reason": "Declared invented arithmetic context; negative controls are intentional"
+        },
+        {
+          "id": "sd",
+          "evidence_id": "D",
+          "status": "approximate",
+          "operator": {
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "kind": "sd",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A"
+          ],
+          "reason": "Declared invented arithmetic context; negative controls are intentional"
+        },
+        {
+          "id": "conflict",
+          "evidence_id": "I",
+          "status": "approximate",
+          "operator": {
+            "unit": "y_unit",
+            "selection": [],
+            "missing_policy": "error",
+            "kind": "mean",
+            "column": "y"
+          },
+          "assumption_ids": [
+            "A"
+          ],
+          "reason": "Declared invented arithmetic context; negative controls are intentional"
+        }
+      ]
+    }
+  ]
+}
