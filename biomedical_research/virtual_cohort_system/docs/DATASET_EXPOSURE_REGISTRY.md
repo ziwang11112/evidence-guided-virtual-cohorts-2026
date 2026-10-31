@@ -23,3 +23,17 @@
 | LARS / Efron diabetes 442-patient example | Candidate metadata and incidental teaching snippets inspected in this cycle | Not admitted: source-population/measurement metadata insufficient for this task | [Current review](../reports/autonomous_research_2026-10-31/admission/lars_diabetes_metadata.md) |
 
 The current cycle initially preferred NAGALA from official repository metadata before the full sibling-directory audit. That provisional preference was withdrawn when prior use was found. No new generator or target evaluation had occurred. Keep this controller workflow failure and the superseded recommendation visible; do not count the discovery as a new biological result.
+
+
+## Second-cycle additions — 31 October 2026
+
+The fuller [cross-workspace inventory](../reports/autonomous_research_cycle2_2026-10-31/history/DATASET_USE_INDEX.md) records 39 study/cycle entries and supersedes treating the minimum table above as exhaustive.
+
+| Study / family | Newly verified role | Admission consequence | Record |
+|---|---|---|---|
+| ENSANUT 2018–2019 Mexico; INEGI catalog 590; INSP laboratory/anthropometry release | Processed public files linked; outcome-blind documentation-consistency amendment; 6,931-person eligible reference evaluated once after all final generators froze; independently recomputed | Now revealed and closed to generator tuning or new-confirmation claims. Re-downloading or selecting a new analysis from this release does not reset exposure | [Case admission](../reports/autonomous_research_cycle2_2026-10-31/CASE_ADMISSION.md), [result report](../reports/autonomous_research_cycle2_2026-10-31/results_report/REPORT.md) |
+| KNHANES Korea | Candidate metadata/access review only; no new patient file acquired in this cycle | Official access route required personal information/terms; no application submitted; prior literature/source exposure still applies | [International data review](../reports/autonomous_research_cycle2_2026-10-31/admission/INTERNATIONAL_DATA.md) |
+| ANSUR II | Backup candidate metadata and incidental public snippets only; not selected; no full IPD acquisition | Not a new validated target; incidental exposure remains recorded | Same international data review |
+| Jansen 2013 Lifelines; Pani 2008 NHANES/FOS; Liu 2015 NHANES | Source aggregate evidence read/audited and disclosed to builders; no source IPD supplied. Pani/Liu survey cycles overlap | Source exposure and study-family overlap must be declared; these are not three independent patient validations | [Source audit](../reports/autonomous_research_cycle2_2026-10-31/evidence/INDEPENDENT_SOURCE_AUDIT.md) |
+
+No claim is made that the foundation model had never encountered public study results. The procedural blind separates the supplied task/evidence and newly evaluated target results; it does not establish pretraining non-exposure.

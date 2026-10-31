@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "population": "Pani NHANES 2001-2004 n=3270, adults age>=25, no self-reported diabetes, FPG<126 mg/dL, HbA1c available. Complex survey design and weights. FOS context is different and is not pooled. NHANES overlaps Liu1999-2008. Monte Carlo reconstruction: assumed age support 25-95, published unweighted age-band count proportions used as approximate mixture probabilities, truncated geometric age tail >=70, and independent female probability 0.5; unweighted calculations are not the complex survey estimator; 6000 fictional rows, not source IPD.",
+  "measurement": {
+    "mode": "identity",
+    "description": "Generated age years, BMI kg/m^2, glucose mg/dL and HbA1c percent are passed unchanged to fixed operators. Published units are normalized in admitted evidence; identity here does not verify assay, plasma/serum or survey-estimator equivalence."
+  },
+  "assumption_ids": [
+    "A_DOMAIN",
+    "A_PANI_POPULATION",
+    "A_COVARIATE_SHAPE",
+    "A_JOINT_PROJECTION",
+    "A_SHARED_AGE_SEX",
+    "A_HBA_RESIDUAL",
+    "A_LEVEL_LINKAGE",
+    "A_SELECTION_MEASUREMENT",
+    "A_SOURCE_ESTIMATOR",
+    "A_UNCERTAINTY"
+  ],
+  "checks": [
+    {
+      "id": "P_NHANES_age_slope",
+      "evidence_id": "P_NHANES_age_slope",
+      "status": "approximate",
+      "operator": {
+        "kind": "ols_coefficient",
+        "unit": "% per year",
+        "selection": [],
+        "missing_policy": "error",
+        "outcome": "hba1c",
+        "predictors": [
+          "age",
+          "female",
+          "bmi",
+          "glucose"
+        ],
+        "term": "age",
+        "include_intercept": true
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_lt40_mean",
+      "evidence_id": "P_NHANES_hba1c_age_lt40_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 25
+          },
+          {
+            "column": "age",
+            "op": "lt",
+            "value": 40
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_40_44_mean",
+      "evidence_id": "P_NHANES_hba1c_age_40_44_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 40
+          },
+          {
+            "column": "age",
+            "op": "le",
+            "value": 44
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_45_49_mean",
+      "evidence_id": "P_NHANES_hba1c_age_45_49_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 45
+          },
+          {
+            "column": "age",
+            "op": "le",
+            "value": 49
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_50_54_mean",
+      "evidence_id": "P_NHANES_hba1c_age_50_54_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 50
+          },
+          {
+            "column": "age",
+            "op": "le",
+            "value": 54
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_55_59_mean",
+      "evidence_id": "P_NHANES_hba1c_age_55_59_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 55
+          },
+          {
+            "column": "age",
+            "op": "le",
+            "value": 59
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_60_64_mean",
+      "evidence_id": "P_NHANES_hba1c_age_60_64_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 60
+          },
+          {
+            "column": "age",
+            "op": "le",
+            "value": 64
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_65_69_mean",
+      "evidence_id": "P_NHANES_hba1c_age_65_69_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 65
+          },
+          {
+            "column": "age",
+            "op": "le",
+            "value": 69
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    },
+    {
+      "id": "P_NHANES_hba1c_age_ge70_mean",
+      "evidence_id": "P_NHANES_hba1c_age_ge70_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 70
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_PANI_POPULATION",
+        "A_COVARIATE_SHAPE",
+        "A_JOINT_PROJECTION",
+        "A_SHARED_AGE_SEX",
+        "A_HBA_RESIDUAL",
+        "A_LEVEL_LINKAGE",
+        "A_SELECTION_MEASUREMENT",
+        "A_SOURCE_ESTIMATOR",
+        "A_UNCERTAINTY"
+      ],
+      "reason": "Uses an unweighted assumed NHANES age-band mixture, independent assumed sex composition, transported Lifelines covariate dispersion and shared linear conditional rule. Original survey weights/PSU/strata are unavailable. Only the 50-54 mean anchors the Pani level; the other seven means diagnose linear age and transport assumptions, including the likely older-age plateau discrepancy. The >=70 reconstruction extends through95."
+    }
+  ]
+}
