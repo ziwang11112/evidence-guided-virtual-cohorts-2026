@@ -8,13 +8,21 @@ Use published biomedical evidence, a target-population specification and optiona
 
 The method must connect evidence meaning, a documented generation process (direct Agent-authored rows or an Agent-authored program), and downstream analytical use. More code, more Agents or a better source-fit score alone does not demonstrate this contribution.
 
-## Latest engineering unit: M17-A complete; scientific construction next
+## Latest scientific unit: M17-B complete; selected analytical feasibility
+
+[M17-B](../MILESTONE_17B_RESULTS.md) now evaluates the whole-cohort regime with zero individual inputs. Two fresh Agents used the same three external primary studies, chose their own generators, reviewed source-only feedback and retained their models. Six analytical draws were evaluated once against a newly admitted 320-person NHANES 2007–2008 quota reference under the [prospective protocol](M17B_WHOLE_COHORT_PROTOCOL.md). Initial/final labels share identical retained outputs; they do not double the number of independent draws.
+
+Adjusted BMI, age and sex directions survived in all six draws. Effect magnitudes and distributional fidelity were mixed; both constructions understated BMI levels, and the reference did not resolve curvature or interaction direction. Independent formula-based recomputation matched all 1,482 fields. A route-label mismatch in the audit checker was preserved and separately adjudicated against actual receipts, without changing scientific results.
+
+Continue with a separately admitted case with stronger conditional/joint evidence, preferably another study family or biomarker, and prespecified precision for shape/subgroup analyses. The present result is feasibility, not a method-superiority or novelty result. This reference is now exposed and closed to tuning. No subsequent target or recurring job has been launched.
+
+## Preceding engineering unit: M17-A complete
 
 The [updated paper direction](PAPER_STORYLINE_AND_DIRECTION_2026-10-31.md) and [near-neighbor audit](GSIM_LLMSYNTHOR_DEEP_REVIEW_2026-10-31.md) replace a missing-column-only framing. The [M17-A readiness review](M17A_WHOLE_COHORT_READINESS.md) confirms that `whole_cohort` already forbids `observed.csv` and passes `observed=None` to a generator. Existing execution-backed source replay adapters are enrichment-only.
 
 The bounded [M17-A plan](M17A_WHOLE_COHORT_PLAN.md) is now implemented: [results](../MILESTONE_17A_RESULTS.md). The new [feedback adapter](WHOLE_COHORT_FEEDBACK.md) links source diagnostics to verified full-cohort output outside the frozen candidate. Thirty-three focused tests, an actual isolated 128-row artificial execution, independent arithmetic on five diagnostics and preservation of ten input bindings passed. These are engineering results from a specified test generator, not an Agent-quality or biological comparison. Earlier replay versions and historical target outcomes are unchanged.
 
-The next scientific unit should give an Agent an admitted aggregate-evidence packet and a whole-cohort task, withholding all target individual records. Evaluate frozen output on unprovided analyses, with any observed-covariate condition labeled separately. A controlled reference can first separate information insufficiency from faulty evidence use; fresh real-data validation requires its own source/target admission. No subsequent experiment, real target download, paid model call, training or HPC job was started.
+M17-B subsequently supplied that scientific whole-cohort test with admitted aggregate evidence, all target individual records withheld, fixed source feedback and separately reserved analytical evaluation. M17-A itself remains an engineering result. No paid model API, training or HPC job was used in either unit.
 
 The literature review, framing and this implementation plan are new work, not new performance evidence. No further fitting to M13-B, M15-B or M16 revealed targets is allowed.
 

@@ -1,0 +1,13 @@
+# M17-B construction record before reference release
+
+Two fresh-context Codex subagent sessions were launched: `/root/m17b_builder1` and `/root/m17b_builder2`. Each received its own bundle with byte-identical task, admitted sources and registry. The root authored the study design and preparation utility; it did not supply the scientific generator, coefficients, covariance, distribution family, desired sign or nonlinear shape. The model backend identifier is not independently attested by the scientific artifact receipt.
+
+The construction instructions required all four variables to be generated, 320 fictional rows, eight fixed age/sex quota cells, and no individual source/target input. Each Agent could choose a program or a literal table. Admitted originals were available, and missing evidence could be raised to the controller. This fixed-packet screen uses the curator's actual original-source retrieval; unrestricted builder retrieval is not being evaluated. It is not a prohibition on literature retrieval in the broader system.
+
+The sessions were instructed to read only their own bundle and named implementation interfaces. Other builders, old scientific results and the entire custodian area were excluded. This is a procedural boundary on the subagent's general tools; the OS isolation applies specifically to later generator execution. Pretraining exposure and all possible filesystem behaviors cannot be excluded merely by this instruction.
+
+Both Agents were asked to independently inspect source context and original statistic direction, record reported/derived/assumed quantities, declare non-computable checks, submit their initial candidates, and await one source-only feedback opportunity. Only schema validation was allowed on the host. The controller handles review, freeze and isolated generator execution. Additional schema guidance pointed both sessions to `lifecycle.py`, `source_replay.py` and `source_checks.py`; no scientific results were provided as guidance.
+
+The independent prospective protocol reviewer found no blocking issue in equations, quota design, HC3 limitations or information boundaries. The evaluator and reference selection were frozen before acquisition. Target feasibility alone was released: all eight quota cells had at least 40 eligible participants. No scientific target outcomes were disclosed at construction time.
+
+This is two independently authored constructions within one model/tool environment, not two model providers or two clinical studies. Initial/final decisions, actual output counts and any interface corrections will be reported after completion.

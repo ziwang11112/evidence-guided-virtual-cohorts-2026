@@ -1,0 +1,20 @@
+# Endpoint exposure classification before target release
+
+This classification uses the complete admitted source packet and the two initial models; both builders have declared retention after source feedback. No target endpoint, target moment or target correlation has been inspected. Final hashes and retention are verified separately before release.
+
+The original papers are accessible inputs, including information not repeated in the curated extraction. Full texts describe BMI/urate associations and differences across demographic groups. The task's eight exact target estimates and target outcomes are never supplied. LLM pretraining exposure is unmeasured.
+
+| Locked endpoint | Source/model exposure | Honest evaluation interpretation |
+|---|---|---|
+| Adjusted BMI-to-urate coefficient | Bogalusa reports the reverse BMI-on-urate coefficient. Both builders use it with marginal moments and assumptions to construct covariance. They do not invert the coefficient. | Target forward slope is not directly calibrated but derives from source-supported dependence and chosen conditional distributions. Transfer and analytical reuse, not a wholly uninformed prediction. |
+| Adjusted age coefficient | Papers give age context and younger/older summaries; both builders explicitly interpolate age-dependent means and scales. No source supplies this exact target adjusted age coefficient. | The age relationship is assumption encoded. Its target direction and magnitude test the transport/interpolation, not discovery of aging biology. |
+| Adjusted female contrast | Young source sex-specific means are supplied. Both assume an older mean gap and interpolate. | New-target conditional contrast; demographic differences were input knowledge. |
+| Quadratic BMI finite-difference contrast | No admitted extraction or source-feedback operator supplies/fits this contrast. The full papers do not report this target regression/contrast. Conditional lognormal shape and age mixing induce curvature. | Not directly calibrated analysis, testing reuse of the selected distributional assumptions. Model-induced curvature is not an independently discovered mechanism. |
+| BMI-by-sex interaction | Source reverse slopes and marginal moments differ by sex; both constructions encode sex-specific dependence, with distinct age transport choices. No exact target forward interaction is fitted. | Derived/assumption-encoded subgroup structure evaluated in the target. |
+| Male BMI coefficient | Source male reverse slopes and moments constrain chosen young covariance. | New-target forward subgroup effect, with dependence transport assumptions. |
+| Female BMI coefficient | Source female reverse slopes and moments constrain chosen young covariance. | New-target forward subgroup effect, with dependence transport assumptions. |
+| Reverse urate coefficient in BMI model | BMI-on-urate is directly reported, but source strata, ages, mixture and adjustment differ from the target model with age and sex. b1 compares an approximate age-only pooled source slope; b2 does not force this ambiguous pooled statistic. | A related supplied analysis transported to a different target and adjustment set; not an unprovided biological relationship. |
+
+Both fresh sessions independently converge on nearly identical age knots and marginal anchors, including an assumed older male–female urate difference. Their main scientific difference is dependence transport: b1 keeps latent correlation fixed within sex; b2 interpolates a raw BMI-on-urate projection slope across age. The random-number stream layout also differs, so cross-builder differences do not isolate a causal effect of that component.
+
+The design has two constructions, three prespecified draws per program, and one reference cohort. It does not constitute broad model-family diversity or independent biomedical corroboration. Three generated draws are Monte Carlo realizations, not extra source evidence. All eight analyses will be retained, including mismatches and inconclusive reference directions.

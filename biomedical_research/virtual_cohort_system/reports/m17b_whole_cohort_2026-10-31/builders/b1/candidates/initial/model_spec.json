@@ -1,0 +1,305 @@
+{
+  "parameters": {
+    "design": {
+      "age_bins": [
+        [
+          20,
+          35
+        ],
+        [
+          35,
+          50
+        ],
+        [
+          50,
+          65
+        ],
+        [
+          65,
+          80
+        ]
+      ],
+      "female_levels": [
+        0,
+        1
+      ],
+      "rows_per_cell": 40,
+      "age_distribution": "discrete_uniform_within_bin"
+    },
+    "age_knots": [
+      32,
+      49,
+      73
+    ],
+    "bmi_mean_by_female": [
+      [
+        27.47723880597015,
+        28.27723880597015,
+        26.551181102362204
+      ],
+      [
+        27.256145454545454,
+        28.056145454545454,
+        26.551181102362204
+      ]
+    ],
+    "bmi_sd_by_female": [
+      [
+        5.95889472600556,
+        5.95889472600556,
+        4.098265175765907
+      ],
+      [
+        7.273611632449243,
+        7.273611632449243,
+        4.098265175765907
+      ]
+    ],
+    "urate_mean_by_female": [
+      [
+        6.0693097014925375,
+        6.150171311054519,
+        6.264328877494964
+      ],
+      [
+        4.2,
+        4.641307095546693,
+        5.264328877494964
+      ]
+    ],
+    "urate_sd_by_female": [
+      [
+        1.364571150583154,
+        1.3856639147437952,
+        1.4154419347352887
+      ],
+      [
+        1.1322261052548954,
+        1.2496570589418878,
+        1.4154419347352887
+      ]
+    ],
+    "copula_rho_by_female": [
+      0.31481500040925997,
+      0.3891893148835504
+    ],
+    "distribution": {
+      "marginals": "lognormal",
+      "dependence": "Gaussian copula",
+      "age_interpolation": "linear between knots; endpoint constant outside knots",
+      "row_sampling": "independent given sex and age; no empirical recentering or redrawing for fit"
+    },
+    "output": {
+      "columns": [
+        "sample_id",
+        "age",
+        "female",
+        "bmi",
+        "urate"
+      ],
+      "identifier_prefix": "fictional_b1_",
+      "shuffle_rows": true
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_quota",
+      "description": "Task fixes eight sex×age-bin quotas of40 (n320). No source demographics substituted for this design. Binary female category is the task encoding, not a fuller sex/gender model."
+    },
+    {
+      "id": "A_age",
+      "description": "Each integer age in a quota bin is equally likely, sampled independently; the packet does not identify the target within-bin age distribution."
+    },
+    {
+      "id": "A_pool",
+      "description": "Bogalusa race-specific summaries are pooled within sex using that source's counts. Transporting these source-sex marginals to a target without race is an explicit approximation, not an assertion of target racial weights. Weighted slope averages are engineering choices, not identified pooled OLS slopes."
+    },
+    {
+      "id": "A_age_structure",
+      "description": "Knots32,49,73 are rounded representative source ages, not biological breakpoints. Continuous linear interpolation with flat endpoints is assumed. Urate means/SDs transition linearly32→73; intermediate knot49 lies on that line. No source establishes a longitudinal age effect."
+    },
+    {
+      "id": "A_middle_bmi",
+      "description": "Middle-age BMI adds0.8kg/m2 to each young sex mean, borrowing the Korean40–59 minus<40 difference23.7−22.9, but not its level. Same increment for both sexes, no increase in SD. This weak cross-population shape assumption is not identified for US adults or sex-specific cells."
+    },
+    {
+      "id": "A_old_bmi",
+      "description": "Older CHS pooled BMI mean/SD are assigned to both sexes because old sex-specific moments are absent. This equal-moment choice is unverified and does not imply source evidence of equality."
+    },
+    {
+      "id": "A_old_urate",
+      "description": "Old male-minus-female mean difference is assumed1mg/dL, motivated by one-unit hyperuricemia threshold difference and similar sex-specific exceedance proportions631/2319 and874/3142. Those tail rates do not identify mean difference. Source female fractionq=3142/5461 is used only to decompose CHS pooled mean into male=m+q and female=m−(1−q); common within-sex variance=pooled_variance−q(1−q). No source-specific sex mean is claimed."
+    },
+    {
+      "id": "A_distribution",
+      "description": "BMI and urate are conditionally lognormal; neither distribution is reported by the papers. Moment conversion ensures positive variables without clipping or outcome-based rejection. Tail shape and within-cell variation remain assumptions."
+    },
+    {
+      "id": "A_dependence",
+      "description": "Use a Gaussian copula with sex-specific fixed latent correlation. At young anchor, choose covariance to reproduce a source-count-weighted raw BMI-on-urate slope, under the unverified approximation that published marginal moments equal age-conditional moments. For lognormal margins rho=log(1+b*sdU^2/(mB*mU))/(sigmaLogB*sigmaLogU). This is a covariance construction, not beta inversion or interpreting standardized beta as correlation. Constant rho across age is untested; older covariances are not identified."
+    },
+    {
+      "id": "A_transport",
+      "description": "US quota population differs in geography, period, medication/comorbidity selection, age limits and sex/race composition from all three sources. Source means are approximate comparisons, not obligations. CHS≥65 is approximated by65–79; Bogalusa19–54 by20–54; Korean open-ended ages by available bounded ages. No target data or national representativeness claim."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Use identity numeric mapping for BMI kg/m2 (equivalent notation tokg/m^2), serum uric acid/urate mg/dL, ageyears and task female category. Assay/fasting differences are unresolved; no calibration evidence permits corrections."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Random draws represent individuals conditional on fixed chosen parameters. Study sampling error, rounding, transport and structural uncertainty are not propagated probabilistically. Alternative model choices would be sensitivity scenarios, not calibrated posterior draws."
+    },
+    {
+      "id": "A_individuals",
+      "description": "Fictional people are conditionally independent. No family, household, repeated-survey or disease structure is generated. Age/sex determine margins; BMI and urate are dependent through the copula. No causal effect is asserted."
+    },
+    {
+      "id": "A_feedback",
+      "description": "Feedback is a source-only descriptive comparison of the generated quota cohort, not replay of source populations and not independent validation. No tolerances or optimization objective are defined. Race-specific or unsupported compound-selection checks remain not_computable."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_quota",
+        "A_age"
+      ],
+      "derivation": "Exact quotas and allowed age/sex encoding from task.json; within-bin age distribution is an assumption."
+    },
+    "age_knots": {
+      "evidence_ids": [
+        "E_S1_white_male_age_mean",
+        "E_S1_black_male_age_mean",
+        "E_S1_white_female_age_mean",
+        "E_S1_black_female_age_mean",
+        "E_S2_middle_age_mean",
+        "E_S3_normal_age_mean",
+        "E_S3_high_age_mean"
+      ],
+      "assumption_ids": [
+        "A_age_structure"
+      ],
+      "derivation": "32 approximates Bogalusa adult subgroup ages30.4–33.2;49 rounds Korean middle group age48.7;73 approximates CHS before-match ages73/74. These age context values are in registered originals/extractions; knot choice is explicitly assumed."
+    },
+    "bmi_mean_by_female": {
+      "evidence_ids": [
+        "E_S1_pooled_f0_bmi_mean",
+        "E_S1_pooled_f1_bmi_mean",
+        "E_S2_lt40_bmi_mean",
+        "E_S2_40_59_bmi_mean",
+        "E_S3_pooled_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_pool",
+        "A_age_structure",
+        "A_middle_bmi",
+        "A_old_bmi",
+        "A_transport"
+      ],
+      "derivation": "At32 use derived source-sex BMI means. At49 add23.7−22.9=0.8. At73 use pooled CHS mean26.551181. Linear interpolation and endpoint extension."
+    },
+    "bmi_sd_by_female": {
+      "evidence_ids": [
+        "E_S1_pooled_f0_bmi_sd",
+        "E_S1_pooled_f1_bmi_sd",
+        "E_S3_pooled_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_pool",
+        "A_age_structure",
+        "A_middle_bmi",
+        "A_old_bmi",
+        "A_transport"
+      ],
+      "derivation": "Source-sex pooled young SD held to49; interpolate to pooled CHS SD4.098265 at73."
+    },
+    "urate_mean_by_female": {
+      "evidence_ids": [
+        "E_S1_pooled_f0_urate_mean",
+        "E_S1_pooled_f1_urate_mean",
+        "E_S3_pooled_urate_mean",
+        "E_S3_normal_female_n",
+        "E_S3_high_female_n",
+        "E_S3_normal_n",
+        "E_S3_high_n",
+        "E_S3_f0_high_proportion",
+        "E_S3_f1_high_proportion",
+        "E_S3_threshold_context"
+      ],
+      "assumption_ids": [
+        "A_pool",
+        "A_age_structure",
+        "A_old_urate",
+        "A_transport"
+      ],
+      "derivation": "Young source-sex mean at32; old pooledCHS5.688976 split by assumed gap1 and sourceq3142/5461: male6.264329, female5.264329. Linear32→73; knot49 value=young+(old−young)*17/41."
+    },
+    "urate_sd_by_female": {
+      "evidence_ids": [
+        "E_S1_pooled_f0_urate_sd",
+        "E_S1_pooled_f1_urate_sd",
+        "E_S3_pooled_urate_sd",
+        "E_S3_normal_female_n",
+        "E_S3_high_female_n",
+        "E_S3_normal_n",
+        "E_S3_high_n"
+      ],
+      "assumption_ids": [
+        "A_pool",
+        "A_age_structure",
+        "A_old_urate",
+        "A_transport"
+      ],
+      "derivation": "Young source-sex SD; old common SD=sqrt(pooledCHSvariance−q(1−q)*1^2), using sourceq. Linear interpolation32→73. This decomposition is assumption-dependent."
+    },
+    "copula_rho_by_female": {
+      "evidence_ids": [
+        "E_S1_white_male_slope",
+        "E_S1_white_male_n",
+        "E_S1_black_male_slope",
+        "E_S1_black_male_n",
+        "E_S1_white_female_slope",
+        "E_S1_white_female_n",
+        "E_S1_black_female_slope",
+        "E_S1_black_female_n",
+        "E_S1_all_slope",
+        "E_S1_pooled_f0_bmi_mean",
+        "E_S1_pooled_f0_bmi_sd",
+        "E_S1_pooled_f0_urate_mean",
+        "E_S1_pooled_f0_urate_sd",
+        "E_S1_pooled_f1_bmi_mean",
+        "E_S1_pooled_f1_bmi_sd",
+        "E_S1_pooled_f1_urate_mean",
+        "E_S1_pooled_f1_urate_sd"
+      ],
+      "assumption_ids": [
+        "A_pool",
+        "A_dependence",
+        "A_distribution",
+        "A_transport"
+      ],
+      "derivation": "Source-count-weighted raw slopes are1.3523787 for men and2.4473091 for women; weighted averages are model assumptions. Match conditional Cov(B,U)=bVar(U) under lognormal margins via the declared analytic formula; rho held at derived young value for every age."
+    },
+    "distribution": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_distribution",
+        "A_dependence",
+        "A_age_structure",
+        "A_uncertainty",
+        "A_individuals"
+      ],
+      "derivation": "Explicit distribution-family, dependence and interpolation choices; no source claims these joint distributions."
+    },
+    "output": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_quota",
+        "A_individuals"
+      ],
+      "derivation": "Exact task columns with unique fictional serial identifiers; rows randomly permuted without changing values."
+    }
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "parameters": {
+    "design": {
+      "age_bins": [
+        [
+          20,
+          35
+        ],
+        [
+          35,
+          50
+        ],
+        [
+          50,
+          65
+        ],
+        [
+          65,
+          80
+        ]
+      ],
+      "sex_values": [
+        0,
+        1
+      ],
+      "rows_per_cell": 40,
+      "age_law": "discrete_uniform",
+      "id_prefix": "B2-FICTIONAL-",
+      "columns": [
+        "sample_id",
+        "age",
+        "female",
+        "bmi",
+        "urate"
+      ],
+      "shuffle_rows": true
+    },
+    "age_knots": [
+      32.0,
+      49.0,
+      73.0
+    ],
+    "moments_by_female": {
+      "0": {
+        "bmi_mean": [
+          27.47723880597015,
+          28.27723880597015,
+          26.551181102362204
+        ],
+        "bmi_sd": [
+          5.95889472600556,
+          5.95889472600556,
+          4.098265175765907
+        ],
+        "urate_mean": [
+          6.0693097014925375,
+          6.150171311054519,
+          6.264328877494964
+        ],
+        "urate_sd": [
+          1.364571150583154,
+          1.3856639147437952,
+          1.4154419347352887
+        ],
+        "bmi_on_urate": [
+          1.3523787313432836,
+          1.1233436476155807,
+          0.8
+        ]
+      },
+      "1": {
+        "bmi_mean": [
+          27.256145454545454,
+          28.056145454545454,
+          26.551181102362204
+        ],
+        "bmi_sd": [
+          7.273611632449242,
+          7.273611632449242,
+          4.098265175765907
+        ],
+        "urate_mean": [
+          4.2,
+          4.641307095546693,
+          5.264328877494964
+        ],
+        "urate_sd": [
+          1.1322261052548954,
+          1.2496570589418878,
+          1.4154419347352887
+        ],
+        "bmi_on_urate": [
+          2.4473090909090907,
+          1.7642784922394679,
+          0.8
+        ]
+      }
+    },
+    "distribution": {
+      "family": "bivariate_lognormal",
+      "dependence_target": "raw_bmi_on_urate_projection",
+      "outside_age_knots": "constant"
+    },
+    "anchor_derivation": {
+      "young": {
+        "0": {
+          "age": [
+            32.61688432835821,
+            8.932015475855975,
+            1072
+          ],
+          "bmi": [
+            27.47723880597015,
+            5.95889472600556,
+            1072
+          ],
+          "serum_urate": [
+            6.0693097014925375,
+            1.364571150583154,
+            1072
+          ],
+          "slope": 1.3523787313432836
+        },
+        "1": {
+          "age": [
+            31.970690909090912,
+            8.837149439779049,
+            1375
+          ],
+          "bmi": [
+            27.256145454545454,
+            7.273611632449242,
+            1375
+          ],
+          "serum_urate": [
+            4.2,
+            1.1322261052548954,
+            1375
+          ],
+          "slope": 2.4473090909090907
+        }
+      },
+      "old_pooled": {
+        "age": [
+          73.2755905511811,
+          5.312733273835076,
+          5461
+        ],
+        "bmi": [
+          26.551181102362204,
+          4.098265175765907,
+          5461
+        ],
+        "serum_urate": [
+          5.688976377952756,
+          1.4992657774457199,
+          5461
+        ]
+      },
+      "old_source_female_fraction": 0.5753524995422084,
+      "old_assumed_urate_sex_gap": 1.0,
+      "old_assumed_bmi_on_urate": 0.8,
+      "middle_age_bmi_increment": 0.8000000000000007
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_design",
+      "description": "Task design fixes 40 rows per sex x 15-year age bin. Sample integer ages uniformly within each bin, independently across rows; this within-bin age law is unreported. The male/female coding is transported from source labels and is not a biological or ascertainment validation."
+    },
+    {
+      "id": "A_transport",
+      "description": "These three geographically and temporally different selected sources are approximate descriptive anchors for fictional US community adults. Quotas do not recreate their selection, racial composition, clinical treatment or nationally representative distributions. No target records or target statistics were accessed."
+    },
+    {
+      "id": "A_young_pool",
+      "description": "Use source-count-pooled Bogalusa sex-specific moments as working younger-adult reference values. This marginalizes reported race strata only for construction; it does not assert target race proportions. Use them as age32 conditional moments although source moments span19-54; the omitted age decomposition is unknown."
+    },
+    {
+      "id": "A_age",
+      "description": "Use piecewise-linear age-dependent moments with knots32,49,73 and constant continuation outside. The+0.8kg/m2 middle-age BMI increment transfers the Korean 40-59 minus<40 marginal contrast additively to both US sex references. This is an assumption, not a within-person or continuous age coefficient; source selection and sex composition may explain it. Interpolation to CHS is not identified from the publications and the 55-64 bridge is unsupported."
+    },
+    {
+      "id": "A_old_sex",
+      "description": "CHS does not report sex-specific urate/BMI moments. Set old male-minus-female urate mean gap to1.0mg/dL as an explicit assumption, preserving the reconstructed pooled urate mean at the source female fraction3142/5461. Allocate remaining pooled urate variance equally within sex after removing this assumed between-sex component. Set old BMI mean and SD equal across sexes. These are unreported allocations, not evidence of sex equality or a measured age-by-sex interaction."
+    },
+    {
+      "id": "A_dependence",
+      "description": "Age-conditional young BMI-on-urate projection slopes are source-count-weighted averages of the two published race-specific, age-adjusted coefficients. They are not a recovered pooled adjusted coefficient. Set the older slope to0.8kg/m2 per mg/dL as a working extension of CHS high-versus-normal group mean BMI contrast2 divided by urate contrast2.5; that ecological ratio is NOT an identified individual or adjusted regression slope. Linearly interpolate these assumed projection slopes. No inversion of BMI-on-urate slopes and no standardized-beta-as-correlation substitution is performed."
+    },
+    {
+      "id": "A_distribution",
+      "description": "At fixed age and sex, use a bivariate lognormal law matching assigned arithmetic means, SDs and raw BMI-on-urate linear-projection slope. Source marginals do not identify this family, skew, tails, conditional response shape, residual variance or copula. Normal log-scale residuals are independent across rows; all unmeasured covariates are absorbed into the distribution without mechanistic or causal claims."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Published SDs describe individual spread; no coefficient SEs or model-transport probabilities are supplied. Seeds vary individual draws only. Parameter, model-family and transport uncertainty are not represented probabilistically; this one declared construction requires sensitivity work before substantive use."
+    },
+    {
+      "id": "A_checks",
+      "description": "Feedback compares the generated quota sample to published or transparently pooled source statistics in overlapping age/sex selections. Means/SDs need not agree because population, age truncation, weighting, treatment and measurement protocols differ. Identity variable/unit mapping is assumed; it is not assay equivalence. Unsupported race and sex-threshold selections remain not_computable."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Literal task quota; all within-cell ages fictional and stochastic."
+    },
+    "age_knots": {
+      "evidence_ids": [
+        "S2_KAHP_2015_age40_59_age_mean",
+        "S3_CHS_2009_normal_urate_before_matching_age_mean",
+        "S3_CHS_2009_high_urate_before_matching_age_mean"
+      ],
+      "assumption_ids": [
+        "A_age",
+        "A_young_pool"
+      ],
+      "derivation": "Rounded working ages32,49,73, not population-specific cell moments."
+    },
+    "moments_by_female": {
+      "evidence_ids": [
+        "D_S1_male_bmi_mean",
+        "D_S1_male_bmi_sd",
+        "D_S1_male_urate_mean",
+        "D_S1_male_urate_sd",
+        "D_S1_female_bmi_mean",
+        "D_S1_female_bmi_sd",
+        "D_S1_female_urate_mean",
+        "D_S1_female_urate_sd",
+        "D_S3_all_bmi_mean",
+        "D_S3_all_bmi_sd",
+        "D_S3_all_urate_mean",
+        "D_S3_all_urate_sd",
+        "S1_BOGALUSA_2014_white_male_bmi_on_urate",
+        "S1_BOGALUSA_2014_black_male_bmi_on_urate",
+        "S1_BOGALUSA_2014_white_female_bmi_on_urate",
+        "S1_BOGALUSA_2014_black_female_bmi_on_urate",
+        "S2_KAHP_2015_age40_59_bmi_mean",
+        "S2_KAHP_2015_age_lt40_bmi_mean",
+        "S3_CHS_2009_normal_urate_before_matching_female_count",
+        "S3_CHS_2009_high_urate_before_matching_female_count"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_young_pool",
+        "A_age",
+        "A_old_sex",
+        "A_dependence",
+        "A_uncertainty"
+      ],
+      "derivation": "Source pooled moments use sum(n*m)/N and sum((n-1)*sd^2+n*(m-M)^2)/(N-1). Young slopes are count-weighted, assumption-dependent averages. Old urate mean male=M+pf*gap, female=M-(1-pf)*gap; within-sex SD=sqrt(pooled_SD^2-pf*(1-pf)*gap^2). Old BMI moments are shared. Middle BMI=young BMI+0.8; middle urate,SD and dependence values are linear interpolations32to73. No values are fitted to generated data."
+    },
+    "distribution": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_distribution",
+        "A_dependence"
+      ],
+      "derivation": "For means mB,mU and SDs sB,sU, log SDs are sqrt(log(1+(s/m)^2)); log correlation=log(1+beta*sU^2/(mB*mU))/(logSD_B*logSD_U), matching the chosen raw BMI-on-urate projection slope. This is algebra within the assumed family, not inversion of a reported regression."
+    },
+    "anchor_derivation": {
+      "evidence_ids": [
+        "S1_BOGALUSA_2014_white_male_age_mean",
+        "S1_BOGALUSA_2014_white_male_age_sd",
+        "S1_BOGALUSA_2014_white_female_age_mean",
+        "S1_BOGALUSA_2014_white_female_age_sd",
+        "S1_BOGALUSA_2014_black_male_age_mean",
+        "S1_BOGALUSA_2014_black_male_age_sd",
+        "S1_BOGALUSA_2014_black_female_age_mean",
+        "S1_BOGALUSA_2014_black_female_age_sd",
+        "S1_BOGALUSA_2014_white_male_serum_urate_mean",
+        "S1_BOGALUSA_2014_white_male_serum_urate_sd",
+        "S1_BOGALUSA_2014_white_female_serum_urate_mean",
+        "S1_BOGALUSA_2014_white_female_serum_urate_sd",
+        "S1_BOGALUSA_2014_black_male_serum_urate_mean",
+        "S1_BOGALUSA_2014_black_male_serum_urate_sd",
+        "S1_BOGALUSA_2014_black_female_serum_urate_mean",
+        "S1_BOGALUSA_2014_black_female_serum_urate_sd",
+        "S1_BOGALUSA_2014_white_male_bmi_mean",
+        "S1_BOGALUSA_2014_white_male_bmi_sd",
+        "S1_BOGALUSA_2014_white_female_bmi_mean",
+        "S1_BOGALUSA_2014_white_female_bmi_sd",
+        "S1_BOGALUSA_2014_black_male_bmi_mean",
+        "S1_BOGALUSA_2014_black_male_bmi_sd",
+        "S1_BOGALUSA_2014_black_female_bmi_mean",
+        "S1_BOGALUSA_2014_black_female_bmi_sd",
+        "S1_BOGALUSA_2014_white_male_n",
+        "S1_BOGALUSA_2014_white_female_n",
+        "S1_BOGALUSA_2014_black_male_n",
+        "S1_BOGALUSA_2014_black_female_n",
+        "S1_BOGALUSA_2014_white_male_bmi_on_urate",
+        "S1_BOGALUSA_2014_white_female_bmi_on_urate",
+        "S1_BOGALUSA_2014_black_male_bmi_on_urate",
+        "S1_BOGALUSA_2014_black_female_bmi_on_urate",
+        "S1_BOGALUSA_2014_all_adults_bmi_on_urate",
+        "S2_KAHP_2015_all_age_mean",
+        "S2_KAHP_2015_all_age_sd",
+        "S2_KAHP_2015_age_lt40_age_mean",
+        "S2_KAHP_2015_age_lt40_age_sd",
+        "S2_KAHP_2015_age40_59_age_mean",
+        "S2_KAHP_2015_age40_59_age_sd",
+        "S2_KAHP_2015_age_ge60_age_mean",
+        "S2_KAHP_2015_age_ge60_age_sd",
+        "S2_KAHP_2015_all_bmi_mean",
+        "S2_KAHP_2015_all_bmi_sd",
+        "S2_KAHP_2015_age_lt40_bmi_mean",
+        "S2_KAHP_2015_age_lt40_bmi_sd",
+        "S2_KAHP_2015_age40_59_bmi_mean",
+        "S2_KAHP_2015_age40_59_bmi_sd",
+        "S2_KAHP_2015_age_ge60_bmi_mean",
+        "S2_KAHP_2015_age_ge60_bmi_sd",
+        "S2_KAHP_2015_all_serum_urate_mean",
+        "S2_KAHP_2015_all_serum_urate_sd",
+        "S2_KAHP_2015_age_lt40_serum_urate_mean",
+        "S2_KAHP_2015_age_lt40_serum_urate_sd",
+        "S2_KAHP_2015_age40_59_serum_urate_mean",
+        "S2_KAHP_2015_age40_59_serum_urate_sd",
+        "S2_KAHP_2015_age_ge60_serum_urate_mean",
+        "S2_KAHP_2015_age_ge60_serum_urate_sd",
+        "S2_KAHP_2015_all_n",
+        "S2_KAHP_2015_all_male",
+        "S2_KAHP_2015_all_male_count",
+        "S2_KAHP_2015_age_lt40_n",
+        "S2_KAHP_2015_age_lt40_male",
+        "S2_KAHP_2015_age_lt40_male_count",
+        "S2_KAHP_2015_age40_59_n",
+        "S2_KAHP_2015_age40_59_male",
+        "S2_KAHP_2015_age40_59_male_count",
+        "S2_KAHP_2015_age_ge60_n",
+        "S2_KAHP_2015_age_ge60_male",
+        "S2_KAHP_2015_age_ge60_male_count",
+        "S3_CHS_2009_normal_urate_before_matching_age_mean",
+        "S3_CHS_2009_normal_urate_before_matching_age_sd",
+        "S3_CHS_2009_high_urate_before_matching_age_mean",
+        "S3_CHS_2009_high_urate_before_matching_age_sd",
+        "S3_CHS_2009_normal_urate_before_matching_bmi_mean",
+        "S3_CHS_2009_normal_urate_before_matching_bmi_sd",
+        "S3_CHS_2009_high_urate_before_matching_bmi_mean",
+        "S3_CHS_2009_high_urate_before_matching_bmi_sd",
+        "S3_CHS_2009_normal_urate_before_matching_serum_urate_mean",
+        "S3_CHS_2009_normal_urate_before_matching_serum_urate_sd",
+        "S3_CHS_2009_normal_urate_before_matching_n",
+        "S3_CHS_2009_normal_urate_before_matching_female",
+        "S3_CHS_2009_normal_urate_before_matching_female_count",
+        "S3_CHS_2009_high_urate_before_matching_serum_urate_mean",
+        "S3_CHS_2009_high_urate_before_matching_serum_urate_sd",
+        "S3_CHS_2009_high_urate_before_matching_n",
+        "S3_CHS_2009_high_urate_before_matching_female",
+        "S3_CHS_2009_high_urate_before_matching_female_count",
+        "D_S1_male_bmi_mean",
+        "D_S1_male_bmi_sd",
+        "D_S1_male_urate_mean",
+        "D_S1_male_urate_sd",
+        "D_S1_female_bmi_mean",
+        "D_S1_female_bmi_sd",
+        "D_S1_female_urate_mean",
+        "D_S1_female_urate_sd",
+        "D_S3_all_bmi_mean",
+        "D_S3_all_bmi_sd",
+        "D_S3_all_urate_mean",
+        "D_S3_all_urate_sd"
+      ],
+      "assumption_ids": [
+        "A_young_pool",
+        "A_age",
+        "A_old_sex",
+        "A_dependence"
+      ],
+      "derivation": "Audit values derived only from the admitted aggregates. Source cohort counts specify aggregation weights, not observed target records. Scientific choices are explicitly labeled in keys."
+    }
+  }
+}
