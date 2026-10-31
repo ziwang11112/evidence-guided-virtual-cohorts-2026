@@ -2,7 +2,13 @@
 
 Private research development repository. This is an explicitly allowlisted export of method documents, reusable code, artificial-fixture tests and aggregate analytical results. It is not a complete copy of the research workspace.
 
-Start with [the current research scope](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/CURRENT_RESEARCH_SCOPE.md): whole-cohort generation, enrichment with variables never measured in the original cohort, and missing-cell completion. Evaluation focuses on downstream conclusions and relationships, distinguishing evidence consistency, independent validation and unvalidated exploration. Multiple scenarios are optional.
+Start with [the current research direction and paper storyline](biomedical_research/virtual_cohort_system/docs/PAPER_STORYLINE_AND_DIRECTION_2026-10-31.md): **turn published biomedical evidence into reusable virtual data for scientific analysis**. Evidence-only complete virtual-cohort generation is a core intended capability: no individual-level records are required as an input, although published evidence and a target-population specification are still needed. Whole-column augmentation and partial-cell completion are separate information regimes within the same method. Their scientific usefulness must be validated separately.
+
+The [G-Sim and LLMSynthor deep review](biomedical_research/virtual_cohort_system/docs/GSIM_LLMSYNTHOR_DEEP_REVIEW_2026-10-31.md) covers methods, data, public implementation, evaluation boundaries and constructive extensions. It distinguishes author-reported results from our static implementation audit; no published numerical results were rerun. See the [documentation export boundary](docs/RESEARCH_DIRECTION_EXPORT_2026-10-31.md).
+
+The latest completed [M16 direct-generation pilot](biomedical_research/virtual_cohort_system/MILESTONE_16_RESULTS.md) contains three Agent constructions, one actual 12-value repair and two retentions, followed by a reserved 200-person reference evaluation. All final tables preserve positive BMI and negative quadratic BMI directions; age transfers in two of three. Repair has mixed analytical effects. This is partial feasibility, not general superiority or proof of evidence-only whole-cohort validity; the revealed target remains closed to tuning.
+
+The [earlier broad scope](biomedical_research/evidence_virtual_cohort_framework_2026-10-27/CURRENT_RESEARCH_SCOPE.md) and completed pilots below remain part of the research record. Evaluation focuses on downstream conclusions and relationships, distinguishing source-evidence consistency, independent validation and unvalidated exploration.
 
 The [three-provider review package](biomedical_research/three_model_review_2026-10-28/README.md) preserves the ChatGPT, Gemini and Claude responses, critical claim checks, and a synthesis of proposed next steps. These are research recommendations; no new experiment or validated improvement is claimed.
 
