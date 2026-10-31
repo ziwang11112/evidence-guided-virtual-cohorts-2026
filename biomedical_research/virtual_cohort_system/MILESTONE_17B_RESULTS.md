@@ -2,11 +2,13 @@
 
 31 October 2026. **Completed small scientific feasibility screen.** No individual source or target records were supplied to either builder. This advances beyond M17-A's artificial engineering fixture.
 
-Two fresh-context Agents independently constructed all age, sex, BMI and serum-urate variables from the same three external publications and a prospective age/sex quota specification. On a newly admitted 320-person NHANES 2007–2008 reference, all six generated draws preserved the positive adjusted BMI and age associations and the negative female contrast. Effect magnitudes were mixed; BMI levels were systematically low. The reference does not establish a nonzero curvature or interaction direction at this sample size. This supports selected analytical feasibility, not a generally equivalent replacement for measured data or a demonstrated method advantage.
+Two fresh-context Agents independently constructed all age, sex, BMI and serum-urate variables from the same three external publications and a prospective age/sex quota specification. On a newly admitted 320-person NHANES 2007–2008 reference, all six generated draws preserved the positive adjusted BMI and age associations and the negative female contrast. Effect magnitudes were mixed; all six generated BMI means were lower than the measured reference-sample mean. This is not, by itself, an estimate of bias relative to an unknown population mean. The reference does not establish a nonzero curvature or interaction direction at this sample size. This supports selected analytical feasibility, not a generally equivalent replacement for measured data or a demonstrated method advantage.
 
 ![All eight locked analyses](reports/m17b_whole_cohort_2026-10-31/figures/analytical_use.png)
 
 Reference bars and shading are 95% HC3 intervals conditional on the selected quota sample/model. Colored dots are three stochastic draws from each frozen model; they are not independent clinical replications or calibrated model uncertainty.
+
+The measured reference is an empirical anchor, not known population truth. In particular, BMI 29.1824 is this selected sample’s mean, not a known national or standardized-population mean. The existing regression intervals do not quantify uncertainty in that mean. See the [reference-interpretation clarification](docs/M17B_REFERENCE_INTERPRETATION.md); numerical results and frozen historical artifacts are unchanged.
 
 ## Design and actual execution
 
@@ -38,7 +40,7 @@ B1 keeps a sex-specific latent correlation fixed with age. B2 interpolates the r
 
 Intervals below are reference HC3 intervals. Generated ranges span three draws, not confidence intervals. Forward BMI effects are mg/dL per 5 kg/m2; age effects are mg/dL per decade; reverse effects are kg/m2 per mg/dL. The other quantities follow the protocol's fixed contrasts.
 
-| Analysis | Real reference [95% interval] | B1 generated range | B2 generated range |
+| Analysis | Measured reference estimate [95% interval] | B1 generated range | B2 generated range |
 |---|---:|---:|---:|
 | Adjusted BMI | 0.2722 [0.1819, 0.3625] | 0.3083–0.4684 | 0.2561–0.3266 |
 | Adjusted age | 0.1485 [0.0694, 0.2275] | 0.1430–0.2098 | 0.1613–0.1799 |
@@ -54,7 +56,7 @@ The complete [custodian report](reports/m17b_whole_cohort_2026-10-31/custodian/r
 ### What the results support
 
 1. **Selected relationship directions transfer without participant inputs.** Both constructions preserve adjusted BMI, age and sex directions across all three draws; age magnitude is also close in this case. This is a real analytical-use result for the fully generated cohort regime.
-2. **One useful relation does not imply a generally accurate cohort.** Both underestimate overall and female BMI means, and female BMI dispersion. B1 overstates the adjusted forward BMI coefficient. B2 has smaller forward discrepancies in this case but understates the reverse coefficient. Matching one orientation is not sufficient evidence for joint fidelity.
+2. **One useful relation does not imply a generally accurate cohort.** Both have lower overall and female BMI means, and lower female BMI dispersion, than this measured sample. B1 has a larger adjusted forward BMI coefficient than the reference estimate. B2 has smaller forward discrepancies in this case but a smaller reverse coefficient than the reference estimate. These are sample-relative comparisons, not established population biases. Matching one orientation is not sufficient evidence for joint fidelity.
 3. **Unprovided shape remains uncertain.** B1 induces stronger negative curvature; B2 is near zero and changes curvature sign across draws. The measured reference interval spans zero. Neither a stable negative synthetic sign nor inclusion in a broad reference interval proves curvature recovery. The same caution applies to interaction.
 4. **No repair improvement occurred.** Both Agents retained their models. All initial/final effects and changes in absolute discrepancy are exactly zero by byte-identical retention; narrative refinement is not data improvement.
 
