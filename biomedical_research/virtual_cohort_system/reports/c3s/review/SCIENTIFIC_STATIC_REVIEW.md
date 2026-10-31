@@ -1,0 +1,31 @@
+# Source-only candidate static review
+
+**Pass for the bounded source-only mechanism comparison, subject to the controller's explicit preexecution interpretation: retain and report both structures, with no replay-selected winner, target release, or new target admission.** No scientific execution was performed by this reviewer. This is not evidence that the candidates fit the sources.
+
+The frozen linear candidate is bound by SHA-256 `d6ce823f7af2533aa31ad4d9a14918f8d84d697d00d710a3e1afff9f335570c4`; the alternative by `e1b3a15ac6017e278e3ee7f6b1dc41261c9d438eb68d0a48531fd696a0402579`. All 27 independent metadata/hash comparisons in `CANDIDATE_STATIC_CHECKS.json` passed. Every freeze commitment was checked; source evidence matches the supplied input manifest; each operator matches the fixed source panel; root plan/criteria copies match their frozen candidate copies.
+
+## Scientific structure and source interpretation
+
+The two candidates use identical program bytes. The alternative activates a genuinely different response function, `age - 0.5 * max(age - 60, 0)`, by a frozen specification selector; it is not merely a renamed seed or parameter vector. The only numerical descriptor difference is the analytically required Lifelines feature center. Evidence, source tasks, source-check operators, population distributions, unreported covariance assumption, initial fitted scalars, bounds, scales and criteria are otherwise identical. The fixed knot and post-knot rate are openly authored sensitivity assumptions motivated by a source marginal pattern, not estimates of a biological threshold.
+
+Task units are HbA1c NGSP percentage points, fasting glucose mg/dL, BMI kg/m² and age years. Jansen's BMI and glucose coefficients use separate regressions adjusted for age and binary sex. The Pani age regression adjusts for sex, BMI and fasting glucose. The exact prescribed operator predictor lists, units and age-stratum selections are preserved. The converted Jansen slope formulas apply the HbA1c multiplier only and divide the glucose slope by the fixed glucose unit factor; they do not add the HbA1c level offset to a slope.
+
+Both specifications distinguish published projection coefficients from conditional model terms. Equality to conditional BMI/glucose terms depends on the fixed independence assumption; the alternative's feature coefficient is not its source-population linear age projection. Unknown covariance is fixed rather than fitted. No quarantined Table 3 coefficients or Liu univariate coefficients enter the model or objective. Duplicate unit representations are not repeated constraints; Pani survey mean SEs are not converted to individual SDs or independent precision weights.
+
+Lifelines and Pani are distinct source populations. Lifelines's rounded truncated-normal ages, Pani's within-bin uniform ages and upper age bound, common lognormal BMI, common truncated-normal glucose, and Pani's borrowed sex/BMI/glucose marginals are explicit approximations. The unweighted Pani simulation does not reconstruct survey estimation. These limitations survive any calibration success.
+
+The source location anchors are published quantities with correctly distinguished reference populations: the Lifelines whole-source mean and Pani 55–59 mean. Analytic centering makes those roles coherent under the declared distributions. They are fixed before execution, shared across structures, and not independent fitted study offsets. There is one bounded common location correction. Consequently, this is a comparison of shared response shapes around known study locations; it does not estimate a transportable common absolute intercept or identify the location for a new population.
+
+The five calibrated scalars are common location correction, age-feature coefficient, BMI coefficient, glucose coefficient and residual SD. All other descriptors remain fixed. Bounds are explicit modeling/engineering choices or converted printed projection bounds of unknown confidence level. Residual SD initialization uses independent variance subtraction rather than treating the source marginal HbA1c SD as residual SD. None of these steps establishes uncertainty calibration or clinical equivalence.
+
+## Prospective decisions and unresolved interpretation
+
+The criteria state implementable comparisons: finite complete checks, source HbA1c mean/SD and stratum-mean discrepancy limits, actual projected-coefficient bands, unchanged covariate outputs at each paired seed, no-harm marginal diagnostics, strict fit improvement, and strict improvement on both unused simulation seeds. These are pragmatic numerical criteria, not clinical tolerances, hypothesis tests or confidence intervals. A lower aggregate score cannot remove an individual failed requirement.
+
+An ambiguity was identified before execution: the frozen structural-comparison text includes a recommendation to retain the linear structure based on replay comparisons. The controller explicitly adjudicated that **both structures remain retained and reported regardless of replay**. “Numerically preferable” is only a prespecified descriptive comparison, and no winner is advanced. This interpretation must accompany the results. The unused seeds are held out from each structure's parameter search; they are not independent biological populations, unseen endpoints, or an independent confirmatory test of an eventual selected structure.
+
+The 40-trial limit is inclusive of baseline and does not establish convergence or global optimality. The exact-zero optimizer target is a stopping rule distinct from the scientific numerical criteria. Failure to pass any criterion is a reportable incomplete source compatibility result; it does not justify an added source-specific offset, covariance fitting, further search, or target-informed revision.
+
+## Review boundary
+
+The review inspected new C3 aggregate inputs, candidate source text and metadata, and their frozen hashes. It did not import either generator, run generated code, generate cohorts, inspect patient tables, or access raw historical target artifacts. The history-stage accidental exposure to target numerical summaries is disclosed in `HISTORY_SCOPE.md`; no such numerical values informed this review and none were communicated to the scientific author.
