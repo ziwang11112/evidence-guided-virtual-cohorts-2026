@@ -1,0 +1,161 @@
+{
+  "parameters": {
+    "distribution": "gamma",
+    "x_values": [
+      0,
+      1,
+      2
+    ],
+    "rows_per_stratum": [
+      256,
+      256,
+      256
+    ],
+    "group_value": 0,
+    "gamma_shape_by_stratum": [
+      4.0,
+      4.0,
+      4.0
+    ],
+    "gamma_scale_by_stratum": [
+      0.5,
+      0.75,
+      1.0
+    ],
+    "row_id_prefix": "core_v0_",
+    "random_generator": "numpy_default_rng"
+  },
+  "assumptions": [
+    {
+      "id": "A_task_design",
+      "description": "The task and integration plan prescribe exactly 768 entirely synthetic rows, 256 at each x=0,1,2, with group=0; this is a fixed design, not a random draw from source stratum prevalence. Sequential string identifiers identify synthetic rows only."
+    },
+    {
+      "id": "A_gamma",
+      "description": "Within each exact x stratum, assume a gamma law parameterized by shape k and scale theta. It is continuous, strictly positive with no point mass at zero, has an unbounded exponentially decaying right tail, and has mean k*theta and SD sqrt(k)*theta. Nonnegative support and two moments do not identify this family or these tail/zero-mass properties; other laws can match the source."
+    },
+    {
+      "id": "A_independent_rows",
+      "description": "Treat separate synthetic rows as independent conditional on fixed x and group. Dependence or clustering between individuals is unreported; independence is an unverified generation assumption, not an extracted zero association."
+    },
+    {
+      "id": "A_moment_plugin",
+      "description": "Treat the reported arithmetic means and individual SDs as fixed conditional population moments for parameterization. Source sample sizes, SEs, confidence intervals and rounding uncertainty are unavailable, so no parameter-uncertainty distribution is invented. Gamma draws represent individual variation only."
+    },
+    {
+      "id": "A_source_applicability",
+      "description": "Adopt the artificial source conditional moments for generated group=0 rows at exactly the same three x values. Source sampling/population context beyond these labels is unreported. Fixed equal quotas define this output population and do not reconstruct source marginal prevalence; checks are approximate source diagnostics, not target validation."
+    },
+    {
+      "id": "A_identity_measurement",
+      "description": "Use source x in x_unit and y in u without measurement error or conversion, with group encoded by numeric category 0. This is consistent with exact x and named y units in the artificial fixture, not evidence of a real assay equivalence."
+    },
+    {
+      "id": "A_sd_diagnostic",
+      "description": "The source explicitly describes within-stratum individual SD, not SE, but gives no sample size or SD divisor. The task prescribes sample SD with ddof=1 as the generated-output diagnostic; this convention is not claimed to have been reported by the source. Sample SD need not equal the population SD or be unbiased for it."
+    },
+    {
+      "id": "A_rng",
+      "description": "Use numpy.random.default_rng(seed) to obtain ordinary pseudorandom gamma draws once per stratum in x_values order. The controller supplies the seed; no seed selection, sample centering/scaling, moment forcing, rejection of draws or preview sampling is performed."
+    },
+    {
+      "id": "A_discrete_scope",
+      "description": "Only x=0,1,2 at group=0 are supported. Parameters are stratum-specific. No interpolation or extrapolation law and no group contrast or causal relationship is inferred from the three source summaries."
+    }
+  ],
+  "parameter_provenance": {
+    "distribution": {
+      "evidence_ids": [
+        "E_population_measurement",
+        "E_distribution_unreported"
+      ],
+      "assumption_ids": [
+        "A_gamma",
+        "A_independent_rows",
+        "A_moment_plugin",
+        "A_source_applicability"
+      ],
+      "derivation": "Gamma is an explicit family choice compatible with nonnegative y and the two reported positive moments; it is not identified by those moments."
+    },
+    "x_values": {
+      "evidence_ids": [
+        "E_y_mean_x0",
+        "E_y_mean_x1",
+        "E_y_mean_x2",
+        "E_y_sd_x0",
+        "E_y_sd_x1",
+        "E_y_sd_x2"
+      ],
+      "assumption_ids": [
+        "A_task_design",
+        "A_identity_measurement",
+        "A_discrete_scope"
+      ],
+      "derivation": "Use exactly the three named source strata in the order x=0,1,2, as also prescribed by the task."
+    },
+    "rows_per_stratum": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task_design"
+      ],
+      "derivation": "The task prescribes 256 rows per stratum, totaling 768; no prevalence is estimated from the source."
+    },
+    "group_value": {
+      "evidence_ids": [
+        "E_population_measurement"
+      ],
+      "assumption_ids": [
+        "A_task_design",
+        "A_identity_measurement"
+      ],
+      "derivation": "Source and task both specify group=0 only; output uses integer category value 0."
+    },
+    "gamma_shape_by_stratum": {
+      "evidence_ids": [
+        "E_y_mean_x0",
+        "E_y_mean_x1",
+        "E_y_mean_x2",
+        "E_y_sd_x0",
+        "E_y_sd_x1",
+        "E_y_sd_x2"
+      ],
+      "assumption_ids": [
+        "A_gamma",
+        "A_moment_plugin",
+        "A_source_applicability"
+      ],
+      "derivation": "For each stratum k=(mean/SD)^2: (2/1)^2=(3/1.5)^2=(4/2)^2=4. Shape is dimensionless; matching is analytic at the population level only."
+    },
+    "gamma_scale_by_stratum": {
+      "evidence_ids": [
+        "E_y_mean_x0",
+        "E_y_mean_x1",
+        "E_y_mean_x2",
+        "E_y_sd_x0",
+        "E_y_sd_x1",
+        "E_y_sd_x2"
+      ],
+      "assumption_ids": [
+        "A_gamma",
+        "A_moment_plugin",
+        "A_source_applicability"
+      ],
+      "derivation": "For each stratum theta=SD^2/mean: 1^2/2=0.5, 1.5^2/3=0.75, 2^2/4=1 in u. Population means k*theta are 2,3,4 u and SDs sqrt(k)*theta are 1,1.5,2 u."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task_design"
+      ],
+      "derivation": "Cosmetic unique synthetic identifier prefix, followed by a six-digit sequential index; conveys no patient identity or scientific information."
+    },
+    "random_generator": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_rng",
+        "A_independent_rows"
+      ],
+      "derivation": "Reproducibility setting: initialize the NumPy default generator once from the supplied seed and draw each stratum once without outcome-dependent modification."
+    }
+  }
+}

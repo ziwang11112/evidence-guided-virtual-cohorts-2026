@@ -4,6 +4,8 @@
 
 **Decision: start a provisional manuscript now; consolidate and freeze a minimal method before viewing a new target; freeze the resulting claims after the complete planned evaluation, including unfavorable results.** A favorable target result is not a prerequisite for freezing the method. These are project milestones, not acceptance rules for any journal or conference.
 
+**Core v0 update:** [the source-feedback integration](../reports/core_v0_2026-10-31/RESULTS.md) and independent review complete F1 for the documented **program whole-cohort identity-feedback reference profile with external Agent orchestration**. Two same-seed executions, six verified diagnostics per stage and a genuine Agent retention decision produced one unique artificial 768-row table. This does not validate numerical revision effects, retrieval performance, generic multi-study replay, all generation modes or real transfer. The [English working draft](../manuscript/DRAFT_v0.md) is now written. F2 and R1 remain pending; proceed to bounded real-case admission rather than adding another toy component.
+
 **C5 implementation update:** the optional dynamic-request adapter now has an actual artificial end-to-end check: nine fixed executions, exact old-cell preservation in all three extensions, and an independent recomputation of 48 endpoint estimates and 210 diagnostics. Both whole-cohort generation and later conditional extension were exercised. See the [C5 result and boundaries](../reports/c5_dynamic_extension_2026-10-31/RESULTS.md). No published-study case, source-feedback revision or general conversational interface was tested in this unit. This contributes implementation evidence but does not complete the assembled core-method freeze F1 or real-case gate F2; keep dynamic extension optional and return to the compact core specification and its source-only feedback/revision replay.
 
 **The scientific core is useful generated data.** Published study-level evidence, a target-population description and optional observed measurements are translated by a scientific Agent into a documented generation process. The same generated data are then used for prespecified scientific analyses. Complete-cohort generation with zero individual inputs remains a central capability; enrichment and missing-cell completion remain supported information regimes.
@@ -12,8 +14,8 @@ Provisional working title: *Evidence guided generation of virtual biomedical dat
 
 | Decision | Current status | Required next artifact |
 |---|---|---|
-| D0: begin a provisional draft | Ready | Write the problem, current implementation, evaluation design, historical findings and limitations with unresolved claims marked |
-| F1: freeze the minimal core method v0 | Partially ready; not yet frozen | A compact method specification, bound code/prompts/configuration and a verified source-only end-to-end replay |
+| D0: begin a provisional draft | Working draft written | Complete related-work citations and the prospective results after the appropriate gates |
+| F1: freeze the minimal core method v0 | Reference profile frozen and independently reviewed | Use the bound specification and interfaces; separately review case-specific source/evaluator adapters before target access |
 | F2: freeze the next case before target access | Not ready; no new case selected here | Admitted case, evidence/exposure register, estimands, interpretation rules, budget and an independent pre-outcome review |
 | R1: lock the next results and manuscript claims | Pending future evaluation | Complete planned analyses, independent recomputation and a claim-to-evidence decision, whether positive, mixed or null |
 
@@ -44,13 +46,13 @@ Keep direct row authorship, numerical calibration, extra Agents and specialized 
 
 **F1 requires an executable, reviewable method version, not an attractive accuracy score.** Existing modules should be reused; implement only missing connections needed for the chosen case.
 
-- [ ] F1.1 Write one compact core specification: scientific claim, inputs/outputs, roles, evidence policy, assumptions, generation route, revision/retention decisions and stopping rules. Current components exist, but a single paper-version contract is not yet bound.
-- [ ] F1.2 Bind the actual code commit or manifest, Agent/task prompts, available tools, dependencies, execution settings and budgets. Record the model identity/settings exposed by the runtime and any unavailable metadata; do not invent them.
-- [ ] F1.3 Make case-specific inputs explicit configuration. Document all remaining source-context and evaluator adapters. A documented minimal callable sequence is sufficient; a new user interface or fully autonomous model launcher is not required.
-- [ ] F1.4 Give every scientific parameter an evidence, derivation or assumption reference. Unknown dependencies must remain visible; absence from a paper is not zero correlation or independence.
-- [ ] F1.5 Demonstrate one source-only end-to-end replay of this exact assembled version, from permitted inputs to actual generated output and computed feedback/decision. Use an approved development fixture or source package, not a revealed target for new tuning. Prior module tests alone do not satisfy this item.
-- [ ] F1.6 Independently recompute the small set of critical source operators and check preservation/isolation/lineage behavior actually used. No unresolved implementation defect may change the scientific interpretation. Additional testing is needed only for changed or uncertain behavior.
-- [ ] F1.7 Record independent review and the frozen version. Changes that alter scientific decisions create a new version; retain the previous record. Cosmetic changes do not silently relabel scientific outputs.
+- [x] F1.1 Compact specification bound: claim, inputs/outputs, roles, evidence policy, assumptions, generation route, decision and stopping rules. Scope is the stated reference profile.
+- [x] F1.2 Assembly manifest binds code, actual task prompts, available interfaces and limits; actual runtime versions are recorded. Model identifier, temperature and token usage remain explicitly unavailable/unmetered.
+- [x] F1.3 Case inputs are declared in task and integration plan. The small replay controller's quotas/strata guards are explicit fixture-specific code, not a claimed generic case engine. Source-context and target-evaluator requirements remain documented for future cases.
+- [x] F1.4 Every reference-candidate parameter has evidence, derivation or assumption provenance; source-underdetermined tails and dependence are disclosed.
+- [x] F1.5 Actual source-only assembled replay completed: initial output, six diagnostics, authentic feedback-bound retention, parent-linked final freeze and final execution. Two same-seed executions yielded one unique draw; no real target was tuned.
+- [x] F1.6 Independent arithmetic and native lineage/isolation checks passed for the exercised profile. Maximum arithmetic disagreement was 4.44e-16; no outstanding issue changes this integration's interpretation.
+- [x] F1.7 Independent scoped closeout and frozen assembly are recorded. A change to scientific procedure requires a new version; the retained result is not a numerical-revision benefit.
 
 **F2 locks a scientifically informative case before the answer is known.** It follows F1 and precedes target-dependent scientific choices or disclosure of held-out results to the builders.
 
@@ -69,7 +71,7 @@ Accessible published source statistics may be used as inputs; do not artificiall
 
 The proposed bounded sequence is:
 
-1. Write the provisional draft and compact method specification; complete F1 with the existing tools.
+1. Completed for the stated reference profile: provisional draft, compact specification and independently checked F1 replay using existing tools. Retain its scope and bindings.
 2. Screen at most three candidate dataset families and audit at most six new primary studies for one fresh real case. These are ceilings, not collection targets. If none is suitable, close admission with reasons instead of inspecting more target outcomes until a favorable case appears.
 3. Complete F2. Default to zero-individual-input whole-cohort generation. Select any different primary regime on scientific grounds before target access and retain the broader framework scope.
 4. Allow at most two independent Agent constructions, one source-feedback/retrieval-and-revision opportunity per construction and three fixed output seeds per stage: at most twelve scheduled initial/final target outputs. Retained stages share output identities. The case contract must separately fix a source-execution cap before running; a limit of twelve target labels is not a cap on optimizer trials.
@@ -126,4 +128,4 @@ Complete the closest-work comparison before asserting novelty: input information
 
 Source records: [M13-B](../MILESTONE_13B_RESULTS.md), [M15-B](../MILESTONE_15B_RESULTS.md), [M16](../MILESTONE_16_RESULTS.md), [M17-B](../MILESTONE_17B_RESULTS.md), [Cycle 2](../work/autonomous_research_cycle2_2026-10-31/results_report/REPORT.md), [C3](C3_SOURCE_CONSTRAINED_GENERATION_RESULTS_2026-10-31.md), [C4](C4_REVISION_ACCEPTANCE_RESULTS_2026-10-31.md). The [implementation roadmap](IMPLEMENTATION_ROADMAP_2026-10-30.md) retains the earlier stage history.
 
-Readiness review: the planning gates were independently challenged against C3/C4 and the roadmap. The review agreed that drafting is ready, method/case freeze is incomplete, and claims must depend on the full new evaluation. This planning review does not satisfy F1's future executable-version review or F2's case review.
+Historical readiness review: the initial planning gates were challenged against C3/C4 and the roadmap, at which time method/case freeze was incomplete. That planning review alone did not satisfy an executable-version or real-case review. The subsequent core v0 integration and independent closeout above now establish the scoped F1 implementation freeze; F2 still requires a new case review.

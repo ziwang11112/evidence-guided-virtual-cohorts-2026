@@ -1,0 +1,11 @@
+# Core v0 reference integration export
+
+The [core v0 archive](../biomedical_research/virtual_cohort_system/reports/core_v0_2026-10-31/README.md) contains the method/plan, source admission, exact prompts and launch strings, native task/registry, artificial aggregate source, scientific/check/freeze artifacts, bounded controller, assembly/lineage/state, actual execution metadata, source feedback and independent scalar audit records selected by an explicit allowlist.
+
+The [manifest](../biomedical_research/virtual_cohort_system/reports/core_v0_2026-10-31/EXPORT_MANIFEST.json) records original/destination SHA-256 values and classifications, including both executions, both source-feedback stages and final closeout. The [root closeout](../biomedical_research/virtual_cohort_system/reports/core_v0_2026-10-31/CLOSEOUT.json) records `F1_REFERENCE_PROFILE_FROZEN`: two executions, one unique 768-row output, a retain decision, and six source statistics per stage. The export preserves that scoped decision without independently establishing it. No F2 real case was admitted; F2/R1 remain separate pending gates.
+
+Generated/input rows, process logs, caches, duplicated runtime inputs, papers and credentials are excluded. Original method wording, operator/lineage preflight corrections and the technical import correction remain disclosed in unchanged review records. Source moment checks are scalar diagnostics from an artificial fixture, not clinical validation, novelty or superiority. Same-seed retention is not independent replication or improvement.
+
+This is a local Windows/WSL reference integration. No fresh replay from the archive was tested. Historical generated rows are omitted, and absolute paths in the assembly require a new controller manifest for relocation; historical frozen files are not rewritten. Any separately authorized execution must use the existing isolated backend, with no host fallback. See the archive [privacy and reproduction record](../biomedical_research/virtual_cohort_system/reports/core_v0_2026-10-31/PRIVACY_AND_REPRODUCTION.md).
+
+This bounded export changes only the new core-v0 report subtree and this new export note. The C5 archive, other old exports, original scientific files and Git history are outside its write scope.
