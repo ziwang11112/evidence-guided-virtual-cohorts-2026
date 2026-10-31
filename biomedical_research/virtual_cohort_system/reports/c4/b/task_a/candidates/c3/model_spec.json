@@ -1,0 +1,138 @@
+{
+  "parameters": {
+    "joint_family": "multivariate_gaussian",
+    "sampling_design": "independent_identically_distributed",
+    "n_rows": 4000,
+    "variables": [
+      "x",
+      "y",
+      "z"
+    ],
+    "means": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "standard_deviations": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "correlation_matrix": [
+      [
+        1.0,
+        0.3,
+        0.2
+      ],
+      [
+        0.3,
+        1.0,
+        0.6
+      ],
+      [
+        0.2,
+        0.6,
+        1.0
+      ]
+    ],
+    "identifier": {
+      "column": "row_id",
+      "prefix": "task_a_fictional_"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "iid_rows",
+      "description": "Rows are independent and identically distributed conditional on the fixed declared Gaussian parameters. There is no centering, whitening, moment matching, selection of favorable random draws, or coupling across rows. The seed controls only the random-number generator; a finite table is allowed Monte Carlo deviations from population moments."
+    },
+    {
+      "id": "fixed_exact_parameters",
+      "description": "Admitted source moments are exact definitions, so no evidence-uncertainty distribution is added. Individual Gaussian residual variation is distinct from uncertainty about an unidentified joint law. No hidden parameter, target outcome, or clinical claim is used."
+    },
+    {
+      "id": "gaussian_construction",
+      "description": "Use the expressly admitted joint multivariate Gaussian family as an artificial construction. Derived Gaussian conditional relationships have validity only within this family."
+    },
+    {
+      "id": "identifier_convention",
+      "description": "Assign deterministic sequential string labels with a case-specific prefix. Labels are not scientific measurements and encode no patient data."
+    }
+  ],
+  "parameter_provenance": {
+    "joint_family": {
+      "evidence_ids": [
+        "gaussian_family"
+      ],
+      "assumption_ids": [
+        "gaussian_construction"
+      ],
+      "derivation": "Use the explicitly admitted artificial Gaussian family."
+    },
+    "sampling_design": {
+      "evidence_ids": [
+        "row_contract"
+      ],
+      "assumption_ids": [
+        "iid_rows",
+        "fixed_exact_parameters"
+      ],
+      "derivation": "Author choice: conventional independent Gaussian draws at fixed source parameters; finite sample moments are not forced."
+    },
+    "n_rows": {
+      "evidence_ids": [
+        "row_contract"
+      ],
+      "assumption_ids": [],
+      "derivation": "Copy the task and source row count of 4000."
+    },
+    "variables": {
+      "evidence_ids": [
+        "row_contract"
+      ],
+      "assumption_ids": [],
+      "derivation": "Copy generated-variable order x,y,z; all use synthetic_standardized_unit."
+    },
+    "means": {
+      "evidence_ids": [
+        "mean_x",
+        "mean_y",
+        "mean_z"
+      ],
+      "assumption_ids": [
+        "fixed_exact_parameters"
+      ],
+      "derivation": "Copy the admitted population arithmetic means in variable order."
+    },
+    "standard_deviations": {
+      "evidence_ids": [
+        "sd_x",
+        "sd_y",
+        "sd_z"
+      ],
+      "assumption_ids": [
+        "fixed_exact_parameters"
+      ],
+      "derivation": "Copy the admitted population SDs in variable order; covariance equals diag(SD) times correlation times diag(SD)."
+    },
+    "correlation_matrix": {
+      "evidence_ids": [
+        "correlation_x_y",
+        "correlation_y_z",
+        "correlation_x_z"
+      ],
+      "assumption_ids": [
+        "fixed_exact_parameters"
+      ],
+      "derivation": "Symmetric unit-diagonal matrix. All three distinct Pearson correlations are reported exact definitions."
+    },
+    "identifier": {
+      "evidence_ids": [
+        "row_contract"
+      ],
+      "assumption_ids": [
+        "identifier_convention"
+      ],
+      "derivation": "Use the required string identifier column and deterministic case-prefixed sequential labels."
+    }
+  }
+}

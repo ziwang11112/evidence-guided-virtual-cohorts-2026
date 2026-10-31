@@ -1,0 +1,230 @@
+{
+  "candidate_feedback_forbidden": true,
+  "cases": {
+    "task_a": {
+      "worlds": {
+        "identified_world": {
+          "column_order": [
+            "x",
+            "y",
+            "z"
+          ],
+          "covariance": [
+            [
+              1.0,
+              0.3,
+              0.2
+            ],
+            [
+              0.3,
+              1.0,
+              0.6
+            ],
+            [
+              0.2,
+              0.6,
+              1.0
+            ]
+          ],
+          "family": "multivariate_gaussian",
+          "means": [
+            0,
+            0,
+            0
+          ],
+          "sds": [
+            1,
+            1,
+            1
+          ],
+          "truth": {
+            "adjusted_x_coefficient": 0.1875,
+            "adjusted_z_coefficient": 0.5625,
+            "partial_correlation_xy_given_z": 0.22963966338592295
+          }
+        }
+      }
+    },
+    "task_b": {
+      "worlds": {
+        "compatible_world_1": {
+          "column_order": [
+            "x",
+            "y",
+            "z"
+          ],
+          "covariance": [
+            [
+              1.0,
+              0.3,
+              0.1
+            ],
+            [
+              0.3,
+              1.0,
+              0.6
+            ],
+            [
+              0.1,
+              0.6,
+              1.0
+            ]
+          ],
+          "family": "multivariate_gaussian",
+          "means": [
+            0,
+            0,
+            0
+          ],
+          "sds": [
+            1,
+            1,
+            1
+          ],
+          "truth": {
+            "adjusted_x_coefficient": 0.24242424242424243,
+            "adjusted_z_coefficient": 0.5757575757575758,
+            "partial_correlation_xy_given_z": 0.3015113445777636
+          }
+        },
+        "compatible_world_2": {
+          "column_order": [
+            "x",
+            "y",
+            "z"
+          ],
+          "covariance": [
+            [
+              1.0,
+              0.3,
+              0.7
+            ],
+            [
+              0.3,
+              1.0,
+              0.6
+            ],
+            [
+              0.7,
+              0.6,
+              1.0
+            ]
+          ],
+          "family": "multivariate_gaussian",
+          "means": [
+            0,
+            0,
+            0
+          ],
+          "sds": [
+            1,
+            1,
+            1
+          ],
+          "truth": {
+            "adjusted_x_coefficient": -0.23529411764705882,
+            "adjusted_z_coefficient": 0.7647058823529411,
+            "partial_correlation_xy_given_z": -0.21004201260420144
+          }
+        }
+      }
+    }
+  },
+  "fixed_before_generator_execution": true,
+  "invalid_endpoint_policy": "Record invalid table, null numerical errors and zero numerical utility. Do not silently drop the table, seed, endpoint, or world.",
+  "n_rows": 4000,
+  "no_outcome_selection": "Evaluate each final Task B table under both worlds; never choose a preferred world based on estimates, method, sign, or fit.",
+  "operators": {
+    "adjusted_x_coefficient": {
+      "coefficient": "x",
+      "formula": "(s_xy*s_zz-s_yz*s_xz)/(s_xx*s_zz-s_xz^2)",
+      "operator": "OLS with intercept, y regressed on x and z",
+      "scale": "fixed artificial population-standardized measurement units; do not restandardize by sample SD"
+    },
+    "adjusted_z_coefficient": {
+      "coefficient": "z",
+      "formula": "(s_yz*s_xx-s_xy*s_xz)/(s_xx*s_zz-s_xz^2)",
+      "operator": "OLS with intercept, y regressed on x and z",
+      "scale": "fixed artificial population-standardized measurement units; do not restandardize by sample SD"
+    },
+    "partial_correlation_xy_given_z": {
+      "formula": "(s_xy-s_xz*s_yz/s_zz)/sqrt((s_xx-s_xz^2/s_zz)*(s_yy-s_yz^2/s_zz))",
+      "operator": "Pearson correlation between centered x and y residuals after separate OLS projections on z with intercept"
+    },
+    "s_ab": "sample covariance centered at sample arithmetic means with n-1 denominator; ratios cancel denominator"
+  },
+  "primary_endpoint": "adjusted_x_coefficient",
+  "primary_scoring": {
+    "above_all_bands_label": "above_0.20",
+    "absolute_error_bands": [
+      {
+        "label": "within_0.05",
+        "upper_inclusive": 0.05
+      },
+      {
+        "label": "above_0.05_through_0.10",
+        "upper_inclusive": 0.1
+      },
+      {
+        "label": "above_0.10_through_0.20",
+        "upper_inclusive": 0.2
+      }
+    ],
+    "direction": "Report positive/negative/zero and exact sign agreement separately; never replace magnitude error with direction success.",
+    "interpretation": "Predeclared descriptive engineering numerical-fidelity bands only; no arbitrary clinical threshold, biomedical usefulness assertion, or hypothesis-test claim.",
+    "invalid_table_utility": 0.0,
+    "report": [
+      "signed_error",
+      "absolute_error",
+      "squared_error",
+      "numerical_utility_score",
+      "engineering_fidelity_band"
+    ],
+    "utility_formula": "1/(1+(absolute_error/utility_scale)^2)",
+    "utility_scale": 0.1
+  },
+  "reveal_condition": "All selectors for both tasks have been sealed and all 24 untouched-test tables have been generated, verified, and committed; root then audits reveal.",
+  "schedule": {
+    "election_runs": 24,
+    "initial_feedback_runs": 6,
+    "methods": [
+      "baseline_retain",
+      "minimum_aggregate_source_error",
+      "source_protected_use_gate"
+    ],
+    "pool_size_per_task": 4,
+    "same_visible_packet_for_both_b_worlds": true,
+    "seeds": {
+      "election": [
+        24203,
+        24209,
+        24223
+      ],
+      "initial_feedback": [
+        24101,
+        24103,
+        24107
+      ],
+      "untouched_test": [
+        24301,
+        24307,
+        24317
+      ]
+    },
+    "shared_candidate_pool": true,
+    "test_all_pool_members": true,
+    "total_generation_runs": 54,
+    "untouched_test_runs": 24
+  },
+  "schema_version": "c4-hidden-evaluation-contract-v1",
+  "secondary_endpoints": [
+    "adjusted_z_coefficient",
+    "partial_correlation_xy_given_z"
+  ],
+  "secondary_scoring": "Report signed, absolute, and squared errors and direction separately for both secondary endpoints, under every world.",
+  "task_b_identification_separation": {
+    "any_single_estimate_minimum_possible_worst_world_absolute_error": 0.23885918003565063,
+    "primary_truth_absolute_difference": 0.47771836007130125
+  },
+  "world_summary": "Report all per-world endpoints; additionally report primary worst-world absolute error and min/max world error; assign no probability weights to worlds."
+}
