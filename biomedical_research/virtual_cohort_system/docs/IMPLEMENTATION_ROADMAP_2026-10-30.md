@@ -127,3 +127,11 @@ Each milestone ends with a short record: what changed; which tests and experimen
 If a mechanism gives no useful signal, stop that mechanism at its budget. If evidence is insufficient, record it and seek specifically relevant information or change the case before unblinding. If a target fails, retain the result and use it as development information; later changes need a new confirmation task.
 
 Artifacts and aggregate results can be synchronized to the existing private GitHub repository under the prior authorization. Real participant-level inputs, outcomes and target-generated tables remain local. Invented engineering fixtures can be shared, explicitly labelled as such.
+
+## Core-v0 real-case admission checkpoint — 31 October 2026
+
+The [bounded metadata intake](../reports/real_case_admission_v0_2026-10-31/REPORT.md) consumed three family slots (PNS, ANSUR II, CHNS), audited zero new primary originals in depth and acquired zero participant tables. The full cross-project history review corrected a prematurely initiated metadata search. PNS remains a closed target. ANSUR/CHNS require relation-specific exposure qualification, not a blanket assertion that all analyses are invalid.
+
+CHNS's current official site and Dataverse release route were located; old deep links had failed because of the website move. Actual acquisition is still unverified. Browser automation stopped on URL-policy verification; the user now specifies the Chrome plugin for future browser work. No new real validation, source calibration or method efficacy is claimed. F1's scoped reference-profile freeze is unchanged; F2/R1 remain pending.
+
+Next bounded work is CHNS release/schema access through the Chrome plugin, then external evidence and approximately three scientific uses with a relation-level exposure map. Freeze only after independent review of sources, measurement/context operators, reference uncertainty and exact budgets. Close with reasons if the current candidate cannot meet those conditions; do not silently expand to a fourth family or tune old targets.
