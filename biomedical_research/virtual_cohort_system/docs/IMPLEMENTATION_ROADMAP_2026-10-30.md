@@ -8,13 +8,21 @@ Use published biomedical evidence and available covariates to generate reusable 
 
 The method must connect evidence meaning, a documented generation process (direct Agent-authored rows or an Agent-authored program), and downstream analytical use. More code, more Agents or a better source-fit score alone does not demonstrate this contribution.
 
-## Current adjustment: literature-enabled analytical data
+## Current completed unit: M16 diagnostic repair
+
+[M16](../MILESTONE_16_RESULTS.md) completed on 31 October: three fresh-context direct authorships, predeclared construction guides, actual source and own-guide feedback, one 12-cell repair and two retentions, followed by a new 200-person real-reference evaluation. The same 24 analyses were retained for all scheduled initial/final stages. Four unique table versions and six stages are explicitly distinguished. Independent actual recomputation passed 2,863 checks.
+
+All final tables retain positive BMI and negative quadratic BMI directions; age transfers in two of three. B2's repair improves BMI magnitude and all four target group SDs, but worsens age/curvature/interaction discrepancies and one reverse regression. Every source SD comparison worsens while every target SD comparison improves. This demonstrates a particular source/guide/target dissociation, not a general improvement theorem or a new validated optimization objective.
+
+The run is closed. Its target must not be reused for tuning or fresh confirmation. Before bulk generation, a small controlled design should hold the evidence and structure fixed to separate realization variation from transport assumptions. A source-only literal-versus-declared-stochastic realization control is a possible next design; a new utility claim still requires a separately admitted unopened target. No next dataset or job has been launched. Keep all failure, retention and mixed-result records.
+
+## Earlier adjustment: literature-enabled analytical data
 
 The user clarified that useful published statistics may all be inputs, and that generating more fictional people or additional indicators is an intended purpose. [M15-B1](../MILESTONE_15B_RESULTS.md) has now exercised the [M15-B design adjustment](M15B_RESEARCH_DESIGN_ADJUSTMENT.md) and [builder prompt](templates/M15B_BUILDER_PROMPT.md): actual literature research, full original/supplement access, direct authorship of 200 urate measurements, source feedback, final retention and all 24 locked target analyses. M15-A's no-retrieval policy remains historical, not the method's default.
 
 M15-B1 found a close adjusted BMI point effect and matching curvature/interaction point directions, but a reversed age effect and higher means/SDs in all four groups. The Agent retained its table after source feedback, so no revision benefit is established. Independent real-data recomputation passed. This measured target is now exposed; do not use its age coefficient or level differences as undisclosed calibration answers, and do not reuse it as fresh confirmation.
 
-The next discriminating unit should address repeatability and assumption sensitivity before bulk generation: freeze a small set of independent constructions under the same evidence-access protocol, then evaluate all on a separately admitted outcome/cycle or cohort with a fixed analysis schedule. An evidence-supported alternative for unresolved age/dispersion belongs to a new specification. No next cohort has been downloaded or scheduled. Full source statistics remain available inputs; source fit, independent transfer and reuse are different claims. Do not hide accessible SDs or ignore incidental literature exposure.
+The subsequently completed M16 unit addressed this proposal with three fresh constructions under the same starting evidence-access protocol and a separately admitted cycle. Acquired evidence and assumptions differed, so it does not isolate every source of variation. Full source statistics remain available inputs; source fit, independent transfer and reuse are different claims. Do not hide accessible SDs or ignore incidental literature exposure.
 
 Keep whole-cohort expansion, unmeasured-variable enrichment and missing-cell completion within the overall method. Enrichment preserves real participants and observed cells; extra fictional rows require whole-cohort mode. Fix the case's output columns and row count before binding its task. Do not equate extra synthetic rows with extra empirical information. The primary contribution is useful generated data, not mandatory superiority over another Agent.
 

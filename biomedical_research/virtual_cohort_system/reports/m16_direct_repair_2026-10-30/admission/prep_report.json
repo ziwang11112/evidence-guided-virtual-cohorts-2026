@@ -1,0 +1,241 @@
+{
+  "status": "ready_locked",
+  "created_utc": "2026-10-31T04:22:15.200493+00:00",
+  "mode": "enrichment",
+  "selected_n": 200,
+  "group_counts": [
+    {
+      "race": "Black",
+      "sex": "female",
+      "eligible_n": 301,
+      "selected_n": 50
+    },
+    {
+      "race": "Black",
+      "sex": "male",
+      "eligible_n": 242,
+      "selected_n": 50
+    },
+    {
+      "race": "White",
+      "sex": "female",
+      "eligible_n": 414,
+      "selected_n": 50
+    },
+    {
+      "race": "White",
+      "sex": "male",
+      "eligible_n": 351,
+      "selected_n": 50
+    }
+  ],
+  "join_row_counts": {
+    "DEMO_J": 9254,
+    "after_BMX_J": 8704,
+    "after_DIQ_J": 8366,
+    "after_BIOPRO_J": 6401
+  },
+  "selection": {
+    "version": "M16-20261030-v1",
+    "cycle": "2017-2018",
+    "selected_n": 200,
+    "per_group_n": 50,
+    "groups_order": [
+      [
+        "Black",
+        "female"
+      ],
+      [
+        "Black",
+        "male"
+      ],
+      [
+        "White",
+        "female"
+      ],
+      [
+        "White",
+        "male"
+      ]
+    ],
+    "eligibility": {
+      "RIDAGEYR": "20 <= age <= 56 inclusive",
+      "RIDSTATR": 2,
+      "RIAGENDR": [
+        1,
+        2
+      ],
+      "RIDRETH3": [
+        3,
+        4
+      ],
+      "DIQ010": 2,
+      "BMXBMI": "finite and > 0",
+      "WTMEC2YR": "finite and > 0",
+      "SDMVSTRA": "finite positive integer",
+      "SDMVPSU": [
+        1,
+        2
+      ],
+      "LBXSUA": "available finite numeric value only; no outcome magnitude/sign/range threshold"
+    },
+    "selection": {
+      "method": "Ascending SHA256 of UTF-8 salt + delimiter + integer SEQN within each fixed race-sex group; first 50",
+      "salt": "M16-20261030-v1",
+      "delimiter": "|",
+      "tie_rule": "Hash collision is fatal; no resampling",
+      "sample_id": "m16t0001 through m16t0200 in fixed group then hash order"
+    },
+    "columns_visible": [
+      "sample_id",
+      "race",
+      "sex",
+      "age",
+      "bmi"
+    ],
+    "outcome": "urate",
+    "outcome_variable": "LBXSUA",
+    "outcome_unit": "mg/dL",
+    "private_design_variables": [
+      "SDMVSTRA",
+      "SDMVPSU",
+      "SEQN",
+      "WTMEC2YR"
+    ],
+    "no_outcome_statistics": true,
+    "failure_rule": "Stop if any group has fewer than 50 or any source/parser/schema/integrity failure. Do not widen criteria, switch cycle, or change salt.",
+    "analysis_population": "Finite equal-quota benchmark. Unweighted descriptive target; retained NHANES design variables do not undo quota selection.",
+    "source_evidence_policy": "Only admitted Bogalusa/Ferrara source cohorts may supply numerical paper evidence; no NHANES paper numerical evidence."
+  },
+  "selection_sha256": "b5dcabd3a1afd344d036ef2c3c5895eaa7a562297a9261a40f7cbd276c731f40",
+  "preparation_script_sha256": "aa0465fd8787903071e86c5cce98d7f5166b20afc2838078142d7176c87fea1a",
+  "visible_path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\m16_direct_repair_2026-10-30\\visible\\observed.csv",
+  "visible_columns": [
+    "sample_id",
+    "race",
+    "sex",
+    "age",
+    "bmi"
+  ],
+  "visible_sha256": "904b4e8674364c7c1ca39c6d3a17c2c40d89e1c174394eded844a37ab46fd583",
+  "reference_sha256": "ce5365242840e30002422591a29c9772f54700bf34226db25b5f0da64f6327d6",
+  "inputs": {
+    "BIOPRO_J": {
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BIOPRO_J.xpt",
+      "bytes": 2106080,
+      "sha256": "5bcd5722c1892883b96a9d7fed0befadabacae313f800fadc0133cd5dd00c4c6",
+      "checks": {
+        "rows": 6401,
+        "columns_read": [
+          "SEQN",
+          "LBXSUA"
+        ],
+        "unique_identifiers": true,
+        "reader": "pyreadstat.read_xport(usecols=...) + independent IBM-byte decoder",
+        "independent_byte_check_passed": true,
+        "exact_byte_zero_check_passed": true,
+        "numeric_pandas_decoder_used": false,
+        "numeric_monkeypatch_used": false
+      }
+    },
+    "DEMO_J": {
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",
+      "bytes": 3412720,
+      "sha256": "c0b46e0345ea19404928656277c8b0d10b0cca348a9b2fe4fc3c67e8b7ee73ec",
+      "checks": {
+        "rows": 9254,
+        "columns_read": [
+          "SEQN",
+          "RIDAGEYR",
+          "RIDSTATR",
+          "RIAGENDR",
+          "RIDRETH3",
+          "SDMVSTRA",
+          "SDMVPSU",
+          "WTMEC2YR"
+        ],
+        "unique_identifiers": true,
+        "reader": "pyreadstat.read_xport(usecols=...) + independent IBM-byte decoder",
+        "independent_byte_check_passed": true,
+        "exact_byte_zero_check_passed": true,
+        "numeric_pandas_decoder_used": false,
+        "numeric_monkeypatch_used": false
+      }
+    },
+    "BMX_J": {
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BMX_J.xpt",
+      "bytes": 1466000,
+      "sha256": "8d675e42d8826ac98714b2c3dd4c5138a5e353fb4424f7eff5e6db4a01ce838a",
+      "checks": {
+        "rows": 8704,
+        "columns_read": [
+          "SEQN",
+          "BMXBMI"
+        ],
+        "unique_identifiers": true,
+        "reader": "pyreadstat.read_xport(usecols=...) + independent IBM-byte decoder",
+        "independent_byte_check_passed": true,
+        "exact_byte_zero_check_passed": true,
+        "numeric_pandas_decoder_used": false,
+        "numeric_monkeypatch_used": false
+      }
+    },
+    "DIQ_J": {
+      "url": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DIQ_J.xpt",
+      "bytes": 3851840,
+      "sha256": "1ecbf5360dfc331d1efbf32198553dc30e9a1f4cff0a907ed30ca72bac797f89",
+      "checks": {
+        "rows": 8897,
+        "columns_read": [
+          "SEQN",
+          "DIQ010"
+        ],
+        "unique_identifiers": true,
+        "reader": "pyreadstat.read_xport(usecols=...) + independent IBM-byte decoder",
+        "independent_byte_check_passed": true,
+        "exact_byte_zero_check_passed": true,
+        "numeric_pandas_decoder_used": false,
+        "numeric_monkeypatch_used": false
+      }
+    }
+  },
+  "checks": {
+    "selection_frozen_before_download": true,
+    "one_to_one_joins": true,
+    "selected_identifier_uniqueness": true,
+    "exactly_50_per_race_sex": true,
+    "hash_order_selection": true,
+    "visible_schema_exact": true,
+    "visible_csv_roundtrip": true,
+    "private_csv_roundtrip": true,
+    "private_integer_dtypes": true,
+    "observed_reference_exact_join": true,
+    "mapping_reference_exact_join": true,
+    "outcome_values_in_visible": false,
+    "outcome_summaries_computed": false,
+    "prior_target_results_read": false
+  },
+  "assay": {
+    "outcome": "serum urate",
+    "source_variable": "LBXSUA",
+    "unit": "mg/dL",
+    "platform": "Roche Cobas 6000 (c501 module)",
+    "method": "uricase/peroxidase colorimetric endpoint",
+    "survey_weight": "WTMEC2YR",
+    "design_variables": [
+      "SDMVSTRA",
+      "SDMVPSU"
+    ]
+  },
+  "limitations": [
+    "DIQ010=2 is no self-reported professional diagnosis, not laboratory-defined nondiabetes.",
+    "No additional BMI cutoff, fasting, medication or pregnancy selection was imposed.",
+    "Source-population fasting, treatment and pregnancy restrictions may differ.",
+    "New urate-cycle task relative to exposed M15B; prior other outcomes used 2017-2018. Not proven model-unseen or participant-unseen.",
+    "Equal race/sex quotas are a deliberately balanced analysis set; raw NHANES weights are retained privately and do not by themselves undo quota selection."
+  ],
+  "evaluation_status": "LOCKED: requires all candidates frozen and explicit root evaluation authorization.",
+  "freshness": "New urate-cycle task; not proven model-unseen or participant-unseen.",
+  "fresh_target_release_authorized": false,
+  "analysis_population": "Finite equal-quota benchmark; downstream estimates are unweighted descriptive quantities, not national population estimates."
+}
