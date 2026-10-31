@@ -91,3 +91,14 @@ python -m cohort_harness verify-source-replay --bundle PATH --replay-id NEW_ID -
 These commands keep feedback under `source_replays/`, outside the frozen candidate. They derive source execution tasks changing only row count and declared population, execute identical code/specification, verify output linkage and recompute diagnostics. `generation_link_verified` concerns those bytes and execution; it does not verify the source-population assumptions or establish scientific validity. Large numerical discrepancies are retained feedback, not automatically execution failures.
 
 After feedback, the builder may re-extract, revise or retain as the task allows. Bind a copy of the verified feedback in the new candidate's `checks.json` auxiliary artifacts. Keep the previous candidate intact and preserve source/target separation. The controller's target evaluator is never a generator tuning tool.
+
+## Optional verified whole-cohort feedback
+
+When a whole-cohort task supplies this adapter, read `docs/WHOLE_COHORT_FEEDBACK.md`. Include its `whole_cohort_feedback.json` recipe before freezing. The controller can collect source-statistic feedback from a successful verified execution without changing the candidate:
+
+```text
+python -m cohort_harness.whole_cohort_feedback collect --bundle PATH --candidate NAME --run-id RUN --feedback-id NEW_ID
+python -m cohort_harness.whole_cohort_feedback verify --bundle PATH --candidate NAME --run-id RUN --feedback-id ID
+```
+
+The adapter uses the execution's own output, supports program and direct-table routes with distinct provenance flags, and stores feedback outside the candidate. It does not regenerate study-specific source populations, convert measurements or certify applicability. It must not be described as generic whole-cohort multi-source replay. A new revision may bind this report through the existing check-artifact interface; no feedback permits changing an old frozen candidate or viewing target answers.

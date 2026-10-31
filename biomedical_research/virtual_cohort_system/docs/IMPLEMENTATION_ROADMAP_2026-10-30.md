@@ -8,11 +8,13 @@ Use published biomedical evidence, a target-population specification and optiona
 
 The method must connect evidence meaning, a documented generation process (direct Agent-authored rows or an Agent-authored program), and downstream analytical use. More code, more Agents or a better source-fit score alone does not demonstrate this contribution.
 
-## Active next unit: M17-A whole-cohort feedback linkage
+## Latest engineering unit: M17-A complete; scientific construction next
 
 The [updated paper direction](PAPER_STORYLINE_AND_DIRECTION_2026-10-31.md) and [near-neighbor audit](GSIM_LLMSYNTHOR_DEEP_REVIEW_2026-10-31.md) replace a missing-column-only framing. The [M17-A readiness review](M17A_WHOLE_COHORT_READINESS.md) confirms that `whole_cohort` already forbids `observed.csv` and passes `observed=None` to a generator. Existing execution-backed source replay adapters are enrichment-only.
 
-The bounded [M17-A plan](M17A_WHOLE_COHORT_PLAN.md) adds source-statistic feedback computed from verified full-cohort execution output, outside the frozen candidate, with integrity and numerical recomputation. Test it on explicitly artificial data before a new Agent study. This does not alter the earlier replay versions or historical target outcomes. A later controlled scientific experiment will separately compare evidence-only generation and generation conditional on observations; no real target download, paid model call, training or HPC job is part of M17-A.
+The bounded [M17-A plan](M17A_WHOLE_COHORT_PLAN.md) is now implemented: [results](../MILESTONE_17A_RESULTS.md). The new [feedback adapter](WHOLE_COHORT_FEEDBACK.md) links source diagnostics to verified full-cohort output outside the frozen candidate. Thirty-three focused tests, an actual isolated 128-row artificial execution, independent arithmetic on five diagnostics and preservation of ten input bindings passed. These are engineering results from a specified test generator, not an Agent-quality or biological comparison. Earlier replay versions and historical target outcomes are unchanged.
+
+The next scientific unit should give an Agent an admitted aggregate-evidence packet and a whole-cohort task, withholding all target individual records. Evaluate frozen output on unprovided analyses, with any observed-covariate condition labeled separately. A controlled reference can first separate information insufficiency from faulty evidence use; fresh real-data validation requires its own source/target admission. No subsequent experiment, real target download, paid model call, training or HPC job was started.
 
 The literature review, framing and this implementation plan are new work, not new performance evidence. No further fitting to M13-B, M15-B or M16 revealed targets is allowed.
 

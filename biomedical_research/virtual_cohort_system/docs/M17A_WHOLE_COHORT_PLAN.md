@@ -2,6 +2,8 @@
 
 Date: 2026-10-31. Status at initiation: implementation and artificial-data validation authorized by the ongoing project continuation. No new biomedical target is selected or opened.
 
+Completion: the bounded unit passed focused tests, actual isolated artificial-cohort execution and independent arithmetic; see [M17-A results](../MILESTONE_17A_RESULTS.md). The plan below preserves the intended scope and does not imply a completed scientific efficacy experiment.
+
 ## Purpose and scope
 
 The user's intended system includes complete virtual-cohort generation from published evidence and a population specification, with no individual records provided. Column augmentation and missing-cell completion remain useful alternatives when observations exist.
@@ -12,7 +14,7 @@ M17-A connects the already implemented pieces. It is an engineering unit, not a 
 
 ## Concrete example
 
-Use an explicitly invented two-variable population with aggregate source statements, a small seeded generator and no observed records. The program generates both variables. After freezing and execution, calculate allowed source means, dispersion or regression statistics on the verified output. A later verification repeats the calculation and checks that the frozen recipe, candidate and execution still match.
+Use an explicitly invented population with two continuous variables (`x`, `y`) and one categorical variable (`group`), aggregate source statements, a small seeded generator and no observed records. The program generates all three variables. After freezing and execution, calculate allowed source means, dispersion or adjusted regression statistics on the verified output. A later verification repeats the calculation and checks that the frozen recipe, candidate and execution still match.
 
 The invented coefficients test numerical wiring. They are not biomedical relationships, a literature claim or evidence of an Agent's modeling ability. The reference for this engineering check is independent arithmetic, not a held-out patient cohort.
 

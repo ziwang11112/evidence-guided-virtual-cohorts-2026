@@ -90,3 +90,13 @@ These are meaningful contract and information-boundary tests. Passing them would
 ## Completion record
 
 This audit added only this document. No generation, target access, test execution, code changes, downloads or Git operations were performed. The root task owns the M17-A protocol, implementation and publication decisions.
+
+## Implementation follow-up — 2026-10-31
+
+After the initial audit, the root task authorized a bounded implementation. Added `cohort_harness/whole_cohort_feedback.py`, `tests/test_whole_cohort_feedback.py`, `examples/m17a_whole_cohort.py` and `docs/WHOLE_COHORT_FEEDBACK.md`. Existing core and frozen research artifacts remain unchanged.
+
+The bridge computes source statistics from a successful verified whole-cohort execution, binds the frozen recipe and evidence to that execution's generated table, and independently rechecks the result. It accepts program and direct-table routes with distinct recorded execution claims. It retains explicit and runtime not-computable checks. Its assumptions are limited to the actual task population and identity measurement; no reconstruction or validation of source population/measurement equivalence is provided.
+
+Focused verification: **33 passed in 5.35 seconds**, using a fresh project-local basetemp directory. The first run had 32 passes and one incorrect expected error-message regex; rejection behavior was correct, and the expectation was fixed before rerunning. Tests used invented direct tables and a mocked program backend. No real isolated program execution, patient data, biomedical calibration or scientific performance result is claimed by this subtask.
+
+The preparation-only example creates no CSV and executes nothing. Root may now independently review and run the artificial isolated example, then make the next experimental decision. This mechanical fixture is distinct from a genuine Agent proposal/revision experiment.
