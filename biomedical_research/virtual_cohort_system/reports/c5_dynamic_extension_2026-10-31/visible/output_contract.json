@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "fixture_id": "c5_artificial_dynamic_extension",
+  "n_rows_per_table": 2000,
+  "identifier": {"name":"subject_id","kind":"string","unique":true,"nonempty":true},
+  "parent_columns": ["subject_id","x1","x2"],
+  "joint_columns": ["subject_id","x1","x2","x3"],
+  "extended_columns": ["subject_id","x1","x2","x3"],
+  "variable_kind": "finite float64; no missing values; no artificial range truncation",
+  "csv_parsing": "UTF-8 CSV; float_precision=round_trip for numeric preservation; subject_id read as text. Parent and extended rows must have exactly equal parsed original cells in the original order.",
+  "runs": [
+    {"run_id":"parent_r1","arm":"parent","replicate":1,"seed":25101,"parent_run_id":null},
+    {"run_id":"parent_r2","arm":"parent","replicate":2,"seed":25103,"parent_run_id":null},
+    {"run_id":"parent_r3","arm":"parent","replicate":3,"seed":25107,"parent_run_id":null},
+    {"run_id":"joint_r1","arm":"joint","replicate":1,"seed":25201,"parent_run_id":null},
+    {"run_id":"joint_r2","arm":"joint","replicate":2,"seed":25203,"parent_run_id":null},
+    {"run_id":"joint_r3","arm":"joint","replicate":3,"seed":25207,"parent_run_id":null},
+    {"run_id":"extended_r1","arm":"extended","replicate":1,"seed":25301,"parent_run_id":"parent_r1"},
+    {"run_id":"extended_r2","arm":"extended","replicate":2,"seed":25303,"parent_run_id":"parent_r2"},
+    {"run_id":"extended_r3","arm":"extended","replicate":3,"seed":25307,"parent_run_id":"parent_r3"}
+  ],
+  "manifest_requirements": {
+    "file":"final_output_manifest.json",
+    "fields":["schema_version","fixture_id","committed_utc","all_final_outputs_committed","outputs"],
+    "all_final_outputs_committed":true,
+    "output_fields":["run_id","arm","replicate","seed","parent_run_id","n_rows","path","sha256"],
+    "paths":"absolute or relative to c5 root; exactly the 9 scheduled records, no duplicates; the n_rows field is 2000"
+  },
+  "reveal_requirements": {
+    "file":"reveal_authorization.json",
+    "fields":["schema_version","fixture_id","authorized_by","authorized_utc","final_output_manifest_sha256","all_final_outputs_committed"],
+    "authorized_by":"root_controller",
+    "all_final_outputs_committed":true
+  },
+  "evaluation_invocation_after_reveal_only":"python evaluation/evaluate.py --root <absolute-c5-path>",
+  "interpretation":"This contract and the source packets define only an invented mechanism sanity check, never biomedical validation or superiority. Scientific decisions are left to the fresh author."
+}

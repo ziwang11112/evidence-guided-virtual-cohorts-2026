@@ -1,0 +1,80 @@
+{
+  "parameters": {
+    "n_rows": 2000,
+    "variable_order": ["x1", "x2"],
+    "units": ["u1", "u2"],
+    "distribution": "multivariate_normal",
+    "mean_vector": [12.0, -7.0],
+    "covariance_matrix": [[9.0, 6.75], [6.75, 25.0]],
+    "identifier": {"column": "subject_id", "prefix": "C5-P-", "start": 1, "width": 6},
+    "random_generator": "PCG64",
+    "source_version": {
+      "packet_id": "C5-S1-initial",
+      "schema_version": 1,
+      "release": "initial x1 and x2",
+      "artifact": "sources/initial_source_packet.json",
+      "sha256": "a51073d808b4869bce5207ec1d3c0050e582b57de9c5fac111cd00f9862decd7"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A-TASK-LAYOUT",
+      "description": "Task c5_p explicitly requests 2000 rows, identifier subject_id, and columns x1 then x2 in u1 and u2. These are task constraints, not estimated source parameters."
+    },
+    {
+      "id": "A-ROW-IDENTITY",
+      "description": "Implementation choice: assign identifiers C5-P-000001 through C5-P-002000 in fixed row order, independent of seed and sampled values. Identifiers label synthetic rows and do not identify persons."
+    },
+    {
+      "id": "A-SAMPLER",
+      "description": "Implementation choice for the requested independent stochastic rows: initialize NumPy PCG64 with the controller-supplied seed, draw independent standard-normal pairs, and transform with the covariance Cholesky factor. Do not search seeds, reject or truncate rows, standardize samples, or force realized sample moments. Repeatability is within a fixed software runtime and specification."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["A-TASK-LAYOUT"],
+      "derivation": "Task-defined row count; not a source-study sample size."
+    },
+    "variable_order": {
+      "evidence_ids": ["C5-S1-CONTEXT"],
+      "assumption_ids": ["A-TASK-LAYOUT"],
+      "derivation": "Reported variable names ordered according to task c5_p."
+    },
+    "units": {
+      "evidence_ids": ["C5-S1-M1", "C5-S1-M2", "C5-S1-S1", "C5-S1-S2"],
+      "assumption_ids": ["A-TASK-LAYOUT"],
+      "derivation": "Reported arbitrary units u1 and u2 retained with no conversion."
+    },
+    "distribution": {
+      "evidence_ids": ["C5-S1-CONTEXT"],
+      "assumption_ids": [],
+      "derivation": "The source explicitly states that x1 and x2 have a bivariate normal marginal; a two-dimensional multivariate normal represents that reported family."
+    },
+    "mean_vector": {
+      "evidence_ids": ["C5-S1-M1", "C5-S1-M2"],
+      "assumption_ids": [],
+      "derivation": "Reported exact population means 12 u1 and -7 u2 in variable_order. No fitting or uncertainty inflation."
+    },
+    "covariance_matrix": {
+      "evidence_ids": ["C5-S1-S1", "C5-S1-S2", "C5-S1-R12"],
+      "assumption_ids": [],
+      "derivation": "Derived, not reported: Var(x1)=3^2=9 u1^2; Var(x2)=5^2=25 u2^2; Cov(x1,x2)=0.45*3*5=6.75 u1*u2. Determinant=9*25-6.75^2=179.4375>0, so the covariance is positive definite. Cholesky transform L of independent standard normals has covariance L L^T equal to this matrix."
+    },
+    "identifier": {
+      "evidence_ids": [],
+      "assumption_ids": ["A-TASK-LAYOUT", "A-ROW-IDENTITY"],
+      "derivation": "Identifier column is task-defined; prefix, six-digit padding and one-based index are explicit bookkeeping choices."
+    },
+    "random_generator": {
+      "evidence_ids": [],
+      "assumption_ids": ["A-SAMPLER"],
+      "derivation": "Explicit computational choice PCG64. The seed remains an external execution input; no seed is selected in the model."
+    },
+    "source_version": {
+      "evidence_ids": ["C5-S1-CONTEXT"],
+      "assumption_ids": [],
+      "derivation": "Selected only the admitted C5-S1-initial packet with schema_version 1; artifact SHA256 is copied from the supplied registry and is checked by native validation/freezing."
+    }
+  }
+}

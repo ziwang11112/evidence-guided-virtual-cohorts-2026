@@ -1,0 +1,151 @@
+{
+  "parameters": {
+    "n_rows": 2000,
+    "variable_order": [
+      "x1",
+      "x2",
+      "x3"
+    ],
+    "units": [
+      "u1",
+      "u2",
+      "u3"
+    ],
+    "distribution": "multivariate_normal",
+    "mean_vector": [
+      12.0,
+      -7.0,
+      40.0
+    ],
+    "covariance_matrix": [
+      [
+        9.0,
+        6.75,
+        -6.0
+      ],
+      [
+        6.75,
+        25.0,
+        14.0
+      ],
+      [
+        -6.0,
+        14.0,
+        64.0
+      ]
+    ],
+    "identifier": {
+      "column": "subject_id",
+      "prefix": "C5-J-",
+      "start": 1,
+      "width": 6
+    },
+    "random_generator": "PCG64",
+    "source_version": {
+      "packet_id": "C5-S2-final",
+      "schema_version": 1,
+      "release": "compatible x3 final release",
+      "artifact": "sources/final_source_packet.json",
+      "sha256": "3abab5e210f7d55a57317300400d6b2c27493ce03c28f8d7dbc35413fa205b2e"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A-J-TASK",
+      "description": "Task c5_j fixes 2000 rows and ordered columns subject_id, x1, x2, x3 with units u1/u2/u3. This is a separate whole-cohort realization, not an extension of particular parent rows."
+    },
+    {
+      "id": "A-J-ID",
+      "description": "Bookkeeping choice: deterministic IDs C5-J-000001 through C5-J-002000, independent of seed and sampled values. IDs label synthetic rows; repeated seeds/runs do not create patients."
+    },
+    {
+      "id": "A-J-SAMPLER",
+      "description": "Computational choice: PCG64 initialized only with the controller-supplied seed; independent standard-normal triples transformed by a Cholesky covariance factor. No sample-moment correction, truncation, row rejection, seed search or evidence-parameter uncertainty is added."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A-J-TASK"
+      ],
+      "derivation": "Task-defined output count, not source sample size."
+    },
+    "variable_order": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [
+        "A-J-TASK"
+      ],
+      "derivation": "Reported names in task order."
+    },
+    "units": {
+      "evidence_ids": [
+        "C5-S2-M1",
+        "C5-S2-S1",
+        "C5-S2-M2",
+        "C5-S2-S2",
+        "C5-S2-R12",
+        "C5-S2-M3",
+        "C5-S2-S3",
+        "C5-S2-R13",
+        "C5-S2-R23"
+      ],
+      "assumption_ids": [
+        "A-J-TASK"
+      ],
+      "derivation": "Reported arbitrary units retained without conversion."
+    },
+    "distribution": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [],
+      "derivation": "Full joint multivariate normal family is explicitly reported."
+    },
+    "mean_vector": {
+      "evidence_ids": [
+        "C5-S2-M1",
+        "C5-S2-M2",
+        "C5-S2-M3"
+      ],
+      "assumption_ids": [],
+      "derivation": "Reported exact means (12,-7,40) in variable order."
+    },
+    "covariance_matrix": {
+      "evidence_ids": [
+        "C5-S2-S1",
+        "C5-S2-S2",
+        "C5-S2-S3",
+        "C5-S2-R12",
+        "C5-S2-R13",
+        "C5-S2-R23"
+      ],
+      "assumption_ids": [],
+      "derivation": "Derived: each variance is squared reported SD; Cov12=0.45*3*5=6.75; Cov13=-0.25*3*8=-6; Cov23=0.35*5*8=14. Leading principal minors are 9, 2871/16 and 7686, all positive."
+    },
+    "identifier": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A-J-TASK",
+        "A-J-ID"
+      ],
+      "derivation": "Task identifier column plus explicit prefix, padding and one-based row index."
+    },
+    "random_generator": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A-J-SAMPLER"
+      ],
+      "derivation": "Explicit PRNG choice. Seed is supplied externally and never fitted."
+    },
+    "source_version": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [],
+      "derivation": "Select the admitted final packet only; SHA256 binds the supplied registry artifact."
+    }
+  }
+}

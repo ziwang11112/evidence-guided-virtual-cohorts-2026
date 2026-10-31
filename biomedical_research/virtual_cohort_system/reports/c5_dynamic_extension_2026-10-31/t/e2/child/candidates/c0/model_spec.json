@@ -1,0 +1,174 @@
+{
+  "parameters": {
+    "n_rows": 2000,
+    "preserved_columns": [
+      "subject_id",
+      "x1",
+      "x2"
+    ],
+    "conditioning_variables": [
+      "x1",
+      "x2"
+    ],
+    "generated_variable": "x3",
+    "units": {
+      "x1": "u1",
+      "x2": "u2",
+      "x3": "u3"
+    },
+    "distribution": "gaussian_conditional",
+    "conditioning_mean": [
+      12.0,
+      -7.0
+    ],
+    "outcome_mean": 40.0,
+    "conditional_slopes": [
+      -1.3625914315569487,
+      0.9278996865203761
+    ],
+    "conditional_residual_variance": 42.83385579937304,
+    "random_generator": "PCG64",
+    "source_version": {
+      "packet_id": "C5-S2-final",
+      "schema_version": 1,
+      "release": "compatible x3 final release",
+      "artifact": "sources/final_source_packet.json",
+      "sha256": "3abab5e210f7d55a57317300400d6b2c27493ce03c28f8d7dbc35413fa205b2e"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A-E-TASK",
+      "description": "The authorized enrichment template fixes 2000 rows, preserved subject_id/x1/x2, and appended x3. The controller supplies actual parent output as observed input; these are fixed synthetic input values, not real-patient measurements."
+    },
+    {
+      "id": "A-E-PARENT",
+      "description": "Compatibility condition for the extension: parent rows come from the committed initial x1/x2 construction for the same artificial population and definitions. Its admitted marginal moments are unchanged by the final packet. The author does not inspect parent outputs or estimate coefficients from them."
+    },
+    {
+      "id": "A-E-SAMPLER",
+      "description": "Computational choice: PCG64 uses the externally supplied extension seed for one independent standard normal per fixed row, multiplied by the derived conditional residual SD. The controller supplies a separate extension draw from the parent-generation draw. No seed search, fitted residuals, sample-moment correction, truncation or row rejection."
+    },
+    {
+      "id": "A-E-PRESERVE",
+      "description": "Implementation choice: deep-copy observed input, preserve its index, row order and every subject_id/x1/x2 cell, and append x3 by position. No old values are recomputed, reordered, rounded or cast in the returned copy."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A-E-TASK"
+      ],
+      "derivation": "Task-defined output count, not source sample size."
+    },
+    "preserved_columns": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [
+        "A-E-TASK",
+        "A-E-PRESERVE"
+      ],
+      "derivation": "Native identifier and initial variable columns retain their definitions, units, order and values."
+    },
+    "conditioning_variables": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [
+        "A-E-TASK",
+        "A-E-PARENT"
+      ],
+      "derivation": "Condition on both existing generic variables; the final joint Gaussian model gives their exact conditional distribution with x3."
+    },
+    "generated_variable": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [
+        "A-E-TASK"
+      ],
+      "derivation": "Only x3 is newly generated."
+    },
+    "units": {
+      "evidence_ids": [
+        "C5-S2-M1",
+        "C5-S2-S1",
+        "C5-S2-M2",
+        "C5-S2-S2",
+        "C5-S2-R12",
+        "C5-S2-M3",
+        "C5-S2-S3",
+        "C5-S2-R13",
+        "C5-S2-R23"
+      ],
+      "assumption_ids": [
+        "A-E-TASK"
+      ],
+      "derivation": "Reported arbitrary units retained without conversion."
+    },
+    "distribution": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [
+        "A-E-PARENT"
+      ],
+      "derivation": "A conditional of the explicitly reported joint Gaussian is Gaussian; this is derived from the reported family, not an extra normality assumption."
+    },
+    "conditioning_mean": {
+      "evidence_ids": [
+        "C5-S2-M1",
+        "C5-S2-M2"
+      ],
+      "assumption_ids": [],
+      "derivation": "Reported means (12,-7); center fixed x1/x2 at population means, never at realized parent sample means."
+    },
+    "outcome_mean": {
+      "evidence_ids": [
+        "C5-S2-M3"
+      ],
+      "assumption_ids": [],
+      "derivation": "Reported unconditional x3 mean 40; used as the centered conditional mean baseline."
+    },
+    "conditional_slopes": {
+      "evidence_ids": [
+        "C5-S2-S1",
+        "C5-S2-S2",
+        "C5-S2-S3",
+        "C5-S2-R12",
+        "C5-S2-R13",
+        "C5-S2-R23"
+      ],
+      "assumption_ids": [],
+      "derivation": "Derived with A=[[9,27/4],[27/4,25]], c=(-6,14)^T: beta=A^(-1)c=(-1304/957,296/319)^T. Conditional mean is 40 + beta1*(x1-12) + beta2*(x2+7). Stored floats are nearest Python float conversions of the exact rational coefficients; units are u3/u1 and u3/u2."
+    },
+    "conditional_residual_variance": {
+      "evidence_ids": [
+        "C5-S2-S1",
+        "C5-S2-S2",
+        "C5-S2-S3",
+        "C5-S2-R12",
+        "C5-S2-R13",
+        "C5-S2-R23"
+      ],
+      "assumption_ids": [],
+      "derivation": "Derived Schur complement: 64-c^T A^(-1)c=64-6752/319=13664/319 u3^2. Gaussian conditional residual is independent of x1,x2. Residual SD is sqrt(13664/319) u3. This is individual variation, not source-parameter uncertainty."
+    },
+    "random_generator": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A-E-SAMPLER"
+      ],
+      "derivation": "Explicit PRNG and independent residual sampling choice; seed supplied externally."
+    },
+    "source_version": {
+      "evidence_ids": [
+        "C5-S2-CONTEXT"
+      ],
+      "assumption_ids": [],
+      "derivation": "Use the same admitted final evidence as the full joint construction; no additional evidence is inferred from the synthetic parent table."
+    }
+  }
+}
