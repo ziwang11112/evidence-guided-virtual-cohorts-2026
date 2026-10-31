@@ -2,6 +2,8 @@
 
 30 October 2026. This is the active development sequence, based on the user's request to reorganize the work and proceed one verified step at a time. It does not overwrite historical experiment protocols.
 
+**Current planning checkpoint, 31 October 2026, after C4:** use the [draft readiness and core-method freeze checklist](DRAFT_READINESS_CHECKLIST_2026-10-31.md). A provisional manuscript can start now. Consolidate a minimal executable method and freeze the next case before its target results are revealed; lock claims after the complete evaluation, including null results. C3 is source-side development and C4 is an artificial, nondiscriminating selection test; neither is a new real-cohort confirmation. No new experiment or actual method freeze is declared by this planning update. The historical sections below retain their original stage-specific decisions.
+
 ## Scientific objective
 
 Use published biomedical evidence, a target-population specification and optional observed data to generate reusable virtual data. The user explicitly includes **complete-cohort generation when no individual records are supplied** as a core intended capability. Whole-column augmentation and partial missing-cell completion are additional information regimes. Evaluate each regime separately against reserved real measurements when available. A capable ordinary Agent is a valid implementation. Existing enrichment results do not establish evidence-only full-cohort performance.
