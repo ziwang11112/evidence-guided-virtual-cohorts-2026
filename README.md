@@ -1,5 +1,7 @@
 # Evidence-guided virtual cohorts
 
+**Public release and external review, 1 November 2026:** [the review synthesis](docs/public_review_2026-11-01/REVIEW_SYNTHESIS.md) records the publication audit, identical-material submissions to ChatGPT/Claude/Gemini, two complete captured reviews and independent claim checks. Claude reported a completed document whose body could not be retrieved; no three-review consensus is claimed. This unit adds review findings and proposed next experiments, not new biomedical validation.
+
 **Latest admission checkpoint, 1 November 2026:** [the reviewed three-family intake](biomedical_research/virtual_cohort_system/reports/real_case_admission_v0_2026-10-31/REPORT.md) records the current CHNS official route, relationship-specific exposure and unresolved acquisition/case gates. No new real-data validation was performed; F2 remains unfrozen. The latest completed real-reference case is the [ENSANUT cycle-2 closeout](biomedical_research/virtual_cohort_system/reports/autonomous_research_cycle2_2026-10-31/CYCLE_CLOSEOUT.md); it is revealed and closed to tuning.
 
 Public research repository. This is an explicitly allowlisted export of method documents, reusable code, artificial-fixture tests and aggregate analytical results. It is not a complete copy of the research workspace. Public visibility was enabled on 1 November 2026; historical references to private visibility describe earlier checkpoints.
@@ -69,23 +71,23 @@ python -B -m unittest discover -s biomedical_research/population_framework/tests
 python -B -m unittest discover -s biomedical_research/evidence_virtual_cohort_framework_2026-10-27/development_batch/attempt_02 -p test_batch.py -v
 python -B biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/test_stage1.py
 python -B biomedical_research/evidence_virtual_cohort_framework_2026-10-27/stage1/test_reporting.py
-python -B sync/audit_export.py
 ```
 
 The fixture tests require no study data. The full batch and original independent audit require omitted local artifacts. Do not interpret archived original `run_batch.py verify` instructions as a claim that this public-data-free checkout can replay the clinical study. See [reproduction and local data](docs/REPRODUCTION.md).
 
+`sync/audit_export.py` is a historical verifier through the M10 export, not a current whole-repository check. Its 1,693-path allowlist does not cover 4,416 later tracked paths at scientific snapshot `7f4b38c`. It also rewrites `sync/EXPORT_AUDIT.json` and `sync/FILE_INVENTORY.tsv`; preserve those historical outputs. Later export units have separate plans, receipts and scoped checks. A historical PASS is not certification of the current complete repository, and a legacy-scope mismatch alone does not establish corrupt research results.
+
 ## Synchronization
 
-`sync/sync_export.py` copies only exact entries in `sync/source_allowlist.json`. It never discovers new research files, uploads files or pushes Git. Changes to the allowlist require content review. A local refresh is:
+`sync/sync_export.py` copies only the legacy exact entries in `sync/source_allowlist.json`. It never discovers later research files, uploads files or pushes Git. It is not a full-workspace or current whole-repository synchronization command. For a reviewed refresh within that historical scope, explicitly select each source:
 
 ```shell
-python -B sync/sync_export.py --workspace PATH_TO_LOCAL_RESEARCH_WORKSPACE
-python -B sync/audit_export.py
+python -B sync/sync_export.py --workspace PATH_TO_LOCAL_RESEARCH_WORKSPACE --only-source REVIEWED_LEGACY_SOURCE_PATH
 ```
 
-For a bounded refresh, repeat `--only-source` with each exact allowlisted source path. Unselected export files and manifest records must remain unchanged. Frozen metadata retains original source hashes; the export manifest records any reviewed path normalization.
+Repeat `--only-source` with each exact reviewed allowlisted source path. Unselected export files and manifest records must remain unchanged. Later units require their own reviewed export plan and receipt; check each verifier's expected checkpoint and workspace requirements before use. Frozen metadata retains original source hashes and must not be rewritten to make a current check pass.
 
-Review `sync/EXPORT_AUDIT.json` and the complete `sync/FILE_INVENTORY.tsv` before an explicit Git commit/push. This repository is public; every update must preserve the data, full-paper and credential exclusions above. The repository's remote access control must be checked separately; the scripts do not change GitHub visibility.
+Review the exact changed files, applicable unit receipts and current content inventory before an explicit Git commit/push. The legacy `sync/EXPORT_AUDIT.json` and `sync/FILE_INVENTORY.tsv` describe their original export scope. This repository is public; every update must preserve the data, full-paper and credential exclusions above. The repository's remote access control must be checked separately; the scripts do not change GitHub visibility.
 
 The completed [C3 source-only calibration unit](biomedical_research/virtual_cohort_system/docs/C3_SOURCE_CONSTRAINED_GENERATION_RESULTS_2026-10-31.md) fitted two Agent-authored whole-cohort structures against published source statistics. Linear loss improved on both unused seeds, with source-compatibility failures remaining. The alternative baseline passed all twenty criteria on both unused seeds; fitting worsened both replay losses and introduced age-slope failures. Both structures and every initial/selected result are retained. This is source-side development, with no new clinical validation or target advancement. See the [independent analysis and final review](biomedical_research/virtual_cohort_system/reports/c3s/review/FINAL_INTERPRETATION_REVIEW.md), [complete aggregate report](biomedical_research/virtual_cohort_system/reports/c3s/analysis/audit_v1/REPORT.md) and [export audit](sync/C3_COMPLETED_SOURCE_EXPORT_AUDIT_2026-10-31.json).
 

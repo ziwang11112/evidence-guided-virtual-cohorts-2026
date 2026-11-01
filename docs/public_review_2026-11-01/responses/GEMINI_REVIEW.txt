@@ -1,0 +1,1282 @@
+评审总结（Executive Summary）
+
+本项目构建了一套纪律严密的“证据引导生物医学虚拟队列生成与审计框架”（cohort_harness）。其核心意图是让科学智能体（Agent）在不接触个体级样本（zero individual-level records）的前提下，将已发表文献中的汇总/条件统计证据、目标人群说明及显式迁移假设转化为可执行随机生成程序（generator.py）与冻结的虚拟数据集，用于支持下游预设的科学研究分析。   
+COMMON_REVIEW_PROMPT.md
++ 4
+
+然而，从批判性科学评审的视角来看，本项目目前呈现出严重的“工程与流程治理超前、实质性科学验证滞后”的倒挂状态：
+
+工程跑通不等于方法有效：Core v0（F1）、C4、C5 的全部完整闭环均建立在人工构造的 Gamma 或高斯（Gaussian）玩具分布之上。在这些设定中，待检验的下游回归斜率本质上是输入矩的初等代数推论（如 
+𝑘
+=
+(
+𝜇
+/
+𝜎
+)
+2
+k=(μ/σ)
+2
+ 或高斯条件协方差公式）。代码无报错、哈希链完整、双盲审计零误差（
+10
+−
+14
+10
+−14
+ 级机器精度），只能证明软件管道的确定性复现能力，完全不构成方法学或生物医学有效性的证据。   
+COMMON_REVIEW_PROMPT.md
++ 4
+
+真实案例结果揭示了严重的迁移与校准瓶颈：在仅有的两个无个体输入真实参考队列试点（M17-B 的 NHANES 尿酸队列、Cycle 2 的 ENSANUT 糖化血红蛋白队列）中，虽然主要效应的符号方向（direction）得以保留，但效应量级（magnitude）与边缘分布离散度均出现系统性偏差（例如 ENSANUT 中生成的 BMI 均值、SD 及模型残差 RMS 远低于真实参考值，且未能复现老年人群 HbA1c 平台期）。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+核心组件（反馈修订、数值校准、选择器）尚未证明正向增益：在 M17-B、ENSANUT、C4 和 Core v0 中，Agent 在收到源统计反馈后全部选择了 retain（保留原模型、零修改）；C3 的数值校准甚至出现了“源统计拟合改善，但破坏了未直接约束的年龄斜率（过拟合源端、损害目标分析）”的负向权衡；C4 的选择器对比因所有候选均未修改而退化为无效对比。   
+COMMON_REVIEW_PROMPT.md
++ 4
+
+因此，本项目目前绝不能作为“优越的新型生成算法”或“可替代真实临床测量的虚拟患者引擎”来发表。它最坚实、最可信的论文定位是：一篇诚实揭示“仅靠文献汇总证据合成分析型虚拟队列的可行性边界与可识别性陷阱（Identifiability & Transportability Limits）”的方法学与实证评估论文。以下按要求分七个部分展开详细独立评审。   
+COMMON_REVIEW_PROMPT.md
++ 3
+
+(A) 访问、阅读与核查范围声明（Access & Read-Scope Statement）
+
+为确保评审的客观性与边界清晰，以下严格区分实际完整阅读的文件、静态审查的代码、未执行/无法运行的部分以及未接触的材料：
+
+实际完整阅读的文档（源自 REVIEW_DOCUMENTS.txt，对应固定提交 7f4b38c0c0dfa8da4bbd8df3d5ee754399600562 的 12 个核心入口文件，共 162,303 字节 / 1,050 行）：   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+项目全局与进度：README.md、DRAFT_v0.md（工作手稿）、DRAFT_READINESS_CHECKLIST_2026-10-31.md、CORE_METHOD_V0.md。   
+REVIEW_DOCUMENTS.txt
+
+实验与审计报告：reports/core_v0_2026-10-31/RESULTS.md、MILESTONE_17B_RESULTS.md、reports/autonomous_research_cycle2_2026-10-31/results_report/REPORT.md（ENSANUT）、C3_SOURCE_CONSTRAINED_GENERATION_RESULTS_2026-10-31.md、C4_REVISION_ACCEPTANCE_RESULTS_2026-10-31.md、reports/c5_dynamic_extension_2026-10-31/RESULTS.md、reports/real_case_admission_v0_2026-10-31/REPORT.md（CHNS/ANSUR/PNS 准入核查）。   
+REVIEW_DOCUMENTS.txt
+
+近邻工作深读：docs/GSIM_LLMSYNTHOR_DEEP_REVIEW_2026-10-31.md。   
+REVIEW_DOCUMENTS.txt
+
+实际逐行静态审查的实现代码与配置（源自 REVIEW_CODE.txt，共 11 个文件，144,910 字节 / 2,463 行）：   
+REVIEW_CODE.txt
+
+核心框架模块：cohort_harness/contracts.py、execution.py、whole_cohort_feedback.py、source_replay.py、scientific_loop.py、lifecycle.py。   
+REVIEW_CODE.txt
+
+集成控制与候选产物：reports/core_v0_2026-10-31/run_integration.py、bundle/candidates/initial/generator.py、bundle/candidates/initial/model_spec.json。   
+REVIEW_CODE.txt
+
+Agent 技能接口定义：skills/evidence-cohort-generation/SKILL.md 及 references/harness-interface.md。   
+REVIEW_CODE.txt
+
+未实际运行/测试的范围（Tests Executed: ZERO）：
+
+本次评审在纯静态分析环境下完成，未实际运行任何 Python 单元测试或集成脚本（如 test_stage1.py、run_integration.py）。此外，由于 REVIEW_CODE.txt 明确省略了传递依赖模块（如 _worker.py、source_checks.py、calibration.py、calibration_budget.py、analysis_evidence.py、__main__.py）以及硬编码的本地 WSL/bubblewrap 沙箱路径（/home/zwang/.cache/evidence-cohort-runtime/m2），即便在外部环境中也无法仅凭附件文本直接执行完整重放。   
+REVIEW_DOCUMENTS.txt
++ 4
+
+未读取/无法核查的仓库其他材料：
+
+未读取上述 23 个文件之外的仓库内其他二级历史文档（如 M1–M16 的完整正文报告、source_checks.py 的具体算子实现源码、literature.py 检索网关源码）。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+遵循评审要求与仓库导出策略，未访问任何受试者个体数据（participant-level rows）、生成的 CSV 虚拟样本表、原始 PDF 文献或未导出的本地工作区文件。   
+COMMON_REVIEW_PROMPT.md
++ 2
+
+(B) 主张与证据对照评估（Claim-versus-Evidence Assessment）
+
+必须将软件工程验证（Executable Engineering）、统计分析效用（Analytical Utility）、科学新颖性（Scientific Novelty）与算法优势（Algorithmic Advantage）彻底剥离：   
+COMMON_REVIEW_PROMPT.md
+
+评估维度	实际已完成的内容（Verified Achievement）	证据支持强度与边界（Evidential Boundary）	核心缺陷与定性判断（Critical Verdict）
+1. 可执行工程与审计治理（Executable Engineering）	
+
+实现了契约校验（contracts.py）、不可变冻结收据（lifecycle.py）、WSL+bubblewrap 生成器进程沙箱（execution.py）、源反馈绑定（whole_cohort_feedback.py / source_replay.py）和事件链日志（scientific_loop.py）。 
+REVIEW_CODE.txt
+
+	
+
+强（针对软件正确性）。Core v0、M17-B、ENSANUT、C3、C4、C5 的算术重算与哈希链校验全部通过，误差在 
+10
+−
+14
+∼
+10
+−
+16
+10
+−14
+∼10
+−16
+ 以内。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+不能将工程跑通当成科研创新。这只是一套防作弊、防数据泄漏的实验记账本（ provenance ledger ），本身不产生任何生物医学预测能力。 
+REVIEW_DOCUMENTS.txt
++ 1
+
+
+2. 分析效用（Analytical Utility in Real Data）	
+
+在零个体输入的 M17-B（NHANES，
+𝑁
+=
+320
+N=320）和 ENSANUT Cycle 2（
+𝑁
+=
+6
+,
+931
+N=6,931）中，Agent 根据 3 篇外部文献构建了双变量对数正态或线性高斯生成器，并在冻结数据集上运行了 8 项/31 项预设分析。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+中等偏弱（仅支持定性方向，不支持定量替代）。主效应（如 BMI、年龄、性别对尿酸或 HbA1c 的方向）符号正确；但效应大小（如 ENSANUT 的 Q1 年龄斜率偏高、Q2/Q3 BMI 斜率偏低）、边缘均值/SD 及非线性曲率均与真实参考存在显著差距。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+仅证明了有界的定性可行性（Bounded Qualitative Feasibility）。由于源文献未报告完整协方差且存在人群迁移偏差，生成的虚拟队列无法作为定量等价的替代品。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+3. 迭代修正与校准机制（Revision, Calibration & Selection）	
+
+设计了源统计反馈闭环（Core v0, M17-B, ENSANUT）、有界数值优化校准（C3）及保护用途的选择器（C4）。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+无正向证据，甚至存在负向证据。所有真实与核心合成案例中 Agent 均选择 retain（零修改）；HDL 证据缺口试点（gap-loop）无增益；C3 优化器改善了源端拟合却恶化了未使用的种子并破坏了年龄斜率；C4 选择器因无候选差异而失效。 
+COMMON_REVIEW_PROMPT.md
++ 4
+
+	
+
+目前属于“无效或未验证的冗余组件”。如果写进论文声称“反馈闭环提升了数据质量”，将被审稿人直接证伪。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+4. 科学新颖性与算法优势（Novelty & Advantage）	
+
+提出了“研究条件化证据（Study-conditioned evidence）→ 显式假设/参数溯源 → 可重用虚拟表”的规范化范式。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+未建立算法优势。迄今没有任何实验将本方法与相同信息条件下（Same-information）的传统统计合成方法（如参数化矩匹配、Copula 合成、IPF/Raking、贝叶斯先验预测合成）或改编版 G-Sim/LLMSynthor 进行正面定量对比。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+缺乏基线对比是宣称“方法优越性”的致命伤（Fatal Gap）。此外，M17-B 和 ENSANUT 中两个独立 Agent 写出了高度同质化的模型（如都假设线性高斯且残差相关系数同设为 0.30），表明 LLM 仅在做“教科书公式翻译”，缺乏结构探索多样性。 
+COMMON_REVIEW_PROMPT.md
++ 2
+
+关键问题独立裁定：
+
+当前证据真正支持的最强主张（Strongest Supported Claim）：
+在零个体样本输入下，普通科学 Agent 能够将异质发表文献中的汇总统计量（均值、SD、回归系数）规范地转化为带有显式假设溯源的参数化生成程序，所生成的冻结数据集能够在部分跨人群真实队列中保留主要协变量关联的定性方向，同时暴露出未识别联合结构与人群迁移导致的定量偏差与不确定性边界。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+绝对不支持的主张（Unsupported Claims）：
+（1）迭代反馈、自动缺口检索或保护性选择器能提升生成质量；（2）Agent 生成优于传统统计矩匹配/蒙特卡洛模拟；（3）合成数据可提供校准的置信区间（Calibrated Uncertainty）或替代真实患者招募。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+致命缺陷（Fatal Gaps，若不解决将导致拒稿）：
+
+完成 F2/R1 的全新前瞻性真实案例缺失：目前 Core v0 只有合成 Gamma 数据（F1），旧真实案例（M17-B、ENSANUT、M10 等）均属于不同历史版本且目标已暴露。没有至少一个在冻结 Core v0 协议下完成的真实生物医学案例，论文没有实证主干。   
+COMMON_REVIEW_PROMPT.md
++ 3
+
+缺乏同信息层级的统计基线对比（Same-Information Statistical Baseline）：审稿人必然质疑：“既然 Agent 只是读了 3 篇论文的均值、SD 和回归斜率，然后手算了一个双变量正态/对数正态公式写成 30 行 Python，为什么需要 LLM Agent？任何统计学家用 10 行 R/Python 解线性方程组不是完全一样吗？”。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+可修复缺陷（Fixable Gaps）：
+
+Whole-cohort 反馈适配器（whole_cohort_feedback.py）目前无法在不同源研究人群上下文下重放生成器（已在代码中硬性限制 plan["population"] == task["population"]），可通过复用 source_replay.py 的子任务衍生机制修复。   
+REVIEW_CODE.txt
++ 1
+
+CHNS 真实案例的准入与暴露映射尚未冻结，可通过严格界定未暴露的生物标志物子集完成 F2。   
+COMMON_REVIEW_PROMPT.md
++ 2
+
+“可重用虚拟数据集（Reusable Frozen Dataset）”在该信息机制下是否提供真正有意义的科学能力？
+答案是：有条件地提供，但其价值不在于“创造新信息”，而在于“一致性约束下的探索性分析与敏感性压力测试”。如果研究者只想求一个特定回归系数，在已知高斯矩时直接用解析公式（代数推导）即可，生成 2,000 行虚拟数据并无额外信息增量（甚至引入蒙特卡洛方差，如 C4 Task A 和 C5 所示）。然而，当面临非线性截断（如 ENSANUT 中空腹血糖 
+<
+126
+ mg/dL
+<126 mg/dL 的排除标准）、复合分层加权、多步条件变换、或在固定观测协变量上嫁接未测量标志物（Enrichment）时，解析推导变得极其繁琐或不可解。此时，一个冻结的、可被标准统计软件（statsmodels 等）直接调用的虚拟数据集，尤其是当系统能同时生成多个与源文献兼容但隐含不同未识别假设的竞争性虚拟队列（如 C4 Task B 所示的兼容世界 1 与 2）时，能够让下游研究者直观地检验：“我的科学结论在多大程度上是由已有文献支撑的，又在多大程度上脆弱地依赖于未测量的偏相关假设？”。这才是该信息机制下最具不可替代性的科学价值。   
+COMMON_REVIEW_PROMPT.md
++ 4
+
+(C) 候选论文故事线排序与评估（Ranked Paper Storylines）
+
+基于现有正反结果，严禁虚构算法优越性。以下按科学可信度与发表可行性从高到低排列三条截然不同的论文故事线：   
+COMMON_REVIEW_PROMPT.md
+
+排名与故事线名称	核心主张（Main Claim）	当前已有支撑证据（Current Supporting Evidence）	相对于近邻工作的新颖性（Novelty vs. Closest Work）	最小必要补充证据（Minimum Missing Evidence）	证伪或严重削弱该故事线的条件（What Would Falsify / Weaken It）
+
+
+第 1 名（强烈推荐）：
+
+
+
+
+面向生物医学证据合成的可识别性审计与有界可行性研究
+
+
+
+
+(Identifiability-Audited Virtual Cohorts: Capabilities and Transport Limits of Evidence-Only Biomedical Data Synthesis)
+
+	
+
+仅凭发表文献的局部/条件汇总证据构建虚拟队列，虽能通过显式程序生成保留主效应方向，但必然面临部分识别（Partial Identification）与人群迁移偏差；将显式假设溯源、多源统计诊断与多兼容结构敏感性分析相结合，比追求“单一黑盒拟真表”更具科学诚实性与实用价值。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+1. M17-B 与 ENSANUT 真实案例的完整正反结果（方向恢复 vs. 量级/离散度偏差）； 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+2. C3 揭示的“源拟合改善但破坏年龄斜率”的精确权衡； 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+3. C4 Task B 构造的“源统计完全兼容但调整后效应符号相反”的可识别性反例； 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+4. Core v0 的严格参数溯源框架。 
+REVIEW_DOCUMENTS.txt
++ 1
+
+	
+
+跳出了 G-Sim（假设拥有无限抽样的真实模拟器 oracle）与 LLMSynthor（假设来自同源微数据的完备边际/联合直方图）的理想化设定，首次在**异质生物医学文献（不同人群、调整集、截断标准）**下系统实证了 LLM 驱动合成的识别边界与失败模式。 
+REVIEW_DOCUMENTS.txt
++ 3
+
+	
+
+1. 完成 1 个基于冻结 Core v0 协议的前瞻性真实案例（如 CHNS），且在该案例中显式展示“至少两个与源文献兼容但结构假设不同的生成器候选”在目标分析上的表现差异； 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+2. 增加 1 个平庸统计基线（如朴素独立边缘抽样或未区分调整集的简单矩匹配）以证明显式建模调整集/协方差的必要性。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	若在新真实案例中，连基本的单变量/主效应定性方向都完全随机崩溃（连有界可行性都不成立）；或者审稿人认为“部分识别与迁移失败”在传统流行病学/统计数据融合（Data Fusion）文献中已是常识，而本文缺乏形式化的部分识别区间（Bounds）推导。
+
+
+第 2 名（次选）：
+
+
+
+
+可重现、防泄漏的证据引导虚拟队列基准与评估协议框架
+
+
+
+
+(A Leak-Closed, Provenance-Bound Protocol and Harness for Evaluating Agent-Synthesized Biomedical Datasets)
+
+	
+
+针对 LLM/Agent 在无个体数据下合成生物医学数据的评测乱象（数据污染、目标泄漏、将源拟合当验证、把随机种子当样本量），提出一套包含三级信息机制（Whole-cohort / Enrichment / Completion）、双重哈希锁定与算子预审的标准化评估基准与软件框架。 
+COMMON_REVIEW_PROMPT.md
++ 2
+
+	
+
+1. 完整实现的 cohort_harness 六大核心模块与沙箱执行机制； 
+REVIEW_CODE.txt
+
+
+
+
+2. 跨项目暴露注册表（Dataset Exposure Registry，成功拦截 NAGALA 与 PNS 重复使用）； 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+3. 涵盖全队列、特征富集（Insulin）、缺失补全及动态扩展（C5）的多模态工程与试点记录。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+现有 LLM 表格生成基准（如 TabSyn、G-Sim、LLMSynthor）普遍缺乏针对预训练记忆泄漏、跨文献队列重叠（如 NHANES 不同波次重叠）及调整集语义错配的形式化拦截与审计机制。 
+REVIEW_DOCUMENTS.txt
++ 1
+
+	
+
+1. 完成 1 个标准化的前瞻性真实案例演示完整 F1→F2→R1 闭环； 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+2. 在同一套 Harness 下横向评测 2–3 种不同的生成策略/模型（如不同 LLM、直接生成表格 generated.csv vs. 编写程序 generator.py、有无源反馈），展示框架的区分度。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+若框架只能跑通作者自己手工编排的单一 Agent 且无法展示对不同生成方法的区分能力（如 C4 中所有策略得分完全一致），审稿人会将其定性为“内部实验室工程文档/过度设计的胶水代码（Over-engineered boilerplate）”，而非通用学术工具。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+第 3 名（高风险，当前不推荐）：
+
+
+
+
+面向异质研究条件生成的自适应仿真 Agent 算法
+
+
+
+
+(Study-Conditioned Generative Agents: Translating Heterogeneous Published Estimates into Target-Compatible Cohorts)
+
+	
+
+提出一种能够自动解析不同源研究的人群筛选、测量单位与回归调整集，并通过执行态源重放（Source Replay）迭代修正生成器的智能体方法，在目标人群分析上优于传统非条件化汇总匹配与现有 LLM 合成器。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+仅有 M16、C3、ENSANUT 的初步尝试，且核心证据链断裂：ENSANUT 与 M17-B 中未发生迭代修订；C3 校准导致负迁移；whole_cohort_feedback.py 尚未实现跨人群源重放。 
+COMMON_REVIEW_PROMPT.md
++ 2
+
+	
+
+直接对标 G-Sim 与 LLMSynthor，试图在异质约束转换与迭代校准算法上宣称方法创新。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+1. 必须重写全队列多上下文源重放引擎； 
+REVIEW_DOCUMENTS.txt
++ 1
+
+
+
+
+2. 必须在受控合成基准 + 至少 2 个独立真实生物医学队列上，证明“研究条件化算子 + 反馈修订”显著且稳定地优于（a）无反馈 One-shot Agent、（b）改编版 G-Sim/LLMSynthor、（c）相同输入下的传统统计校准（如 Raking/IPF/Copula）。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+极易被当前已有的负结果证伪：只要审稿人看到 M17-B/ENSANUT 的 100% retain 率、HDL gap-loop 的零增益以及 C3 的过拟合退化，该“算法创新/优越性”故事线会立刻崩塌。除非推倒重做大量算法与对比实验，否则不具备可投性。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+(D) 近邻方法深度对比（Nearest-Method Comparison）
+
+以下结合主文献与官方代码库，将本项目的 Core v0 (cohort_harness) 与 6 个高度相关的代表性方法/传统（涵盖最新 LLM/Agent 生成器与经典统计合成/数据融合传统）进行严格对比：   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+G-Sim — Holt, S., et al. (2025). G-Sim: Generative Simulations with Large Language Models and Gradient-Free Calibration. ICML 2025 (PMLR 267: 23540–23588).   
+REVIEW_DOCUMENTS.txt
+
+主要链接与官方代码：论文 PMLR v267；官方仓库 samholt/generative-simulations（固定核查提交：72b5d51a7790b8b2ebc87973ee5e9d21aa818ece）。状态：有官方开源代码，但默认配置与论文存在差异（如默认使用 o3 与 3 轮迭代、部分 default_rng() 未固定全局种子、SIR 的 SBI 路径仅条件化于单条轨迹）。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+LLMSynthor — Tang, Y., et al. (2025/2026). Macro-Aligned Micro-Records Synthesis with Large Language Models. arXiv:2505.14752v3 (2026-05-31) / KDD 2026.   
+REVIEW_DOCUMENTS.txt
+
+主要链接与官方代码：论文 arXiv:2505.14752v3；官方仓库 YihongT/LLMSynthor。状态：截至 2026-10-31 核查，官方仓库仅含 README 与图片，无核心算法实现代码；任何对比均只能是基于论文描述的重构（Reconstruction）。   
+REVIEW_DOCUMENTS.txt
++ 2
+
+CLLM / Curated LLM Tabular Synthesis — Seedat, N., Huynh, N., van Breugel, B., & van der Schaar, M. (2024). Curated LLM: Synergy of LLMs and Data Curation for tabular augmentation in low-data regimes. ICML 2024 (PMLR 235: 44060–44092).
+
+主要链接与官方代码：论文 PMLR v235；官方代码 vanderschaarlab/curated-llm。状态：官方实现可用，代表了“利用 LLM 先验在少样本下直接生成表格行并通过学习动力学/置信度过滤”的主流范式。
+
+Synthea（基于规则与文献参数的虚拟患者群生成传统） — Walonoski, J., et al. (2018). Synthea: An approach, method, and software mechanism for generating synthetic patients and the synthetic electronic health care record. JAMIA, 25(3), 230–238.
+
+主要链接与官方代码：论文 DOI:10.1093/jamia/ocx079；官方仓库 synthetichealth/synthea。状态：工业级官方开源工具（Java），代表生物医学领域无需个体隐私数据、纯靠人口统计与流行病学文献手工编码状态机生成全队列的经典基线。
+
+经典微观模拟与迭代比例拟合（Spatial Microsimulation / IPF / Raking / SimPop） — Templ, M., Meindl, B., Kowarik, A., & Dupriez, O. (2017). Simulation of Synthetic Complex Data: The R Package simPop. Journal of Statistical Software, 79(10), 1–38.
+
+主要链接与官方代码：论文 DOI:10.18637/jss.v079.i10；官方包 CRAN simPop / mipfp。状态：官方成熟统计软件包，代表利用宏观汇总表（边际分布/列联表）与种子样本合成人口微观记录的标准统计学方法。
+
+统计数据融合、生态学推断与跨人群可迁移性理论（Statistical Data Fusion / Ecological Inference / Transportability） — Evans, R. J., & Robins, J. M. (2024, JRSS-B Frugal Copula 参数化) / Bareinboim, E., & Pearl, J. (2016, PNAS Transportability) / Jackson, C., et al. (2006, JRSS-A Hierarchical Related Regression combining aggregate & individual data).
+
+主要链接与官方代码：Bareinboim & Pearl DOI:10.1073/pnas.1510507113；Jackson et al. DOI:10.1111/j.1467-985X.2006.00419.x（R 包 ecoreg）；Evans (frugalCopula R package)。状态：代表严肃的生物统计与因果推断传统——严格区分边际分布与条件/联合依赖结构，证明仅凭边际与局部回归无法唯一识别高维联合分布（Ecological Fallacy / Unidentifiability）。
+
+结构化横向对比表：
+对比维度	本项目 (cohort_harness Core v0) REVIEW_DOCUMENTS.txt+ 1	G-Sim (ICML 2025) REVIEW_DOCUMENTS.txt	LLMSynthor (KDD 2026) REVIEW_DOCUMENTS.txt	CLLM (ICML 2024)	Synthea (JAMIA 2018)	统计合成与数据融合 (simPop / ecoreg / Copula)
+1. 允许的输入信息（Permitted Inputs）	
+
+已发表文献中的汇总/条件统计量（均值、SD、比例、相关性、特定调整集下的 OLS 系数）、目标人群配额/资格描述；可选协变量表（Enrichment）。 
+REVIEW_DOCUMENTS.txt
++ 1
+
+	
+
+任务描述/变量 Schema + 来自真实模拟器的训练/验证轨迹与状态转移抽样。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+变量描述 + 宏观边际直方图与选定变量组的联合列联表（允许 LLM 近似缺失联合表）。 
+REVIEW_DOCUMENTS.txt
+
+	少量真实目标个体样本（
+𝑁
+=
+10
+∼
+100
+N=10∼100）+ 变量名语义先验。	公开人口普查统计 + 临床指南/流行病学发病率与病程文献。	宏观边际列联表 +（通常需要）一个微数据参考样本或显式参数化先验分布。
+2. 目标个体记录或目标汇总的接触权限（Target Access）	
+
+零目标个体记录（Whole-cohort 模式）；目标结局与回归真值在构建与修订期严格盲态隔离。 
+COMMON_REVIEW_PROMPT.md
++ 2
+
+	
+
+特权级接触（Privileged）：验证反馈在每个验证状态从真实模拟器抽取 20–200 个下一状态计算 Wasserstein 距离。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+特权级目标宏观信息：实验中输入的 6 分位/8 子分位精细联合频率表直接从目标微数据计算得出。 
+REVIEW_DOCUMENTS.txt
+
+	直接接触目标小样本个体行。	零目标验证集个体接触（完全前向规则驱动）。	依赖目标人群的精确边际分布表（如普查表）作为重加权/IPF 约束。
+3. 源研究条件处理（Source-Condition Handling）	
+
+显式记录每个证据项的人群筛选、测量单位、统计量类型与回归调整集（Adjustment set）；但当前 whole_cohort_feedback 仅在生成表上做恒等测量评估，未自动重放多源人群。 
+REVIEW_DOCUMENTS.txt
++ 1
+
+	
+
+假设所有训练/验证轨迹来自同一个同质动态系统，无跨研究人群或调整集差异问题。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+将不同来源的宏观表直接拼合为统一频率约束，不区分回归调整集、测量方法差异或截断选择偏倚。 
+REVIEW_DOCUMENTS.txt
+
+	无外部文献统计约束，完全依赖小样本与 LLM 内部常识。	人类专家手工将不同文献的率参数硬编码进 JSON 状态模块，假设直接可迁移。	ecoreg / Transportability 显式建模个体与汇总层次及选择偏差；普通 IPF 假设联合结构（Odds Ratio）从种子样本完美迁移。
+4. 生成的核心对象（Generated Object）	
+
+带有参数证据/假设溯源字典（model_spec.json）的**确定性随机采样程序（generator.py）**及冻结的虚拟数据表（也支持直接输出表格分支）。 
+REVIEW_DOCUMENTS.txt
++ 2
+
+	
+
+Python 状态转移模拟器代码（SimulatorStep）+ 经 ES 或 SBI 拟合的参数向量。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+LLM 逐批输出的“类别组合 + 数值区间 + 记录条数”紧凑提议，由采样器在区间内均匀抽样追加成表。 
+REVIEW_DOCUMENTS.txt
+
+	LLM 直接按行生成的文本化表格记录，再经置信度/不确定性指标筛选。	人工编写的模块化疾病状态机生成的多表纵向电子健康记录（EHR）。	经过校准权重调整的合成微观个体表或参数化联合分布抽样表。
+5. 不确定性表征（Uncertainty Handling）	
+
+严格区分个体残差波动（跨种子波动）、源估计标准误、模型结构不确定性与迁移不确定性；明确承认跨种子范围不是置信区间。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+SBI 分支训练神经后验估计器，但在 SIR 代码中仅基于单条轨迹并用后验均值做下游评估，未完整传播全后验。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+无论文级源统计不确定性或结构部分识别建模；抽样仅反映批次内均匀随机噪声。 
+REVIEW_DOCUMENTS.txt
+
+	利用预测动力学评估样本级模糊度（Aleatoric/Epistemic），无人群效应区间校准。	仅反映蒙特卡洛个体随机波动，无源文献参数不确定性传播。	贝叶斯数据融合（如 Jackson 2006）与多重插补（Rubin's Rules）可传播参数与抽样不确定性；未识别参数仍需敏感性分析。
+6. 下游评估方式（Downstream Evaluation）	
+
+在同一个冻结的生成表上运行预设的多项科学回归分析（主效应、调整后偏效应、交互项、非线性曲率）及边缘诊断，与独立真实参考队列对比。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+状态分布 Wasserstein 距离、一步/多步预测误差、因果图恢复及干预决策模拟。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+边际/联合分布距离（Wasserstein, JSD）、二分类判别器、规则违背率及 16 项 ACS 政策计数查询。 
+REVIEW_DOCUMENTS.txt
+
+	下游机器学习分类器（XGBoost/MLP）在测试集上的预测准确率（TSTR）。	宏观疾病患病率、医疗利用率的定性/描述性对齐。	边际吻合度、目标回归系数偏差（Bias）、均方误差（MSE）及置信区间覆盖率（Coverage）。
+(E) 最小可判别前瞻性实验方案（Minimal Discriminating Prospective Protocol）
+
+为了在不耗费巨额算力、不盲目扩展玩具模块的前提下，一次性解决当前手稿面临的最大科学悬念（即：完成 F2/R1 闭环，检验基于异质文献构建的可重用虚拟队列在真实独立人群中的支持边界，并分离“信息/假设价值”与“LLM 编程实现”），建议执行以下唯一、最小化的前瞻性实验：   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+1. 解决的核心不确定性（Core Uncertainty Resolved）
+
+当外部发表文献仅提供局部/条件汇总证据（存在未观测到的协变量偏相关与人群选择差异）时：
+
+问题 A（可行性与重用性）：冻结的 Core v0 流程能否在零个体输入下生成一个真实目标队列的虚拟副本，同时支持直接受约束的主效应分析和未直接拟合的条件调整分析？   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+问题 B（算法对比 vs. 证据/假设对比）：Agent 生成的程序与同等输入信息下的透明统计合成基线（Same-Information Competent Statistical Synthesis）相比是否一致？当源文献无法唯一确定联合分布时，显式构造两个兼容源文献但隐含不同偏相关假设的虚拟队列（Competing Compatible Worlds），能否比单一模型更诚实地界定下游目标分析的成败边界？   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+2. 案例选择与准入/暴露核查（Case Selection & Admission/Exposure Checks）
+
+推荐目标队列：CHNS（中国健康与营养调查）2009 年生物标志物波次（公开 UNC Dataverse 发布版）。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+选择理由与暴露隔离（F2.1 / F2.8）：
+
+根据 real_case_admission_v0_2026-10-31/REPORT.md，Brazil PNS 已作为 M10 目标完全暴露并关闭；ANSUR II 为美军特定人体测量队列，临床生物标志物适用性受限。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+CHNS 具有已核实的官方公开获取路由（UNC Dataverse）及明确的实验室测量手册（Biomarker_Methods.pdf）。   
+REVIEW_DOCUMENTS.txt
+
+严格暴露规避：历史记录显示，此前 Builder 曾接触过关于 CHNS 尿酸/胰岛素（urate/insulin）及 BMI/血脂/认知的含结果摘要。因此，严禁在本次前瞻性实验中再次使用尿酸、空腹胰岛素或认知结局。应从 Biomarker_Methods.pdf 中选择此前未在历史摘要中暴露的常规心肾/炎症或铁代谢/肝酶标志物组合（例如：年龄 Age、性别 Sex、腰围或 BMI、超敏 C 反应蛋白 hs-CRP 或血红蛋白 Hemoglobin / 肌酐 Creatinine / 转氨酶 ALT——以 Custodian 在不查看效应值的前提下核实无历史摘要暴露的 4 个连续/分类变量为准）。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+源文献与目标分离（Source/Target Separation）：
+
+在 task.json 的 excluded_cohorts 中明确列入 ["CHNS", "China Health and Nutrition Survey"]。   
+REVIEW_CODE.txt
+
+仅准入 3–4 篇非 CHNS 的外部发表文献（例如韩国 KNHANES、日本体检队列或欧美社区队列中报告了相同标志物均值/SD、年龄/性别分层及回归斜率的文献），总深度审计文献数严格控制在 
+≤
+6
+≤6 篇上限内。   
+REVIEW_DOCUMENTS.txt
+
+Custodian 在本地完成 CHNS 原始文件下载、资格筛选（如 20–79 岁成人、排除缺失值与极端异常值）及年龄×性别配额标准化定义；在所有候选生成器与虚拟表完成哈希冻结（Commit）之前，严禁计算或向任何进程暴露 CHNS 的生物标志物分布或回归效应。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+3. 预设的 3 项科学分析与信息属性分类（Prespecified Analyses on One Frozen Release, F2.3 / F2.4）
+
+设生成的 4 个核心变量为：年龄 
+𝐴
+A、性别 
+𝑆
+S、体格指标 
+𝑊
+W（如 BMI 或腰围）、核心生物标志物 
+𝑌
+Y 及次要关联标志物 
+𝑍
+Z（所有分析均在同一个冻结的生成表上运行，禁止针对不同分析重新生成数据）：   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+分析 1（直接受源文献约束的主效应转移，Source-Constrained Primary Transfer）：
+
+模型：
+𝑌
+∼
+𝐴
++
+𝑆
++
+𝑊
+Y∼A+S+W（调整年龄、性别后的 
+𝑊
+W 对 
+𝑌
+Y 的线性或对数线性回归斜率 
+𝛽
+𝑊
+β
+W
+	​
+
+）。   
+REVIEW_DOCUMENTS.txt
+
+信息分类：源文献已报告同方向或逆方向的条件回归系数，主要检验跨人群与测量单位的迁移（Transportability）。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+分析 2（未直接拟合但受联合假设支配的条件调整分析，Unfitted Conditional/Mediation-Style Contrast）：
+
+模型：
+𝑌
+∼
+𝐴
++
+𝑆
++
+𝑊
++
+𝑍
+Y∼A+S+W+Z 中的偏回归系数 
+𝛽
+𝑊
+∣
+𝑍
+β
+W∣Z
+	​
+
+，以及引入 
+𝑍
+Z 前后的系数变化量 
+Δ
+𝛽
+𝑊
+=
+𝛽
+𝑊
+−
+𝛽
+𝑊
+∣
+𝑍
+Δβ
+W
+	​
+
+=β
+W
+	​
+
+−β
+W∣Z
+	​
+
+。   
+REVIEW_DOCUMENTS.txt
+
+信息分类：源文献分别报告了 
+(
+𝑌
+,
+𝑊
+)
+(Y,W) 与 
+(
+𝑌
+,
+𝑍
+)
+(Y,Z) 的关系，但未在同一篇文献中联合调整 
+(
+𝑊
+,
+𝑍
+)
+(W,Z) 或未完整报告给定 
+𝐴
+,
+𝑆
+A,S 下 
+(
+𝑊
+,
+𝑍
+)
+(W,Z) 的条件偏相关 
+𝜌
+𝑊
+𝑍
+∣
+𝐴
+𝑆
+ρ
+WZ∣AS
+	​
+
+。必须明确标注：这不是凭空发现新生物学，而是直接检验未观测偏相关假设对调整后结论的影响（将 C4 Task B 的理论反例推进到真实数据）。   
+REVIEW_DOCUMENTS.txt
++ 2
+
+分析 3（非参数/分布尾部或亚组交互分析，Distributional / Subgroup Shape Analysis）：
+
+模型：高危临床阈值超标率（Proportion 
+{
+𝑌
+>
+𝑐
+clinical
+}
+{Y>c
+clinical
+	​
+
+} 在不同年龄×性别亚组中的分布对比）或 
+𝑊
+×
+𝑆
+W×S 性别交互斜率。   
+REVIEW_DOCUMENTS.txt
+
+信息分类：高度依赖分布族假设（如对数正态 vs. Gamma vs. 正态尾部）与高阶矩（Assumption-Dependent），源文献的均值和 SD 无法代数决定该尾部比例。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+4. 实验分组设计：严格区分“证据/假设对比”与“生成算法对比”（Comparators & Information Tiers）
+
+为了同时支撑第 1 和第 2 故事线，且不引入不公平比较，设计 同一信息层级（Tier 1: Zero Target Microdata, Same Admitted Literature Packet） 下的 3 个构建臂，外加 1 个可选的参考锚点：   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+Arm 1A（Standard Single-Model Agent — Core v0 基准）：1 个全新上下文的科学 Agent，接收准入文献包，自主选择单一最佳分布与点估计参数，经过 1 次源统计反馈后冻结最终生成器。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+Arm 1B（Identifiability-Aware Dual-Scenario Agent — 核心方法优化检验）：接收完全相同的文献包，但任务契约要求 Agent 对源文献未唯一识别的关键参数（如条件偏相关 
+𝜌
+𝑊
+𝑍
+∣
+𝐴
+𝑆
+ρ
+WZ∣AS
+	​
+
+ 或尾部偏度族），在源统计兼容性容差范围内显式构造 Low-Dependence 与 High-Dependence 两个边界生成器候选（Scenarios 
+𝑀
+low
+,
+𝑀
+high
+M
+low
+	​
+
+,M
+high
+	​
+
+），以此生成一组包络数据集而非单一猜测。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+Arm 1C（Same-Information Competent Statistical Synthesis — 同信息统计合成基线）：由独立脚本实现确定性高斯/对数正态 Copula 矩匹配合成器（Moment-Matching Copula / Parametric Data Fusion）——直接将文献报告的各层均值、SD 与相关/回归系数代入解析协方差矩阵公式（缺失偏相关默认设为条件独立 
+𝜌
+𝑊
+𝑍
+∣
+𝐴
+𝑆
+=
+0
+ρ
+WZ∣AS
+	​
+
+=0），不经过 LLM 编写生成代码。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+科学判别力：对比 Arm 1A 与 Arm 1C 检验 LLM 是否有任何超越解析统计公式的算法增益；对比 Arm 1A/1C 与 Arm 1B 检验显式表征“部分识别边界”的科学价值。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+（可选补充，明确标为不同信息层级 Tier 2: Privileged Target-Macro Reference）：若需对比 LLMSynthor 类方法，仅作为上限参考报告，必须明确标注其使用了目标人群真实边际分位数表，不属于零目标信息竞赛。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+5. 预算、重复次数、不确定性与独立验证（Budgets, Replication & Uncertainty）
+
+构建与执行预算（F2.7）：每个 Agent 臂最多允许 2 次独立构建（或 Arm 1A 1次 + Arm 1B 双场景各1次），每次构建最多 1 次源反馈修订机会；源端诊断执行上限固定为每个候选 1 次（种子 27101）；目标端冻结发布每个最终模型固定运行 3 个预设随机种子（27201, 27202, 27203），每表 
+𝑁
+=
+2
+,
+000
+N=2,000 行（八个年龄×性别层各 250 行）。总目标评估表不超过 12 张，绝不进行超参数网格搜索。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+不确定性处理（F2.6）：
+
+目标 CHNS 参考队列计算 95% HC3 稳健置信区间（或分层 Bootstrap 稳定性带）；   
+REVIEW_DOCUMENTS.txt
+
+虚拟队列的 3 个种子范围仅报告为 [min, max] 蒙特卡洛抽样波动（Simulation Variation），严禁伪装成总体置信区间；   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+Arm 1B 的双场景输出差值单独报告为 结构识别不确定性区间（Structural Identification Range）。   
+REVIEW_DOCUMENTS.txt
+
+独立验证：由独立审计脚本在目标揭盲后一次性重算所有端点与源检查，要求算术差异 
+<
+10
+−
+12
+<10
+−12
+，并核验所有 freeze.json 时间戳与 SHA-256 均早于目标揭盲记录。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+6. 预设结果判定与继续/停止规则（Outcome & Continue/Stop Rules, R1）
+观测到的前瞻性实验结果	科学解释（Scientific Interpretation）	强制行动与论文停止/推进规则（Continue / Stop Rule）
+结果 1：Arm 1A 与统计基线 Arm 1C 表现几乎一致；两者在分析 1（主效应）上恢复了正确方向，但在分析 2/3 上因未识别协方差/分布尾部产生偏差；而 Arm 1B 的兼容场景包络成功覆盖或解释了分析 2 的偏差范围。	
+
+证明瓶颈在于**源证据的部分识别性（Information Limitation）**而非采样代码；LLM 的核心价值在于自动化证据提取与多假设敏感性建模，而非打败统计公式。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+立即锁定 R1 并停止扩张实验。直接按 故事线 1（可识别性审计与有界可行性） 撰写并投稿；放弃任何“LLM 算法精度超越统计合成”的措辞。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+结果 2：Arm 1A 在经过源反馈修订（且修复了跨人群源重放适配器）后，在分析 1–3 上的误差均显著小于未修订初始模型及统计基线 Arm 1C。	
+
+证明研究条件化源重放与结构修正确实提供了超越静态矩匹配的算法增益。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+在锁定当前案例后，可按 故事线 1 + 故事线 3 的融合版 定位，强调研究条件化重放机制的贡献。 
+REVIEW_DOCUMENTS.txt
+
+
+结果 3：所有无个体输入方法（Arm 1A, 1B, 1C）在 CHNS 上的主效应（分析 1）符号方向均失败或与真实值严重冲突，且源文献本身与 CHNS 存在无法调和的人群/测量异质性。	
+
+证明在高度异质的跨国人群间，仅靠无目标锚点的外部文献无法实现有效分布迁移（Transport Failure）。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+严禁更换目标队列或事后调参重跑。将该负结果完整锁定并写入正文，作为“零目标信息全队列生成的实证失效边界”，转型纯负向/方法学反思论文或补充测试“提供极少量目标边际均值（Calibration Anchor）”的修复效果（明确标为新开发阶段）。 
+REVIEW_DOCUMENTS.txt
++ 2
+
+(F) 代码与实现缺陷审查（Prioritized Implementation Findings）
+
+通过对 REVIEW_CODE.txt 中全部 11 个核心源码文件的逐行静态审计，以下按严重程度列出已确认的实现缺陷（Confirmed Defects）、高风险架构漏洞（Plausible Risks）与文档/契约缺口（Documentation/Contract Gaps），并附精确文件名与行号[cite: 1, 3]：
+
+1. 【已确认缺陷 / Confirmed Defect — 高优先级】whole_cohort_feedback.py 强制要求源反馈人群与目标生成人群完全一致，且缺乏 lifecycle.py 自动预检，导致“研究条件化全队列反馈”在架构上无法处理异质源文献
+
+代码位置：
+
+cohort_harness/whole_cohort_feedback.py 第 45–53 行（_read_plan 函数）：   
+REVIEW_CODE.txt
+
+Python
+require(plan["population"] == task["population"],
+        "Feedback population must name the actual execution task; no source-context transformation is implemented")
+...
+require(plan["measurement"]["mode"] == "identity", "Only identity measurement is implemented")
+
+
+cohort_harness/lifecycle.py 第 257–306 行（_state 与 freeze_candidate 函数）：仅校验了 model_spec.json、evidence.json、decision.md、checks.json 以及可选的 analysis_evidence.json 和 source_check_report.json，完全没有校验 whole_cohort_feedback.json 或 source_replay.json 的语法与算子合法性。   
+REVIEW_CODE.txt
++ 1
+
+技术后果与危害：
+
+在真实全队列任务中，目标人群是 
+𝑃
+target
+P
+target
+	​
+
+（如墨西哥 ENSANUT 或美国 NHANES 特定配额），而输入的 3 篇源文献分别来自不同人群 
+𝑃
+𝑆
+1
+,
+𝑃
+𝑆
+2
+,
+𝑃
+𝑆
+3
+P
+S
+1
+	​
+
+	​
+
+,P
+S
+2
+	​
+
+	​
+
+,P
+S
+3
+	​
+
+	​
+
+（如韩国体检人群、荷兰 Lifelines、美国老年 CHS）。但 whole_cohort_feedback.py 直接在生成的单一目标表上计算源统计量，并强制要求 plan["population"] == task["population"]。这迫使 Builder 把异质源人群的统计量当作目标人群的统计量来强行对比（用 status: "approximate" 掩盖人群分布差异）。如果源文献的年龄结构或截断条件与目标表不同（如 ENSANUT 中 Lifelines 年龄上限与 Pani 不同），直接用目标表算出的回归系数或均值偏差根本无法区分是“生成器写错了”还是“目标人群配额与源人群不同”。这也直接解释了为什么 ENSANUT Cycle 2 必须绕开标准 whole_cohort_feedback.py 而单独生成两个 6,000 行的源上下文表！   
+REVIEW_DOCUMENTS.txt
++ 4
+
+由于 lifecycle.freeze_candidate 不检查 whole_cohort_feedback.json，候选模型可以在包含非法反馈配方的情况下成功生成 freeze.json，直到执行后调用 collect_feedback 时才崩溃（这也是 run_integration.py 第 25 行不得不手写 preflight 补丁的原因）。   
+REVIEW_CODE.txt
++ 2
+
+修复建议：在 lifecycle.py 的 _state() 中加入对 whole_cohort_feedback.json / source_replay.json 的前置校验；并将 source_replay.py 的多上下文子任务机制扩展至 whole_cohort 模式（允许 generator(None, spec, seed) 接收源特定人口配额参数或上下文配置以生成源人群专属诊断表）。   
+REVIEW_CODE.txt
+
+2. 【已确认缺陷 / Confirmed Defect — 中高优先级】lifecycle.py 的保留判定（_same_model）未绑定 evidence.json 与反馈配方，且 scientific_loop.py 存在晋升（Promotion）语义冲突
+
+代码位置：
+
+cohort_harness/lifecycle.py 第 315–320 行（_same_model 函数）：   
+REVIEW_CODE.txt
+
+Python
+def _same_model(current: dict, previous: dict) -> bool:
+    if current["route"] != previous["route"]:
+        return False
+    return all(current["commitments"][current["candidate"] + "/" + name] ==
+               previous["commitments"][previous["candidate"] + "/" + name]
+               for name in ("model_spec.json", current["route"]))
+
+
+cohort_harness/scientific_loop.py 第 137–139 行、第 264–266 行、第 279–280 行：   
+REVIEW_CODE.txt
+
+第 279 行：require(action["status"] == "decided" and action["decision"]["choice"] == "retain_structure", "Only retain_structure decisions can promote selected numeric trials")。   
+REVIEW_CODE.txt
+
+第 264 行：_promotion_revision 根据 generator.py 或 model_spec.json 的哈希是否变化，将 revision["kind"] 设为 "revise"（当数值校准改变了 model_spec.json 中的参数时）或 "retain"。   
+REVIEW_CODE.txt
+
+技术后果与危害：
+
+在 lifecycle.py 中，如果一个候选选择了 revision["kind"] == "retain"，系统只检查 model_spec.json 和 generator.py 未变，不检查 evidence.json、source_checks.json 或 whole_cohort_feedback.json 是否被篡改。如果外部控制器没有像 run_integration.py 第 62–63 行那样额外打补丁，Agent 可以在 retain 模式下悄悄删掉未通过的源检查项或修改 evidence.json 中的估计值，从而在不改变模型的情况下伪造“源检查通过率提升”。   
+REVIEW_CODE.txt
++ 3
+
+在 scientific_loop.py 中，设计逻辑是：当 Agent 选择 "retain_structure"（保留模型方程结构，但采纳 C3 数值优化器拟合出的新参数 selected_dir/model_spec.json）时，调用 promote() 生成新候选，此时因为 model_spec.json 参数变了，lifecycle.freeze_candidate 里的 revision["kind"] 会被记为 "revise"。然而，如果 Agent 选择了 "revise_structure"（修改了模型结构或代码），scientific_loop.py 完全没有任何函数支持将其晋升或关联到事件链中（promote 硬性报错拒绝 "revise_structure"）！这意味着 scientific_loop.py 名义上有 4 个选项（retain_structure, revise_structure, stop, request_evidence），实际上只是一条单向的“固定结构数值校准晋升通道”，根本不支持真正的结构修正闭环。   
+REVIEW_CODE.txt
++ 2
+
+3. 【已确认缺陷 / Confirmed Defect — 中优先级】可移植性与硬编码本地路径锁死（Hardcoded Host Paths Breaking Reproducibility）
+
+代码位置：
+
+cohort_harness/execution.py 第 25–30 行、第 45–49 行、第 52–56 行：   
+REVIEW_CODE.txt
+
+Python
+RUNTIME_ROOT = "/home/zwang/.cache/evidence-cohort-runtime/m2"
+...
+require(value == DEFAULT_RUNTIME, "Only the inspected task-specific Ubuntu runtime is supported")
+...
+require(re.fullmatch(r"[A-Za-z]:", absolute.drive) is not None,
+        "This adapter requires a local Windows drive path, not UNC or another backend")
+
+
+reports/core_v0_2026-10-31/run_integration.py 第 49 行：   
+REVIEW_CODE.txt
+
+Python
+paths += [Path('D:/Codex/home/skills/evidence-cohort-generation/SKILL.md')]
+
+
+技术后果与危害：
+
+execution.py 将运行环境死锁在特定用户的 WSL 缓存目录 /home/zwang/... 且要求宿主路径必须带 Windows 盘符（C:, D:）；run_integration.py 甚至把宿主机器上的绝对路径 D:/Codex/home/... 写进了 ASSEMBLY.json 哈希校验列表中。   
+REVIEW_CODE.txt
++ 1
+
+这意味着任何外部审稿人、合作者或 Linux/macOS 服务器在克隆公开仓库后，调用 verify_assembly() 或 run_candidate() 都会立即抛出 ContractError 崩溃。虽然文档声明了“仅在作者本地环境执行”，但这严重违背了计算可重复性软件的设计规范。   
+REVIEW_CODE.txt
+
+修复建议：将 RUNTIME_ROOT 改为支持环境变量覆盖并仅在 runtime_manifest.json 中校验 Python/NumPy/pandas 版本与 worker.py 哈希；移除 run_integration.py 中指向仓库外部 D:/Codex/... 的绝对路径绑定，全部使用相对于 PROJECT 根目录的相对路径。   
+REVIEW_CODE.txt
+
+4. 【高风险漏洞 / Plausible Risk — 高优先级】缺乏模型级相关结构识别检查，且生成器参数未强制绑定 model_spec.json
+
+代码位置：
+
+cohort_harness/contracts.py 第 308–340 行（validate_spec） 与 cohort_harness/lifecycle.py 第 151–169 行（validate_program）。   
+REVIEW_CODE.txt
++ 1
+
+技术后果与危害：
+
+validate_program 仅通过 AST 检查是否存在 def generate(observed, spec, seed) 这一函数签名。它完全不检查 generator.py 内部是否真正读取了 spec["parameters"] 中的参数，还是在 Python 代码里直接硬编码了魔法数字（Magic Numbers）。如果 Agent 在 model_spec.json 中写了一套漂亮的参数溯源以通过 validate_spec，却在 generator.py 里直接写死 y = rng.normal(5.4, 0.3)，静态验证器会全部放行。   
+REVIEW_CODE.txt
++ 2
+
+contracts.py 中的 validate_evidence 允许单独录入边际均值、SD 和单变量/多变量 OLS 系数，但没有任何机制检查所声明的多元正态/对数正态协方差矩阵是否正定（Positive Definite）或是否处于 Fréchet–Hoeffding 联合分布界限内，也未检查哪些成对偏相关是未识别的（Underidentified）。在 ENSANUT 中，两个 Agent 不约而同地拍脑袋编造了完全相同的 BMI-glucose residual correlation = 0.30，这种关键的未识别参数在契约层与普通有强证据支撑的参数混在一起（只要挂一个 assumption_id 即可通过校验）。   
+REVIEW_CODE.txt
++ 2
+
+修复建议：在 validate_spec 中强制将参数分类为 "identified_from_evidence"、"derived_with_auxiliary_assumptions" 和 "unidentified_free_sensitivity_parameter"；对于自由敏感性参数，要求提供合理区间 [low, high] 而非单点值。
+
+5. 【高风险漏洞 / Plausible Risk — 中优先级】Agent 工具链隔离完全依赖提示词自觉（Procedural Only），且算子预算存在绕过风险
+
+代码位置：
+
+cohort_harness/execution.py 第 198 行（"agent_isolation": "not_provided"）；   
+REVIEW_CODE.txt
+
+cohort_harness/contracts.py 第 136–138 行（budget 仅包含 source_queries, source_downloads, revisions，不包含 generator_executions 或 calibration_trials）；   
+REVIEW_CODE.txt
+
+reports/core_v0_2026-10-31/bundle/candidates/initial/generator.py 第 28–32 行。   
+REVIEW_CODE.txt
+
+技术后果与危害：
+
+虽然 execution.py 用 bwrap --unshare-all 严格隔离了 generator.py 子进程，但构建 generator.py 的 LLM Agent 本身运行在宿主会话中，拥有通用的文件读取工具。正如 real_case_admission_v0 和 C5 报告中所坦白披露的，Agent 或 Root 控制器曾多次因目录扫描或历史摘要检索而发生“意外暴露（incidental exposure）”。仅靠 SKILL.md 中的一句“Do not inspect custodian files” 在对抗性审稿人看来并非真正的盲态隔离（需要物理分离工作区目录或在不同机器/容器中存放 Custodian 评估数据）。   
+REVIEW_CODE.txt
++ 4
+
+在 generator.py 第 28–32 行中，随机数流采用按层顺序依次调用 rng.gamma(..., size=count) 的方式。当 counts 改变或增删中间层时，后续所有层的随机数流都会发生移位（Stream Shifting）。若未来进行亚组规模敏感性分析，应使用 np.random.SeedSequence(seed).spawn(n_strata) 为每个层/变量分配正交独立的子随机数流。   
+REVIEW_CODE.txt
+
+(G) 有条件的投稿定位与最高信息价值的下一步行动（Conditional Venue Positioning & Top 3 Next Actions）
+1. 有条件的期刊/会议分档定位（Conditional Venue Tiers）
+
+绝对不要按“系统有多少个模块”来高估投稿档次，审稿人只看实证证据的闭环程度与方法学深度：   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+稿件成熟度阶段	适用故事线	推荐目标期刊/会议（Plausible Venues）	审稿人核心期待（Evidence Expectations）	审稿人最可能提出的尖锐质疑（Likely Reviewer Objections）
+
+
+阶段 I：仅整理现有包（无新真实案例，仅有历史试点 + Core v0 合成重放）
+
+
+
+
+(不建议直接投顶刊)
+
+	故事线 2（评估协议与探索性可行性报告）	
+
+• JAMIA Open / BMJ Health & Care Informatics
+
+
+
+
+• Journal of Biomedical Informatics (JBI) (Application / Methodological Note)
+
+
+
+
+• NeurIPS / ICML / ICLR Workshop (GenAI for Health / Synthetic Data)
+
+	
+
+完整透明地公开代码、暴露注册表及 M17-B / ENSANUT / C3 / C4 的全部正负结果，作为防范 LLM 合成数据评估陷阱的案例研究。 
+REVIEW_DOCUMENTS.txt
+
+	
+
+“Core v0 只在一个 768 行的人造 Gamma 表上跑通；M17-B 和 ENSANUT 用的是旧版本且量级偏差很大；所有修订闭环都是 retain 零修改——这只是一份阶段性工程实验报告，不是完整的科研论文。” 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+阶段 II：完成上述 (E) 节最小前瞻性实验（1 个冻结 Core v0 真实案例 CHNS + 同信息统计基线 + 双兼容场景敏感性分析）
+
+
+
+
+(最具性价比的目标形态)
+
+	故事线 1（可识别性审计、有界可行性与迁移边界研究）	
+
+医学信息学与生物统计方法学主流顶刊/一区刊物：
+
+
+
+
+• Journal of the American Medical Informatics Association (JAMIA)
+
+
+
+
+• Journal of Biomedical Informatics (JBI) (Full Research Paper)
+
+
+
+
+• Statistics in Medicine / Biometrical Journal
+
+
+
+
+• BMC Medical Research Methodology
+
+
+
+
+• Briefings in Bioinformatics
+
+	
+
+1. 至少 2–3 个真实生物医学队列（含 1 个严格按冻结 v0 协议前瞻性完成的案例）； 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+2. 清晰区分哪些下游分析由源证据识别、哪些由未验证假设驱动； 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+3. 包含与传统统计矩匹配/Copula 基线的公平对比。 
+COMMON_REVIEW_PROMPT.md
++ 1
+
+	
+
+1. “既然 Agent 只是把文献里的均值和回归系数代入高斯/对数正态公式，它比统计学家手写 Copula 或 simPop 强在哪里？”（需用 Arm 1B 多场景自动构建与源条件审计来回答）； 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+2. “为什么合成数据的方差和 BMI 均值系统性偏离真实人群？”（需用跨人群迁移理论与截断选择偏倚正面解释，而非掩饰）。 
+REVIEW_DOCUMENTS.txt
+
+
+阶段 III：完整比较方法学论文（修复多源上下文全队列重放 + 证明结构修订闭环在多个真实队列上稳定超越统计基线与改编版 G-Sim/LLMSynthor）	故事线 3 + 故事线 1（通用研究条件化生成方法学）	
+
+机器学习主会（Datasets & Benchmarks 或 Main Track）或顶级综合数字医学刊物：
+
+
+
+
+• NeurIPS (Datasets and Benchmarks Track) / ICML / KDD
+
+
+
+
+• npj Digital Medicine / Nature Communications / Patterns
+
+	
+
+1. 多个受控合成环境 + 3 个以上独立真实队列； 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+2. 证明 revise 闭环和研究条件化算子能带来统计显著且可复现的下游误差降低； 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+3. 完整的开源可一键复现包（无硬编码本地路径）。 
+REVIEW_DOCUMENTS.txt
++ 1
+
+	
+
+1. “你们的基线 G-Sim 和 LLMSynthor 是你们自己改编的，改编是否公平？” 
+REVIEW_DOCUMENTS.txt
+
+
+
+
+2. “LLM 的预训练语料里本来就包含 NHANES 和 CHNS 的大量已发表论文，如何证明不是 LLM 靠记忆背出了目标队列的回归系数？”（需靠受控合成实验 + 严格算子消融来回应）。 
+REVIEW_DOCUMENTS.txt
+
+2. 信息价值最高的 3 项下一步行动（Top 3 Next Actions by Information Value）
+
+行动一（最高优先级 — 决定论文生死）：冻结并执行 CHNS 前瞻性最小判别实验（完成 Gate F2 → R1），引入“同信息统计合成基线（Copula/矩匹配）”与“双兼容结构边界候选”。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+具体操作：放弃在玩具高斯分布（C4/C5）上继续打转。立即使用 Chrome 插件核实并下载 CHNS 公开生物标志物数据，挑选未在历史摘要中暴露的标志物组合，锁定 3–4 篇外部文献与 3 项下游分析。在完全相同的文献输入下，同时运行：（a）单一模型 Agent、（b）显式输出两个兼容源文献但偏相关假设相反的双场景 Agent、（c）不含 LLM 的纯统计矩匹配/Copula 脚本。一次性揭盲评估，用真实数据回答“Agent 到底提供了什么增量价值”以及“多场景生成能否框定未识别误差”。   
+REVIEW_DOCUMENTS.txt
++ 4
+
+行动二（消除致命方法学漏洞）：升级全队列多源上下文重放（Multi-Context Whole-Cohort Source Replay）并精简无效复杂组件。   
+REVIEW_DOCUMENTS.txt
++ 1
+
+具体操作：修改 whole_cohort_feedback.py 与 lifecycle.py，在 freeze_candidate 中强制前置校验反馈配方，并允许全队列生成器在各源文献自身声明的人口配额/截断条件下运行源诊断重放（而非强行在目标人群表上做 identity 近似比较）；同时在 _same_model 中锁定 evidence.json 与反馈配方哈希。根据 C4 和 HDL 试点的负结果，从主方法叙事中果断砍掉“保护性选择器（Protected-use selector）”和“自动证据缺口循环（Gap loop）”，将其降级为附录中的负向探索记录，保持核心方法简洁有力。   
+REVIEW_CODE.txt
++ 4
+
+行动三（重构论文叙事与解除工程硬编码）：将手稿 DRAFT_v0.md 从“待验证的通用生成系统”重写为“生物医学证据合成的可识别性与可迁移性实证剖析”。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+具体操作：在论文引言与讨论中，主动将 M17-B、ENSANUT、C3、C4 的混合/负向结果转化为核心科学发现（Scientific Findings）——即证明：（1）局部汇总统计匹配不等于联合分布恢复（C4 反例与 ENSANUT Q3 偏差）；（2）盲目最小化源端综合损失会破坏特定下游回归斜率（C3 权衡）；（3）跨人群边缘分布漂移是零个体输入合成的首要瓶颈（M17-B 与 ENSANUT 边缘偏差）。同时清理 execution.py 和 run_integration.py 中的 /home/zwang/... 与 D:/Codex/... 硬编码路径，确保公开仓库 [https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026) 具备真正的跨平台可验证性[cite: 1, 3]。   
+COMMON_REVIEW_PROMPT.md
++ 1
+
+
+
+
+Ultra
+Model Firefly
+
+Gemini is AI and can make mistakes.
