@@ -2,6 +2,10 @@
 
 Latest authorization: the user requested sustained progress on 1 November 2026 after supplying the third independent model review. The scientific goal is unchanged: published evidence, target-population descriptions and optional real observations are translated by an Agent into virtual data useful for scientific analysis. Whole-cohort generation without individual input remains the principal information regime. Ordinary Agents and direct-row outputs remain valid implementations; multiple Agents or superiority to a direct-analysis Agent are not mandatory contributions.
 
+## Consent and continuation update, 1 November 2026
+
+The user explicitly authorized accepting CHNS's data-use terms, downloading necessary codebooks/data, careful review and restoring automatic progress. The unchanged Individual-Level Data v1.0 terms were accepted through the requested Chrome extension. The earlier consent checkpoint is resolved. The former `automation-4` had already been deleted, so its replacement is the single ACTIVE heartbeat `chns`, continuing this same chat every 30 minutes. This is a replacement, not a concurrent second schedule; no evidence, case or execution quota was reset. Foreground restoration is not a verified scheduled run. Read `work/chns_admission_2026-11-01/STATE.json` and its acquisition/schema reports before resuming.
+
 ## Current sequence
 
 1. **S1 implementation repair.** Read `work/post_review_semantics_2026-11-01/STATE.json`, `RESULTS.md`, `INDEPENDENT_REVIEW.md` and `docs/SEMANTIC_FEEDBACK_V1.md`. Finish any explicitly pending validation/export item first. The new semantic collector preserves legacy code and frozen receipts. It is not a biomedical validation result or an automatic upgrade of old controllers.
@@ -13,7 +17,7 @@ One optional controlled mechanism pilot can produce at most 24 final artificial 
 
 ## Resources and boundaries
 
-- Continue authorized local CPU work, original-paper reading, public processed-data access and allowlisted public GitHub synchronization. User prefers wang Chrome extension; no silent desktop fallback.
+- Continue authorized local CPU work, original-paper reading, public processed-data access and allowlisted public GitHub synchronization. User prefers requested Chrome extension; no silent desktop fallback.
 - No model training, HPC launch, new paid API, controlled-data application, new account, external correspondence or additional schedule.
 - New processed downloads: at most 500 MiB total and 200 MiB per file. Check local copies first, meter actual bytes and hashes, distinguish unmetered browser traffic, and keep raw/virtual participant records and full third-party papers local. Download only approved files needed for the case.
 - Preserve all frozen modules/candidates/receipts and all exposed targets, including M13-B, M15-B, M16, M17-B and ENSANUT cycle 2. More seeds, a new filename or a new Agent do not make an old target unexposed.
@@ -22,7 +26,7 @@ One optional controlled mechanism pilot can produce at most 24 final artificial 
 
 ## Continuation and stopping
 
-Reuse the existing chat heartbeat `automation-4`, after its configuration is actually updated; do not revive its old cycle-2 quotas or create a duplicate schedule. Check current processes/agents and state before work. Count only actual scheduled wakeups in `scheduled_runs_verified`; this foreground implementation and browser session count as zero scheduled runs. Thirty minutes is a resumption interval, not a mandatory wait between useful steps.
+Use the replacement chat heartbeat `chns`; `automation-4` was deleted at the prior consent checkpoint. Do not revive its old cycle-2 quotas or create a duplicate schedule. Check current processes/agents and state before work. Count only actual scheduled wakeups in `scheduled_runs_verified`; foreground implementation, browser work and restoration do not increase the inherited count. Thirty minutes is a resumption interval, not a mandatory wait between useful steps.
 
 Each continuation should complete a substantive work unit that changes a decision, then save its evidence, changes, results, limitations and next action. Do not rerun tests or repeat unchanged summaries merely because a timer fired. Report substantive findings, completion, failure or a concrete needed user action.
 
