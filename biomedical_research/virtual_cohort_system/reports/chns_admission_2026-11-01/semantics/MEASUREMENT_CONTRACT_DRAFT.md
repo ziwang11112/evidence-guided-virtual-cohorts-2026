@@ -4,6 +4,8 @@
 
 This unit used `pyreadstat.read_sas7bdat(..., metadataonly=True, user_missing=True, disable_datetime_conversion=True)` on the four acquired files and verified that no data rows were returned. It projected only selected stored-format entries from the existing header audit, reused schema-only codebook crops/audits and the official methods/protocol documents, and read official CHNS documentation in a separate requested Chrome tab. No participant values, eligibility filters, counts, moments or effects were computed; previous linkage/count tests were not repeated. No new file was downloaded and no original-study audit was consumed. Browser traffic was unmetered. No state, generator, source operator or F2 freeze was changed.
 
+Subsequent decision: [MEASUREMENT_POLICY_DECISION.md](MEASUREMENT_POLICY_DECISION.md) recovers a documented cleaning-code subset and replaces this draft's exhaustive-sentinel gate with a conditional released-data policy and fixed quality-failure rule. Unknown codes are still unknown; this does not retrospectively certify them or freeze F2. The original draft findings below remain the historical record.
+
 ## 1. What the actual headers establish
 
 Selected clinical/flag fields are ReadStat `double` values, with numeric storage width 8 except master `GENDER` (6). Numeric storage does not make a category continuous or imply that all codes are valid measurements. Current metadata returns no value-label dictionaries, format-to-label maps, missing ranges or user-missing definitions. Existing raw header entries have **empty stored format strings** for the selected fields. No SAS format catalog or `.sas` format-definition file was located in this unit's local inventory.
