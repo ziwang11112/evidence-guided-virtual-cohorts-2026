@@ -2,7 +2,7 @@
 
 **Latest admission checkpoint, 1 November 2026:** [the reviewed three-family intake](biomedical_research/virtual_cohort_system/reports/real_case_admission_v0_2026-10-31/REPORT.md) records the current CHNS official route, relationship-specific exposure and unresolved acquisition/case gates. No new real-data validation was performed; F2 remains unfrozen. The latest completed real-reference case is the [ENSANUT cycle-2 closeout](biomedical_research/virtual_cohort_system/reports/autonomous_research_cycle2_2026-10-31/CYCLE_CLOSEOUT.md); it is revealed and closed to tuning.
 
-Private research development repository. This is an explicitly allowlisted export of method documents, reusable code, artificial-fixture tests and aggregate analytical results. It is not a complete copy of the research workspace.
+Public research repository. This is an explicitly allowlisted export of method documents, reusable code, artificial-fixture tests and aggregate analytical results. It is not a complete copy of the research workspace. Public visibility was enabled on 1 November 2026; historical references to private visibility describe earlier checkpoints.
 
 **Current method checkpoint: core v0 reference profile frozen.** The [source-feedback integration](biomedical_research/virtual_cohort_system/reports/core_v0_2026-10-31/RESULTS.md) passed independent review: Agent construction, two actual whole-cohort executions, six diagnostics per stage, and authentic feedback-bound retention. The same seed and retained scientific bytes produced one unique artificial 768-row table. This is an implementation freeze for externally orchestrated program whole-cohort identity feedback; real transfer, numerical revision efficacy and general multi-study replay remain unproven. The [English working draft](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0.md) is started. Next is [bounded real-case admission](biomedical_research/virtual_cohort_system/reports/core_v0_2026-10-31/NEXT_CASE_ADMISSION.md), with F2 and the final claim lock pending. See the [export boundary](docs/CORE_V0_EXPORT_2026-10-31.md).
 
@@ -56,7 +56,7 @@ Read [the completed Stage 1 report](biomedical_research/evidence_virtual_cohort_
 - `sync/`: exact source allowlist, content hashes, refresh/audit scripts and file inventory.
 - `biomedical_research/virtual_cohort_system/`: current harness code, fixture tests, skills, M4 source-only aggregate results and inspection specimens, unchanged M1–M3 evidence and the system explorer; no execution bundles or participant tables.
 
-No participant-level reference, masked or completed tables are included. Full synthetic cohort tables are also omitted in this initial export. No paper PDFs/HTML, downloaded supplements, environments, credentials or patient-bearing prompts are included. The CSV files here are analysis-level summaries.
+Participant-level original, reference, masked and completed data, and generated biomedical participant tables, remain excluded. Full third-party papers, downloaded supplements, environments, credentials and patient-bearing prompts also remain excluded. Included CSVs contain aggregate analytical summaries, explicitly invented engineering fixtures, or documented computational source-covariate inputs constructed from published aggregates. Those numerical integration inputs contain no original participant records or generated biomedical outcome values.
 
 ## Run the independent checks
 
@@ -85,7 +85,7 @@ python -B sync/audit_export.py
 
 For a bounded refresh, repeat `--only-source` with each exact allowlisted source path. Unselected export files and manifest records must remain unchanged. Frozen metadata retains original source hashes; the export manifest records any reviewed path normalization.
 
-Review `sync/EXPORT_AUDIT.json` and the complete `sync/FILE_INVENTORY.tsv` before an explicit Git commit/push. This repository should remain private. The repository's remote access control must be checked separately; the scripts do not change GitHub visibility.
+Review `sync/EXPORT_AUDIT.json` and the complete `sync/FILE_INVENTORY.tsv` before an explicit Git commit/push. This repository is public; every update must preserve the data, full-paper and credential exclusions above. The repository's remote access control must be checked separately; the scripts do not change GitHub visibility.
 
 The completed [C3 source-only calibration unit](biomedical_research/virtual_cohort_system/docs/C3_SOURCE_CONSTRAINED_GENERATION_RESULTS_2026-10-31.md) fitted two Agent-authored whole-cohort structures against published source statistics. Linear loss improved on both unused seeds, with source-compatibility failures remaining. The alternative baseline passed all twenty criteria on both unused seeds; fitting worsened both replay losses and introduced age-slope failures. Both structures and every initial/selected result are retained. This is source-side development, with no new clinical validation or target advancement. See the [independent analysis and final review](biomedical_research/virtual_cohort_system/reports/c3s/review/FINAL_INTERPRETATION_REVIEW.md), [complete aggregate report](biomedical_research/virtual_cohort_system/reports/c3s/analysis/audit_v1/REPORT.md) and [export audit](sync/C3_COMPLETED_SOURCE_EXPORT_AUDIT_2026-10-31.json).
 
