@@ -1,0 +1,29 @@
+# Post-review continuation: one bounded real-case decision
+
+Latest authorization: the user requested sustained progress on 1 November 2026 after supplying the third independent model review. The scientific goal is unchanged: published evidence, target-population descriptions and optional real observations are translated by an Agent into virtual data useful for scientific analysis. Whole-cohort generation without individual input remains the principal information regime. Ordinary Agents and direct-row outputs remain valid implementations; multiple Agents or superiority to a direct-analysis Agent are not mandatory contributions.
+
+## Current sequence
+
+1. **S1 implementation repair.** Read `work/post_review_semantics_2026-11-01/STATE.json`, `RESULTS.md`, `INDEPENDENT_REVIEW.md` and `docs/SEMANTIC_FEEDBACK_V1.md`. Finish any explicitly pending validation/export item first. The new semantic collector preserves legacy code and frozen receipts. It is not a biomedical validation result or an automatic upgrade of old controllers.
+2. **Existing CHNS admission.** Resume from `work/post_review_semantics_2026-11-01/CHNS_ACCESS_UPDATE.md` and the earlier `work/real_case_admission_v0_2026-10-31` records. Three families have already been screened (PNS, ANSUR, CHNS); the ceiling remains three. Zero of six newly deeply audited original studies has been consumed at this checkpoint. Do not substitute a fourth dataset family.
+3. **Source and use-case freeze.** Check all prior project exposures, including `docs/DATASET_EXPOSURE_REGISTRY.md`, before selecting analyses. From source metadata and available measurements, define the target population, approximately three scientific estimands, their relevance, source selection/measurement/adjustment operators, uncertainty and unresolved joint/transport assumptions. Label each analysis directly reported, algebraically implied or assumption-dependent; applicability is a separate axis. Never choose analyses because target effects look favorable. Independent review precedes the F2 freeze.
+4. **Bounded construction and validation, only after admission.** Use a fresh-context Agent with approved evidence/task only. It chooses the generator structure and parameters; root must not prescribe desired target means, slopes or signs. Explicitly integrate the versioned semantic collector without a legacy fallback. Continue to distinguish checking generated task-population statistics from genuine source-population replay; implement and test any newly needed source operator under a separate reviewed scope. Preserve unavailable diagnostics. Maximum two independent constructions, each initial plus at most one source-feedback revision, each stage with three predeclared seeds. Apply all frozen scientific analyses once to every planned output, then independently recompute and report favorable and unfavorable results. Never reopen a revealed target for tuning.
+
+One optional controlled mechanism pilot can produce at most 24 final artificial tables. Its role must be decided in the protocol; artificial demonstrations do not replace real-reference validation. Any same-information synthesis comparison is tied to the eventual superiority claim, not imposed as a competition against another Agent. If the question is feasibility, state that narrower claim.
+
+## Resources and boundaries
+
+- Continue authorized local CPU work, original-paper reading, public processed-data access and allowlisted public GitHub synchronization. User prefers wang Chrome extension; no silent desktop fallback.
+- No model training, HPC launch, new paid API, controlled-data application, new account, external correspondence or additional schedule.
+- New processed downloads: at most 500 MiB total and 200 MiB per file. Check local copies first, meter actual bytes and hashes, distinguish unmetered browser traffic, and keep raw/virtual participant records and full third-party papers local. Download only approved files needed for the case.
+- Preserve all frozen modules/candidates/receipts and all exposed targets, including M13-B, M15-B, M16, M17-B and ENSANUT cycle 2. More seeds, a new filename or a new Agent do not make an old target unexposed.
+- Real samples are uncertain references, not known population truth. Do not transform a regression interval into a mean interval or dismiss all mismatches by invoking sampling uncertainty. This implementation does not claim calibrated uncertainty.
+- Maintain a clear evidence/assumption/exposure ledger, complete failures and costs. Record changes in current state without rewriting historical conclusions.
+
+## Continuation and stopping
+
+Reuse the existing chat heartbeat `automation-4`, after its configuration is actually updated; do not revive its old cycle-2 quotas or create a duplicate schedule. Check current processes/agents and state before work. Count only actual scheduled wakeups in `scheduled_runs_verified`; this foreground implementation and browser session count as zero scheduled runs. Thirty minutes is a resumption interval, not a mandatory wait between useful steps.
+
+Each continuation should complete a substantive work unit that changes a decision, then save its evidence, changes, results, limitations and next action. Do not rerun tests or repeat unchanged summaries merely because a timer fired. Report substantive findings, completion, failure or a concrete needed user action.
+
+End and pause this continuation after one independently reviewed new real case with a continue/simplify/stop decision, after justified admission failure within the existing quotas, or at a concrete required-resource obstacle after checking allowed paths. Stop starting new work by 14 November 2026 (America/Chicago), save a safe checkpoint and summarize. Do not expand quotas or add components to obtain a positive result. Later user instructions take priority.
