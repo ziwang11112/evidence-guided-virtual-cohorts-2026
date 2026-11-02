@@ -1,5 +1,7 @@
 # Draft readiness and core method freeze checklist
 
+**Current-status note, 1 November 2026:** the F2/R1 pending statements below are historical planning entries. CHNS F2 has since been frozen, evaluated and independently checked; its target is revealed and closed. Read the [completed case](../reports/chns_admission_2026-11-01/f2/CASE_RESULTS.md), [current focus](CURRENT_RESEARCH_FOCUS.md) and [experimental-sufficiency assessment](EXPERIMENT_SUFFICIENCY_2026-11-01.md) for present decisions. Completing F2/R1 does not imply that the experiment established quantitative usefulness or broad transfer. The historical checklist and its original budgets are retained below; this note does not reopen them.
+
 31 October 2026. Planning checkpoint after C4; no new experiment or method freeze is declared by this document. This is the current writing and method-consolidation decision record. Historical protocols, results and freezes remain unchanged.
 
 **Decision: start a provisional manuscript now; consolidate and freeze a minimal method before viewing a new target; freeze the resulting claims after the complete planned evaluation, including unfavorable results.** A favorable target result is not a prerequisite for freezing the method. These are project milestones, not acceptance rules for any journal or conference.

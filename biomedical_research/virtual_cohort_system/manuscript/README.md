@@ -7,6 +7,7 @@ The current working revision is [DRAFT_v0_2.md](DRAFT_v0_2.md), prepared on 1 No
 - [Independent v0.2 review](REVIEW_v0_2_2026-11-01.md): contribution framing, predecessor fairness, implementation and analysis-use boundaries, and preservation of the Results section.
 - [Previous consolidated draft](DRAFT_v0_1.md) and [its independent review](REVIEW_v0_1_2026-11-01.md): preserved numerical and implementation account.
 - [Current research scope](../docs/CURRENT_RESEARCH_FOCUS.md): no peripheral experimental expansion; new experiments require a named essential contribution gap.
+- [Experimental sufficiency](../docs/EXPERIMENT_SUFFICIENCY_2026-11-01.md): the current results support a bounded draft; reliable quantitative biomedical use remains a core evidence gap, with one prioritized prospective design rather than automatic experimental expansion.
 - [Earlier draft](DRAFT_v0.md): preserved historical version, including its then-pending case status.
 
 This revision adds no scientific experiment or target analysis. Biomedical method contribution does not require a new loss, model family or superiority to another Agent. The current data support a bounded analytical-feasibility claim; stronger accuracy or comparative claims require their own evidence. Remaining writing work includes the broader statistical-prior-work context, full source bibliography, author/access/ethics declarations, and submission-specific reproducibility and formatting. The G-Sim/LLMSynthor comparison is complete within its stated scope. No venue or submission-readiness claim has been made.
