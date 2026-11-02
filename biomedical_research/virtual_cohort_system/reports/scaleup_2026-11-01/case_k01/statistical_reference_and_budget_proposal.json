@@ -1,0 +1,229 @@
+{
+  "schema_version": "k01_reference_source_budget_proposal.v1",
+  "date": "2026-11-02",
+  "status": "scientific_proposal_not_case_or_global_release",
+  "cohort_slot": "K01",
+  "case_released": false,
+  "clinical_fit_or_sampling_authorized": false,
+  "actual_source_fit_performed": false,
+  "same_information_all_six_constructors": true,
+  "input_bindings": [
+    {
+      "path": "evidence/MIND_REUSE_CANDIDATE.json",
+      "sha256": "818382e977c429fbdb557c8554d0ad42ef4eb08192bb0d158fff46c5d8090b70",
+      "selected_ids": [
+        "MIND_K01_age_mean", "MIND_K01_age_sd", "MIND_K01_bmi_mean",
+        "MIND_K01_bmi_sd", "MIND_K01_serum_glucose_fsg_mean",
+        "MIND_K01_serum_glucose_fsg_sd", "MIND_K01_female_proportion"
+      ]
+    },
+    {
+      "path": "evidence/CANDIDATE_EVIDENCE.json",
+      "sha256": "70d0a2c0d7b06d020699b2fa7db22dac9882ddf76ebc2b6b8f86a596834190db",
+      "selected_ids": [
+        "ayele_age_mean", "ayele_age_sd", "ayele_sex_male", "ayele_sex_female",
+        "ayele_age_25_34", "ayele_age_35_44", "ayele_age_45_54", "ayele_age_55_64",
+        "ayele_bmi_underweight", "ayele_bmi_normal", "ayele_bmi_overweight"
+      ]
+    }
+  ],
+  "context_only": [
+    "Ayele composite-diabetes adjusted odds ratios",
+    "All Bahendeka abstract-only records",
+    "Unselected MIND biomarkers, HbA1c correlations and old CHNS applicability claims"
+  ],
+  "constructors": ["A01", "A02", "A03", "A04", "A05", "S01"],
+  "stages": ["initial", "final"],
+  "canonical_schema": [
+    {"name": "id", "kind": "string", "role": "identifier", "unit": "1", "nullable": false},
+    {"name": "age", "kind": "number", "role": "generated", "unit": "year", "nullable": false},
+    {"name": "sex", "kind": "category", "role": "generated", "unit": "1", "nullable": false, "categories": ["F", "M"]},
+    {"name": "bmi", "kind": "number", "role": "generated", "unit": "kg/m^2", "nullable": false},
+    {"name": "glucose", "kind": "number", "role": "generated", "unit": "mmol/L", "nullable": false}
+  ],
+  "context_validation": {
+    "canonical_age_has_global_bounds": false,
+    "requires_separate_whole_frame_context_guard": true,
+    "filter_or_repair_invalid_rows": false,
+    "root_owned_integration_pending": true,
+    "target_haalsi_pooled_poc": {"age_min_inclusive": 40, "age_max": null},
+    "source_mind_china_2019": {"age_min_inclusive": 61, "age_max_inclusive": 80},
+    "source_ayele_dire_dawa_2017": {
+      "age_min_inclusive": 25, "age_max_inclusive": 64,
+      "rule": "Methods bounds scenario; table-caption25–65 inconsistency preserved"
+    }
+  },
+  "source_contexts": [
+    {"id": "source_mind_china_2019", "seed": 3101, "rows_per_executed_stage": 5000},
+    {"id": "source_ayele_dire_dawa_2017", "seed": 3102, "rows_per_executed_stage": 5000}
+  ],
+  "source_trial_id_pattern": "K01_{construction}_{stage}_{source_context_id}",
+  "target": {
+    "context_id": "target_haalsi_pooled_poc", "seeds": [2101, 2102, 2103],
+    "rows_per_trial": 5000, "feedback_policy": "none",
+    "glucose_unit": "mmol/L", "unit_conversion_invented": false
+  },
+  "reserved_slot_ceiling": {
+    "source_slots": 24, "source_scheduled_rows": 120000,
+    "target_slots": 36, "target_scheduled_rows": 180000,
+    "unused_allocation_transfer_allowed": false
+  },
+  "maximum_new_attempts_under_s01_retention": {
+    "source_attempts": 22, "source_scheduled_rows": 110000,
+    "target_attempts": 33, "target_scheduled_rows": 165000,
+    "condition": "All five Agents revise once; S01 retains; each failed attempted slot debits full scheduled-row allocation"
+  },
+  "all_constructors_retain": {
+    "source_attempts": 12, "source_scheduled_rows": 60000,
+    "target_attempts": 18, "target_scheduled_rows": 90000
+  },
+  "feedback_and_failures": {
+    "initial_source_packets_per_constructor": 1,
+    "source_reports_per_packet": 2,
+    "max_agent_scientific_revisions": 1,
+    "final_stage_primary": true,
+    "final_diagnostics_trigger_revision": false,
+    "target_summaries_delivered_to_constructors": false,
+    "retention": "Exact initial scientific/output aliases, no resampling",
+    "s01_rule": "Precommit retain unchanged scientific bytes if execution/contract integrity is valid; otherwise stop with failed/unrun slots, no repair-and-retry candidate",
+    "source_monte_carlo_mismatch_can_change_s01": false,
+    "failed_prelaunch_timeout_interruption_debit": true,
+    "retry": false,
+    "replacement_seed": false,
+    "extra_context_or_warmup": false,
+    "automatic_partial_resume": false,
+    "extra_simulation_calibration_calls": 0
+  },
+  "execution_limits": {
+    "timeout_seconds": 60, "memory_mb": 1024,
+    "output_bytes": 2000000, "log_bytes": 10000,
+    "runtime": "existing_isolated_executor_only", "host_fallback": false
+  },
+  "analytic_calculation_cap": {
+    "jobs_per_initial_or_changed_final": 1,
+    "reserved_jobs": 12, "maximum_jobs_under_s01_retention": 11,
+    "s01_jobs": 1, "timeout_seconds": 120, "memory_mb": 1024,
+    "fitting_scope": "Finite analytic parameter derivation only",
+    "standard_cdf_and_inverse_cdf_formula_evaluation": true,
+    "optimizer": false, "model_grid": false, "quadrature": false,
+    "monte_carlo_fitting": false, "generator_calls": 0, "pseudopatient_rows": 0,
+    "failed_job_consumes_allocation": true,
+    "receipt_fields": ["job_id", "input_sha256", "evidence_sha256", "code_sha256", "output_sha256", "declared_finite_calculations", "elapsed_seconds", "status"],
+    "enforcement": "Reviewed finite code and existing controller attempt ledger",
+    "new_counter_engine_required": false,
+    "common_design_feedback_turn_ceiling": 40
+  },
+  "statistical_reference": {
+    "construction_id": "S01",
+    "label": "independent_marginal_completion_reference",
+    "claim": "Transparent limited reference, not optimal statistical or causal model",
+    "source_age": {
+      "family": "affinely_scaled_beta",
+      "inputs": "Source arithmetic mean, individual SD, declared support L,U",
+      "formula": {
+        "m": "(mean-L)/(U-L)", "v": "(sd/(U-L))^2",
+        "k": "m*(1-m)/v-1", "alpha": "m*k", "beta": "(1-m)*k"
+      },
+      "domain": "Finite L<mean<U, sd>0, 0<v<m*(1-m), finite positive alpha,beta",
+      "mind_support": [61, 80], "ayele_support": [25, 64],
+      "reported_sd_interpretation": "Individual SD used as population-moment approximation; divisor/weights unknown",
+      "integer_age_recording_reconstructed": false,
+      "ayele_age_categories_fitted": false
+    },
+    "mind_bmi_and_glucose": {
+      "family": "lognormal",
+      "formula": {"sigma_squared": "log1p((sd/mean)^2)", "mu": "log(mean)-sigma_squared/2"},
+      "domain": "Finite positive mean, SD, sigma_squared and sigma; finite mu",
+      "mean_and_individual_sd_from_exact_shared_items": true,
+      "confidence_interval_inversion": false
+    },
+    "ayele_bmi": {
+      "family": "lognormal",
+      "lower_threshold": 18.5, "upper_threshold": 25,
+      "threshold_unit": "kg/m^2",
+      "p_lower": {"numerator": 65, "denominator": 872, "event": "bmi<18.5"},
+      "p_upper": {"numerator": 340, "denominator": 872, "event": "bmi>=25"},
+      "fit_rounded_percentages": false,
+      "formula": {
+        "z_lower": "Phi_inverse(p_lower)", "z_upper": "Phi_inverse(1-p_upper)",
+        "sigma": "(log(25)-log(18.5))/(z_upper-z_lower)",
+        "mu": "log(18.5)-sigma*z_lower"
+      },
+      "domain": "0<p_lower<1-p_upper<1; ordered positive thresholds; finite mu and finite sigma>0",
+      "middle_category": {
+        "numerator": 467, "denominator": 872, "printed_interval": "18.5–24.9",
+        "fitted": false, "silently_replaced_with_less_than_25": false
+      }
+    },
+    "sex": {
+      "family": "Bernoulli_Female",
+      "mind_female": {"numerator": 2049, "denominator": 3547},
+      "ayele_female": {"numerator": 586, "denominator": 872},
+      "ayele_male_complement": {"numerator": 286, "denominator": 872},
+      "fit_rounded_ayele_percentages": false,
+      "weighted_population_proportions_claimed": false
+    },
+    "joint_law": {
+      "within_donor": "Age, sex, BMI and glucose mutually independent",
+      "ayele_glucose": "Copy entire MIND glucose marginal; unsupported transport, no Ayele glucose constraint",
+      "target_glucose": "Same MIND glucose marginal independent of donor and all covariates",
+      "assay_or_fasting_equivalence_claimed": false,
+      "target_coefficients_supplied": false,
+      "population_null_contrasts": "Consequence of this reference's independent shared glucose law only; not evidence and not an Agent constraint",
+      "finite_sample_contrasts_forced_zero": false
+    },
+    "target_transport": {
+      "donors": ["source_mind_china_2019", "source_ayele_dire_dawa_2017"],
+      "donor_probabilities": [0.5, 0.5],
+      "age_rule": "Draw each selected donor's age law conditioned on age>=40; then retain fixed donor weights1/2",
+      "inverse_cdf_formula": "q=F_donor(40); age=F_inverse(q+(1-q)*U_uniform)",
+      "not_equivalent_to_filtering_unconditional_pooled_mixture": true,
+      "requires_positive_retained_probability": true,
+      "target_covariate_moments_used": false,
+      "maximum_age_support": 80,
+      "maximum_age_support_is_target_eligibility_cutoff": false,
+      "donor_sex_and_bmi_marginals_changed_after_age_selection": false
+    },
+    "sampling_policy": {
+      "standard_inverse_beta_cdf_allowed": true,
+      "no_parameter_fitting_inside_draw": true,
+      "clipping_or_boundary_repair": false,
+      "whole_cohort_redraw": false,
+      "within_run_parameter_or_seed_adaptation": false,
+      "nonfinite_or_invalid_output": "Fail without retry or substitution"
+    }
+  },
+  "diagnostic_disposition": {
+    "selected_candidate_records": 18,
+    "mind_marginal_records_fit": 7,
+    "ayele_record_roles_fit_or_count_derived_fit": 6,
+    "ayele_unfitted_age_category_records": 4,
+    "ayele_unfitted_middle_bmi_record": 1,
+    "independent_constraints_equal_record_count": false,
+    "generated_sd_ddof": 1,
+    "source_sd_divisor": "unknown",
+    "count_ratios_vs_printed_percentages": "Keep separate labelled values; preserve all integer operands and rounding metadata",
+    "age_intervals": {"interpreted_half_open": [[25,35],[35,45],[45,55],[55,65]], "interpretation": "Declared completed-year continuous-age approximation; printed labels retained; source support25–64 unchanged"},
+    "bmi_middle_interval": {"closed": [18.5,24.9], "gap_to25_preserved": true},
+    "strict_original_estimator_reconstruction_available": false,
+    "equal_weight_proxy_difference_requires_reviewed_scenario": true,
+    "unsupported_operator": "Unavailable, no invented discrepancy or extra execution",
+    "new_operator_engine_authorized": false
+  },
+  "implementation_boundary": {
+    "pure_component_and_invented_tests_after_root_reviewer_agreement": true,
+    "actual_source_parameter_fit": false,
+    "clinical_candidate_or_table": false,
+    "target_data_access": false,
+    "new_original_study_or_browser": false,
+    "frozen_k02_or_state_export_edit": false
+  },
+  "remaining_before_clinical_release": [
+    "Exact shared admitted packet and contextual dispositions",
+    "Outcome-blind recorded-value eligibility and context-specific whole-frame guard",
+    "Reviewed source proxy/SD/interval semantics",
+    "Reviewed pure code, actual candidate and binding",
+    "Finite controller attempt ledger and reviewed source/target schedule",
+    "Independent complete case review and global pre-outcome freeze"
+  ]
+}

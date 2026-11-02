@@ -1,0 +1,98 @@
+{
+  "schema": "k01_target_protocol_metadata_v1",
+  "context_id": "target_haalsi_pooled_poc",
+  "population": "HAALSI target pooled cleaned capillary point-of-care glucose context; adults age >=40 years, no upper age limit; whole-cohort synthesis.",
+  "definition_basis": {
+    "release_doi": "10.7910/DVN/F5YHML",
+    "release_version": "3.0",
+    "codebook_year": 2016,
+    "survey_variables_update": "2017-04-14",
+    "basis": "Reviewed official variable definitions and sex value-label metadata only; no target outcomes or composition supplied."
+  },
+  "measurements": {
+    "age": {
+      "canonical_unit": "year",
+      "reference_field": "rage",
+      "definition": "Census age on 31 July 2014 at sample selection; not interview-date age",
+      "locator": "Codebook p13; survey/variables DOCX zero-based table42 row18"
+    },
+    "sex": {
+      "reference_field": "rsex",
+      "canonical_categories": [
+        "F",
+        "M"
+      ],
+      "mapping": {
+        "F": "Female",
+        "M": "Male"
+      },
+      "raw_metadata_mapping": {
+        "1": "M",
+        "2": "F"
+      },
+      "basis": "Actual-file value-label metadata independently verified; census-preloaded sex; no category frequencies supplied",
+      "locator": "Definition codebook p95; DOCX table42 row20; reviewed selected value-label dictionary"
+    },
+    "bmi": {
+      "canonical_unit": "kg/m^2",
+      "reference_field": "c_bs_bmi",
+      "definition": "BMI derived from cleaned height and weight",
+      "unit_basis": "Conventional BMI unit interpretation from documented height cm and weight kg; actual BMI label has no explicit unit string",
+      "locator": "Codebook p89; DOCX table41 row32"
+    },
+    "glucose": {
+      "canonical_unit": "mmol/L",
+      "reference_field": "c_bs_glucose",
+      "definition": "Released cleaned point-of-care glucose from CareSens readings/checks and comments; fingerstick/capillary protocol context",
+      "locator": "Codebook pp85–88; DOCX table41 row40",
+      "fasting": "Pooled protocol; fasting status is not an eligibility requirement",
+      "exact_device_model": "not_established",
+      "plasma_or_serum_equivalence": "not_established",
+      "feeding_mixture": "unspecified; no target proportions or dependencies supplied",
+      "recorded_value_estimand": true
+    }
+  },
+  "reference_selection": {
+    "age_minimum_inclusive": 40,
+    "age_maximum": null,
+    "sex": [
+      "F",
+      "M"
+    ],
+    "require_finite": [
+      "age",
+      "bmi",
+      "glucose"
+    ],
+    "require_strictly_positive": [
+      "bmi",
+      "glucose"
+    ],
+    "native_and_tagged_missing": "excluded from the measured reference subset; no imputation",
+    "unknown_nonmissing_sex_or_bad_numeric_dtype": "fail input validation rather than silently coercing",
+    "named_numeric_nonmeasurement_sentinels": {
+      "age": [],
+      "bmi": [],
+      "glucose": []
+    },
+    "sentinel_qualification": "None identified in reviewed metadata; not a claim of physical absence. Range-flag cutoffs are not sentinel lists.",
+    "flag_exclusion": false,
+    "fasting_restriction": false,
+    "treatment_exclusion": false,
+    "tail_trimming_or_winsorization": false,
+    "retain_positive_finite_cleaned_boundary_numbers": true
+  },
+  "generated_table": {
+    "n_rows": 5000,
+    "individual_inputs": null,
+    "all_rows_must_satisfy_contract": true,
+    "filtering_repair_or_shrinking_permitted": false,
+    "mandatory_guard_contract": "context_eligibility.json",
+    "caller_integration": "pending"
+  },
+  "transport_limits": [
+    "Recorded cleaned boundary/substitution values do not become exact latent biological measurements.",
+    "Source serum assays, repeated glucose averaging, fasting rules, health exclusions, imputation and age eligibility do not become target rules.",
+    "Unknown target demographic, feeding and treatment mixture is not reconstructed from reference data; construction assumptions belong to the Agent."
+  ]
+}

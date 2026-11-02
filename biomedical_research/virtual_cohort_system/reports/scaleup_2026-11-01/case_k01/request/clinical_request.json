@@ -1,0 +1,70 @@
+{
+  "schema": "k01_clinical_request_v1",
+  "status": "request_preparation_for_independent_review",
+  "approved_for_builder": false,
+  "release_authorized": false,
+  "task": "task_template.json",
+  "target_protocol": "target_protocol_metadata.json",
+  "context_eligibility": "context_eligibility.json",
+  "source_contexts": "source_contexts.json",
+  "selected_source_evidence": "selected_source_evidence.json",
+  "descriptive_diagnostic_plan": "descriptive_diagnostic_plan.json",
+  "request": "Generate a whole cohort of exactly5000 valid rows with id, age, sex, bmi, glucose. No observed individuals are supplied. Target age>=40 with no upper cutoff is mandatory; BMI and glucose are strictly positive finite. Return canonical units and literal F/M as defined.",
+  "target_context": "target_haalsi_pooled_poc",
+  "schema_vs_population": "Age is finite numeric without common column min/max so the same schema can represent distinct source populations. Mandatory context_eligibility guard enforces exact context/task population and all context age bounds. The bare task validator is insufficient for release.",
+  "analysis_visibility": {
+    "variables": {
+      "G": "glucose",
+      "A": "age",
+      "B": "bmi",
+      "S": "1 if sex==F, 0 if sex==M"
+    },
+    "estimator": "unweighted ordinary least squares with intercept",
+    "primary_uses": [
+      {
+        "id": "K01-GLUCOSE-BMI",
+        "formula": "G ~ 1 + A + S + B",
+        "contrast": "5 * beta_B",
+        "unit": "mmol/L per5kg/m^2"
+      },
+      {
+        "id": "K01-GLUCOSE-AGE",
+        "formula": "G ~ 1 + A + S + B",
+        "contrast": "10 * beta_A",
+        "unit": "mmol/L per10years"
+      },
+      {
+        "id": "K01-SEX-BMI",
+        "formula": "G ~ 1 + A + S + B + S:B",
+        "contrast": "5 * beta_S:B",
+        "interpretation": "Female-minus-Male difference in BMI contrast",
+        "unit": "mmol/L per5kg/m^2"
+      }
+    ],
+    "expected_effects_or_signs": null,
+    "all_three_evidence_relationships": "joint_assumption_dependent",
+    "failure_policy": "Singular models or missing sex support are unavailable/failure, not permission to replace the analysis."
+  },
+  "agent_scientific_ownership": [
+    "Author the common joint distribution and all unreported dependence, interactions, distribution families and residual structure; no default independence or zero effect is prescribed.",
+    "Declare shared and context-varying scientific parameters, provenance and source-to-target measurement, feeding, age and selection transport assumptions before freeze.",
+    "Use the same generator bytes and common scientific spec in all source/target runs, changing only the declared active_context. Hash linkage is a mechanical check, not proof of transport or adherence to scientific declarations.",
+    "Choose assumptions without target moments, composition, effects or individual data. Source means and margins are source-context evidence, not coordinator-prescribed target parameters."
+  ],
+  "feedback_policy": {
+    "strict_route": "semantic_feedback_v1_only",
+    "legacy_fallback": false,
+    "source_diagnostics_activated": 0,
+    "strict_comparison": "Unavailable for unspecified weights and unresolved operators. Unknown values are not replaced with equal weighting.",
+    "descriptive_approximation": "Only after explicit candidate-local weighting/operator/context assumptions and separate independent recipe review; original uncertainty and incompatibility labels remain bound. No approvals are filled here.",
+    "context_only_records": "Six Ayele composite-DM ORs and ten Bahendeka abstract records cannot become continuous-glucose coefficients or executable checks."
+  },
+  "execution_prerequisites": [
+    "Independent packet review and exact approved task commitment.",
+    "Agent-authored model/evidence declarations and reviewed finite source/target trial schedule, including failed attempts.",
+    "Root-owned validate_generated_context(frame, task, context_id=context_id) wired after immutable execution verification and before feedback or analysis for target and both source contexts.",
+    "Exact child task/population/context binding; never select a weaker source age rule for a target output.",
+    "All5000 target rows satisfy the whole-frame guard; no filtering, repair or delivery of a smaller complete subset."
+  ],
+  "integration_status": "No candidate frozen or recipe activated. Guard and thin descriptive Boolean helper are separately implemented outside this builder packet; production caller/collector binding and review remain pending. This packet alone authorizes no clinical run."
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "k01_context_eligibility_v1",
+  "status": "proposed_mandatory_case_guard_contract",
+  "canonical_columns": [
+    "id",
+    "age",
+    "sex",
+    "bmi",
+    "glucose"
+  ],
+  "guard_api": "validate_generated_context(frame, task, *, context_id)",
+  "caller_integration": "guard_separately_implemented; production_caller_binding_and_review_pending",
+  "requirements": [
+    "Verify immutable execution and exact child task binding before passing the parsed output to the guard.",
+    "Match context_id to the exact task.population string in this mapping; reject a different context's task.",
+    "Validate every generated row, exact ordered columns and required task.n_rows, unique nonmissing string id, finite age, sex F/M, strictly positive finite BMI and glucose, and no missing cells.",
+    "Reject the entire table on any violation; never filter, repair or silently reduce the required row count.",
+    "The common canonical age column has no min/max. The following context-specific age rules are mandatory."
+  ],
+  "contexts": {
+    "target_haalsi_pooled_poc": {
+      "role": "target",
+      "population": "HAALSI target pooled cleaned capillary point-of-care glucose context; adults age >=40 years, no upper age limit; whole-cohort synthesis.",
+      "age_minimum": 40,
+      "age_maximum": null,
+      "minimum_inclusive": true,
+      "maximum_inclusive": null,
+      "required_target_n_rows": 5000
+    },
+    "source_mind_china_2019": {
+      "role": "source",
+      "population": "MIND-China 2019 source context; selected rural Chinese adults age 61–80 years inclusive; whole-cohort synthesis.",
+      "age_minimum": 61,
+      "age_maximum": 80,
+      "minimum_inclusive": true,
+      "maximum_inclusive": true,
+      "source_rows_and_trial_budget": "pending_separate_reviewed_schedule"
+    },
+    "source_ayele_dire_dawa_2017": {
+      "role": "source",
+      "population": "Ayele Dire Dawa 2017 source context; urban Ethiopian adults age 25–64 years inclusive by Methods; whole-cohort synthesis.",
+      "age_minimum": 25,
+      "age_maximum": 64,
+      "minimum_inclusive": true,
+      "maximum_inclusive": true,
+      "source_rows_and_trial_budget": "pending_separate_reviewed_schedule",
+      "boundary_discrepancy": "Methods report ages 25–64; table captions say 25–65. This context explicitly chooses Methods and does not silently repair the original evidence."
+    }
+  },
+  "not_a_scheduled_context": "context_bahendeka_uganda_2014 is contextual evidence only and is excluded from this execution-context map.",
+  "release_authorized": false
+}

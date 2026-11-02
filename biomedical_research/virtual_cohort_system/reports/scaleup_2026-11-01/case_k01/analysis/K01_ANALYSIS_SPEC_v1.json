@@ -1,0 +1,186 @@
+{
+  "schema_version": "k01_analysis_spec.v1",
+  "case_id": "K01",
+  "status": "prospective_pre_execution_specification",
+  "purpose": "Unweighted finite-sample projections of one released cleaned-number table; same three analyses for generated releases",
+  "input": {
+    "interface": "pandas.DataFrame only; no file loader",
+    "columns": {
+      "age": "year",
+      "sex": "F=female/M=male",
+      "bmi": "kg/m^2",
+      "glucose": "mmol/L"
+    },
+    "numeric_dtype": "real numeric, not bool/complex; canonical missing only",
+    "extra_columns": "ignored by analysis; generated-context guard requires exact id,age,sex,bmi,glucose",
+    "roles": [
+      "reference",
+      "generated"
+    ]
+  },
+  "measured_reference": {
+    "dataset": "HAALSI baseline v3.0",
+    "doi": "10.7910/DVN/F5YHML",
+    "raw_mapping": {
+      "rage": "age",
+      "rsex": "sex",
+      "c_bs_bmi": "bmi",
+      "c_bs_glucose": "glucose"
+    },
+    "sex_mapping": {
+      "1": "M",
+      "2": "F"
+    },
+    "age_definition": "census age on 31 July2014 at sample selection",
+    "native_and_tagged_missing": "exclude before numerical use; no imputation",
+    "finite_numeric_nonmeasurement_sentinels": [],
+    "sentinel_scope": "None documented in reviewed codebook definitions/actual variable metadata; not proof none exists. No inferred sentinel from extremes.",
+    "range_or_flag_trimming": false,
+    "recorded_boundary_values": "retain finite positive cleaned numbers; assay/censoring limitation remains",
+    "fasting_restriction": false,
+    "weighting": "none; not a national or design-based parameter"
+  },
+  "eligibility": {
+    "common_rows": true,
+    "age_minimum_inclusive": 40,
+    "age_maximum": null,
+    "recognized_sex": [
+      "F",
+      "M"
+    ],
+    "finite_numeric": [
+      "age",
+      "bmi",
+      "glucose"
+    ],
+    "positive": [
+      "bmi",
+      "glucose"
+    ],
+    "unknown_nonmissing_sex": "fail whole input",
+    "malformed_numeric_schema": "fail whole input",
+    "reference_ineligible_rows": "exclude with fixed overlapping reason counts",
+    "generated_ineligible_rows": "reject whole table, never filter or repair",
+    "reference_final_n": "determined only after frozen custody release; never constructor input"
+  },
+  "design": {
+    "base": "glucose ~ 1 + age + female + bmi",
+    "interaction": "glucose ~ 1 + age + female + bmi + female:bmi",
+    "implemented_base": [
+      "1",
+      "(age-50)/10",
+      "I(sex==F)",
+      "(bmi-25)/5"
+    ],
+    "implemented_interaction_addition": "I(sex==F)*(bmi-25)/5",
+    "centering": "fixed numerical coordinates, not scientific source or target parameters",
+    "weights": "none",
+    "minimum_rows": "n>5",
+    "both_sexes_required": true,
+    "ranks_required": {
+      "base": 4,
+      "interaction": 5
+    },
+    "rank_tolerance": "max(n,p)*float64_epsilon*largest_singular_value; all three unavailable if either rank fails"
+  },
+  "estimands": [
+    {
+      "id": "K01-GLUCOSE-BMI",
+      "model": "base",
+      "term": "bmi5",
+      "meaning": "age/sex-adjusted glucose contrast per5kg/m^2",
+      "unit": "mmol/L per 5 kg/m^2"
+    },
+    {
+      "id": "K01-GLUCOSE-AGE",
+      "model": "base",
+      "term": "age10",
+      "meaning": "BMI/sex-adjusted glucose contrast per10years",
+      "unit": "mmol/L per 10 years"
+    },
+    {
+      "id": "K01-SEX-BMI",
+      "model": "interaction",
+      "term": "female:bmi5",
+      "meaning": "Female-minus-Male difference in BMI contrast under common age adjustment",
+      "unit": "mmol/L per 5 kg/m^2"
+    }
+  ],
+  "evidence_status": {
+    "all_three": "joint_assumption_dependent_under_fixed_source_packet",
+    "desired_sign_or_effect": "not_supplied",
+    "reuse_item": "K01-SEX-BMI within three primaries, not extra fourth endpoint"
+  },
+  "uncertainty": {
+    "reference_only": "HC3 sandwich with1.959963984540054 normal multiplier, working descriptive sensitivity",
+    "generated": "no inferential interval from synthetic rows",
+    "not_claimed": [
+      "survey-design coverage",
+      "cluster correction",
+      "source/transport uncertainty coverage",
+      "causal or clinical equivalence"
+    ],
+    "residual_tolerance": "16*eps*max(n,p)*max(norm(y),tiny)",
+    "near_unit_leverage": "HC3 unavailable if1-h<=64*eps",
+    "point_vs_interval": "finite identifiable point may remain when residual variation/HC3 unavailable"
+  },
+  "failures": {
+    "constant_glucose": "all three unavailable",
+    "n_or_sex_or_rank_failure": "all three unavailable",
+    "nonfinite_OLS_arithmetic": "all three unavailable",
+    "nonfinite_HC3": "affected interval unavailable; point retained",
+    "endpoint_omission": "forbidden",
+    "unavailable_reference": "case cannot pass; retain failure without selecting substitute outcomes"
+  },
+  "comparison": {
+    "raw_discrepancies": true,
+    "normalization": "abs(generated_effect-reference_effect)/reference_glucose_SD",
+    "reference_glucose_SD": {
+      "ddof": 1,
+      "scope": "same eligible measured-reference rows",
+      "evaluation_only": true
+    },
+    "nonpositive_or_nonfinite_SD": "normalized endpoint unavailable and cannot pass",
+    "working_resolution": 0.1,
+    "complete_sensitivity_grid": [
+      0.05,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "comparison_boundary": "<= resolution",
+    "meaning": "author-selected exploratory resolution, not percent error or biomedical equivalence",
+    "directions": "report alongside magnitudes, not sole success criterion"
+  },
+  "bundle": {
+    "constructors": [
+      "A01",
+      "A02",
+      "A03",
+      "A04",
+      "A05"
+    ],
+    "statistical_reference": "S01 separately under same rule",
+    "target_seeds": [
+      2101,
+      2102,
+      2103
+    ],
+    "rows_per_new_table": 5000,
+    "primary_stage": "final",
+    "constructor_pass": "all3estimands within fixed working resolution on all3seeds; any failed/missing output fails",
+    "case_reliability_pass": "at least4ofall5Agentconstructors; failed attempts stay denominator",
+    "zero_anchor": "zero for each of3effect contrasts; if all3zeroanchors withinworkingresolution, case cannot alone support joint-signal recovery or positiveWaveB",
+    "positive_wave_A": "independentlyadmittedK01mustpassandbediscriminating; K02aloneinsufficient",
+    "retention": "final aliasesinitial; zero revision gain; no additional draw",
+    "initial_final": "paired secondary; finalfailurecannotfallbacktoinitial",
+    "independent_evidence_units": "cases/studies and constructions, not rows or seeds"
+  },
+  "access": {
+    "target_read_enabled": false,
+    "file_loader": false,
+    "automatic_execution": false,
+    "scientific_result_claim": false,
+    "global_execution_release": false
+  }
+}

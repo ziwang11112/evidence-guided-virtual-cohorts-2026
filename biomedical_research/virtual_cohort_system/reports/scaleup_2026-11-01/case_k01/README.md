@@ -1,6 +1,8 @@
 # K01: whole-cohort glucose generation for scientific analyses
 
-2 November 2026. This is a preparation checkpoint, not an admitted case or a clinical result. The candidate target is HAALSI baseline v3.0. No participant covariates, glucose values, target moments or target relationships are inputs to the proposed generators. No K01 clinical construction or target-effect evaluation has run.
+2 November 2026. **K01 now has prospective scientific admission and a fixed reviewed design; clinical execution remains unreleased.** The [decision](CONTRACT_DECISION_2026-11-02.md), [independent contract review](CONTRACT_INDEPENDENT_REVIEW.md) and [byte commitment](REVIEWED_DESIGN_COMMITMENT.json) supersede the earlier preparation-only status. The task is whole-cohort generation without target participant inputs. Necessary pure components passed invented-input verification; actual Agent scientific models, clinical source fitting, generation and target-effect evaluation have not run.
+
+The evidence discussion below records the preceding source-review checkpoint. Its scientific limitations remain; its call for completing the case design has now been resolved by the linked contract.
 
 ## The scientific question
 
