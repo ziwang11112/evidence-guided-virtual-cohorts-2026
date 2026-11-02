@@ -1,5 +1,7 @@
 # Experimental sufficiency for the biomedical method contribution
 
+**Subsequent scope update:** the user explicitly requested larger experiments. The [new staged campaign](SCALED_EXPERIMENT_CAMPAIGN_2026-11-01.md) replaces the single-additional-case recommendation and defines new prospective screening ceilings. The scientific sufficiency judgments below remain valid; earlier exhausted intakes and revealed targets are not reopened. The larger plan is not yet an executable release.
+
 1 November 2026. Response to the user's instruction that experiments must be sufficient. This assessment uses existing aggregate results and an independent read-only review; it adds no experiment or target access. It complements the [current focus](CURRENT_RESEARCH_FOCUS.md) and [working manuscript](../manuscript/DRAFT_v0_2.md).
 
 **Decision: the existing experiments support a bounded methods-and-feasibility draft. They do not yet establish reliable quantitative usefulness across biomedical settings. Draft completion and experimental sufficiency for a stronger paper are different milestones.**
