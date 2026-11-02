@@ -2,6 +2,8 @@
 
 Updated 1 November 2026, America/Chicago, following the user's explicit direction: keep experimental purposes clear, concentrate on the paper's contributions and innovation, improve the essential method, and place unresolved peripheral capabilities in limitations. This is the current prospective scope policy. It supersedes broader proposed expansions in earlier planning documents, without changing frozen protocols, historical results, or exposure records.
 
+Current execution checkpoint: the larger campaign is in [candidate admission](../reports/scaleup_2026-11-01/STATE.json). Turkana's public file has been acquired and independently schema-checked (1,226 deposit rows; 397 with age/sex/BMI/TC/HDL present). Measured TC/HDL remains a conditional candidate; calculated LDL and unrestricted TG are excluded from that proposed measured-lipid use. External lipid evidence is under operator/transport review. There are still **zero newly admitted cohorts and zero new generated tables** in this campaign. The new batch preflight verifies metadata readiness only and correctly blocks the unresolved plan; it is not yet a scientific execution controller. See [candidate decisions](../reports/scaleup_2026-11-01/TURKANA_ADMISSION.md).
+
 ## The contribution we are trying to deliver
 
 **An Agent turns published biomedical evidence, a target-population description and optional observed measurements into a reusable virtual dataset that can support specified scientific analyses.**
