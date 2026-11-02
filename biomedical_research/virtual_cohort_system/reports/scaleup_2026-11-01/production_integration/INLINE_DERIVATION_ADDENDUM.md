@@ -1,0 +1,11 @@
+# Prospective operational amendment: finite inline derivation
+
+2 November 2026. No scientific construction, actual source fit, clinical generation or target-effect evaluation has started in this campaign.
+
+The reviewed K01 and K02 source laws, analysis questions, source evidence, assumptions, constructors, initial/final stages, rows, seeds and failure rules stay fixed. The earlier proposals reserved at most one separate analytic parameter job for each new construction and described one such job for S01. The first production implementation instead supplies **zero separate analytic jobs**. The unused reservations cannot become extra generation or calibration calls.
+
+An Agent may submit fixed numeric parameters with explicit evidence/assumption provenance, or deterministic finite expressions evaluated inside its frozen isolated generator. The prescribed S01 uses its previously reviewed closed-form equations inside that same execution boundary. Repeated execution evaluates those same expressions again; it is not recorded as one separate parameter job or as a newly optimized model. Every actual generator dispatch remains in the fixed attempt and resource ledger.
+
+The equations and permitted source operands must be visible in the frozen code/specification and inspected before execution. This route allows arithmetic and reviewed CDF/inverse-CDF evaluations, not an optimizer, a grid, random calibration samples, target observations, output-dependent parameter updates or additional candidate tables. The model equations and scientific specification remain the same across source and target runs, apart from the already permitted context selector and declared context inputs. Derivation must precede random generation and cannot use generated samples to tune parameters.
+
+This amendment avoids an unimplemented external execution interface. It is an operational change to where finite arithmetic runs, not an improved scientific method or a positive result. The release review must accept the amendment and inspect each actual submitted formula. A later separate-job interface would need a new prospective operational version; it cannot be simulated by accepting a caller-supplied success flag or running untrusted code on the host.
