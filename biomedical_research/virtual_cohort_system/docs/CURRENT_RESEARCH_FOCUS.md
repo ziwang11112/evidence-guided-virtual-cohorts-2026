@@ -6,6 +6,8 @@ Current execution checkpoint: the larger campaign is in [candidate admission](..
 
 **Existing-data reuse, 2 November 2026:** the [aggregate evidence atlas](../reports/existing_evidence_atlas_2026-11-02/README.md) places all locked/primary analyses from M17-B, ENSANUT and CHNS alongside their failures: six constructions, eighteen unique virtual tables, fifteen case-specific quantities and ninety existing estimates. It labels historical method versions and distinct reference uncertainty; it is reporting work, not a new common-protocol validation. The [data-use matrix](../reports/existing_evidence_atlas_2026-11-02/DATA_USE_MATRIX.md) assigns optional-input, comparator and intervention datasets to specific supporting claims. No revealed target, budget or execution gate is reopened.
 
+**Subsequent K02 implementation:** [the bounded checkpoint](../reports/scaleup_2026-11-01/K02_IMPLEMENTATION_CHECKPOINT_2026-11-02.md) resolves code-only sex metadata and qualified target-study exposure, implements the three fixed in-memory analyses, and adds an execution-bound supplemental collector that explicitly retains semantic_feedback_v1. Independent reviews passed on their documented arithmetic/adapter scope. Source/target model linkage, unit representation and global release remain pending; no target effect or new biomedical generator was run. This is actual component implementation, not a claim that the campaign or all thirty source checks are operational.
+
 ## The contribution we are trying to deliver
 
 **An Agent turns published biomedical evidence, a target-population description and optional observed measurements into a reusable virtual dataset that can support specified scientific analyses.**

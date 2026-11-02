@@ -1,0 +1,128 @@
+{
+  "schema_version": "k02_analysis_spec.v0",
+  "status": "prospective_draft_not_case_or_global_release",
+  "case_id": "K02",
+  "purpose": "Descriptive analysis of empirical measured-protocol adult complete records and separately generated whole cohorts.",
+  "input": {
+    "interface": "pandas.DataFrame only; no file loader",
+    "columns": {
+      "age": "year",
+      "sex": "recorded categorical F/M",
+      "bmi": "kg/m^2",
+      "total_cholesterol": "mg/dL",
+      "hdl_cholesterol": "mg/dL"
+    },
+    "extra_columns": "ignored",
+    "numeric_columns": "real numeric dtype, not boolean or complex; canonical missing values only",
+    "sex_missing": "None/pandas missing; literal NA conversion belongs to separate preparation",
+    "roles": [
+      "reference",
+      "generated"
+    ]
+  },
+  "eligibility": {
+    "common_subset": true,
+    "age_min_inclusive": 18,
+    "age_max": null,
+    "sex_levels": [
+      "F",
+      "M"
+    ],
+    "numeric_requirements": "finite age,bmi,total_cholesterol,hdl_cholesterol",
+    "strictly_positive": [
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "unknown_sex_or_bad_numeric_schema": "fail whole invocation; no silent coercion",
+    "missing_or_ineligible_rows": "exclude under this fixed rule and report overlapping reason counts",
+    "no_filters": [
+      "lifestyle",
+      "LDL",
+      "TG",
+      "disease",
+      "pregnancy",
+      "fasting",
+      "outliers",
+      "TC>=HDL"
+    ],
+    "age_boundary_origin": "investigator-selected prospective use case, not an asserted paper cutoff"
+  },
+  "design": {
+    "formula": "outcome ~ 1 + age + categorical sex + BMI",
+    "implemented_columns": [
+      "intercept",
+      "(age-50)/10",
+      "I(sex=='F')",
+      "(bmi-25)/5"
+    ],
+    "weights": "none",
+    "common_rows": true,
+    "require_n_greater_than_columns": true,
+    "rank_rule": "SVD singular value > max(n,p)*float64_epsilon*largest_singular_value"
+  },
+  "estimands": [
+    {
+      "id": "K02-HDL-BMI",
+      "outcome": "hdl_cholesterol",
+      "term": "BMI",
+      "contrast": 5,
+      "unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-TC-BMI",
+      "outcome": "total_cholesterol",
+      "term": "BMI",
+      "contrast": 5,
+      "unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "operator": "Pearson correlation between TC and HDL residuals from the same common-row design",
+      "unit": "1"
+    }
+  ],
+  "uncertainty": {
+    "reference_slopes": "HC3 sandwich, 1.959963984540054 normal multiplier; assumption-conditional sensitivity interval only",
+    "not_claimed": [
+      "design-based confidence coverage",
+      "cluster correction",
+      "national inference",
+      "source/transport uncertainty",
+      "clinical equivalence"
+    ],
+    "generated_slopes": "unavailable; no synthetic precision",
+    "residual_correlation": "unavailable; no Fisher/normal/bootstrap substitute in v0",
+    "degenerate_residuals": "retain finite point slope where identifiable; interval unavailable",
+    "leverage_limit": "HC3 unavailable if 1-h <= 64*float64_epsilon"
+  },
+  "diagnostics": {
+    "reference_outcome_sample_sd": {
+      "ddof": 1,
+      "role": "evaluation-only metric denominator, never builder input",
+      "nonpositive_or_nonfinite": "unavailable"
+    },
+    "generated_outcome_sd": "not emitted"
+  },
+  "failures": {
+    "constant_response": "corresponding slope unavailable; residual correlation unavailable",
+    "rank_deficiency": "all three unavailable",
+    "too_few_rows": "all three unavailable",
+    "zero_numerical_residual_variation": "residual correlation unavailable; corresponding HC3 unavailable",
+    "numerical_residual_tolerance": "16*eps*max(n,p)*max(norm(y),tiny); numerical-resolution rule, not scientific tolerance",
+    "nonfinite_arithmetic": "affected endpoint unavailable",
+    "endpoint_omission": "forbidden"
+  },
+  "access": {
+    "target_read_enabled": false,
+    "file_loader": false,
+    "automatic_execution": false,
+    "builder_feedback": false,
+    "scientific_admission": false,
+    "global_freeze": false
+  },
+  "references": [
+    "../K02_PROSPECTIVE_DECISIONS_2026-11-02.md",
+    "../K02_ADMISSION_REVIEW_2026-11-02.md"
+  ]
+}
