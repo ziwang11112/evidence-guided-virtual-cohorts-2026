@@ -1,5 +1,7 @@
 # Evidence-guided virtual cohorts
 
+**Prior-work positioning, 1 November 2026:** [The G-Sim / LLMSynthor comparison](biomedical_research/virtual_cohort_system/manuscript/POSITIONING_GSIM_LLMSYNTHOR_2026-11-01.md) separates overlapping capabilities, implemented biomedical evidence operations, selected analytical feasibility and unproved methodological advantage. The review acknowledges aggregate-only and multi-source support in both predecessors and checks LLMSynthor v4. Study-conditioned evidence-to-data generation remains the contribution candidate; no experiment or automation is started by this documentation update.
+
 **Working manuscript v0.1:** [Read the updated paper](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_1.md), [contribution-to-evidence map](biomedical_research/virtual_cohort_system/manuscript/CONTRIBUTION_EVIDENCE_MAP_2026-11-01.md), and [independent consistency review](biomedical_research/virtual_cohort_system/manuscript/REVIEW_v0_1_2026-11-01.md). The revision incorporates the completed CHNS case, quantitative discrepancies and retention outcomes, with the artificial conditional-evidence example as supporting material. This is a bounded working draft, not a submission-ready or algorithmic-superiority claim. No experiment was added for this writing update; the earlier draft remains preserved.
 
 
