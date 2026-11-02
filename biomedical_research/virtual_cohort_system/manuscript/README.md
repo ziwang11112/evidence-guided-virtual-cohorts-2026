@@ -1,11 +1,12 @@
 # Manuscript
 
-The current working revision is [DRAFT_v0_1.md](DRAFT_v0_1.md), prepared on 1 November 2026. It incorporates the completed CHNS whole-cohort results and the bounded artificial conditional-evidence illustration. It describes the implemented procedure, selected analytical feasibility, and quantitative limitations; it is not submission-ready.
+The current working revision is [DRAFT_v0_2.md](DRAFT_v0_2.md), prepared on 1 November 2026. It centers the biomedical measurement/data-access problem, the evidence-to-joint-data construction method, and the scientific analyses enabled by the resulting virtual cohorts. It incorporates the reviewed G-Sim/LLMSynthor comparison and preserves the complete Results section of v0.1, including quantitative failures and no revision gain. It is a working biomedical methods manuscript, not a submission-ready package.
 
 - [Contribution-to-evidence map](CONTRIBUTION_EVIDENCE_MAP_2026-11-01.md): what the paper contributes, the exact supporting records, existing displays and remaining manuscript work.
 - [G-Sim / LLMSynthor positioning](POSITIONING_GSIM_LLMSYNTHOR_2026-11-01.md): corrected primary-source comparison of problems, capabilities and mechanisms, implemented differences versus unproved innovation, and wording for the paper. Includes a fresh LLMSynthor v4 check; no new experiment.
-- [Independent draft review](REVIEW_v0_1_2026-11-01.md): numerical, implementation, interpretation and local-link checks against the completed records.
+- [Independent v0.2 review](REVIEW_v0_2_2026-11-01.md): contribution framing, predecessor fairness, implementation and analysis-use boundaries, and preservation of the Results section.
+- [Previous consolidated draft](DRAFT_v0_1.md) and [its independent review](REVIEW_v0_1_2026-11-01.md): preserved numerical and implementation account.
 - [Current research scope](../docs/CURRENT_RESEARCH_FOCUS.md): no peripheral experimental expansion; new experiments require a named essential contribution gap.
 - [Earlier draft](DRAFT_v0.md): preserved historical version, including its then-pending case status.
 
-This revision adds no scientific experiment or target analysis. The principal remaining work is completing the prior-work positioning and bibliography, author/access/ethics declarations, and the submission-specific reproducibility and formatting statement. The absence of a demonstrated method advantage must not be repaired by wording alone. No venue or submission-readiness claim has been made.
+This revision adds no scientific experiment or target analysis. Biomedical method contribution does not require a new loss, model family or superiority to another Agent. The current data support a bounded analytical-feasibility claim; stronger accuracy or comparative claims require their own evidence. Remaining writing work includes the broader statistical-prior-work context, full source bibliography, author/access/ethics declarations, and submission-specific reproducibility and formatting. The G-Sim/LLMSynthor comparison is complete within its stated scope. No venue or submission-readiness claim has been made.

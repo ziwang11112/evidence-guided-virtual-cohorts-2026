@@ -10,6 +10,8 @@ Complete-cohort generation with no individual input remains central. Variable en
 
 Working title: **From Published Evidence to Virtual Cohorts for Scientific Analysis**.
 
+Following the user's subsequent clarification on 1 November, contribution is evaluated as a **biomedical data-generation method that addresses unavailable joint measurements and has demonstrated analytical uses**. A new loss, model family or Agent architecture is not a prerequisite. The value lies in turning available study evidence into useful joint data with an explicit construction and real-reference evaluation. This positive contribution is distinct from claims of firstness, quantitative replacement or comparative algorithmic superiority, which require their own support. The data product stays central; semantic checking is a supporting operation rather than the paper's replacement objective.
+
 ## Three contribution slots and their current evidence
 
 | Contribution slot | What the paper should explain and demonstrate | Supported scope and remaining gap |
@@ -40,7 +42,7 @@ All revealed targets remain closed to tuning. No new experiment, target family, 
 
 Before any proposed new experiment, write five concrete items: **the manuscript claim it tests; the unresolved gap; the minimal discriminating experiment; the decision its result would change; and the fixed stopping rule.** If an item cannot be stated clearly, do not run the experiment. Prefer reusing existing verified results when they already answer the question. This rule needs no new controller, audit subsystem or benchmark.
 
-Default next action: consolidate the existing method and complete results into the manuscript, reconcile obsolete status statements, and identify whether one essential contribution still lacks evidence. There is no automatic requirement for another cohort or toy experiment before drafting.
+Current writing checkpoint: [manuscript v0.2](../manuscript/DRAFT_v0_2.md) consolidates the complete results and centers the biomedical method contribution; the [G-Sim/LLMSynthor positioning](../manuscript/POSITIONING_GSIM_LLMSYNTHOR_2026-11-01.md) is complete within its stated scope. Do not repeatedly rewrite the framing as a substitute for progress. Remaining manuscript work is the broader statistical-predecessor context, source bibliography, author/access/ethics declarations and submission-specific reproduction/format preparation. The current results support selected analytical feasibility; stronger quantitative usefulness or comparative improvement remains a separate evidence question. There is no automatic requirement for another cohort or toy experiment before drafting.
 
 Only if an incremental biomedical-validity claim remains central should one focused prospective comparison be designed. It must isolate the proposed mechanism with matched information when claiming a method advantage, and test scientific analyses from the same frozen virtual release on a genuinely fresh reference. A different evidence packet can test information value, but does not alone isolate an algorithmic advantage. Its budget and informative stopping decision must be fixed before execution. Do not repeatedly add cases or components to obtain a positive result; if the promised gain is not demonstrated, simplify the method and narrow the claim.
 
