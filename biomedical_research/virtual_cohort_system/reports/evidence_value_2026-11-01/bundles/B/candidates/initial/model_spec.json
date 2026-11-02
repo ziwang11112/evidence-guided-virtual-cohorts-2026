@@ -1,0 +1,100 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "target_g_probability": 0.75,
+    "x_group_mean": [0.0, 0.0],
+    "x_group_sd": [1.0, 1.0],
+    "y_group_intercept": [0.4, 1.0],
+    "y_group_x_slope": [0.15, 0.15],
+    "y_group_residual_sd": [1.0630145812734648, 1.0630145812734648],
+    "conditional_family": "x is Gaussian within each g; y is Gaussian conditional on x,g with additive linear mean and independent residual",
+    "sampling_law": "IID rows; Bernoulli g; mutually independent standard Gaussian x and residual innovations, independent of g",
+    "identifier_prefix": "artificial_B_"
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Task requirements: exactly 3000 rows with unique string identifiers; target Pr(g=1)=0.75 is a population probability, not a finite-row quota. The supplied fictional premise preserves the joint law of x,y conditional on g between source and target. These are stipulated requirements, not empirical evidence."
+    },
+    {
+      "id": "A_IID",
+      "description": "Rows are sampled independently with Bernoulli group membership. There is no balancing, finite-sample moment matching, selection, missingness, or additional dependence between rows."
+    },
+    {
+      "id": "A_COMMON_X_VARIANCE",
+      "description": "Var(x|g=0)=Var(x|g=1)=1. The pooled source variance identifies their equally weighted average, not equality. Equal conditional means are identified by source Cov(g,x)=0 and E(x)=0; equality of the full x distributions across g remains assumed."
+    },
+    {
+      "id": "A_LINEAR_COMMON_SLOPE",
+      "description": "E(y|x,g)=a_g+b*x with a common slope and no nonlinear x term or g-by-x interaction. The source covariance identifies b=0.15 only after this model and the common x-variance assumption. The missing interaction is set to zero explicitly as an unsupported closure."
+    },
+    {
+      "id": "A_COMMON_RESIDUAL",
+      "description": "Residuals have zero mean, common variance 1.13 across g and x, and are independent of x and g. Source moments do not identify homoskedasticity or independence; these choices supply a simple equal-covariance completion of the source moments."
+    },
+    {
+      "id": "A_GAUSSIAN",
+      "description": "x and the y residual are Gaussian under the independent-innovation representation. Gaussian shapes, unbounded support, symmetry and their tail behavior are assumptions; no distribution family, quantile or threshold probability was supplied."
+    },
+    {
+      "id": "A_FIXED_PARAMETERS",
+      "description": "All model parameters are fixed across seeds. The invented evidence specifies exact population functionals with no estimator uncertainty. Random draws represent individual variation and finite-cohort sampling only; no probability distribution is assigned to the unresolved scientific assumptions."
+    },
+    {
+      "id": "A_IDENTIFIERS",
+      "description": "Identifiers are a fixed non-scientific prefix followed by the one-based row number, carrying no relationship to g,x,y."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK"],
+      "derivation": "Copied from task.json n_rows=3000, not estimated from the source."
+    },
+    "target_g_probability": {
+      "evidence_ids": ["E_G_MEAN", "E_G_SD"],
+      "assumption_ids": ["A_TASK", "A_IID"],
+      "derivation": "The source has p_s=0.5 and SD(g)=sqrt(0.5*(1-0.5))=0.5. Replace only its population group probability with the task's target p_t=0.75. Generate Bernoulli membership rather than force 2250 group-1 rows."
+    },
+    "x_group_mean": {
+      "evidence_ids": ["E_G_MEAN", "E_X_MEAN", "E_COV_G_X"],
+      "assumption_ids": ["A_TASK"],
+      "derivation": "For binary g, Cov(g,x)=p_s*(1-p_s)*(mu_x1-mu_x0). With p_s=0.5 and covariance=0, the difference is 0; source mean 0 makes both conditional means 0. Preserve these within-group means in the target."
+    },
+    "x_group_sd": {
+      "evidence_ids": ["E_G_MEAN", "E_X_SD", "E_COV_G_X"],
+      "assumption_ids": ["A_COMMON_X_VARIANCE", "A_TASK"],
+      "derivation": "No between-group mean variance exists for x. Source Var(x)=1 implies 0.5*Var(x|0)+0.5*Var(x|1)=1. The declared equality assumption sets each variance to 1 and each SD to 1."
+    },
+    "y_group_intercept": {
+      "evidence_ids": ["E_G_MEAN", "E_Y_MEAN", "E_COV_G_Y", "E_X_MEAN", "E_COV_G_X"],
+      "assumption_ids": ["A_LINEAR_COMMON_SLOPE", "A_TASK"],
+      "derivation": "The group y mean difference is 0.15/(0.5*0.5)=0.6. Thus mu_y0=0.7-0.5*0.6=0.4 and mu_y1=1.0. Since both x group means are zero, these are the intercepts of the assumed additive model."
+    },
+    "y_group_x_slope": {
+      "evidence_ids": ["E_COV_X_Y", "E_X_SD", "E_COV_G_X"],
+      "assumption_ids": ["A_LINEAR_COMMON_SLOPE", "A_COMMON_X_VARIANCE", "A_COMMON_RESIDUAL", "A_TASK"],
+      "derivation": "Under the declared additive law and residual independence, Cov(x,y)=b*Var(x)+0.6*Cov(x,g). Therefore b=0.15/1=0.15. Its equality across groups and linearity are not identified from this pooled covariance."
+    },
+    "y_group_residual_sd": {
+      "evidence_ids": ["E_Y_SD", "E_COV_G_Y", "E_G_MEAN", "E_COV_X_Y", "E_X_SD", "E_COV_G_X"],
+      "assumption_ids": ["A_COMMON_RESIDUAL", "A_LINEAR_COMMON_SLOPE", "A_COMMON_X_VARIANCE", "A_TASK", "A_FIXED_PARAMETERS"],
+      "derivation": "Source Var(y)=1.1146748404803977^2=1.2425. Remove between-group mean variance (0.6)^2*0.25=0.09 and linear x variance (0.15)^2*1=0.0225; the cross term is zero because Cov(g,x)=0. Residual variance=1.13, giving SD=sqrt(1.13)=1.0630145812734648 in both groups under the equality assumption."
+    },
+    "conditional_family": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_GAUSSIAN", "A_LINEAR_COMMON_SLOPE", "A_COMMON_RESIDUAL", "A_COMMON_X_VARIANCE"],
+      "derivation": "A Gaussian additive completion is chosen as a simple fully specified joint law compatible with the supplied first and second moments. Gaussianity, equal covariance and linear conditional behavior are not reported facts or uniquely determined by those moments."
+    },
+    "sampling_law": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_IID", "A_GAUSSIAN", "A_COMMON_RESIDUAL", "A_FIXED_PARAMETERS"],
+      "derivation": "Use the supplied seed for IID Bernoulli group draws and independent Gaussian innovations. Independence and the absence of parameter uncertainty are explicit modeling conventions."
+    },
+    "identifier_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_IDENTIFIERS", "A_TASK"],
+      "derivation": "A deterministic prefix and one-based sequence provide unique string identifiers."
+    }
+  }
+}

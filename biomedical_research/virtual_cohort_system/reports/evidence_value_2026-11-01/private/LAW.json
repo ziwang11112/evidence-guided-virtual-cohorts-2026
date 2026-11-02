@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope": "Artificial custodian law; not biomedical or participant-derived; withheld from builders and coordinator until all frozen outputs complete",
+  "parameters": {
+    "mu": 0.4,
+    "a": 0.6,
+    "b": 0.15,
+    "d": 0.7,
+    "sigma": 0.8
+  },
+  "source_p": 0.5,
+  "target_p": 0.75,
+  "x_law": "standard_normal_independent_of_g",
+  "error_laws": [
+    "standard_normal",
+    "student_t3_divided_by_sqrt3"
+  ],
+  "arm_map": {
+    "A": "T0",
+    "B": "T1",
+    "C": "T2plus",
+    "D": "T2minus"
+  },
+  "rows": 3000,
+  "seeds": [
+    18101,
+    18103,
+    18107
+  ],
+  "analysis": {
+    "primary": "pooled unweighted population OLS y ~ 1 + x; no g adjustment",
+    "conditional": "within each g, unweighted OLS y ~ 1+x and empirical sqrt(SSE/n_g); no estimator CI",
+    "source_compliance": "equal-group recombination of empirical first and second moments; no extra source table",
+    "tail": {
+      "x_cut": 1,
+      "y_cut": 2,
+      "contrast": "P(x>x_cut and y>y_cut) - P(x<-x_cut and y>y_cut)"
+    },
+    "quadrature": {
+      "orders": [
+        128,
+        256,
+        512
+      ],
+      "normal_x_limit": 12,
+      "maximum_successive_difference": 1e-11
+    },
+    "minimum_total_for_ols": 100,
+    "minimum_group_for_conditional": 30,
+    "world_policy": {
+      "A": [
+        "plus_normal",
+        "plus_t3",
+        "minus_normal",
+        "minus_t3"
+      ],
+      "B": [
+        "plus_normal",
+        "plus_t3",
+        "minus_normal",
+        "minus_t3"
+      ],
+      "C": [
+        "plus_normal",
+        "plus_t3"
+      ],
+      "D": [
+        "minus_normal",
+        "minus_t3"
+      ]
+    },
+    "no_world_weighting": true,
+    "no_scientific_error_tolerance": true
+  }
+}

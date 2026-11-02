@@ -1,0 +1,21 @@
+# Initial artificial whole-cohort construction
+
+The candidate is one explicitly assumed joint stochastic law, not a recovered unique distribution. It uses only the single registered artificial source and the target's stipulated composition change. All nine source functionals come from the same fictional population; they are jointly constraining moments, not independent replications. No literature, individual table, additional source, or target outcome was accessed.
+
+## Chosen law and evidence translation
+
+Generate independent rows with g ~ Bernoulli(0.75). Conditional on g, x ~ Normal(0,1) and y = 0.4 + 0.6*g + 0.15*x + epsilon, where epsilon ~ Normal(0,1.13) is independent of g and x. The second argument in this notation is variance. Both Gaussian families, common group variances, the common linear slope, residual independence, and absence of a nonlinear term or interaction are explicit assumptions. Normality is a convenient distribution completion; it was not supplied by S1.
+
+For a binary source group with p=0.5, Cov(g,v)=0.25*(E[v|1]-E[v|0]). Thus the source means and g covariances identify x group means 0 and 0 and y group means 0.4 and 1.0. Source Var(x)=1 only identifies the average within-group variance; equality sets each to 1. Under the additive common-slope construction, Cov(x,y)=0.15 gives slope 0.15. Source Var(y)=1.2425 minus the group-mean contribution 0.09 and linear-x contribution 0.0225 leaves residual variance 1.13. The declared law therefore reproduces every admitted first or second source moment algebraically, with no moment fitting to simulated tables. The residual distribution and its independence do not follow from that variance calculation.
+
+The source's group probability is replaced by the target's 0.75 while the conditional laws remain unchanged, exactly as the fictional task stipulates. Group counts fluctuate in a 3000-row draw; no exact count or sample-moment quota is enforced. Evidence is copied byte for byte, retaining its population, locator, units, measurement, adjustment, selection and absence of estimator uncertainty. Nothing in the construction treats a population SD as an SE.
+
+## Identification and permitted interpretations
+
+The task and evidence identify the target group probability, within-group x and y means, and consequently target marginal means and g covariances. The target marginal variances and x-y covariance additionally depend on how the unreported group-specific second moments are allocated; this candidate assumes equal conditional covariance matrices. Even if source pooled moments agree exactly, alternative group variances, slopes, interactions, nonlinear associations and distribution shapes can yield different target summaries after changing group composition.
+
+Descriptive associations can be inspected as predictions of this specified model. Threshold probabilities, quantiles, tail events, rank associations, subgroup x-y slopes and nonlinear questions are assumption-dependent and are not established by the supplied evidence. No threshold probability or tail-shape validation was available. Causal effects, interventions, measurement-error correction, extrapolation to other populations, longitudinal behavior, empirical uncertainty intervals, clinical interpretations and claims of scientific accuracy are unsupported. Repeated seeds express finite-cohort sampling under one fixed law, not uncertainty about the law or new evidence. No posterior or prior distribution over unidentified assumptions is implied.
+
+## Submission and checks
+
+The sole output route is generator.py with generate(observed, spec, seed); observed must be None. All scientific coefficients and distribution assumptions are in model_spec.json. NumPy and pandas are the only imports. No file/network access, trial tables, local generator import or execution, source replay, fitting, freeze, approval or revision is part of this construction. Static schema/ABI and deterministic moment-algebra checks, if completed, are separately recorded in checks.json with their bound results. Such checks assess representation and algebra, not execution behavior or scientific validity. Stop after this initial construction as required by the zero-revision budget.

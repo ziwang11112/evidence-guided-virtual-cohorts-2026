@@ -1,0 +1,98 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "group_probability": 0.75,
+    "x_group_mean": [0.0, 0.0],
+    "x_group_sd": [1.0, 1.0],
+    "y_group_intercept": [0.4, 1.0],
+    "y_group_slope": [-0.5499999999999999, 0.85],
+    "y_group_residual_sd": [0.8, 0.8],
+    "x_family": "normal",
+    "residual_family": "normal",
+    "dependence_model": "independent_standard_innovations_given_group",
+    "row_id_prefix": "artificial_C_"
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK_POPULATION",
+      "description": "Task-supplied design, recorded here because task facts have no evidence IDs: exactly 3000 rows; target Pr(g=1)=0.75; the within-g joint distribution of x,y is stipulated invariant from source to target. This is a fictional premise, not an empirically validated transport claim."
+    },
+    {
+      "id": "A_IID",
+      "description": "Rows are independent identically distributed draws. Group membership is Bernoulli with target population probability, without a fixed group quota, balancing, recentering or rescaling of the realized cohort. No clustering or dependence between people is modeled."
+    },
+    {
+      "id": "A_X_NORMAL",
+      "description": "x conditional on each g follows a normal distribution with the reported group mean and SD. Normality is an unreported distribution-family choice; it is a maximum differential-entropy completion of these unrestricted real-valued first two moments, not evidence for normal tails. Equal means and SDs alone do not establish equal group distributions or independence of x and g; this completion chooses those properties."
+    },
+    {
+      "id": "A_RESIDUAL_NORMAL",
+      "description": "The residual conditional on x,g is normal with mean zero and the reported group residual SD. This completes the reported conditional first two moments but adds unreported tail and shape assumptions. Standardized residual innovations are independent of x and g. Homoskedasticity and linear conditional means are supplied evidence, whereas full residual independence and normality are assumptions."
+    },
+    {
+      "id": "A_FIXED_PARAMETERS",
+      "description": "The reported functionals are exact fictional population quantities with no sampling estimator or SE. Their numerical values are fixed. Seed changes represent individual/finite-cohort variation only; uncertainty about Gaussian families, independence, transport and other structural choices is not assigned a probability distribution or quantified."
+    },
+    {
+      "id": "A_IDENTIFIER",
+      "description": "Unique sequential string identifiers use an arbitrary artificial_C_ prefix and contain no scientific information."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK_POPULATION"],
+      "derivation": "Exactly task.json n_rows=3000; not inferred from any source sample size."
+    },
+    "group_probability": {
+      "evidence_ids": ["E_G_MEAN", "E_G_SD"],
+      "assumption_ids": ["A_TASK_POPULATION", "A_IID"],
+      "derivation": "Use the task target probability 0.75, replacing source p=0.5. Source SD=0.5 agrees with sqrt(0.5*(1-0.5)); it is not uncertainty in p. Draw iid Bernoulli memberships, not an exact 2250-row quota."
+    },
+    "x_group_mean": {
+      "evidence_ids": ["E_G0_X_MEAN", "E_G1_X_MEAN", "E_X_MEAN", "E_COV_G_X"],
+      "assumption_ids": ["A_TASK_POPULATION", "A_FIXED_PARAMETERS"],
+      "derivation": "Group-indexed means [0,0] are directly reported in S2. At source p=0.5 these imply E[x]=0 and Cov(g,x)=p*(1-p)*(0-0)=0, agreeing with S1."
+    },
+    "x_group_sd": {
+      "evidence_ids": ["E_G0_X_SD", "E_G1_X_SD", "E_X_SD"],
+      "assumption_ids": ["A_TASK_POPULATION", "A_FIXED_PARAMETERS"],
+      "derivation": "Group-indexed population SDs [1,1] are directly reported. With equal group means, source Var(x)=0.5*1^2+0.5*1^2=1, agreeing with S1; these are individual SDs rather than SEs."
+    },
+    "y_group_intercept": {
+      "evidence_ids": ["E_G0_Y_INTERCEPT", "E_G1_Y_INTERCEPT", "E_Y_MEAN", "E_COV_G_Y"],
+      "assumption_ids": ["A_TASK_POPULATION", "A_FIXED_PARAMETERS"],
+      "derivation": "Use reported S2 y~1+x intercepts [0.4,1.0]. Because each group x mean is zero, these are also group y means. Source E[y]=0.5*0.4+0.5*1.0=0.7 and Cov(g,y)=0.25*(1.0-0.4)=0.15, agreeing with S1."
+    },
+    "y_group_slope": {
+      "evidence_ids": ["E_G0_Y_SLOPE", "E_G1_Y_SLOPE", "E_COV_X_Y"],
+      "assumption_ids": ["A_TASK_POPULATION", "A_FIXED_PARAMETERS"],
+      "derivation": "Use the two reported within-group population OLS slopes [-0.5499999999999999,0.85] with linear conditional means. Preserve the g-by-x interaction. Source Cov(x,y)=0.5*(-0.55)*1+0.5*0.85*1=0.15. It is not appropriate to use pooled covariance 0.15 as both group slopes."
+    },
+    "y_group_residual_sd": {
+      "evidence_ids": ["E_G0_RESIDUAL_SD", "E_G1_RESIDUAL_SD", "E_Y_SD"],
+      "assumption_ids": ["A_TASK_POPULATION", "A_FIXED_PARAMETERS"],
+      "derivation": "Use residual SDs [0.8,0.8] from S2, with conditional variance 0.64 for all x. Combined with the slopes and intercepts, source Var(y)=0.5*(0.55^2+0.8^2)+0.5*(0.85^2+0.8^2)+0.25*(1.0-0.4)^2=1.2425, whose square root is the reported 1.1146748404803977. Marginal y SD is not the residual SD."
+    },
+    "x_family": {
+      "evidence_ids": ["E_G0_X_MEAN", "E_G1_X_MEAN", "E_G0_X_SD", "E_G1_X_SD"],
+      "assumption_ids": ["A_X_NORMAL"],
+      "derivation": "Choose normal conditional distributions as a single parsimonious moment-constrained completion. The supplied source states no distribution family; thresholds and quantiles depend on this added choice."
+    },
+    "residual_family": {
+      "evidence_ids": ["E_G0_RESIDUAL_SD", "E_G1_RESIDUAL_SD"],
+      "assumption_ids": ["A_RESIDUAL_NORMAL"],
+      "derivation": "Choose a normal zero-mean residual family at each x,g using the reported SD. A residual SD and linear mean do not identify this family."
+    },
+    "dependence_model": {
+      "evidence_ids": ["E_G0_Y_INTERCEPT", "E_G1_Y_INTERCEPT", "E_G0_Y_SLOPE", "E_G1_Y_SLOPE", "E_G0_RESIDUAL_SD", "E_G1_RESIDUAL_SD"],
+      "assumption_ids": ["A_IID", "A_X_NORMAL", "A_RESIDUAL_NORMAL", "A_FIXED_PARAMETERS"],
+      "derivation": "Draw independent standard normal x and residual innovations and map by g. Then y=a_g+b_g*x+sigma_g*epsilon has exactly the supplied conditional mean and variance at the population level. Full independence is a declared completion beyond those moment constraints."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_IDENTIFIER"],
+      "derivation": "Arbitrary prefix plus one-based row number gives unique string identifiers without implying external records."
+    }
+  }
+}

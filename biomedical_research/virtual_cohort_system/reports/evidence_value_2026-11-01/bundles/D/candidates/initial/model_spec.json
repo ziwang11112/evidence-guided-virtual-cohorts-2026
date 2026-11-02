@@ -1,0 +1,98 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "g_probability": 0.75,
+    "x_mean_by_g": [0.0, 0.0],
+    "x_sd_by_g": [1.0, 1.0],
+    "y_intercept_by_g": [0.4, 1.0],
+    "y_slope_by_g": [0.85, -0.5499999999999999],
+    "residual_sd_by_g": [0.8, 0.8],
+    "x_family": "normal",
+    "residual_family": "normal",
+    "sampling_scheme": "iid_rows_independent_latent_draws",
+    "uncertainty_mode": "fixed_parameters_unquantified_structural_uncertainty"
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK_DESIGN",
+      "description": "Task-mandated design, recorded here because the provenance schema has no task-reference field: exactly 3000 rows and population Pr(g=1)=0.75, with independent Bernoulli sampling rather than an exact group quota. g,x,y are dimensionless and no observations are supplied."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Task-stipulated artificial transport premise: the complete within-g joint law of x,y is invariant between source and target; only Pr(g=1) changes from 0.5 to 0.75. This is a supplied fictional premise, not empirical transport evidence."
+    },
+    {
+      "id": "A_X_NORMAL",
+      "description": "Assume x|g is Gaussian with the supplied conditional mean and SD. This is a distributional completion of moments, not a reported family. Using the same Gaussian family in both groups makes x independent of g, which is stronger than the reported equal first two moments and zero covariance. Other shapes, including group-dependent shapes with the same moments, remain possible."
+    },
+    {
+      "id": "A_RESIDUAL_NORMAL",
+      "description": "Assume y=a_g+b_g*x+epsilon, with epsilon|x,g Gaussian of mean zero and supplied SD 0.8. This supplies a full conditional error distribution beyond the reported linear conditional mean and constant conditional variance; the normal family and absence of higher-order dependence on x are assumptions. Independent standard-normal latent draws implement this choice."
+    },
+    {
+      "id": "A_IID",
+      "description": "Rows are independent identically distributed draws from the stipulated target population. No clustering, longitudinal dependence, selection, missingness or finite-population sampling is modeled. Row identifiers are deterministic unique labels with no scientific meaning."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Supplied numbers are exact artificial population functionals, so no sampling SE or parameter posterior is invented. Between-row and between-seed variability describe individual variation and finite-table sampling only. Distributional and transport uncertainty are unquantified; seeds do not explore alternative scientific assumptions. All records originate from one artificial source population and are not independent replications."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK_DESIGN"],
+      "derivation": "Copied from task.json n_rows; an output requirement rather than an inferred scientific parameter."
+    },
+    "g_probability": {
+      "evidence_ids": ["E_G_MEAN", "E_G_SD"],
+      "assumption_ids": ["A_TASK_DESIGN", "A_TRANSPORT"],
+      "derivation": "Use the target task's 0.75 in a Bernoulli law. Source probability 0.5 and SD 0.5 describe the source and are not substituted for the target probability."
+    },
+    "x_mean_by_g": {
+      "evidence_ids": ["E_G0_X_MEAN", "E_G1_X_MEAN", "E_X_MEAN", "E_COV_G_X"],
+      "assumption_ids": ["A_TRANSPORT"],
+      "derivation": "Array indices are g=0,1. Copy the two conditional means 0 and 0 from S2. Equal group means imply the S1 mean 0 and Cov(g,x)=0 under the source mixture."
+    },
+    "x_sd_by_g": {
+      "evidence_ids": ["E_G0_X_SD", "E_G1_X_SD", "E_X_SD"],
+      "assumption_ids": ["A_TRANSPORT"],
+      "derivation": "Copy conditional population SDs 1 and 1. Their variances plus zero between-group x-mean variance yield source marginal Var(x)=1. SDs are individual dispersion, not standard errors."
+    },
+    "y_intercept_by_g": {
+      "evidence_ids": ["E_G0_Y_INTERCEPT", "E_G1_Y_INTERCEPT", "E_Y_MEAN", "E_COV_G_Y"],
+      "assumption_ids": ["A_TRANSPORT"],
+      "derivation": "Copy conditional linear intercepts 0.4 and 1.0 from S2. Conditional x means are zero, giving source E(y)=0.5*(0.4+1)=0.7 and Cov(g,y)=0.25*(1-0.4)=0.15."
+    },
+    "y_slope_by_g": {
+      "evidence_ids": ["E_G0_Y_SLOPE", "E_G1_Y_SLOPE", "E_COV_X_Y"],
+      "assumption_ids": ["A_TRANSPORT"],
+      "derivation": "Copy the population OLS slopes 0.85 and -0.5499999999999999. The stated linear conditional means permit them to specify E(y|x,g). Source Cov(x,y)=0.5*(0.85*1+(-0.55)*1)=0.15; no common pooled slope is imposed."
+    },
+    "residual_sd_by_g": {
+      "evidence_ids": ["E_G0_RESIDUAL_SD", "E_G1_RESIDUAL_SD", "E_Y_SD"],
+      "assumption_ids": ["A_TRANSPORT"],
+      "derivation": "Copy residual population SDs 0.8 and 0.8. Source Var(y)=0.5*(0.85^2+0.8^2)+0.5*((-0.55)^2+0.8^2)+0.25*(1-0.4)^2=1.2425; its square root is the reported marginal SD. Marginal y SD is not reused as residual SD."
+    },
+    "x_family": {
+      "evidence_ids": ["E_G0_X_MEAN", "E_G0_X_SD", "E_G1_X_MEAN", "E_G1_X_SD"],
+      "assumption_ids": ["A_X_NORMAL"],
+      "derivation": "Choose a Gaussian completion with the supplied conditional moments; no source quantiles, shape or full x distribution is reported."
+    },
+    "residual_family": {
+      "evidence_ids": ["E_G0_Y_INTERCEPT", "E_G0_Y_SLOPE", "E_G0_RESIDUAL_SD", "E_G1_Y_INTERCEPT", "E_G1_Y_SLOPE", "E_G1_RESIDUAL_SD"],
+      "assumption_ids": ["A_RESIDUAL_NORMAL"],
+      "derivation": "Choose Gaussian conditional errors to complete the specified first two conditional moments. Residual SD alone does not establish Gaussian errors, independence or tail probabilities."
+    },
+    "sampling_scheme": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK_DESIGN", "A_X_NORMAL", "A_RESIDUAL_NORMAL", "A_IID"],
+      "derivation": "Draw g from Bernoulli(0.75), then independent normal latent variables for x and its y residual on every row. Do not rescale, balance groups, or select seeds to force sample functionals to population values."
+    },
+    "uncertainty_mode": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_UNCERTAINTY"],
+      "derivation": "Fix supplied exact moment values and the declared distributional completion across seeds; distinguish finite-table randomness from unresolved scientific uncertainty."
+    }
+  }
+}

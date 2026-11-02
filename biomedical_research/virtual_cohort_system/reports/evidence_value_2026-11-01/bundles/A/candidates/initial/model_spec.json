@@ -1,0 +1,90 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "probability_g1": 0.75,
+    "distribution_family": "bivariate_normal",
+    "x_mean_by_g": [0.0, 0.0],
+    "y_mean_by_g": [0.0, 0.0],
+    "x_sd_by_g": [1.0, 1.0],
+    "y_sd_by_g": [1.0, 1.0],
+    "xy_correlation_by_g": [0.0, 0.0],
+    "parameter_uncertainty": "fixed_scenario"
+  },
+  "assumptions": [
+    {
+      "id": "task_design",
+      "description": "The task supplies n=3000 and target Pr(g=1)=0.75. These are design constraints rather than source evidence. This assumption record carries their provenance because the contract has no separate task-reference field. Group counts are stochastic, not fixed quotas; the task stipulates invariant within-group laws between any source and target."
+    },
+    {
+      "id": "iid_rows",
+      "description": "Rows are independent draws from the chosen population law. The task supplies no clustering, temporal dependence, measurement error, selection or missingness mechanism. IID sampling is an implementation assumption; identifiers are deterministic labels without scientific content."
+    },
+    {
+      "id": "normal_shape",
+      "description": "Conditional on g, (x,y) is bivariate Gaussian on all real values. This shape, its continuous unbounded support and its Gaussian tail behavior are unsupported prior choices. They are selected as a simple reference distribution, not inferred from dimensionless units."
+    },
+    {
+      "id": "reference_location_scale",
+      "description": "In both groups x and y have mean zero and population SD one. No location or scale statistic is supplied. Centering at zero and choosing unit individual dispersion are arbitrary reference conventions, not standardizations of observed data or estimated facts."
+    },
+    {
+      "id": "no_group_contrast",
+      "description": "Both groups share the same conditional x,y law. Thus g is independent of (x,y) in this candidate. An unreported group association is explicitly set to zero for a symmetric reference scenario; absent evidence does not establish that choice. The task's transport stipulation alone does not imply equal laws across groups."
+    },
+    {
+      "id": "zero_xy_association",
+      "description": "Within each group the Pearson correlation of x and y is assumed zero. Combined with the Gaussian joint-shape assumption this also imposes independence and zero conditional slopes. No relationship statistic supports zero; positive, negative, nonlinear and group-dependent relationships remain unidentified alternatives."
+    },
+    {
+      "id": "fixed_assumptions",
+      "description": "All parameters and structural assumptions remain fixed between seeds. Random innovations represent individual variation and finite-cohort sampling only. There is no evidence-based probability distribution for epistemic uncertainty, so no parameter posterior or random assumed parameter draw is invented. Other parameter or distribution choices are sensitivity scenarios, not calibrated uncertainty intervals."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["task_design", "iid_rows"],
+      "derivation": "Exactly 3000 rows from task.json; no source-statistic derivation."
+    },
+    "probability_g1": {
+      "evidence_ids": [],
+      "assumption_ids": ["task_design", "iid_rows"],
+      "derivation": "Use the task's population probability 0.75 directly in an IID Bernoulli draw. Do not enforce a realized count of 2250."
+    },
+    "distribution_family": {
+      "evidence_ids": [],
+      "assumption_ids": ["normal_shape", "iid_rows"],
+      "derivation": "Chosen prior-only Gaussian reference law; no source functional identifies a distribution."
+    },
+    "x_mean_by_g": {
+      "evidence_ids": [],
+      "assumption_ids": ["reference_location_scale", "no_group_contrast"],
+      "derivation": "Assume E[x|g=0]=E[x|g=1]=0; array entries index groups 0 then 1."
+    },
+    "y_mean_by_g": {
+      "evidence_ids": [],
+      "assumption_ids": ["reference_location_scale", "no_group_contrast"],
+      "derivation": "Assume E[y|g=0]=E[y|g=1]=0; array entries index groups 0 then 1."
+    },
+    "x_sd_by_g": {
+      "evidence_ids": [],
+      "assumption_ids": ["reference_location_scale", "no_group_contrast"],
+      "derivation": "Assume SD(x|g)=1 in both groups. This is individual population dispersion, not a standard error."
+    },
+    "y_sd_by_g": {
+      "evidence_ids": [],
+      "assumption_ids": ["reference_location_scale", "no_group_contrast"],
+      "derivation": "Assume SD(y|g)=1 in both groups. This is individual population dispersion, not parameter uncertainty."
+    },
+    "xy_correlation_by_g": {
+      "evidence_ids": [],
+      "assumption_ids": ["zero_xy_association", "normal_shape", "no_group_contrast"],
+      "derivation": "Choose rho=0 for both groups. Given independent standard-normal z1,z2, x=mu_x+sd_x*z1 and y=mu_y+sd_y*(rho*z1+sqrt(1-rho^2)*z2) realize the specified conditional Gaussian moments algebraically."
+    },
+    "parameter_uncertainty": {
+      "evidence_ids": [],
+      "assumption_ids": ["fixed_assumptions"],
+      "derivation": "The packet provides no source data, estimates or sampling uncertainty. Use one declared scenario and do not confuse random rows with knowledge about unknown parameters."
+    }
+  }
+}
