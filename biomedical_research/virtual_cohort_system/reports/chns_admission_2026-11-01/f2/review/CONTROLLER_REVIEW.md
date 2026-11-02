@@ -1,0 +1,32 @@
+# Independent static review: CHNS F2 controller
+
+1 November 2026. **PASS for the reviewed bounded controller implementation.** No blocking routing, schedule, review-binding or overwrite defect was found. This is static review plus inspection of implementing-team test code/results; it does not certify a real packet, run a constructor or demonstrate live isolated-runtime integration.
+
+| Reviewed file | SHA-256 |
+|---|---|
+| `f2/controller/chns_f2_controller.py` | `b4b849692045a873d2e16585c623af942a5dc0b0ffd705472c88107752d0bedb` |
+| Project `tests/test_chns_f2_controller.py` | `0a83883aad3a2c76f079d1740f47278f5a845aafb86e23ef2492fe74988010e0` |
+
+## Checks performed
+
+- **Release binding precedes work.** `_release` checks the released status, exact schedule/limits, controller and engine hashes, task hash/schema/whole-cohort shape, absence of `observed.csv`, referenced protocol/analysis/brief/policy hashes and independent-review payload. The review covers all release fields apart from its own circular reference. Declared reviewer/coordinator names must differ; this is a procedural declaration, not authentication.
+- **Candidate review precedes freeze.** `_candidate_preflight` verifies the independent candidate review and every candidate-file hash apart from the review/binding files themselves; fixed evidence, recipe and semantic-sidecar hashes; required interpretation assumptions; strict preflight; and selected-or-explicitly-declined proxy accounting. Conditional preflight is invoked only for an enabled plan. The lifecycle then freezes the full artifact set including review and controller binding. Existing `_files` deliberately excludes `freeze.json`, so post-freeze verification does not spuriously change the candidate review's file set.
+- **Budget and overwrite handling are explicit.** Only C1/C2 and initial/revised stages exist; each uses exactly seeds 1701/1702/1703. Stage directory creation and exclusive JSON writes prevent two calls from silently sharing a reservation. A partial freeze or started execution cannot be retried under the same stage. The run reservation consumes all three stage slots before launching; interrupted or failed execution does not unlock new seeds. This is a single-bundle procedural budget, not host-wide access control against an actor creating unrelated bundles.
+- **Execution and feedback order matches the actual APIs.** The controller calls the existing isolated `execution.run_candidate`, verifies its receipt, then explicitly calls strict v1 collect/verify. Only successful verified output may enter feedback. Optional conditional collect/verify binds the preceding strict report. There is no legacy collection fallback. Existing `strict.legacy` helpers are used for engine identity and fixed plan naming, not as a replacement feedback path.
+- **Failures stay visible.** Exceptions are captured per seed; no retry or substitute scientific candidate is invented. A failed seed has unavailable feedback. All seed results, error records and feedback reports enter the round; there is no average loss, best-seed selection or target-performance calculation. A strict/conditional failure cannot silently become a successful old-collector result.
+- **Revision requires the complete initial round.** `revision_feedback` checks the exact initial-stage artifact set, reservation, three seed records, hashes, available execution receipts and feedback verifications. The revised candidate must contain the identical complete feedback-round bytes and a reviewed revision description; lifecycle parent linkage enforces the one-revision budget and revise-versus-retain semantics. An interrupted incomplete round does not unlock revision.
+- **Direct rows remain valid with limited claims.** The existing lifecycle/execution route supports direct tables; the round explicitly labels reused direct rows as lacking Monte Carlo replication. No source-context generation or extra calibration table is created by this controller.
+
+The existing execution and feedback function signatures, receipt field names and lifecycle file/parent rules were read directly. Their current hashes were checked: strict v1 `9599e57e1e77f43fd34c249c420e1ef37da755abc13530a6f1a25a215b3393b7`; conditional v1 `02241f61966f9e4bcca688226097ec0695cd2ae934e6769c549929b8622dc010`; execution `194a471f61e119dae9f8069dc976e070988545eb2e2ccbff84305cc84ddb238d`; lifecycle `01688ffce3972053bab631c19e1f7a7bb941c53af1a5a658dfff0ecad401fee4`. No changes to those files were made by this review.
+
+## Test evidence and limits
+
+The implementing team reports **11 new focused tests passed in 1.14 seconds after its implementation fix**. The reviewer inspected those tests but did not run or import them. They use invented metadata and mocked lifecycle, runtime and feedback adapters. They exercise release/hash gates, exact call order, fixed seeds/limits, failure accounting, the twelve-slot ceiling, revision binding, altered recipes/assumptions/code, documented proxy decline, direct-table labelling, interruption and feedback tampering. They do not test a live WSL invocation, biomedical generator, target sample, real evidence compilation or actual candidate approval. No old passed suite was repeated by this reviewer.
+
+No patient-data read, source search/download, original-study read, scientific table or clinical effect was produced. Hash commitments and approval records are not signatures or proof against a host rewriting both receipts and their artifacts; Agent context isolation remains procedural while the existing sandbox isolates the generator process.
+
+## Integration obligations retained
+
+The exact source packet, fixed recipe/semantic sidecar, interpretation policy and independent release payload still need concrete approval and schema validation before construction. Candidate-specific approvals must be produced from actual reviewed candidates, never copied from the invented tests. Before clinical evaluation, the separate evaluator and complete final inventory must be independently checked and bound as required by the protocol.
+
+The test file currently loads its controller under project `work/chns_admission_2026-11-01/f2/controller`. If curated public export relocates that directory to `reports`, adapt the exported dependency path explicitly and record that transformation; otherwise public tests would point at a missing module. This is an export integration issue, not a local controller defect. This PASS covers the hashes above and does not automatically approve later code or release changes.

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "strict_recipe_sha256": "e62a712e48fe5d503ddc0fd9aa7615e6f830bdbc669c022c496afbd9cab0d6c2",
+  "strict_semantics_sha256": "bca9a2046e7087536cb9df230ce3947320a4150ac41870bb0394f740189485fd",
+  "required_assumptions": [
+    {
+      "id": "A_BAO_EQUAL_WEIGHT_INTERPRETATION",
+      "description": "Bao names Pearson correlation but original analytic weighting is unreported. For this optional target-task proxy only, interpret the reported coefficient using the conventional equal-weight Pearson functional. This is an approved assumption, not a claim that original weights were none; strict weighting remains not_reported."
+    },
+    {
+      "id": "A_MIND_EQUAL_WEIGHT_INTERPRETATION",
+      "description": "MIND names Spearman correlation but original analytic weighting is unreported. For this optional target-task proxy only, interpret the reported coefficient using conventional equal-weight Spearman. This is an approved assumption, not a claim that original weights were none; strict weighting remains not_reported."
+    },
+    {
+      "id": "A_COMPLETE_GENERATED_ANALYSIS_VALUES",
+      "description": "The proxy computes the named correlation functional on the complete generated target-task analysis values. missing_policy=error is the generated-input guard, not a statement about original source missing-data processing. Bao's original correlation missingness is unreported; MIND reports mean/mode imputation without field-specific effects. No original exclusions, missingness mechanism or imputation is replayed. If this post-analysis-functional interpretation is not accepted, decline the affected proxy rather than rewrite source metadata."
+    },
+    {
+      "id": "A_BAO_TARGET_PROXY_TRANSPORT",
+      "description": "Bao's selected Shanghai population excludes previously diagnosed diabetes and other conditions, uses source plasma glucose and a distinct HbA1c assay, and is not age-harmonized with the task's prospectively chosen age35-74 released-data subset. Compute only a labelled target-task proxy; serum/plasma, assay, calendar, selection, age composition and timing differences remain unquantified. No source-population replay, source/target measurement identity or target accuracy follows."
+    },
+    {
+      "id": "A_MIND_TARGET_PROXY_TRANSPORT",
+      "description": "MIND's selected rural population aged61-80, demographics/BMI2018, laboratory2019, imputation and known-history inclusion differ from the task. Selected source glucose is serum FSG, but instrument/site/handling are not CHNS-identical. Only part of the age range overlaps. Compute a labelled task proxy with these limitations; no individual serum/plasma correction, source-population replay or target-accuracy claim follows."
+    },
+    {
+      "id": "A_MIND_AVERAGE_TIE_INTERPRETATION",
+      "description": "For the optional MIND Spearman proxy, rank the complete generated pairs with average ranks for ties and calculate Pearson correlation of those ranks. The original paper's tie convention is not established by the retained audit. This is the explicit conventional interpretation, not a claim to reproduce its exact ranking implementation."
+    }
+  ],
+  "conditional_interpretations": [
+    {
+      "id": "I_BAO_PEARSON_TARGET_PROXY",
+      "strict_check_id": "bao_pearson_glucose_hba1c",
+      "evidence_id": "E_BAO_PEARSON_GLUCOSE_HBA1C",
+      "source_id": "S_BAO_2010",
+      "source_identifier": "doi:10.1136/bmj.c2249",
+      "source_locator": "Methods Statistical analysis; Results paragraph following Table1; https://www.bmj.com/content/340/bmj.c2249",
+      "named_estimator": "Pearson",
+      "operator": {
+        "kind": "correlation",
+        "unit": "1",
+        "selection": [],
+        "missing_policy": "error",
+        "x": "glucose",
+        "y": "hba1c"
+      },
+      "equal_weight_assumption_id": "A_BAO_EQUAL_WEIGHT_INTERPRETATION",
+      "applicability_assumption_ids": [
+        "A_COMPLETE_GENERATED_ANALYSIS_VALUES",
+        "A_BAO_TARGET_PROXY_TRANSPORT"
+      ],
+      "reason": "Optional conditional source-interpretation target proxy, pending independent approval. Decline if inapplicable; do not change original weighting or claim original missingness/tie/imputation handling was recovered. No source-context table or held-out scientific coefficient is evaluated."
+    },
+    {
+      "id": "I_MIND_SPEARMAN_TARGET_PROXY",
+      "strict_check_id": "mind_spearman_serum_glucose_hba1c",
+      "evidence_id": "E_MIND_SPEARMAN_SERUM_GLUCOSE_HBA1C",
+      "source_id": "S_MIND_2024",
+      "source_identifier": "doi:10.1371/journal.pone.0296694",
+      "source_locator": "Methods Statistical analysis; Results glycemic correlations, full analysis sample",
+      "named_estimator": "Spearman",
+      "operator": {
+        "kind": "spearman_correlation",
+        "unit": "1",
+        "selection": [],
+        "missing_policy": "error",
+        "x": "glucose",
+        "y": "hba1c"
+      },
+      "equal_weight_assumption_id": "A_MIND_EQUAL_WEIGHT_INTERPRETATION",
+      "applicability_assumption_ids": [
+        "A_COMPLETE_GENERATED_ANALYSIS_VALUES",
+        "A_MIND_TARGET_PROXY_TRANSPORT",
+        "A_MIND_AVERAGE_TIE_INTERPRETATION"
+      ],
+      "reason": "Optional conditional source-interpretation target proxy, pending independent approval. Decline if inapplicable; do not change original weighting or claim original missingness/tie/imputation handling was recovered. No source-context table or held-out scientific coefficient is evaluated."
+    }
+  ]
+}
+

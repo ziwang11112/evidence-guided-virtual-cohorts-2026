@@ -1,0 +1,450 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "column_order": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "units": {
+      "row_id": "identifier",
+      "age": "year",
+      "female": "1",
+      "bmi": "kg/m^2",
+      "glucose": "mmol/L",
+      "hba1c": "%"
+    },
+    "model_family": "conditional_two_component_bivariate_lognormal",
+    "age_min": 35,
+    "age_max": 74,
+    "age_beta_alpha": 2.0,
+    "age_beta_beta": 2.0,
+    "female_probability": 0.6,
+    "age_reference": 55.0,
+    "bmi_reference": 24.0,
+    "female_reference": 0.6,
+    "bmi_reference_median": 24.0,
+    "bmi_log_sd": 0.14,
+    "bmi_age_log_quadratic": -0.0001,
+    "bmi_female_log_shift": 0.0125,
+    "elevated_probability_reference": 0.08,
+    "elevated_age_logodds_slope": 0.025,
+    "elevated_bmi_logodds_slope": 0.12,
+    "elevated_female_logodds_slope": 0.0,
+    "glucose_reference_medians": [
+      5.1,
+      7.5
+    ],
+    "hba1c_reference_medians": [
+      5.6,
+      6.8
+    ],
+    "glucose_log_sds": [
+      0.1,
+      0.2
+    ],
+    "hba1c_log_sds": [
+      0.06,
+      0.14
+    ],
+    "glucose_age_log_slope": 0.0015,
+    "glucose_bmi_log_slope": 0.008,
+    "glucose_female_log_slope": -0.012,
+    "hba1c_age_log_slope": 0.001,
+    "hba1c_bmi_log_slope": 0.001,
+    "hba1c_female_log_slope": 0.0,
+    "glycemic_residual_correlations": [
+      0.4,
+      0.4
+    ],
+    "innovation_law": "independent standard normal draws except explicitly coupled paired glycemic innovations; independent uniform mixing draw",
+    "continuous_output_policy": "positive_log_support_no_clipping_no_rounding_no_missingness",
+    "uncertainty_mode": "fixed_parameter_single_scenario",
+    "row_id_prefix": "C2F2_",
+    "row_id_digits": 5
+  },
+  "assumptions": [
+    {
+      "id": "A_BAO_EQUAL_WEIGHT_INTERPRETATION",
+      "description": "Bao names Pearson correlation but original analytic weighting is unreported. For this optional target-task proxy only, interpret the reported coefficient using the conventional equal-weight Pearson functional. This is an approved assumption, not a claim that original weights were none; strict weighting remains not_reported."
+    },
+    {
+      "id": "A_MIND_EQUAL_WEIGHT_INTERPRETATION",
+      "description": "MIND names Spearman correlation but original analytic weighting is unreported. For this optional target-task proxy only, interpret the reported coefficient using conventional equal-weight Spearman. This is an approved assumption, not a claim that original weights were none; strict weighting remains not_reported."
+    },
+    {
+      "id": "A_COMPLETE_GENERATED_ANALYSIS_VALUES",
+      "description": "The proxy computes the named correlation functional on the complete generated target-task analysis values. missing_policy=error is the generated-input guard, not a statement about original source missing-data processing. Bao's original correlation missingness is unreported; MIND reports mean/mode imputation without field-specific effects. No original exclusions, missingness mechanism or imputation is replayed. If this post-analysis-functional interpretation is not accepted, decline the affected proxy rather than rewrite source metadata."
+    },
+    {
+      "id": "A_BAO_TARGET_PROXY_TRANSPORT",
+      "description": "Bao's selected Shanghai population excludes previously diagnosed diabetes and other conditions, uses source plasma glucose and a distinct HbA1c assay, and is not age-harmonized with the task's prospectively chosen age35-74 released-data subset. Compute only a labelled target-task proxy; serum/plasma, assay, calendar, selection, age composition and timing differences remain unquantified. No source-population replay, source/target measurement identity or target accuracy follows."
+    },
+    {
+      "id": "A_MIND_TARGET_PROXY_TRANSPORT",
+      "description": "MIND's selected rural population aged61-80, demographics/BMI2018, laboratory2019, imputation and known-history inclusion differ from the task. Selected source glucose is serum FSG, but instrument/site/handling are not CHNS-identical. Only part of the age range overlaps. Compute a labelled task proxy with these limitations; no individual serum/plasma correction, source-population replay or target-accuracy claim follows."
+    },
+    {
+      "id": "A_MIND_AVERAGE_TIE_INTERPRETATION",
+      "description": "For the optional MIND Spearman proxy, rank the complete generated pairs with average ranks for ties and calculate Pearson correlation of those ranks. The original paper's tie convention is not established by the retained audit. This is the explicit conventional interpretation, not a claim to reproduce its exact ranking implementation."
+    },
+    {
+      "id": "A_TASK_OUTPUT",
+      "description": "Generate 3000 fictional, complete analysis rows for the admitted whole-cohort task, with observed=None, exact task columns and units, integer ages35-74 and female indicator0/1. No participant values, source context table, diagnosis indicator, survey weights, or selection mechanism are reconstructed."
+    },
+    {
+      "id": "A_MODEL_FAMILY",
+      "description": "Use a generative joint distribution: rounded bounded beta age; Bernoulli sex independent of age; conditional lognormal BMI; a latent two-component glycemic mixture whose mixing probability depends on age and BMI; component-specific bivariate lognormal glucose/HbA1c. This parametric joint law is assumed, not identified by the source summaries. Innovations are independent except the explicitly modelled paired glycemic residuals."
+    },
+    {
+      "id": "A_AGE_COMPOSITION",
+      "description": "Age equals floor(35+40*U), U~Beta(2,2). This midpoint-concentrated age35-74 composition is a transparent reference scenario, not a transported source age distribution or an estimate of the selected target composition."
+    },
+    {
+      "id": "A_SEX_COMPOSITION",
+      "description": "Female probability0.60 is an assumed composition, near the two external unweighted female count ratios. Neither source count ratio is target composition, a weighted fraction, or a precision weight. Age and female are independent by parsimony; their target dependence is unknown."
+    },
+    {
+      "id": "A_BMI_LAW",
+      "description": "Conditional BMI is lognormal, reference median24kg/m^2 and log SD0.14, with log-median age curvature -0.00010*(age-55)^2 and sex shift0.0125*(female-0.60). These values use Bao median23.5/quartile context and MIND mean25/individual SD3.6 only as broad scale context; no quartile-to-normal-SD or SD-to-SE conversion, pooled source fit or target moment matching is claimed. The midlife maximum and sex shift are unreported joint assumptions."
+    },
+    {
+      "id": "A_GLYCEMIC_MIXTURE",
+      "description": "An unobserved elevated glycemic distribution component has reference probability0.08 at age55 and BMI24, modified by log-odds slopes0.025/year and0.12/(kg/m^2), with sex slope0. It represents heterogeneity and upper tails, not diagnosed diabetes, treatment status, or a validated disease prevalence. Component probabilities and risk gradients are invented assumptions; no task diabetes exclusions are imposed."
+    },
+    {
+      "id": "A_GLYCEMIC_LEVELS",
+      "description": "Reference component medians are glucose[5.10,7.50]mmol/L and HbA1c[5.60,6.80]%. Component log SDs are glucose[0.10,0.20], HbA1c[0.06,0.14]. All are assumed component-specific quantities. Bao central values and MIND broad marginal dispersion motivate scale and upper-tail heterogeneity but report no such components or residual SDs. No marginal source SD is labelled residual SD; no source mean is treated as a median."
+    },
+    {
+      "id": "A_CONDITIONAL_GLYCEMIC_SHIFTS",
+      "description": "Conditional log-median glucose shifts by0.0015/year,0.008/(kg/m^2),-0.012 per female indicator; conditional log-median HbA1c shifts by0.001/year,0.001/(kg/m^2),0 per female indicator. These are model assumptions about remaining variation within a mixture component. Pani age and Jansen separate projections provide contextual motivation only; their coefficients are not assigned, converted into these parameters, concatenated, fitted, or held as numeric constraints. Zero sex slopes are parsimony assumptions, not evidence of no association."
+    },
+    {
+      "id": "A_RESIDUAL_DEPENDENCE",
+      "description": "The paired standard-normal residuals have Pearson correlation0.40 within each component conditional on age, female, BMI and latent component. This unreported conditional log-scale correlation is assumed. Bao unadjusted raw Pearson0.619 and MIND unadjusted Spearman0.529 motivate positive shared variation but are neither equal to this residual parameter nor mutually exchangeable. Shared mixing and covariates additionally induce dependence; resulting target-task correlations are uncalibrated."
+    },
+    {
+      "id": "A_MEASUREMENT_TRANSPORT",
+      "description": "Generated glucose is labelled task central serum mmol/L and HbA1c task whole-blood percent. External source levels inform a scenario without a numeric serum/plasma, assay, calendar or timing conversion. Bao plasma and MIND serum are not declared interchangeable measurements; missingness, imputation, fasting adherence, treatment, pregnancy, anemia and unmeasured clinical factors can alter the selected target distribution."
+    },
+    {
+      "id": "A_SOURCE_CONTEXT_ONLY",
+      "description": "All source projections and marginal summaries remain context. Unknown analytic weights, pair or model n, sampling SE/CI, quantile convention, source imputation effects and individual source/target overlap remain unknown. Sources are not pooled by sample size or counted as independent parameter precision. NGSP scale guidance is retained but no HbA1c coefficient conversion is used in this model."
+    },
+    {
+      "id": "A_UNCERTAINTY_SCOPE",
+      "description": "Parameters are fixed for this single assumed scenario. Seed variation represents conditional Monte Carlo variation among fictional people, not evidence uncertainty, transport uncertainty, posterior draws, empirical confidence intervals, or new clinical evidence. No parameter priors or calibrated structural uncertainty are asserted."
+    },
+    {
+      "id": "A_SUPPORT_AND_PRECISION",
+      "description": "Positive lognormal supports are used for BMI, glucose and HbA1c, with no artificial clinical threshold clipping, diagnosis-based exclusion, rounding of continuous laboratory values, or generated missingness. Lognormal tails and unmeasured subgroups are unvalidated. Age alone is discretized to the task integer format; identifiers have no scientific content."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT"
+      ],
+      "derivation": "Exact admitted task.n_rows; no source sample-size substitution."
+    },
+    "column_order": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT"
+      ],
+      "derivation": "Exact admitted task column order."
+    },
+    "units": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT",
+        "A_MEASUREMENT_TRANSPORT"
+      ],
+      "derivation": "Task output units; no specimen conversion or HbA1c scale transformation."
+    },
+    "model_family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_MODEL_FAMILY"
+      ],
+      "derivation": "Distributional construction assumed from incomplete external marginal and association evidence."
+    },
+    "age_min": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT",
+        "A_AGE_COMPOSITION"
+      ],
+      "derivation": "Task lower age bound, used in floor(min+(max-min+1)*Beta(alpha,beta))."
+    },
+    "age_max": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT",
+        "A_AGE_COMPOSITION"
+      ],
+      "derivation": "Task upper age bound; numerical endpoint guard preserves inclusive support."
+    },
+    "age_beta_alpha": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE_COMPOSITION"
+      ],
+      "derivation": "Assumed beta shape; no source age distribution or sample weighting inferred."
+    },
+    "age_beta_beta": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE_COMPOSITION"
+      ],
+      "derivation": "Assumed symmetric beta shape; uncertainty in composition remains unresolved."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "E_BAO_FEMALE_COUNT_RATIO",
+        "E_MIND_FEMALE_COUNT_RATIO"
+      ],
+      "assumption_ids": [
+        "A_SEX_COMPOSITION"
+      ],
+      "derivation": "Assumed round reference fraction near Bao3058/4886=0.6258698322 and MIND2049/3547=0.5776712715; not pooled or precision-weighted."
+    },
+    "age_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_BMI_LAW",
+        "A_GLYCEMIC_MIXTURE",
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS"
+      ],
+      "derivation": "Assumed centering age and BMI quadratic peak; not an observed target age moment."
+    },
+    "bmi_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_BMI_LAW",
+        "A_GLYCEMIC_MIXTURE",
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS"
+      ],
+      "derivation": "Assumed centering BMI; does not constrain marginal BMI mean."
+    },
+    "female_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SEX_COMPOSITION"
+      ],
+      "derivation": "Centering constant chosen equal to assumed female probability; arithmetic only."
+    },
+    "bmi_reference_median": {
+      "evidence_ids": [
+        "E_BAO_MEDIAN_BMI",
+        "E_MIND_MEAN_BMI"
+      ],
+      "assumption_ids": [
+        "A_BMI_LAW",
+        "A_MEASUREMENT_TRANSPORT"
+      ],
+      "derivation": "Assumed conditional median between Bao median23.5 and MIND mean25; mean and median are not equated."
+    },
+    "bmi_log_sd": {
+      "evidence_ids": [
+        "E_BAO_MEDIAN_BMI",
+        "E_MIND_MEAN_BMI"
+      ],
+      "assumption_ids": [
+        "A_BMI_LAW",
+        "A_UNCERTAINTY_SCOPE"
+      ],
+      "derivation": "Assumed individual residual log SD; broad scale choice using source contextual dispersion, not a reconstructed SD or SE."
+    },
+    "bmi_age_log_quadratic": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_BMI_LAW"
+      ],
+      "derivation": "Assumed log-median curvature per year squared; unknown target age-BMI dependency."
+    },
+    "bmi_female_log_shift": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_BMI_LAW"
+      ],
+      "derivation": "Assumed log-median shift per female indicator; no source sex-specific BMI difference was supplied."
+    },
+    "elevated_probability_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_GLYCEMIC_MIXTURE"
+      ],
+      "derivation": "Assumed reference component probability; not a source or target diabetes prevalence."
+    },
+    "elevated_age_logodds_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_GLYCEMIC_MIXTURE"
+      ],
+      "derivation": "Assumed component log-odds gradient per year; not inferred from Pani outcome slope."
+    },
+    "elevated_bmi_logodds_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_GLYCEMIC_MIXTURE"
+      ],
+      "derivation": "Assumed component log-odds gradient per kg/m^2; source supplies no mixing regression."
+    },
+    "elevated_female_logodds_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_GLYCEMIC_MIXTURE"
+      ],
+      "derivation": "Explicit parsimony assumption: no direct sex term in mixing probability after age and BMI; not evidence of independence overall."
+    },
+    "glucose_reference_medians": {
+      "evidence_ids": [
+        "E_BAO_MEDIAN_GLUCOSE",
+        "E_MIND_MEAN_GLUCOSE"
+      ],
+      "assumption_ids": [
+        "A_GLYCEMIC_LEVELS",
+        "A_MEASUREMENT_TRANSPORT"
+      ],
+      "derivation": "Assumed conditional component medians in mmol/L. Bao median5.2 and MIND mean5.2 are scale context only; second component is not source-reported."
+    },
+    "hba1c_reference_medians": {
+      "evidence_ids": [
+        "E_BAO_MEDIAN_HBA1C",
+        "E_MIND_MEAN_HBA1C"
+      ],
+      "assumption_ids": [
+        "A_GLYCEMIC_LEVELS",
+        "A_MEASUREMENT_TRANSPORT"
+      ],
+      "derivation": "Assumed conditional component medians in %. First adopts Bao median5.6 as a contextual anchor, not whole-target marginal equality; upper component is unreported."
+    },
+    "glucose_log_sds": {
+      "evidence_ids": [
+        "E_BAO_MEDIAN_GLUCOSE",
+        "E_MIND_MEAN_GLUCOSE"
+      ],
+      "assumption_ids": [
+        "A_GLYCEMIC_LEVELS",
+        "A_UNCERTAINTY_SCOPE"
+      ],
+      "derivation": "Assumed within-component individual residual log SDs; source raw individual SD1.4 is not assigned as residual or estimator uncertainty."
+    },
+    "hba1c_log_sds": {
+      "evidence_ids": [
+        "E_BAO_MEDIAN_HBA1C",
+        "E_MIND_MEAN_HBA1C"
+      ],
+      "assumption_ids": [
+        "A_GLYCEMIC_LEVELS",
+        "A_UNCERTAINTY_SCOPE"
+      ],
+      "derivation": "Assumed within-component individual residual log SDs; no source fitted residual law supplied."
+    },
+    "glucose_age_log_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS"
+      ],
+      "derivation": "Assumed within-component log-median shift per year; no supplied conditional glucose-age coefficient."
+    },
+    "glucose_bmi_log_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS"
+      ],
+      "derivation": "Assumed within-component log-median shift per kg/m^2; no supplied glucose-on-BMI coefficient."
+    },
+    "glucose_female_log_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS"
+      ],
+      "derivation": "Assumed within-component log-median shift per female indicator; no source coding or coefficient transplanted."
+    },
+    "hba1c_age_log_slope": {
+      "evidence_ids": [
+        "E_PANI_AGE_CONTEXT"
+      ],
+      "assumption_ids": [
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS",
+        "A_SOURCE_CONTEXT_ONLY"
+      ],
+      "derivation": "Assumed per-year log-median shift, not Pani0.010 percentage points/year. The source weighted, selected, adjusted association is contextual and no target slope is imposed."
+    },
+    "hba1c_bmi_log_slope": {
+      "evidence_ids": [
+        "E_JANSEN_BMI_CONTEXT",
+        "E_JANSEN_GLUCOSE_CONTEXT",
+        "E_NGSP_SCALE_CONTEXT"
+      ],
+      "assumption_ids": [
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS",
+        "A_SOURCE_CONTEXT_ONLY"
+      ],
+      "derivation": "Assumed per-kg/m^2 log-median shift. Jansen age/gender-adjusted BMI projection is not copied, converted, or concatenated with its separate FPG projection."
+    },
+    "hba1c_female_log_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CONDITIONAL_GLYCEMIC_SHIFTS"
+      ],
+      "derivation": "Explicit assumed zero within-component direct sex shift; other pathways may still induce a sex association."
+    },
+    "glycemic_residual_correlations": {
+      "evidence_ids": [
+        "E_BAO_PEARSON_GLUCOSE_HBA1C",
+        "E_MIND_SPEARMAN_SERUM_GLUCOSE_HBA1C"
+      ],
+      "assumption_ids": [
+        "A_RESIDUAL_DEPENDENCE",
+        "A_GLYCEMIC_MIXTURE"
+      ],
+      "derivation": "Assumed conditional Pearson correlation between standard-normal log-scale residuals in both components. Positive association is context-informed, but neither the source Pearson0.619 nor Spearman0.529 is a residual estimate. No Gaussian-copula or raw-scale conversion is claimed."
+    },
+    "innovation_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_MODEL_FAMILY",
+        "A_RESIDUAL_DEPENDENCE"
+      ],
+      "derivation": "Independent innovations conditional on generated parents and component; z_h=rho*z_g+sqrt(1-rho^2)*z_independent."
+    },
+    "continuous_output_policy": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SUPPORT_AND_PRECISION"
+      ],
+      "derivation": "Exponentiate conditional Gaussian log-values; no clinical clipping or disease threshold logic."
+    },
+    "uncertainty_mode": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_UNCERTAINTY_SCOPE"
+      ],
+      "derivation": "Seeds resample fictional individuals only; no parameter posterior or calibrated transport uncertainty."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT",
+        "A_SUPPORT_AND_PRECISION"
+      ],
+      "derivation": "Engineering identifier prefix; no participant correspondence."
+    },
+    "row_id_digits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK_OUTPUT",
+        "A_SUPPORT_AND_PRECISION"
+      ],
+      "derivation": "Engineering zero-padding width, without scientific content."
+    }
+  }
+}

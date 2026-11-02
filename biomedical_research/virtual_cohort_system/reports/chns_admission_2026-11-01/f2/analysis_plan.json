@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "status": "prospective_for_independent_review",
+  "task_id": "chns-2009-evidence-only-whole-cohort-f2",
+  "information_regime": "whole_cohort_no_individual_input",
+  "target_wave": 2009,
+  "target_age_interval": {
+    "lower": 35,
+    "upper": 74,
+    "inclusive": true,
+    "motivation": "prospectively fixed midlife/older-adult scientific-use scope; not source-age harmonization and not selected from target effects"
+  },
+  "input_files": [
+    {
+      "file": "biomarker_09.sas7bdat",
+      "sha256": "cfef4075d994e3ee30a393695d3b05a8df21fe931037c7d9cd28c8709f2f2948",
+      "key": "IDind",
+      "wave": "wave",
+      "columns": [
+        "GLUCOSE",
+        "HbA1c"
+      ]
+    },
+    {
+      "file": "pexam_00.sas7bdat",
+      "sha256": "2dfc31340d291951db011c3e1f29e996d1f45d99fe086fd0ac6192e31c5fd2da",
+      "key": "IDind",
+      "wave": "WAVE",
+      "columns": [
+        "HEIGHT",
+        "WEIGHT",
+        "CLN_HT",
+        "CLN_WT"
+      ]
+    },
+    {
+      "file": "mast_pub_12.sas7bdat",
+      "sha256": "a34324bd0cc9286b731d461433dcc9ab0185ac36ba5e134c295e7bdcc3693af8",
+      "key": "Idind",
+      "wave": null,
+      "columns": [
+        "GENDER"
+      ]
+    },
+    {
+      "file": "surveys_pub_12.sas7bdat",
+      "sha256": "b34cc95d3c03ed13fc1aa11499eaaa44af6037c1cd60a9ca429715eee13480df",
+      "key": "Idind",
+      "wave": "wave",
+      "columns": [
+        "age",
+        "commid"
+      ]
+    }
+  ],
+  "linkage": {
+    "base": "biomarker_09.sas7bdat",
+    "wave_specific": "inner_one_to_one_ID_wave",
+    "master": "inner_many_to_one_ID",
+    "invalid_or_duplicate_key": "stop_no_silent_deduplication",
+    "key_domain": "finite_integral_exactly_representable_numeric_ID",
+    "component_flags_required": false
+  },
+  "measurement_policy": {
+    "age": "released_years_label_zero_decimal_points_no_reconstruction",
+    "gender_mapping": {
+      "1": 0,
+      "2": 1
+    },
+    "other_gender_codes": "unavailable",
+    "height_unit": "cm",
+    "weight_unit": "kg",
+    "height_weight_flag_exact_9": "set_corresponding_measurement_unavailable",
+    "other_cleaning_flags": "retain_released_value_and_flag",
+    "bmi": "weight/(height/100)^2_for_finite_positive_height_weight_and_result",
+    "glucose": "central_GLUCOSE_mmol/L_no_field_substitution",
+    "hba1c": "HbA1c_percent",
+    "native_missing": "retain",
+    "generic_sentinel_recoding": false,
+    "nonpositive_glycemia": "interpretation_gate_before_any_affected_effect_without_ad_hoc_recode",
+    "undocumented_positive_sentinels": "residual_release_quality_assumption",
+    "fasting_adherence": "not_verified_per_person",
+    "generated_nonpositive_glycemia": "same_interpretation_or_withholding_gate_before_scientific_estimates; no_row_deletion"
+  },
+  "denominator": {
+    "kind": "common_complete_case",
+    "required": [
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "additional_eligibility": [
+      "age_interval",
+      "documented_gender",
+      "fixed_measurement_rules"
+    ],
+    "diabetes_exclusion": false,
+    "treatment_exclusion": false,
+    "pregnancy_exclusion": false,
+    "min_n_for_effects": 100,
+    "insufficient_n_action": "report_eligibility_failure_without_population_change"
+  },
+  "estimands": [
+    {
+      "id": "E1",
+      "operator": "ols_coefficient",
+      "outcome": "hba1c",
+      "predictors": [
+        "age",
+        "female",
+        "bmi"
+      ],
+      "term": "bmi",
+      "intercept": true,
+      "weights": "none",
+      "unit": "%/(kg/m^2)",
+      "source_class": "source_analogous_Jansen; transport_assumption",
+      "feedback": false
+    },
+    {
+      "id": "E2",
+      "operator": "ols_coefficient",
+      "outcome": "hba1c",
+      "predictors": [
+        "age",
+        "female",
+        "glucose"
+      ],
+      "term": "glucose",
+      "intercept": true,
+      "weights": "none",
+      "unit": "%/(mmol/L)",
+      "source_class": "source_analogous_Jansen; measurement_and_transport_assumption",
+      "feedback": false
+    },
+    {
+      "id": "E3",
+      "operator": "ols_coefficient",
+      "outcome": "hba1c",
+      "predictors": [
+        "female",
+        "bmi",
+        "glucose",
+        "age"
+      ],
+      "term": "age",
+      "intercept": true,
+      "weights": "none",
+      "unit": "%/year",
+      "source_class": "related_weighted_Pani; unweighted_target_and_joint_dependence_assumption",
+      "feedback": false
+    }
+  ],
+  "reference_interval": {
+    "method": "community_cluster_sandwich_CR1_t",
+    "level": 0.95,
+    "group": "survey_commid",
+    "group_requirements": "all_analysis_rows_finite_integral_positive",
+    "min_groups": 20,
+    "correction": "G/(G-1)*(n-1)/(n-k)",
+    "degrees_of_freedom": "G-1",
+    "invalid_inference": "retain_unmodified_point_estimate_interval_unavailable_no_IID_fallback",
+    "national_survey_design_claim": false,
+    "k_definition": "number_of_design_columns_including_intercept"
+  },
+  "diagnostics": {
+    "marginal_variables": [
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "marginal_statistics": [
+      "mean",
+      "sample_sd_ddof1",
+      "quantile_0.1_linear",
+      "quantile_0.5_linear",
+      "quantile_0.9_linear"
+    ],
+    "joint": [
+      "pearson_glucose_hba1c",
+      "spearman_glucose_hba1c_average_ties"
+    ],
+    "reference": [
+      "eligibility_flow",
+      "native_missing",
+      "cleaning_flag_counts"
+    ],
+    "fit": [
+      "n",
+      "rank",
+      "condition_number"
+    ],
+    "feedback": false
+  },
+  "interpretation": {
+    "reference_direction": "positive_or_negative_only_if_nominal_interval_excludes_zero_else_inconclusive",
+    "generated_direction_stability": "all_three_planned_seeds_have_valid_coefficients_and_share_nonzero_sign; otherwise_incomplete_or_unresolved",
+    "direction_match": "limited_directional_utility_not_equivalence",
+    "stable_opposite": "failure",
+    "point_differences": "always_report",
+    "reference_interval_membership": "descriptive_only_not_equivalence",
+    "relative_effect_ratio": "only_when_reference_interval_excludes_zero_descriptive",
+    "synthetic_seed_spread": "conditional_MC_only; direct_rows_no_resampling_credit",
+    "global_accuracy_score": false,
+    "best_seed_selection": false
+  },
+  "execution": {
+    "constructions": [
+      "C1",
+      "C2"
+    ],
+    "stages": [
+      "initial",
+      "revised"
+    ],
+    "seeds": [
+      1701,
+      1702,
+      1703
+    ],
+    "max_tables": 12,
+    "rows_each": 3000,
+    "timeout_seconds": 180,
+    "memory_mb": 1024,
+    "max_revisions_each": 1,
+    "new_source_queries": 0,
+    "new_source_downloads": 0,
+    "extra_source_context_tables": 0,
+    "mechanism_tables": 0,
+    "failed_slot_reuse": false
+  },
+  "evaluation_release_required": true,
+  "reference_read_after": "all_candidate_stage_decisions_and_inventory_frozen",
+  "reference_evaluator": "separate_reviewed_implementation_and_invented_checks_before_clinical_access",
+  "independent_recomputation_required": true,
+  "no_post_reveal_tuning": true
+}

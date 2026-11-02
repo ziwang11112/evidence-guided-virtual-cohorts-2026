@@ -1,0 +1,35 @@
+# External evidence for a complete virtual adult cohort
+
+Status: **coordinator explanatory overview, not an actual constructor input**. This review-ready packet reuses audited external sources; it contains no target participant values, target moments, target coefficients or desired target signs. The separately bound task, builder brief, evidence records, five source summaries and fixed machine-policy/templates supply the actual constructor inputs after independent admission. This overview is redundant explanation and stays outside that mount.
+
+## Intended data and scientific use
+
+The intended task is a no-IPD whole-cohort construction of 3,000 synthetic rows representing an age-35-through-74-inclusive, 2009 CHNS released-data population under prospectively specified age/wave/linkage/common-complete-case rules. The clinical columns are `age` (year), `female` (0/1; 1 denotes the documented female category), `bmi` (kg/m^2), `glucose` (mmol/L, the central non-field serum measurement) and `hba1c` (%). The separately supplied task defines identifiers, schema and execution limits. Synthetic n is an engineering setting, not the reference sample size or any source's analysis n.
+
+The broad purpose is to examine whether an evidence-informed complete cohort can support scientific analyses involving adult demographic characteristics, adiposity and glycemia. The constructor chooses a coherent joint model and parameters, documents uncertainty and transport assumptions, and supplies parameter provenance. No particular target relationship, coefficient, direction, source-fit threshold or numerical outcome is prescribed here. The final evaluation specification is separate from this construction packet.
+
+The target is a released-data eligible and observed subset, not automatically untreated, nondiabetic, nonpregnant or nationally representative. Its glucose is serum, not Bao/Jansen/Pani fasting plasma glucose. Known source restrictions must not be silently attributed to the target. Finite target glycemic values and the reference's unresolved nonpositive-value interpretation policy do not supply empirical target margins. Common completeness defines the intended reference population; no observed completeness count is provided.
+
+## Source facts offered for review
+
+Read the authored summaries with their numerical records in [evidence.json](evidence.json):
+
+- [Bao 2010, SHDS II](sources/BAO_2010.md): plasma glucose–HbA1c Pearson correlation; overall medians and quartile endpoints; reported sex counts. The sample excludes previously diagnosed diabetes but retains screen-detected disease. Quantile conventions, analytic weighting and original correlation missingness are not established.
+- [Wang 2024, MIND-China](sources/MIND_2024.md): serum glucose–HbA1c Spearman correlation and selected overall means/individual SDs and sex counts. This older rural selected population has earlier anthropometry, later laboratory testing and reported mean/mode imputation. It is not the target population.
+- [Jansen 2013, Lifelines](sources/JANSEN_2013.md): two separate adjusted source coefficients in native IFCC HbA1c units. They are contextual projections, not a single jointly estimated response equation or an installed target parameter.
+- [Pani 2008, NHANES](sources/PANI_2008.md): a survey-weighted source age coefficient. An unweighted target calculation is a different estimand; strict feedback on this coefficient is unavailable here.
+- [Official NGSP unit guidance](sources/NGSP_UNITS.md): an audited deterministic HbA1c scale relation. It is neither an empirical cohort constraint nor a plasma/serum conversion.
+
+The numeric source estimates retain their original meaning. Source marginal summaries are context for modelling choices, not target-population calibration requirements. SD denotes individual source dispersion where specified; it is not a mean/coefficient SE. Bao's brackets are quartile endpoints, not an SD or confidence interval. Female fractions are explicitly derived from reported female/total counts, rather than reported weighted population proportions. Rounded alternative scales and algebraic derivatives are dependent evidence.
+
+Only the two unadjusted Bao/MIND correlations are proposed for a separate, conditional equal-weight target-task proxy report after independent approval. Original analytic weighting remains unreported, so strict v1 discrepancies remain unavailable. Unknown original missing-data processing is not converted to a fact about the authors' implementation. A complete-generated-analysis-values interpretation, source/target population differences and measurement/timing/imputation differences must all be reviewed explicitly. These diagnostics are not actual source-population replay and do not demonstrate target utility.
+
+## What the packet does not identify
+
+These sources do not identify the target age/sex/adiposity distribution, predictor covariance, a common multivariable conditional response, intercept, residual distribution, interactions, tails, missingness process or transport law. Different source projections must not be concatenated into one empirical equation. A Pearson correlation and quartiles do not determine a covariance or unique copula. Spearman is a rank statistic, not an interchangeable Pearson coefficient. Any such modelling choices remain labelled assumptions chosen by the constructor.
+
+No source pair-specific correlation n, coefficient SE or unreported CI level is supplied. Do not manufacture precision from source-wide n, significance P values, SDs or synthetic n. Do not treat a good proxy discrepancy as approval of population/assay transport. Distinct study families are documented, but individual-level non-overlap has not been verified. No global target-blindness or pretraining-blindness claim is made.
+
+Quarantined or omitted quantities are not hidden calibration targets: MIND's conflicting HbA1c agreement bundle and its dependent derived quantities; Jansen Table 3; Bao's ambiguous high-risk subset and OGTT-dependent groups; alternative source populations/projections not included here. Their numeric values are intentionally absent from this builder packet. Do not recover them from older files or outside sources.
+
+The actual constructor allowlist, relative to the F2 package root, is `task.json`, `BUILDER_BRIEF.md`, `evidence/evidence.json`, the five `evidence/sources/*.md` summaries, and the three read-only fixed files `evidence/FEEDBACK_POLICY.json`, `evidence/whole_cohort_feedback.json`, `evidence/source_semantics_v1.json`. The latter provide exact required assumption text and fixed source semantics; the constructor cannot redefine them. This overview, coordinator admission/interpretation reviews, validation receipt and `_metadata_preflight` engineering metadata are excluded. Original URLs are attribution, not permission to browse. No target files, old fitted candidates/results, codebook statistics, new literature, downloads or independent source search are authorized by this packet.

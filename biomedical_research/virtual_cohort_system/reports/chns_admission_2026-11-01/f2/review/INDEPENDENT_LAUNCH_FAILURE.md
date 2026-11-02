@@ -1,0 +1,7 @@
+# Preserved independent-recomputation launch failure
+
+The first explicitly authorized launch of the unchanged independent script by absolute path stopped in its metadata permission gate, before a recomputation reservation or any clinical/generated table read. Importing the reviewed primary evaluator for its permission gate raised `ModuleNotFoundError: No module named 'cohort_harness'`. Python placed the script directory, rather than the project package root, on its import path.
+
+Confirmed after failure: `independent_results/` did not exist; script SHA-256 remained `be03a4c63ce577ba93bd37600cddda528a738917e33829b0d0c950c936ea652a`; authorization SHA-256 remained `bdf0dd5d9c2b03f4f97dbfadb108fbfb28f3da916bae4426ab964c7d265dedde`; completed primary-report SHA-256 remained `55c307e230d1d59eded5d5af0dd15b0ca376d8a2b045cb00621c5b0e5409794f`. These checks hashed metadata/report bytes only. No generator or test ran.
+
+The coordinator reviewed this failure and explicitly authorized one environment-only continuation: set `PYTHONPATH` to the project root containing `cohort_harness/`, retain the exact script/authorization/plan, verify the reservation remains absent and invoke the same gated script once. The earlier suggestion of a `src` directory was corrected after checking the actual package location. No scientific budget, source evidence, parameter, primary result or frozen receipt changes. Once the actual recomputation reservation exists, an error must remain recorded without automatic retry.
