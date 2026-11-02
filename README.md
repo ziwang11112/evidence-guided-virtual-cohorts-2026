@@ -1,5 +1,8 @@
 # Evidence-guided virtual cohorts
 
+**Working manuscript v0.1:** [Read the updated paper](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_1.md), [contribution-to-evidence map](biomedical_research/virtual_cohort_system/manuscript/CONTRIBUTION_EVIDENCE_MAP_2026-11-01.md), and [independent consistency review](biomedical_research/virtual_cohort_system/manuscript/REVIEW_v0_1_2026-11-01.md). The revision incorporates the completed CHNS case, quantitative discrepancies and retention outcomes, with the artificial conditional-evidence example as supporting material. This is a bounded working draft, not a submission-ready or algorithmic-superiority claim. No experiment was added for this writing update; the earlier draft remains preserved.
+
+
 **Current contribution scope:** [The research-focus policy](biomedical_research/virtual_cohort_system/docs/CURRENT_RESEARCH_FOCUS.md) keeps published-evidence generation of reusable virtual biomedical data at the center. Consolidate the method and complete results into the paper; add experiments only for an essential, explicitly named contribution gap. Optional capabilities may remain limitations. Core analytical failures remain in the main results, and innovation or superiority is claimed only where supported. No new experiment or automation is started by this update.
 
 
