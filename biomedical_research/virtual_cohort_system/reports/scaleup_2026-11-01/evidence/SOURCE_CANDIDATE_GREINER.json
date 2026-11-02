@@ -1,0 +1,3337 @@
+{
+  "schema_version": "source_candidate_greiner.v1",
+  "document_kind": "reviewable_source_packet_candidate_not_live_harness_bundle",
+  "created_local_date": "2026-11-02",
+  "status": "independently_transcription_checked_pending_context_and_pipeline_admission",
+  "source_packet_released_to_builder": false,
+  "scope": {
+    "core_variables": [
+      "age",
+      "sex",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "derived_variable": "non_hdl_cholesterol",
+    "subgroup_count": 6,
+    "source_constraints_do_not_expand_target_schema": true,
+    "original_study_count_increment": 0,
+    "campaign_originals_reviewed": 2,
+    "campaign_original_limit": 12,
+    "campaign_target_families": 1,
+    "target_family_limit": 6
+  },
+  "provenance": {
+    "source_doi": "10.1136/bmjgh-2021-005222",
+    "title": "Associations between low HDL, sex and cardiovascular risk markers are substantially different in sub-Saharan Africa and the UK: analysis of four population studies",
+    "publication_year": 2021,
+    "main_url": "https://gh.bmj.com/content/6/5/e005222",
+    "correction_url": "https://gh.bmj.com/content/6/6/e005222corr1",
+    "correction_scope": "Co-author names Moffat Nyirenda and Beverley Shields only; no stated statistical correction.",
+    "supplement_url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+    "supplement_version_label": "Publisher DC2 path dated 2021-06-08; inspected visually; no claim of byte-equivalence to DC1.",
+    "verification": "Tables 1 and 2 re-read in wang Chrome on 2026-11-02; DC2 Table 3 and correction independently read in preceding source-operator review.",
+    "local_primary_downloads_created": 0,
+    "target_participant_data_accessed": false,
+    "source_locator_policy": "Each statistic retains its table row, subgroup, DOI and primary URL."
+  },
+  "selection_rules": {
+    "id": "greiner_analysis_selection",
+    "minimum_age_in_years": 18,
+    "exclude_reported_pregnancy": true,
+    "exclude_hiv_positive": true,
+    "exclude_diabetes": true,
+    "require_sex_observed": true,
+    "require_complete_lipid_data": true,
+    "diabetes_case_definition": "not_resolved_in_this_primary-maintext_packet",
+    "missing_covariate_rule_for_table1": "not_separately_reported_per_row",
+    "table1_row_n_equals_group_n": "not_assumed",
+    "sex_stratified": true,
+    "malawi_site_stratified": true,
+    "not_a_turkana_target_filter": "The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions."
+  },
+  "measurements": {
+    "malawi_lipids": {
+      "method": "enzymatic laboratory assays",
+      "instrument": "Beckman Coulter Chemistry Analyser",
+      "fasting": "Fasting sought; random blood accepted after second unsuccessful fasting visit.",
+      "specimen_matrix": "not resolved in inspected maintext",
+      "source_unit": "mmol/L",
+      "locator": "Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi"
+    },
+    "uganda_lipids": {
+      "method": "enzymatic colourimetric laboratory assays",
+      "instrument": "Cobas Integra 400",
+      "fasting": "Main Data collection describes a fasted sample; duration and participant-level adherence not established here.",
+      "specimen_matrix": "not resolved in inspected maintext",
+      "source_unit": "mmol/L",
+      "locator": "Methods / Data collection / Masaka General Population Cohort, Uganda"
+    },
+    "target_transfer": {
+      "validated_assay_bridge": false,
+      "automatic_mmol_to_mg_conversion": false,
+      "note": "Turkana CardioChek Plus venous-EDTA protocol and unknown fasting status are not certified equivalent; unit conversion alone does not remove these differences."
+    }
+  },
+  "variable_definitions": {
+    "age": {
+      "unit": "year",
+      "role": "covariate",
+      "source_transform": "raw reported median/IQR"
+    },
+    "sex": {
+      "unit": "category",
+      "role": "stratification",
+      "source_labels": [
+        "Men",
+        "Women"
+      ]
+    },
+    "bmi": {
+      "unit": "kg/m^2",
+      "role": "covariate",
+      "source_summary": "geometric mean"
+    },
+    "total_cholesterol": {
+      "unit": "mmol/L",
+      "role": "measured_lipid"
+    },
+    "hdl_cholesterol": {
+      "unit": "mmol/L",
+      "role": "measured_lipid"
+    },
+    "non_hdl_cholesterol": {
+      "unit": "mmol/L",
+      "role": "derived_lipid",
+      "expression_ast": {
+        "op": "subtract",
+        "args": [
+          {
+            "column": "total_cholesterol"
+          },
+          {
+            "column": "hdl_cholesterol"
+          }
+        ]
+      },
+      "independently_measured": false,
+      "round_before_derivation": false,
+      "aggregation_note": "Compute non-HDL row by row before its geometric mean; geometric_mean(TC - HDL) is not geometric_mean(TC) - geometric_mean(HDL). Nonpositive derived values violate the positive-domain operator and must not be silently clipped."
+    }
+  },
+  "operator_definitions": {
+    "geometric_mean_positive": {
+      "statistic": "geometric_mean",
+      "formula": "exp(mean(log(x)))",
+      "expression_ast": {
+        "op": "exp",
+        "args": [
+          {
+            "op": "mean",
+            "args": [
+              {
+                "op": "log",
+                "args": [
+                  {
+                    "column_parameter": "column"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "input_domain": "finite x > 0",
+      "missing_policy": "error_on_unresolved_or_missing_values_in_declared_context",
+      "source_weighting": "not_reported",
+      "formula_weighting": "equal_weight_operational_definition",
+      "weighting_assumption_required": true,
+      "uncertainty_is_not_a_fit_weight": true,
+      "adjustment_set": [],
+      "current_semantic_feedback_v1_supported": false,
+      "implementation_note": "Candidate for separate geometric utility; existing core modules are unchanged. A formula is not proof that a source-context dataset has been reconstructed."
+    },
+    "threshold_percentage": {
+      "statistic": "proportion",
+      "formula": "100 * count(x < threshold) / count(all eligible rows in declared subgroup)",
+      "expression_ast": {
+        "op": "multiply",
+        "args": [
+          100,
+          {
+            "op": "mean",
+            "args": [
+              {
+                "op": "indicator_lt",
+                "args": [
+                  {
+                    "column_parameter": "column"
+                  },
+                  {
+                    "parameter": "threshold"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "comparison": "strict_lt",
+      "denominator": "all eligible records in the declared subgroup, not the subset satisfying the event",
+      "missing_policy": "error_on_unresolved_or_missing_values_in_declared_context",
+      "source_weighting": "not_reported",
+      "formula_weighting": "equal_weight_operational_definition",
+      "weighting_assumption_required": true,
+      "adjustment_set": [],
+      "existing_operator_kind": "proportion",
+      "not_clinical_risk_classification": true
+    },
+    "reported_age_quantile": {
+      "statistic": "quantile",
+      "q_parameter": "q",
+      "interpolation": "not_reported",
+      "executable_recipe": null,
+      "numerical_calibration_allowed": false,
+      "reason": "Median and quartile meanings are reported, but the finite-sample convention is not; do not silently adopt linear interpolation."
+    }
+  },
+  "contexts": [
+    {
+      "id": "malawi_rural_men",
+      "country": "Malawi",
+      "cohort": "MEIRU",
+      "site_stratum": "rural",
+      "sex": "male",
+      "selection_rules_ref": "greiner_analysis_selection",
+      "measurement_ref": "malawi_lipids",
+      "reported_table_1_group_n": 4534,
+      "reported_table_2_group_n": 4534,
+      "source_context_reconstructed": false,
+      "context_kind": "external_source_stratum_not_target_lifestyle_category",
+      "eligible_n_is_not_synthetic_row_count": true
+    },
+    {
+      "id": "malawi_urban_men",
+      "country": "Malawi",
+      "cohort": "MEIRU",
+      "site_stratum": "urban",
+      "sex": "male",
+      "selection_rules_ref": "greiner_analysis_selection",
+      "measurement_ref": "malawi_lipids",
+      "reported_table_1_group_n": 3988,
+      "reported_table_2_group_n": 3988,
+      "source_context_reconstructed": false,
+      "context_kind": "external_source_stratum_not_target_lifestyle_category",
+      "eligible_n_is_not_synthetic_row_count": true
+    },
+    {
+      "id": "uganda_men",
+      "country": "Uganda",
+      "cohort": "Masaka_GPC",
+      "site_stratum": "not_separately_stratified",
+      "sex": "male",
+      "selection_rules_ref": "greiner_analysis_selection",
+      "measurement_ref": "uganda_lipids",
+      "reported_table_1_group_n": 2177,
+      "reported_table_2_group_n": 2179,
+      "source_context_reconstructed": false,
+      "context_kind": "external_source_stratum_not_target_lifestyle_category",
+      "eligible_n_is_not_synthetic_row_count": true
+    },
+    {
+      "id": "malawi_rural_women",
+      "country": "Malawi",
+      "cohort": "MEIRU",
+      "site_stratum": "rural",
+      "sex": "female",
+      "selection_rules_ref": "greiner_analysis_selection",
+      "measurement_ref": "malawi_lipids",
+      "reported_table_1_group_n": 5894,
+      "reported_table_2_group_n": 5893,
+      "source_context_reconstructed": false,
+      "context_kind": "external_source_stratum_not_target_lifestyle_category",
+      "eligible_n_is_not_synthetic_row_count": true
+    },
+    {
+      "id": "malawi_urban_women",
+      "country": "Malawi",
+      "cohort": "MEIRU",
+      "site_stratum": "urban",
+      "sex": "female",
+      "selection_rules_ref": "greiner_analysis_selection",
+      "measurement_ref": "malawi_lipids",
+      "reported_table_1_group_n": 7192,
+      "reported_table_2_group_n": 7190,
+      "source_context_reconstructed": false,
+      "context_kind": "external_source_stratum_not_target_lifestyle_category",
+      "eligible_n_is_not_synthetic_row_count": true
+    },
+    {
+      "id": "uganda_women",
+      "country": "Uganda",
+      "cohort": "Masaka_GPC",
+      "site_stratum": "not_separately_stratified",
+      "sex": "female",
+      "selection_rules_ref": "greiner_analysis_selection",
+      "measurement_ref": "uganda_lipids",
+      "reported_table_1_group_n": 2424,
+      "reported_table_2_group_n": 2429,
+      "source_context_reconstructed": false,
+      "context_kind": "external_source_stratum_not_target_lifestyle_category",
+      "eligible_n_is_not_synthetic_row_count": true
+    }
+  ],
+  "constraint_candidates": [
+    {
+      "id": "malawi_rural_men__bmi__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_men",
+      "variable": "bmi",
+      "unit": "kg/m^2",
+      "reported_statistic": "geometric_mean",
+      "value": 21.5,
+      "reported_text": "21.5",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "bmi"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 21.3,
+        "upper": 21.6,
+        "reported_text": "(21.3 to 21.6)",
+        "unit": "kg/m^2",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_rural_men__total_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_men",
+      "variable": "total_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 3.6,
+      "reported_text": "3.6",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "total_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 3.6,
+        "upper": 3.7,
+        "reported_text": "(3.6 to 3.7)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_rural_men__hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_men",
+      "variable": "hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 1.05,
+      "reported_text": "1.05",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 1.04,
+        "upper": 1.06,
+        "reported_text": "(1.04 to 1.06)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_rural_men__non_hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_men",
+      "variable": "non_hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 2.5,
+      "reported_text": "2.5",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "non_hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 2.5,
+        "upper": 2.5,
+        "reported_text": "(2.5 to 2.5)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Non-HDL cholesterol, star-marked geometric mean; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "rounded_or_collapsed_ci"
+      ]
+    },
+    {
+      "id": "malawi_rural_men__age__q1",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_rural_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 24,
+      "reported_text": "24",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.25,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q1; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported"
+      ]
+    },
+    {
+      "id": "malawi_rural_men__age__median",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_rural_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "median",
+      "value": 33,
+      "reported_text": "33",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.5,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); median; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported"
+      ]
+    },
+    {
+      "id": "malawi_rural_men__age__q3",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_rural_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 46,
+      "reported_text": "46",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.75,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q3; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported"
+      ]
+    },
+    {
+      "id": "malawi_rural_men__hdl_cholesterol__low_prevalence",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_men",
+      "variable": "hdl_cholesterol",
+      "unit": "%",
+      "reported_statistic": "proportion",
+      "value": 46.6,
+      "reported_text": "46.6",
+      "operator": {
+        "definition_ref": "threshold_percentage",
+        "column": "hdl_cholesterol",
+        "comparison": "lt",
+        "threshold": 1.03,
+        "threshold_unit": "mmol/L",
+        "output_multiplier": 100
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 4534,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 45.2,
+        "upper": 48.1,
+        "reported_text": "(45.2 to 48.1)",
+        "unit": "%",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_rural_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_urban_men__bmi__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_men",
+      "variable": "bmi",
+      "unit": "kg/m^2",
+      "reported_statistic": "geometric_mean",
+      "value": 22.3,
+      "reported_text": "22.3",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "bmi"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 22.2,
+        "upper": 22.4,
+        "reported_text": "(22.2 to 22.4)",
+        "unit": "kg/m^2",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_urban_men__total_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_men",
+      "variable": "total_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 3.8,
+      "reported_text": "3.8",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "total_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 3.7,
+        "upper": 3.8,
+        "reported_text": "(3.7 to 3.8)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_urban_men__hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_men",
+      "variable": "hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 1.1,
+      "reported_text": "1.10",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 1.09,
+        "upper": 1.12,
+        "reported_text": "(1.09 to 1.12)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "malawi_urban_men__non_hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_men",
+      "variable": "non_hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 2.6,
+      "reported_text": "2.6",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "non_hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 2.6,
+        "upper": 2.6,
+        "reported_text": "(2.6 to 2.6)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Non-HDL cholesterol, star-marked geometric mean; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "rounded_or_collapsed_ci"
+      ]
+    },
+    {
+      "id": "malawi_urban_men__age__q1",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_urban_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 22,
+      "reported_text": "22",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.25,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q1; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported"
+      ]
+    },
+    {
+      "id": "malawi_urban_men__age__median",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_urban_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "median",
+      "value": 28,
+      "reported_text": "28",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.5,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); median; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported"
+      ]
+    },
+    {
+      "id": "malawi_urban_men__age__q3",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_urban_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 39,
+      "reported_text": "39",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.75,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q3; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported"
+      ]
+    },
+    {
+      "id": "malawi_urban_men__hdl_cholesterol__low_prevalence",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_men",
+      "variable": "hdl_cholesterol",
+      "unit": "%",
+      "reported_statistic": "proportion",
+      "value": 41.0,
+      "reported_text": "41.0",
+      "operator": {
+        "definition_ref": "threshold_percentage",
+        "column": "hdl_cholesterol",
+        "comparison": "lt",
+        "threshold": 1.03,
+        "threshold_unit": "mmol/L",
+        "output_multiplier": 100
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 3988,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 39.5,
+        "upper": 42.6,
+        "reported_text": "(39.5 to 42.6)",
+        "unit": "%",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_urban_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": []
+    },
+    {
+      "id": "uganda_men__bmi__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_men",
+      "variable": "bmi",
+      "unit": "kg/m^2",
+      "reported_statistic": "geometric_mean",
+      "value": 20.7,
+      "reported_text": "20.7",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "bmi"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2177,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 20.6,
+        "upper": 20.9,
+        "reported_text": "(20.6 to 20.9)",
+        "unit": "kg/m^2",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__total_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_men",
+      "variable": "total_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 3.3,
+      "reported_text": "3.3",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "total_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2179,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 3.2,
+        "upper": 3.3,
+        "reported_text": "(3.2 to 3.3)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Total cholesterol, star-marked geometric mean; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_men",
+      "variable": "hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 0.9,
+      "reported_text": "0.90",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2179,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 0.89,
+        "upper": 0.91,
+        "reported_text": "(0.89 to 0.91)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; HDL cholesterol, star-marked geometric mean; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__non_hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_men",
+      "variable": "non_hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 2.3,
+      "reported_text": "2.3",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "non_hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2179,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 2.2,
+        "upper": 2.3,
+        "reported_text": "(2.2 to 2.3)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Non-HDL cholesterol, star-marked geometric mean; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__age__q1",
+      "record_class": "context_only_quantile",
+      "population_ref": "uganda_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 25,
+      "reported_text": "25",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.25,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2177,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q1; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__age__median",
+      "record_class": "context_only_quantile",
+      "population_ref": "uganda_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "median",
+      "value": 37,
+      "reported_text": "37",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.5,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2177,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); median; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__age__q3",
+      "record_class": "context_only_quantile",
+      "population_ref": "uganda_men",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 51,
+      "reported_text": "51",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.75,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2177,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q3; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_men__hdl_cholesterol__low_prevalence",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_men",
+      "variable": "hdl_cholesterol",
+      "unit": "%",
+      "reported_statistic": "proportion",
+      "value": 59.8,
+      "reported_text": "59.8",
+      "operator": {
+        "definition_ref": "threshold_percentage",
+        "column": "hdl_cholesterol",
+        "comparison": "lt",
+        "threshold": 1.03,
+        "threshold_unit": "mmol/L",
+        "output_multiplier": 100
+      },
+      "denominator": {
+        "population_ref": "uganda_men",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2179,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 57.7,
+        "upper": 61.8,
+        "reported_text": "(57.7 to 61.8)",
+        "unit": "%",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; uganda_men",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__bmi__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_women",
+      "variable": "bmi",
+      "unit": "kg/m^2",
+      "reported_statistic": "geometric_mean",
+      "value": 23.2,
+      "reported_text": "23.2",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "bmi"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 5894,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 23.1,
+        "upper": 23.3,
+        "reported_text": "(23.1 to 23.3)",
+        "unit": "kg/m^2",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__total_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_women",
+      "variable": "total_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 3.9,
+      "reported_text": "3.9",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "total_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 5893,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 3.9,
+        "upper": 3.9,
+        "reported_text": "(3.9 to 3.9)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement",
+        "rounded_or_collapsed_ci"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_women",
+      "variable": "hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 1.1,
+      "reported_text": "1.10",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 5893,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 1.09,
+        "upper": 1.11,
+        "reported_text": "(1.09 to 1.11)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__non_hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_women",
+      "variable": "non_hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 2.7,
+      "reported_text": "2.7",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "non_hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 5893,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 2.7,
+        "upper": 2.8,
+        "reported_text": "(2.7 to 2.8)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Non-HDL cholesterol, star-marked geometric mean; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__age__q1",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_rural_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 25,
+      "reported_text": "25",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.25,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 5894,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q1; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__age__median",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_rural_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "median",
+      "value": 34,
+      "reported_text": "34",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.5,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 5894,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); median; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__age__q3",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_rural_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 48,
+      "reported_text": "48",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.75,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 5894,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q3; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_rural_women__hdl_cholesterol__low_prevalence",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_rural_women",
+      "variable": "hdl_cholesterol",
+      "unit": "%",
+      "reported_statistic": "proportion",
+      "value": 71.6,
+      "reported_text": "71.6",
+      "operator": {
+        "definition_ref": "threshold_percentage",
+        "column": "hdl_cholesterol",
+        "comparison": "lt",
+        "threshold": 1.29,
+        "threshold_unit": "mmol/L",
+        "output_multiplier": 100
+      },
+      "denominator": {
+        "population_ref": "malawi_rural_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 5893,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 70.5,
+        "upper": 72.8,
+        "reported_text": "(70.5 to 72.8)",
+        "unit": "%",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_rural_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__bmi__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_women",
+      "variable": "bmi",
+      "unit": "kg/m^2",
+      "reported_statistic": "geometric_mean",
+      "value": 25.0,
+      "reported_text": "25.0",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "bmi"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 7192,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 24.9,
+        "upper": 25.1,
+        "reported_text": "(24.9 to 25.1)",
+        "unit": "kg/m^2",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__total_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_women",
+      "variable": "total_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 3.8,
+      "reported_text": "3.8",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "total_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 7190,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 3.8,
+        "upper": 3.9,
+        "reported_text": "(3.8 to 3.9)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_women",
+      "variable": "hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 1.15,
+      "reported_text": "1.15",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 7190,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 1.15,
+        "upper": 1.26,
+        "reported_text": "(1.15 to 1.26)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "flagged_unresolved",
+        "issue_ids": [
+          "malawi_urban_women_hdl_ci"
+        ]
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement",
+        "malawi_urban_women_hdl_ci"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__non_hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_women",
+      "variable": "non_hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 2.6,
+      "reported_text": "2.6",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "non_hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 7190,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 2.6,
+        "upper": 2.6,
+        "reported_text": "(2.6 to 2.6)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Non-HDL cholesterol, star-marked geometric mean; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement",
+        "rounded_or_collapsed_ci"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__age__q1",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_urban_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 22,
+      "reported_text": "22",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.25,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 7192,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q1; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__age__median",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_urban_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "median",
+      "value": 29,
+      "reported_text": "29",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.5,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 7192,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); median; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__age__q3",
+      "record_class": "context_only_quantile",
+      "population_ref": "malawi_urban_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 37,
+      "reported_text": "37",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.75,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 7192,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q3; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "malawi_urban_women__hdl_cholesterol__low_prevalence",
+      "record_class": "numerical_candidate",
+      "population_ref": "malawi_urban_women",
+      "variable": "hdl_cholesterol",
+      "unit": "%",
+      "reported_statistic": "proportion",
+      "value": 69.4,
+      "reported_text": "69.4",
+      "operator": {
+        "definition_ref": "threshold_percentage",
+        "column": "hdl_cholesterol",
+        "comparison": "lt",
+        "threshold": 1.29,
+        "threshold_unit": "mmol/L",
+        "output_multiplier": 100
+      },
+      "denominator": {
+        "population_ref": "malawi_urban_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 7190,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 68.3,
+        "upper": 70.5,
+        "reported_text": "(68.3 to 70.5)",
+        "unit": "%",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_urban_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__bmi__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_women",
+      "variable": "bmi",
+      "unit": "kg/m^2",
+      "reported_statistic": "geometric_mean",
+      "value": 22.3,
+      "reported_text": "22.3",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "bmi"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2424,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 22.2,
+        "upper": 22.5,
+        "reported_text": "(22.2 to 22.5)",
+        "unit": "kg/m^2",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__total_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_women",
+      "variable": "total_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 3.7,
+      "reported_text": "3.7",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "total_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2429,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 3.7,
+        "upper": 3.7,
+        "reported_text": "(3.7 to 3.7)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Total cholesterol, star-marked geometric mean; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement",
+        "rounded_or_collapsed_ci"
+      ]
+    },
+    {
+      "id": "uganda_women__hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_women",
+      "variable": "hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 0.99,
+      "reported_text": "0.99",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2429,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 0.98,
+        "upper": 1.0,
+        "reported_text": "(0.98 to 1.00)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; HDL cholesterol, star-marked geometric mean; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__non_hdl_cholesterol__geometric_mean",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_women",
+      "variable": "non_hdl_cholesterol",
+      "unit": "mmol/L",
+      "reported_statistic": "geometric_mean",
+      "value": 2.6,
+      "reported_text": "2.6",
+      "operator": {
+        "definition_ref": "geometric_mean_positive",
+        "column": "non_hdl_cholesterol"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2429,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 2.6,
+        "upper": 2.7,
+        "reported_text": "(2.6 to 2.7)",
+        "unit": "mmol/L",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Non-HDL cholesterol, star-marked geometric mean; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__age__q1",
+      "record_class": "context_only_quantile",
+      "population_ref": "uganda_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 30,
+      "reported_text": "30",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.25,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2424,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q1; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__age__median",
+      "record_class": "context_only_quantile",
+      "population_ref": "uganda_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "median",
+      "value": 43,
+      "reported_text": "43",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.5,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2424,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); median; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__age__q3",
+      "record_class": "context_only_quantile",
+      "population_ref": "uganda_women",
+      "variable": "age",
+      "unit": "year",
+      "reported_statistic": "quantile",
+      "value": 56,
+      "reported_text": "56",
+      "operator": {
+        "definition_ref": "reported_age_quantile",
+        "column": "age",
+        "q": 0.75,
+        "interpolation": "not_reported"
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 1,
+        "reported_group_n": 2424,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "not_reported",
+        "role": "not_reported",
+        "note": "Q1 and Q3 are distributional quartiles, not confidence limits of the median."
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T1",
+        "locator": "Table 1; Age (years), median (IQR); q3; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "quantile_convention_unresolved",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "numerical_calibration_allowed": false,
+        "exact_target_replay_allowed": false
+      },
+      "issue_ids": [
+        "source_quantile_convention_unreported",
+        "table_denominator_disagreement"
+      ]
+    },
+    {
+      "id": "uganda_women__hdl_cholesterol__low_prevalence",
+      "record_class": "numerical_candidate",
+      "population_ref": "uganda_women",
+      "variable": "hdl_cholesterol",
+      "unit": "%",
+      "reported_statistic": "proportion",
+      "value": 76.7,
+      "reported_text": "76.7",
+      "operator": {
+        "definition_ref": "threshold_percentage",
+        "column": "hdl_cholesterol",
+        "comparison": "lt",
+        "threshold": 1.29,
+        "threshold_unit": "mmol/L",
+        "output_multiplier": 100
+      },
+      "denominator": {
+        "population_ref": "uganda_women",
+        "selection_rules_ref": "greiner_analysis_selection",
+        "source_table": 2,
+        "reported_group_n": 2429,
+        "row_specific_n": null,
+        "row_specific_n_status": "not_separately_reported",
+        "role": "reported_source_group_metadata_not_generated_row_requirement",
+        "event_conditioned": false,
+        "uncertainty_weighting_allowed": false
+      },
+      "uncertainty": {
+        "kind": "confidence_interval",
+        "level": 0.95,
+        "lower": 75.0,
+        "upper": 78.4,
+        "reported_text": "(75.0 to 78.4)",
+        "unit": "%",
+        "role": "estimation_uncertainty",
+        "is_individual_dispersion": false,
+        "method": "not_reported_in_table",
+        "use_for_precision_weighting": false,
+        "status": "reported_rounded",
+        "issue_ids": []
+      },
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/6/5/e005222#T2",
+        "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; uganda_women",
+        "verified_from": "publisher_rendered_table_2026-11-02"
+      },
+      "admission": {
+        "reported_value": "independently_verified_transcription",
+        "operator_definition": "specified",
+        "activation": "pending_source_context_and_reviewed_pipeline_integration",
+        "exact_target_replay_allowed": false,
+        "source_weighting": "not_reported"
+      },
+      "issue_ids": [
+        "table_denominator_disagreement"
+      ]
+    }
+  ],
+  "contextual_regressions": [
+    {
+      "id": "greiner_table3_context_01",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "bmi",
+      "sex": "male",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [],
+      "reported_estimate": -0.007,
+      "reported_ci95": [
+        -0.009,
+        -0.005
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 10667,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa male; bmi; unadjusted"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_02",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "bmi",
+      "sex": "female",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [],
+      "reported_estimate": -0.004,
+      "reported_ci95": [
+        -0.005,
+        -0.003
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 15454,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa female; bmi; unadjusted"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_03",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "bmi",
+      "sex": "male",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status"
+      ],
+      "reported_estimate": -0.007,
+      "reported_ci95": [
+        -0.009,
+        -0.004
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 10667,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa male; bmi; adjusted for age, smoking_status"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_04",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "bmi",
+      "sex": "female",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status"
+      ],
+      "reported_estimate": -0.004,
+      "reported_ci95": [
+        -0.005,
+        -0.003
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 15454,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa female; bmi; adjusted for age, smoking_status"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_05",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "bmi",
+      "sex": "male",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status",
+        "alcohol_consumption"
+      ],
+      "reported_estimate": -0.006,
+      "reported_ci95": [
+        -0.008,
+        -0.003
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 10667,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa male; bmi; adjusted for age, smoking_status, alcohol_consumption"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_06",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "bmi",
+      "sex": "female",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status",
+        "alcohol_consumption"
+      ],
+      "reported_estimate": -0.004,
+      "reported_ci95": [
+        -0.005,
+        -0.003
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 15454,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa female; bmi; adjusted for age, smoking_status, alcohol_consumption"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_07",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "non_hdl_cholesterol",
+      "sex": "male",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [],
+      "reported_estimate": 0.046,
+      "reported_ci95": [
+        0.038,
+        0.054
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 10701,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa male; non_hdl_cholesterol; unadjusted"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_08",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "non_hdl_cholesterol",
+      "sex": "female",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [],
+      "reported_estimate": 0.041,
+      "reported_ci95": [
+        0.036,
+        0.047
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 15515,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa female; non_hdl_cholesterol; unadjusted"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_09",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "non_hdl_cholesterol",
+      "sex": "male",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status"
+      ],
+      "reported_estimate": 0.041,
+      "reported_ci95": [
+        0.033,
+        0.049
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 10699,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa male; non_hdl_cholesterol; adjusted for age, smoking_status"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_10",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "non_hdl_cholesterol",
+      "sex": "female",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status"
+      ],
+      "reported_estimate": 0.046,
+      "reported_ci95": [
+        0.04,
+        0.052
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 15510,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa female; non_hdl_cholesterol; adjusted for age, smoking_status"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_11",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "non_hdl_cholesterol",
+      "sex": "male",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status",
+        "alcohol_consumption"
+      ],
+      "reported_estimate": 0.043,
+      "reported_ci95": [
+        0.035,
+        0.051
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 10699,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa male; non_hdl_cholesterol; adjusted for age, smoking_status, alcohol_consumption"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    },
+    {
+      "id": "greiner_table3_context_12",
+      "record_class": "context_only_regression",
+      "response_label": "HDL",
+      "predictor_label": "non_hdl_cholesterol",
+      "sex": "female",
+      "population": "pooled sub-Saharan African studies in Table 3, under greiner_analysis_selection",
+      "adjustment_set": [
+        "age",
+        "smoking_status",
+        "alcohol_consumption"
+      ],
+      "reported_estimate": 0.046,
+      "reported_ci95": [
+        0.04,
+        0.052
+      ],
+      "uncertainty_role": "estimation_uncertainty",
+      "reported_analysis_n": 15510,
+      "unit": "unresolved_regression_scale",
+      "response_transform": "not_unambiguously_reported",
+      "predictor_transform": "not_unambiguously_reported",
+      "weighting": "not_reported",
+      "intercept": "not_explicitly_reported",
+      "executable_operator": null,
+      "numerical_calibration_allowed": false,
+      "provenance": {
+        "source_doi": "10.1136/bmjgh-2021-005222",
+        "url": "https://gh.bmj.com/content/bmjgh/suppl/2021/06/08/bmjgh-2021-005222.DC2/bmjgh-2021-005222supp001_data_supplement.pdf",
+        "locator": "DC2 Supplementary Table 3, PDF pages 3-4; sub-Saharan Africa female; non_hdl_cholesterol; adjusted for age, smoking_status, alcohol_consumption"
+      },
+      "issue_ids": [
+        "regression_scale_unresolved",
+        "adjustment_covariates_not_in_core_target"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "table_denominator_disagreement",
+      "severity": "preserve_unresolved",
+      "details": "Table 1 and Table 2 subgroup counts differ: Uganda men 2177 vs 2179; Uganda women 2424 vs 2429; Malawi rural women 5894 vs 5893; Malawi urban women 7192 vs 7190. EXTEND women also differs 4641 vs 4183 outside this candidate. Table 1 subgroup n does not prove each variable-specific n.",
+      "resolution": "Preserve table-specific counts and scope; do not harmonize, infer missingness causes or inverse-variance weights."
+    },
+    {
+      "id": "malawi_urban_women_hdl_ci",
+      "severity": "ci_quarantined",
+      "details": "Table 2 reports HDL geometric mean 1.15 with 95% CI 1.15 to 1.26; printed values retained.",
+      "resolution": "Point estimate remains a candidate; interval not used for weighting, SD conversion or an acceptance band."
+    },
+    {
+      "id": "rounded_or_collapsed_ci",
+      "severity": "interpretation_limit",
+      "details": "Several printed CI endpoints coincide after rounding.",
+      "resolution": "No zero-variance interpretation, CI-width-derived SD, exact equality tolerance or precision weight is authorized."
+    },
+    {
+      "id": "source_quantile_convention_unreported",
+      "severity": "context_only",
+      "resolution": "Age median/Q1/Q3 retained as reported distributional context, not executable calibration."
+    },
+    {
+      "id": "regression_scale_unresolved",
+      "severity": "context_only",
+      "resolution": "All Table 3 coefficients stay outside numerical candidates; no raw/log conversion, orientation reversal or insertion into a joint generator."
+    },
+    {
+      "id": "adjustment_covariates_not_in_core_target",
+      "severity": "context_only",
+      "resolution": "Do not drop smoking/alcohol to imitate the reported adjusted operators."
+    },
+    {
+      "id": "source_weighting_not_explicit",
+      "severity": "assumption_required",
+      "resolution": "Equal-weight mathematical recipes are explicit operational choices, not a claim of verified source weighting."
+    },
+    {
+      "id": "source_selection_and_measurement_transfer",
+      "severity": "assumption_required",
+      "resolution": "External source strata are not interchangeable with Turkana lifestyle categories. Source health exclusions and assays cannot be recreated from target fields by assertion."
+    }
+  ],
+  "optional_model_assumption_note": {
+    "model_selected": false,
+    "clinical_parameters_selected": false,
+    "family_example": "lognormal HDL within a declared source subgroup",
+    "mathematical_relation": "If log(H) ~ Normal(mu,sigma^2), G=exp(mu) and p=P(H<c), then mu=log(G) and sigma=(log(c)-log(G))/Phi_inverse(p), where defined and positive.",
+    "status": "possible_agent_selected_assumption_not_reported_fact",
+    "restrictions": [
+      "No inversion or parameter values computed in this packet.",
+      "Rounded constraints can be incompatible or weakly informative.",
+      "No SD is inferred from a confidence interval.",
+      "The resulting sigma would be a model-specific marginal log-scale dispersion, not an observed SD or a conditional residual SD.",
+      "The family, joint dependence and source-to-target transport would remain assumptions."
+    ]
+  },
+  "application_rules": {
+    "active_numerical_checks": [],
+    "calibration_settings": null,
+    "loss_weights": null,
+    "success_tolerances": null,
+    "can_evaluate_all_candidates_on_target_as_exact_source_replay": false,
+    "required_before_activation": [
+      "Independent review of extraction and operator definitions.",
+      "Explicit source-context construction or separately approved source-to-target proxy designation.",
+      "Explicit weighting/measurement assumptions when not source-verified.",
+      "Working operator utility with its required checks; no silent fallback to existing unsupported collector."
+    ],
+    "source_context_n_vs_generated_n": "Reported source n records evidence provenance only; it neither sets synthetic row count nor makes synthetic rows new independent observations.",
+    "exclude_from_numerical_calibration": [
+      "context_only_quantile",
+      "context_only_regression"
+    ],
+    "not_included_as_numerical_constraints": [
+      "waist",
+      "waist_to_hip_ratio",
+      "blood_pressure",
+      "triglycerides",
+      "ldl_cholesterol",
+      "total_to_hdl_ratio",
+      "BMI_category_prevalence"
+    ],
+    "not_a_generator": true
+  },
+  "counts": {
+    "source_contexts": 6,
+    "geometric_mean_candidates": 24,
+    "threshold_prevalence_candidates": 6,
+    "age_quantile_context_records": 18,
+    "contextual_regression_records": 12,
+    "total_constraint_candidate_records": 48,
+    "active_calibration_checks": 0
+  },
+  "independent_transcription_review": {
+    "path": "../SOURCE_PACKET_INDEPENDENT_REVIEW_2026-11-02.md",
+    "sha256": "f5d5538d0188fb4bb9c19b188d616d43e7d6dc3b38d58e926882cee09b45bc58",
+    "meaning": "Reported values checked; no source-context, transfer or runtime approval implied"
+  }
+}
