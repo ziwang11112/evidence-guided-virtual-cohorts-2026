@@ -10,6 +10,8 @@ Current execution checkpoint: the larger campaign is in [candidate admission](..
 
 **Subsequent K02 implementation:** [the bounded checkpoint](../reports/scaleup_2026-11-01/K02_IMPLEMENTATION_CHECKPOINT_2026-11-02.md) resolves code-only sex metadata and qualified target-study exposure, implements the three fixed in-memory analyses, and adds an execution-bound supplemental collector that explicitly retains semantic_feedback_v1. Independent reviews passed on their documented arithmetic/adapter scope. Source/target model linkage, unit representation and global release remain pending; no target effect or new biomedical generator was run. This is actual component implementation, not a claim that the campaign or all thirty source checks are operational.
 
+**Latest connection checkpoint:** [the source/target bridge](../reports/scaleup_2026-11-01/SOURCE_TARGET_BRIDGE_CHECKPOINT_2026-11-02.md) now executes a finite frozen schedule with identical generator bytes and common scientific specifications across contexts. An actual isolated invented source/target pair, explicit source feedback and a target-analysis unit view passed independent retained-artifact verification. This closes the supported mechanical connection gap; it does not establish transport or clinical efficacy. Actual clinical context contracts, production unit mappings, statistical references, remaining admission and global release are still pending. No real target relationship was supplied or evaluated in this unit.
+
 ## The contribution we are trying to deliver
 
 **An Agent turns published biomedical evidence, a target-population description and optional observed measurements into a reusable virtual dataset that can support specified scientific analyses.**
