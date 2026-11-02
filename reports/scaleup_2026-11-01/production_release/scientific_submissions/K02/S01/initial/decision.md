@@ -1,0 +1,1 @@
+Precommitted S01 reference; exact retained source module and operands, inline deterministic derivation. No actual fit or sample performed in packaging. Retain valid initial law regardless of finite source mismatch; stop on invalid execution.

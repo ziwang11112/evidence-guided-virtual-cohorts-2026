@@ -1,0 +1,298 @@
+{
+  "parameters": {
+    "active_context": "target_haalsi_pooled_poc",
+    "contexts": {
+      "source_mind_china_2019": {
+        "population": "MIND-China 2019 source context; selected rural Chinese adults age 61–80 years inclusive; whole-cohort synthesis.",
+        "n_rows": 5000,
+        "measurement": "{\"assay\":\"glucose oxidase\",\"capillary_poc_equivalence\":false,\"centrifugation\":\"3000 rpm for10 minutes\",\"exact_fasting_hours\":\"not_reported_in_retained_audit\",\"fasting\":\"overnight\",\"individual_fasting_adherence\":\"not_established\",\"instrument\":\"CS-600B\",\"site_handling\":\"local town laboratory within two hours\",\"source_variable\":\"FSG\",\"specimen\":\"serum from coagulant tube\",\"unit\":\"mmol/L\"}",
+        "inputs": {
+          "age_distribution": {
+            "family": "bounded_beta",
+            "lower": 61,
+            "upper": 80,
+            "mean": 69.5,
+            "sd": 4.2,
+            "female_minus_male": 0.8
+          },
+          "sex_distribution": {
+            "numerator": 2049,
+            "denominator": 3547
+          },
+          "bmi_distribution": {
+            "family": "sex_lognormal",
+            "mean": 25,
+            "sd": 3.6,
+            "female_minus_male": 1.2
+          },
+          "glucose_baseline": {
+            "mean": 5.2,
+            "sd": 1.4
+          },
+          "dependence": {
+            "age_bmi_latent_correlation": -0.12
+          },
+          "feeding": {
+            "nonfasting_probability": 0.0
+          },
+          "measurement_model": {
+            "multiplicative_cv": 0.0,
+            "repetitions": 1
+          }
+        }
+      },
+      "source_ayele_dire_dawa_2017": {
+        "population": "Ayele Dire Dawa 2017 source context; urban Ethiopian adults age 25–64 years inclusive by Methods; whole-cohort synthesis.",
+        "n_rows": 5000,
+        "measurement": "{\"bmi_construction\":\"measured kg / measured height in metres squared\",\"bmi_unit\":\"kg/m^2\",\"device\":\"Accu-Chek digital blood glucometer\",\"diabetes_operator_description\":\"FBG >=126 mg/dL OR RBG >200 mg/dL; current DM medication also identifies prior diagnosis\",\"exact_commercial_model\":\"unverified\",\"fasting\":\"time since meal asked; mixed fasting/random diagnostic thresholds; exact hours and mixture unreported\",\"glucose_unit\":\"mg/dL\",\"lot\":\"496915\",\"material_number\":\"06453970018\",\"operator_gaps\":[\"fasting-hours boundary\",\"handling different fasting states across three averaged measurements\",\"complete reconstructible treatment/outcome rule\"],\"plasma_equivalence\":\"unverified\",\"repeated_measurement\":\"average of three measurements on three consecutive days\",\"specimen\":\"capillary blood\"}",
+        "inputs": {
+          "age_distribution": {
+            "family": "bin_beta",
+            "lower": [
+              25,
+              35,
+              45,
+              55
+            ],
+            "upper": [
+              35,
+              45,
+              55,
+              64
+            ],
+            "counts": [
+              371,
+              187,
+              121,
+              193
+            ],
+            "denominator": 872,
+            "within_means_prefix": [
+              28,
+              40,
+              50
+            ],
+            "mean": 40.4,
+            "sd": 13
+          },
+          "sex_distribution": {
+            "numerator": 586,
+            "denominator": 872
+          },
+          "bmi_distribution": {
+            "family": "category_mixture",
+            "counts": [
+              65,
+              467,
+              340
+            ],
+            "denominator": 872,
+            "female_minus_male_probabilities": [
+              -0.02,
+              -0.08,
+              0.1
+            ],
+            "underweight_lower": 13,
+            "underweight_upper": 18.5,
+            "normal_lower": 18.5,
+            "normal_upper": 24.9,
+            "overweight_lower": 25,
+            "overweight_shape": 2,
+            "overweight_scale": 3
+          },
+          "glucose_baseline": {
+            "mean": 5.2,
+            "sd": 1.6
+          },
+          "dependence": {
+            "age_bmi_latent_correlation": 0.18
+          },
+          "feeding": {
+            "nonfasting_probability": 0.4
+          },
+          "measurement_model": {
+            "multiplicative_cv": 0.08,
+            "repetitions": 3
+          }
+        }
+      },
+      "target_haalsi_pooled_poc": {
+        "population": "HAALSI target pooled cleaned capillary point-of-care glucose context; adults age >=40 years, no upper age limit; whole-cohort synthesis.",
+        "n_rows": 5000,
+        "measurement": "Pooled released-cleaned capillary point-of-care glucose in mmol/L; feeding status not universally fasting",
+        "inputs": {
+          "age_distribution": {
+            "family": "shifted_gamma",
+            "lower": 40,
+            "excess_mean": 20,
+            "within_sd": 12,
+            "female_minus_male": 2
+          },
+          "sex_distribution": {
+            "numerator": 56,
+            "denominator": 100
+          },
+          "bmi_distribution": {
+            "family": "sex_lognormal",
+            "mean": 27,
+            "sd": 6,
+            "female_minus_male": 4.5
+          },
+          "glucose_baseline": {
+            "mean": 5.4,
+            "sd": 1.9
+          },
+          "dependence": {
+            "age_bmi_latent_correlation": -0.1
+          },
+          "feeding": {
+            "nonfasting_probability": 0.55
+          },
+          "measurement_model": {
+            "multiplicative_cv": 0.07,
+            "repetitions": 1
+          }
+        }
+      }
+    },
+    "shared_settings": {
+      "columns": [
+        "id",
+        "age",
+        "sex",
+        "bmi",
+        "glucose"
+      ],
+      "cdf_epsilon": 1e-12,
+      "glucose_female_minus_male": 0.12,
+      "glucose_age_latent_loading": 0.14,
+      "glucose_bmi_residual_loadings_male_female": [
+        0.27,
+        0.36
+      ],
+      "meal_increment": {
+        "mean": 0.9,
+        "sd": 0.7
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_CONTRACT",
+      "description": "The active context selects one complete 5000-row population with the provided exact descriptor. Whole-cohort output is id, age (year), sex (F/M), bmi (kg/m^2), glucose (mmol/L). MIND age is 61-80; Ayele is 25-64 by Methods; target is at least 40 with no eligibility upper bound. No filtering, target-derived margin or observed individual is used."
+    },
+    {
+      "id": "A_DESCRIPTIVE",
+      "description": "Source reported moments and category counts anchor an equal-row complete-distribution scenario only. Unknown original analytic weights, SD divisors and missingness mechanisms are not inferred. Source descriptive SD with ddof1 and full-output denominators are approximation conventions, not strict replications. Count/denominator ratios are distinct from printed rounded percentages; MIND female proportion already has unit 1."
+    },
+    {
+      "id": "A_QUOTA",
+      "description": "For each context n_F=floor(5000*p_F+0.5), using the declared numerator/denominator. Row sex positions are uniformly permuted, preserving both sexes. All mixture equations use p=n_F/5000. This fixed-composition design suppresses binomial variation; quota error relative to the anchor is at most 0.0001."
+    },
+    {
+      "id": "A_MIND_MARGINS",
+      "description": "Treat source total mean and individual SD as latent distribution moment anchors under an equal-weight approximation: MIND age 69.5/4.2, BMI 25/3.6, and recorded fasting serum glucose 5.2/1.4. Scaled beta age and lognormal BMI/glucose are unreported distributional assumptions. No 2018-to-2019 age shift is performed."
+    },
+    {
+      "id": "A_SEX_MOMENTS",
+      "description": "Unreported female-minus-male mean differences are assumed: MIND age 0.8 years, MIND BMI 1.2 kg/m^2; target age excess 2 years and BMI 4.5 kg/m^2; glucose baseline 0.12 mmol/L in every context. For total mean m, SD s and difference d, m_M=m-p*d, m_F=m+(1-p)*d, within-sex variance v=s^2-p*(1-p)*d^2. Source participant SD is thus not directly interpreted as conditional residual SD."
+    },
+    {
+      "id": "A_AYELE_AGE",
+      "description": "Use source imputed age counts 371,187,121,193 divided once by 872 for bin probabilities. Generated supports are [25,35),[35,45),[45,55),[55,64] within the Methods bound; this is an approximation to reported completed-year categories, with the table-caption age discrepancy retained. Conditional mean ages in the first three bins are assumed 28,40,50; the fourth is algebraically determined by the reported mean 40.4. A common beta concentration is then determined by reported total SD 13. Within-bin means and the resulting endpoint-heavy shapes are assumptions, not recovered observations. The age margin is assumed equal between sexes in this source."
+    },
+    {
+      "id": "A_AYELE_BMI",
+      "description": "Source BMI category probabilities are counts 65,467,340 divided by 872. Female-minus-male probability differences are assumed [-0.02,-0.08,0.10]; q_M=q-p*d and q_F=q+(1-p)*d preserve the aggregate. Within underweight use Uniform(13,18.5); within normal use Uniform(18.5,24.9); within overweight use 25+Gamma(shape=2,scale=3). Zero density in the literal gap (24.9,25) is an explicit unverified category-based assumption. No source mean/SD of BMI is invented."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "Given sex, independent standard normals Z_A,E_B,E_G generate Z_B=r*Z_A+sqrt(1-r^2)*E_B and Z_G=a*Z_A+b_sex*E_B+sqrt(1-a^2-b_sex^2)*E_G. Assume a=0.14, b_M=0.27,b_F=0.36; r=-0.12 MIND, +0.18 Ayele, -0.10 target. Marginal quantile maps produce age/BMI and lognormal glucose. The sex-dependent BMI loadings introduce effect modification without fixing an OLS estimand. These numerical dependences, interactions and Gaussian innovations are unreported assumptions, not inferred from absent correlation evidence or adjusted diabetes ORs. Source treatment/selection may alter them; invariance of a and b is a transport hypothesis."
+    },
+    {
+      "id": "A_TARGET_MARGINS",
+      "description": "Without target composition or outcome statistics, assume female fraction 0.56; age 40+Gamma with sex-specific excess means centered at 20 years and common within-sex SD 12 years; and BMI total mean 27, SD 6 with female-minus-male 4.5. These are candidate scenario values, not measured HAALSI quantities or source-derived estimates. Target age has no imposed upper eligibility cutoff. Marginal support and distribution families do not model survival or recruitment."
+    },
+    {
+      "id": "A_GLUCOSE_TRANSPORT",
+      "description": "MIND recorded fasting-serum glucose anchors only its own baseline mean 5.2/SD1.4. Assume Ayele persistent baseline mean 5.2/SD1.6 and target baseline mean 5.4/SD1.9; these are explicit population, selection and measurement transport judgments. Assume nominal nonfasting probabilities 0 MIND, 0.40 Ayele, 0.55 target, independent of age, sex and BMI. Individual fasting adherence and target feeding composition are unknown. Nonfasting adds Gamma increments with mean 0.9/SD0.7 mmol/L. This constructs pooled recorded-value scenarios rather than claiming serum/capillary equivalence."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "Each daily reading is (persistent baseline + feeding increment)*mean-one lognormal error. Error CV is assumed 0 for MIND (already a recorded serum marginal), 0.08 for Ayele and 0.07 for target. Ayele averages 3 daily readings; others use 1. Daily feeding and errors are independent conditional on the persistent phenotype. Zero extra MIND error does not imply noiseless measurement. Ayele actual within-person fasting/error correlations, CareSens model, capillary plasma-equivalence and target cleaning/substitution mechanisms are unknown. They are not recovered. Canonical output glucose remains mmol/L; no contextual mg/dL statistic is converted."
+    },
+    {
+      "id": "A_SELECTION",
+      "description": "Source cohorts are distinct: MIND selected rural Chinese follow-up adults without dementia/functional disability, with known diabetes included, 2018 demographic/BMI timing versus 2019 laboratory timing and mean/mode imputations; Ayele urban Ethiopian household sample with pregnancy/disability/nonconsent exclusions and imputation. These do not become target exclusions. Target represents its finite positive measured subset without imputation. Sampling, weighting, missingness, treatment and selection effects are not mechanistically recovered. Bahendeka is contextual only and has no executable context."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "All parameter values are fixed before execution; finite equations do not estimate evidence uncertainty. Participant SDs are not estimator SEs or CIs. Same-cohort records are not independent confirmations. Seed-to-seed variation is individual sampling variation under the fixed scenario. Target projection uncertainty due to dependence, selection, treatment, measurement, tails and transport is not quantified. The three requested OLS contrasts are assumption-dependent and unvalidated."
+    },
+    {
+      "id": "A_NUMERICAL",
+      "description": "Uniform CDF arguments are clipped only at 1e-12 and 1-1e-12 to avoid inverse-CDF singularities; the target age has no eligibility upper bound or explicit age cap. Ayele age-bin inverse-CDF endpoint rounding is moved to the preceding representable number to preserve half-open bins. These numerical mappings do not filter or resize a generated cohort. IDs are unique context-prefixed row indices."
+    }
+  ],
+  "parameter_provenance": {
+    "active_context": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CONTRACT"
+      ],
+      "derivation": "Target context ID copied from target_descriptor.json. Only this selector changes between scheduled runs."
+    },
+    "contexts": {
+      "evidence_ids": [
+        "MIND_K01_age_mean",
+        "MIND_K01_age_sd",
+        "MIND_K01_bmi_mean",
+        "MIND_K01_bmi_sd",
+        "MIND_K01_serum_glucose_fsg_mean",
+        "MIND_K01_serum_glucose_fsg_sd",
+        "MIND_K01_female_proportion",
+        "ayele_age_mean",
+        "ayele_age_sd",
+        "ayele_sex_male",
+        "ayele_sex_female",
+        "ayele_age_25_34",
+        "ayele_age_35_44",
+        "ayele_age_45_54",
+        "ayele_age_55_64",
+        "ayele_bmi_underweight",
+        "ayele_bmi_normal",
+        "ayele_bmi_overweight"
+      ],
+      "assumption_ids": [
+        "A_CONTRACT",
+        "A_DESCRIPTIVE",
+        "A_QUOTA",
+        "A_MIND_MARGINS",
+        "A_SEX_MOMENTS",
+        "A_AYELE_AGE",
+        "A_AYELE_BMI",
+        "A_DEPENDENCE",
+        "A_TARGET_MARGINS",
+        "A_GLUCOSE_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_SELECTION",
+        "A_UNCERTAINTY",
+        "A_NUMERICAL"
+      ],
+      "derivation": "Population, measurement strings and n_rows are copied mechanically. Source counts are divided once by their denominators; source means/SDs remain in canonical units. All choices beyond these anchors are specified by the named assumptions. For a bounded beta on [L,U] with mean m and variance v: t=(m-L)/(U-L), k=t*(1-t)*(U-L)^2/v-1, alpha=t*k,beta=(1-t)*k. Within-sex means/variance follow A_SEX_MOMENTS. For Ayele age-bin probabilities q_i and chosen first three means mu_i, mu_4=(40.4-sum_{i<4}q_i*mu_i)/q_4; V_between=sum_i q_i*(mu_i-40.4)^2; W=13^2-V_between; k=sum_i q_i*(mu_i-L_i)*(U_i-mu_i)/W-1; t_i=(mu_i-L_i)/(U_i-L_i); alpha_i=t_i*k,beta_i=(1-t_i)*k. These finite equations are evaluated inside generator before random draws, with no source fit or optimizer. Target shifted-gamma conditional excess mean mu and within SD s give shape=mu^2/s^2,scale=s^2/mu. Lognormal mean m and variance v give sigma^2=log(1+v/m^2),mu_log=log(m)-sigma^2/2. Ayele BMI probabilities use the finite sex-mixture formula in A_AYELE_BMI. Reported MIND source Table1 anchors and Ayele Table1/Table2 counts are repeated measures of their respective cohorts, not independent evidence items. Ayele mean/SD source column and imputation caveats and all source selection/weighting limitations are retained."
+    },
+    "shared_settings": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_CONTRACT",
+        "A_SEX_MOMENTS",
+        "A_DEPENDENCE",
+        "A_GLUCOSE_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_NUMERICAL",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Canonical column names follow task; all numerical shared clinical values are explicit assumptions. Z_B and Z_G equations appear in A_DEPENDENCE, with residual variances fixed analytically to give conditional standard-normal marginals. Gamma meal shape=(mean/sd)^2 and scale=sd^2/mean. For mean-one multiplicative error with coefficient of variation c, logSD=sqrt(log(1+c^2)) and logMean=-logSD^2/2. Daily readings share the persistent glucose baseline; feeding and error innovations are independent. No generated-sample recentering, variance repair or tuning occurs."
+    }
+  }
+}

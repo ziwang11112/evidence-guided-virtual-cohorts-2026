@@ -1,0 +1,145 @@
+{
+  "context_assumption_ids": {
+    "source_mind_china_2019": [
+      "A_CONTEXT",
+      "A_DESCRIPTIVE",
+      "A_SEX",
+      "A_MIND_AGE",
+      "A_BMI",
+      "A_JOINT",
+      "A_GLUCOSE_MOMENTS",
+      "A_FEEDING",
+      "A_MEASUREMENT",
+      "A_TRANSPORT",
+      "A_UNCERTAINTY",
+      "A_NUMERICS"
+    ],
+    "source_ayele_dire_dawa_2017": [
+      "A_CONTEXT",
+      "A_DESCRIPTIVE",
+      "A_SEX",
+      "A_AYELE_AGE",
+      "A_BMI",
+      "A_JOINT",
+      "A_GLUCOSE_MOMENTS",
+      "A_FEEDING",
+      "A_MEASUREMENT",
+      "A_TRANSPORT",
+      "A_UNCERTAINTY",
+      "A_OMISSIONS",
+      "A_NUMERICS"
+    ],
+    "target_haalsi_pooled_poc": [
+      "A_CONTEXT",
+      "A_SEX",
+      "A_BMI",
+      "A_JOINT",
+      "A_GLUCOSE_MOMENTS",
+      "A_TARGET",
+      "A_FEEDING",
+      "A_MEASUREMENT",
+      "A_TRANSPORT",
+      "A_UNCERTAINTY",
+      "A_OMISSIONS",
+      "A_NUMERICS"
+    ]
+  },
+  "context_varying_parameters": [
+    {
+      "name": "age_distribution",
+      "reason": "Context eligibility and age margins differ. MIND bounded beta follows 61-80 and reported moments. Ayele binned beta follows Methods 25-64, reported imputed bins and moments with explicitly assumed within-bin densities. The target shifted gamma is a standalone demographic assumption with support 40 to infinity; source selection/timing is not imported.",
+      "evidence_ids": [
+        "MIND_K01_age_mean",
+        "MIND_K01_age_sd",
+        "ayele_age_mean",
+        "ayele_age_sd",
+        "ayele_age_25_34",
+        "ayele_age_35_44",
+        "ayele_age_45_54",
+        "ayele_age_55_64"
+      ],
+      "assumption_ids": [
+        "A_CONTEXT",
+        "A_DESCRIPTIVE",
+        "A_MIND_AGE",
+        "A_AYELE_AGE",
+        "A_TARGET",
+        "A_TRANSPORT"
+      ]
+    },
+    {
+      "name": "sex_composition",
+      "reason": "MIND 2049/3547 is the supplied once-derived female ratio; Ayele uses 586/872 with the complementary male count 286/872. Target 0.56 is a scenario. Nearest-integer allocation conditions each generated cohort on approximately these fractions.",
+      "evidence_ids": [
+        "MIND_K01_female_proportion",
+        "ayele_sex_male",
+        "ayele_sex_female"
+      ],
+      "assumption_ids": [
+        "A_DESCRIPTIVE",
+        "A_SEX",
+        "A_TARGET"
+      ]
+    },
+    {
+      "name": "bmi_distribution",
+      "reason": "MIND lognormal moments use 25/3.6. Ayele uses category count ratios and unsupported within-category positive quantiles, explicitly assigning no gap mass. Target lognormal 27/6 is an unvalidated demographic scenario; the broader dispersion reflects assumed population heterogeneity rather than a target observation.",
+      "evidence_ids": [
+        "MIND_K01_bmi_mean",
+        "MIND_K01_bmi_sd",
+        "ayele_bmi_underweight",
+        "ayele_bmi_normal",
+        "ayele_bmi_overweight"
+      ],
+      "assumption_ids": [
+        "A_DESCRIPTIVE",
+        "A_BMI",
+        "A_TARGET",
+        "A_TRANSPORT"
+      ]
+    },
+    {
+      "name": "dependence",
+      "reason": "Age-BMI latent correlations -0.12 MIND, +0.10 Ayele and -0.15 target represent an assumed modest age-related decline in the older contexts and rise over younger adult ages. Female BMI latent shifts 0.15/0.25/0.60 express context-dependent body-composition hypotheses. No selected source identifies these quantities. The mixture-CDF transform retains each BMI marginal while permitting this dependence.",
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_JOINT",
+        "A_TARGET",
+        "A_TRANSPORT",
+        "A_UNCERTAINTY"
+      ]
+    },
+    {
+      "name": "glucose_baseline",
+      "reason": "MIND persistent glucose moments use reported fasting-serum 5.2/1.4. Ayele provisional 5.0/1.4 allows an assumed younger population anchor, with no source continuous-glucose constraint. Target 5.2/1.6 borrows a location anchor and broadens dispersion for unmeasured selection/treatment heterogeneity; meal/device modifiers follow separately. These are not claims of assay equivalence.",
+      "evidence_ids": [
+        "MIND_K01_serum_glucose_fsg_mean",
+        "MIND_K01_serum_glucose_fsg_sd"
+      ],
+      "assumption_ids": [
+        "A_DESCRIPTIVE",
+        "A_GLUCOSE_MOMENTS",
+        "A_TARGET",
+        "A_MEASUREMENT",
+        "A_TRANSPORT",
+        "A_UNCERTAINTY"
+      ]
+    },
+    {
+      "name": "measurement_model",
+      "reason": "Source overnight serum, three-day capillary average and target pooled capillary reading require distinct observation models. Nonfasting references 0/0.50/0.55, device log SD 0/0.05/0.06, meal log increment 0.12/SD 0.10 and replicate counts 1/3/1 are explicit protocol-conditioned assumptions. Source variance already absorbs MIND assay noise. Original Ayele units/diagnostic rules remain contextual, and target cleaning effects are unidentified.",
+      "evidence_ids": [
+        "MIND_K01_serum_glucose_fsg_mean",
+        "MIND_K01_serum_glucose_fsg_sd"
+      ],
+      "assumption_ids": [
+        "A_FEEDING",
+        "A_MEASUREMENT",
+        "A_TRANSPORT",
+        "A_UNCERTAINTY",
+        "A_OMISSIONS"
+      ]
+    }
+  ],
+  "descriptive_proxies": {}
+}
