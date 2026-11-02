@@ -14,6 +14,8 @@ Current execution checkpoint: the larger campaign is in [candidate admission](..
 
 ## The contribution we are trying to deliver
 
+**K02 clinical preparation, 2 November 2026:** the [reviewed case preparation](../reports/scaleup_2026-11-01/case_k02/README.md) separates the Agent-visible whole-cohort request from coordinator/evaluation records, fixes the explicit cholesterol unit representation and bounded source/comparison design, and records a prospective exposure amendment. K02 is a context-exposed quantitative holdout, not a fully unseen confirmation; it can occupy one of four total case slots, with at most three other fully unseen cases. Qualified K02 success cannot alone unlock Wave B: the independently admitted K01 case must pass its fixed bundle. This is an explicit narrowing of the earlier campaign claim/gate before any new target effect, without enlarging trials or changing the historical campaign file. The new whole-table guard and pure statistical-reference implementation are checked on invented inputs only; the clinical campaign remains unreleased.
+
 **An Agent turns published biomedical evidence, a target-population description and optional observed measurements into a reusable virtual dataset that can support specified scientific analyses.**
 
 Complete-cohort generation with no individual input remains central. Variable enrichment and missing-cell completion remain within the overall method; this paper does not need to newly validate every regime. The output is data and its generation recipe, with evidence and assumptions documented. A checklist, reliability classifier, simulator benchmark or Agent orchestration framework must not replace that output as the project objective.

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "purpose": "target_analysis_unit_conversion",
+  "input_contract_sha256": "efd43c2c84b561b6daec5deb95b20d59fabe969dfbf68d880ad1e69e58254306",
+  "output_contract_sha256": "40cbfdf7fb507313b2a85d8bdc4c3525b8046f68e4d7132a4e66e70e24edc173",
+  "columns": [
+    {
+      "column": "id",
+      "operation": "identity",
+      "factor": 1,
+      "source": null
+    },
+    {
+      "column": "age",
+      "operation": "identity",
+      "factor": 1,
+      "source": null
+    },
+    {
+      "column": "sex",
+      "operation": "identity",
+      "factor": 1,
+      "source": null
+    },
+    {
+      "column": "bmi",
+      "operation": "identity",
+      "factor": 1,
+      "source": null
+    },
+    {
+      "column": "total_cholesterol",
+      "operation": "multiply",
+      "factor": 38.67,
+      "source": {
+        "kind": "official_unit_documentation",
+        "reference": "https://www.ncbi.nlm.nih.gov/books/NBK83505/",
+        "locator": "Appendix A, Lipid Conversion Factors; To Convert From mmol/L to mg/dL",
+        "analyte_id": "total_cholesterol",
+        "input_unit": "mmol/L",
+        "output_unit": "mg/dL"
+      }
+    },
+    {
+      "column": "hdl_cholesterol",
+      "operation": "multiply",
+      "factor": 38.67,
+      "source": {
+        "kind": "official_unit_documentation",
+        "reference": "https://www.ncbi.nlm.nih.gov/books/NBK83505/",
+        "locator": "Appendix A, Lipid Conversion Factors; To Convert From mmol/L to mg/dL",
+        "analyte_id": "hdl_cholesterol",
+        "input_unit": "mmol/L",
+        "output_unit": "mg/dL"
+      }
+    }
+  ],
+  "review": {
+    "decision": "approved",
+    "independent": true,
+    "reviewer_id": "/root/context_bridge_review",
+    "producer_id": "/root",
+    "reviewed_utc": "2026-11-02T15:21:22.524461+00:00",
+    "reason": "Independently opened the official AHRQ Appendix A Lipid Conversion Factors at https://www.ncbi.nlm.nih.gov/books/NBK83505/ in a new wang Chrome tab on 2026-11-02. The visible mmol/L-to-mg/dL instruction explicitly specifies multiplication by 38.67 for total and HDL cholesterol. Reviewed both exact contracts and current K02 task_template.json; input columns, types, roles and units match, and output TC/HDL units match the fixed K02 analysis specification. Only TC and HDL are multiplied; ID, age, recorded F/M categories and BMI remain unchanged. This approves numerical representation only, not the target sex legend, assay/specimen or fasting equivalence, population transport, clinical model quality, source-feedback conversion, candidate construction, case admission, execution or global release. Original measured-reference lipids are already mg/dL and must not be converted again.",
+    "approved_sha256": "4544cdb10b3c01bc56670e5875c5bfea725162336a6b19e7ddd24e908094788a"
+  }
+}

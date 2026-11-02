@@ -1,0 +1,166 @@
+{
+  "schema_version": "k02_clinical_request.v1",
+  "case_id": "K02",
+  "status": "draft_for_independent_packet_review_not_case_or_global_release",
+  "request_type": "evidence_guided_whole_cohort_generation",
+  "purpose": "Construct one joint virtual cohort for three prespecified descriptive analyses.",
+  "n_rows_per_target_table": 5000,
+  "task_contract": "task_template.json",
+  "target_context": "target_protocol_metadata.json",
+  "source_contexts": "source_contexts.json",
+  "evidence_packet": "sources/greiner_source_packet.json",
+  "output_route": "generator.py",
+  "individual_inputs": null,
+  "target_schema": {
+    "row_id": "id",
+    "ordered_columns": [
+      "id",
+      "age",
+      "sex",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "all_values_required": true,
+    "unique_identifier": true,
+    "strictly_positive": [
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "positivity_note": "The basic harness schema has inclusive minimum bounds only. Do not replace strict positivity with an arbitrary numerical floor; the case validator must enforce the declared >0 requirement.",
+    "extra_target_variables": "Not requested; derived/source-only quantities do not expand the release schema."
+  },
+  "representation": {
+    "all_generation_contexts_same_columns_and_units": true,
+    "lipid_generation_unit": "mmol/L",
+    "target_analysis_unit": "mg/dL",
+    "output_to_analysis_unit_map": {
+      "path": "../unit_mapping",
+      "status": "separate_root_owned_reviewed_artifact_required_before_activation"
+    },
+    "assay_harmonization_claimed": false,
+    "source_feedback_unit_conversion": false
+  },
+  "scientific_uses": [
+    {
+      "id": "K02-HDL-BMI",
+      "formula": "hdl_cholesterol ~ 1 + age + categorical sex + bmi",
+      "estimator": "unweighted ordinary least squares",
+      "reported_quantity": "BMI coefficient multiplied by 5",
+      "unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-TC-BMI",
+      "formula": "total_cholesterol ~ 1 + age + categorical sex + bmi",
+      "estimator": "unweighted ordinary least squares",
+      "reported_quantity": "BMI coefficient multiplied by 5",
+      "unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "formula": "Pearson correlation of residuals from the two models above fitted on the same rows",
+      "unit": "1",
+      "role": "joint reuse"
+    }
+  ],
+  "analysis_common_rules": {
+    "same_release_and_common_eligible_rows_for_all_three": true,
+    "reference_category": "M",
+    "categorical_indicator": "I(sex == 'F')",
+    "contrasts_are_descriptive_not_causal": true,
+    "expected_target_effects_supplied": false,
+    "evaluation_margins_or_target_SD_supplied": false
+  },
+  "agent_scientific_responsibility": {
+    "joint_structure": "Choose and justify from admitted evidence and explicit assumptions.",
+    "parameter_values_and_distributions": "Unassigned; future Agent choices, not controller-written means, slopes, signs, variances or distribution families.",
+    "shared_and_context_varying_parameters": "Declare the complete shared scientific structure and every context-varying input with rationale/provenance before freeze.",
+    "target_demographic_composition": "Unspecified; choose and disclose assumptions without reading target rows or target-derived summaries.",
+    "transport_assumptions": "State source selection, population composition, assay/specimen and fasting differences. Do not label their resolution as verified.",
+    "unreported_relations": "May be modeled under explicit assumptions; missing evidence does not itself imply zero, independence or a release blocker.",
+    "common_model": "Future source and target execution must retain one generator's bytes and the entire scientific specification except active_context; that linkage does not prove scientific compliance or transfer."
+  },
+  "feedback_rules": {
+    "required_engine": "semantic_feedback_v1",
+    "legacy_fallback": false,
+    "supplement": "existing execution_feedback collector only where separately declared and independently reviewed",
+    "geometric_means": "Keep original kind; v1 remains unavailable, supplement may compute supported descriptive values.",
+    "unknown_source_weighting": "Keep not_reported; exact source-estimator comparison is unavailable. Any unweighted proxy needs a separate reviewed assumption.",
+    "confidence_intervals": "Estimator uncertainty only; never participant/residual SD, acceptance bands or automatic precision weights.",
+    "age_quantiles": "Reported context only because finite-sample convention is unresolved.",
+    "table3_regressions": "Context only; unresolved transformations/adjustments forbid implicit raw-scale numerical constraints.",
+    "non_HDL": "Original source evidence retained as TC minus HDL, a derived quantity. Current five-variable output does not include it and the collector does not add it; executable derived checks need a separately reviewed path.",
+    "diagnostic_disposition": {
+      "original_numerical_source_candidates": 30,
+      "potential_direct_source_scenario_geometric_means": {
+        "count": 18,
+        "variables": [
+          "bmi",
+          "total_cholesterol",
+          "hdl_cholesterol"
+        ],
+        "status": "supplement_can_compute_descriptive_values_after_context_and_binding_review"
+      },
+      "potential_direct_source_scenario_prevalences": {
+        "count": 6,
+        "variable": "hdl_cholesterol",
+        "status": "threshold_operators_available_but_unknown_source_weights_prevent_strict_source_checks"
+      },
+      "non_HDL_geometric_means": {
+        "count": 6,
+        "status": "evidence_retained_diagnostic_unavailable_without_separate_derived_view_not_added_here"
+      },
+      "age_quantile_context_records": 18,
+      "pooled_regression_context_records": 12,
+      "active_operational_source_checks": 0,
+      "strict_source_checks": "Unavailable under current unknown weighting; geometric means also remain unsupported in frozen semantic v1."
+    },
+    "active_check_ids": [],
+    "proxy_approvals": [],
+    "target_feedback": "No measured-target outcome feedback to constructors."
+  },
+  "information_boundary": {
+    "allowed_files": "manifest.json exact file allowlist",
+    "target_individual_rows": "forbidden",
+    "target_moments_effects_exposed_conclusions": "forbidden",
+    "other_constructors_or_historical_target_results": "forbidden",
+    "new_searches_studies_downloads": "not authorized for this packet",
+    "input_boundary_is_filesystem_sandbox": false
+  },
+  "execution_and_revisions": {
+    "execution_enabled": false,
+    "candidate_construction_authorized_by_this_file": false,
+    "maximum_feedback_decisions": 1,
+    "per_context_source_rows_seeds_and_attempt_caps": "Controller must freeze finite schedule before execution; failed attempts count.",
+    "target_seed_schedule": "Pending separate frozen controller schedule",
+    "retention": "Explicitly retain initial outputs or make at most one revised scientific candidate; no better-seed or better-stage selection."
+  },
+  "uncertainty_and_missing_information": [
+    {
+      "item": "Target demographic and lifestyle composition",
+      "status": "unspecified",
+      "consequence": "Declare a target-composition assumption; do not infer it from reserved rows."
+    },
+    {
+      "item": "Joint covariate/lipid law and conditional residual dependence",
+      "status": "partly identified by external evidence",
+      "consequence": "Choose an explicit scientific model and disclose unsupported relationships."
+    },
+    {
+      "item": "Source selection details, weights and exact row denominators",
+      "status": "partly unresolved",
+      "consequence": "Preserve original table-specific counts and unknown weights; use only supported or explicitly assumption-defined diagnostics."
+    },
+    {
+      "item": "Assay/specimen/fasting transfer",
+      "status": "not validated",
+      "consequence": "Treat as a transport limitation; unit conversion alone is insufficient."
+    },
+    {
+      "item": "Controller budgets, unit-map approval and case/global release",
+      "status": "not supplied as active permission",
+      "consequence": "Operational release requirements remain separate from unspecified scientific relationships."
+    }
+  ]
+}

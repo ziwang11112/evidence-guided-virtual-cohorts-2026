@@ -1,0 +1,198 @@
+{
+  "schema_version": "k02_reference_source_budget_proposal.v1",
+  "status": "proposal_pending_independent_review_not_executable_release",
+  "cohort_slot": "K02",
+  "created_local_date": "2026-11-02",
+  "campaign_plan_modified": false,
+  "execution_authorized": false,
+  "case_released": false,
+  "source_packet": {
+    "path": "work/scaleup_2026-11-01/evidence/SOURCE_CANDIDATE_GREINER.json",
+    "sha256": "34eeb0be18f7a9d015e9a7d2446beeb10beb134d389315c998a22199f7d7e753",
+    "same_packet_for_all_constructors": true,
+    "live_harness_admission_implied": false
+  },
+  "constructors": ["A01", "A02", "A03", "A04", "A05", "S01"],
+  "stages": ["initial", "final"],
+  "source_contexts": [
+    {"id": "malawi_rural_men", "seed": 3101, "rows_per_executed_stage": 5000},
+    {"id": "malawi_urban_men", "seed": 3102, "rows_per_executed_stage": 5000},
+    {"id": "uganda_men", "seed": 3103, "rows_per_executed_stage": 5000},
+    {"id": "malawi_rural_women", "seed": 3104, "rows_per_executed_stage": 5000},
+    {"id": "malawi_urban_women", "seed": 3105, "rows_per_executed_stage": 5000},
+    {"id": "uganda_women", "seed": 3106, "rows_per_executed_stage": 5000}
+  ],
+  "source_trial_id_pattern": "K02_{construction}_{stage}_{source_context_id}",
+  "target": {
+    "seeds": [2101, 2102, 2103],
+    "rows_per_trial": 5000,
+    "feedback_policy": "none",
+    "canonical_lipid_unit": "mmol/L",
+    "analysis_lipid_unit": "mg/dL",
+    "separate_reviewed_unit_conversion_required": true
+  },
+  "reserved_slot_ceiling": {
+    "source_slots": 72,
+    "source_scheduled_rows": 360000,
+    "target_slots": 36,
+    "target_scheduled_rows": 180000,
+    "unused_allocation_transfer_allowed": false
+  },
+  "maximum_new_attempts_under_s01_retention": {
+    "source_attempts": 66,
+    "source_scheduled_rows": 330000,
+    "target_attempts": 33,
+    "target_scheduled_rows": 165000,
+    "condition": "Every Agent revises once; S01 retains; each failed dispatched attempt still consumes its full row allocation"
+  },
+  "all_constructors_retain": {
+    "maximum_unique_source_attempts": 36,
+    "maximum_source_scheduled_rows": 180000,
+    "maximum_unique_target_attempts": 18,
+    "maximum_target_scheduled_rows": 90000
+  },
+  "feedback_and_failure_policy": {
+    "initial_feedback_packets_per_constructor": 1,
+    "source_reports_per_packet": 6,
+    "maximum_agent_scientific_revisions": 1,
+    "final_is_primary": true,
+    "final_feedback_can_trigger_revision": false,
+    "retain": "Alias exact initial candidate and output hashes; no new source or target generation",
+    "failed_prelaunch_timeout_interrupted_attempts_debit_budget": true,
+    "automatic_retry": false,
+    "new_seed_after_failure": false,
+    "additional_contexts_after_freeze": false,
+    "extra_simulation_calibration_calls": 0,
+    "partial_bridge_resume": false,
+    "target_scientific_summaries_delivered_to_constructor": false
+  },
+  "execution_limits": {
+    "timeout_seconds": 60,
+    "memory_mb": 1024,
+    "output_bytes": 2000000,
+    "log_bytes": 10000,
+    "runtime": "existing_isolated_executor_only",
+    "host_fallback": false
+  },
+  "analytic_calculation_cap": {
+    "jobs_per_initial_or_changed_final_stage": 1,
+    "reserved_jobs": 12,
+    "maximum_jobs_under_s01_retention": 11,
+    "method_scope": "Finite analytic parameter derivation and source-formula scalar transforms only",
+    "timeout_seconds_per_job": 120,
+    "memory_mb_per_job": 1024,
+    "numerical_fitting_optimizer": false,
+    "quadrature": false,
+    "randomized_fitting_or_integration": false,
+    "multistart_or_model_grid": false,
+    "generator_calls_inside_fitting": 0,
+    "synthetic_rows_inside_fitting": 0,
+    "target_endpoint_optimization": false,
+    "failed_job_consumes_allocation": true,
+    "receipt_required": true,
+    "receipt_fields": ["job_id", "input_sha256", "evidence_sha256", "code_sha256", "output_sha256", "method", "declared_finite_calculations", "elapsed_seconds", "status"],
+    "enforcement": "Independent finite-code review and controller attempt ledger; no new generic counter engine",
+    "new_enforcement_engine_implemented_here": false,
+    "existing_campaign_design_feedback_turn_ceiling": 40
+  },
+  "scheduled_generator_sampling": {
+    "ordinary_declared_bounded_support_sampling_allowed": true,
+    "rng_internal_rejection_allowed": true,
+    "subject_to_frozen_resource_limits": true,
+    "whole_cohort_redraw_for_diagnostic_favorability": false,
+    "within_run_parameter_or_seed_adaptation_for_fit": false,
+    "extra_cohorts_inside_generator_for_calibration": false,
+    "sampler_cap_exhaustion_or_invalid_output": "Recorded failure; no retry or replacement"
+  },
+  "statistical_reference": {
+    "construction_id": "S01",
+    "label": "transparent_positive_sum_source_marginal_completion_reference",
+    "not_best_statistical_or_causal_model": true,
+    "fitting_method": "closed_form_original_point_summary_inversion",
+    "formulas": {
+      "mu_bmi_g": "log(source_bmi_geometric_mean_g)",
+      "mu_hdl_g": "log(source_hdl_geometric_mean_g)",
+      "mu_non_hdl_g": "log(source_non_hdl_geometric_mean_g)",
+      "sigma_g": "(log(strict_hdl_threshold_g)-log(source_hdl_geometric_mean_g))/Phi_inverse(source_low_hdl_percentage_g/100)",
+      "bmi": "exp(mu_bmi_g + sigma_g*Z_B)",
+      "hdl": "exp(mu_hdl_g + sigma_g*Z_H)",
+      "non_hdl_internal": "exp(mu_non_hdl_g + sigma_g*Z_N)",
+      "total_cholesterol": "hdl + non_hdl_internal"
+    },
+    "assumptions": {
+      "conditional_noise": "Z_B,Z_H,Z_N independent standard normals within source stratum",
+      "bmi_and_non_hdl_log_dispersion": "Set equal to HDL-derived sigma_g; arbitrary unreported completion rule",
+      "age": "Uniform(18,80) years, independent of stratum and all generated measurements",
+      "age_support_is_target_eligibility_cutoff": false,
+      "age_quantiles_numerically_used": false,
+      "source_context_component_probability": "1 for its named stratum",
+      "target_donor_component_probabilities": [0.16666666666666666, 0.16666666666666666, 0.16666666666666666, 0.16666666666666666, 0.16666666666666666, 0.16666666666666666],
+      "target_donor_probability_definition": "exact equal mixture 1/6 each; decimal list is display only",
+      "target_composition_inferred_from_data": false,
+      "donor_site_is_target_lifestyle": false,
+      "source_sex_to_F_M_is_internal_encoding_only": true,
+      "target_biological_sex_legend_claimed": false,
+      "source_weights": "not_reported",
+      "scenario_sampling_weights": "equal_weight_assumption_not_source_reconstruction"
+    },
+    "fitted_source_constraints": {
+      "bmi_geometric_means": 6,
+      "hdl_geometric_means": 6,
+      "non_hdl_geometric_means_internal_analytic_only": 6,
+      "low_hdl_percentages": 6
+    },
+    "unfitted_source_constraints": {
+      "total_cholesterol_geometric_means_diagnostic": 6,
+      "age_median_quartile_context_records": 18,
+      "raw_log_ambiguous_regression_context_records": 12
+    },
+    "confidence_interval_to_sd_conversion": false,
+    "precision_weighting": false,
+    "target_expected_coefficient_supplied": false,
+    "non_hdl_output_column_added": false,
+    "measured_tc_less_than_hdl_excluded": false,
+    "s01_rejection_repair_or_clipping": false,
+    "fitting_jobs": 1,
+    "optimizer_evaluations": 0,
+    "hdl_inverse_cdf_evaluations": 6,
+    "feedback_decision": "Precommit retain scientific bytes and alias initial outputs if integrity valid; stop without repair/retry on implementation or integrity failure",
+    "monte_carlo_discrepancy_tuning": false
+  },
+  "source_diagnostic_disposition": {
+    "potential_numeric_geometric_means": {"bmi": 6, "total_cholesterol": 6, "hdl_cholesterol": 6},
+    "potential_numeric_strict_low_hdl_proportions": 6,
+    "potential_numeric_total": 24,
+    "non_hdl_geometric_means_unavailable_with_current_task_operands": 6,
+    "all_gm_prevalence_records_dispositioned": 30,
+    "native_geometric_mean": "reported_other; semantic_v1 unavailable; supplemental descriptive arithmetic only",
+    "strict_source_estimator_discrepancy_available": false,
+    "raw_equal_weight_proxy_requires_separate_independent_review": true,
+    "implicit_derived_variable_engine": false
+  },
+  "performed_source_algebra_check": {
+    "kind": "source_only_closed_form_domain_feasibility_no_parameter_output",
+    "context_count": 6,
+    "all_feasible": true,
+    "positive_finite_gm_and_threshold": true,
+    "probabilities_in_open_unit_interval_and_not_half": true,
+    "finite_positive_lognormal_solutions": true,
+    "strict_lt_thresholds_preserved": true,
+    "hdl_and_threshold_units_mmol_per_liter": true,
+    "evidence_id_patterns": ["{context_id}__hdl_cholesterol__geometric_mean", "{context_id}__hdl_cholesterol__low_prevalence"],
+    "generator_runs": 0,
+    "sampled_rows": 0,
+    "parameter_values_emitted": false,
+    "target_data_accessed": false,
+    "new_original_studies": 0,
+    "does_not_validate_model_or_transport": true
+  },
+  "required_before_implementation": [
+    "Independent reference, assumption and source-budget review",
+    "Shared source/context and proxy admission",
+    "Frozen same-information task and evidence packet",
+    "Reviewed finite analytic calculation code and attempt ledger",
+    "Reviewed generator and source/target bindings",
+    "Reviewed downstream unit manifest",
+    "Existing case admission and global campaign freeze"
+  ]
+}
