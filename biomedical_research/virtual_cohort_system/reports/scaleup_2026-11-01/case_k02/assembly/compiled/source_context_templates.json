@@ -1,0 +1,2636 @@
+[
+  {
+    "id": "malawi_rural_men",
+    "role": "source",
+    "source_ids": [
+      "greiner_malawi_rural_men"
+    ],
+    "assumption_ids": [],
+    "feedback_policy": "semantic_v1_plus_supplement",
+    "recipe": {
+      "schema_version": 1,
+      "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":4534,\"reported_table_2_group_n\":4534,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+      "measurement": {
+        "mode": "identity",
+        "description": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}"
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_rural_men__bmi__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_rural_men__total_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_rural_men__hdl_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_rural_men__hdl_cholesterol__low_prevalence",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; retain original strict threshold and percentage scale."
+        }
+      ]
+    },
+    "semantics": {
+      "schema_version": 1,
+      "evidence_sha256": "",
+      "recipe_sha256": "",
+      "bindings": [
+        {
+          "check_id": "check-1",
+          "evidence_id": "malawi_rural_men__bmi__geometric_mean",
+          "source_locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_rural_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-2",
+          "evidence_id": "malawi_rural_men__total_cholesterol__geometric_mean",
+          "source_locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-3",
+          "evidence_id": "malawi_rural_men__hdl_cholesterol__geometric_mean",
+          "source_locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-4",
+          "evidence_id": "malawi_rural_men__hdl_cholesterol__low_prevalence",
+          "source_locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_rural_men",
+          "definition_status": "specified",
+          "source_operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.03
+            }
+          },
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {
+            "age": "year",
+            "hdl_cholesterol": "mmol/L",
+            "sex": "1"
+          },
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        }
+      ]
+    },
+    "supplement": {
+      "schema_version": 1,
+      "task_sha256": "",
+      "evidence_sha256": "",
+      "model_spec_sha256": "",
+      "semantics_sha256": "",
+      "table_context": {
+        "kind": "source_context_simulation",
+        "context_id": "malawi_rural_men",
+        "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":4534,\"reported_table_2_group_n\":4534,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+        "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+        "variable_units": {
+          "age": "year",
+          "sex": "1",
+          "bmi": "kg/m^2",
+          "total_cholesterol": "mmol/L",
+          "hdl_cholesterol": "mmol/L"
+        },
+        "variable_scales": {
+          "age": "original",
+          "sex": "categorical",
+          "bmi": "original",
+          "total_cholesterol": "original",
+          "hdl_cholesterol": "original"
+        }
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_rural_men__bmi__geometric_mean",
+          "semantic_check_id": "check-1",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_men",
+            "context_id": "malawi_rural_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":4534,\"reported_table_2_group_n\":4534,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_rural_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "kg/m^2",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "bmi"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "bmi": "kg/m^2",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "bmi": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_rural_men__total_cholesterol__geometric_mean",
+          "semantic_check_id": "check-2",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "total_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_men",
+            "context_id": "malawi_rural_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":4534,\"reported_table_2_group_n\":4534,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "total_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "sex": "1",
+              "total_cholesterol": "mmol/L"
+            },
+            "variable_scales": {
+              "age": "original",
+              "sex": "categorical",
+              "total_cholesterol": "original"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_rural_men__hdl_cholesterol__geometric_mean",
+          "semantic_check_id": "check-3",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "hdl_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_men",
+            "context_id": "malawi_rural_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":4534,\"reported_table_2_group_n\":4534,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "hdl_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_rural_men__hdl_cholesterol__low_prevalence",
+          "semantic_check_id": "check-4",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.03
+            }
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_men",
+            "context_id": "malawi_rural_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":4534,\"reported_table_2_group_n\":4534,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_rural_men",
+            "operator": {
+              "kind": "proportion",
+              "unit": "%",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "event": {
+                "column": "hdl_cholesterol",
+                "op": "lt",
+                "value": 1.03
+              }
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        }
+      ],
+      "context_review": null
+    }
+  },
+  {
+    "id": "malawi_urban_men",
+    "role": "source",
+    "source_ids": [
+      "greiner_malawi_urban_men"
+    ],
+    "assumption_ids": [],
+    "feedback_policy": "semantic_v1_plus_supplement",
+    "recipe": {
+      "schema_version": 1,
+      "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":3988,\"reported_table_2_group_n\":3988,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+      "measurement": {
+        "mode": "identity",
+        "description": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}"
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_urban_men__bmi__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_urban_men__total_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_urban_men__hdl_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_urban_men__hdl_cholesterol__low_prevalence",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; retain original strict threshold and percentage scale."
+        }
+      ]
+    },
+    "semantics": {
+      "schema_version": 1,
+      "evidence_sha256": "",
+      "recipe_sha256": "",
+      "bindings": [
+        {
+          "check_id": "check-1",
+          "evidence_id": "malawi_urban_men__bmi__geometric_mean",
+          "source_locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_urban_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-2",
+          "evidence_id": "malawi_urban_men__total_cholesterol__geometric_mean",
+          "source_locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_urban_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-3",
+          "evidence_id": "malawi_urban_men__hdl_cholesterol__geometric_mean",
+          "source_locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_urban_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-4",
+          "evidence_id": "malawi_urban_men__hdl_cholesterol__low_prevalence",
+          "source_locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_urban_men",
+          "definition_status": "specified",
+          "source_operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.03
+            }
+          },
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {
+            "age": "year",
+            "hdl_cholesterol": "mmol/L",
+            "sex": "1"
+          },
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        }
+      ]
+    },
+    "supplement": {
+      "schema_version": 1,
+      "task_sha256": "",
+      "evidence_sha256": "",
+      "model_spec_sha256": "",
+      "semantics_sha256": "",
+      "table_context": {
+        "kind": "source_context_simulation",
+        "context_id": "malawi_urban_men",
+        "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":3988,\"reported_table_2_group_n\":3988,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+        "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+        "variable_units": {
+          "age": "year",
+          "sex": "1",
+          "bmi": "kg/m^2",
+          "total_cholesterol": "mmol/L",
+          "hdl_cholesterol": "mmol/L"
+        },
+        "variable_scales": {
+          "age": "original",
+          "sex": "categorical",
+          "bmi": "original",
+          "total_cholesterol": "original",
+          "hdl_cholesterol": "original"
+        }
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_urban_men__bmi__geometric_mean",
+          "semantic_check_id": "check-1",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_men",
+            "context_id": "malawi_urban_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":3988,\"reported_table_2_group_n\":3988,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_urban_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "kg/m^2",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "bmi"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "bmi": "kg/m^2",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "bmi": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_urban_men__total_cholesterol__geometric_mean",
+          "semantic_check_id": "check-2",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "total_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_men",
+            "context_id": "malawi_urban_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":3988,\"reported_table_2_group_n\":3988,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_urban_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "total_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "sex": "1",
+              "total_cholesterol": "mmol/L"
+            },
+            "variable_scales": {
+              "age": "original",
+              "sex": "categorical",
+              "total_cholesterol": "original"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_urban_men__hdl_cholesterol__geometric_mean",
+          "semantic_check_id": "check-3",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "hdl_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_men",
+            "context_id": "malawi_urban_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":3988,\"reported_table_2_group_n\":3988,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_urban_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "hdl_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_urban_men__hdl_cholesterol__low_prevalence",
+          "semantic_check_id": "check-4",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.03
+            }
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_men",
+            "context_id": "malawi_urban_men",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_men\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":3988,\"reported_table_2_group_n\":3988,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_urban_men",
+            "operator": {
+              "kind": "proportion",
+              "unit": "%",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "event": {
+                "column": "hdl_cholesterol",
+                "op": "lt",
+                "value": 1.03
+              }
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        }
+      ],
+      "context_review": null
+    }
+  },
+  {
+    "id": "uganda_men",
+    "role": "source",
+    "source_ids": [
+      "greiner_uganda_men"
+    ],
+    "assumption_ids": [],
+    "feedback_policy": "semantic_v1_plus_supplement",
+    "recipe": {
+      "schema_version": 1,
+      "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_men\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2177,\"reported_table_2_group_n\":2179,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+      "measurement": {
+        "mode": "identity",
+        "description": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}"
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "uganda_men__bmi__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "uganda_men__total_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "uganda_men__hdl_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "uganda_men__hdl_cholesterol__low_prevalence",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; retain original strict threshold and percentage scale."
+        }
+      ]
+    },
+    "semantics": {
+      "schema_version": 1,
+      "evidence_sha256": "",
+      "recipe_sha256": "",
+      "bindings": [
+        {
+          "check_id": "check-1",
+          "evidence_id": "uganda_men__bmi__geometric_mean",
+          "source_locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; uganda_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-2",
+          "evidence_id": "uganda_men__total_cholesterol__geometric_mean",
+          "source_locator": "Table 2; Total cholesterol, star-marked geometric mean; uganda_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-3",
+          "evidence_id": "uganda_men__hdl_cholesterol__geometric_mean",
+          "source_locator": "Table 2; HDL cholesterol, star-marked geometric mean; uganda_men",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-4",
+          "evidence_id": "uganda_men__hdl_cholesterol__low_prevalence",
+          "source_locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; uganda_men",
+          "definition_status": "specified",
+          "source_operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.03
+            }
+          },
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {
+            "age": "year",
+            "hdl_cholesterol": "mmol/L",
+            "sex": "1"
+          },
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        }
+      ]
+    },
+    "supplement": {
+      "schema_version": 1,
+      "task_sha256": "",
+      "evidence_sha256": "",
+      "model_spec_sha256": "",
+      "semantics_sha256": "",
+      "table_context": {
+        "kind": "source_context_simulation",
+        "context_id": "uganda_men",
+        "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_men\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2177,\"reported_table_2_group_n\":2179,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+        "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+        "variable_units": {
+          "age": "year",
+          "sex": "1",
+          "bmi": "kg/m^2",
+          "total_cholesterol": "mmol/L",
+          "hdl_cholesterol": "mmol/L"
+        },
+        "variable_scales": {
+          "age": "original",
+          "sex": "categorical",
+          "bmi": "original",
+          "total_cholesterol": "original",
+          "hdl_cholesterol": "original"
+        }
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "uganda_men__bmi__geometric_mean",
+          "semantic_check_id": "check-1",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "source": {
+            "source_id": "greiner_uganda_men",
+            "context_id": "uganda_men",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_men\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2177,\"reported_table_2_group_n\":2179,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; uganda_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "kg/m^2",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "bmi"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "bmi": "kg/m^2",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "bmi": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "uganda_men__total_cholesterol__geometric_mean",
+          "semantic_check_id": "check-2",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "total_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_uganda_men",
+            "context_id": "uganda_men",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_men\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2177,\"reported_table_2_group_n\":2179,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Total cholesterol, star-marked geometric mean; uganda_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "total_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "sex": "1",
+              "total_cholesterol": "mmol/L"
+            },
+            "variable_scales": {
+              "age": "original",
+              "sex": "categorical",
+              "total_cholesterol": "original"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "uganda_men__hdl_cholesterol__geometric_mean",
+          "semantic_check_id": "check-3",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "hdl_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_uganda_men",
+            "context_id": "uganda_men",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_men\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2177,\"reported_table_2_group_n\":2179,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; HDL cholesterol, star-marked geometric mean; uganda_men",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "hdl_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "uganda_men__hdl_cholesterol__low_prevalence",
+          "semantic_check_id": "check-4",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "M"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.03
+            }
+          },
+          "source": {
+            "source_id": "greiner_uganda_men",
+            "context_id": "uganda_men",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_men\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2177,\"reported_table_2_group_n\":2179,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"male\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; uganda_men",
+            "operator": {
+              "kind": "proportion",
+              "unit": "%",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "M"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "event": {
+                "column": "hdl_cholesterol",
+                "op": "lt",
+                "value": 1.03
+              }
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        }
+      ],
+      "context_review": null
+    }
+  },
+  {
+    "id": "malawi_rural_women",
+    "role": "source",
+    "source_ids": [
+      "greiner_malawi_rural_women"
+    ],
+    "assumption_ids": [],
+    "feedback_policy": "semantic_v1_plus_supplement",
+    "recipe": {
+      "schema_version": 1,
+      "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":5894,\"reported_table_2_group_n\":5893,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+      "measurement": {
+        "mode": "identity",
+        "description": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}"
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_rural_women__bmi__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_rural_women__total_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_rural_women__hdl_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_rural_women__hdl_cholesterol__low_prevalence",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; retain original strict threshold and percentage scale."
+        }
+      ]
+    },
+    "semantics": {
+      "schema_version": 1,
+      "evidence_sha256": "",
+      "recipe_sha256": "",
+      "bindings": [
+        {
+          "check_id": "check-1",
+          "evidence_id": "malawi_rural_women__bmi__geometric_mean",
+          "source_locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_rural_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-2",
+          "evidence_id": "malawi_rural_women__total_cholesterol__geometric_mean",
+          "source_locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-3",
+          "evidence_id": "malawi_rural_women__hdl_cholesterol__geometric_mean",
+          "source_locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-4",
+          "evidence_id": "malawi_rural_women__hdl_cholesterol__low_prevalence",
+          "source_locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_rural_women",
+          "definition_status": "specified",
+          "source_operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.29
+            }
+          },
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {
+            "age": "year",
+            "hdl_cholesterol": "mmol/L",
+            "sex": "1"
+          },
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        }
+      ]
+    },
+    "supplement": {
+      "schema_version": 1,
+      "task_sha256": "",
+      "evidence_sha256": "",
+      "model_spec_sha256": "",
+      "semantics_sha256": "",
+      "table_context": {
+        "kind": "source_context_simulation",
+        "context_id": "malawi_rural_women",
+        "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":5894,\"reported_table_2_group_n\":5893,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+        "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+        "variable_units": {
+          "age": "year",
+          "sex": "1",
+          "bmi": "kg/m^2",
+          "total_cholesterol": "mmol/L",
+          "hdl_cholesterol": "mmol/L"
+        },
+        "variable_scales": {
+          "age": "original",
+          "sex": "categorical",
+          "bmi": "original",
+          "total_cholesterol": "original",
+          "hdl_cholesterol": "original"
+        }
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_rural_women__bmi__geometric_mean",
+          "semantic_check_id": "check-1",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_women",
+            "context_id": "malawi_rural_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":5894,\"reported_table_2_group_n\":5893,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_rural_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "kg/m^2",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "bmi"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "bmi": "kg/m^2",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "bmi": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_rural_women__total_cholesterol__geometric_mean",
+          "semantic_check_id": "check-2",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "total_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_women",
+            "context_id": "malawi_rural_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":5894,\"reported_table_2_group_n\":5893,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "total_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "sex": "1",
+              "total_cholesterol": "mmol/L"
+            },
+            "variable_scales": {
+              "age": "original",
+              "sex": "categorical",
+              "total_cholesterol": "original"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_rural_women__hdl_cholesterol__geometric_mean",
+          "semantic_check_id": "check-3",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "hdl_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_women",
+            "context_id": "malawi_rural_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":5894,\"reported_table_2_group_n\":5893,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "hdl_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_rural_women__hdl_cholesterol__low_prevalence",
+          "semantic_check_id": "check-4",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.29
+            }
+          },
+          "source": {
+            "source_id": "greiner_malawi_rural_women",
+            "context_id": "malawi_rural_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_rural_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":5894,\"reported_table_2_group_n\":5893,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"rural\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_rural_women",
+            "operator": {
+              "kind": "proportion",
+              "unit": "%",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "event": {
+                "column": "hdl_cholesterol",
+                "op": "lt",
+                "value": 1.29
+              }
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        }
+      ],
+      "context_review": null
+    }
+  },
+  {
+    "id": "malawi_urban_women",
+    "role": "source",
+    "source_ids": [
+      "greiner_malawi_urban_women"
+    ],
+    "assumption_ids": [],
+    "feedback_policy": "semantic_v1_plus_supplement",
+    "recipe": {
+      "schema_version": 1,
+      "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":7192,\"reported_table_2_group_n\":7190,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+      "measurement": {
+        "mode": "identity",
+        "description": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}"
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_urban_women__bmi__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_urban_women__total_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_urban_women__hdl_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_urban_women__hdl_cholesterol__low_prevalence",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; retain original strict threshold and percentage scale."
+        }
+      ]
+    },
+    "semantics": {
+      "schema_version": 1,
+      "evidence_sha256": "",
+      "recipe_sha256": "",
+      "bindings": [
+        {
+          "check_id": "check-1",
+          "evidence_id": "malawi_urban_women__bmi__geometric_mean",
+          "source_locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_urban_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-2",
+          "evidence_id": "malawi_urban_women__total_cholesterol__geometric_mean",
+          "source_locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_urban_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-3",
+          "evidence_id": "malawi_urban_women__hdl_cholesterol__geometric_mean",
+          "source_locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_urban_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-4",
+          "evidence_id": "malawi_urban_women__hdl_cholesterol__low_prevalence",
+          "source_locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_urban_women",
+          "definition_status": "specified",
+          "source_operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.29
+            }
+          },
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {
+            "age": "year",
+            "hdl_cholesterol": "mmol/L",
+            "sex": "1"
+          },
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        }
+      ]
+    },
+    "supplement": {
+      "schema_version": 1,
+      "task_sha256": "",
+      "evidence_sha256": "",
+      "model_spec_sha256": "",
+      "semantics_sha256": "",
+      "table_context": {
+        "kind": "source_context_simulation",
+        "context_id": "malawi_urban_women",
+        "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":7192,\"reported_table_2_group_n\":7190,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+        "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+        "variable_units": {
+          "age": "year",
+          "sex": "1",
+          "bmi": "kg/m^2",
+          "total_cholesterol": "mmol/L",
+          "hdl_cholesterol": "mmol/L"
+        },
+        "variable_scales": {
+          "age": "original",
+          "sex": "categorical",
+          "bmi": "original",
+          "total_cholesterol": "original",
+          "hdl_cholesterol": "original"
+        }
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "malawi_urban_women__bmi__geometric_mean",
+          "semantic_check_id": "check-1",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_women",
+            "context_id": "malawi_urban_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":7192,\"reported_table_2_group_n\":7190,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; malawi_urban_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "kg/m^2",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "bmi"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "bmi": "kg/m^2",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "bmi": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "malawi_urban_women__total_cholesterol__geometric_mean",
+          "semantic_check_id": "check-2",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "total_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_women",
+            "context_id": "malawi_urban_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":7192,\"reported_table_2_group_n\":7190,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_urban_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "total_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "sex": "1",
+              "total_cholesterol": "mmol/L"
+            },
+            "variable_scales": {
+              "age": "original",
+              "sex": "categorical",
+              "total_cholesterol": "original"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "malawi_urban_women__hdl_cholesterol__geometric_mean",
+          "semantic_check_id": "check-3",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "hdl_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_women",
+            "context_id": "malawi_urban_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":7192,\"reported_table_2_group_n\":7190,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_urban_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "hdl_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "malawi_urban_women__hdl_cholesterol__low_prevalence",
+          "semantic_check_id": "check-4",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.29
+            }
+          },
+          "source": {
+            "source_id": "greiner_malawi_urban_women",
+            "context_id": "malawi_urban_women",
+            "population": "{\"context\":{\"cohort\":\"MEIRU\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Malawi\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"malawi_urban_women\",\"measurement_ref\":\"malawi_lipids\",\"reported_table_1_group_n\":7192,\"reported_table_2_group_n\":7190,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"urban\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Fasting sought; random blood accepted after second unsuccessful fasting visit.\",\"instrument\":\"Beckman Coulter Chemistry Analyser\",\"locator\":\"Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi\",\"method\":\"enzymatic laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; malawi_urban_women",
+            "operator": {
+              "kind": "proportion",
+              "unit": "%",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "event": {
+                "column": "hdl_cholesterol",
+                "op": "lt",
+                "value": 1.29
+              }
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        }
+      ],
+      "context_review": null
+    }
+  },
+  {
+    "id": "uganda_women",
+    "role": "source",
+    "source_ids": [
+      "greiner_uganda_women"
+    ],
+    "assumption_ids": [],
+    "feedback_policy": "semantic_v1_plus_supplement",
+    "recipe": {
+      "schema_version": 1,
+      "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_women\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2424,\"reported_table_2_group_n\":2429,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+      "measurement": {
+        "mode": "identity",
+        "description": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}"
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "uganda_women__bmi__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "uganda_women__total_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "uganda_women__hdl_cholesterol__geometric_mean",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; geometric mean also unsupported in semantic v1."
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "uganda_women__hdl_cholesterol__low_prevalence",
+          "status": "not_computable",
+          "operator": null,
+          "assumption_ids": [],
+          "reason": "Unknown source estimator weighting; retain original strict threshold and percentage scale."
+        }
+      ]
+    },
+    "semantics": {
+      "schema_version": 1,
+      "evidence_sha256": "",
+      "recipe_sha256": "",
+      "bindings": [
+        {
+          "check_id": "check-1",
+          "evidence_id": "uganda_women__bmi__geometric_mean",
+          "source_locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; uganda_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-2",
+          "evidence_id": "uganda_women__total_cholesterol__geometric_mean",
+          "source_locator": "Table 2; Total cholesterol, star-marked geometric mean; uganda_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-3",
+          "evidence_id": "uganda_women__hdl_cholesterol__geometric_mean",
+          "source_locator": "Table 2; HDL cholesterol, star-marked geometric mean; uganda_women",
+          "definition_status": "unsupported",
+          "source_operator": null,
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {},
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        },
+        {
+          "check_id": "check-4",
+          "evidence_id": "uganda_women__hdl_cholesterol__low_prevalence",
+          "source_locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; uganda_women",
+          "definition_status": "specified",
+          "source_operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.29
+            }
+          },
+          "weights": "not_reported",
+          "transform": "identity",
+          "source_variable_units": {
+            "age": "year",
+            "hdl_cholesterol": "mmol/L",
+            "sex": "1"
+          },
+          "source_n": {
+            "status": "not_reported"
+          },
+          "uncertainty_role": "estimate",
+          "reason": "Reported CIs remain estimator uncertainty; unreported uncertainty remains unknown. Row-specific N and weights are not reported; full table-specific provenance is retained."
+        }
+      ]
+    },
+    "supplement": {
+      "schema_version": 1,
+      "task_sha256": "",
+      "evidence_sha256": "",
+      "model_spec_sha256": "",
+      "semantics_sha256": "",
+      "table_context": {
+        "kind": "source_context_simulation",
+        "context_id": "uganda_women",
+        "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_women\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2424,\"reported_table_2_group_n\":2429,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+        "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+        "variable_units": {
+          "age": "year",
+          "sex": "1",
+          "bmi": "kg/m^2",
+          "total_cholesterol": "mmol/L",
+          "hdl_cholesterol": "mmol/L"
+        },
+        "variable_scales": {
+          "age": "original",
+          "sex": "categorical",
+          "bmi": "original",
+          "total_cholesterol": "original",
+          "hdl_cholesterol": "original"
+        }
+      },
+      "assumption_ids": [],
+      "checks": [
+        {
+          "id": "check-1",
+          "evidence_id": "uganda_women__bmi__geometric_mean",
+          "semantic_check_id": "check-1",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "kg/m^2",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "bmi"
+          },
+          "source": {
+            "source_id": "greiner_uganda_women",
+            "context_id": "uganda_women",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_women\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2424,\"reported_table_2_group_n\":2429,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 1; BMI (kg/m2), dagger-marked geometric mean; uganda_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "kg/m^2",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "bmi"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "bmi": "kg/m^2",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "bmi": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-2",
+          "evidence_id": "uganda_women__total_cholesterol__geometric_mean",
+          "semantic_check_id": "check-2",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "total_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_uganda_women",
+            "context_id": "uganda_women",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_women\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2424,\"reported_table_2_group_n\":2429,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Total cholesterol, star-marked geometric mean; uganda_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "total_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "sex": "1",
+              "total_cholesterol": "mmol/L"
+            },
+            "variable_scales": {
+              "age": "original",
+              "sex": "categorical",
+              "total_cholesterol": "original"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-3",
+          "evidence_id": "uganda_women__hdl_cholesterol__geometric_mean",
+          "semantic_check_id": "check-3",
+          "operator": {
+            "kind": "geometric_mean",
+            "unit": "mmol/L",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "column": "hdl_cholesterol"
+          },
+          "source": {
+            "source_id": "greiner_uganda_women",
+            "context_id": "uganda_women",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_women\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2424,\"reported_table_2_group_n\":2429,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; HDL cholesterol, star-marked geometric mean; uganda_women",
+            "operator": {
+              "kind": "geometric_mean",
+              "unit": "mmol/L",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "column": "hdl_cholesterol"
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        },
+        {
+          "id": "check-4",
+          "evidence_id": "uganda_women__hdl_cholesterol__low_prevalence",
+          "semantic_check_id": "check-4",
+          "operator": {
+            "kind": "proportion",
+            "unit": "%",
+            "selection": [
+              {
+                "column": "age",
+                "op": "ge",
+                "value": 18
+              },
+              {
+                "column": "sex",
+                "op": "eq",
+                "value": "F"
+              }
+            ],
+            "selection_missing_policy": "error",
+            "missing_policy": "error",
+            "event": {
+              "column": "hdl_cholesterol",
+              "op": "lt",
+              "value": 1.29
+            }
+          },
+          "source": {
+            "source_id": "greiner_uganda_women",
+            "context_id": "uganda_women",
+            "population": "{\"context\":{\"cohort\":\"Masaka_GPC\",\"context_kind\":\"external_source_stratum_not_target_lifestyle_category\",\"country\":\"Uganda\",\"eligible_n_is_not_synthetic_row_count\":true,\"id\":\"uganda_women\",\"measurement_ref\":\"uganda_lipids\",\"reported_table_1_group_n\":2424,\"reported_table_2_group_n\":2429,\"selection_rules_ref\":\"greiner_analysis_selection\",\"sex\":\"female\",\"site_stratum\":\"not_separately_stratified\",\"source_context_reconstructed\":false},\"selection\":{\"diabetes_case_definition\":\"not_resolved_in_this_primary-maintext_packet\",\"exclude_diabetes\":true,\"exclude_hiv_positive\":true,\"exclude_reported_pregnancy\":true,\"id\":\"greiner_analysis_selection\",\"malawi_site_stratified\":true,\"minimum_age_in_years\":18,\"missing_covariate_rule_for_table1\":\"not_separately_reported_per_row\",\"not_a_turkana_target_filter\":\"The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions.\",\"require_complete_lipid_data\":true,\"require_sex_observed\":true,\"sex_stratified\":true,\"table1_row_n_equals_group_n\":\"not_assumed\"}}",
+            "measurement": "{\"fasting\":\"Main Data collection describes a fasted sample; duration and participant-level adherence not established here.\",\"instrument\":\"Cobas Integra 400\",\"locator\":\"Methods / Data collection / Masaka General Population Cohort, Uganda\",\"method\":\"enzymatic colourimetric laboratory assays\",\"source_unit\":\"mmol/L\",\"specimen_matrix\":\"not resolved in inspected maintext\"}",
+            "locator": "Table 2; Low HDL, percentage; footnote defines strict sex-specific threshold; uganda_women",
+            "operator": {
+              "kind": "proportion",
+              "unit": "%",
+              "selection": [
+                {
+                  "column": "age",
+                  "op": "ge",
+                  "value": 18
+                },
+                {
+                  "column": "sex",
+                  "op": "eq",
+                  "value": "F"
+                }
+              ],
+              "selection_missing_policy": "error",
+              "missing_policy": "error",
+              "event": {
+                "column": "hdl_cholesterol",
+                "op": "lt",
+                "value": 1.29
+              }
+            },
+            "weights": "not_reported",
+            "definition_status": "specified",
+            "uncertainty_role": "estimator_confidence_interval",
+            "variable_units": {
+              "age": "year",
+              "hdl_cholesterol": "mmol/L",
+              "sex": "1"
+            },
+            "variable_scales": {
+              "age": "original",
+              "hdl_cholesterol": "original",
+              "sex": "categorical"
+            }
+          },
+          "proxy": null
+        }
+      ],
+      "context_review": null
+    }
+  }
+]
