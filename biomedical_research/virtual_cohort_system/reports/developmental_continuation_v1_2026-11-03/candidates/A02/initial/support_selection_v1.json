@@ -1,0 +1,798 @@
+{
+  "schema_version": "support_selection_v1",
+  "contexts": {
+    "J": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "25",
+            "upper": "85",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_AGE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_SEX"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "484964792224190087/25000000000000000",
+            "upper": "840035207775809913/25000000000000000",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "202248407874573459548232584275201/50000000000000000000000000000000",
+            "upper": "307751592125426540451767415724799/50000000000000000000000000000000",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "30879493425003404195650859550619403403/6250000000000000000000000000000000000",
+            "upper": "39473506574996595804349140449380596597/6250000000000000000000000000000000000",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      },
+      "native_views": {
+        "HbA1c_IFCC": {
+          "kind": "affine",
+          "variable": "hba1c",
+          "scale": "25000/2287",
+          "shift": "-53800/2287",
+          "provenance": [
+            {
+              "kind": "evidence",
+              "id": "U_NGSP_SCALE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_UNIT"
+            }
+          ]
+        }
+      },
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Final joint law specified directly for this eligible analytical population. No preselection parent, prevalence, row rejection or verified absent-variable exclusion is supplied.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_J_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "tr_bmi",
+          "kind": "affine",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Affine correlated uniform-factor direct eligible law; no clipping or exclusion.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            }
+          ]
+        },
+        {
+          "id": "tr_glucose",
+          "kind": "affine",
+          "variable": "glucose",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Affine correlated uniform-factor direct eligible law; no clipping or exclusion.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            }
+          ]
+        },
+        {
+          "id": "tr_hba1c",
+          "kind": "affine",
+          "variable": "hba1c",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Affine correlated uniform-factor direct eligible law; no clipping or exclusion.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "d_moments_support",
+          "claim": "exact_final_law",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "The final declared law has bounded integer age, nondegenerate Bernoulli female and bounded affine-uniform or exponentiated jointly Gaussian biomarkers. Every polynomial moment required by the three OLS projections is finite. This concerns the final real-valued model, with numerical failures separately declared.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DEPENDENCE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_J_LAW"
+            }
+          ]
+        },
+        {
+          "id": "d_source_identity",
+          "claim": "approximation",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "J separate covariance-to-slope identities, B lognormal Pearson formula and M Gaussian-copula Spearman formula motivate parameters. Decimal constants, assumed eligible law, age coarsening and unknown original processing mean this is not exact source replay. Target effects remain unverified.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_NUMERICS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_QUALIFIED"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      ]
+    },
+    "B": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "20",
+            "upper": "80",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_AGE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_SEX"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "0.0",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "0.0",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "2.152",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      },
+      "native_views": {},
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Final joint law specified directly for this eligible analytical population. No preselection parent, prevalence, row rejection or verified absent-variable exclusion is supplied.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_B_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "tr_bmi",
+          "kind": "other",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "tr_glucose",
+          "kind": "other",
+          "variable": "glucose",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "tr_hba1c",
+          "kind": "other",
+          "variable": "hba1c",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "d_moments_support",
+          "claim": "exact_final_law",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "The final declared law has bounded integer age, nondegenerate Bernoulli female and bounded affine-uniform or exponentiated jointly Gaussian biomarkers. Every polynomial moment required by the three OLS projections is finite. This concerns the final real-valued model, with numerical failures separately declared.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DEPENDENCE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "d_source_identity",
+          "claim": "approximation",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "J separate covariance-to-slope identities, B lognormal Pearson formula and M Gaussian-copula Spearman formula motivate parameters. Decimal constants, assumed eligible law, age coarsening and unknown original processing mean this is not exact source replay. Target effects remain unverified.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_NUMERICS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_QUALIFIED"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      ]
+    },
+    "M": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "61",
+            "upper": "80",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_AGE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_SEX"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "0.0",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "0.0",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "2.152",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      },
+      "native_views": {},
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Final joint law specified directly for this eligible analytical population. No preselection parent, prevalence, row rejection or verified absent-variable exclusion is supplied.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_M_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "tr_bmi",
+          "kind": "other",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "tr_glucose",
+          "kind": "other",
+          "variable": "glucose",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "tr_hba1c",
+          "kind": "other",
+          "variable": "hba1c",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "d_moments_support",
+          "claim": "exact_final_law",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "The final declared law has bounded integer age, nondegenerate Bernoulli female and bounded affine-uniform or exponentiated jointly Gaussian biomarkers. Every polynomial moment required by the three OLS projections is finite. This concerns the final real-valued model, with numerical failures separately declared.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DEPENDENCE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "d_source_identity",
+          "claim": "approximation",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "J separate covariance-to-slope identities, B lognormal Pearson formula and M Gaussian-copula Spearman formula motivate parameters. Decimal constants, assumed eligible law, age coarsening and unknown original processing mean this is not exact source replay. Target effects remain unverified.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_NUMERICS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_QUALIFIED"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      ]
+    },
+    "T": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "35",
+            "upper": "74",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_AGE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_SEX"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "0.0",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "0.0",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "2.152",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      },
+      "native_views": {},
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Final joint law specified directly for this eligible analytical population. No preselection parent, prevalence, row rejection or verified absent-variable exclusion is supplied.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_T_TRANSPORT"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "tr_bmi",
+          "kind": "other",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "tr_glucose",
+          "kind": "other",
+          "variable": "glucose",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "tr_hba1c",
+          "kind": "other",
+          "variable": "hba1c",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Exponentiate the affine correlated Gaussian factor, then add the declared shift. This final shifted-lognormal law has no clipping, censoring or finite biomarker upper bound.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "d_moments_support",
+          "claim": "exact_final_law",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "The final declared law has bounded integer age, nondegenerate Bernoulli female and bounded affine-uniform or exponentiated jointly Gaussian biomarkers. Every polynomial moment required by the three OLS projections is finite. This concerns the final real-valued model, with numerical failures separately declared.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DEPENDENCE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_LOGNORMAL"
+            }
+          ]
+        },
+        {
+          "id": "d_source_identity",
+          "claim": "approximation",
+          "applicable_stage": 2,
+          "transform_effects": {},
+          "description": "J separate covariance-to-slope identities, B lognormal Pearson formula and M Gaussian-copula Spearman formula motivate parameters. Decimal constants, assumed eligible law, age coarsening and unknown original processing mean this is not exact source replay. Target effects remain unverified.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_NUMERICS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_QUALIFIED"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# A02 source-feedback author submission
+
+**Decision: retain.** The candidate is `D:/AIR-014_ECRC_Paper_Clean_2026-08-16/evcDC/A02/candidates/source_feedback`. `decision.json` in this directory records the single scientific decision and remaining limitations. No schema return was needed.
+
+The generator, full model specification, evidence, declared laws, support/selection, analysis-evidence, evidence-use and qualified plan are byte-identical to the assigned accepted initial packet. The twelve bridge trial IDs now identify `A02_source_feedback`; all seeds, 3,000-row sizes, context metadata, resource limits and budgets are unchanged. The controller retains responsibility for parenting this candidate to the accepted initial and for independent admission, freezing and any later execution.
+
+The complete supplied initial feedback reports nine successful source trials, twelve available qualified comparisons, twelve unavailable strict checks and 96 passing retained-support checks. The full raw discrepancy vectors are preserved in candidate `decision.md` and `INHERITED_FEEDBACK_INSPECTION.json` here. They cross zero for each relationship. This is descriptive evidence, with no estimate of Monte Carlo uncertainty or source precision. The largest J BMI discrepancy is retained. The inherited target-eligibility flag is procedural, with no target attempts or target-performance information.
+
+Static source algebra reproduces the four reported point functionals under the existing population-law assumptions to floating arithmetic precision. The feedback gives no identified replacement for the assumed independence, latent dependence, marginal shapes or transport. Retuning the fixed-seed differences would not resolve these limitations. A_BMI and A_GLUCOSE remain partially supported and assumption-dependent; A_AGE remains unassessed. Strict replay, source measurement/selection reconstruction, calibrated inference, causal interpretation and target transport remain unsupported. CHNS remains a researcher-exposed developmental reference, and retaining the law is a paired repeat rather than a new independent scientific model.
+
+Fresh checks actually performed:
+
+- Verified the canonical manifest digest against assigned packet SHA256 `1d114453095a165a182bd9c226c19cf5e84859b02ecb448ce8b90aa6bf5a6c7e`, every one of the 44 manifest file digests, the complete feedback file/payload digests, and assigned task/registry identity.
+- Verified retained scientific bytes and schedule-only identity changes; parsed generator syntax without importing or executing it; evaluated only the four source population-law identities using scalar algebra.
+- Called the packet-provided pure declared-law, support-selection and evidence-use validators. Required second moments passed in all declared contexts, support declarations passed and evidence-use references were valid. These are metadata/declared-law checks, not independent code-law or scientific certification.
+- Ran the actual `python -B -m cohort_harness validate --bundle D:/AIR-014_ECRC_Paper_Clean_2026-08-16/evcDC/A02 --candidate source_feedback` from the project root. Exit 0: valid program contract, generator not executed, scientific validity not assessed.
+- Ran the canonical `work/qualified_author_preflight_v1_2026-11-03/qualified_author_preflight.py` with the same bundle/name. Exit 0: three source contexts and all four qualified operators passed, with zero findings.
+- Validated final `checks.json` with the supplied lifecycle `_checks` contract, including every bound auxiliary-artifact hash. The candidate contains 335,828 bytes, including a 3,182-byte generator, below both caps.
+
+The raw metadata results are saved inside the candidate as `METADATA_VALIDATE.json`, `QUALIFIED_PREFLIGHT.json`, and `AUTHOR_STATIC_CHECKS.json`; `checks.json` binds them and `INPUT_BINDING.json`. The complete immutable initial feedback stays in its original packet. Its raw SHA256 is `26e64280ddf74ed5c80c094107dc135013136fbee92c0e8da1fcf32eaf697622`; the raw manifest SHA256 is `1005f2d8de99af3c6cb759bbbb52a4bdf3e03cd1e67970db5b7b6962b9614111`.
+
+No generator import/execution, sampling, simulation, source-statistic recomputation from rows, hidden fitting, fresh evidence retrieval, target-data access or target analysis was performed. Inherited checks were inspected, not claimed as newly executed. No review/approval, freeze or execution receipt was authored. No improvement in generated data or target utility is claimed.

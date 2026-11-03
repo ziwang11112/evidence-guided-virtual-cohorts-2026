@@ -1,0 +1,988 @@
+{
+  "schema_version": "support_selection_v1",
+  "contexts": {
+    "J": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "18",
+            "upper": "90",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_AGES"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MEMBERSHIP"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "484964792224190087/25000000000000000",
+            "upper": "840035207775809913/25000000000000000",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "49129879131105305755516166507242421/12500000000000000000000000000000000",
+            "upper": "78370120868894694244483833492757579/12500000000000000000000000000000000",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "6179823635155631193903793910632156653651486507242421/1250000000000000000000000000000000000000000000000000",
+            "upper": "7890776364844368806096206089367843346348513492757579/1250000000000000000000000000000000000000000000000000",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        }
+      },
+      "native_views": {
+        "HbA1c_IFCC": {
+          "kind": "affine",
+          "variable": "hba1c",
+          "scale": "25000/2287",
+          "shift": "-53800/2287",
+          "provenance": [
+            {
+              "kind": "evidence",
+              "id": "U_NGSP_SCALE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_NGSP"
+            }
+          ]
+        }
+      },
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Direct eligible-population law. Observed output bounds arise from the stated distributions; unobserved exclusions remain assumptions. No parent population, selection prevalence, clipping or rejection is asserted.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_J_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "construct_bmi",
+          "kind": "affine",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "BMI is the stated affine transform of X; no empirical bound or clipping.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_glucose",
+          "kind": "affine",
+          "variable": "glucose",
+          "stage": 2,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Glucose is a positive-location affine sum of X and independent Z; J bounded support is direct law construction, not an exclusion algorithm.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_hba1c",
+          "kind": "affine",
+          "variable": "hba1c",
+          "stage": 3,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "HbA1c is an affine glucose term plus independent E and a context location; no clipping or censoring.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "final_projection_algebra",
+          "claim": "exact_final_law",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "For the final law, separate BMI and glucose OLS projections with age/female adjustment are beta*alpha and beta respectively. Independence and positive variances prove these identities; source parameter initialization is rounded, not exact source recovery. All predictors are assumed independent of age/female. No subsequent output transform is applied.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_J_PROJECTIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_RANK"
+            }
+          ]
+        },
+        {
+          "id": "moment_initialization",
+          "claim": "approximation",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "Reported J/M marginal moments initialize locations and scales; J uniform endpoint serialization gives a near-unit innovation variance. B medians anchor locations approximately and chosen scales are assumptions; the actual final law need not reproduce source quartiles, ages, imputation or native source weighting.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_B_LOCATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        }
+      ]
+    },
+    "B": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "20",
+            "upper": "80",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_AGES"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MEMBERSHIP"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "33/2",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "1835163153494877069/500000000000000000",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "248029423405281041363478633494877069/50000000000000000000000000000000000",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        }
+      },
+      "native_views": {},
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Direct eligible-population law. Observed output bounds arise from the stated distributions; unobserved exclusions remain assumptions. No parent population, selection prevalence, clipping or rejection is asserted.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_B_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "construct_bmi",
+          "kind": "affine",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "BMI is the stated affine transform of X; no empirical bound or clipping.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_glucose",
+          "kind": "affine",
+          "variable": "glucose",
+          "stage": 2,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Glucose is a positive-location affine sum of X and independent Z; J bounded support is direct law construction, not an exclusion algorithm.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_hba1c",
+          "kind": "affine",
+          "variable": "hba1c",
+          "stage": 3,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "HbA1c is an affine glucose term plus independent E and a context location; no clipping or censoring.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "final_projection_algebra",
+          "claim": "exact_final_law",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "For the final law, separate BMI and glucose OLS projections with age/female adjustment are beta*alpha and beta respectively. Independence and positive variances prove these identities; source parameter initialization is rounded, not exact source recovery. All predictors are assumed independent of age/female. No subsequent output transform is applied.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_J_PROJECTIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_RANK"
+            }
+          ]
+        },
+        {
+          "id": "moment_initialization",
+          "claim": "approximation",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "Reported J/M marginal moments initialize locations and scales; J uniform endpoint serialization gives a near-unit innovation variance. B medians anchor locations approximately and chosen scales are assumptions; the actual final law need not reproduce source quartiles, ages, imputation or native source weighting.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_B_LOCATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "pearson_final_formula",
+          "claim": "exact_final_law",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "rho=beta*sqrt(Var(glucose))/sqrt(beta^2*Var(glucose)+residual_scale^2), with actual Var(glucose)=(alpha*bmi_sd)^2+glucose_independent_scale^2. Initialization targets the reported 0.619 up to serialized arithmetic; no SD/SE or rank-correlation substitution.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_B_PEARSON"
+            }
+          ]
+        }
+      ]
+    },
+    "M": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "61",
+            "upper": "80",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_AGES"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MEMBERSHIP"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "89/5",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "1263287330361870953/625000000000000000",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "220127378548843116158008090361870953/62500000000000000000000000000000000",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        }
+      },
+      "native_views": {},
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Direct eligible-population law. Observed output bounds arise from the stated distributions; unobserved exclusions remain assumptions. No parent population, selection prevalence, clipping or rejection is asserted.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_M_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "construct_bmi",
+          "kind": "affine",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "BMI is the stated affine transform of X; no empirical bound or clipping.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_glucose",
+          "kind": "affine",
+          "variable": "glucose",
+          "stage": 2,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Glucose is a positive-location affine sum of X and independent Z; J bounded support is direct law construction, not an exclusion algorithm.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_hba1c",
+          "kind": "affine",
+          "variable": "hba1c",
+          "stage": 3,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "HbA1c is an affine glucose term plus independent E and a context location; no clipping or censoring.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "final_projection_algebra",
+          "claim": "exact_final_law",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "For the final law, separate BMI and glucose OLS projections with age/female adjustment are beta*alpha and beta respectively. Independence and positive variances prove these identities; source parameter initialization is rounded, not exact source recovery. All predictors are assumed independent of age/female. No subsequent output transform is applied.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_J_PROJECTIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_RANK"
+            }
+          ]
+        },
+        {
+          "id": "moment_initialization",
+          "claim": "approximation",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "Reported J/M marginal moments initialize locations and scales; J uniform endpoint serialization gives a near-unit innovation variance. B medians anchor locations approximately and chosen scales are assumptions; the actual final law need not reproduce source quartiles, ages, imputation or native source weighting.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_B_LOCATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "rank_not_derived",
+          "claim": "approximation",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "No analytic equality to MIND Spearman is asserted. The final raw serum/HbA1c law is to be compared using the native rank operator with average ties.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_M_RANK"
+            }
+          ]
+        }
+      ]
+    },
+    "T": {
+      "final_supports": {
+        "age": {
+          "domain": {
+            "lower": "35",
+            "upper": "74",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_AGES"
+            }
+          ]
+        },
+        "female": {
+          "domain": {
+            "lower": "0",
+            "upper": "1",
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_MEMBERSHIP"
+            }
+          ]
+        },
+        "bmi": {
+          "domain": {
+            "lower": "89/5",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "glucose": {
+          "domain": {
+            "lower": "1263287330361870953/625000000000000000",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        },
+        "hba1c": {
+          "domain": {
+            "lower": "220127378548843116158008090361870953/62500000000000000000000000000000000",
+            "upper": null,
+            "lower_closed": false,
+            "upper_closed": false
+          },
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_DIRECT"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            }
+          ]
+        }
+      },
+      "native_views": {},
+      "selection": {
+        "route": "direct_eligible_joint",
+        "exclusion_implementation": "not_claimed",
+        "conditioning_event": null,
+        "description": "Direct eligible-population law. Observed output bounds arise from the stated distributions; unobserved exclusions remain assumptions. No parent population, selection prevalence, clipping or rejection is asserted.",
+        "provenance": [
+          {
+            "kind": "assumption",
+            "id": "A_DIRECT"
+          },
+          {
+            "kind": "assumption",
+            "id": "A_T_SELECTION"
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "construct_bmi",
+          "kind": "affine",
+          "variable": "bmi",
+          "stage": 1,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "BMI is the stated affine transform of X; no empirical bound or clipping.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_glucose",
+          "kind": "affine",
+          "variable": "glucose",
+          "stage": 2,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "Glucose is a positive-location affine sum of X and independent Z; J bounded support is direct law construction, not an exclusion algorithm.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        },
+        {
+          "id": "construct_hba1c",
+          "kind": "affine",
+          "variable": "hba1c",
+          "stage": 3,
+          "role": "law_construction",
+          "atom_effect": "none",
+          "description": "HbA1c is an affine glucose term plus independent E and a context location; no clipping or censoring.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        }
+      ],
+      "derivations": [
+        {
+          "id": "final_projection_algebra",
+          "claim": "exact_final_law",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "For the final law, separate BMI and glucose OLS projections with age/female adjustment are beta*alpha and beta respectively. Independence and positive variances prove these identities; source parameter initialization is rounded, not exact source recovery. All predictors are assumed independent of age/female. No subsequent output transform is applied.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_STRUCTURE"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_J_PROJECTIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_RANK"
+            }
+          ]
+        },
+        {
+          "id": "moment_initialization",
+          "claim": "approximation",
+          "applicable_stage": 3,
+          "transform_effects": {},
+          "description": "Reported J/M marginal moments initialize locations and scales; J uniform endpoint serialization gives a near-unit innovation variance. B medians anchor locations approximately and chosen scales are assumptions; the actual final law need not reproduce source quartiles, ages, imputation or native source weighting.",
+          "provenance": [
+            {
+              "kind": "assumption",
+              "id": "A_MARGINS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_B_LOCATIONS"
+            },
+            {
+              "kind": "assumption",
+              "id": "A_INNOVATIONS"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

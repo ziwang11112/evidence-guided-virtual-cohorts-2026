@@ -1,0 +1,344 @@
+{
+  "J": {
+    "declaration": {
+      "schema_version": 1,
+      "bindings": {
+        "task_sha256": "994cacd7f3609bb6a028099466125ef6b1e66837f05d91e6939df295821ae64f",
+        "candidate_freeze_sha256": "65a29250cc8a09c42095a3ecd6547ce22859a7250360e5cc28fa9683ffa5fe1b",
+        "evidence_sha256": "a10a223af16f040d34fa82a5d183128c8e40396cc009ffb92395b715b386a648",
+        "model_spec_sha256": "29eb0e4392c0fc69701b751159df1610838a4e31f5b4a98eb07ac11ac59a5b95",
+        "semantics_sha256": "2eeeb15302fdbbbb1a68d6fa206bd416679372094300623b3efed8a91c185161",
+        "bridge_plan_sha256": "c1f9c2ee77403fb104537a9cadd019dc07f7c466408e046ed3e6fed4e8c51ab7"
+      },
+      "context_role": "source",
+      "context_id": "J",
+      "population": "Unrelated western-European adults selected for GWAS, preferring the oldest family members. Exclusions: diabetes by self-report or FPG >=7.0 mmol/L; anemia at the reported sex-specific thresholds; missing HbA1c, erythrocytes or FPG. Source context: CTX_JANSEN_SELECTED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count. Direct eligible-population scenario A01.",
+      "measurement": "J: age integer years; female membership 1=female,0=male; BMI kg/m^2; glucose is fresh fasting plasma hexokinase/G6PD FPG mmol/L; hba1c is NGSP-percent representation of IFCC-standardized immunoassay HbA1c via U_NGSP_SCALE. Fasting hours and original age rounding unreported.",
+      "source_ids": [
+        "S_JANSEN_2013"
+      ],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_STRUCTURE",
+        "A_INNOVATIONS",
+        "A_AGES",
+        "A_MEMBERSHIP",
+        "A_MEASUREMENT",
+        "A_EQUAL",
+        "A_J_SELECTION",
+        "A_NGSP"
+      ],
+      "column_aliases": [
+        {
+          "source_name": "gender_binary",
+          "generated_name": "female",
+          "assumption_ids": [
+            "A_MEMBERSHIP"
+          ]
+        },
+        {
+          "source_name": "BMI",
+          "generated_name": "bmi",
+          "assumption_ids": [
+            "A_MEASUREMENT"
+          ]
+        },
+        {
+          "source_name": "FPG",
+          "generated_name": "glucose",
+          "assumption_ids": [
+            "A_MEASUREMENT"
+          ]
+        },
+        {
+          "source_name": "HbA1c_percent",
+          "generated_name": "hba1c",
+          "assumption_ids": [
+            "A_NGSP",
+            "A_MEASUREMENT"
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "Q_J_bmi",
+          "evidence_id": "R_JANSEN_BMI",
+          "semantic_check_id": "J_bmi",
+          "operator": {
+            "kind": "ols_coefficient",
+            "outcome": "HbA1c_IFCC",
+            "predictors": [
+              "age",
+              "gender_binary",
+              "BMI"
+            ],
+            "term": "BMI",
+            "include_intercept": true,
+            "unit": "mmol/mol/(kg/m^2)",
+            "selection": [],
+            "missing_policy": "error"
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_DIRECT",
+              "A_STRUCTURE",
+              "A_INNOVATIONS",
+              "A_AGES",
+              "A_MEMBERSHIP",
+              "A_MEASUREMENT",
+              "A_EQUAL",
+              "A_J_SELECTION",
+              "A_NGSP",
+              "A_J_PROJECTIONS"
+            ],
+            "unresolved_original_details": [
+              "Original analytic weights not reported.",
+              "Exact original row processing and analysis-specific count unconfirmed.",
+              "Original intercept convention and numerical gender coding unresolved."
+            ],
+            "reason": "Native named functional retained with original adjustment set and units. Context/measurement aliases and complete equal-weight generated values are explicit qualifications; this is not exact source reproduction."
+          },
+          "measurement_mapping": {
+            "kind": "hba1c_ngsp_to_ifcc",
+            "input_column": "HbA1c_percent",
+            "output_column": "HbA1c_IFCC",
+            "ngsp_percent_per_ifcc": 0.09148,
+            "ngsp_percent_intercept": 2.152,
+            "unit_evidence_id": "U_NGSP_SCALE",
+            "assumption_ids": [
+              "A_NGSP",
+              "A_MEASUREMENT"
+            ]
+          }
+        },
+        {
+          "id": "Q_J_fpg",
+          "evidence_id": "R_JANSEN_FPG",
+          "semantic_check_id": "J_fpg",
+          "operator": {
+            "kind": "ols_coefficient",
+            "outcome": "HbA1c_IFCC",
+            "predictors": [
+              "age",
+              "gender_binary",
+              "FPG"
+            ],
+            "term": "FPG",
+            "include_intercept": true,
+            "unit": "mmol/mol/(mmol/L)",
+            "selection": [],
+            "missing_policy": "error"
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_DIRECT",
+              "A_STRUCTURE",
+              "A_INNOVATIONS",
+              "A_AGES",
+              "A_MEMBERSHIP",
+              "A_MEASUREMENT",
+              "A_EQUAL",
+              "A_J_SELECTION",
+              "A_NGSP",
+              "A_J_PROJECTIONS"
+            ],
+            "unresolved_original_details": [
+              "Original analytic weights not reported.",
+              "Exact original row processing and analysis-specific count unconfirmed.",
+              "Original intercept convention and numerical gender coding unresolved."
+            ],
+            "reason": "Native named functional retained with original adjustment set and units. Context/measurement aliases and complete equal-weight generated values are explicit qualifications; this is not exact source reproduction."
+          },
+          "measurement_mapping": {
+            "kind": "hba1c_ngsp_to_ifcc",
+            "input_column": "HbA1c_percent",
+            "output_column": "HbA1c_IFCC",
+            "ngsp_percent_per_ifcc": 0.09148,
+            "ngsp_percent_intercept": 2.152,
+            "unit_evidence_id": "U_NGSP_SCALE",
+            "assumption_ids": [
+              "A_NGSP",
+              "A_MEASUREMENT"
+            ]
+          }
+        }
+      ]
+    },
+    "declaration_sha256": "008cd87a1ae5cff4700198fc3bb04ae9abe83756678c6c6138b944648ba48b4f"
+  },
+  "B": {
+    "declaration": {
+      "schema_version": 1,
+      "bindings": {
+        "task_sha256": "a7c84d84777405b77d9e3caee40a46d106be1550e3a79d40785e70891a02dbac",
+        "candidate_freeze_sha256": "fbcab94b7348763acda6a65d958bb9cffa8969b07a6aa6e56c76f39edb06228e",
+        "evidence_sha256": "a10a223af16f040d34fa82a5d183128c8e40396cc009ffb92395b715b386a648",
+        "model_spec_sha256": "f8bfd24b6cb03272ba93fb2ea04476fe85820e421bfd391cd86f3345fb0591e9",
+        "semantics_sha256": "6fedf608dc56260d282e66c12232e4c5c82b1a01ab6cde8211525358c3bf382c",
+        "bridge_plan_sha256": "c1f9c2ee77403fb104537a9cadd019dc07f7c466408e046ed3e6fed4e8c51ab7"
+      },
+      "context_role": "source",
+      "context_id": "B",
+      "population": "Six Shanghai communities, 2007-2008; excludes previously diagnosed diabetes and specified medical, questionnaire and age exclusions, retaining screen-detected diabetes. Explicit exclusion under age 20 differs from prose over age 20; exact boundary unresolved. Source context: CTX_BAO_ANALYZED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count. Direct eligible-population scenario A01.",
+      "measurement": "B: integer age years; female membership 1=female,0=male; BMI kg/m^2; glucose is fasting venous plasma glucose-oxidase FPG mmol/L after stated 10-hour fast; hba1c is HPLC percent (printed Tosoh HLC-73G7 retained).",
+      "source_ids": [
+        "S_BAO_2010"
+      ],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_STRUCTURE",
+        "A_INNOVATIONS",
+        "A_AGES",
+        "A_MEMBERSHIP",
+        "A_MEASUREMENT",
+        "A_EQUAL",
+        "A_B_SELECTION"
+      ],
+      "column_aliases": [
+        {
+          "source_name": "FPG",
+          "generated_name": "glucose",
+          "assumption_ids": [
+            "A_MEASUREMENT"
+          ]
+        },
+        {
+          "source_name": "HbA1c_percent",
+          "generated_name": "hba1c",
+          "assumption_ids": [
+            "A_MEASUREMENT"
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "Q_B_pearson",
+          "evidence_id": "R_BAO_PEARSON",
+          "semantic_check_id": "B_pearson",
+          "operator": {
+            "kind": "correlation",
+            "x": "FPG",
+            "y": "HbA1c_percent",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error"
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_DIRECT",
+              "A_STRUCTURE",
+              "A_INNOVATIONS",
+              "A_AGES",
+              "A_MEMBERSHIP",
+              "A_MEASUREMENT",
+              "A_EQUAL",
+              "A_B_SELECTION",
+              "A_B_PEARSON"
+            ],
+            "unresolved_original_details": [
+              "Original analytic weights not reported.",
+              "Exact original row processing and analysis-specific count unconfirmed."
+            ],
+            "reason": "Native named functional retained with original adjustment set and units. Context/measurement aliases and complete equal-weight generated values are explicit qualifications; this is not exact source reproduction."
+          },
+          "measurement_mapping": {
+            "kind": "identity"
+          }
+        }
+      ]
+    },
+    "declaration_sha256": "8471aed00335940f9be1dbea0c1a384ae3e4ce94be24c8359ef4f9eb93ccddc3"
+  },
+  "M": {
+    "declaration": {
+      "schema_version": 1,
+      "bindings": {
+        "task_sha256": "21525fbb49e64dad4f486c8ac5d226472013c44c0d5600fe472101e2a372dc38",
+        "candidate_freeze_sha256": "89a57501d2917afa89f21092c7f1ea17d9dc2329c510dccdee1b84fefcaf1bb4",
+        "evidence_sha256": "a10a223af16f040d34fa82a5d183128c8e40396cc009ffb92395b715b386a648",
+        "model_spec_sha256": "e37d39401ab1be09d9797a88ad3d0200d23bdb104bc3da96aada8631161bf501",
+        "semantics_sha256": "57acd3a9115082ec03c80afb1c796ea9381ebde4afb17ed804c1e15d9df1def9",
+        "bridge_plan_sha256": "c1f9c2ee77403fb104537a9cadd019dc07f7c466408e046ed3e6fed4e8c51ab7"
+      },
+      "context_role": "source",
+      "context_id": "M",
+      "population": "Selected 2019 rural Yanlou/Shandong follow-up, age 61-80, free of dementia and functional disability; known diabetes included. Demographics/BMI collected in 2018, laboratory measurements in 2019. Source context: CTX_MIND_ANALYZED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count. Direct eligible-population scenario A01.",
+      "measurement": "M: integer age years and female membership 1=female,0=male; prior-year BMI kg/m^2; glucose is serum FSG mmol/L, glucose oxidase CS-600B within two hours; overnight fasting exact hours unreported; hba1c is EDTA whole-blood HPLC Huizhong MQ6000 percent within two days. Separate plasma measurement is not used.",
+      "source_ids": [
+        "S_MIND_2024"
+      ],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_STRUCTURE",
+        "A_INNOVATIONS",
+        "A_AGES",
+        "A_MEMBERSHIP",
+        "A_MEASUREMENT",
+        "A_EQUAL",
+        "A_M_SELECTION"
+      ],
+      "column_aliases": [
+        {
+          "source_name": "FSG",
+          "generated_name": "glucose",
+          "assumption_ids": [
+            "A_MEASUREMENT"
+          ]
+        },
+        {
+          "source_name": "HbA1c_percent",
+          "generated_name": "hba1c",
+          "assumption_ids": [
+            "A_MEASUREMENT"
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "Q_M_spearman",
+          "evidence_id": "R_MIND_SPEARMAN",
+          "semantic_check_id": "M_spearman",
+          "operator": {
+            "kind": "spearman_correlation",
+            "x": "FSG",
+            "y": "HbA1c_percent",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error"
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_DIRECT",
+              "A_STRUCTURE",
+              "A_INNOVATIONS",
+              "A_AGES",
+              "A_MEMBERSHIP",
+              "A_MEASUREMENT",
+              "A_EQUAL",
+              "A_M_SELECTION",
+              "A_M_RANK"
+            ],
+            "unresolved_original_details": [
+              "Original analytic weights not reported.",
+              "Exact original row processing and analysis-specific count unconfirmed.",
+              "Original tie implementation and field-specific imputation effects unreported."
+            ],
+            "reason": "Native named functional retained with original adjustment set and units. Context/measurement aliases and complete equal-weight generated values are explicit qualifications; this is not exact source reproduction."
+          },
+          "measurement_mapping": {
+            "kind": "identity"
+          }
+        }
+      ]
+    },
+    "declaration_sha256": "9c61cc09ee8a293d585701a3acdd62b2fabd884a5397bdc1c384ede142d44d63"
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "parameters": {
+    "active_context": "T",
+    "contexts": {
+      "J": {
+        "population": "Unrelated western-European adults selected for GWAS, preferring the oldest family members. Exclusions: diabetes by self-report or FPG >=7.0 mmol/L; anemia at the reported sex-specific thresholds; missing HbA1c, erythrocytes or FPG. Source context: CTX_JANSEN_SELECTED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count. Direct eligible-population scenario A01.",
+        "n_rows": 3000,
+        "measurement": "J: age integer years; female membership 1=female,0=male; BMI kg/m^2; glucose is fresh fasting plasma hexokinase/G6PD FPG mmol/L; hba1c is NGSP-percent representation of IFCC-standardized immunoassay HbA1c via U_NGSP_SCALE. Fasting hours and original age rounding unreported.",
+        "inputs": {
+          "age_lower": 18,
+          "age_upper": 90,
+          "female_probability": 0.5973981513180417,
+          "innovation_family": "uniform",
+          "bmi_location": 26.5,
+          "bmi_sd": 4.1,
+          "glucose_location": 5.1,
+          "glucose_sd": 0.5,
+          "hba1c_location": 5.62824,
+          "residual_scale": 0.2536649017322657,
+          "glucose_independent_scale": 0.44252336583624063
+        }
+      },
+      "B": {
+        "population": "Six Shanghai communities, 2007-2008; excludes previously diagnosed diabetes and specified medical, questionnaire and age exclusions, retaining screen-detected diabetes. Explicit exclusion under age 20 differs from prose over age 20; exact boundary unresolved. Source context: CTX_BAO_ANALYZED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count. Direct eligible-population scenario A01.",
+        "n_rows": 3000,
+        "measurement": "B: integer age years; female membership 1=female,0=male; BMI kg/m^2; glucose is fasting venous plasma glucose-oxidase FPG mmol/L after stated 10-hour fast; hba1c is HPLC percent (printed Tosoh HLC-73G7 retained).",
+        "inputs": {
+          "age_lower": 20,
+          "age_upper": 80,
+          "female_probability": 0.6258698321735571,
+          "innovation_family": "gamma",
+          "bmi_location": 23.5,
+          "bmi_sd": 3.5,
+          "glucose_location": 5.2,
+          "glucose_sd": 0.6,
+          "hba1c_location": 5.6,
+          "residual_scale": 0.15948070684230858,
+          "glucose_independent_scale": 0.5661468901732452
+        }
+      },
+      "M": {
+        "population": "Selected 2019 rural Yanlou/Shandong follow-up, age 61-80, free of dementia and functional disability; known diabetes included. Demographics/BMI collected in 2018, laboratory measurements in 2019. Source context: CTX_MIND_ANALYZED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count. Direct eligible-population scenario A01.",
+        "n_rows": 3000,
+        "measurement": "M: integer age years and female membership 1=female,0=male; prior-year BMI kg/m^2; glucose is serum FSG mmol/L, glucose oxidase CS-600B within two hours; overnight fasting exact hours unreported; hba1c is EDTA whole-blood HPLC Huizhong MQ6000 percent within two days. Separate plasma measurement is not used.",
+        "inputs": {
+          "age_lower": 61,
+          "age_upper": 80,
+          "female_probability": 0.5776712714970398,
+          "innovation_family": "gamma",
+          "bmi_location": 25.0,
+          "bmi_sd": 3.6,
+          "glucose_location": 5.2,
+          "glucose_sd": 1.4,
+          "hba1c_location": 6.1,
+          "residual_scale": 0.9560250933753703,
+          "glucose_independent_scale": 1.385003323483429
+        }
+      },
+      "T": {
+        "population": "CHNS 2009 released-data analytical population: adults aged 35-74 years inclusive, linked person/wave records with documented male/female category and available age, BMI from released height/weight, central-serum glucose and whole-blood HbA1c under the frozen common-complete-case release policy. No diabetes, treatment or pregnancy exclusion is claimed. Age/sex composition is not supplied. This is a selected analytical sample, not a nationally representative population; no participant input.",
+        "n_rows": 3000,
+        "measurement": "T: task age integer years and documented female/male membership; BMI kg/m^2 from released height/weight; glucose central serum mmol/L; whole-blood HbA1c percent. Cross-context association transfer does not certify assay or specimen equivalence.",
+        "inputs": {
+          "age_lower": 35,
+          "age_upper": 74,
+          "female_probability": 0.5,
+          "innovation_family": "gamma",
+          "bmi_location": 25.0,
+          "bmi_sd": 3.6,
+          "glucose_location": 5.2,
+          "glucose_sd": 1.4,
+          "hba1c_location": 6.1,
+          "residual_scale": 0.9560250933753703,
+          "glucose_independent_scale": 1.385003323483429
+        }
+      }
+    },
+    "glucose_on_bmi": 0.056768558951965066,
+    "hba1c_on_glucose": 0.20948920000000001,
+    "innovations": {
+      "uniform_lower": -1.7320508075688772,
+      "uniform_upper": 1.7320508075688772,
+      "gamma_shape": 4.0,
+      "gamma_scale": 0.5,
+      "gamma_center": 2.0
+    },
+    "ngsp": {
+      "percent_per_ifcc": 0.09148,
+      "percent_intercept": 2.152
+    },
+    "required_domains": {
+      "J": {
+        "age_lower": 18,
+        "age_upper": 90,
+        "positive_columns": [
+          "bmi",
+          "glucose",
+          "hba1c"
+        ],
+        "glucose_upper_exclusive": 7.0,
+        "hba1c_lower_inclusive": 2.152
+      },
+      "B": {
+        "age_lower": 20,
+        "age_upper": 80,
+        "positive_columns": [
+          "bmi",
+          "glucose",
+          "hba1c"
+        ],
+        "glucose_upper_exclusive": null,
+        "hba1c_lower_inclusive": null
+      },
+      "M": {
+        "age_lower": 61,
+        "age_upper": 80,
+        "positive_columns": [
+          "bmi",
+          "glucose",
+          "hba1c"
+        ],
+        "glucose_upper_exclusive": null,
+        "hba1c_lower_inclusive": null
+      },
+      "T": {
+        "age_lower": 35,
+        "age_upper": 74,
+        "positive_columns": [
+          "bmi",
+          "glucose",
+          "hba1c"
+        ],
+        "glucose_upper_exclusive": null,
+        "hba1c_lower_inclusive": null
+      }
+    },
+    "construction": {
+      "innovation_order": [
+        "X",
+        "Z",
+        "E"
+      ],
+      "age_law": "discrete_uniform_inclusive",
+      "female_law": "bernoulli",
+      "biomarker_law": "affine_glucose_mediated_independent_residual",
+      "selection_route": "direct_eligible_joint",
+      "parameter_uncertainty": "not_modelled",
+      "failure_policy": "raise_without_repair"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DIRECT",
+      "description": "All contexts are directly specified joint laws for their named eligible analytical populations. There is no simulated parent, rejection, exclusion algorithm, imputation or selection prevalence. Complete generated values represent an assumed analysis table, not recovered participants."
+    },
+    {
+      "id": "A_STRUCTURE",
+      "description": "Common associative structure: BMI=location+SD*X; glucose=location+alpha*SD_BMI*X+independent_scale*Z; HbA1c=location+beta*(glucose-location_glucose)+residual_scale*E. X,Z,E are mutually independent centered innovations with the declared context distribution. Age and female are independent of these and of each other. There is no direct BMI term in HbA1c; this mediation-like factorization is a working joint-law assumption, not a causal conclusion."
+    },
+    {
+      "id": "A_J_PROJECTIONS",
+      "description": "Under the common structure and independent age/female, the two separate Jansen OLS projections imply beta=0.09148*2.29 and alpha=0.13/2.29. The BMI-only projection is beta*alpha, and the glucose-only projection is beta. These are separate projection constraints, not two reported coefficients pasted as simultaneous HbA1c regressors. Original joint covariances and nuisance effects are unknown."
+    },
+    {
+      "id": "A_INNOVATIONS",
+      "description": "J uses independent Uniform(-sqrt(3),sqrt(3)) innovations with the serialized finite decimal endpoints; other contexts use Gamma(shape=4,scale=0.5)-2. The gamma innovations have mean zero and variance one. Uniform endpoint serialization makes unit variance approximate at floating precision. These families and lower tails are assumptions, not identified physiology. No clipping is applied."
+    },
+    {
+      "id": "A_MARGINS",
+      "description": "J and M reported means and individual SDs initialize source locations and scales under the chosen joint law. J residual dispersion is obtained by variance subtraction. Individual SDs are never estimator SEs. Printed rounding, original weights, divisors and eligible-source distribution details remain unknown. Algebraic initialization is not exact source reconstruction."
+    },
+    {
+      "id": "A_B_LOCATIONS",
+      "description": "Bao medians 23.5,5.2,5.6 are approximate location anchors for a right-skewed source scenario, not asserted arithmetic means. BMI SD=3.5 and glucose SD=0.6 are explicit modelling choices informed by quartile spread; no normal-IQR conversion is claimed. HbA1c residual scale is instead determined by the qualified Pearson constraint and shared beta, so the reported HbA1c quartiles are not fitted."
+    },
+    {
+      "id": "A_B_PEARSON",
+      "description": "Within B the unweighted complete-data Pearson target 0.619 is used only to initialize residual scale beta*glucose_SD*sqrt(1/r^2-1). This identity applies to the final linear independent-residual law, up to stored decimal parameter arithmetic; it is not an original weighted-source estimate."
+    },
+    {
+      "id": "A_M_RANK",
+      "description": "MIND Spearman 0.529 is a native rank-functional diagnostic of the specified M source law, with average ties. It is not treated as a Pearson correlation, a residual correlation, or converted to a Gaussian-copula parameter. No assertion is made that the proposed M law reproduces this rank correlation."
+    },
+    {
+      "id": "A_AGES",
+      "description": "Integer age is a direct discrete coarsening scenario: J uniform integers 18-90, B uniform integers 20-80, M uniform integers 61-80, T uniform integers 35-74, inclusive. J adult and B upper support are explicit finite model approximations rather than physiological limits or recovered source bounds. All printed age moments/quantiles remain unfitted. B includes age exactly 20 under the under-20 exclusion convention; the source boundary ambiguity remains."
+    },
+    {
+      "id": "A_MEMBERSHIP",
+      "description": "female=1 is the reported female membership category and female=0 the reported male category. Source prevalence is the reported count fraction (J complement of male count ratio); target prevalence is assumed 0.5. Native gender_binary is a read-only alias. Original historical numeric coding remains unknown; an intercept and no interactions make reversal of this binary nuisance coding immaterial for the focal J coefficients when rows/categories are preserved."
+    },
+    {
+      "id": "A_J_SELECTION",
+      "description": "J self-reported diabetes, anemia and missing-laboratory exclusions, unrelated western-European membership, GWAS selection and preference for oldest family members are conditioning assumptions on an eligible population. Absent variables are not checked. J glucose <7 is delivered by the direct bounded law, not by clipping or reconstructed exclusion."
+    },
+    {
+      "id": "A_B_SELECTION",
+      "description": "B prior diabetes, cancer, severe psychiatric disturbance, chronic kidney disease, pregnancy, glucocorticoid use and missing-questionnaire exclusions are unobserved conditioning assumptions. Screen-detected diabetes remains possible; J glucose <7 restriction is not imported."
+    },
+    {
+      "id": "A_M_SELECTION",
+      "description": "M rural follow-up membership and freedom from dementia/functional disability are unobserved conditioning assumptions. Known diabetes is not excluded. BMI/demographics reflect prior-year measurement; their joint relation to later labs is assumed."
+    },
+    {
+      "id": "A_T_SELECTION",
+      "description": "T is the task complete-case analytical population. Available categories, linkage and measurements are assumptions of that selected population, not verified individual criteria. No diabetes, treatment or pregnancy exclusion is added."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "Task bmi is kg/m^2; J/B glucose aliases FPG in the explicitly described fasting plasma contexts; M glucose aliases only FSG (serum), never its separately reported plasma test; T glucose denotes central serum. HbA1c hba1c is percent. The common association across these measurements is an unverified transport assumption; there is no serum/plasma conversion."
+    },
+    {
+      "id": "A_NGSP",
+      "description": "J hba1c is the NGSP percent representation of IFCC HbA1c using NGSP%=0.09148*IFCC+2.152. The inverse is used only for the native response view. Levels require the offset and slopes/SDs only the multiplier. This deterministic scale map does not establish assay equivalence."
+    },
+    {
+      "id": "A_EQUAL",
+      "description": "Qualified operators use the entire generated table with equal weights, an explicit OLS intercept, error on missing/nonfinite values and no retrospective selection. Original weights and processing remain not reported. Spearman uses average ties. These are qualified comparisons, never exact replay."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Shared alpha and beta from the J projection scenario apply unchanged to B, M and T as an explicit unverified transport hypothesis. T adopts M BMI/glucose/HbA1c location and dispersion inputs as a serum, known-diabetes-inclusive source analogue, despite major age, time, region, assay and selection differences. They are assumed T values, not known target means. T age/female composition is independently assumed."
+    },
+    {
+      "id": "A_RANK",
+      "description": "Population predictor covariance is nonsingular: age has at least two support points; 0<p_female<1; BMI scale>0 and glucose has an independent Z term with positive scale. The joint predictor transform is triangular with nonzero diagonal on independent nondegenerate variables. Empirical full rank and both female categories are not guaranteed on every seed; qualified analysis must fail rather than repair a deficient table."
+    },
+    {
+      "id": "A_RUNTIME",
+      "description": "Seeded NumPy draws and vectorized affine operations use one finite batch with no rejection/resampling, clipping, winsorization, row removal or fallback. Nonfinite values, observed input, or declared required-domain violations raise an error. Floating overflow/underflow and runtime timeout consume the controller attempt; no new seed is requested. No parameter uncertainty or inference interval is simulated."
+    },
+    {
+      "id": "A_NO_AGE",
+      "description": "No source age coefficient is supplied. Independence of age and female from the biomarkers is a simplifying unsupported assumption; calculable zero population age/female coefficients are not source-supported effects."
+    }
+  ],
+  "parameter_provenance": {
+    "active_context": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_T_SELECTION"
+      ],
+      "derivation": "Required active target selector; no participant input."
+    },
+    "contexts": {
+      "evidence_ids": [
+        "M_J_BMI_MEAN",
+        "M_J_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_J_FPG_SD",
+        "M_J_HBA1C_IFCC_MEAN",
+        "M_J_HBA1C_IFCC_SD",
+        "M_J_MALE_FRACTION",
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_FEMALE_FRACTION",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD",
+        "M_M_FEMALE_FRACTION",
+        "R_BAO_PEARSON",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_STRUCTURE",
+        "A_J_PROJECTIONS",
+        "A_INNOVATIONS",
+        "A_MARGINS",
+        "A_B_LOCATIONS",
+        "A_B_PEARSON",
+        "A_M_RANK",
+        "A_AGES",
+        "A_MEMBERSHIP",
+        "A_J_SELECTION",
+        "A_B_SELECTION",
+        "A_M_SELECTION",
+        "A_T_SELECTION",
+        "A_MEASUREMENT",
+        "A_NGSP",
+        "A_EQUAL",
+        "A_TRANSPORT",
+        "A_RANK",
+        "A_RUNTIME",
+        "A_NO_AGE"
+      ],
+      "derivation": "J source mean/individual-SD inputs and M source mean/individual-SD inputs retain their source meaning. B locations borrow medians as approximate anchors; B chosen BMI SD 3.5 and glucose SD 0.6 are not reported SDs. B residual_scale=shared_beta*0.6*sqrt(1/0.619^2-1). J/M residual scales use variance subtraction under independence. glucose_independent_scale=sqrt(glucose_sd^2-(shared_alpha*bmi_sd)^2). J female complements male count ratio; B/M use female count ratios; T uses 0.5. Ages are direct discrete laws with unfit source age summaries. T transports M biomarker settings as an assumption, not empirical target calibration. All source intervals, counts and quantiles retain their original limitations in unchanged evidence."
+    },
+    "glucose_on_bmi": {
+      "evidence_ids": [
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG"
+      ],
+      "assumption_ids": [
+        "A_STRUCTURE",
+        "A_J_PROJECTIONS",
+        "A_TRANSPORT"
+      ],
+      "derivation": "alpha=0.13/2.29. A derived BMI-glucose projection under the assumed no-direct-BMI HbA1c law; no such coefficient was directly reported."
+    },
+    "hba1c_on_glucose": {
+      "evidence_ids": [
+        "R_JANSEN_FPG",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_STRUCTURE",
+        "A_J_PROJECTIONS",
+        "A_NGSP",
+        "A_TRANSPORT"
+      ],
+      "derivation": "beta=2.29*0.09148 in percent per mmol/L. A source-projection initialization transferred by assumption to all contexts."
+    },
+    "innovations": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_INNOVATIONS"
+      ],
+      "derivation": "Distribution families, gamma shape and centering are assumptions. J bounded innovations yield an eligible direct joint law without clipping or rejection."
+    },
+    "ngsp": {
+      "evidence_ids": [
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_NGSP"
+      ],
+      "derivation": "Documented scale and offset; only source J native HbA1c view uses inverse affine map."
+    },
+    "required_domains": {
+      "evidence_ids": [
+        "R_JANSEN_FPG",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_AGES",
+        "A_RUNTIME"
+      ],
+      "derivation": "Task/source eligibility and output positivity guards; no selective repair, physiological maximum or data-fitted bound."
+    },
+    "construction": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DIRECT",
+        "A_STRUCTURE",
+        "A_RUNTIME",
+        "A_NO_AGE"
+      ],
+      "derivation": "One common associative construction, independent source blocks, direct discrete age and Bernoulli membership; no uncertainty sampling."
+    }
+  }
+}

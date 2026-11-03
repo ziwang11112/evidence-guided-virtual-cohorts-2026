@@ -1,0 +1,626 @@
+{
+  "schema_version": 1,
+  "context_laws": {
+    "J": {
+      "schema_version": "scientific_validity_v1",
+      "variables": {
+        "age": {
+          "op": "discrete_uniform",
+          "lower": 18,
+          "upper": 90
+        },
+        "female": {
+          "op": "bernoulli",
+          "p": 0.5973981513180417
+        },
+        "X": {
+          "op": "uniform",
+          "lower": -1.7320508075688772,
+          "upper": 1.7320508075688772
+        },
+        "Z": {
+          "op": "uniform",
+          "lower": -1.7320508075688772,
+          "upper": 1.7320508075688772
+        },
+        "E": {
+          "op": "uniform",
+          "lower": -1.7320508075688772,
+          "upper": 1.7320508075688772
+        },
+        "bmi": {
+          "op": "affine",
+          "input": {
+            "op": "ref",
+            "name": "X"
+          },
+          "scale": 4.1,
+          "shift": 26.5
+        },
+        "glucose": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 5.1
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "X"
+                },
+                "scale": 4.1,
+                "shift": 0
+              },
+              "scale": 0.056768558951965066,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "Z"
+              },
+              "scale": 0.44252336583624063,
+              "shift": 0
+            }
+          ]
+        },
+        "hba1c": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 5.62824
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "glucose"
+                },
+                "scale": 1.0,
+                "shift": -5.1
+              },
+              "scale": 0.20948920000000001,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "E"
+              },
+              "scale": 0.2536649017322657,
+              "shift": 0
+            }
+          ]
+        }
+      },
+      "independence": [
+        [
+          "age",
+          "female",
+          "X",
+          "Z",
+          "E"
+        ]
+      ],
+      "analyses": [
+        {
+          "id": "A_BMI",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi"
+          ]
+        },
+        {
+          "id": "A_GLUCOSE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "glucose"
+          ]
+        },
+        {
+          "id": "A_AGE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi",
+            "glucose"
+          ]
+        }
+      ]
+    },
+    "B": {
+      "schema_version": "scientific_validity_v1",
+      "variables": {
+        "age": {
+          "op": "discrete_uniform",
+          "lower": 20,
+          "upper": 80
+        },
+        "female": {
+          "op": "bernoulli",
+          "p": 0.6258698321735571
+        },
+        "X": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "Z": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "E": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "bmi": {
+          "op": "affine",
+          "input": {
+            "op": "ref",
+            "name": "X"
+          },
+          "scale": 3.5,
+          "shift": 23.5
+        },
+        "glucose": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 5.2
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "X"
+                },
+                "scale": 3.5,
+                "shift": 0
+              },
+              "scale": 0.056768558951965066,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "Z"
+              },
+              "scale": 0.5661468901732452,
+              "shift": 0
+            }
+          ]
+        },
+        "hba1c": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 5.6
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "glucose"
+                },
+                "scale": 1.0,
+                "shift": -5.2
+              },
+              "scale": 0.20948920000000001,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "E"
+              },
+              "scale": 0.15948070684230858,
+              "shift": 0
+            }
+          ]
+        }
+      },
+      "independence": [
+        [
+          "age",
+          "female",
+          "X",
+          "Z",
+          "E"
+        ]
+      ],
+      "analyses": [
+        {
+          "id": "A_BMI",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi"
+          ]
+        },
+        {
+          "id": "A_GLUCOSE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "glucose"
+          ]
+        },
+        {
+          "id": "A_AGE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi",
+            "glucose"
+          ]
+        }
+      ]
+    },
+    "M": {
+      "schema_version": "scientific_validity_v1",
+      "variables": {
+        "age": {
+          "op": "discrete_uniform",
+          "lower": 61,
+          "upper": 80
+        },
+        "female": {
+          "op": "bernoulli",
+          "p": 0.5776712714970398
+        },
+        "X": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "Z": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "E": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "bmi": {
+          "op": "affine",
+          "input": {
+            "op": "ref",
+            "name": "X"
+          },
+          "scale": 3.6,
+          "shift": 25.0
+        },
+        "glucose": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 5.2
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "X"
+                },
+                "scale": 3.6,
+                "shift": 0
+              },
+              "scale": 0.056768558951965066,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "Z"
+              },
+              "scale": 1.385003323483429,
+              "shift": 0
+            }
+          ]
+        },
+        "hba1c": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 6.1
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "glucose"
+                },
+                "scale": 1.0,
+                "shift": -5.2
+              },
+              "scale": 0.20948920000000001,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "E"
+              },
+              "scale": 0.9560250933753703,
+              "shift": 0
+            }
+          ]
+        }
+      },
+      "independence": [
+        [
+          "age",
+          "female",
+          "X",
+          "Z",
+          "E"
+        ]
+      ],
+      "analyses": [
+        {
+          "id": "A_BMI",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi"
+          ]
+        },
+        {
+          "id": "A_GLUCOSE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "glucose"
+          ]
+        },
+        {
+          "id": "A_AGE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi",
+            "glucose"
+          ]
+        }
+      ]
+    },
+    "T": {
+      "schema_version": "scientific_validity_v1",
+      "variables": {
+        "age": {
+          "op": "discrete_uniform",
+          "lower": 35,
+          "upper": 74
+        },
+        "female": {
+          "op": "bernoulli",
+          "p": 0.5
+        },
+        "X": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "Z": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "E": {
+          "op": "affine",
+          "input": {
+            "op": "gamma",
+            "shape": 4.0,
+            "scale": 0.5
+          },
+          "scale": 1.0,
+          "shift": -2.0
+        },
+        "bmi": {
+          "op": "affine",
+          "input": {
+            "op": "ref",
+            "name": "X"
+          },
+          "scale": 3.6,
+          "shift": 25.0
+        },
+        "glucose": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 5.2
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "X"
+                },
+                "scale": 3.6,
+                "shift": 0
+              },
+              "scale": 0.056768558951965066,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "Z"
+              },
+              "scale": 1.385003323483429,
+              "shift": 0
+            }
+          ]
+        },
+        "hba1c": {
+          "op": "sum",
+          "terms": [
+            {
+              "op": "constant",
+              "value": 6.1
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "affine",
+                "input": {
+                  "op": "ref",
+                  "name": "glucose"
+                },
+                "scale": 1.0,
+                "shift": -5.2
+              },
+              "scale": 0.20948920000000001,
+              "shift": 0
+            },
+            {
+              "op": "affine",
+              "input": {
+                "op": "ref",
+                "name": "E"
+              },
+              "scale": 0.9560250933753703,
+              "shift": 0
+            }
+          ]
+        }
+      },
+      "independence": [
+        [
+          "age",
+          "female",
+          "X",
+          "Z",
+          "E"
+        ]
+      ],
+      "analyses": [
+        {
+          "id": "A_BMI",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi"
+          ]
+        },
+        {
+          "id": "A_GLUCOSE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "glucose"
+          ]
+        },
+        {
+          "id": "A_AGE",
+          "kind": "ols",
+          "outcome": "hba1c",
+          "predictors": [
+            "age",
+            "female",
+            "bmi",
+            "glucose"
+          ]
+        }
+      ]
+    }
+  }
+}
