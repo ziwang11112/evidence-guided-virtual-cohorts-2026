@@ -1,0 +1,343 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age": {
+      "values": [
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74
+      ],
+      "probabilities": [
+        0.021462003828784798,
+        0.02220014090397754,
+        0.022870951743221308,
+        0.023466903524750143,
+        0.028281525816660935,
+        0.028784618255386966,
+        0.02917837863801108,
+        0.02945811009293996,
+        0.029620449845742938,
+        0.029663436503272658,
+        0.029586549496551894,
+        0.02939071957346431,
+        0.0290783100455573,
+        0.02865306931723497,
+        0.028120056030481136,
+        0.02748553891504289,
+        0.026756874115877072,
+        0.02594236335304522,
+        0.038102128838913056,
+        0.03664455828793491,
+        0.0351004581127473,
+        0.03348567994906329,
+        0.031816214287654895,
+        0.030107932090055016,
+        0.02837634111959755,
+        0.02663636199664055,
+        0.024902128186804127,
+        0.023186813242104174,
+        0.021502487673166256,
+        0.019860006872435394,
+        0.018268930568064598,
+        0.016737473397629772,
+        0.01527248537754178,
+        0.021115120391577626,
+        0.019111706515562633,
+        0.017228537679506155,
+        0.015468222488823473,
+        0.013831696375094417,
+        0.012318378025675782,
+        0.010926338523404166
+      ],
+      "mean": 52.742572764288944
+    },
+    "female_probability": 0.5368722666264515,
+    "bmi": {
+      "log_mu": 3.1552468005995413,
+      "log_sigma": 0.1429932872938595,
+      "mean": 23.69988843402959,
+      "support": [
+        10,
+        55
+      ]
+    },
+    "mixture_probability": 0.15999999999999998,
+    "copula_correlations": [
+      0.4,
+      0.5717497553171411
+    ],
+    "glucose": {
+      "log_mu": [
+        1.6277352821041617,
+        1.9299299578642573
+      ],
+      "log_sigma": [
+        0.1031462806322241,
+        0.38772135297884786
+      ],
+      "baseline_support": [
+        2.5,
+        25
+      ]
+    },
+    "hba1c": {
+      "log_mu": [
+        1.6975800211029037,
+        1.8718021769015916
+      ],
+      "log_sigma": [
+        0.04661740893558886,
+        0.2771368973081733
+      ],
+      "baseline_support": [
+        3.5,
+        16
+      ]
+    },
+    "glucose_age_slope": 0.016157091106951266,
+    "hba1c_age_slope": 0.01460369457409454,
+    "hba1c_bmi_slope": 0.05494608227224506,
+    "probability_epsilon": 1e-15,
+    "measurement_decimals": {
+      "glucose": 2,
+      "hba1c": 1
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "3000 iid synthetic people per prescribed seed; row count is design, not evidence. No participant data."
+    },
+    {
+      "id": "A_SCAFFOLD",
+      "description": "Age, BMI, female and latent-mixture innovations independent; no female biomarker term. Unidentified simplifying assumptions, not evidence of independence."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Discrete maximum entropy on 35..74 with CDF(38)=.09, CDF(52)=.49, CDF(67)=.89 inside reference quantile bins."
+    },
+    {
+      "id": "A_BMI",
+      "description": "Bounded lognormal BMI 10..55 approximating mean/SD; clipping has negligible theoretical mass but is an assumption."
+    },
+    {
+      "id": "A_MIXTURE",
+      "description": "Two bounded lognormal baseline components, shared membership, Gaussian copula by component. Broad probability constrained to .02..16; tail shape and membership are not identified or clinical classes."
+    },
+    {
+      "id": "A_MOMENTS",
+      "description": "CHNS sample reference moments treated as developmental fitting targets. Algebra exploits the scaffold independence; not causal and not independent validation."
+    },
+    {
+      "id": "A_CORE_RHO",
+      "description": "Core latent Gaussian correlation 0.40 chosen as first-trial assumption; broad correlation solves baseline covariance using 64-point Gauss-Hermite quadrature without random draws."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "Baseline glucose support 2.5..25 and HbA1c 3.5..16, bounded age/BMI additive shifts preserve positivity and finite all moments. These are assumed, not reference extrema."
+    },
+    {
+      "id": "A_ROUND",
+      "description": "Glucose rounded 2 decimals; HbA1c 1 decimal as unverified measurement-resolution approximation; changes expected moments slightly."
+    },
+    {
+      "id": "A_NUMERICS",
+      "description": "Probability clipped at 1e-15 for finite inverse-normal numerics, then scientific bounds enforced."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task design choice."
+    },
+    "age": {
+      "evidence_ids": [
+        "REF_age_mean",
+        "REF_age_sd",
+        "REF_age_q10",
+        "REF_age_median",
+        "REF_age_q90"
+      ],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "Maximum entropy probabilities solve five deterministic moment/CDF constraints."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "REF_female_mean"
+      ],
+      "assumption_ids": [
+        "A_SCAFFOLD"
+      ],
+      "derivation": "Direct supplied selected-sample female proportion."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "REF_bmi_mean",
+        "REF_bmi_sd",
+        "REF_bmi_q10",
+        "REF_bmi_median",
+        "REF_bmi_q90"
+      ],
+      "assumption_ids": [
+        "A_BMI",
+        "A_SCAFFOLD"
+      ],
+      "derivation": "log_sigma=sqrt(log(1+SD^2/mean^2)); log_mu=log(mean)-log_sigma^2/2; bounds assumed."
+    },
+    "mixture_probability": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90",
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_MIXTURE",
+        "A_MOMENTS"
+      ],
+      "derivation": "Joint deterministic least-squares margin fit; 0.16 upper bound active, indicating one possible underidentified representation."
+    },
+    "copula_correlations": {
+      "evidence_ids": [
+        "REF_E2",
+        "REF_glucose_sd",
+        "REF_hba1c_mean",
+        "REF_glucose_mean"
+      ],
+      "assumption_ids": [
+        "A_CORE_RHO",
+        "A_MIXTURE",
+        "A_MOMENTS"
+      ],
+      "derivation": "Core rho assumed .40; solve mixture E[G0 H0]-E[G0]E[H0]=E2*(Var(G)-glucose_age_slope^2 Var(age)); 64-point deterministic quadrature."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90"
+      ],
+      "assumption_ids": [
+        "A_MIXTURE",
+        "A_SUPPORT",
+        "A_MOMENTS"
+      ],
+      "derivation": "Deterministic truncated lognormal mixture moment/CDF fit including age additive spread."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_MIXTURE",
+        "A_SUPPORT",
+        "A_MOMENTS"
+      ],
+      "derivation": "Deterministic truncated lognormal mixture moment/CDF fit including age and BMI spread, using 24-point BMI quadrature."
+    },
+    "glucose_age_slope": {
+      "evidence_ids": [
+        "REF_glucose_hba1c_pearson",
+        "REF_E2",
+        "REF_E3",
+        "REF_glucose_sd",
+        "REF_hba1c_sd",
+        "REF_age_sd"
+      ],
+      "assumption_ids": [
+        "A_SCAFFOLD",
+        "A_MOMENTS"
+      ],
+      "derivation": "[Pearson*SD(G)*SD(H)-E2*Var(G)]/[E3*Var(age)]."
+    },
+    "hba1c_age_slope": {
+      "evidence_ids": [
+        "REF_E2",
+        "REF_E3"
+      ],
+      "assumption_ids": [
+        "A_SCAFFOLD",
+        "A_MOMENTS"
+      ],
+      "derivation": "E3 + E2*glucose_age_slope, ensuring age partial slope under stated covariance scaffold."
+    },
+    "hba1c_bmi_slope": {
+      "evidence_ids": [
+        "REF_E1"
+      ],
+      "assumption_ids": [
+        "A_SCAFFOLD",
+        "A_MOMENTS"
+      ],
+      "derivation": "Direct E1 coefficient since generated BMI is independent of age, female and mixture innovations."
+    },
+    "probability_epsilon": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_NUMERICS"
+      ],
+      "derivation": "Floating point safeguard."
+    },
+    "measurement_decimals": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_ROUND"
+      ],
+      "derivation": "Measurement representation assumption; exact resolution unverified."
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# Adaptive reference-assisted pilot review package
+
+Read RESULTS.md, COMPLETE_RESULTS.json and FINAL_INDEPENDENT_REVIEW.md first. This is one explicitly reference-assisted developmental construction, not independent clinical validation. All nine execution outcomes and all 30 statistics per run are included in the independent aggregate audit. The three-seed delivery profile and paired changes are complete.
+
+This public package contains original code, scientific specifications, source reconciliation, allowed aggregate inputs, result summaries, failures and hashes. Patient-level real data, synthetic individual tables, third-party full articles, credentials, mocked-test temporary directories and duplicated large feedback copies are excluded. Full frozen candidate bundles and execution receipts remain local. FROZEN_LOCAL_ARTIFACT_HASHES.json preserves their identities; this selected public package is not itself a complete frozen harness bundle.
+
+The scientific generator.py functions take (None, model_spec, seed), return a DataFrame and use the row count in the specification. They require numpy, pandas and scipy. Do not execute unreviewed generated programs outside isolation. To reconstruct the original session, adapt recorded absolute local paths and provide the existing cohort_harness execution backend; no raw reference patient files are needed for the declared aggregate-fitting pilot. Deterministic producer scripts document how the author calculated parameters; local input paths in those scripts need relocation. For the first trial, the copula calculation was initially inline; the later retained covariance_solver.py and provenance note preserve this limitation.
+
+The coordinator supplied information and numerical operators but did not set scientific parameters. One actual external Agent task authored and revised the model. The controller records external dispatches; it is not a standalone LLM service or secure isolation of the author's general tools. The existing WSL/bubblewrap adapter isolates generator execution.
+
+No superiority claim versus older literature-only cases is justified: this pilot received more reference information. A separate information ablation is the next discriminating test.
