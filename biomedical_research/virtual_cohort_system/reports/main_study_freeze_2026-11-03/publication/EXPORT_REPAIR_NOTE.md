@@ -1,0 +1,9 @@
+# Publication text-byte repair
+
+The first final publication commit, `d485c1d86ea5d6ac544ad43a10c4df25d2590d1f`, contained all 842 selected artifacts. A subsequent read-back audit found that Python's universal-newline text reading had normalized CRLF to LF in 259 files. Every affected Git blob exactly matched its original source after that newline normalization. No scientific value, model instruction or analysis changed, but the published byte hashes differed from the recorded original SHA-256 values.
+
+The exporter now decodes the original UTF-8 bytes without newline translation. A narrowly scoped repair republishes only byte-different files, the changed export helper and this repair's code/review records. All scientific-source hashes must still match the original export manifest. Existing commits, frozen files and independent scientific audits are preserved. This is a publication-format repair, not a new experiment or numerical reevaluation.
+
+Verification must compare Git object bytes to original source bytes, independently of any checkout newline filters. The final repair manifest records both SHA-256 and expected Git blob identifiers for the complete selected inventory. The scientific release and manuscript review remain valid for their scientific content; the separate repair review covers the changed serialization helper. This does not change the previously stated boundary that public review packages are selected artifacts rather than fully portable copies of all historical runtime bundles.
+
+The initial attempt to read the export manifest occurred before the export process finished; that read failed without modifying any artifact. It succeeded after process completion. A first Git fetch failed with a connection reset; an HTTP/1.1 retry succeeded. Both are publication operations, with zero additional scientific executions.

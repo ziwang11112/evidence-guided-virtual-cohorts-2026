@@ -25,7 +25,7 @@ def prepare():
         assert path.is_file() and '__pycache__' not in path.parts
         assert path.suffix in TEXT or path.name in {'ALL_ENDPOINTS.csv','main_scientific_uses.svg'}
         assert path.stat().st_size<6_000_000
-        content=path.read_text(encoding='utf-8')
+        content=path.read_bytes().decode('utf-8')
         assert not re.search(r'-----BEGIN [A-Z ]*PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{30,}|sk-[A-Za-z0-9]{30,}',content)
         assert destination not in files or files[destination]['sha256']==c.SHA(path)
         files[destination]={'source':str(path),'sha256':c.SHA(path),'content':content}

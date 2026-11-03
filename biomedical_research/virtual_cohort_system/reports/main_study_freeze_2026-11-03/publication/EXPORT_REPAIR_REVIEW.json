@@ -1,0 +1,83 @@
+{
+  "schema_version": "main_study_export_repair_review_v1",
+  "created_utc": "2026-11-03T20:36:13.466268+00:00",
+  "reviewer_id": "/root/main_closeout_review",
+  "status": "ready",
+  "ready_for": "Prepare and publish the bounded byte-restoration payload, followed by complete Git-object byte verification.",
+  "scope": "Static review of the one-line serialization repair and repair helper, plus independent read-only byte comparison against the original manifest and committed Git objects.",
+  "base_commit": "d485c1d86ea5d6ac544ad43a10c4df25d2590d1f",
+  "original_manifest_sha256": "3ff534e4814d29fd26ccce005a037b5039ceea01c7f18d12355c271a0db3bc2d",
+  "bindings": {
+    "work/main_study_freeze_2026-11-03/publication/prepare_export.py": "de84ededd94ff89324507a351a374634e86f3eae219c311ea25b7c46e719354a",
+    "work/main_study_freeze_2026-11-03/publication/prepare_byte_repair.py": "6f1858b7dbbd574c2d54ea4e9c371d30dcbb787c6fc7a768449bf1556d63d8b5",
+    "work/main_study_freeze_2026-11-03/publication/EXPORT_REPAIR_NOTE.md": "3547824e6a3c3e726a059c06ea398ab2516555224eb47b1c5378041f0a11e4da",
+    "work/main_study_freeze_2026-11-03/publication/EXPORT_LINE_ENDING_AUDIT.json": "2756c8bc3581aba7e50a0b5f2ec4f7837e4bc122c365bfa5269af21e272aeb31",
+    "work/main_study_freeze_2026-11-03/publication/final_export/MANIFEST.json": "3ff534e4814d29fd26ccce005a037b5039ceea01c7f18d12355c271a0db3bc2d",
+    "work/main_study_freeze_2026-11-03/publication/FINAL_REPORT_REVIEW.json": "9b8576a1c7c7ded09bcbddc6c0f5176ebaade1431cd10b8f1496df4dfeaf33f1",
+    "work/main_study_freeze_2026-11-03/publication/FINAL_REPORT_REVIEW.md": "237a2d6e75ca105c0db04589948aafcecb55868e6d80fe35d1b7072013990c0a",
+    "work/main_study_freeze_2026-11-03/RELEASE.json": "796fb50db7fc49c0b0195e596182a3550816938f5d8e1d28e859bf267ee78aad",
+    "work/main_study_freeze_2026-11-03/final_evaluation/RESULTS.json": "1fbc32d2f982d31c649d9217e644a34c02b81e08c093380fba8f3aaec9e4c2cb",
+    "work/main_study_freeze_2026-11-03/independent_audit/RESULTS.json": "5914da17545432b10f1f37880e4e2d80a4bc254c75a70e6d12a7e5688ad4c80d",
+    "manuscript/DRAFT_v0_4.md": "127986b929a36da54a09a7eed288f8bf8335bfad2a5ece6db2e55840e39dc703"
+  },
+  "independent_byte_findings": {
+    "original_inventory_files": 842,
+    "reported_newline_mismatches": 259,
+    "unique_reported_paths": 259,
+    "original_hash_and_crlf_only_difference_independently_verified": 259,
+    "exceptions": [],
+    "original_source_hashes_unchanged": 841,
+    "only_permitted_source_edit": "publication/prepare_export.py",
+    "unexpected_source_hash_changes": [],
+    "original_inventory_git_blobs_needing_update": 260,
+    "additional_repair_metadata_files": 5,
+    "expected_payload_files": 265,
+    "expected_complete_verification_inventory": 847
+  },
+  "checks": [
+    {
+      "id": "minimal_exporter_diff",
+      "status": "matched",
+      "detail": "The only exporter code change versus the base commit is content=path.read_text(encoding='utf-8') to content=path.read_bytes().decode('utf-8'). This preserves original UTF-8 newline bytes rather than applying universal-newline translation."
+    },
+    {
+      "id": "semantic_and_byte_scope",
+      "status": "matched",
+      "detail": "All 259 disputed committed blobs were independently read through git cat-file, without checkout filters. Each equals original source bytes after CRLF-to-LF replacement alone, and every disputed source still has its original manifest SHA-256. No scientific text or numerical content difference was detected."
+    },
+    {
+      "id": "repair_helper",
+      "status": "consistent",
+      "detail": "Helper pins the base HEAD and original manifest SHA-256, requires a ready repair review, checks original source hashes except the intentionally edited exporter, computes Git blob IDs from raw bytes, selects only differing original-inventory blobs and appends five named repair metadata files. It emits a new repair directory and complete inventory rather than overwriting the original export/history."
+    },
+    {
+      "id": "prior_review_and_science",
+      "status": "preserved",
+      "detail": "Both original FINAL_REPORT_REVIEW files retain their reviewed hashes. The release, main manuscript, final aggregate result and independent audit hashes are bound separately here and retain their earlier values. No generator, evaluator, model, protocol or scientific-result source changed in the original 842-file inventory."
+    },
+    {
+      "id": "row_exclusion",
+      "status": "consistent",
+      "detail": "Repair selection is confined to the exact previously reviewed 842-file manifest plus five named code/note/audit/review files. It does not enumerate or add patient/generated row directories, new datasets, third-party full texts or runtime bundles."
+    }
+  ],
+  "unresolved_blocking_findings": [],
+  "actions_not_performed": {
+    "patient_or_generated_rows_read": false,
+    "scientific_execution_tests_or_evaluation": false,
+    "new_literature": false,
+    "repair_helper_executed_by_reviewer": false,
+    "export_or_public_commit_performed_by_reviewer": false,
+    "original_reviews_or_scientific_files_edited_by_reviewer": false
+  },
+  "followthrough": [
+    "After preparation, verify 265 changed payload files and the full 847-entry inventory against their current raw source bytes and expected Git object IDs.",
+    "Publish as a child of the recorded base commit using the existing branch lease; preserve the base commit and original export manifest/review.",
+    "Read back committed Git objects and verify every complete-inventory SHA-256/Git blob ID, not merely checkout bytes; report the resulting commit and retain its receipt."
+  ],
+  "limitations": [
+    "Ready covers this bounded serialization repair; it does not independently certify source science, clinical validity or a completed publication.",
+    "The repair note describes earlier manifest-read and fetch retries; this review does not reconstruct those orchestration incidents.",
+    "The status gate alone is not a current-hash verifier; the prepared payload and committed objects still require the stated final byte audit."
+  ]
+}
