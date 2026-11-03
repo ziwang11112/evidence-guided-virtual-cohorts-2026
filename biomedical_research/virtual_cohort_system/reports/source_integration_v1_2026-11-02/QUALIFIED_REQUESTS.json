@@ -1,0 +1,358 @@
+{
+  "J": {
+    "declaration": {
+      "schema_version": 1,
+      "bindings": {
+        "task_sha256": "5c8fab3ecc4f9e819101ac20e8e4a8c2c62ba4a9299cabef6a42d8a068cbbb37",
+        "candidate_freeze_sha256": "af08f6bfddafaad1b9890468143d294b8c76e9895d6ff0de611d4d4e82c21381",
+        "evidence_sha256": "a10a223af16f040d34fa82a5d183128c8e40396cc009ffb92395b715b386a648",
+        "model_spec_sha256": "a501f785519032aac2bee02dcb4730ad1b09b552a4ee3b3a3926f7b5f39c23ff",
+        "semantics_sha256": "0d481de881b2688f18724dd046c7bbe513c07f27a146d79d89f872c386fca508",
+        "bridge_plan_sha256": "1fe7425582fabaff3c6d9fd11eb6f9d1e661437d2b754e74466e0eda2a7d4c2e"
+      },
+      "context_role": "source",
+      "context_id": "J",
+      "population": "Unrelated western-European adults selected for GWAS, preferring the oldest family members. Exclusions: diabetes by self-report or FPG >=7.0 mmol/L; anemia at the reported sex-specific thresholds; missing HbA1c, erythrocytes or FPG. Source context: CTX_JANSEN_SELECTED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count.",
+      "measurement": "{\"BMI\": \"kg/m^2\", \"FPG\": \"fresh fasting plasma, hexokinase/G6PD, mmol/L; fasting hours unreported\", \"HbA1c_IFCC\": \"IFCC-standardized immunoassay; mmol/mol\", \"age\": \"years; exact source rounding not established\", \"gender\": \"binary male/female membership described; original numeric coding unresolved\"} Original weights: not_reported. Exact regression-row processing and source model sample remain unconfirmed.",
+      "source_ids": [
+        "S_JANSEN_2013"
+      ],
+      "assumption_ids": [
+        "A_LAW",
+        "A_AGESEX",
+        "A_BG",
+        "A_MARGINALS",
+        "A_SOURCE_AGES",
+        "A_ALIAS",
+        "A_GENDER",
+        "A_POINT",
+        "A_J_SELECTION",
+        "A_PROJECTION",
+        "A_UNITS",
+        "A_EQUAL"
+      ],
+      "column_aliases": [
+        {
+          "source_name": "HbA1c_percent",
+          "generated_name": "hba1c",
+          "assumption_ids": [
+            "A_ALIAS",
+            "A_UNITS"
+          ]
+        },
+        {
+          "source_name": "FPG",
+          "generated_name": "glucose",
+          "assumption_ids": [
+            "A_ALIAS"
+          ]
+        },
+        {
+          "source_name": "BMI",
+          "generated_name": "bmi",
+          "assumption_ids": [
+            "A_ALIAS"
+          ]
+        },
+        {
+          "source_name": "gender_binary",
+          "generated_name": "female",
+          "assumption_ids": [
+            "A_GENDER"
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "Q_J_bmi",
+          "evidence_id": "R_JANSEN_BMI",
+          "semantic_check_id": "J_bmi",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "mmol/mol/(kg/m^2)",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "HbA1c_IFCC",
+            "predictors": [
+              "age",
+              "gender_binary",
+              "BMI"
+            ],
+            "term": "BMI",
+            "include_intercept": true
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_LAW",
+              "A_AGESEX",
+              "A_BG",
+              "A_MARGINALS",
+              "A_SOURCE_AGES",
+              "A_ALIAS",
+              "A_GENDER",
+              "A_POINT",
+              "A_J_SELECTION",
+              "A_PROJECTION",
+              "A_UNITS",
+              "A_EQUAL"
+            ],
+            "unresolved_original_details": [
+              "Original weights, exact regression rows/processing and original intercept convention are not certified. The original source operator therefore remains unavailable; a distinct qualified native-unit OLS uses disclosed conventions."
+            ],
+            "reason": "Native functional and adjustment preserved; all complete generated rows, equal weights, explicit J intercept and M average ties. Qualified point comparison only."
+          },
+          "measurement_mapping": {
+            "kind": "hba1c_ngsp_to_ifcc",
+            "input_column": "HbA1c_percent",
+            "output_column": "HbA1c_IFCC",
+            "ngsp_percent_per_ifcc": 0.09148,
+            "ngsp_percent_intercept": 2.152,
+            "unit_evidence_id": "U_NGSP_SCALE",
+            "assumption_ids": [
+              "A_UNITS"
+            ]
+          }
+        },
+        {
+          "id": "Q_J_fpg",
+          "evidence_id": "R_JANSEN_FPG",
+          "semantic_check_id": "J_fpg",
+          "operator": {
+            "kind": "ols_coefficient",
+            "unit": "mmol/mol/(mmol/L)",
+            "selection": [],
+            "missing_policy": "error",
+            "outcome": "HbA1c_IFCC",
+            "predictors": [
+              "age",
+              "gender_binary",
+              "FPG"
+            ],
+            "term": "FPG",
+            "include_intercept": true
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_LAW",
+              "A_AGESEX",
+              "A_BG",
+              "A_MARGINALS",
+              "A_SOURCE_AGES",
+              "A_ALIAS",
+              "A_GENDER",
+              "A_POINT",
+              "A_J_SELECTION",
+              "A_PROJECTION",
+              "A_UNITS",
+              "A_EQUAL"
+            ],
+            "unresolved_original_details": [
+              "Original weights, exact regression rows/processing and original intercept convention are not certified. The original source operator therefore remains unavailable; a distinct qualified native-unit OLS uses disclosed conventions."
+            ],
+            "reason": "Native functional and adjustment preserved; all complete generated rows, equal weights, explicit J intercept and M average ties. Qualified point comparison only."
+          },
+          "measurement_mapping": {
+            "kind": "hba1c_ngsp_to_ifcc",
+            "input_column": "HbA1c_percent",
+            "output_column": "HbA1c_IFCC",
+            "ngsp_percent_per_ifcc": 0.09148,
+            "ngsp_percent_intercept": 2.152,
+            "unit_evidence_id": "U_NGSP_SCALE",
+            "assumption_ids": [
+              "A_UNITS"
+            ]
+          }
+        }
+      ]
+    },
+    "declaration_sha256": "eae278951a4be2a1fecaced704487a907a49e2b7a4b5bc55d9adcdd1a94f300e"
+  },
+  "B": {
+    "declaration": {
+      "schema_version": 1,
+      "bindings": {
+        "task_sha256": "35143bd292494a432100ffea1bc6071a07612ba9f1bdf544255baac8f94fb75d",
+        "candidate_freeze_sha256": "68f021b9b06f7075fd9e711a7320fa0e3d627bc5b0088c8558ea0e13008f2850",
+        "evidence_sha256": "a10a223af16f040d34fa82a5d183128c8e40396cc009ffb92395b715b386a648",
+        "model_spec_sha256": "fb0b9d94de8c47c0fa04da63d9c8027d3686358ac16dc36537e655cf6e36ce32",
+        "semantics_sha256": "65e76f39ecc3b8e9854d36c2de4aa11184fd6aa7ce48d934281c526d813a98e4",
+        "bridge_plan_sha256": "1fe7425582fabaff3c6d9fd11eb6f9d1e661437d2b754e74466e0eda2a7d4c2e"
+      },
+      "context_role": "source",
+      "context_id": "B",
+      "population": "Six Shanghai communities, 2007-2008; excludes previously diagnosed diabetes and specified medical, questionnaire and age exclusions, retaining screen-detected diabetes. Explicit exclusion under age 20 differs from prose over age 20; exact boundary unresolved. Source context: CTX_BAO_ANALYZED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count.",
+      "measurement": "{\"BMI\": \"kg/m^2\", \"FPG\": \"fasting venous plasma, glucose oxidase, mmol/L; stated 10-hour fast\", \"HbA1c_percent\": \"HPLC, percent; printed Tosoh instrument HLC-73G7 retained without correction\", \"age\": \"years\", \"gender\": \"reported men/women counts\"} Original weights: not_reported. Correlation-specific missing handling and quantile algorithm not reported.",
+      "source_ids": [
+        "S_BAO_2010"
+      ],
+      "assumption_ids": [
+        "A_LAW",
+        "A_AGESEX",
+        "A_BG",
+        "A_MARGINALS",
+        "A_SOURCE_AGES",
+        "A_ALIAS",
+        "A_GENDER",
+        "A_POINT",
+        "A_B_SELECTION",
+        "A_B_CORR",
+        "A_TRANSFER",
+        "A_EQUAL"
+      ],
+      "column_aliases": [
+        {
+          "source_name": "HbA1c_percent",
+          "generated_name": "hba1c",
+          "assumption_ids": [
+            "A_ALIAS",
+            "A_UNITS"
+          ]
+        },
+        {
+          "source_name": "FPG",
+          "generated_name": "glucose",
+          "assumption_ids": [
+            "A_ALIAS"
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "Q_B_pearson",
+          "evidence_id": "R_BAO_PEARSON",
+          "semantic_check_id": "B_pearson",
+          "operator": {
+            "kind": "correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "FPG",
+            "y": "HbA1c_percent"
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_LAW",
+              "A_AGESEX",
+              "A_BG",
+              "A_MARGINALS",
+              "A_SOURCE_AGES",
+              "A_ALIAS",
+              "A_GENDER",
+              "A_POINT",
+              "A_B_SELECTION",
+              "A_B_CORR",
+              "A_TRANSFER",
+              "A_EQUAL"
+            ],
+            "unresolved_original_details": [
+              "Original weights and correlation-specific missing processing are unreported. A distinct complete-row equal-weight Pearson scenario does not repair strict replay."
+            ],
+            "reason": "Native functional and adjustment preserved; all complete generated rows, equal weights, explicit J intercept and M average ties. Qualified point comparison only."
+          },
+          "measurement_mapping": {
+            "kind": "identity"
+          }
+        }
+      ]
+    },
+    "declaration_sha256": "370a5257260de04c61a4fde573186ce128577caa9e38f4260f78dfb801a2ef01"
+  },
+  "M": {
+    "declaration": {
+      "schema_version": 1,
+      "bindings": {
+        "task_sha256": "3868ad86beca500dd57fd8837bc800d3ef49594b394237924c61d32d5935d2fc",
+        "candidate_freeze_sha256": "2b3de1ed1c0c22530b31dd538d0fd54d4b6c99154decf877007e3be536517f1e",
+        "evidence_sha256": "a10a223af16f040d34fa82a5d183128c8e40396cc009ffb92395b715b386a648",
+        "model_spec_sha256": "d7c21be20d369627c17d29d51923aefe8e77beacc6fe429260fd3b7f1d45d71c",
+        "semantics_sha256": "360624cbb136e339fd5fb3a0fd8f80aa4bcfbcefa79dc19d2725f3d4367a064e",
+        "bridge_plan_sha256": "1fe7425582fabaff3c6d9fd11eb6f9d1e661437d2b754e74466e0eda2a7d4c2e"
+      },
+      "context_role": "source",
+      "context_id": "M",
+      "population": "Selected 2019 rural Yanlou/Shandong follow-up, age 61-80, free of dementia and functional disability; known diabetes included. Demographics/BMI collected in 2018, laboratory measurements in 2019. Source context: CTX_MIND_ANALYZED. Reported marginal sample count is source-specific, not target size or a guaranteed regression/pair count.",
+      "measurement": "{\"BMI\": \"kg/m^2, prior-year assessment\", \"FPG_distinction\": \"Separate plasma hexokinase measurement; never alias it to FSG.\", \"FSG\": \"serum, glucose oxidase CS-600B, mmol/L, local laboratory within two hours\", \"HbA1c_percent\": \"EDTA whole blood, HPLC Huizhong MQ6000, percent, KingMed within two days\", \"age\": \"years; source timing retained as reported\", \"fasting\": \"overnight, exact hours unreported\", \"gender\": \"reported female count\"} Original weights: not_reported. Mean filling of continuous and mode filling of categorical variables reported; affected field counts/effects and correlation tie implementation unreported.",
+      "source_ids": [
+        "S_MIND_2024"
+      ],
+      "assumption_ids": [
+        "A_LAW",
+        "A_AGESEX",
+        "A_BG",
+        "A_MARGINALS",
+        "A_SOURCE_AGES",
+        "A_ALIAS",
+        "A_GENDER",
+        "A_POINT",
+        "A_M_SELECTION",
+        "A_M_CORR",
+        "A_TRANSFER",
+        "A_EQUAL"
+      ],
+      "column_aliases": [
+        {
+          "source_name": "HbA1c_percent",
+          "generated_name": "hba1c",
+          "assumption_ids": [
+            "A_ALIAS",
+            "A_UNITS"
+          ]
+        },
+        {
+          "source_name": "FSG",
+          "generated_name": "glucose",
+          "assumption_ids": [
+            "A_ALIAS"
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "Q_M_spearman",
+          "evidence_id": "R_MIND_SPEARMAN",
+          "semantic_check_id": "M_spearman",
+          "operator": {
+            "kind": "spearman_correlation",
+            "unit": "1",
+            "selection": [],
+            "missing_policy": "error",
+            "x": "FSG",
+            "y": "HbA1c_percent"
+          },
+          "source_relation": {
+            "kind": "same_reported_functional_under_declared_assumptions",
+            "assumed_weights": "equal",
+            "assumption_ids": [
+              "A_LAW",
+              "A_AGESEX",
+              "A_BG",
+              "A_MARGINALS",
+              "A_SOURCE_AGES",
+              "A_ALIAS",
+              "A_GENDER",
+              "A_POINT",
+              "A_M_SELECTION",
+              "A_M_CORR",
+              "A_TRANSFER",
+              "A_EQUAL"
+            ],
+            "unresolved_original_details": [
+              "Original weights, imputation impacts and correlation tie handling are unreported. A distinct complete-row equal-weight Spearman scenario with average ties does not repair strict replay."
+            ],
+            "reason": "Native functional and adjustment preserved; all complete generated rows, equal weights, explicit J intercept and M average ties. Qualified point comparison only."
+          },
+          "measurement_mapping": {
+            "kind": "identity"
+          }
+        }
+      ]
+    },
+    "declaration_sha256": "69b5908a53898d6e4e0d026f11710dfc6c3831fb67a2ea68d56750130e75e782"
+  }
+}
