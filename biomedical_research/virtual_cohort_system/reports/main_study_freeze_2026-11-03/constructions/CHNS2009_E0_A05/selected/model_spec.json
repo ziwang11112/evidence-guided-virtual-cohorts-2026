@@ -1,0 +1,233 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_min": 35,
+    "age_max": 74,
+    "age_effect_unit_years": 10.0,
+    "female_probability": 0.5776712714970398,
+    "biomarker_order": [
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "biomarker_means": [
+      25.0,
+      5.2,
+      6.1
+    ],
+    "biomarker_sds": [
+      3.6,
+      1.4,
+      1.0
+    ],
+    "log_age_effects": [
+      0.01,
+      0.02,
+      0.015
+    ],
+    "log_female_effects": [
+      0.01,
+      -0.01,
+      0.005
+    ],
+    "residual_factor_loadings": [
+      0.35,
+      0.65,
+      0.8
+    ],
+    "row_id_prefix": "CHNS2009_E0_A05_",
+    "row_id_width": 6,
+    "output_columns": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Exactly 3000 synthetic rows, independent draws from one scenario law; generated age 35-74 inclusive, female=1 and male=0, BMI kg/m^2, serum glucose mmol/L, whole-blood HbA1c %. No individual input, empirical target composition, survey design, clusters or individual recovery is supplied."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age is discrete uniform on the 40 admissible years, independently of sex. This is a maximum-entropy composition scenario, not an estimated target age distribution; neither MIND-China age mean nor Jansen/Bao age summaries are transported."
+    },
+    {
+      "id": "A_SEX",
+      "description": "Female probability is set to the MIND-China unweighted count ratio 2049/3547. Its transfer from selected older adults is an unvalidated composition assumption; numeric binary coding is imposed here."
+    },
+    {
+      "id": "A_MARGINAL_TRANSFER",
+      "description": "Use MIND-China reported BMI mean/individual SD 25.0/3.6, serum glucose 5.2/1.4 and HbA1c percent 6.1/1.0 as working unconditional biomarker scales for this target scenario. These are external source facts used under an explicit unsupported stationarity assumption across age composition, location, calendar time, selection and treatment. They are not known target moments or calibration answers. No diabetes, pregnancy or treatment exclusions are introduced."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "MIND-China local serum glucose oxidase measurements and externally processed HPLC HbA1c are used only as approximate scale anchors for target central-serum glucose and whole-blood HbA1c. Different laboratories, fasting details, assay performance and prior-year BMI are unresolved. FSG is never relabelled as plasma FPG; no serum/plasma conversion or NGSP-to-IFCC harmonization is performed."
+    },
+    {
+      "id": "A_LAW",
+      "description": "Conditional on age and female category, log(BMI), log(glucose), log(HbA1c) are multivariate normal with an age/sex-invariant residual covariance. This finite 80-component mixture is a chosen family. Positive unbounded biomarker support is a mathematical approximation; all moments exist, but extreme biological tail realism is unassessed. No clipping, clinical cutoffs, rejection or row removal is used."
+    },
+    {
+      "id": "A_AGE_EFFECT",
+      "description": "Log-level changes per ten years at fixed sex are assumed to be 0.010, 0.020 and 0.015 for BMI, glucose and HbA1c. These modest positive trends are illustrative structure, not reported E0 effects, causal effects, fitted slopes or consequences of marginal evidence."
+    },
+    {
+      "id": "A_SEX_EFFECT",
+      "description": "At fixed age, the assumed female-minus-male log-level differences are 0.010, -0.010 and 0.005 for BMI, glucose and HbA1c. Magnitudes and signs are scenario choices, not E0 evidence. Unknown differences have not been reported as zero facts."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "One shared independent standard-normal factor has standardized log-residual loadings 0.35, 0.65 and 0.80 for BMI, glucose and HbA1c. Biomarker-specific residual normals are independent of that factor, each other, age and sex. This imposes positive conditional dependence of assumed strength; no clinical correlation, separate regression coefficient or hidden target value was used."
+    },
+    {
+      "id": "A_NORMALIZATION",
+      "description": "Log residual variances and intercepts are algebraically chosen so that the full target scenario mixture has the assumed MIND-derived marginal means/SDs despite the demographic terms. The finite-state MGFs and Gaussian MGFs in mathematical_properties.md give this law-linked normalization. It is not an empirical target fit or source reconstruction."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Published individual SDs describe source dispersion and are not estimator SEs. Reported summary uncertainty, SD divisors, field-specific sample sizes and weighting remain unknown. All scenario parameters are held fixed; seeds represent individual residual/sample variation only. Structural, external-estimate and transport uncertainty are not assigned probability distributions or claimed covered by synthetic confidence intervals."
+    },
+    {
+      "id": "A_SOURCE_BOUNDARY",
+      "description": "No supplied source-population replay exists. Every comparison of a target output with an external source statistic is unavailable. All 32 retained source items are preserved with their locators and contexts, but no target-table numerical source check is permitted. E0 contains zero admitted non-marginal operations; numerical_uptake.records is empty."
+    },
+    {
+      "id": "A_OVERLAP",
+      "description": "Multiple MIND-China marginal summaries are from one selected cohort, and mean/SD pairs are related summaries, not independent replications. Jansen and Bao provide context only, not additional weighted evidence. All source estimates are fixed anchors without sample-size pooling or precision weighting; unknown cross-study participant overlap is not asserted absent."
+    },
+    {
+      "id": "A_USE",
+      "description": "All three requested OLS analyses operate on every generated row. Their population coefficients are algebraic implications of the selected law, explicitly calculated in analytic_properties.json. E1/E2 are not transported source regressions in E0; E3 is also assumption-dependent. No synthetic P-value is clinical evidence and no common reference values have been used."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "age_min": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "age_max": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "biomarker_order": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "row_id_width": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "output_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task design, units/order or synthetic identifier convention; no source inference."
+    },
+    "age_effect_unit_years": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE_EFFECT"
+      ],
+      "derivation": "Ten years is the declared effect-reporting unit; actual age is integer years."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "M_M_FEMALE_FRACTION"
+      ],
+      "assumption_ids": [
+        "A_SEX",
+        "A_OVERLAP"
+      ],
+      "derivation": "Use derived female count ratio 2049/3547; transfer of composition is an assumption."
+    },
+    "biomarker_means": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_FSG_MEAN",
+        "M_M_HBA1C_PERCENT_MEAN"
+      ],
+      "assumption_ids": [
+        "A_MARGINAL_TRANSFER",
+        "A_MEASUREMENT",
+        "A_NORMALIZATION",
+        "A_UNCERTAINTY",
+        "A_OVERLAP"
+      ],
+      "derivation": "Reported source means 25.0, 5.2, 6.1 in the declared output units; choose them as working scenario means without claiming target equality."
+    },
+    "biomarker_sds": {
+      "evidence_ids": [
+        "M_M_BMI_SD",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_MARGINAL_TRANSFER",
+        "A_MEASUREMENT",
+        "A_NORMALIZATION",
+        "A_UNCERTAINTY",
+        "A_OVERLAP"
+      ],
+      "derivation": "Reported source individual SDs 3.6, 1.4, 1.0; these set assumed total mixture dispersion, not evidence precision or log-residual SDs."
+    },
+    "log_age_effects": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE_EFFECT",
+        "A_USE"
+      ],
+      "derivation": "Explicit assumed log conditional location change per ten years; no non-marginal E0 evidence exists."
+    },
+    "log_female_effects": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SEX_EFFECT",
+        "A_USE"
+      ],
+      "derivation": "Explicit assumed log conditional location contrast female-minus-male."
+    },
+    "residual_factor_loadings": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEPENDENCE",
+        "A_LAW",
+        "A_NORMALIZATION",
+        "A_USE"
+      ],
+      "derivation": "Assumed shared factor strengths; residual covariance is sqrt(v_j*v_k)*loading_j*loading_k off diagonal and v_j on diagonal."
+    }
+  }
+}

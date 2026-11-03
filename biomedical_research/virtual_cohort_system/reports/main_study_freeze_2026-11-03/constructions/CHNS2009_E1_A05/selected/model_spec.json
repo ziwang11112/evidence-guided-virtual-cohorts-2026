@@ -1,0 +1,398 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_prefix": "CHNS2009_E1_A05_",
+    "ngsp_relation": {
+      "multiplier": 0.09148,
+      "offset": 2.152
+    },
+    "dependence_derivation": {
+      "jansen_bmi_slope_ifcc": 0.13,
+      "jansen_bmi_sd": 4.1,
+      "jansen_hba1c_sd_ifcc": 3,
+      "bmi_hba1c_rank": 0.17766666666666664,
+      "glucose_hba1c_rank": 0.529,
+      "bmi_glucose_rank": 0.25,
+      "rank_to_gaussian_formula": "rho=2*sin(pi*rank_correlation/6)",
+      "biomarker_variables": [
+        "bmi",
+        "glucose",
+        "hba1c"
+      ],
+      "biomarker_latent_correlation": [
+        [
+          1.0,
+          0.26105238444010315,
+          0.18578386998716295
+        ],
+        [
+          0.26105238444010315,
+          1.0,
+          0.5469112291791653
+        ],
+        [
+          0.18578386998716295,
+          0.5469112291791653,
+          1.0
+        ]
+      ]
+    },
+    "target_law": {
+      "variables": [
+        "age",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ],
+      "latent_correlation": [
+        [
+          1.0,
+          0.1,
+          0.1,
+          0.15
+        ],
+        [
+          0.1,
+          1.0,
+          0.26105238444010315,
+          0.18578386998716295
+        ],
+        [
+          0.1,
+          0.26105238444010315,
+          1.0,
+          0.5469112291791653
+        ],
+        [
+          0.15,
+          0.18578386998716295,
+          0.5469112291791653,
+          1.0
+        ]
+      ],
+      "marginals": {
+        "age": {
+          "family": "discrete_uniform",
+          "low": 35,
+          "high": 74
+        },
+        "bmi": {
+          "family": "lognormal",
+          "log_mean": 3.2086138570091247,
+          "log_sd": 0.14326177340153182
+        },
+        "glucose": {
+          "family": "lognormal",
+          "log_mean": 1.6136693361815262,
+          "log_sd": 0.26453464576820684
+        },
+        "hba1c": {
+          "family": "lognormal",
+          "log_mean": 1.7950289116291267,
+          "log_sd": 0.162848761433047
+        }
+      },
+      "female_probability": 0.6258698321735571
+    },
+    "source_laws": {
+      "CTX_JANSEN_SELECTED": {
+        "variables": [
+          "age",
+          "bmi",
+          "glucose",
+          "hba1c"
+        ],
+        "latent_correlation": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.26105238444010315,
+            0.18578386998716295
+          ],
+          [
+            0.0,
+            0.26105238444010315,
+            1.0,
+            0.5469112291791653
+          ],
+          [
+            0.0,
+            0.18578386998716295,
+            0.5469112291791653,
+            1.0
+          ]
+        ],
+        "marginals": {
+          "age": {
+            "family": "uniform",
+            "low": 38.352697005068116,
+            "high": 72.64730299493189
+          },
+          "bmi": {
+            "family": "uniform",
+            "low": 19.398591688967606,
+            "high": 33.601408311032394
+          },
+          "glucose": {
+            "family": "uniform",
+            "low": 4.233974596215561,
+            "high": 5.966025403784438
+          },
+          "hba1c": {
+            "family": "uniform",
+            "low": 5.1528959763707975,
+            "high": 6.103584023629202
+          }
+        },
+        "female_probability": 0.5973981513180417,
+        "population_selection": "Unrelated western-European adults selected for GWAS, preferring the oldest family members. Exclusions: diabetes by self-report or FPG >=7.0 mmol/L; anemia at the reported sex-specific thresholds; missing HbA1c, erythrocytes or FPG. Source context: CTX_JANSEN_SELECTED.",
+        "measurement": "BMI kg/m^2; age years; native FPG plasma mmol/L; HbA1c NGSP-percent affine representation of native IFCC; female=1,male=0 assumed encoding",
+        "law_role": "directly_selected_source_scenario_not_reconstruction"
+      },
+      "CTX_BAO_ANALYZED": {
+        "variables": [
+          "glucose",
+          "hba1c"
+        ],
+        "latent_correlation": [
+          [
+            1.0,
+            0.5469112291791653
+          ],
+          [
+            0.5469112291791653,
+            1.0
+          ]
+        ],
+        "marginals": {
+          "glucose": {
+            "family": "lognormal",
+            "log_mean": 1.6486586255873816,
+            "log_sd": 0.11427206994801999
+          },
+          "hba1c": {
+            "family": "lognormal",
+            "log_mean": 1.7227665977411035,
+            "log_sd": 0.07950123061352699
+          }
+        },
+        "population_selection": "Six Shanghai communities, 2007-2008; excludes previously diagnosed diabetes and specified medical, questionnaire and age exclusions, retaining screen-detected diabetes. Explicit exclusion under age 20 differs from prose over age 20; exact boundary unresolved. Source context: CTX_BAO_ANALYZED.",
+        "measurement": "FPG plasma mmol/L; HPLC HbA1c percent; no serum conversion",
+        "law_role": "directly_selected_source_pair_scenario_not_reconstruction"
+      },
+      "CTX_MIND_ANALYZED": {
+        "variables": [
+          "glucose",
+          "hba1c"
+        ],
+        "latent_correlation": [
+          [
+            1.0,
+            0.5469112291791653
+          ],
+          [
+            0.5469112291791653,
+            1.0
+          ]
+        ],
+        "marginals": {
+          "glucose": {
+            "family": "lognormal",
+            "log_mean": 1.6136693361815262,
+            "log_sd": 0.26453464576820684
+          },
+          "hba1c": {
+            "family": "lognormal",
+            "log_mean": 1.7950289116291267,
+            "log_sd": 0.162848761433047
+          }
+        },
+        "population_selection": "Selected 2019 rural Yanlou/Shandong follow-up, age 61-80, free of dementia and functional disability; known diabetes included. Demographics/BMI collected in 2018, laboratory measurements in 2019. Source context: CTX_MIND_ANALYZED.",
+        "measurement": "FSG serum mmol/L; EDTA whole-blood HbA1c percent; source imputation/tie process unknown",
+        "law_role": "directly_selected_source_pair_scenario_not_reconstruction"
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_COPULA",
+      "description": "A positive-definite Gaussian copula with context-specific monotone marginals is an assumed joint-law family. Reported slopes and correlations do not establish Gaussian dependence, tail dependence, or individual conditional effects."
+    },
+    {
+      "id": "A_TARGET_MARGINALS",
+      "description": "Transport MIND-China BMI, serum-glucose and HbA1c arithmetic means/individual SDs to the target selected adult population and use lognormal margins. This assumes broader-age and assay/selection transport; it does not identify actual target moments, multimodality, treatment effects, or extreme tails."
+    },
+    {
+      "id": "A_TARGET_COMPOSITION",
+      "description": "Target integer age is uniform on 35-74, since no target composition is supplied. Target female probability is transported from Bao's reported female fraction. Female is independent of the copula variables: this is a deliberately unverified completion assumption, not evidence of no sex associations."
+    },
+    {
+      "id": "A_TARGET_AGE",
+      "description": "Target latent normal age correlations with BMI, glucose, HbA1c are respectively 0.10, 0.10, 0.15. These modest positive values are assumptions, not supplied age coefficients. Discrete age is obtained by the normal-CDF quantile map. E3 is an assumption-dependent consequence of these correlations and all other margins/dependence."
+    },
+    {
+      "id": "A_BMI_GLUCOSE",
+      "description": "BMI-glucose population Spearman correlation 0.25 is assumed for the common biomarker copula, independent of source uncertainty. This unsupported cross-covariance is not treated as zero or measured."
+    },
+    {
+      "id": "A_JANSEN_SELECTED",
+      "description": "For a qualified directly post-selection Jansen scenario, use uniform age/BMI/FPG/HbA1c margins matching its reported means and individual SDs. Age and binary female membership are independent of the biomarkers and each other. Source age bounds are derived from its own 55.5/9.9 summaries, never target 35-74; FPG support is wholly below 7. Eligibility concerning prior diabetes, anemia and complete laboratory records is conditioned upon, not reconstructed. Uniform technical supports are model assumptions, not known clinical cutoffs."
+    },
+    {
+      "id": "A_JANSEN_BMI_TRANSPORT",
+      "description": "In the selected uniform source scenario with independent nuisances, the separate adjusted BMI slope determines a raw correlation, which equals rank correlation for uniform margins. Carry that resulting BMI-HbA1c copula rank dependence to the target. This is a strong shape, adjustment and population-transport assumption; no target raw regression coefficient is assigned from the source."
+    },
+    {
+      "id": "A_MIND_RANK_TRANSPORT",
+      "description": "Use MIND's reported serum-glucose/HbA1c Spearman point as the common biomarker copula rank dependence. The source pair law is directly conditional on MIND's selected 61-80-year population; both margins are continuous lognormal with published means/individual SDs. Original imputation and ties are not reproduced; population ranks use continuous distribution transforms. Transfer to younger target adults, central-serum measurement, and other source contexts is unvalidated."
+    },
+    {
+      "id": "A_BAO_SCENARIO",
+      "description": "For an analytical Bao source pair scenario, use positive lognormal margins with reported medians and log-IQR widths. These cannot in general reproduce all three rounded quantiles simultaneously; quartile interpolation was unreported. Keep the same glucose-HbA1c copula as MIND/target to expose, rather than fit away, cross-context disagreement. Condition on Bao eligibility including no previously diagnosed diabetes and age over 20; the unresolved exact boundary and source pair-specific selection remain unknown."
+    },
+    {
+      "id": "A_SOURCE_OPERATORS",
+      "description": "Source scenarios use equal-weight, intercept-including separate Jansen linear projections and population Pearson/rank functionals with complete modeled measurements. Original weighting, processing, regression/pair counts and Jansen intercept convention are unknown. These are qualified analytical scenarios, not original-program replay or actual source reconstruction."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "NGSP=0.09148*IFCC+2.152 is a deterministic representation only. Target glucose is serum; Jansen/Bao analytical contexts retain plasma, and MIND retains serum. Shared copula dependence is a separate transport assumption; no numeric serum/plasma calibration or assay equivalence is claimed."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Reported point estimates are fixed scenario inputs. Source individual SDs set marginal dispersion, never coefficient uncertainty. Jansen printed intervals have unconfirmed confidence level; no SE, precision weights, tolerances, or posterior distribution are inferred. Within-cohort marginal and relationship records overlap; separate cohort families are not pooled as independent precision-weighted confirmations. Residual latent variation is distinct from structural, estimate and transport uncertainty."
+    },
+    {
+      "id": "A_EXECUTION",
+      "description": "Generate 3000 iid virtual rows using the supplied seed, with no participant input, row deletion, source-selection clipping, or fitting. Floating-point CDF rounding at 1 is assigned to the final legal age bin. Nonfinite numerical output raises an error. Final seeds are controller supplied; iid rows do not reproduce community sampling or establish inferential validity."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_EXECUTION"
+      ],
+      "derivation": "Task-required full cohort size."
+    },
+    "row_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_EXECUTION"
+      ],
+      "derivation": "Technical unique row identifiers, not participant identities."
+    },
+    "ngsp_relation": {
+      "evidence_ids": [
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_MEASUREMENT"
+      ],
+      "derivation": "Approved NGSP scale relation; multiplier-only for SDs, covariances with one response and slopes."
+    },
+    "dependence_derivation": {
+      "evidence_ids": [
+        "R_JANSEN_BMI",
+        "M_J_BMI_SD",
+        "M_J_HBA1C_IFCC_SD",
+        "R_MIND_SPEARMAN"
+      ],
+      "assumption_ids": [
+        "A_COPULA",
+        "A_JANSEN_SELECTED",
+        "A_JANSEN_BMI_TRANSPORT",
+        "A_MIND_RANK_TRANSPORT",
+        "A_BMI_GLUCOSE",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Under the stated independent-nuisance uniform source law, BMI-H rank equals slope*BMI_SD/HbA1c_SD; retain MIND rank for glucose-H. Transform each rank using rho=2*sin(pi*r/6). Derivation and source discrepancies are in mathematical_properties.md and analytic/source_results.json."
+    },
+    "target_law": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD",
+        "M_B_FEMALE_FRACTION",
+        "R_JANSEN_BMI",
+        "M_J_BMI_SD",
+        "M_J_HBA1C_IFCC_SD",
+        "R_MIND_SPEARMAN"
+      ],
+      "assumption_ids": [
+        "A_COPULA",
+        "A_TARGET_MARGINALS",
+        "A_TARGET_COMPOSITION",
+        "A_TARGET_AGE",
+        "A_BMI_GLUCOSE",
+        "A_JANSEN_BMI_TRANSPORT",
+        "A_MIND_RANK_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_UNCERTAINTY",
+        "A_EXECUTION"
+      ],
+      "derivation": "Lognormal variance v=log(1+(sd/mean)^2), log mean=log(mean)-v/2. Age bins 35..74 are uniform. Biomarker copula submatrix equals dependence_derivation; remaining age entries are assumed. This chooses a scenario rather than recovering target moments."
+    },
+    "source_laws": {
+      "evidence_ids": [
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD",
+        "M_J_BMI_MEAN",
+        "M_J_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_J_FPG_SD",
+        "M_J_HBA1C_IFCC_MEAN",
+        "M_J_HBA1C_IFCC_SD",
+        "M_J_MALE_FRACTION",
+        "M_B_AGE_MEDIAN",
+        "M_B_AGE_Q1",
+        "M_B_AGE_Q3",
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3",
+        "M_B_FEMALE_FRACTION",
+        "M_M_AGE_MEAN",
+        "M_M_AGE_SD",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD",
+        "M_M_FEMALE_FRACTION",
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG",
+        "R_BAO_PEARSON",
+        "R_MIND_SPEARMAN",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_COPULA",
+        "A_JANSEN_SELECTED",
+        "A_JANSEN_BMI_TRANSPORT",
+        "A_MIND_RANK_TRANSPORT",
+        "A_BAO_SCENARIO",
+        "A_BMI_GLUCOSE",
+        "A_SOURCE_OPERATORS",
+        "A_MEASUREMENT",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Uniform Jansen levels m+-sqrt(3)*sd after source selection, with HbA1c affine scale mapping; its age/sex are independent nuisance assumptions. Bao log location=log(median), log SD=log(Q3/Q1)/(2*Phi^-1(.75)); pair rank transport is held fixed. MIND pair uses lognormal mean/SD transform and retained rank. Same Gaussian/monotone-transform family as generator._marginal; no source tables are produced and no desired covariance matrix is supplied independently of these laws."
+    }
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "parameters": {
+    "design": {
+      "rows_per_cell": 375,
+      "female_values": [
+        0,
+        1
+      ],
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "row_id_prefix": "ENSANUT2018_E1_A03_"
+    },
+    "factor_distributions": {
+      "bmi_beta": [
+        2.0,
+        5.0
+      ],
+      "glucose_beta": [
+        2.0,
+        2.0
+      ],
+      "hba1c_residual": "standardized_uniform"
+    },
+    "bmi_location_scale": {
+      "mean": 26.5,
+      "sd": 4.1
+    },
+    "glucose_location_scale": {
+      "mean": 91.8,
+      "sd": 9.0
+    },
+    "bmi_glucose_rho": 0.3,
+    "hba1c_reference": {
+      "mean": 5.6,
+      "age": 55.5,
+      "lifelines_sd": 0.3
+    },
+    "age_slope": 0.01,
+    "female_slope": 0.0,
+    "separate_source_slopes": {
+      "bmi": 0.0118924,
+      "glucose": 0.01163828888888889
+    },
+    "lifelines_context": {
+      "age_mean": 55.5,
+      "age_sd": 9.9,
+      "age_beta": [
+        2.0,
+        2.0
+      ],
+      "female_probability": 0.597
+    },
+    "pani_context": {
+      "finite_age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          44
+        ],
+        [
+          45,
+          49
+        ],
+        [
+          50,
+          54
+        ],
+        [
+          55,
+          59
+        ],
+        [
+          60,
+          64
+        ],
+        [
+          65,
+          69
+        ]
+      ],
+      "band_probabilities": [
+        0.125,
+        0.125,
+        0.125,
+        0.125,
+        0.125,
+        0.125,
+        0.125,
+        0.125
+      ],
+      "open_age_lower": 70,
+      "geometric_probability": 0.1,
+      "female_probability": 0.5
+    },
+    "joint_hba1c_slopes": {
+      "bmi": 0.0046463307424283035,
+      "glucose": 0.011003290354090353
+    },
+    "hba1c_residual_sd": 0.2624830071068187
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Generate exactly 375 individuals per female=0/1 crossed with 25-39,40-54,55-69,70-79. Integer age is uniform within each stratum. Equal stratum sampling is analytical design, not Mexican population prevalence. No individual observations are input."
+    },
+    {
+      "id": "A_FACTORS",
+      "description": "Independent standardized beta factors: U from Beta(2,5) for right-skew BMI, V from Beta(2,2) for glucose residual; independent standardized Uniform(-sqrt(3),sqrt(3)) W for HbA1c residual. Distribution shapes and their finite supports are completion assumptions, not measured physiological cutoffs."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "BMI and fasting glucose have residual Pearson correlation rho=0.30 by assumption. They are independent of age and binary sex in both declared source contexts and the target law. HbA1c has no extra binary-sex term. These unreported covariances/zero coefficients are assumptions, not source findings. They materially affect the fully conditioned BMI projection."
+    },
+    {
+      "id": "A_TRANSFER",
+      "description": "Transport Jansen BMI/glucose means, SDs and separate age/sex-adjusted projections, and Pani fully adjusted age slope, as a single illustrative conditional law. Serum/plasma, assay, country, ancestry, fasting window and source-selection transfer are unverified. This is not an estimator of a recovered Mexican joint distribution."
+    },
+    {
+      "id": "A_SELECTION",
+      "description": "The law is specified directly for people satisfying the full task eligibility description. Unrecorded diagnosis, fast duration, measurement documentation, pregnancy/lactation routing, anemia and medication variables are not fabricated. Glucose positivity and <126 are guaranteed by the assumed support; no rejection/clipping or subsequent selection is used. Prior diagnosis and measurement validity are membership assumptions and not verifiable from output columns."
+    },
+    {
+      "id": "A_J_SOURCE",
+      "description": "Declared already-selected Lifelines source law: independent age=55.5+9.9*standardized Beta(2,2), female Bernoulli(0.597), and the common B,G,H equations. Age is continuous only in this analytic source context. Table1 moments are assumed applicable to Table2 rows although row-specific n is unknown. This is an assumed source context, not source reconstruction."
+    },
+    {
+      "id": "A_P_SOURCE",
+      "description": "Declared already-selected Pani source law for qualified analytic checks: equal mass over the eight admitted age bands; uniform integer age within each finite band and age=70+K in the open band, K geometric failures with p=0.1, support 0,1,... . Female Bernoulli(0.5); B,G and residual laws are the same conditional equation. Band weights, within-band age distribution, open-band tail and population intercept transfer from Jansen are assumptions. No target age79 cap is imposed on this source context. Original survey design and weighted covariate distributions remain unavailable."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "All evidence point estimates and structural assumptions are fixed for this candidate. Individual residual SD is separated from source-estimate uncertainty, unknown structural dependence and transport. Jansen CI confidence level is absent; no SE is inferred. Pani age-band SEs remain estimator uncertainty, never individual SDs. Repeated seeds are Monte Carlo variability only, not new evidence."
+    },
+    {
+      "id": "A_ROUNDING",
+      "description": "Use directly reported Jansen percent HbA1c mean5.6 and SD0.3. IFCC-derived5.62824 and0.27444 are alternative rounded representations and not additional constraints. Glucose moments use the admitted factor18; slopes use NGSP scale only without affine offset."
+    },
+    {
+      "id": "A_FEEDBACK",
+      "description": "Target-table-to-source comparisons are unavailable because no source replay is allocated. All feedback recipes therefore use null operators and not_computable status. Separate deterministic source-law projections are assumption-qualified and do not reconstruct the survey or verify target validity."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task prescribes sex/age quota and row count; within-band uniform law is assumed."
+    },
+    "factor_distributions": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTORS"
+      ],
+      "derivation": "Chosen bounded factors with exact zero mean and unit variance after analytic standardization."
+    },
+    "bmi_location_scale": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task"
+      ],
+      "assumption_ids": [
+        "A_TRANSFER"
+      ],
+      "derivation": "Admitted mean and individual SD in kg/m^2."
+    },
+    "glucose_location_scale": {
+      "evidence_ids": [
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_TRANSFER",
+        "A_ROUNDING"
+      ],
+      "derivation": "Admitted 5.1*18=91.8 and0.5*18=9.0 in mg/dL, counted once."
+    },
+    "bmi_glucose_rho": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEPENDENCE"
+      ],
+      "derivation": "rho=0.30 is an explicit positive moderate dependence scenario; absent joint data do not identify it."
+    },
+    "hba1c_reference": {
+      "evidence_ids": [
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct",
+        "J_T1_age_mean_task"
+      ],
+      "assumption_ids": [
+        "A_ROUNDING",
+        "A_TRANSFER"
+      ],
+      "derivation": "Use direct percent moments once. HbA1c conditional location is centered at source age55.5."
+    },
+    "age_slope": {
+      "evidence_ids": [
+        "P_NHANES_age_slope"
+      ],
+      "assumption_ids": [
+        "A_TRANSFER",
+        "A_P_SOURCE"
+      ],
+      "derivation": "Fully adjusted source slope0.01 percentage points/year, a separate source projection; transported conditionally under the common equation."
+    },
+    "female_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEPENDENCE"
+      ],
+      "derivation": "Zero additional conditional sex effect is not measured; it is a completion assumption."
+    },
+    "separate_source_slopes": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived",
+        "NGSP_UNIT_GUIDANCE"
+      ],
+      "assumption_ids": [
+        "A_J_SOURCE",
+        "A_ROUNDING"
+      ],
+      "derivation": "Separate age/sex-adjusted projections:0.13*0.09148 and2.29*0.09148/18, no affine offset."
+    },
+    "lifelines_context": {
+      "evidence_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_female_proportion_derived"
+      ],
+      "assumption_ids": [
+        "A_J_SOURCE",
+        "A_FACTORS"
+      ],
+      "derivation": "Mean/SD and sex proportion from Jansen; source age shape and independence are assumed."
+    },
+    "pani_context": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_P_SOURCE"
+      ],
+      "derivation": "Explicit source-context completion only. Equal band masses do not use unweighted source n as population weights; open band is uncapped geometric."
+    },
+    "joint_hba1c_slopes": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived"
+      ],
+      "assumption_ids": [
+        "A_DEPENDENCE",
+        "A_J_SOURCE"
+      ],
+      "derivation": "Solve [[sB^2,rho*sB*sG],[rho*sB*sG,sG^2]] beta = [slope_B*sB^2,slope_G*sG^2]. Actual calculation is retained in analytic_calculations.py/results."
+    },
+    "hba1c_residual_sd": {
+      "evidence_ids": [
+        "J_T1_hba1c_sd_pct",
+        "J_T1_age_sd_task",
+        "P_NHANES_age_slope",
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived"
+      ],
+      "assumption_ids": [
+        "A_DEPENDENCE",
+        "A_J_SOURCE",
+        "A_UNCERTAINTY",
+        "A_ROUNDING"
+      ],
+      "derivation": "sqrt(0.3^2 - age_slope^2*9.9^2 - beta.T*Sigma_BG*beta); fixed residual individual SD. Positive radicand checked analytically."
+    }
+  }
+}

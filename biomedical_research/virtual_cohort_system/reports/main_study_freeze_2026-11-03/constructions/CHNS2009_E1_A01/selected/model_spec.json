@@ -1,0 +1,263 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_id_prefix": "CHNS2009_E1_A01_",
+    "factor_law": "independent_uniform_minus_sqrt3_plus_sqrt3",
+    "unit_conversion": {
+      "ifcc_to_percent_multiplier": 0.09148,
+      "ifcc_to_percent_offset": 2.152
+    },
+    "jansen_selected": {
+      "age_mean": 55.5,
+      "age_sd": 9.9,
+      "age_law": "continuous_uniform_mean_sd",
+      "female_probability": 0.5973981513180417,
+      "bmi_mean": 26.5,
+      "bmi_age": 0.04,
+      "bmi_female": 0.4,
+      "glucose_mean": 5.1,
+      "glucose_age": 0.005,
+      "glucose_female": -0.05,
+      "residual_bmi_glucose_correlation": 0.25,
+      "hba1c_mean": 38.0,
+      "hba1c_age": 0.07,
+      "hba1c_female": -0.3,
+      "excess_probability": 0.0,
+      "excess_mean": 1.0,
+      "excess_log_sd": 0.0,
+      "excess_hba1c_slope": 0.0,
+      "hba1c_unit": "mmol/mol",
+      "glucose_measurement": "fresh_fasting_plasma",
+      "reported_bmi_sd": 4.1,
+      "reported_glucose_sd": 0.5,
+      "reported_hba1c_sd": 3.0,
+      "separate_bmi_projection": 0.13,
+      "separate_glucose_projection": 2.29,
+      "bmi_residual_sd": 4.076113568582311,
+      "glucose_residual_sd": 0.49693909687173987,
+      "hba1c_bmi_residual_slope": 0.06421728327312319,
+      "hba1c_glucose_residual_slope": 2.158315382440803,
+      "hba1c_residual_sd": 2.67186225757111
+    },
+    "bao_selected": {
+      "age_mean": 50.01,
+      "age_sd": 17.320508075688775,
+      "age_law": "continuous_uniform_mean_sd",
+      "female_probability": 0.6258698321735571,
+      "bmi_mean": 23.5,
+      "bmi_age": 0.025,
+      "bmi_female": 0.3,
+      "bmi_residual_sd": 3.3,
+      "glucose_mean": 5.2,
+      "glucose_age": 0.007,
+      "glucose_female": -0.03,
+      "glucose_residual_sd": 0.55,
+      "residual_bmi_glucose_correlation": 0.25,
+      "hba1c_mean": 5.6,
+      "hba1c_age": 0.006,
+      "hba1c_female": -0.04,
+      "hba1c_bmi_residual_slope": 0.00587459707382531,
+      "hba1c_glucose_residual_slope": 0.19744269118568467,
+      "hba1c_residual_sd": 0.3,
+      "excess_probability": 0.04,
+      "excess_mean": 3.0,
+      "excess_log_sd": 0.5,
+      "excess_hba1c_slope": 0.55,
+      "hba1c_unit": "%",
+      "glucose_measurement": "fasting_venous_plasma_glucose_oxidase"
+    },
+    "target": {
+      "age_min": 35,
+      "age_max": 74,
+      "age_mean": 54.5,
+      "age_law": "discrete_uniform_inclusive",
+      "female_probability": 0.58,
+      "bmi_mean": 24.0,
+      "bmi_age": 0.025,
+      "bmi_female": 0.3,
+      "bmi_residual_sd": 3.6,
+      "glucose_mean": 5.15,
+      "glucose_age": 0.007,
+      "glucose_female": -0.03,
+      "glucose_residual_sd": 0.65,
+      "residual_bmi_glucose_correlation": 0.25,
+      "hba1c_mean": 5.65,
+      "hba1c_age": 0.006,
+      "hba1c_female": -0.04,
+      "hba1c_bmi_residual_slope": 0.00587459707382531,
+      "hba1c_glucose_residual_slope": 0.19744269118568467,
+      "hba1c_residual_sd": 0.35,
+      "excess_probability": 0.08,
+      "excess_mean": 2.5,
+      "excess_log_sd": 0.55,
+      "excess_hba1c_slope": 0.55,
+      "hba1c_unit": "%",
+      "glucose_measurement": "target_central_serum"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_FAMILY",
+      "description": "Within each declared selected population: centered age, binary female membership, three independent standardized uniform factors, Bernoulli excess membership and independent standard-normal log-excess factor. Age/sex/excess/factors are mutually independent. BMI and glucose residuals have the explicitly assumed 0.25 correlation; unreported cross-covariances are assumptions, not zero facts. Rows are IID conditional on fixed parameters."
+    },
+    {
+      "id": "A_COMPOSITION",
+      "description": "Target ages are discrete uniform on the task interval 35..74 and female probability is 0.58. Neither is an estimate of target composition. Target age/sex independence is an unverified completion choice."
+    },
+    {
+      "id": "A_TARGET_MARGINS",
+      "description": "Target baseline BMI 24 with residual SD 3.6, glucose 5.15 with residual SD 0.65, and HbA1c 5.65 with residual SD 0.35 are declared choices informed by the scale of the external margins. They are not pooled estimates or target calibration. The uniform baseline and finite lower supports are simplifying distribution assumptions, not population cutoffs."
+    },
+    {
+      "id": "A_TARGET_NUISANCE",
+      "description": "Target age/female baseline contributions to BMI, glucose and HbA1c are specified assumptions. The fully adjusted age use is not identified by the source slopes and is an algebraic consequence of these and the rest of the law."
+    },
+    {
+      "id": "A_J_SELECTION",
+      "description": "The Jansen scenario is defined directly conditional on all stated source eligibility: unrelated western-European selected adults, no self-reported diabetes, no anemia, complete required measurements. Its glucose support lies below 7 without filtering or clipping. This is a selected-population law, not a model for pre-selection people or a reconstruction of exact regression rows. Uniform source age support is 55.5 +/- sqrt(3)*9.9, separately assumed and not the target age interval."
+    },
+    {
+      "id": "A_J_COVARIATES",
+      "description": "Jansen BMI/glucose marginal means and SDs are treated as point constraints in a qualified scenario. Age/sex nuisance effects and residual correlation 0.25 are assumed. Solve the two separate adjusted projection identities for two structural residual slopes. Missing information would allow other structural slopes; the two published numbers are never inserted unchanged into a joint equation."
+    },
+    {
+      "id": "A_J_RESPONSE",
+      "description": "Jansen source HbA1c mean/SD are scenario constraints. Its age slope 0.07 IFCC units/year and female contribution -0.30 IFCC units are assumptions. Independent bounded residual variance is the remaining nonnegative variance needed for SD 3; this is individual dispersion, not source estimator uncertainty."
+    },
+    {
+      "id": "A_MEASUREMENT_TRANSPORT",
+      "description": "The common baseline residual mechanism is transported from the qualified Jansen law to target percent units using the NGSP affine scale. Using the resulting mechanism for serum glucose assumes comparable residual associations despite plasma/serum, fasting, assay, ancestry and eligibility differences; no glucose conversion or assay equivalence is asserted. Target projections need not equal the separate source projections. This transport is unvalidated."
+    },
+    {
+      "id": "A_TAIL",
+      "description": "Target has no diabetes exclusion. An assumed 8% latent high-glycemia class adds a lognormal glucose excess (mean 2.5 mmol/L, log SD 0.55), with 0.55 HbA1c percentage points per mmol/L excess. It is a heterogeneity component, not a diagnosis classifier or estimated prevalence. This tail has independent latent membership and is not clipped, filtered, or resampled."
+    },
+    {
+      "id": "A_BAO_CONTEXT",
+      "description": "Bao scenario is conditional on the reported exclusions and retains a latent screen-detected high-glycemia class. Age is continuous uniform (20.01,80.01), a source support assumption avoiding the unresolved age-20 boundary. Sex probability is the reported count fraction; BMI/glucose/HbA1c baselines use reported medians as chosen location anchors, not asserted distribution medians. Other marginals and joint law, including a 4% excess class, mean excess 3 and log SD 0.5, are assumed. Shared baseline response slopes are a cross-source mechanism assumption; the Pearson comparison is a check, not calibration."
+    },
+    {
+      "id": "A_QUALIFIED",
+      "description": "Analytic source scenarios use population, equal-weight, intercept-including functionals and no missing values. Original weights, exact regression/pair counts, row processing and source intercept convention are not established. No source table replay is supplied."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "All source estimates are fixed point inputs. Printed Jansen interval levels are unresolved; they are retained as reported context, never SDs, 95% intervals, tolerances or precision weights. Source sample uncertainty, structural uncertainty and transport uncertainty are not represented by synthetic sampling seeds. Jansen two slopes and margins share one cohort; NGSP conversions are the same evidence on another scale; Bao and MIND are distinct cohorts but no independence or precision pooling is claimed."
+    },
+    {
+      "id": "A_MIND_CONTEXT",
+      "description": "MIND Spearman 0.529 remains context only: older 61..80 selected source, prior-year BMI, serum protocol and mean/mode imputation differ; unknown imputation counts/ties and the joint rank law prevent a faithful rank-functional derivation here. Pearson is not substituted. No MIND effect is silently installed."
+    },
+    {
+      "id": "A_FEEDBACK",
+      "description": "The execution table is the target analytical scenario and cannot serve as any source population. All semantic source comparisons are unavailable; any own-table trial diagnostics are simulation checks only."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_COMPOSITION"
+      ],
+      "derivation": "Exactly 3000 rows required by bundle/task.json; not a source count."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_COMPOSITION"
+      ],
+      "derivation": "Technical unique synthetic identifier, not an observed participant ID."
+    },
+    "factor_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FAMILY"
+      ],
+      "derivation": "Centered unit-variance bounded residual factors are a declared family assumption."
+    },
+    "unit_conversion": {
+      "evidence_ids": [
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_MEASUREMENT_TRANSPORT"
+      ],
+      "derivation": "Official deterministic scale conversion; offset is only for levels, multiplier for slopes."
+    },
+    "jansen_selected": {
+      "evidence_ids": [
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD",
+        "M_J_BMI_MEAN",
+        "M_J_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_J_FPG_SD",
+        "M_J_HBA1C_IFCC_MEAN",
+        "M_J_HBA1C_IFCC_SD",
+        "M_J_MALE_FRACTION",
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG"
+      ],
+      "assumption_ids": [
+        "A_FAMILY",
+        "A_J_SELECTION",
+        "A_J_COVARIATES",
+        "A_J_RESPONSE",
+        "A_QUALIFIED",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "All point values and assumptions are distinguished in analytic/law_derivation.md. Residual SDs subtract declared nuisance variance. The two separate projection equations are solved with assumed residual correlation. Derived numerical settings are recomputed by analytic/derive_moments.py."
+    },
+    "bao_selected": {
+      "evidence_ids": [
+        "M_B_AGE_MEDIAN",
+        "M_B_AGE_Q1",
+        "M_B_AGE_Q3",
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3",
+        "M_B_FEMALE_FRACTION",
+        "R_BAO_PEARSON",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_FAMILY",
+        "A_BAO_CONTEXT",
+        "A_MEASUREMENT_TRANSPORT",
+        "A_QUALIFIED",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Bao locations/count fraction anchor an assumed source law. Pearson is computed from its law without fitting to 0.619. Source marginal quartiles supply context only; no quartile-to-SD conversion."
+    },
+    "target": {
+      "evidence_ids": [
+        "M_B_BMI_MEDIAN",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_B_FPG_MEDIAN",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_M_FEMALE_FRACTION",
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_FAMILY",
+        "A_COMPOSITION",
+        "A_TARGET_MARGINS",
+        "A_TARGET_NUISANCE",
+        "A_MEASUREMENT_TRANSPORT",
+        "A_TAIL",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Target composition, marginal locations/scales, nuisance effects and tail are explicit choices. Only the two residual response slopes are algebraically derived from the separately constrained Jansen law and transformed by 0.09148 under unvalidated transport. Exact target projections are consequences, not calibrated answers."
+    }
+  }
+}

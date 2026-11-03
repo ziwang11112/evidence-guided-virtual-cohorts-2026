@@ -1,0 +1,156 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age": {
+      "minimum": 35,
+      "maximum": 74,
+      "law": "discrete_uniform"
+    },
+    "female": {
+      "numerator": 2049,
+      "denominator": 3547,
+      "probability": 0.5776712714970398,
+      "coding": {
+        "female": 1,
+        "male": 0
+      }
+    },
+    "common_factor": {
+      "law": "gamma_shape_scale",
+      "shape": 4.0,
+      "scale": 1.0
+    },
+    "margins": {
+      "bmi": {
+        "unit": "kg/m^2",
+        "mean": 25.0,
+        "sd": 3.6,
+        "common_variance_fraction": 0.1
+      },
+      "glucose": {
+        "unit": "mmol/L",
+        "mean": 5.2,
+        "sd": 1.4,
+        "common_variance_fraction": 0.65
+      },
+      "hba1c": {
+        "unit": "%",
+        "mean": 6.1,
+        "sd": 1.0,
+        "common_variance_fraction": 0.65
+      }
+    },
+    "joint_law": {
+      "form": "X_j = loading_j*C + independent_Gamma_j",
+      "independent_demographics": true,
+      "no_clipping": true,
+      "no_selection_after_generation": true
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Whole cohort has 3000 independent identically distributed rows, no observed input and no source or target participant records. All generated scientific variables are retained in one table, without analysis-specific selection. Row identifiers are technical sequential labels."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age is discrete uniform over every integer from 35 through 74 inclusive. The target age composition is unavailable. This law uses task eligibility only, not a reported target distribution; source age summaries are contextual and are not transported."
+    },
+    {
+      "id": "A_SEX",
+      "description": "Female=1 and male=0. The MIND-China reported female count fraction 2049/3547 is used as an explicit target composition assumption. It is unweighted and comes from selected older rural adults, so it does not identify this target composition."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "MIND-China BMI, fasting serum glucose and HbA1c means and individual SDs anchor the model margins by exact point plug-in. This is a declared transport scenario across rural setting, 2019 versus 2009, age 61-80 versus 35-74, health/functional selection, BMI/laboratory timing and complete-case policy, not a claim of empirical equality. Known diabetes was included in MIND-China; this motivates choosing its dispersion over explicitly diabetes-excluding sources, but cannot identify target disease or treatment mix."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "MIND-China fasting serum glucose is a closer named specimen anchor than the Jansen/Bao fasting plasma quantities. Its mean and SD are transported without numerical serum/plasma conversion. Target central-serum glucose and source local glucose-oxidase FSG are not certified assay-equivalent. Whole-blood HbA1c percent and BMI kg/m^2 are treated as numerical scale-compatible under unresolved assay and measurement differences. No NGSP, average-glucose or FPG-to-FSG equation is used."
+    },
+    {
+      "id": "A_FACTOR",
+      "description": "A common positive Gamma factor creates positive BMI/glucose/HbA1c dependence. Its shape 4 and scale 1 and the fractions 0.10, 0.65, 0.65 of marginal variances attributed to it are scientific completion assumptions. These numbers were not estimated, calibrated or taken from absent relationship evidence. A shared monotone component represents a possible source of joint variation, not an identified physiological pathway or causal mechanism."
+    },
+    {
+      "id": "A_RESIDUAL",
+      "description": "Independent positive Gamma residuals complete each margin, with shapes and scales algebraically determined by the selected means, SDs and shared-factor allocation. Gamma skew and unbounded upper tails are unverified distributional assumptions. The model has no clipping or diagnostic/diabetes exclusions, and positive support is a law choice rather than a known lower physiological cutoff."
+    },
+    {
+      "id": "A_DEMOGRAPHIC_INDEPENDENCE",
+      "description": "Age and female membership are mutually independent and independent of all latent Gamma variables. Zero demographic associations are completion assumptions, not facts implied by absent relationship records. In particular, the population age coefficient in E3 is fixed to zero by this choice."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Reported SDs describe individual dispersion; they are not standard errors. The admitted source estimates have no reported estimator uncertainty, so fixed plug-in values are used without invented precision or a pseudo-posterior. Across seeds only individual residual and common-factor variation changes. External-estimate, structural and population-transport uncertainties remain unquantified."
+    },
+    {
+      "id": "A_SOURCE_BOUNDARY",
+      "description": "E0 contains no non-marginal relationship operations. All admitted marginal records are retained with their separate source contexts. Repeated summaries from each study are overlapping evidence, not independent replications; the three named study families are not pooled or assigned independent precision weights. No target table is represented as source-population replay."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task n_rows, exactly 3000; not a fitted or evidence sample count."
+    },
+    "age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE",
+        "A_DEMOGRAPHIC_INDEPENDENCE"
+      ],
+      "derivation": "Uniform mass 1/(maximum-minimum+1) on task-required integer support."
+    },
+    "female": {
+      "evidence_ids": [
+        "M_M_FEMALE_FRACTION"
+      ],
+      "assumption_ids": [
+        "A_SEX",
+        "A_DEMOGRAPHIC_INDEPENDENCE",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Reported count ratio 2049/3547 transported as an assumed composition; category coding is explicit."
+    },
+    "common_factor": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTOR"
+      ],
+      "derivation": "Gamma shape=4 and scale=1 chosen as a moderately right-skewed shared component; both parameters are assumptions."
+    },
+    "margins": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_FACTOR",
+        "A_RESIDUAL",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Means and SDs are direct MIND-China point anchors under transport; common variance fractions are assumptions. For common C of mean kc*tc and variance kc*tc^2, loading_j=sd_j*sqrt(q_j/(kc*tc^2)); residual mean=m_j-loading_j*kc*tc, residual variance=sd_j^2*(1-q_j), residual shape=residual_mean^2/residual_variance and residual scale=residual_variance/residual_mean. These algebraic parameters are evaluated by generator and independently by retained non-sampling analytic script."
+    },
+    "joint_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTOR",
+        "A_RESIDUAL",
+        "A_DEMOGRAPHIC_INDEPENDENCE",
+        "A_DESIGN",
+        "A_SOURCE_BOUNDARY"
+      ],
+      "derivation": "Independent age, sex, common Gamma and three Gamma residuals define the joint law. No reported covariance identifies it."
+    }
+  }
+}

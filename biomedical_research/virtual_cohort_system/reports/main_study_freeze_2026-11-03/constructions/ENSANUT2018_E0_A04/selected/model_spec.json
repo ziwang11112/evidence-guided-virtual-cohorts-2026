@@ -1,0 +1,193 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000,
+      "rows_per_cell": 375,
+      "female_values": [
+        0,
+        1
+      ],
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "age_law": "discrete_uniform_within_band",
+      "row_id_prefix": "A04_"
+    },
+    "joint_law": "independent_marginal_completion_with_fixed_demographic_quotas",
+    "bmi": {
+      "family": "gamma",
+      "mean": 26.5,
+      "sd": 4.1,
+      "unit": "kg/m^2"
+    },
+    "glucose": {
+      "family": "scaled_beta",
+      "mean": 91.8,
+      "sd": 9.0,
+      "lower": 0.0,
+      "upper": 126.0,
+      "unit": "mg/dL"
+    },
+    "hba1c": {
+      "family": "gamma",
+      "mean": 5.6,
+      "sd": 0.3,
+      "unit": "%"
+    },
+    "glucose_unit_conversion": {
+      "mg_dL_per_mmol_L": 18.0
+    },
+    "output_columns": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "numeric_policy": "raise_on_nonfinite_or_support_violation_no_clipping"
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "The task fixes 375 rows in each female=0/1 by age band 25-39, 40-54, 55-69, 70-79 cell. Age is sampled uniformly over integer years within each cell. This is an equal-cell analytical design, not national population sampling; source age and sex margins are contextual and are not imposed."
+    },
+    {
+      "id": "A_PRODUCT",
+      "description": "The completion joint law factorizes between age, female, BMI, glucose and HbA1c for a random design row. Independence is an explicit structural assumption chosen because E0 supplies no dependence estimates. It is not a source finding, a claim of biological absence of association, or a preferred regression result. Finite-cohort demographic rows are dependent through the fixed quotas."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "The selected source BMI, glucose and HbA1c marginal means and individual SDs are used unchanged as working parameters for all target demographic cells. This unquantified transport assumption crosses Lifelines western-European GWAS selection to the Mexico analytical design, including age, sex, ethnicity, anemia and medication eligibility differences. It is not target calibration."
+    },
+    {
+      "id": "A_GAMMA",
+      "description": "BMI and HbA1c use positive gamma laws matched to their respective selected mean and SD. Gamma shape, tail form and unbounded upper support are model completion choices; the source does not identify them. No clinical upper cutoff is claimed."
+    },
+    {
+      "id": "A_BETA",
+      "description": "Glucose uses a beta law scaled to the task interval (0,126) mg/dL, moment-matched to the source mean and SD converted with the fixed factor 18. This directly models the already selected population, not an unselected population followed by rejection. The beta shape is assumed and its upper support is a task eligibility bound."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "The source fasting venous plasma glucose marginal is transported to target fasting serum glucose without a correction. This specimen/method equivalence is unverified; no eAG-to-fasting-glucose equation is used. HbA1c is modeled in reported NGSP percent."
+    },
+    {
+      "id": "A_SELECTION",
+      "description": "The generator represents rows conditional on the entire task population: no reported prior doctor diabetes/high-blood-sugar diagnosis; recorded 8-12-hour fast; positive glucose below 126; HbA1c available; usable internally consistent standing anthropometry excluding contradictory not-weighed/alternative-standing documentation; pregnancy/lactation exclusions only as documented by questionnaire routing for women 25-49; no verified medication or anemia exclusion. Unprovided eligibility fields are not generated or claimed recovered. The post-selection biomarker product law does not model any additional selection effects."
+    },
+    {
+      "id": "A_REPRESENTATION",
+      "description": "Use the directly reported HbA1c percent mean 5.6 and SD 0.3 as one representation. IFCC and derived percent values are retained as alternative rounded representations of the same quantities, not extra constraints. Use 91.8 mg/dL and 9 mg/dL as converted representations of glucose 5.1 and 0.5 mmol/L, not independent evidence."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "The reported SDs represent between-person dispersion, not estimator SEs. Marginal estimates are fixed working values; no unsupported sampling uncertainty distribution is invented. Repeated seeds measure synthetic sampling variation conditional on this law, not uncertainty about source estimates, family, joint structure or transport."
+    },
+    {
+      "id": "A_NO_SOURCE_REPLAY",
+      "description": "No source-population replay is available. All target-table-to-source checks are unavailable. Analytic moment identities describe this generator law only; matching an input marginal by construction is not an independent validation of source or target."
+    },
+    {
+      "id": "A_NUMERICS",
+      "description": "The ideal law is continuous. Implementation fails explicitly if a numerical gamma/beta draw is nonfinite or violates strict support; it does not clip, winsorize, replace or calibrate rows. Such a floating-point failure would be recorded by the controller. Successful output has no scientific caps beyond the glucose eligibility restriction."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Row count, strata, quotas and age bounds are prescribed by task.json. Uniform within-band age and ID prefix are implementation choices; no source age/sex constraint is imposed."
+    },
+    "joint_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_PRODUCT",
+        "A_SELECTION"
+      ],
+      "derivation": "Explicit product-law completion of unspecified joint dependence, conditional on task eligibility. No sign or effect size is imported from the analysis questions."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task"
+      ],
+      "assumption_ids": [
+        "A_GAMMA",
+        "A_TRANSPORT",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Gamma shape=(mean/sd)^2 and scale=sd^2/mean give exactly mean 26.5 and SD 4.1 for the ideal working marginal."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "J_T1_glucose_mean_mmol_L",
+        "J_T1_glucose_sd_mmol_L",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_BETA",
+        "A_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Source mean=5.1*18=91.8 and SD=0.5*18=9; duplicates retained as provenance, used once. For width w=upper-lower, p=(mean-lower)/w and c=p(1-p)/(sd/w)^2-1, beta shapes are p*c and (1-p)*c."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct"
+      ],
+      "assumption_ids": [
+        "A_GAMMA",
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Choose the directly printed percent representation once: mean 5.6 and SD 0.3. Gamma shape=(mean/sd)^2 and scale=sd^2/mean. The IFCC-derived alternative is not additionally fitted."
+    },
+    "glucose_unit_conversion": {
+      "evidence_ids": [
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_REPRESENTATION"
+      ],
+      "derivation": "Fixed protocol factor 18.0 in the admitted normalization, used to explain provenance; generator receives values already in mg/dL."
+    },
+    "output_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Exact output order prescribed by task.json."
+    },
+    "numeric_policy": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_NUMERICS"
+      ],
+      "derivation": "No post-hoc moment correction or support clipping. Failures remain failures."
+    }
+  }
+}

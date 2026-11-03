@@ -1,0 +1,11 @@
+# Scientific candidate
+
+This is a five-variable whole-cohort probability scenario using positive lognormal biomarkers and a shared latent glucose factor. The MIND serum-glucose/HbA1c Spearman point constrains its copula through an explicit law-specific derivation. MIND marginal means and individual SDs set a documented target marginal scenario because its serum specimen and inclusion of known diabetes are relevant to this target request. Its older, rural, selected population, prior-year BMI, processing and different assays prevent a claim of target equality.
+
+Target age is uniform 35-74 and female probability is 0.5. Age/sex independence, latent BMI-glucose correlation 0.20 and conditional BMI-HbA1c innovation independence are explicit completion assumptions. The population E3 age coefficient is therefore exactly zero by construction, not supported as an empirical absence. The model is intentionally transparent about this non-identification.
+
+The two Jansen estimates are examined as separate source-population OLS projections, after an explicitly modeled FPG<7 selection and with their native IFCC response. Bao's correlation is examined using a separate source pair law and its own margins. These diagnostics test implications of the common dependence hypothesis; no discrepancy is optimized away and no source point becomes a desired target coefficient. The MIND rank equality is imposed, so its agreement supplies no independent validation.
+
+The mathematical note proves finite moments and task support under the actual law, including exponentiation and selected-source moments. Its analytic script uses no rows or generator import. All target-table source comparisons are unavailable. There is no source replay, target feedback, synthetic hypothesis-test claim or population-validity claim.
+
+No exploratory execution is requested. The initial candidate is selected because analytic derivation and static contracts make its assumptions and limitations reviewable; a random draw is not needed to choose scientific parameters. Independent review and isolated controller execution remain pending. The candidate is deliberately left unfrozen for the controller. A passed static check, imposed rank identity or retained source discrepancy is not an improvement claim.

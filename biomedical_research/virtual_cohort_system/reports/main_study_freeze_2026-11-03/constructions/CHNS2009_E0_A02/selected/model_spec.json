@@ -1,0 +1,141 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_support": {
+      "minimum": 35,
+      "maximum": 74,
+      "distribution": "discrete_uniform_inclusive"
+    },
+    "female_probability": 0.5776712714970398,
+    "marginal_moments": {
+      "bmi": {
+        "mean": 25.0,
+        "individual_sd": 3.6,
+        "unit": "kg/m^2"
+      },
+      "glucose": {
+        "mean": 5.2,
+        "individual_sd": 1.4,
+        "unit": "mmol/L"
+      },
+      "hba1c": {
+        "mean": 6.1,
+        "individual_sd": 1.0,
+        "unit": "%"
+      }
+    },
+    "factor_loadings": {
+      "bmi": 0.3,
+      "glucose": 0.6,
+      "hba1c": 0.7
+    },
+    "continuous_family": "one_factor_multivariate_lognormal",
+    "demographic_dependence": "age_and_female_mutually_independent_and_independent_of_continuous_variables"
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Generate 3000 independent synthetic rows with no participant input, no missing values, no analysis-specific removal, and the exact task columns and native units. Rows are not survey clusters and no national representativeness is claimed."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age is discrete uniform on each integer 35 through 74. The task establishes eligibility only, not frequencies. Source age distributions are contextual and are not projected to this target."
+    },
+    {
+      "id": "A_SEX",
+      "description": "Use a Bernoulli female probability equal to the MIND source count ratio 2049/3547 as a transparent transport assumption. The ratio is not a target estimate or a weighted national proportion. Female is 1 and male is 0."
+    },
+    {
+      "id": "A_MARGINS",
+      "description": "Transport the three MIND mean/individual-SD pairs for BMI, fasting serum glucose, and HbA1c percent as chosen marginal anchors. This is an uncalibrated scenario, not a claim of equality of source and target. Unlike the other supplied cohorts, MIND includes known diabetes and reports serum glucose, which motivates this single-source choice. Its age, selection, date, prior-year BMI, imputation, assay and fasting context still differ."
+    },
+    {
+      "id": "A_LOGNORMAL",
+      "description": "Each continuous margin is lognormal with log variance log(1+(SD/mean)^2) and log mean log(mean)-log variance/2. A lognormal tail and strictly positive support are author assumptions; the source mean and SD do not identify the family. No clipping, row rejection or diabetes exclusion is applied. Unbounded tails are not validated physiological extremes; in particular no HbA1c upper bound is supplied by the task."
+    },
+    {
+      "id": "A_FACTOR",
+      "description": "A common independent standard-normal factor has standardized log-scale loadings 0.30 for BMI, 0.60 for glucose and 0.70 for HbA1c. Each margin has its own independent normal residual with loading sqrt(1-loading^2). These positive associations and exact loadings are explicit illustrative assumptions, not reported evidence, calibrated estimates, or a favored target direction. Marginal evidence alone cannot choose them."
+    },
+    {
+      "id": "A_DEMOGRAPHIC_INDEPENDENCE",
+      "description": "Age and female are independent of each other and of the common factor and all continuous residuals. This simplifying assumption is unsupported by E0 relationship evidence, which is absent rather than evidence of zero. It algebraically fixes the population age coefficient in E3 at zero and fixes age/female slopes in E1/E2 at zero. Finite-sample coefficients fluctuate."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "MIND serum FSG remains distinct from the plasma FPG in Jansen and Bao. Native target serum glucose is modeled directly in mmol/L with no plasma conversion; HbA1c percent is used directly. No NGSP conversion is needed. Matching unit labels does not establish assay or population equivalence. There is no diabetes, pregnancy or treatment exclusion and no target data."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Reported individual SDs set individual variation under the assumed law, not estimator SEs, transport tolerances, or weights. Estimator uncertainty and field-specific counts remain unreported. All scientific parameters are held fixed across seeds; seeds vary individual synthetic residuals only. Structural, external-estimate and transport uncertainty are not integrated probabilistically and must be assessed with separately justified future scenarios."
+    },
+    {
+      "id": "A_SOURCE_UNAVAILABLE",
+      "description": "No source-population reconstruction or source replay is supplied. Every target-table source comparison is unavailable. Jansen, Bao and MIND are distinct source families; multiple summaries from each study share that cohort and are not independent replications. No cross-source precision pooling or statistical independence of source estimates is assumed."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Fixed whole-cohort task n_rows=3000; not a source sample size."
+    },
+    "age_support": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "Task bounds 35 to 74 inclusive with assumed equal mass per integer."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "M_M_FEMALE_FRACTION"
+      ],
+      "assumption_ids": [
+        "A_SEX",
+        "A_TRANSPORT"
+      ],
+      "derivation": "2049/3547, retaining source category and count-ratio interpretation; transported by assumption."
+    },
+    "marginal_moments": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_MARGINS",
+        "A_TRANSPORT",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Choose the reported MIND arithmetic means and individual SDs without pooling or estimating precision. The source context is older selected adults; target transport is assumed. BMI 25.0/3.6; serum glucose 5.2/1.4; HbA1c percent 6.1/1.0."
+    },
+    "factor_loadings": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTOR"
+      ],
+      "derivation": "Author-selected illustrative standardized log-scale loadings; pairwise log correlations are products. No E0 relationship coefficient is supplied or fitted."
+    },
+    "continuous_family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_LOGNORMAL",
+        "A_FACTOR"
+      ],
+      "derivation": "Positive law with analytic finite moments; mu=log(m)-0.5*log(1+s^2/m^2) and sigma=sqrt(log(1+s^2/m^2))."
+    },
+    "demographic_dependence": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEMOGRAPHIC_INDEPENDENCE"
+      ],
+      "derivation": "Explicit simplifying assumption. It implies E3 age slope=0 in the population; this is not empirical information."
+    }
+  }
+}

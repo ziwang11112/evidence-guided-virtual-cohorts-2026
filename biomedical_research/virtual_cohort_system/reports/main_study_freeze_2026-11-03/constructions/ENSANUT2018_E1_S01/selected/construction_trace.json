@@ -1,0 +1,262 @@
+{
+  "input_packet_sha256": "28f75f5b7f4f497cce69b330d9b781194a044bf09e173e663917764d3d153165",
+  "input_task_sha256": "5d0ec2dc131be31a0b4a56f11c35051a9791411172763275ffb0ce9328c5969a",
+  "fitting_version": "source_moment_maxentropy_v1",
+  "source_context_inputs": [
+    {
+      "role": "external_source",
+      "source_context_id": "lifelines",
+      "marginals": {
+        "age": {
+          "kind": "uniform",
+          "low": 38.352697005068116,
+          "high": 72.64730299493189
+        },
+        "female": {
+          "kind": "bernoulli",
+          "probability": 0.597
+        },
+        "bmi": {
+          "kind": "lognormal",
+          "mu": 3.265317064247152,
+          "sigma": 0.15380291769029805
+        },
+        "glucose": {
+          "kind": "truncated_lognormal",
+          "mu": 4.515008443587541,
+          "sigma": 0.09821356594684554,
+          "low": 0.0,
+          "high": 126.0
+        },
+        "hba1c": {
+          "kind": "shifted_lognormal",
+          "mu": 1.2428445778400734,
+          "sigma": 0.07882476842662696,
+          "offset": 2.152
+        }
+      },
+      "constraints": [
+        {
+          "evidence_id": "J_T2_bmi_slope_task_derived",
+          "value": 0.0118924,
+          "numerical_scale": 1.0,
+          "operator": {
+            "kind": "ols_coefficient",
+            "outcome": "hba1c",
+            "regressors": [
+              "age",
+              "female",
+              "bmi"
+            ],
+            "term": "bmi"
+          }
+        },
+        {
+          "evidence_id": "J_T2_glucose_slope_task_derived",
+          "value": 0.01163828888888889,
+          "numerical_scale": 1.0,
+          "operator": {
+            "kind": "ols_coefficient",
+            "outcome": "hba1c",
+            "regressors": [
+              "age",
+              "female",
+              "glucose"
+            ],
+            "term": "glucose"
+          }
+        }
+      ],
+      "assumptions": [
+        "Qualified equal-weight selected-source population law, not reconstructed participants or original survey weights",
+        "Bounded uniform source age matches the admitted moments/quantile fit; not an empirical age distribution",
+        "Binary female variable is independent of the continuous variables; unspecified nuisance associations remain assumptions",
+        "Positive lognormal margins and latent Gaussian copula; unspecified dependence completed by the entropy objective",
+        "Source marginal summaries are treated as point constraints with unknown estimation uncertainty",
+        "Selection not represented by the declared source support remains an applicability limitation"
+      ]
+    }
+  ],
+  "source_fit_reports": [
+    {
+      "version": "source_moment_maxentropy_v1",
+      "source_context_id": "lifelines",
+      "success": true,
+      "optimizer_success": true,
+      "optimizer_message": "Optimization terminated successfully",
+      "iterations": 5,
+      "variable_order": [
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ],
+      "latent_correlation": [
+        [
+          1.0,
+          0.0,
+          -2.6334987165088207e-09,
+          -8.173458263874391e-09,
+          -1.0125517027749963e-08
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -2.6334987165088207e-09,
+          0.0,
+          1.0,
+          0.06840102285699348,
+          0.17880658540189862
+        ],
+        [
+          -8.173458263874391e-09,
+          0.0,
+          0.06840102285699348,
+          1.0,
+          0.3825410619118633
+        ],
+        [
+          -1.0125517027749963e-08,
+          0.0,
+          0.17880658540189862,
+          0.3825410619118633,
+          1.0
+        ]
+      ],
+      "minimum_eigenvalue": 0.6005470255237063,
+      "max_scaled_constraint_residual": 2.42861286636753e-17,
+      "source_checks": [
+        {
+          "evidence_id": "J_T2_bmi_slope_task_derived",
+          "operator": {
+            "kind": "ols_coefficient",
+            "outcome": "hba1c",
+            "regressors": [
+              "age",
+              "female",
+              "bmi"
+            ],
+            "term": "bmi"
+          },
+          "reported": 0.0118924,
+          "calculated": 0.011892400000000001,
+          "raw_residual": 1.734723475976807e-18,
+          "checked_order_value": 0.011892400000000001,
+          "quadrature_stable": true
+        },
+        {
+          "evidence_id": "J_T2_glucose_slope_task_derived",
+          "operator": {
+            "kind": "ols_coefficient",
+            "outcome": "hba1c",
+            "regressors": [
+              "age",
+              "female",
+              "glucose"
+            ],
+            "term": "glucose"
+          },
+          "reported": 0.01163828888888889,
+          "calculated": 0.011638288888888865,
+          "raw_residual": -2.42861286636753e-17,
+          "checked_order_value": 0.01163828888888888,
+          "quadrature_stable": true
+        }
+      ],
+      "quadrature_order": 64,
+      "independent_order_check": 128,
+      "assumptions": [
+        "Qualified equal-weight selected-source population law, not reconstructed participants or original survey weights",
+        "Bounded uniform source age matches the admitted moments/quantile fit; not an empirical age distribution",
+        "Binary female variable is independent of the continuous variables; unspecified nuisance associations remain assumptions",
+        "Positive lognormal margins and latent Gaussian copula; unspecified dependence completed by the entropy objective",
+        "Source marginal summaries are treated as point constraints with unknown estimation uncertainty",
+        "Selection not represented by the declared source support remains an applicability limitation"
+      ],
+      "sampled_rows": 0,
+      "uncertainty": "No calibrated source, model or transport uncertainty",
+      "execution_authorized": false
+    }
+  ],
+  "normalization_records": [
+    {
+      "rule": "native_IFCC_canonical; rounded_percent_alternative_not_second_constraint",
+      "implied_mean_percent": 5.62824,
+      "implied_individual_sd_percent": 0.27444
+    }
+  ],
+  "unhandled_relational_items": [
+    {
+      "evidence_id": "P_NHANES_age_slope",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_lt40_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_40_44_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_45_49_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_50_54_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_55_59_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_60_64_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_65_69_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    },
+    {
+      "evidence_id": "P_NHANES_hba1c_age_ge70_mean",
+      "role": "contextual_unfitted",
+      "reason": "Pani individual dispersion/source age law and original survey weighting are not bound; no source=target quota substitution or SE-to-SD conversion"
+    }
+  ],
+  "marginal_rule": "source_binding.py: individual mean/SD positive lognormal; native IFCC shifted-affine lognormal; glucose upper-truncated law; Bao log-quantile least squares; bounded uniform source age; explicit source sex fraction",
+  "dependence_rule": "moment_reference.py: separately named population projections/correlations; entropy completion under the source moments",
+  "transport_rule": "fixed case request/support and the declared donor rule; no target effect or demographic fit",
+  "sampled_rows": 0,
+  "execution_authorized": false,
+  "compiled_evidence_sha256": "28f75f5b7f4f497cce69b330d9b781194a044bf09e173e663917764d3d153165",
+  "used_compiled_evidence_ids": [
+    "J_T1_age_mean_task",
+    "J_T1_age_sd_task",
+    "J_T1_bmi_mean_task",
+    "J_T1_bmi_sd_task",
+    "J_T1_glucose_mean_mg_dL_derived",
+    "J_T1_glucose_sd_mg_dL_derived",
+    "J_T1_hba1c_mean_ifcc",
+    "J_T1_hba1c_sd_ifcc",
+    "J_T1_female_proportion_derived",
+    "NGSP_UNIT_GUIDANCE",
+    "J_T2_bmi_slope_task_derived",
+    "J_T2_glucose_slope_task_derived"
+  ],
+  "raw_to_compiled_rule": "CHNS grouped mean/SD, quantile and fraction suffix mapping; relationship IDs unchanged; ENSANUT native admitted item IDs unchanged"
+}

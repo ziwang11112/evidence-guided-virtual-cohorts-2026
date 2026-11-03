@@ -1,0 +1,65 @@
+{
+  "status": "ready",
+  "reviewer_id": "/root/main_review_g3",
+  "author_id": "CHNS2009_E0_A03",
+  "candidate": "candidates/initial",
+  "candidate_freeze_sha256": "9acce3bcfd615dc71cac090d42261d61d7b6a7c0d782c6b5cf76837dbbeab85b",
+  "decision_sha256": "c41e2f5314093729680b77f148bbecdac468ad61f2be19df1f5a379d31eb32cd",
+  "finite_moments_checked": true,
+  "numerical_uptake_checked": true,
+  "target_results_used": false,
+  "lifecycle_verify_candidate": "pass",
+  "generator_imported_or_executed": false,
+  "random_sampling_performed": false,
+  "generated_rows_parsed": false,
+  "readiness_scope": "Independent implementation, source traceability, finite-moment and information-boundary readiness. This is not source-fit approval, clinical target validation, or a claim of favorable science.",
+  "findings": [
+    {
+      "id": "G3_01",
+      "severity": "pass",
+      "topic": "Actual implemented law",
+      "detail": "Static code inspection matches the specification: independent discrete-uniform age 35-74, Bernoulli female probability 2049/3547, common Gamma(shape=4, scale=1), and three independent Gamma residuals added through positive loadings. The residual parameters are algebraically derived from marginal means/SDs and assumed variance fractions. No clipping, row selection, hidden input, or I/O occurs in the generator. All scientific numerical settings are in model_spec.json."
+    },
+    {
+      "id": "G3_02",
+      "severity": "pass",
+      "topic": "Finite moments and identified model consequences",
+      "detail": "Independent retained arithmetic confirms positive residual means, variances, shapes and scales. Each continuous margin has an MGF finite in a neighborhood of zero, hence finite moments of all positive integer orders. Bounded demographics have finite moments. Positive residual covariance plus the shared-factor positive-semidefinite covariance gives positive-definite population covariance. The implemented law implies E1=0.07081971546656644 %/(kg/m^2), E2=0.4642857142857143 %/(mmol/L), and E3=0 %/year. These are consequences of assumptions, not reported source coefficients or target estimates. Finite-sample rank is not guaranteed for every possible random draw."
+    },
+    {
+      "id": "G3_03",
+      "severity": "pass",
+      "topic": "Evidence, units and support",
+      "detail": "All 31 marginal evidence quantities, types, units, source IDs and locators reproduce the admitted packet; no estimator uncertainty is manufactured. Chosen MIND-China BMI, fasting serum glucose and HbA1c mean/SD pairs are 25/3.6 kg/m^2, 5.2/1.4 mmol/L and 6.1/1.0 percent. Female probability reproduces its stated count ratio. Serum/plasma and IFCC/percent distinctions are retained; no NGSP or glucose conversion is applied. Integer age/female support and strictly positive continuous support meet the task."
+    },
+    {
+      "id": "G3_04",
+      "severity": "pass",
+      "topic": "Numerical uptake",
+      "detail": "E0 supplies zero non-marginal relationship operations, and numerical_uptake.json correctly contains an empty records list. Marginal plug-in values are numerically traced; Gamma shape, variance fractions, age law, demographic independence and transport remain explicit assumptions. Overlapping within-study summaries are not treated as independent precision evidence."
+    },
+    {
+      "id": "G3_05",
+      "severity": "pass",
+      "topic": "Own-trial feedback and retention",
+      "detail": "The own-trial receipt for seed 5201 records success with 3000 rows and binds the frozen generator/specification. Generated-only aggregate feedback has the permitted fields and computed E1/E2/E3 diagnostics. All 31 source comparisons are unavailable with null calculation and difference; no generated target-scenario table is used as source-population replay. The retain decision binds the actual feedback and retention rationale and makes no improvement claim. No generated rows were parsed during this review."
+    },
+    {
+      "id": "G3_06",
+      "severity": "pass",
+      "topic": "Integrity",
+      "detail": "lifecycle.verify_candidate(bundle, 'candidates/initial') passed. Registered source hashes, frozen candidate commitments, semantic/evidence/recipe bindings, decision-linked feedback/rationale/script hashes, and all own-trial receipt file hashes were checked. Frozen files and the decision were not changed."
+    },
+    {
+      "id": "G3_07",
+      "severity": "nonblocking_scientific_limitation",
+      "topic": "Scientific applicability",
+      "detail": "E0 marginals do not identify the chosen joint distribution. The positive dependence, exact zero demographic associations and E3 age coefficient, unbounded positive Gamma tails, target age/sex composition, and transport from selected older rural MIND-China participants remain unvalidated choices. Unbounded HbA1c and other upper tails are mathematically valid under the task but do not establish physiological realism. Source-estimate, structural and transport uncertainty remain unquantified; repeated seeds express only variation under this fixed law. These limitations are disclosed and do not block the requested readiness review."
+    }
+  ],
+  "blocking_findings": [],
+  "review_artifacts": [
+    "independent_review_support/review_candidate.py",
+    "independent_review_support/deterministic_audit.json"
+  ]
+}

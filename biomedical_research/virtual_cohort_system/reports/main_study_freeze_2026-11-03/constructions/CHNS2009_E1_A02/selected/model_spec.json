@@ -1,0 +1,286 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_prefix": "CHNS2009_E1_A02_",
+    "unit_conversion": {
+      "ngsp_per_ifcc": 0.09148,
+      "ngsp_offset": 2.152
+    },
+    "reported_constraints": {
+      "jansen_bmi_separate_ifcc": 0.13,
+      "jansen_fpg_separate_ifcc": 2.29,
+      "jansen_bmi_interval": [
+        0.1,
+        0.16
+      ],
+      "jansen_fpg_interval": [
+        2.07,
+        2.51
+      ],
+      "interval_confidence_level": null,
+      "bao_pearson": 0.619,
+      "mind_spearman": 0.529
+    },
+    "shared_structure": {
+      "bmi_age": 0.03,
+      "bmi_female": 0.2,
+      "glucose_age": 0.005,
+      "glucose_female": 0.03,
+      "residual_bmi_glucose_correlation": 0.3,
+      "hba1c_age_direct": 0.003,
+      "hba1c_female_direct": 0.02,
+      "hba1c_bmi_joint": 0.0046668871459520965,
+      "hba1c_glucose_joint": 0.1979805681743806,
+      "hba1c_upper_extra": 0.2
+    },
+    "target_context": {
+      "age_law": "discrete_uniform_inclusive",
+      "age_min": 35,
+      "age_max": 74,
+      "age_mean": 54.5,
+      "female_probability": 0.6,
+      "bmi_center": 23.5,
+      "glucose_center": 5.2,
+      "hba1c_center": 5.6,
+      "bmi_residual_sd": 3.6,
+      "glucose_residual_sd": 0.46188021535170065,
+      "hba1c_residual_sd": 0.45,
+      "bmi_innovation_law": "standardized_gamma",
+      "bmi_gamma_shape": 4.0,
+      "upper_probability": 0.1,
+      "upper_gamma_shape": 2.0,
+      "upper_gamma_scale": 1.5
+    },
+    "jansen_context": {
+      "source_context_id": "CTX_JANSEN_SELECTED",
+      "age_law": "continuous_uniform_matching_mean_sd",
+      "age_mean": 55.5,
+      "age_sd": 9.9,
+      "female_probability": 0.5973981513180417,
+      "bmi_center": 26.5,
+      "glucose_center": 5.1,
+      "hba1c_center": 5.62824,
+      "reported_bmi_sd": 4.1,
+      "reported_glucose_sd": 0.5,
+      "reported_hba1c_ifcc_sd": 3,
+      "bmi_residual_sd": 4.088052159157856,
+      "glucose_residual_sd": 0.49732613822309013,
+      "hba1c_residual_sd": 0.2495722819775183,
+      "bmi_innovation_law": "standardized_uniform",
+      "upper_probability": 0.0,
+      "upper_gamma_shape": 2.0,
+      "upper_gamma_scale": 1.5,
+      "fpg_selection_upper_exclusive": 7.0
+    },
+    "bao_context": {
+      "source_context_id": "CTX_BAO_ANALYZED",
+      "age_law": "piecewise_linear_quantile",
+      "age_probability_knots": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "age_value_knots": [
+        20.1,
+        37.9,
+        49.4,
+        57.7,
+        85
+      ],
+      "female_probability": 0.6258698321735571,
+      "bmi_center": 23.5,
+      "glucose_center": 5.2,
+      "hba1c_center": 5.6,
+      "bmi_residual_sd": 2.598076211353316,
+      "glucose_residual_sd": 0.46188021535170065,
+      "hba1c_residual_sd": 0.45,
+      "bmi_innovation_law": "standardized_uniform",
+      "upper_probability": 0.06,
+      "upper_gamma_shape": 2.0,
+      "upper_gamma_scale": 1.5
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_TARGET",
+      "description": "The target analytical population has no supplied composition. Age is discrete uniform 35..74, female probability 0.60, and rows are independent. This is not a survey or national-population model."
+    },
+    {
+      "id": "A_LAW",
+      "description": "Independent age, binary sex and standardized innovations generate BMI, glucose and HbA1c through the documented affine equations. Target BMI innovation is standardized Gamma(shape=4,scale=1), permitting an unbounded upper BMI tail; ordinary glucose/HbA1c innovations are Uniform(-sqrt(3),sqrt(3)). Source-scenario BMI innovation is also standardized uniform to retain Jansen's selected FPG support. This contextual shape difference preserves the exact first/second-moment derivation but is not evidence of recovered tails. The shape choices and lower support limits are modelling assumptions, not known biological cutoffs. No clipping, row rejection, imputation or output rounding is used."
+    },
+    {
+      "id": "A_COVARIATES",
+      "description": "BMI-age 0.03 kg/m^2/year, BMI-female 0.20 kg/m^2, glucose-age 0.005 mmol/L/year, glucose-female 0.03 mmol/L, and ordinary residual BMI/glucose correlation 0.30 are unsupported completion assumptions. Unknown covariance is not a zero fact; specified independence is a model assumption."
+    },
+    {
+      "id": "A_HBA1C",
+      "description": "Direct HbA1c-age 0.003 percent/year, female 0.02 percent and broad-context residual SD 0.45 percent are assumptions. In a context with metabolic excess the complete-model OLS age coefficient is not necessarily this direct age loading."
+    },
+    {
+      "id": "A_JANSEN",
+      "description": "A separately declared post-selection Jansen law uses continuous uniform age matching its reported mean/SD, the source male count fraction, reported BMI/FPG moments, and reported HbA1c IFCC moments on the NGSP representation. Self-reported diabetes/anemia/missingness exclusions are assumed conditioned upon, not generated. The law satisfies FPG<7; it does not reconstruct actual selected participants. Exact source age bounds, regression-row membership, weights and processing are unknown."
+    },
+    {
+      "id": "A_JANSEN_PROJECTION",
+      "description": "Jansen's separate age/sex-adjusted slopes constrain two residualized population projections. Their conversion uses the NGSP slope multiplier. A stipulated nonzero BMI/FPG residual covariance identifies one member of an otherwise unidentified family of joint HbA1c coefficients; the two printed slopes are never pasted into a joint equation."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Transport the chosen Jansen joint response coefficients and assumed covariate loadings to the broader Chinese target scenario. Target central serum glucose is not source fasting plasma. Numerical equality of their mmol/L scales is a modelling bridge without a supplied serum/plasma conversion, fasting-protocol or assay validation. The HbA1c affine scale conversion likewise does not prove assay interchangeability."
+    },
+    {
+      "id": "A_UPPER",
+      "description": "An independent latent Bernoulli-gamma metabolic excess L increases glucose by L and HbA1c by an additional 0.20 percent per mmol/L of L beyond the ordinary glucose loading. Its probability, shape and scale are assumptions; it is not diagnosed diabetes, treatment status or estimated disease prevalence. Target probability 0.10 and Bao selected-source probability 0.06 deliberately represent different selection scenarios. It is absent in the Jansen selected scenario."
+    },
+    {
+      "id": "A_CHINESE_MARGINS",
+      "description": "Use Bao BMI/glucose/HbA1c medians as ordinary-component location anchors, not target means. Target ordinary BMI SD 3.6 is an assumption informed by MIND dispersion despite different age, timing and eligibility. Uniform glucose residual SD is Bao IQR/sqrt(3), an explicit symmetric-uniform approximation, not a generic IQR-to-SD conversion. Added age/sex effects and the upper component alter total moments and quantiles."
+    },
+    {
+      "id": "A_BAO",
+      "description": "A distinct Bao post-exclusion source scenario has a piecewise-linear quantile age law with probability knots 0,0.25,0.5,0.75,1 and age knots 20.1,37.9,49.4,57.7,85; endpoint ages are assumptions. Reported female count fraction is used. Ordinary BMI and FPG symmetric-uniform scales use their IQR/sqrt(3); the BMI center 23.5 need not match asymmetric quartiles exactly. All stated health exclusions are conditioned upon without reconstructing their selection mechanism. The upper component represents screen-detected hyperglycemia only as a hypothetical scenario."
+    },
+    {
+      "id": "A_SOURCE_CHECKS",
+      "description": "Source functionals are qualified equal-weight, intercept-including analytic population comparisons. They use separately declared post-selection source laws and exact moments, never the target table. Strict replay and source-population reconstruction remain unavailable. A constrained point agreement is not independent verification or transport evidence."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Published estimator precision is not supplied; Jansen printed intervals have unconfirmed confidence level. Retain them descriptively, do not use as SD/SE, equivalence tolerances or precision weights. Parameters are fixed scenarios, not posterior draws. Individual residual variation, unknown external estimates, structural assumptions and population transport uncertainty remain distinct."
+    },
+    {
+      "id": "A_OVERLAP",
+      "description": "Jansen's two coefficients and its margins share Lifelines and are not independent confirmations. Bao's correlation and its margins share SHDS II; MIND rank and margins share MIND-China. The packet gives distinct cohort names but no cross-study participant linkage audit. NGSP and converted source values are deterministic representations, not added evidence."
+    },
+    {
+      "id": "A_MIND",
+      "description": "MIND's reported serum-glucose Spearman correlation is contextual only. Its older selected/imputed cohort and rank distribution are not represented by a declared source law here. Ordinary moments cannot identify Spearman; do not substitute Pearson or a Gaussian-copula formula. MIND FSG is distinct from its separately measured FPG."
+    },
+    {
+      "id": "A_OUTPUT",
+      "description": "Return exactly 3000 complete rows and the specified scientific columns with technical row identifiers. No participant input is available and no individual measurement is recovered."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_OUTPUT"
+      ],
+      "derivation": "Task-specified output count."
+    },
+    "row_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_OUTPUT"
+      ],
+      "derivation": "Technical identifier prefix, no biomedical information."
+    },
+    "unit_conversion": {
+      "evidence_ids": [
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT"
+      ],
+      "derivation": "Reported affine scale representation; slopes/SDs use the multiplier only."
+    },
+    "reported_constraints": {
+      "evidence_ids": [
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG",
+        "R_BAO_PEARSON",
+        "R_MIND_SPEARMAN"
+      ],
+      "assumption_ids": [
+        "A_UNCERTAINTY",
+        "A_OVERLAP"
+      ],
+      "derivation": "Source points and original printed Jansen intervals retained; no confidence level supplied and no pooling."
+    },
+    "shared_structure": {
+      "evidence_ids": [
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG",
+        "M_J_BMI_SD",
+        "M_J_FPG_SD",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_COVARIATES",
+        "A_HBA1C",
+        "A_JANSEN_PROJECTION",
+        "A_TRANSPORT",
+        "A_UPPER"
+      ],
+      "derivation": "Joint coefficients solve the two separate residualized projection equations after removing assumed age/sex loadings: beta_B=(t_B-t_G*rho*s_G/s_B)/(1-rho^2), beta_G=(t_G-t_B*rho*s_B/s_G)/(1-rho^2). All other loadings are explicit assumptions; no target estimate enters."
+    },
+    "target_context": {
+      "evidence_ids": [
+        "M_B_BMI_MEDIAN",
+        "M_B_FPG_MEDIAN",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_M_BMI_SD"
+      ],
+      "assumption_ids": [
+        "A_TARGET",
+        "A_CHINESE_MARGINS",
+        "A_LAW",
+        "A_HBA1C",
+        "A_UPPER",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Locations proxy ordinary components using Bao medians; glucose uniform scale=(5.6-4.8)/sqrt(3); BMI residual SD uses MIND dispersion as a transport assumption. Composition and metabolic-tail parameters are not identified by the sources."
+    },
+    "jansen_context": {
+      "evidence_ids": [
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD",
+        "M_J_MALE_FRACTION",
+        "M_J_BMI_MEAN",
+        "M_J_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_J_FPG_SD",
+        "M_J_HBA1C_IFCC_MEAN",
+        "M_J_HBA1C_IFCC_SD",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_JANSEN",
+        "A_LAW",
+        "A_COVARIATES",
+        "A_HBA1C",
+        "A_SOURCE_CHECKS"
+      ],
+      "derivation": "Residual variances subtract age/sex explained variance from source marginal variances. Response residual variance subtracts all affine explained variance from (3*0.09148)^2. Continuous uniform source age is determined by mean/SD, independently of target age bounds."
+    },
+    "bao_context": {
+      "evidence_ids": [
+        "M_B_AGE_Q1",
+        "M_B_AGE_MEDIAN",
+        "M_B_AGE_Q3",
+        "M_B_FEMALE_FRACTION",
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN"
+      ],
+      "assumption_ids": [
+        "A_BAO",
+        "A_COVARIATES",
+        "A_HBA1C",
+        "A_UPPER",
+        "A_SOURCE_CHECKS"
+      ],
+      "derivation": "Source age quantile knots retain the three reported summaries with assumed endpoints. Symmetric uniform residual scales use IQR/sqrt(3); source tail probability and HbA1c residual variance are assumptions. No fitting to Bao r is performed."
+    }
+  }
+}

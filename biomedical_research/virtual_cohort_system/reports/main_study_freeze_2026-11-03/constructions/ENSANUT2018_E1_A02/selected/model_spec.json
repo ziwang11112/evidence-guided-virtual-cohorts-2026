@@ -1,0 +1,199 @@
+{
+  "parameters": {
+    "design": {
+      "rows_per_cell": 375,
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "female_values": [
+        0,
+        1
+      ],
+      "row_id_prefix": "E1A02_"
+    },
+    "factor_law": {
+      "beta_alpha": 4.0,
+      "bmi_glucose_correlation": 0.25
+    },
+    "anchors": {
+      "age_reference": 55.5,
+      "bmi_mean": 26.5,
+      "bmi_sd": 4.1,
+      "glucose_mean": 91.8,
+      "glucose_sd": 9.0,
+      "hba1c_mean_at_reference": 5.6,
+      "lifelines_hba1c_sd": 0.3
+    },
+    "source_projection_constraints": {
+      "jansen_bmi": 0.0118924,
+      "jansen_glucose": 0.01163828888888889,
+      "pani_age": 0.01
+    },
+    "conditional_coefficients": {
+      "age": 0.01,
+      "female": 0.0,
+      "bmi": 0.005872569756097559,
+      "glucose": 0.010969468444444444
+    },
+    "hba1c_residual_sd": 0.26207646596890033,
+    "source_contexts": {
+      "lifelines": {
+        "age_mean": 55.5,
+        "age_sd": 9.9,
+        "female_probability": 0.597
+      },
+      "pani": {
+        "age_minimum": 25.0,
+        "gamma_shape": 4,
+        "gamma_scale": 7.5,
+        "female_probability": 0.5
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Exactly 375 rows in each sex by age-band cell. Integer age is independent discrete uniform within its target band. Cells and the fictional records have no national sampling weights."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "The post-selection conditional law is transported from external populations to the task population without numerical ancestry, serum/plasma, assay, fasting-duration or medication/anemia corrections. These differences are unassessed; no actual diagnosis, pregnancy/lactation, fasting or anthropometry documentation is recovered."
+    },
+    {
+      "id": "A_SHAPE",
+      "description": "Independent standardized symmetric Beta(4,4) residuals have support [-3,3]. This is an explicit smooth bounded residual choice; its BMI and glucose support limits are technical modeling restrictions, not known clinical or population cutoffs."
+    },
+    {
+      "id": "A_BG",
+      "description": "BMI and glucose are independent of age and sex, with residual Pearson correlation 0.25 from a shared beta factor. The unreported correlations with age/sex and zero sex coefficient are completion assumptions, not zero facts. The value 0.25 is a chosen structural scenario, not estimated evidence."
+    },
+    {
+      "id": "A_LINEAR",
+      "description": "HbA1c has the additive identity-scale conditional mean specified by the model, independent homoscedastic beta residual and no interactions. The two Jansen coefficients are constraints on separate projections; their joint coefficients are solved using A_BG."
+    },
+    {
+      "id": "A_LIFELINES",
+      "description": "Lifelines source context: continuous age=55.5+9.9*U_A, U_A standardized Beta(4,4); female Bernoulli(0.597), independent of all factors. BMI/glucose law is the same as the target. Table1 margins are assumed applicable to Table2 row-specific analysis populations despite unresolved row n. All exclusion conditions are represented as conditioning labels; their selection process is not reconstructed."
+    },
+    {
+      "id": "A_PANI",
+      "description": "Pani source context: age=25+Gamma(shape=4,scale=7.5 years), with unbounded upper age support, female Bernoulli(0.5), independent of the same BMI/glucose factors. This is an assumed survey-population law, not the unavailable complex-survey design. The common Lifelines HbA1c intercept and conditional law are transferred for a deliberately visible source compatibility check. None of these source age probabilities is taken from unweighted counts."
+    },
+    {
+      "id": "A_AGE_TRANSPORT",
+      "description": "Pani adjusted age coefficient 0.01 percentage point/year is treated as the common conditional age coefficient. The linear mean with full-rank covariates makes this the adjusted population projection under each declared source age law, but does not reproduce source survey estimation or establish causal aging."
+    },
+    {
+      "id": "A_MARGINS",
+      "description": "Use the directly printed Jansen percent HbA1c mean 5.6 and SD 0.3 as level and total-variance anchors. Do not add the alternate IFCC-derived rounded representation as independent evidence. BMI and glucose marginal means/SDs are transported unchanged; the age distribution follows task design."
+    },
+    {
+      "id": "A_PRECISION",
+      "description": "External estimates are fixed plug-in point constraints. Unknown slope SE/CI level and row n prohibit inverse-variance pooling. Jansen printed bounds retain unknown confidence level. Pani band SE is estimate precision, never individual SD. Seed variation is residual/finite-sample variability, not source-estimate or transport uncertainty."
+    },
+    {
+      "id": "A_CONTEXT",
+      "description": "Source-law algebra is qualified and not source replay. Actual target-table-to-source comparisons are unavailable. The Pani age-band diagnostics may disagree with evidence and are retained, not tuned away."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task quotas and support; the record prefix only identifies fictional rows."
+    },
+    "factor_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SHAPE",
+        "A_BG"
+      ],
+      "derivation": "Chosen symmetric bounded residual family and unreported dependence scenario."
+    },
+    "anchors": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived",
+        "J_T1_age_mean_task",
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct"
+      ],
+      "assumption_ids": [
+        "A_MARGINS",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Printed percent representation chosen; glucose conversion uses admitted factor 18, without conversion of FPG into eAG."
+    },
+    "source_projection_constraints": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived",
+        "P_NHANES_age_slope",
+        "NGSP_UNIT_GUIDANCE"
+      ],
+      "assumption_ids": [
+        "A_LINEAR",
+        "A_AGE_TRANSPORT",
+        "A_PRECISION"
+      ],
+      "derivation": "Jansen slope conversion is scale-only 0.13*0.09148 and 2.29*0.09148/18. The three quantities are separate population projections."
+    },
+    "conditional_coefficients": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived",
+        "P_NHANES_age_slope"
+      ],
+      "assumption_ids": [
+        "A_BG",
+        "A_LINEAR",
+        "A_AGE_TRANSPORT"
+      ],
+      "derivation": "Solve bB+rho*sG/sB*bG=sB_source and bG+rho*sB/sG*bB=sG_source. Set age coefficient to Pani adjusted projection; sex coefficient zero is assumed. See analytic/source_algebra.py and results.json."
+    },
+    "hba1c_residual_sd": {
+      "evidence_ids": [
+        "J_T1_hba1c_sd_pct",
+        "J_T1_age_sd_task"
+      ],
+      "assumption_ids": [
+        "A_MARGINS",
+        "A_LIFELINES",
+        "A_AGE_TRANSPORT",
+        "A_LINEAR"
+      ],
+      "derivation": "sqrt(0.3^2-age_coef^2*9.9^2-[bB,bG] Cov(B,G) [bB,bG]^T); positive checked analytically."
+    },
+    "source_contexts": {
+      "evidence_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_female_proportion_derived"
+      ],
+      "assumption_ids": [
+        "A_LIFELINES",
+        "A_PANI"
+      ],
+      "derivation": "Lifelines age mean/SD and sex proportion are admitted; source age shapes and all Pani age/sex law parameters are explicit completion assumptions."
+    }
+  }
+}

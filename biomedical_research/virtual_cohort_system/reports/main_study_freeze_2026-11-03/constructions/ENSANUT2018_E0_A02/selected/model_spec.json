@@ -1,0 +1,201 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000,
+      "rows_per_cell": 375,
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "sex_values": [
+        0,
+        1
+      ],
+      "row_id_prefix": "ENSANUT2018_E0_A02_",
+      "columns": [
+        "row_id",
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ]
+    },
+    "population": "Mexico analytical-use design: adults aged 25-79 with no reported prior doctor diagnosis of diabetes/high blood sugar, recorded 8-12-hour fast, positive fasting serum glucose below 126 mg/dL, available HbA1c and valid standing anthropometry with internally consistent measurement documentation (uniformly excluding explicit not-weighed or alternative-standing-route documentation that contradicts usable standing measurements, without asserting which field is correct) under the prespecified measurement restrictions; pregnancy/lactation excluded when documented by questionnaire routing for women aged 25-49; no verified medication or anemia exclusion. Exactly 375 fictional individuals per female=0/1 crossed with age bands 25-39, 40-54, 55-69, 70-79; equal-stratum analytical design, not a nationally representative population.",
+    "age_law": "discrete_uniform_within_fixed_cells",
+    "bmi": {
+      "family": "lognormal",
+      "arithmetic_mean": 26.5,
+      "individual_sd": 4.1
+    },
+    "glucose": {
+      "family": "scaled_beta",
+      "arithmetic_mean": 91.8,
+      "individual_sd": 9.0,
+      "lower": 0.0,
+      "upper": 126.0
+    },
+    "hba1c": {
+      "family": "lognormal",
+      "arithmetic_mean": 5.6,
+      "individual_sd": 0.3
+    },
+    "dependence": "independent_product",
+    "endpoint_policy": "nearest_float_strictly_inside",
+    "source_context": {
+      "population": "Lifelines western-European unrelated adults selected for GWAS, oldest family members preferred; n=2921 eligible; excludes self-reported diabetes or FPG>=7.0 mmol/L, significant anemia, and missing HbA1c/erythrocytes/FPG. Table 2 row-specific n unknown; Table 3 complete-case n unresolved.",
+      "scope": "The same BMI, glucose and HbA1c marginal sublaws apply under A_TRANSPORT; source age/sex law is unspecified and no source rows are reconstructed.",
+      "hba1c_conversion_slope": 0.09148,
+      "hba1c_conversion_intercept": 2.152,
+      "glucose_conversion_factor": 18.0
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Task-specified fictional analytical design: exactly 375 persons in each female=0/1 by age-band cell, 3000 rows. This is not Mexican national sampling or a source-population sample."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Within each task age band, integer age is discrete uniform, independently drawn. This shape is an explicit completion assumption. The source mean age 55.5 and SD 9.9 do not override the task demographic design."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Transfer the selected Jansen BMI, fasting glucose and directly reported percent HbA1c marginal means and individual SDs unchanged to every target demographic cell. This is unvalidated transfer, despite ancestry, age/sex composition, selection, plasma-versus-serum, fasting-duration, anemia exclusion and medication documentation differences. No empirical target marginal is provided."
+    },
+    {
+      "id": "A_PRODUCT",
+      "description": "Use a product measure: BMI, glucose and HbA1c are mutually independent and independent of task age and female. This is a deliberately sparse completion of unidentified dependence, not a finding that the true relationships are zero. It makes every requested regression association assumption dependent."
+    },
+    {
+      "id": "A_FAMILY",
+      "description": "BMI and HbA1c follow positive lognormal laws specified by arithmetic mean and SD. Glucose follows a beta law scaled to the task interval (0,126) mg/dL. Marginal shapes and tails are assumptions; the source moments identify neither shape nor support. There is no additional claimed physiological cutoff."
+    },
+    {
+      "id": "A_SELECTION",
+      "description": "Generate the law conditional on the task inclusion population directly. Diagnosis, fasting, anthropometric consistency, pregnancy/lactation routing and other selection variables are not output or simulated. This assumes the transported marginal laws describe the selected people; selection verification and biological exclusion probabilities cannot be assessed."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Source marginal SDs describe individual dispersion, not SEs. The packet supplies no precision for these moments. Use fixed reported central estimates, without an invented confidence distribution. Seeds vary fictional individual residual draws; they do not represent external-estimate, structural or transport uncertainty."
+    },
+    {
+      "id": "A_UNITS",
+      "description": "Use protocol factor 18.0 for glucose mmol/L to mg/dL. Select directly published rounded HbA1c percent mean 5.6 and SD 0.3, not the alternative IFCC-derived 5.62824 and 0.27444, as one pair of constraints. Alternative representations and complementary sex percentages are not independent evidence."
+    },
+    {
+      "id": "A_NO_SOURCE_REPLAY",
+      "description": "No source-population replay exists. All generated-target-versus-source comparisons are unavailable. Retained source-context algebra concerns the declared marginal sublaw only and does not claim a reconstructed source joint population."
+    },
+    {
+      "id": "A_FLOAT",
+      "description": "Continuous mathematical draws are represented by finite NumPy floating values. Glucose alone is guarded at the nearest floating numbers inside task endpoints if beta arithmetic rounds to an endpoint. This is a machine representation safeguard, not a learned clinical threshold. No sample centering, rescaling, favorable-seed selection or target calibration is performed."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task n_rows, age bands, binary sex coding, and exact quotas; row IDs and column names are technical metadata."
+    },
+    "population": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SELECTION",
+        "A_DESIGN"
+      ],
+      "derivation": "Verbatim task population; not inferred from source."
+    },
+    "age_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE"
+      ],
+      "derivation": "Choose equiprobable integer ages within each required age band."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_FAMILY",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "sigma2=log(1+(SD/mean)^2), mu=log(mean)-sigma2/2; BMI=exp(mu+sqrt(sigma2)*Z), Z standard normal."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "J_T1_glucose_mean_mmol_L",
+        "J_T1_glucose_sd_mmol_L",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_FAMILY",
+        "A_SELECTION",
+        "A_UNITS",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "mean=5.1*18=91.8 and SD=0.5*18=9.0; p=(mean-lower)/(upper-lower), v=(SD/(upper-lower))^2, k=p*(1-p)/v-1; alpha=p*k,beta=(1-p)*k. Endpoints 0 and 126 come from the task, not source cutoffs."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_FAMILY",
+        "A_UNITS",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use direct reported percent row only; lognormal arithmetic-moment conversion as for BMI. IFCC-derived moments are retained contextual alternative representations."
+    },
+    "dependence": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_PRODUCT"
+      ],
+      "derivation": "Choose factorization explicitly. No source coefficient, correlation, adjustment or sign is supplied in E0."
+    },
+    "endpoint_policy": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FLOAT"
+      ],
+      "derivation": "Floating-point task-support guarantee; analytic law remains a continuous scaled beta."
+    },
+    "source_context": {
+      "evidence_ids": [
+        "NGSP_UNIT_GUIDANCE",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_NO_SOURCE_REPLAY",
+        "A_UNITS",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Source marginal algebra uses the same six scientific moment parameters as the generator. Conversion guidance is measurement-only. Source joint covariances and source demographic distribution are not claimed."
+    }
+  }
+}

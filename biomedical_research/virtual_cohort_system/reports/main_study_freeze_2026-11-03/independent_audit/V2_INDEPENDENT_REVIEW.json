@@ -1,0 +1,80 @@
+{
+  "status": "blocked",
+  "reviewer_id": "/root/main_review_g9",
+  "scope": "Static independent review of concrete v2 fixes before common evaluation; no result audit or new scientific gate",
+  "target_results_used": false,
+  "clinical_reference_artifacts_opened": false,
+  "retained_generated_rows_opened": false,
+  "result_outputs_opened": false,
+  "providers_or_evaluators_imported": false,
+  "tests_run_or_rerun": false,
+  "code_edited": false,
+  "primary_evaluation_started": false,
+  "recompute_v2_sha256": "6935190058ba2d201c35de84195c13a993627740e54126cc2a3f5247bca9189e",
+  "code_commit_v2_sha256": "6fd5a24c922fb1d1a53f62bc763fe42b49bb41b8f8e6698f4c43758be9ff3f72",
+  "commitment_verified": true,
+  "original_review_input_hashes_verified": 11,
+  "retained_test_evidence": {
+    "test_count": 12,
+    "recorded_status": "passed",
+    "recorded_exit_code": 0,
+    "test_code_and_record_hashes_verified": true,
+    "reviewer_execution": "not_run_or_rerun"
+  },
+  "findings": [
+    {
+      "id": "csv_float_transport_mismatch",
+      "priority": 1,
+      "status": "blocking",
+      "file": "independent_audit/recompute_v2.py",
+      "line": 426,
+      "related_file": "cohort_harness/lifecycle.py",
+      "related_line": 137,
+      "detail": "V2 uses default pd.read_csv for retained generated outputs while both primary providers use lifecycle.read_table with float_precision='round_trip', keep_default_na=False and na_values=['']. Decimal-to-float parsing may therefore differ. V2 line 315 compares quantile values exactly; an ENSANUT inverse-CDF quantile can select the same serialized observation yet falsely mismatch because its parsed binary value differs. Existing new fixtures bypass CSV ingestion. No actual output discrepancy is claimed or tested.",
+      "required_correction": "Align the independent CSV float and empty-field transport convention with the pinned primary reader while preserving independent arithmetic and exact quantile comparison. Bind the corrected implementation separately; do not loosen the quantile tolerance or alter the scientific analysis."
+    },
+    {
+      "id": "quantile_compensation_and_raw_weights",
+      "status": "resolved_original_finding",
+      "detail": "Original weights, stable sort, zero-mass removal, independently recovered addition errors, compensated prefixes, q times final prefix and left search match the prescribed compensated inverse-CDF convention. No tolerance or interpolation is introduced. Integer versus floating factor 8 gives the same weight bytes at the task sizes. Exact selected-value checks remain appropriate once CSV transport is aligned."
+    },
+    {
+      "id": "inventory_and_rollup_coverage",
+      "status": "resolved_original_finding",
+      "detail": "Exact 72-slot constructor/seed identities, all endpoint ID sets, six case/analysis contrasts, all 24 construction summaries and four statistical references are required. Independent reconstruction covers complete and available-only arm counts/means, effect means/ranges/directions and incomplete contrasts using constructor-first averaging."
+    },
+    {
+      "id": "provider_failure_and_unavailable_classification",
+      "status": "resolved_original_finding",
+      "detail": "Provider errors require retained typed errors and null primary results. Independent computability is separately classified without substitution or claiming to reproduce the provider failure. Preserved provider failures or other unavailable slots preclude complete numerical validation; ledger-derived execution failures and unattempted slots remain in summaries."
+    },
+    {
+      "id": "closure_and_preservation",
+      "status": "pass",
+      "detail": "Global require_campaign_closed precedes manifest/result/reference/table reads. The code commitment is checked before result access, closure and code/release bindings are rechecked before exclusive writing. The unchanged primary source and all eleven previously reviewed input hashes match. The original blocked review remains intact; no code/test changes were made by this reviewer."
+    }
+  ],
+  "reviewed_inputs": [
+    {"path": "independent_audit/recompute_v2.py", "sha256": "6935190058ba2d201c35de84195c13a993627740e54126cc2a3f5247bca9189e"},
+    {"path": "independent_audit/test_recompute_v2.py", "sha256": "85d5bbef57ebfa3618aed239d6cefecbc25da87c2297e931616953cdd62992bc"},
+    {"path": "independent_audit/test_recompute_v2_quantiles.py", "sha256": "2e39e962405206c329b65b9eb3040f7292b9925216782a9d270e95ef3f9b3eeb"},
+    {"path": "independent_audit/TEST_RESULTS_V2.json", "sha256": "f56fd69d41b4cf491c29d28475a5528858206e581e7cf364cd4e5c97290017da"},
+    {"path": "independent_audit/CODE_COMMIT_V2.json", "sha256": "6fd5a24c922fb1d1a53f62bc763fe42b49bb41b8f8e6698f4c43758be9ff3f72"},
+    {"path": "independent_audit/CODE_REVIEW.md", "sha256": "8032d8d347f7016c0a7856bea1793f84085f4f966533c835a11b818893e58812"},
+    {"path": "independent_audit/CODE_REVIEW.json", "sha256": "4eaa0c07f1e339a0ed516f74e60bc914db30caccc6cbd2173628da489728ee46"},
+    {"path": "independent_audit/V2_REPAIR_NOTES.md", "sha256": "d479357bcf5039836b3176e41f2380428b7d985e97b63966c02226454fdcd0b9"},
+    {"path": "independent_audit/recompute.py", "sha256": "305ac0474b872c142d485272ad3d9ed1f89c48684b550a8593a90f634fed2d02"},
+    {"path": "independent_audit/test_recompute.py", "sha256": "01481162f69dc5b2cedfca3a5f0899c6d6b676d22c45460386583baf241f9237"},
+    {"path": "independent_audit/CODE_COMMIT.json", "sha256": "ae17844c454d413a20153c4d1893bc6440fec96b8a456a42b66ac464657b295d"},
+    {"path": "implementation/evaluate_main.py", "sha256": "3b52b9ded8c3fcaa99ca6eedbdb2136709930adf086f64f3d27cd7c7fbeb0919"},
+    {"path": "implementation/reference_bindings.json", "sha256": "1464a629063b86777ec78ee9f65399d1a44d3837db903da3189eb8f23e64827e", "scope": "metadata_only_no_artifact_values"},
+    {"path": "implementation/main_session_v1.py", "sha256": "9a91db49e5b9d59d551f35f1b6515cd8899c64f5c3841afcd3db077141bdaf44"},
+    {"path": "cases/CHNS2009/generated_provider.py", "sha256": "aea016b2f3c607ad0a77b3e4a0f914d3bc436b0b7047c690b81606b10d179c12"},
+    {"path": "cases/ENSANUT2018/generated_feedback.py", "sha256": "1a5a3cd6126211dc2e24f2d1c7fa58e4afdbc980e29c6fdccb6b637c7cf4e551"},
+    {"path": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/chns_admission_2026-11-01/f2/analysis_plan.json", "sha256": "a2c5f43969c700474a9466416be8503dc0c92b1c78b12a07a6edc6bc88f247b7"},
+    {"path": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/chns_admission_2026-11-01/f2/evaluation/chns_f2_evaluation.py", "sha256": "e40f403b13125f5b41f620126a807122bb99796558adda576518fcf50796365a"},
+    {"path": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/autonomous_research_cycle2_2026-10-31/analysis/analytical_engine.py", "sha256": "1799c017b60f8fd3a9af409a524d3ebd9e54c81016e52da760aeafaefe03289d"},
+    {"path": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/cohort_harness/lifecycle.py", "sha256": "01688ffce3972053bab631c19e1f7a7bb941c53af1a5a658dfff0ecad401fee4"}
+  ],
+  "relative_input_root": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/main_study_freeze_2026-11-03"
+}

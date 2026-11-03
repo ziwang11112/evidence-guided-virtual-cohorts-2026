@@ -1,0 +1,252 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_id_prefix": "CHNS2009_E1_A03_",
+    "target_age": {
+      "minimum": 35,
+      "maximum": 74,
+      "law": "discrete_uniform_inclusive"
+    },
+    "target_female_probability": 0.5,
+    "target_marginals": {
+      "bmi": {
+        "mean": 25.0,
+        "sd": 3.6
+      },
+      "glucose": {
+        "mean": 5.2,
+        "sd": 1.4
+      },
+      "hba1c": {
+        "mean": 6.1,
+        "sd": 1.0
+      }
+    },
+    "dependence": {
+      "latent_bmi_glucose": 0.2,
+      "source_spearman_glucose_hba1c": 0.529,
+      "latent_glucose_hba1c_formula": "2*sin(pi*source_spearman_glucose_hba1c/6)",
+      "residual_bmi_hba1c_conditional_latent_glucose": 0.0
+    },
+    "source_jansen": {
+      "age_mean": 55.5,
+      "age_sd": 9.9,
+      "female_probability": 0.5973981513180417,
+      "parent_marginals": {
+        "BMI": {
+          "mean": 26.5,
+          "sd": 4.1
+        },
+        "FPG": {
+          "mean": 5.1,
+          "sd": 0.5
+        },
+        "HbA1c_IFCC": {
+          "mean": 38,
+          "sd": 3
+        }
+      },
+      "selection_fpg_upper_exclusive": 7.0
+    },
+    "source_bao": {
+      "FPG": {
+        "median": 5.2,
+        "q1": 4.8,
+        "q3": 5.6
+      },
+      "HbA1c_percent": {
+        "median": 5.6,
+        "q1": 5.3,
+        "q3": 5.9
+      },
+      "quartile_probability": 0.75
+    },
+    "source_mind": {
+      "FSG": {
+        "mean": 5.2,
+        "sd": 1.4
+      },
+      "HbA1c_percent": {
+        "mean": 6.1,
+        "sd": 1.0
+      }
+    },
+    "ngsp_representation": {
+      "IFCC_multiplier": 0.09148,
+      "percent_offset": 2.152
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_LAW",
+      "description": "Positive biomarkers have a Gaussian latent-factor/lognormal law. This is a distributional completion, not inferred tails or individual measurements. Latent innovations are independent standard normals. No clipping, rejection or target disease exclusion is used."
+    },
+    {
+      "id": "A_DEMOGRAPHY",
+      "description": "Target age is discrete uniform on every integer 35 through 74 and female is Bernoulli(0.5), mutually independent and independent of biomarkers. These composition and null association assumptions are not supplied evidence. In particular the population age coefficient conditional on BMI/glucose/female is exactly zero by construction."
+    },
+    {
+      "id": "A_MARGINAL_TRANSPORT",
+      "description": "Use MIND source BMI, serum-glucose and HbA1c means and individual SDs as plug-in target marginal scenario parameters. Extending a selected rural age-61-80 cohort to age 35-74 and to target complete cases, different calendar, prior-year BMI and central assay is an unvalidated transport assumption. No claim of target marginal equality."
+    },
+    {
+      "id": "A_FACTOR",
+      "description": "Latent correlation between log BMI and log glucose is assumed 0.20. Latent HbA1c and BMI innovations are independent given latent glucose. No supplied evidence identifies either choice; zero residual covariance is an explicit assumption, not a reported absence. The resulting nonzero marginal BMI-HbA1c dependence is mediated through the common latent glucose factor."
+    },
+    {
+      "id": "A_RANK",
+      "description": "MIND Spearman 0.529 constrains the continuous population rank functional of an assumed Gaussian copula, using rho=2*sin(pi*r_s/6). Treat the point estimate as a plug-in constraint. Its sampling error, original weighting, preprocessing effects and original tie rule are unknown; it does not exactly reconstruct the mean-imputed source data."
+    },
+    {
+      "id": "A_TRANSPORT_DEPENDENCE",
+      "description": "Transport the same latent glucose-HbA1c correlation and BMI-glucose loading between source scenarios and the target. Plasma/serum, assay, treatment, selection and population differences are not measured or harmonized. A rank association invariant to monotone scale mapping need not survive these differences."
+    },
+    {
+      "id": "A_SOURCE_CONTEXT",
+      "description": "Source operations describe separately declared post-eligibility source population laws, not generated target rows. Equal-weight intercept-including operations are qualified assumptions. No source replay or exact source reconstruction is available."
+    },
+    {
+      "id": "A_JANSEN",
+      "description": "For the Jansen diagnostic only, set unselected lognormal BMI/FPG/IFCC parent moments to the printed selected-sample means/SDs, then condition the joint law on FPG<7.0. This parent-to-selected approximation is deliberately not asserted to reproduce the printed post-selection margins. Other reported source exclusions and oldest-family preference are represented as already applied; their remaining association with model variables is assumed absent. Source age is independent continuous uniform with mean55.5/SD9.9, not truncated to target support; female fraction is one minus the reported male fraction. Source regression-row count is unknown. IFCC is modeled natively; no coefficient is borrowed as a joint conditional slope."
+    },
+    {
+      "id": "A_BAO",
+      "description": "For the Bao diagnostic only, declare a lognormal pair law conditional on the reported analyzed population excluding known diabetes but retaining screen-detected cases. Its log-location is log(reported median); log-SD is log(Q3/Q1)/(2*Phi^-1(.75)). All three printed quantiles need not be matched because they are rounded/asymmetric and original interpolation is unknown. Further selection effects and preprocessing are not identified. Use the shared latent copula but the Bao-specific margins."
+    },
+    {
+      "id": "A_MIND",
+      "description": "For the MIND source rank calculation, declare a continuous lognormal FSG/HbA1c pair law conditional on the selected age61-80, dementia/disability-free follow-up population with known diabetes included. Match its reported marginal moments and impose the rank point. This represents a source scenario; unknown mean imputation/ties cannot be faithfully reconstructed. No plasma FPG is substituted for serum FSG."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "All source point estimates are fixed plug-in parameters. Reported individual SDs describe individual variation, not estimation precision. Jansen printed intervals have unconfirmed confidence levels and are retained in uptake metadata only. No confidence weighting, inferred SE, pooled loss, or uncertainty sampling is used. Seeds vary individual innovations only; source-estimation, model and transport uncertainty remain unquantified."
+    },
+    {
+      "id": "A_ROWS",
+      "description": "Generate 3000 independent synthetic rows with artificial unique IDs; no participant input, clustered sample design, exact quotas, individual measurement recovery or national representativeness is claimed."
+    },
+    {
+      "id": "A_UNITS",
+      "description": "Target glucose is serum mmol/L, HbA1c percent and BMI kg/m^2. The deterministic NGSP relation is a representation conversion only, not assay or plasma/serum harmonization. Jansen diagnostics remain on native IFCC scale."
+    },
+    {
+      "id": "A_FEEDBACK",
+      "description": "Every target-table source comparison is not computable because source-population replay/measurement mapping is absent. Analytic source-population scenarios are recorded separately and cannot establish target validity."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_ROWS"
+      ],
+      "derivation": "Task fixes total output rows, not evidence sample size."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_ROWS"
+      ],
+      "derivation": "Artificial identifier prefix, no source identity."
+    },
+    "target_age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEMOGRAPHY"
+      ],
+      "derivation": "Task bounds plus assumed uniform composition."
+    },
+    "target_female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEMOGRAPHY"
+      ],
+      "derivation": "Symmetric composition assumption because target composition is unavailable."
+    },
+    "target_marginals": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_LAW",
+        "A_MARGINAL_TRANSPORT"
+      ],
+      "derivation": "For each mean m, SD s: sigma²=log(1+s²/m²), mu=log(m)-sigma²/2; no adjustment to target evidence."
+    },
+    "dependence": {
+      "evidence_ids": [
+        "R_MIND_SPEARMAN"
+      ],
+      "assumption_ids": [
+        "A_LAW",
+        "A_FACTOR",
+        "A_RANK",
+        "A_TRANSPORT_DEPENDENCE"
+      ],
+      "derivation": "For a continuous Gaussian copula Spearman=(6/pi)asin(rho/2); invert for latent G-H rho. Assumed B-G rho=.2; implied B-H rho=.2*rho."
+    },
+    "source_jansen": {
+      "evidence_ids": [
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD",
+        "M_J_MALE_FRACTION",
+        "M_J_BMI_MEAN",
+        "M_J_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_J_FPG_SD",
+        "M_J_HBA1C_IFCC_MEAN",
+        "M_J_HBA1C_IFCC_SD"
+      ],
+      "assumption_ids": [
+        "A_JANSEN",
+        "A_SOURCE_CONTEXT",
+        "A_TRANSPORT_DEPENDENCE"
+      ],
+      "derivation": "Parent lognormal parameters from reported means/SDs; exact exponential-normal moments after FPG<7 selection. No fitted source slopes in the specification."
+    },
+    "source_bao": {
+      "evidence_ids": [
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3"
+      ],
+      "assumption_ids": [
+        "A_BAO",
+        "A_SOURCE_CONTEXT",
+        "A_TRANSPORT_DEPENDENCE"
+      ],
+      "derivation": "Lognormal log-location from median and log-SD from interquartile log-width."
+    },
+    "source_mind": {
+      "evidence_ids": [
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_MIND",
+        "A_RANK",
+        "A_SOURCE_CONTEXT"
+      ],
+      "derivation": "Separate conditional source pair law has these moments; the shared copula has the imposed rank functional."
+    },
+    "ngsp_representation": {
+      "evidence_ids": [
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_UNITS"
+      ],
+      "derivation": "Official affine scale relation retained explicitly; not a second independent relationship and not used to harmonize glucose."
+    }
+  }
+}

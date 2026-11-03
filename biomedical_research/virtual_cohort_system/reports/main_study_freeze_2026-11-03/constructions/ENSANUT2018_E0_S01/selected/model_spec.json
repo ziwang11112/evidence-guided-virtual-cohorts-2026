@@ -1,0 +1,237 @@
+{
+  "parameters": {
+    "family": "sourcewise_positive_gaussian_copula_v1",
+    "case_id": "ENSANUT2018",
+    "arm": "E0",
+    "n_rows": 3000,
+    "units": {
+      "row_id": "identifier",
+      "age": "year",
+      "female": "1",
+      "bmi": "kg/m^2",
+      "glucose": "mg/dL",
+      "hba1c": "%"
+    },
+    "components": [
+      {
+        "source_context_id": "lifelines",
+        "marginals": {
+          "age": {
+            "kind": "uniform",
+            "low": 38.352697005068116,
+            "high": 72.64730299493189
+          },
+          "female": {
+            "kind": "bernoulli",
+            "probability": 0.597
+          },
+          "bmi": {
+            "kind": "lognormal",
+            "mu": 3.265317064247152,
+            "sigma": 0.15380291769029805
+          },
+          "glucose": {
+            "kind": "truncated_lognormal",
+            "mu": 4.515008443587541,
+            "sigma": 0.09821356594684554,
+            "low": 0.0,
+            "high": 126.0
+          },
+          "hba1c": {
+            "kind": "shifted_lognormal",
+            "mu": 1.2428445778400734,
+            "sigma": 0.07882476842662696,
+            "offset": 2.152
+          }
+        },
+        "variable_order": [
+          "age",
+          "female",
+          "bmi",
+          "glucose",
+          "hba1c"
+        ],
+        "latent_correlation": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    ],
+    "transport": {
+      "kind": "one_source_with_exact_target_design",
+      "component_probabilities": [
+        1.0
+      ],
+      "age_bands": [
+        [
+          25,
+          40
+        ],
+        [
+          40,
+          55
+        ],
+        [
+          55,
+          70
+        ],
+        [
+          70,
+          80
+        ]
+      ],
+      "rows_per_age_sex_cell": 375,
+      "sex_categories": [
+        0,
+        1
+      ]
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_family",
+      "description": "Fixed positive Gaussian-copula reference. Source moment constraints are fitted separately in their declared source contexts; no cross-source loss or target fitting."
+    },
+    {
+      "id": "A_missing_dependence",
+      "description": "Unspecified continuous dependence is completed by a latent-Gaussian entropy objective. Independent binary sex is a declared simplification. Local constrained optimization does not certify a global entropy optimum."
+    },
+    {
+      "id": "A_source_semantics",
+      "description": "Source moments describe a qualified equal-weight analysis-population scenario. Known glucose/age support is represented in the declared margins; unavailable selection variables, assay differences and survey weights remain limitations."
+    },
+    {
+      "id": "A_transport",
+      "description": "Target biomarkers inherit the source-context marginal/copula laws through a prespecified donor rule. This is an unverified transport assumption, not target population estimation."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Published point summaries are fixed inputs. No source-estimate, structural or transport uncertainty is calibrated. SDs remain individual variability; SEs are not converted to SDs."
+    },
+    {
+      "id": "A_sampling",
+      "description": "One random draw under each scheduled seed, without moment forcing, clipping, seed selection, rejection redraws or calibration inside the generator. Invalid floating-point output fails the attempt."
+    },
+    {
+      "id": "A_ensanut_composition",
+      "description": "The exact eight age/sex quotas are the supplied analytical design. Age is uniform over integers within each band. Those target quotas are not substituted into the Lifelines source operator."
+    },
+    {
+      "id": "A_pani_unhandled",
+      "description": "Pani age coefficient and age-band means remain contextual/unfitted because source individual dispersion, age law and survey weighting are not bound. No full Pani uptake or numerical source-fit claim is made."
+    },
+    {
+      "id": "A_task",
+      "description": "The bound research task determines case, row count, variables, units and explicit support/design; no reference outcome supplies these values."
+    },
+    {
+      "id": "A_information",
+      "description": "The bound E0/E1 packet determines the allowed source information. The reference's actual numerical uptake and declined records are retained in the separate construction trace."
+    }
+  ],
+  "parameter_provenance": {
+    "family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_family",
+        "A_missing_dependence"
+      ],
+      "derivation": "Prespecified positive Gaussian-copula family; no family search."
+    },
+    "case_id": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "Exact admitted task identity."
+    },
+    "arm": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_information"
+      ],
+      "derivation": "Exact admitted packet condition."
+    },
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "The request fixes 3,000 virtual rows, not source or target participant count."
+    },
+    "units": {
+      "evidence_ids": [
+        "NGSP_UNIT_GUIDANCE"
+      ],
+      "assumption_ids": [
+        "A_task",
+        "A_source_semantics"
+      ],
+      "derivation": "Task measurement scales; explicit NGSP/IFCC and glucose unit mapping without assay-equivalence inference."
+    },
+    "components": {
+      "evidence_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived",
+        "J_T1_hba1c_mean_ifcc",
+        "J_T1_hba1c_sd_ifcc",
+        "J_T1_female_proportion_derived",
+        "NGSP_UNIT_GUIDANCE"
+      ],
+      "assumption_ids": [
+        "A_family",
+        "A_missing_dependence",
+        "A_source_semantics",
+        "A_uncertainty",
+        "A_information"
+      ],
+      "derivation": "Deterministic source_binding and moment_reference calculations. Complete source moments, separate operators, residuals, unhandled evidence and input hashes are in construction_trace with canonical SHA-256 5900ce85ee906b97380a4273c9f4483166db3948adb63ab3164d2184c58bc3c9"
+    },
+    "transport": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task",
+        "A_transport",
+        "A_ensanut_composition"
+      ],
+      "derivation": "Prespecified donor/marginal mapping and request support; no target moment or effect fitting."
+    }
+  }
+}

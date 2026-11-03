@@ -1,0 +1,201 @@
+{
+  "parameters": {
+    "design": {
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "rows_per_cell": 375,
+      "female_values": [
+        0,
+        1
+      ]
+    },
+    "margins": {
+      "bmi_mean": 26.5,
+      "bmi_sd": 4.1,
+      "glucose_mean": 91.8,
+      "glucose_sd": 9.0,
+      "hba1c_mean": 5.6,
+      "hba1c_source_sd": 0.3,
+      "age_center": 55.5
+    },
+    "source_constraints": {
+      "bmi_projection": 0.0118924,
+      "glucose_projection": 0.01163828888888889,
+      "age_projection": 0.01
+    },
+    "latent": {
+      "bmi_beta": [
+        2,
+        5
+      ],
+      "glucose_beta": [
+        3,
+        3
+      ],
+      "hba1c_beta": [
+        3,
+        3
+      ],
+      "bmi_glucose_correlation": 0.25
+    },
+    "coefficients": {
+      "age": 0.01,
+      "bmi": 0.005872569756097559,
+      "glucose": 0.010969468444444444,
+      "residual_sd": 0.26207646596890033
+    },
+    "source_contexts": {
+      "lifelines": {
+        "age_distribution": "uniform",
+        "age_mean": 55.5,
+        "age_sd": 9.9,
+        "female_probability": 0.597
+      },
+      "pani": {
+        "age_distribution": "shifted_gamma",
+        "age_shift": 25,
+        "age_shape": 4,
+        "age_scale": 7.5,
+        "female_probability": 0.5
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "The task defines an equal-cell analytical design: exactly 375 rows for each sex crossed with four age bands. Integer ages are independently discrete-uniform within each assigned band; this is not Mexico population age weighting."
+    },
+    {
+      "id": "A_TARGET_TRANSPORT",
+      "description": "Transfer the selected Lifelines BMI/glucose marginal means and SDs and HbA1c baseline to the eligible Mexican design as an explicit weak population-transport assumption. No target numerical calibration is available. Plasma-to-serum, ancestry, assay, fast duration, anemia and medication differences are unresolved."
+    },
+    {
+      "id": "A_LATENT",
+      "description": "U is standardized Beta(2,5), and V,W are independent standardized Beta(3,3). These variables are also independent of age and female. BMI-glucose correlation is assumed 0.25. Distribution shapes and all implied support boundaries are model restrictions, not reported physiological cutoffs."
+    },
+    {
+      "id": "A_JOINT",
+      "description": "Age/female have no effects on BMI/glucose in this minimal completion, and the direct female coefficient in HbA1c is zero. These are unsupported completion assumptions, not empirical absence-of-association findings. HbA1c has an additive conditional mean and independent bounded residual."
+    },
+    {
+      "id": "A_JANSEN_ROWS",
+      "description": "Assume the Table1 selected-cohort margins are applicable to both separate Table2 projection populations, although row-specific sample sizes and missingness are unresolved. The two published slopes are imposed as separate projections, never as joint coefficients."
+    },
+    {
+      "id": "A_AGE_TRANSFER",
+      "description": "Transfer the Pani NHANES age projection 0.01 percentage points/year into the age coefficient of the common linear conditional law; this requires constant slope, correct linear conditioning, and population/measurement transport. It is not a causal aging effect or a verified Mexican coefficient."
+    },
+    {
+      "id": "A_SOURCE_LAWS",
+      "description": "For qualified analytic checks only, Lifelines age is continuous uniform with mean55.5/SD9.9 and female Bernoulli0.597; Pani age is 25+Gamma(shape4,scale7.5) and female Bernoulli0.5. Both source contexts use the same U,V,W and conditional outcome law as the generator. Source age/sex laws are approximations, distinct from target quotas, not reconstructed data or survey weights. Pani age has no upper cutoff."
+    },
+    {
+      "id": "A_SOURCE_SELECTION",
+      "description": "Source laws describe people already selected under each paper's supplied criteria, including positive glucose below126. They do not simulate preselection populations. Target rows are conditional on all task eligibility restrictions; questionnaire and anthropometry validity cannot be verified from the five generated fields. Do not assert verified medication/anemia exclusions for the target."
+    },
+    {
+      "id": "A_SPREAD",
+      "description": "Use Jansen's directly reported rounded percent SD0.3 as one individual-dispersion anchor. Alternative IFCC-derived percent SD0.27444 is retained evidence, not a second independent constraint. Independent residual variance is derived by subtracting explained variance in the declared Lifelines law."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Scientific parameters are fixed nominal evidence/assumption settings. Pani ageband SEs measure uncertainty of means, never individual SD. Jansen CI levels and Pani slope SE are not supplied; no probability distribution over parameters or inverse-variance pooling is invented. Seeds quantify conditional row variability only."
+    },
+    {
+      "id": "A_CONTEXT_MEANS",
+      "description": "Pani survey ageband means remain contextual. Their marginal age trend and levels cannot establish the conditional age coefficient or target intercept without the missing within-band weighted covariate distributions. The common Lifelines baseline is not claimed to reproduce Pani means; the >=70 band is not silently limited at79."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN",
+        "A_SOURCE_SELECTION"
+      ],
+      "derivation": "Task-mandated quotas and allowed age/sex coding; within-band uniformity is author completion."
+    },
+    "margins": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived",
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct",
+        "J_T1_age_mean_task"
+      ],
+      "assumption_ids": [
+        "A_TARGET_TRANSPORT",
+        "A_SPREAD"
+      ],
+      "derivation": "Use reported percent HbA1c row; glucose mmol/L multiplied by protocol factor18.0. No pooling of duplicate unit representations."
+    },
+    "source_constraints": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived",
+        "P_NHANES_age_slope",
+        "NGSP_UNIT_GUIDANCE"
+      ],
+      "assumption_ids": [
+        "A_JANSEN_ROWS",
+        "A_AGE_TRANSFER",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Separate Jansen slopes after scale-only conversion; Pani adjusted age slope nominal point value."
+    },
+    "latent": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_LATENT",
+        "A_JOINT"
+      ],
+      "derivation": "Explicit, unidentified shape and correlation completion. No source covariance is claimed."
+    },
+    "coefficients": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived",
+        "P_NHANES_age_slope",
+        "J_T1_hba1c_sd_pct",
+        "J_T1_age_sd_task"
+      ],
+      "assumption_ids": [
+        "A_JANSEN_ROWS",
+        "A_JOINT",
+        "A_AGE_TRANSFER",
+        "A_SPREAD"
+      ],
+      "derivation": "Solve kB=b+g*rho*sG/sB and kG=g+b*rho*sB/sG. Set a=Pani age projection. residual_sd squared =0.3^2-a^2*9.9^2-b^2*sB^2-g^2*sG^2-2*b*g*rho*sB*sG. See mathematical_properties.md and analytic_check.py."
+    },
+    "source_contexts": {
+      "evidence_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_female_proportion_derived"
+      ],
+      "assumption_ids": [
+        "A_SOURCE_LAWS",
+        "A_SOURCE_SELECTION"
+      ],
+      "derivation": "Lifelines first two age moments and sex probability anchored to source. Functional distribution and all Pani covariate details assumed; Pani gamma has positive support above25 without target79 cap."
+    }
+  }
+}

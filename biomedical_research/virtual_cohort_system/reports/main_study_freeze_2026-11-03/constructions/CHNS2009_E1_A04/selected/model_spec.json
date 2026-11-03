@@ -1,0 +1,220 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000,
+      "row_id_prefix": "CHNS2009_E1_A04_",
+      "columns": [
+        "row_id",
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ]
+    },
+    "unit_mapping": {
+      "ngsp_multiplier": 0.09148,
+      "ngsp_offset": 2.152
+    },
+    "source_projection_constraints": {
+      "bmi_ifcc": 0.13,
+      "fpg_ifcc": 2.29,
+      "reference_bmi_sd": 4.1,
+      "reference_glucose_sd": 0.5
+    },
+    "structure": {
+      "uniform_half_width": 1.7320508075688772,
+      "bmi_glucose_rho": 0.25,
+      "age_hba1c_coefficient": 0.005,
+      "female_hba1c_coefficient": -0.03
+    },
+    "target_context": {
+      "context_id": "TARGET_SCENARIO",
+      "age_kind": "integer_uniform",
+      "age_low": 35,
+      "age_high": 74,
+      "female_probability": 0.5776712714970398,
+      "bmi_mean": 25.0,
+      "bmi_sd": 3.6,
+      "glucose_mean": 5.2,
+      "glucose_sd_mode": "total",
+      "glucose_sd": 1.4,
+      "hba1c_mean": 6.1,
+      "hba1c_sd_mode": "total",
+      "hba1c_sd": 1.0,
+      "class_probability": 0.1,
+      "glucose_class_shift": 4.0,
+      "hba1c_class_total_shift": 1.8
+    },
+    "source_contexts": {
+      "CTX_JANSEN_SELECTED": {
+        "context_id": "CTX_JANSEN_SELECTED",
+        "age_kind": "continuous_uniform",
+        "age_low": 38.352697005068116,
+        "age_high": 72.64730299493189,
+        "female_probability": 0.5973981513180417,
+        "bmi_mean": 26.5,
+        "bmi_sd": 4.1,
+        "glucose_mean": 5.1,
+        "glucose_sd_mode": "total",
+        "glucose_sd": 0.5,
+        "hba1c_mean": 5.62824,
+        "hba1c_sd_mode": "total",
+        "hba1c_sd": 0.27444,
+        "class_probability": 0.0,
+        "glucose_class_shift": 0.0,
+        "hba1c_class_total_shift": 0.0
+      },
+      "CTX_BAO_ANALYZED": {
+        "context_id": "CTX_BAO_ANALYZED",
+        "age_kind": "continuous_uniform",
+        "age_low": 25.0,
+        "age_high": 75.0,
+        "female_probability": 0.6258698321735571,
+        "bmi_mean": 23.5,
+        "bmi_sd": 2.6,
+        "glucose_mean": 5.4,
+        "glucose_sd_mode": "within_class",
+        "glucose_sd": 0.46,
+        "hba1c_mean": 5.69,
+        "hba1c_sd_mode": "residual",
+        "hba1c_sd": 0.4,
+        "class_probability": 0.05,
+        "glucose_class_shift": 4.0,
+        "hba1c_class_total_shift": 1.8
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_LAW",
+      "description": "Independent standardized uniform U,V,E on [-sqrt(3),sqrt(3)], independent age, female membership and Bernoulli glycemic class D. BMI/glucose share U with residual correlation rho=0.25. These unreported dependencies, independent nuisance covariates and bounded tails are structural assumptions, not zero-covariance facts or biological cutoffs."
+    },
+    {
+      "id": "A_J_SOURCE",
+      "description": "Direct law for the post-selection Jansen source analytical population: adult continuous age with reported mean/SD, female=1 and male=0; all members satisfy the reported self-report diabetes/anemia/missingness exclusions by scenario declaration. No parent-population selection mechanism or exact regression-row reconstruction is claimed. The law itself keeps FPG below 7. Original weights/intercept/sample are unresolved; equal-weight intercept-including qualified projections are used."
+    },
+    {
+      "id": "A_J_PROJECTION",
+      "description": "Two separate source age/sex-adjusted slopes constrain two population projections. Conditional residual BMI/FPG correlation 0.25, independent age/sex and linear additive HbA1c identify joint coefficients only after these assumptions. Age coefficient 0.005 percent/year and female coefficient -0.03 percent are unsupported working assumptions, not supplied regression results."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Share the derived joint BMI/glucose coefficients and assumed age/sex terms across source contexts and the selected target. Apply plasma-to-central-serum identity in numerical units as an unverified measurement/transport assumption, not a conversion justified by NGSP. Target age composition is discrete uniform 35 through 74; other target means/SD and sex fraction use MIND summaries as scenario anchors despite older rural selection, time offsets and assay differences. No national representativeness or target calibration is claimed."
+    },
+    {
+      "id": "A_CLASS",
+      "description": "An independent latent elevated-glycemia class has target probability 0.10, glucose shift 4 mmol/L and total HbA1c shift 1.8 percent. These are explicit unestimated mixture assumptions, not disease prevalence estimates or diabetes/treatment exclusions. Center class effects to preserve specified means. Preserve specified total glucose/HbA1c variances by deriving positive within-class variances; never clip or resample observations."
+    },
+    {
+      "id": "A_BAO",
+      "description": "Bao qualified analytic sensitivity context uses the identical affine law with separately declared source parameters: age uniform 25-75, female source count ratio, BMI mean 23.5 and SD 2.6, glucose mean 5.4/within-class SD 0.46, HbA1c mean 5.69/residual SD 0.4, class probability 0.05 and shifts 4/1.8. Center/spread choices are assumptions informed by source median/IQR, not exact quantile matching, CI-to-SD conversion or a fitted Pearson target. Age support is a declared subset scenario, not reported source bounds. Class members are assumed previously undiagnosed; other source eligibility is assumed satisfied after selection. Native fasting plasma/HPLC percent are retained; equal weighting is qualified."
+    },
+    {
+      "id": "A_MIND",
+      "description": "MIND Spearman is contextual only. This candidate does not supply a post-imputation, age-61-80 MIND joint rank law, tie reconstruction or source rows; ordinary covariance algebra cannot evaluate its Spearman functional. Do not convert it to Pearson or fit the target correlation to it. MIND mean/SD transfer does not transport its rank association automatically."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Reported points remain fixed scenario inputs. Jansen printed interval confidence levels/SE are unresolved; Bao/MIND correlation uncertainty and pair counts are unavailable. No SE derived from these, no precision weighting, pooled loss or tolerance. Within-row random variation is separate from external estimation, structural and transport uncertainty. Repeated seeds are synthetic sampling only."
+    },
+    {
+      "id": "A_OVERLAP",
+      "description": "Jansen regressions and marginal records reuse the same source family and are not independent confirmations. Bao records reuse SHDS II; MIND records reuse MIND-China. These are distinct named families, but cross-source participant overlap is unconfirmed and no independence precision benefit is claimed. NGSP representations are the same evidence, not duplicates."
+    },
+    {
+      "id": "A_FEEDBACK",
+      "description": "Generated target rows cannot reconstruct any source population. All target-table source diagnostics are unavailable, including marginal and relationship comparisons. Separate deterministic source-context calculations are qualified analytic checks, not source replay or target validation."
+    },
+    {
+      "id": "A_SCOPE",
+      "description": "This whole-cohort scenario generates all five variables without participant input. No individual measurement is recovered. E1/E2 are transport-dependent projections; E3 is algebraically fixed at the assumed 0.005 percent/year because age is independent of other factors and enters additively. This is not a new age-effect estimate. No causal, clinical-p-value, calibrated uncertainty or publication-readiness claim."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SCOPE"
+      ],
+      "derivation": "3000 and column schema from task; technical identifier prefix does not represent people."
+    },
+    "unit_mapping": {
+      "evidence_ids": [
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [],
+      "derivation": "Official affine unit relation; slopes multiply only by 0.09148."
+    },
+    "source_projection_constraints": {
+      "evidence_ids": [
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG",
+        "M_J_BMI_SD",
+        "M_J_FPG_SD"
+      ],
+      "assumption_ids": [
+        "A_J_SOURCE",
+        "A_J_PROJECTION"
+      ],
+      "derivation": "Solve the two separate adjusted source projection equations after specifying residual covariance. These are not combined-regression coefficients. Exact formula in analytic/derive.py and mathematical_properties.md."
+    },
+    "structure": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_LAW",
+        "A_J_PROJECTION"
+      ],
+      "derivation": "Explicit structural choices: standardized uniform factor law, rho 0.25, age 0.005 and female -0.03 percent; source does not identify these."
+    },
+    "target_context": {
+      "evidence_ids": [
+        "M_M_FEMALE_FRACTION",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_CLASS",
+        "A_LAW"
+      ],
+      "derivation": "Age support/composition from task plus uniform assumption. MIND mean/SD and count ratio are transported scenario anchors, not observed target values. Class parameters are assumed; variance decomposition derives residual SDs. Serum units align nominally but assay/selection equivalence is unestablished."
+    },
+    "source_contexts": {
+      "evidence_ids": [
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD",
+        "M_J_BMI_MEAN",
+        "M_J_BMI_SD",
+        "M_J_FPG_MEAN",
+        "M_J_FPG_SD",
+        "M_J_HBA1C_IFCC_MEAN",
+        "M_J_HBA1C_IFCC_SD",
+        "M_J_MALE_FRACTION",
+        "M_B_FEMALE_FRACTION",
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3",
+        "U_NGSP_SCALE"
+      ],
+      "assumption_ids": [
+        "A_J_SOURCE",
+        "A_BAO",
+        "A_LAW",
+        "A_UNCERTAINTY",
+        "A_OVERLAP"
+      ],
+      "derivation": "Jansen source mean/SD matched under declared selected law, source age bounds mean +/- sqrt(3)*SD are assumed. Bao context choices are separate approximate location/scale and mixture assumptions, not a fitted source reconstruction or exact quantile conversion. Each context uses the same law as generator with its named parameters."
+    }
+  }
+}

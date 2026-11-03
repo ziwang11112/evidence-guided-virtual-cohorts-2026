@@ -1,0 +1,163 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_id_prefix": "CHNS2009_E0_A04_",
+    "age_min": 35,
+    "age_max": 74,
+    "female_probability": 0.5,
+    "marginals": {
+      "bmi": {
+        "mean": 25.0,
+        "individual_sd": 3.6,
+        "unit": "kg/m^2",
+        "factor_loading": 0.35
+      },
+      "glucose": {
+        "mean": 5.2,
+        "individual_sd": 1.4,
+        "unit": "mmol/L",
+        "factor_loading": 0.75
+      },
+      "hba1c": {
+        "mean": 6.1,
+        "individual_sd": 1.0,
+        "unit": "%",
+        "factor_loading": 0.65
+      }
+    },
+    "continuous_order": [
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "output_columns": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "law": "independent_discrete_age_and_binary_female_with_one_factor_multivariate_lognormal"
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Construct 3000 complete synthetic rows for the exact task analytical selection, without participant inputs. All eligible target rows are represented directly; no disease, treatment, pregnancy, anemia or laboratory exclusion is added. This is not a nationally representative sample."
+    },
+    {
+      "id": "A_AGE_SEX",
+      "description": "Unknown target age composition is completed by discrete uniform age on integers 35 through 74. Unknown female composition is completed by Bernoulli probability 0.5. Age and female are independent of one another and all continuous latent variables. Equal composition is a design assumption, not an estimate from source counts. Absence of reported age/sex relationships is not evidence of independence."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Use the MIND-China marginal means and individual SDs for BMI, serum glucose, and HbA1c as a transparent transported scenario for this younger, broader, differently selected analytical population. This transfer is not identified by evidence. MIND is rural age 61-80, dementia/disability-free, includes known diabetes, and has prior-year BMI plus reported mean/mode filling. Target complete-case selection and demographic composition may change every marginal."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "Interpret glucose as serum mmol/L and HbA1c as whole-blood percent. MIND serum FSG is the selected measurement analogue, not its distinct plasma FPG. Direct numerical transfer assumes no assay, processing, fasting, temporal or missing-data-induced offset; these assumptions are unverified. NGSP scale guidance is retained as context and is not a serum/plasma or assay harmonization."
+    },
+    {
+      "id": "A_LOGNORMAL",
+      "description": "Each positive continuous marginal is lognormal, with log parameters derived from the selected arithmetic mean and individual SD. Shape, upper tails and strict positivity are completion assumptions; two moments do not identify a lognormal law. No artificial clinical bounds, clipping, rejection, censoring, hidden disease strata or diabetes exclusions are imposed."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "One independent standard-normal shared factor and three independent standard-normal residuals construct standardized log variables Z_i=l_i F+sqrt(1-l_i^2)E_i. Assumed loadings are BMI 0.35, glucose 0.75, HbA1c 0.65. They specify a modest shared BMI component and a stronger shared glucose/HbA1c component as a hypothesis, with substantial residual variation. E0 reports no relationship that identifies these signs or magnitudes. These are uncalibrated structural assumptions, not estimated effects, source correlations or causal pathways."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Reported individual SDs determine individual marginal variability only. Source estimator uncertainty is unreported and is not inferred from total sample counts or used as a precision weight. Fixed parameters do not integrate uncertainty in source moments, dependence, tail shape, measurement transfer or target selection. Independent seeds describe conditional Monte Carlo variability, not new evidence or a posterior."
+    },
+    {
+      "id": "A_SOURCE_SEPARATION",
+      "description": "No source-population replay is available. Every target-table/source comparison is unavailable. Deterministic analytic moments document the submitted law and its transported constraints; they do not reconstruct MIND, Bao or Jansen participant populations. All source items remain separately attributed; same-source mean/SD pairs and unit representations are not independent confirmations."
+    },
+    {
+      "id": "A_USE",
+      "description": "E1 and E2 are model-implied, assumption-dependent projections. E3 is algebraically zero in the population because age is independent of every other variable. This is an imposed null completion, not an empirical finding. Synthetic p-values do not establish clinical effects, and individual measurements are not recovered."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task-defined output design; no participant or target-value input."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task-defined output design; no participant or target-value input."
+    },
+    "age_min": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE_SEX"
+      ],
+      "derivation": "Age support is the task eligibility interval; uniform age and female probability 0.5 are explicit composition assumptions."
+    },
+    "age_max": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE_SEX"
+      ],
+      "derivation": "Age support is the task eligibility interval; uniform age and female probability 0.5 are explicit composition assumptions."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE_SEX"
+      ],
+      "derivation": "Age support is the task eligibility interval; uniform age and female probability 0.5 are explicit composition assumptions."
+    },
+    "marginals": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_LOGNORMAL",
+        "A_DEPENDENCE",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Means and individual SDs are the reported MIND marginal values in their original units. Factor loadings are assumed independently of source moments. For each variable sigma=sqrt(log1p((sd/mean)^2)), mu=log(mean)-sigma^2/2; generator uses X=exp(mu+sigma Z). No regression, correlation or sample-size-weighted pooling is performed."
+    },
+    "continuous_order": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task-defined output design; no participant or target-value input."
+    },
+    "output_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task-defined output design; no participant or target-value input."
+    },
+    "law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE_SEX",
+        "A_LOGNORMAL",
+        "A_DEPENDENCE",
+        "A_USE"
+      ],
+      "derivation": "Declared structural completion of the otherwise unidentified joint law."
+    }
+  }
+}

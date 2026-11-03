@@ -1,0 +1,158 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_id_prefix": "CHNS2009_E0_A01_SYN_",
+    "age_min": 35,
+    "age_max": 74,
+    "female_probability": 0.5776712714970398,
+    "marginals": {
+      "bmi": {
+        "mean": 25.0,
+        "individual_sd": 3.6,
+        "unit": "kg/m^2"
+      },
+      "glucose": {
+        "mean": 5.2,
+        "individual_sd": 1.4,
+        "unit": "mmol/L"
+      },
+      "hba1c": {
+        "mean": 6.1,
+        "individual_sd": 1.0,
+        "unit": "%"
+      }
+    },
+    "continuous_family": "independent_lognormal",
+    "age_family": "discrete_uniform_inclusive",
+    "female_family": "bernoulli",
+    "joint_law": "product_of_five_marginals"
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Generate exactly 3000 complete rows, with synthetic identifiers, integer age 35 through 74 inclusive, female 0/1, positive BMI, serum glucose and HbA1c percent. These are task requirements; rows do not represent recovered people or a survey-weighted population."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age is discrete uniform on all 40 task-eligible integer years. No target composition is supplied. This is a composition assumption, not a restriction or fit imported from any source."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Use the MIND-China BMI, FSG and HbA1c mean/individual-SD pairs and female count fraction as plug-in marginal anchors for a target scenario. MIND includes known diabetes and measures serum glucose, which motivates choosing it over sources excluding prior diabetes or using plasma. Transport remains unsupported across rural older adults aged 61-80 in 2019, selected dementia/disability-free follow-up with prior-year BMI and imputation, to the 35-74-year 2009 released-data analytical population. No age reweighting, diabetes-state adjustment, national weighting, treatment exclusion or recovery of missing participants is asserted."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "The target glucose variable denotes central-serum glucose, in mmol/L. The model adopts the MIND FSG mean and individual SD on that scale, assuming transferable serum-assay and processing behavior. It does not alias plasma FPG to FSG, infer a serum/plasma correction, impose a source fasting duration on the target, or claim assay equivalence. HbA1c is in percent; no IFCC conversion is used in generation."
+    },
+    {
+      "id": "A_LOGNORMAL",
+      "description": "Each continuous variable follows its own positive lognormal distribution. Its two parameters are algebraically determined by the selected source mean and individual SD. The shape and tails are modeling choices; two marginal moments do not identify a lognormal law. No clinical upper/lower cutoff, mixture, clipping, truncation, rejection or diabetes exclusion is introduced."
+    },
+    {
+      "id": "A_INDEPENDENCE",
+      "description": "Age, female, BMI, serum glucose and HbA1c are mutually independent within a row; rows are IID conditional on the fixed specification. E0 contains no numerical relationship records. Independence is an explicit, parsimonious completion assumption, not evidence that associations are absent. It forces the three requested population OLS focal coefficients to zero and precludes empirical claims about those associations."
+    },
+    {
+      "id": "A_FIXED_ESTIMATES",
+      "description": "Published individual SDs describe person-to-person dispersion, not SEs. Treat selected source means, SDs and count fraction as fixed plug-in settings. No source estimator uncertainty, precision weighting, confidence interval, or Bayesian probability is manufactured. The same source mean/SD pair and its derived lognormal parameters are not independent evidence."
+    },
+    {
+      "id": "A_SOURCE_UNAVAILABLE",
+      "description": "The execution adapter can produce only the target table. No source-population input, source-covariate reconstruction or replay is allocated. Every source comparison is therefore unavailable even where a source definition is known. Target rows or analytic target-law moments are not source-population checks."
+    },
+    {
+      "id": "A_NUMERICS",
+      "description": "The seed controls a NumPy default_rng pseudo-random implementation of the declared IID law. No sample centering, SD matching, re-ranking, coefficient correction, favorable seed selection or resampling on diagnostic results occurs. A nonfinite or nonpositive continuous value fails the run rather than being clipped or redrawn."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Task n_rows, not a source sample size."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Administrative synthetic-identity label, not a clinical quantity."
+    },
+    "age_min": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE"
+      ],
+      "derivation": "Task lower eligible integer age, 35 years."
+    },
+    "age_max": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE"
+      ],
+      "derivation": "Task upper eligible integer age, 74 years."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "M_M_FEMALE_FRACTION"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_FIXED_ESTIMATES"
+      ],
+      "derivation": "2049/3547 from MIND female count; category female is encoded 1. This transported count ratio is not a known target or weighted population fraction."
+    },
+    "marginals": {
+      "evidence_ids": [
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_MEASUREMENT",
+        "A_LOGNORMAL",
+        "A_FIXED_ESTIMATES"
+      ],
+      "derivation": "For each source mean m and individual SD s, sigma^2=log(1+(s/m)^2), mu=log(m)-sigma^2/2. The generated positive variable is exp(mu+sigma*Z), Z standard normal. Uses BMI 25/3.6, serum glucose 5.2/1.4, HbA1c percent 6.1/1.0. Units and moments are transported assumptions; values are not target observations."
+    },
+    "continuous_family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_LOGNORMAL",
+        "A_INDEPENDENCE",
+        "A_NUMERICS"
+      ],
+      "derivation": "Positive lognormal completion using two fixed moments, with independent normal innovations."
+    },
+    "age_family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_AGE",
+        "A_INDEPENDENCE"
+      ],
+      "derivation": "Uniform mass 1/40 on 35,...,74, sampled independently of other variables."
+    },
+    "female_family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_INDEPENDENCE"
+      ],
+      "derivation": "Bernoulli distribution with female=1 and male=0, independent of the other marginals."
+    },
+    "joint_law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_INDEPENDENCE"
+      ],
+      "derivation": "Product completion. No correlation, regression slope, covariate dependence or conditional mean effect is supplied by E0."
+    }
+  }
+}

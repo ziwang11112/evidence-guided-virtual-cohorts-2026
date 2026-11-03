@@ -1,0 +1,231 @@
+{
+  "parameters": {
+    "rows_per_cell": 375,
+    "female_values": [
+      0,
+      1
+    ],
+    "age_bands": [
+      [
+        25,
+        39
+      ],
+      [
+        40,
+        54
+      ],
+      [
+        55,
+        69
+      ],
+      [
+        70,
+        79
+      ]
+    ],
+    "residual_beta_shape": 3.0,
+    "bmi_mean": 26.5,
+    "bmi_sd": 4.1,
+    "glucose_mean": 91.8,
+    "glucose_sd": 9.0,
+    "hba1c_mean": 5.6,
+    "hba1c_sd": 0.3,
+    "bmi_loadings": {
+      "age": 0.12,
+      "female": 0.1
+    },
+    "glucose_loadings": {
+      "age": 0.18,
+      "female": -0.05,
+      "bmi_factor": 0.3
+    },
+    "hba1c_loadings": {
+      "age": 0.22,
+      "female": -0.06,
+      "bmi_factor": 0.2,
+      "glucose_factor": 0.5
+    },
+    "row_id_prefix": "E0A05_",
+    "columns": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Exactly 375 rows in each female 0/1 by age-band cell [25,39], [40,54], [55,69], [70,79]. Within each cell integer age is discrete uniform. This equal-cell analytical design is not Mexican national prevalence; age and female marginal source summaries are contextual only."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "As a point scenario, transfer Jansen selected-cohort BMI mean/SD 26.5/4.1, glucose mean/SD 91.8/9.0 and the directly reported HbA1c percent mean/SD 5.6/0.3 as unconditional scales in the task design. The target Mexico selection, age/sex composition, serum versus plasma, fasting details and no verified anemia/medication exclusion differ. No evidence identifies transport invariance; this is not target calibration or source reconstruction."
+    },
+    {
+      "id": "A_FACTORS",
+      "description": "Independent age, balanced female coding, and independent Beta(3,3) residual factors define this completion scenario. Standardized age A and sex S, and residual factors U_B, U_G, U_H, each have variance one. Their orthogonality is assumed, not inferred from missing cross-covariances. Outcome loadings supplied in the specification are chosen modest round coefficients, not evidence estimates or causal effects."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "Standardized Beta(3,3) factors have support [-sqrt(7),sqrt(7)]. Bounded affine outcomes are a technical/scientific completion choice. The resulting BMI, glucose and HbA1c ranges exclude tails that could occur clinically and are not known population cutoffs. There is no clipping, rejection, exponentiation or population selection model."
+    },
+    {
+      "id": "A_SELECTION",
+      "description": "The generator directly describes rows conditional on the exact task population restrictions. Diagnosis, fasting hours, pregnancy/lactation routing and anthropometry validity are not extra output variables and cannot be checked or recovered from this table. No verified medication or anemia exclusion is asserted."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Residual factors describe between-person variability under one fixed law. Jansen Table 1 SDs are individual dispersion, not precision of their estimated means. External sampling uncertainty is not reported and is not assigned a probability distribution. Structural and transport uncertainty remain unquantified. Repeated seeds measure only synthetic sampling variability."
+    },
+    {
+      "id": "A_REPRESENTATION",
+      "description": "Use the directly reported Jansen HbA1c percent row 5.6 and 0.3 once. IFCC and converted percent entries are alternative rounded representations and not independent constraints. NGSP is unit guidance, not a glucose-HbA1c biological equation. Glucose uses the admitted fixed factor 18.0."
+    },
+    {
+      "id": "A_FEEDBACK",
+      "description": "No source-population replay is allocated. Every target-table versus Jansen statistic comparison is unavailable; a marginal scale chosen from evidence does not make the generated target population a source reconstruction."
+    },
+    {
+      "id": "A_ANALYSES",
+      "description": "Q1, Q2, Q3 and Q2-Q3 are descriptive population linear projections of the assumed joint law. E0 identifies none of their dependence parameters. They are not causal mediation, clinical recovery, or validated target estimates."
+    }
+  ],
+  "parameter_provenance": {
+    "rows_per_cell": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task-mandated design and output encoding; row prefix is a technical identifier choice."
+    },
+    "female_values": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task-mandated design and output encoding; row prefix is a technical identifier choice."
+    },
+    "age_bands": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task-mandated design and output encoding; row prefix is a technical identifier choice."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task-mandated design and output encoding; row prefix is a technical identifier choice."
+    },
+    "columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task-mandated design and output encoding; row prefix is a technical identifier choice."
+    },
+    "bmi_mean": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use the admitted selected-source marginal value as the fixed unconditional target-design location/scale by explicit transport assumption; not an estimated target moment."
+    },
+    "bmi_sd": {
+      "evidence_ids": [
+        "J_T1_bmi_sd_task"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use the admitted selected-source marginal value as the fixed unconditional target-design location/scale by explicit transport assumption; not an estimated target moment."
+    },
+    "glucose_mean": {
+      "evidence_ids": [
+        "J_T1_glucose_mean_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use the admitted selected-source marginal value as the fixed unconditional target-design location/scale by explicit transport assumption; not an estimated target moment."
+    },
+    "glucose_sd": {
+      "evidence_ids": [
+        "J_T1_glucose_sd_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use the admitted selected-source marginal value as the fixed unconditional target-design location/scale by explicit transport assumption; not an estimated target moment."
+    },
+    "hba1c_mean": {
+      "evidence_ids": [
+        "J_T1_hba1c_mean_pct"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use the admitted selected-source marginal value as the fixed unconditional target-design location/scale by explicit transport assumption; not an estimated target moment."
+    },
+    "hba1c_sd": {
+      "evidence_ids": [
+        "J_T1_hba1c_sd_pct"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_REPRESENTATION",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Use the admitted selected-source marginal value as the fixed unconditional target-design location/scale by explicit transport assumption; not an estimated target moment."
+    },
+    "residual_beta_shape": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTORS",
+        "A_SUPPORT"
+      ],
+      "derivation": "Assumed common symmetric Beta(3,3) density; centering and scaling give mean zero, variance one, support plus/minus sqrt(7). Shape not identified by reported means and SDs."
+    },
+    "bmi_loadings": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTORS",
+        "A_ANALYSES"
+      ],
+      "derivation": "Chosen standardized-factor loadings; remaining independent residual coefficient is sqrt(1-sum of squared named loadings). All dependence is assumption-dependent in E0."
+    },
+    "glucose_loadings": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTORS",
+        "A_ANALYSES"
+      ],
+      "derivation": "Chosen standardized-factor loadings; remaining independent residual coefficient is sqrt(1-sum of squared named loadings). All dependence is assumption-dependent in E0."
+    },
+    "hba1c_loadings": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTORS",
+        "A_ANALYSES"
+      ],
+      "derivation": "Chosen standardized-factor loadings; remaining independent residual coefficient is sqrt(1-sum of squared named loadings). All dependence is assumption-dependent in E0."
+    }
+  }
+}

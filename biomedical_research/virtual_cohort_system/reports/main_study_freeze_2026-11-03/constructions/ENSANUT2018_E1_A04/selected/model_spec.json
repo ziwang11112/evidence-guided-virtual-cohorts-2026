@@ -1,0 +1,224 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000,
+      "rows_per_cell": 375,
+      "female_values": [
+        0,
+        1
+      ],
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "columns": [
+        "row_id",
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ]
+    },
+    "marginals": {
+      "bmi_mean": 26.5,
+      "bmi_sd": 4.1,
+      "glucose_mean": 91.8,
+      "glucose_sd": 9.0,
+      "hba1c_mean": 5.6,
+      "hba1c_sd": 0.3
+    },
+    "factor": {
+      "positive_probability": 0.5,
+      "bmi_loading": 1.5,
+      "glucose_loading": 3.0
+    },
+    "residual_support": {
+      "bmi": [
+        -12.0,
+        30.0
+      ],
+      "glucose": [
+        -40.0,
+        31.0
+      ]
+    },
+    "source_projections": {
+      "bmi_age_sex": 0.0118924,
+      "glucose_age_sex": 0.01163828888888889,
+      "age_full": 0.01
+    },
+    "source_contexts": {
+      "lifelines": {
+        "age_mean": 55.5,
+        "age_sd": 9.9,
+        "female_probability": 0.597,
+        "age_law": "continuous_uniform"
+      },
+      "pani": {
+        "age_minimum": 25,
+        "age_geometric_probability": 0.03225806451612903,
+        "female_probability": 0.5,
+        "age_law": "shifted_geometric_failures"
+      }
+    },
+    "outcome_residual": {
+      "law": "symmetric_uniform",
+      "variance_rule": "source_H_variance_minus_age_and_metabolic_explained_variance"
+    },
+    "measurement": {
+      "age": "year",
+      "female": "1=female,0=male",
+      "bmi": "kg/m^2",
+      "glucose": "mg/dL",
+      "hba1c": "%",
+      "ngsp_slope_factor": 0.09148,
+      "ngsp_level_offset": 2.152,
+      "glucose_mmol_to_mgdl": 18.0
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Task-fixed 3000 fictional records, 375 per female=0/1 and age bands 25-39,40-54,55-69,70-79. Age is discrete uniform within each cell; sex and band quotas are exact. This is not a representative survey."
+    },
+    {
+      "id": "A_POSTSELECT",
+      "description": "The model is specified directly conditional on all task eligibility and measurement restrictions; it does not simulate diagnosis, fasting hours, measurement routing, pregnancy, lactation, treatment or anemia. No medication/anemia exclusion is added. Those conditions cannot be independently checked from six output fields."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Working transfer from selected Lifelines marginals and separate projections, plus the Pani adjusted age projection, to the task-selected Mexico population. Serum/plasma, assay, ancestry, exclusions and different covariate populations can change every relationship. No transport is established by calibration."
+    },
+    {
+      "id": "A_FACTOR",
+      "description": "A balanced binary common factor C=-1 or +1 contributes 1.5 kg/m^2 to BMI and 3 mg/dL to glucose. Thus Cov(B,G)=4.5. These nonzero loadings are author assumptions, not reported cross-covariances. Residuals, age, sex and common factor are mutually independent; age/sex effects on BMI/glucose and sex effect on HbA1c are set to zero as unverified completion assumptions."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "BMI residual support [-12,30] kg/m^2 and glucose residual support [-40,31] mg/dL are technical model limits, not observed population cutoffs. Beta residuals have zero means and variances chosen to complete source marginal variances. This gives positive BMI and glucose below126 without clipping or rejection. Tail shape and limits are assumption-dependent."
+    },
+    {
+      "id": "A_OUTCOME",
+      "description": "HbA1c has an additive linear conditional expectation and independent symmetric uniform residual. The joint BMI/glucose coefficients solve the two separate Jansen projection constraints for the assumed covariance. Pani age slope is transferred as a conditional coefficient. Residual variance completes the Jansen percent-unit HbA1c variance using its source age variance. No causal interpretation."
+    },
+    {
+      "id": "A_SOURCE_J",
+      "description": "Qualified selected Lifelines working law: age continuous uniform with mean55.5 and SD9.9, female Bernoulli0.597, both independent of metabolic factors; same BMI/glucose/HbA1c equations as generator. Rounded Table1 moments are treated as point inputs, and Table2 row population is assumed to share them despite unknown row-specific n. These assumptions do not reconstruct source IPD."
+    },
+    {
+      "id": "A_SOURCE_P",
+      "description": "Pani adjusted-slope diagnostic uses a mathematical reference law age=25+K, K geometric failures with p=1/31, female Bernoulli0.5, independent of other variables; the same conditional HbA1c equation is used. The unbounded age tail is an explicit analytic device because source upper support is unreported, not a demographic claim or the target age law. The slope identity holds for any finite-variance nondegenerate age law under the stated conditional equation. No complex-survey reconstruction or source age-band calibration is claimed."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "Point estimates are fixed for this candidate. Jansen printed intervals have unknown confidence level and cannot supply SEs; Pani slope uncertainty is absent. Source age-band SEs concern mean estimation, not individual SD. Random draws represent individuals conditional on fixed assumptions; estimate, structural and transport uncertainty are not sampled or pooled."
+    },
+    {
+      "id": "A_DUPLICATES",
+      "description": "Use directly reported HbA1c percent mean5.6 and SD0.3 rather than converted IFCC alternatives. Unit representations and rounded complements are duplicate evidence, not independent precision. Jansen records share Lifelines; Pani records share NHANES2001-2004; no extra cohort is imported. Pani overlaps a cited but unadmitted Liu series, which is not used."
+    },
+    {
+      "id": "A_FEEDBACK",
+      "description": "All source comparisons from the target table are unavailable. Qualified source-law calculations are separate analytic identities, not target-as-source diagnostics, source replay, validation or independent replication."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN",
+        "A_POSTSELECT"
+      ],
+      "derivation": "Exact task quotas and units; uniform within-band ages are assumed."
+    },
+    "marginals": {
+      "evidence_ids": [
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived",
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT",
+        "A_DUPLICATES"
+      ],
+      "derivation": "Source point moments anchor the selected working law; they are not target estimates."
+    },
+    "factor": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_FACTOR"
+      ],
+      "derivation": "Chosen completion of unreported dependence: covariance=1.5*3=4.5."
+    },
+    "residual_support": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_SUPPORT"
+      ],
+      "derivation": "Technical supports; Beta shape parameters are derived from zero residual mean and remaining variance."
+    },
+    "source_projections": {
+      "evidence_ids": [
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_task_derived",
+        "P_NHANES_age_slope"
+      ],
+      "assumption_ids": [
+        "A_OUTCOME",
+        "A_TRANSPORT",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Solve the two Jansen separate-projection normal equations using assumed cross-covariance; Pani conditional age slope is separately transported."
+    },
+    "source_contexts": {
+      "evidence_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_female_proportion_derived"
+      ],
+      "assumption_ids": [
+        "A_SOURCE_J",
+        "A_SOURCE_P"
+      ],
+      "derivation": "Jansen source covariate law matches reported age/sex moments under explicit independence. Pani reference age and sex distributions are assumed, not reported; the full adjusted slope is invariant to those choices."
+    },
+    "outcome_residual": {
+      "evidence_ids": [
+        "J_T1_hba1c_sd_pct"
+      ],
+      "assumption_ids": [
+        "A_OUTCOME",
+        "A_UNCERTAINTY"
+      ],
+      "derivation": "Uniform zero-mean residual SD is sqrt(0.3^2-0.01^2*9.9^2-beta^T Sigma_BG beta)."
+    },
+    "measurement": {
+      "evidence_ids": [
+        "NGSP_UNIT_GUIDANCE",
+        "J_T1_glucose_mean_mg_dL_derived"
+      ],
+      "assumption_ids": [
+        "A_TRANSPORT"
+      ],
+      "derivation": "Preserve task units; coefficients multiply0.09148 and glucose slope divides18. Offset applies to levels only; no eAG equation."
+    }
+  }
+}
