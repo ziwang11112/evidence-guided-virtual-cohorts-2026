@@ -1,0 +1,127 @@
+{
+  "parameters": {
+    "cohort": {
+      "n_rows": 3000
+    },
+    "demographics": {
+      "age_minimum": 35,
+      "age_maximum": 74,
+      "age_kernel_location": 54.0,
+      "age_kernel_scale": 11.0,
+      "age_reference": 54.0,
+      "age_unit": 10.0,
+      "female_reference_probability": 0.55,
+      "female_age_log_odds": 0.08
+    },
+    "bmi": {
+      "reference_median": 23.8,
+      "log_residual_sd": 0.145,
+      "age_log_shift": 0.008,
+      "age_squared_log_shift": -0.004,
+      "female_log_shift": 0.025,
+      "driver_reference": 24.0,
+      "driver_scale": 3.5,
+      "driver_saturation": 3.0
+    },
+    "glycemic_state": {
+      "reference_high_probability": 0.08,
+      "age_log_odds": 0.25,
+      "bmi_log_odds": 0.4,
+      "female_log_odds": -0.1
+    },
+    "glucose": {
+      "component_medians": [5.05, 8.2],
+      "component_log_residual_sd": [0.11, 0.28],
+      "age_log_shift": 0.01,
+      "bmi_log_shift": 0.025,
+      "female_log_shift": -0.015,
+      "shared_normal_loading": 0.75
+    },
+    "hba1c": {
+      "component_medians": [5.55, 7.4],
+      "component_log_residual_sd": [0.075, 0.19],
+      "age_log_shift": 0.015,
+      "bmi_log_shift": 0.01,
+      "female_log_shift": 0.005,
+      "shared_normal_loading": 0.8
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Generate exactly 3000 independent synthetic records conditional on this fixed model, with integer age 35 through 74 and the six task columns. These are task representation requirements, not observed population moments."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age has discrete probability proportional to exp(-0.5*((age-54)/11)^2) on the integers 35 through 74. The kernel location and scale are author choices motivated by broad adult source age context; they are neither the output mean and SD nor a pooled source estimate. Centered age is (age-54)/10. No target age composition is known."
+    },
+    {
+      "id": "A_SEX",
+      "description": "The probability of documented female membership is logistic(logit(0.55)+0.08*centered_age). A modest female excess and small increase with age are assumed after attenuating source selection-specific female excess. female=1 is assigned from named membership and female=0 denotes documented male membership; original Jansen numerical gender coding is not inferred. Centered female membership is female-0.55."
+    },
+    {
+      "id": "A_BMI",
+      "description": "Conditional BMI is lognormal with median 23.8*exp(0.008*centered_age-0.004*centered_age^2+0.025*centered_female) and log residual SD 0.145. Median, spread, age curvature and female shift are transported author settings, not reproduced source moments. The bounded metabolic driver is 3*tanh(((BMI-24)/3.5)/3); its reference, scale and saturation are modelling choices that avoid unbounded covariate effects at extreme BMI."
+    },
+    {
+      "id": "A_STATE",
+      "description": "A binary latent high-glycemia state has probability logistic(logit(0.08)+0.25*centered_age+0.4*BMI_driver-0.1*centered_female). Its prevalence, covariate associations and binary structure are wholly assumed. It is a distributional component, not diagnosed diabetes, a treatment indicator, or a measured clinical category. State 0 and state 1 index the two measurement-component parameter arrays."
+    },
+    {
+      "id": "A_SERUM",
+      "description": "Central-serum glucose is represented directly in mmol/L by conditional lognormal components with medians 5.05 and 8.2 and log residual SDs 0.11 and 0.28, multiplied by exp(0.01*centered_age+0.025*BMI_driver-0.015*centered_female). Values are selected using source glycemic scale and dispersion as context, with a wider high component because target diabetes/treatment exclusion is not claimed. No source fasting-plasma field is relabelled, no plasma-to-serum correction is applied, and no exact transport from local fasting serum to released central serum is claimed."
+    },
+    {
+      "id": "A_HBA1C",
+      "description": "Whole-blood HbA1c is modelled directly in percent with conditional lognormal component medians 5.55 and 7.4 and log residual SDs 0.075 and 0.19, multiplied by exp(0.015*centered_age+0.01*BMI_driver+0.005*centered_female). These are assumed transported conditional levels and spreads; source HbA1c marginal summaries are not conditional estimates. Direct age and sex terms allow nonglycemic influences without claiming their mechanisms or estimated sizes. No estimated-average-glucose equation or deterministic glucose-to-HbA1c mapping is used."
+    },
+    {
+      "id": "A_JOINT",
+      "description": "The packet supplies no relationship records. Every dependence, including direct covariate shifts and the shared latent state, is an explicit scientific assumption. Age precedes sex and BMI in the sampling factorization; this is a probability factorization, not a causal assertion. Innovations are independent conditional on the declared factors, which is an unverified simplification rather than evidence of zero remaining dependence."
+    },
+    {
+      "id": "A_RESIDUAL",
+      "description": "Glucose and HbA1c standardized log residuals equal loading*U+sqrt(1-loading^2)*E, with independent standard-normal U, E_glucose and E_hba1c, and loadings 0.75 and 0.8. Their conditional log-residual correlation is algebraically the loading product, 0.60, not an observed rank or Pearson association. Separate residuals represent unseparated biological and measurement variation. The same loadings apply in both components; total or raw-scale correlation is not specified by this product."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "The fixed law is one assumption-dependent synthesis for the selected complete-case target population. No selection weights, missingness mechanism, treatment process, assay correction, region effects, survey clustering, or source-to-target bridge is identified. Source studies differ in age, ethnicity, calendar time, geography, selection and measurement; none is installed as the target distribution, and no source precision or uncertainty is inferred from individual SDs, quartiles or synthetic n."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "Age uses an intrinsically bounded discrete law. BMI, glucose and HbA1c use positive lognormal support without empirical clipping, censoring or rejection. Only the BMI covariate driver is smoothly saturated. The lognormal tail shapes and absence of zero values are distributional assumptions, not empirical target bounds."
+    }
+  ],
+  "parameter_provenance": {
+    "cohort": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK"],
+      "derivation": "The common task fixes 3000 rows. This setting is an engineering output requirement and contributes no empirical population information."
+    },
+    "demographics": {
+      "evidence_ids": ["M_J_AGE_MEAN", "M_J_AGE_SD", "M_B_AGE_MEDIAN", "M_B_AGE_Q1", "M_B_AGE_Q3", "M_M_AGE_MEAN", "M_M_AGE_SD", "M_J_MALE_FRACTION", "M_B_FEMALE_FRACTION", "M_M_FEMALE_FRACTION"],
+      "assumption_ids": ["A_TASK", "A_AGE", "A_SEX", "A_JOINT", "A_TRANSPORT"],
+      "derivation": "The age kernel is a chosen broad adult law informed qualitatively by Jansen and Bao; the selected older MIND age distribution is not extrapolated to all adults. The task determines age support. A female reference probability of 0.55 is deliberately assumed rather than copying selected-source count fractions. The age trend, age centering and ten-year scale are declared choices. Source quartiles are retained as quartiles and no estimator precision is calculated."
+    },
+    "bmi": {
+      "evidence_ids": ["M_B_BMI_MEDIAN", "M_B_BMI_Q1", "M_B_BMI_Q3", "M_M_BMI_MEAN", "M_M_BMI_SD", "M_J_BMI_MEAN", "M_J_BMI_SD"],
+      "assumption_ids": ["A_BMI", "A_JOINT", "A_TRANSPORT", "A_SUPPORT"],
+      "derivation": "Bao's 23.5 median and 21.4-25.9 quartiles, MIND's 25.0 mean/3.6 individual SD and Jansen's 26.5 mean/4.1 individual SD provide distinct scale contexts. Choosing conditional reference median 23.8 and log SD 0.145 is a transport and shape assumption, not pooled estimation or a claimed quantile-to-SD conversion. Covariate shifts and metabolic-driver constants are unsupported-by-relationships assumptions."
+    },
+    "glycemic_state": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "M_B_FPG_MEDIAN", "M_B_HBA1C_PERCENT_MEDIAN"],
+      "assumption_ids": ["A_STATE", "A_JOINT", "A_TRANSPORT"],
+      "derivation": "Source selection descriptions distinguish excluded known diabetes from retained known or screen-detected diabetes, and target exclusion is not claimed. This motivates allowing a shared high-value component; none of the state parameters or its covariate effects is identified by these marginal records. The 0.08 probability is at reference covariates, not a prevalence estimate, and source differences do not identify a mixture weight."
+    },
+    "glucose": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD", "M_B_FPG_MEDIAN", "M_B_FPG_Q1", "M_B_FPG_Q3", "M_J_FPG_MEAN", "M_J_FPG_SD"],
+      "assumption_ids": ["A_SERUM", "A_STATE", "A_JOINT", "A_RESIDUAL", "A_TRANSPORT", "A_SUPPORT"],
+      "derivation": "MIND fasting serum 5.2 mean/1.4 individual SD is the closest supplied specimen context but differs in assay, timing, age and processing. Bao and Jansen plasma summaries inform only qualitative glycemic scale and selection contrasts. Chosen serum component medians and log spreads are not source means, source SDs, or universal specimen conversions. Direct shifts and loading 0.75 are assumed; sqrt(1-loading^2) follows algebraically from unit conditional residual variance."
+    },
+    "hba1c": {
+      "evidence_ids": ["M_B_HBA1C_PERCENT_MEDIAN", "M_B_HBA1C_PERCENT_Q1", "M_B_HBA1C_PERCENT_Q3", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD"],
+      "assumption_ids": ["A_HBA1C", "A_STATE", "A_JOINT", "A_RESIDUAL", "A_TRANSPORT", "A_SUPPORT"],
+      "derivation": "Bao's percent median/quartiles and MIND's percent mean/individual SD contextualize the ordinary level and need for dispersion, without identifying conditional components. All component values and direct shifts are assumed transport choices. Loading 0.8 is assumed, and its independent residual coefficient is algebraically sqrt(1-loading^2). The model works directly in percent; it performs no IFCC conversion, pools no assays and recovers no regression equation from separate source adjustments."
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age": {
+      "minimum": 35,
+      "maximum": 74,
+      "beta_alpha": 2.4,
+      "beta_beta": 2.6,
+      "reference": 55.0,
+      "decade_scale": 10.0
+    },
+    "female": {
+      "intercept_logit": 0.2,
+      "age_decade_slope": 0.04,
+      "effect_center": 0.5
+    },
+    "bmi": {
+      "reference_median": 23.7,
+      "residual_log_sd": 0.145,
+      "age_decade_log_shift": 0.012,
+      "age_decade_squared_log_shift": -0.006,
+      "female_log_shift": 0.015,
+      "glycemic_reference": 24.0,
+      "glycemic_scale": 4.0
+    },
+    "glycemic_state": {
+      "intercept_logit": -2.5,
+      "age_decade_log_odds": 0.25,
+      "bmi_scaled_log_odds": 0.35,
+      "female_log_odds": -0.1
+    },
+    "glucose": {
+      "baseline_median": 5.1,
+      "state_log_shift": 0.4,
+      "age_decade_log_shift": 0.012,
+      "bmi_scaled_log_shift": 0.025,
+      "female_log_shift": -0.015,
+      "residual_log_sd_by_state": [0.105, 0.25],
+      "shared_factor_loading_by_state": [0.65, 0.85]
+    },
+    "hba1c": {
+      "baseline_median": 5.55,
+      "state_log_shift": 0.25,
+      "age_decade_log_shift": 0.015,
+      "bmi_scaled_log_shift": 0.008,
+      "female_log_shift": -0.006,
+      "residual_log_sd_by_state": [0.065, 0.17],
+      "shared_factor_loading_by_state": [0.7, 0.8]
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "The supplied contract requires 3000 exchangeable synthetic rows, integer age 35-74 and documented female=1/male=0. These are representation requirements, not empirical target moments. No participant observations enter the model."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Target age composition is unidentified. Generate U from Beta(2.4,2.6), set age=35+floor(40*U), and guard the floating-point upper endpoint at 74. This is an assumed smooth middle-adult-heavy distribution over the task support, not a fitted source or target age distribution. Use (age-55)/10 as a descriptive modeling coordinate."
+    },
+    {
+      "id": "A_SEX",
+      "description": "The source category fractions are selected-sample count ratios. Choose P(female=1|age)=logistic(0.2+0.04*(age-55)/10), allowing a modest female excess closer to parity than those sources. Center the sex indicator at 0.5 in subsequent equations. No unresolved source numeric gender code is copied; source category identity alone informs context."
+    },
+    {
+      "id": "A_BMI",
+      "description": "Conditional BMI is lognormal. At centered age and sex, its median is assumed 23.7 kg/m^2 and its residual log SD is 0.145, chosen near the Shanghai BMI central range, without fitting its quartiles. Log BMI has age-decade shift 0.012, squared-age-decade shift -0.006 and centered-female shift 0.015. These dependencies, mild curvature, residual law and tail shape are assumptions. The glycemic coordinate (BMI-24)/4 uses conventional modeling reference and scale values, not target moments."
+    },
+    {
+      "id": "A_STATE",
+      "description": "An unobserved high-glycemia component H is Bernoulli with log odds -2.5+0.25*age_coordinate+0.35*BMI_coordinate-0.1*centered_female. Its reference prevalence, covariate gradients and component interpretation are assumptions. H is a distributional device, not a clinical diagnosis, treatment status or screening threshold. The target does not exclude known diabetes, so a broad upper component is included without claiming its prevalence is known."
+    },
+    {
+      "id": "A_GLUCOSE",
+      "description": "Central-serum glucose is modeled directly in mmol/L using a conditional lognormal mixture: baseline median 5.1, log shift 0.4 for H=1, age-decade log shift 0.012, scaled-BMI log shift 0.025 and centered-female log shift -0.015. Residual log SD is 0.105 in H=0 and 0.25 in H=1. These are assumed conditional quantities informed only by the scale and dispersion of supplied glucose margins. Plasma FPG is not relabeled as serum; the target's release, processing, fasting and assay differences are unresolved. No universal plasma/serum conversion or multiplicative laboratory correction is asserted."
+    },
+    {
+      "id": "A_HBA1C",
+      "description": "Whole-blood HbA1c is generated directly in percent as a conditional lognormal mixture: baseline median 5.55, log shift 0.25 for H=1, age-decade log shift 0.015, scaled-BMI log shift 0.008 and centered-female log shift -0.006. Residual log SD is 0.065 in H=0 and 0.17 in H=1. All conditional values are assumptions chosen against the scale of supplied percent margins, without source fitting. Erythrocyte, assay, anemia and treatment effects are unobserved and absorbed into component/residual variation rather than modeled as known covariates."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "Conditional on age, sex, BMI and H, glucose and HbA1c use one shared standard-normal factor plus separate independent standard-normal errors. Shared-factor loadings are (0.65,0.70) for H=0 and (0.85,0.80) for H=1, giving conditional log-residual correlations equal to the loading products by construction. This is a declared dependence assumption; the packet contains no relationship records. Structural covariate links, H and the shared factor create joint dependence. Remaining innovation independence and exchangeability are simplifying assumptions, not conclusions from missing evidence. No rank-to-Pearson conversion is used."
+    },
+    {
+      "id": "A_TRANSFER",
+      "description": "The selected Shanghai, older rural Shandong and western-European populations are contextual comparators, not one pooled empirical cohort. Their disease exclusions, age ranges, imputation, timing and laboratory methods limit transfer to the target common-complete-case release. No source age/sex mix, marginal equality, estimated precision, target sign or regression coefficient is imposed as validated truth. Parameters are fixed across seeds; seed variation represents Monte Carlo variation, not uncertainty about transport or scientific parameters."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "Exponential links impose strictly positive continuous BMI, glucose and HbA1c with unbounded mathematical upper tails. No empirical range clipping, rounding of laboratory values, moment correction or source/target rejection sampling is used. The lognormal tails and absence of explicit assay detection limits are modeling limitations. Age alone is restricted to the contract support."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK"],
+      "derivation": "3000 is the task-mandated output size, not a source sample size or a basis for estimator uncertainty."
+    },
+    "age": {
+      "evidence_ids": ["M_B_AGE_MEDIAN", "M_B_AGE_Q1", "M_B_AGE_Q3", "M_J_AGE_MEAN", "M_J_AGE_SD", "M_M_AGE_MEAN", "M_M_AGE_SD"],
+      "assumption_ids": ["A_TASK", "A_AGE", "A_TRANSFER"],
+      "derivation": "Source age summaries show heterogeneous selections and are not pooled or conditioned to recover target composition. Task bounds supply the support; beta shape parameters 2.4 and 2.6 and modeling reference 55/scale 10 are explicit choices. Integer age is obtained by the declared affine beta transformation and floor."
+    },
+    "female": {
+      "evidence_ids": ["M_B_FEMALE_FRACTION", "M_M_FEMALE_FRACTION", "M_J_MALE_FRACTION"],
+      "assumption_ids": ["A_TASK", "A_SEX", "A_TRANSFER"],
+      "derivation": "Named-category count fractions motivate considering female overrepresentation but do not determine target composition. The logit intercept 0.2, age slope 0.04 and effect center 0.5 are assumed. The Lifelines male fraction is not treated as a female fraction or used through its unresolved original numeric coding."
+    },
+    "bmi": {
+      "evidence_ids": ["M_B_BMI_MEDIAN", "M_B_BMI_Q1", "M_B_BMI_Q3", "M_M_BMI_MEAN", "M_M_BMI_SD", "M_J_BMI_MEAN", "M_J_BMI_SD"],
+      "assumption_ids": ["A_BMI", "A_TRANSFER", "A_SUPPORT"],
+      "derivation": "The Shanghai median 23.5 and quartile endpoints 21.4/25.9 provide central-scale context for assumed conditional median 23.7 and log SD 0.145. No quartile-to-SD conversion or source fit is claimed. Other source means/individual SDs show selection heterogeneity. Age/sex shifts and the BMI reference 24/scale 4 are assumed, not extracted source coefficients."
+    },
+    "glycemic_state": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "M_B_FPG_MEDIAN", "M_B_HBA1C_PERCENT_MEDIAN"],
+      "assumption_ids": ["A_STATE", "A_DEPENDENCE", "A_TRANSFER"],
+      "derivation": "The source populations differ in inclusion of known and screen-detected diabetes, and MIND has broad individual laboratory dispersion. This motivates permitting a broad high-glycemia component, but the logit intercept and all covariate coefficients are assumptions, not an estimated diabetes prevalence or fitted decomposition of any margin."
+    },
+    "glucose": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD", "M_B_FPG_MEDIAN", "M_B_FPG_Q1", "M_B_FPG_Q3", "M_J_FPG_MEAN", "M_J_FPG_SD"],
+      "assumption_ids": ["A_GLUCOSE", "A_DEPENDENCE", "A_TRANSFER", "A_SUPPORT"],
+      "derivation": "MIND's serum mean 5.2 and individual SD 1.4 are the nearest specimen context, with important age/processing limits. Shanghai and Lifelines plasma margins supply only separate scale context. The conditional serum median 5.1, mixture shift, log SDs, direct covariate shifts and factor loadings are explicitly assumed. Their mixture does not assert any source or target marginal match. Correlation in log residuals is algebraically the product of declared shared-factor loadings."
+    },
+    "hba1c": {
+      "evidence_ids": ["M_B_HBA1C_PERCENT_MEDIAN", "M_B_HBA1C_PERCENT_Q1", "M_B_HBA1C_PERCENT_Q3", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "U_NGSP_SCALE"],
+      "assumption_ids": ["A_HBA1C", "A_DEPENDENCE", "A_TRANSFER", "A_SUPPORT"],
+      "derivation": "Shanghai's HbA1c median 5.6 with quartiles 5.3/5.9 and MIND's mean 6.1 with individual SD 1.0 contextualize the assumed conditional percent median 5.55 and broader high component. All shifts, log SDs and loadings are assumptions. Generation is directly in percent; NGSP guidance establishes unit distinctions only and no IFCC conversion or estimated-average-glucose formula is implemented."
+    }
+  }
+}

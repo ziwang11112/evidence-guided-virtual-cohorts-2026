@@ -1,0 +1,64 @@
+{
+  "parameters": {
+    "design": {"n_rows": 3000, "age_min": 35, "age_max": 74},
+    "age_distribution": {"kernel_center_years": 54.5, "kernel_scale_years": 11.0},
+    "reference_scales": {"age_years": 55.0, "age_unit_years": 10.0, "bmi_kg_m2": 23.5, "bmi_unit_kg_m2": 5.0, "female_center": 0.55},
+    "female_distribution": {"reference_probability": 0.55, "age_log_odds_per_unit": 0.10},
+    "bmi_distribution": {
+      "reference_median_kg_m2": 23.5,
+      "dispersion_anchor_q1_kg_m2": 21.4,
+      "dispersion_anchor_q3_kg_m2": 25.9,
+      "age_log_location_per_unit": -0.005,
+      "age_squared_log_location": -0.008,
+      "female_log_location": 0.025
+    },
+    "elevated_tail": {
+      "reference_probability": 0.08,
+      "age_log_odds_per_unit": 0.30,
+      "bmi_log_odds_per_unit": 0.45,
+      "female_log_odds": -0.10,
+      "severity_gamma_shape": 2.0,
+      "severity_gamma_scale": 0.5
+    },
+    "serum_glucose": {
+      "reference_core_median_mmol_L": 5.0,
+      "age_log_location_per_unit": 0.010,
+      "bmi_log_location_per_unit": 0.025,
+      "female_log_location": -0.010,
+      "core_log_sd": 0.11,
+      "shared_normal_loading": 0.60,
+      "tail_increment_mmol_L_per_severity": 3.0
+    },
+    "hba1c_percent": {
+      "reference_core_median_percent": 5.5,
+      "age_log_location_per_unit": 0.012,
+      "bmi_log_location_per_unit": 0.010,
+      "female_log_location": -0.004,
+      "core_log_sd": 0.065,
+      "shared_normal_loading": 0.65,
+      "tail_increment_percent_per_severity": 1.8
+    }
+  },
+  "assumptions": [
+    {"id": "A_DESIGN", "description": "Generate 3000 independent complete synthetic records on the task's integer age support 35 through 74, with female=1 and male=0. The design size and support are interface constraints rather than population estimates. Household, community and survey clustering are not reconstructed."},
+    {"id": "A_AGE", "description": "Age has discrete probability proportional to a Gaussian-shaped kernel centered at 54.5 with scale 11 on the allowed integer support. These are assumed kernel parameters, not the resulting mean and SD. Source age summaries belong to differently selected populations and do not identify target composition."},
+    {"id": "A_SEX", "description": "Female probability is logistic with probability 0.55 at age 55 and a 0.10 log-odds rise per decade. The reference probability is a judgemental move toward balance from the female-enriched source counts, not a reweighted source estimate. Source category names are used; unresolved Jansen numeric gender coding is not imported."},
+    {"id": "A_SCALES", "description": "Covariates use fixed age 55, BMI 23.5 and female indicator 0.55 as reference points. Age is centered and divided by 10. The BMI predictor is log(BMI/23.5)/log((23.5+5)/23.5), a smooth relative-BMI scale with one unit between 23.5 and 28.5, not a linear per-5 slope away from that reference. This logarithmic predictor avoids exponentiating a linear unbounded lognormal BMI in the laboratory equations. These are equation scales, not sample centering or claims about target moments."},
+    {"id": "A_BMI", "description": "BMI is conditionally lognormal. Bao's median is adopted as a provisional reference median, and log(Q3/Q1)/(2*Phi_inverse(0.75)) supplies a log-scale dispersion only under the explicitly assumed lognormal shape. Modest positive female shift and weak concave age dependence are assumed. The conditional model is transported to the released analytical population without claiming marginal quartile equality."},
+    {"id": "A_TAIL", "description": "A latent elevated-glycemia component is included because the target has no claimed diabetes or treatment exclusion. Its reference probability 0.08, age/BMI/female log-odds coefficients and gamma severity law are assumed, not source-estimated prevalence, treatment status or diagnosis. Severity is independent of all other innovations given the component indicator; the same positive severity increment affects both laboratory values."},
+    {"id": "A_SERUM", "description": "The released central-serum glucose is generated directly in mmol/L, using a reference core median 5.0, log SD 0.11 and additive tail increment 3.0 per severity unit as judgemental settings. MIND fasting serum level and individual SD supply scale context, but different ages, geography, year, local processing, timing and imputation prevent exact transport. No source plasma value is renamed serum and no plasma-to-serum correction is assumed."},
+    {"id": "A_HBA1C", "description": "HbA1c is generated directly in percent with reference core median 5.5, log SD 0.065 and tail increment 1.8 per severity unit. These values use Bao and MIND percent summaries as scale context with explicit selection and assay transfer, not as target constraints. No IFCC conversion or glucose-to-HbA1c conversion is applied in this generator."},
+    {"id": "A_DEPENDENCE", "description": "All age, sex and BMI effects on the two core laboratory distributions, all component-membership effects, and the shared standard-normal loadings 0.60 and 0.65 are assumptions because E0 supplies no relationship records. Conditional log-laboratory errors are a shared standard normal plus independent standard-normal residuals with residual loading sqrt(1-loading^2). Remaining innovations are independent conditional on the stated graph. This is a coherent specified joint law, not an inference of independence from absent evidence."},
+    {"id": "A_SUPPORT_UNCERTAINTY", "description": "BMI and each core laboratory level use exponential links; positive gamma increments preserve support without clipping or invented upper bounds. Parameters are fixed across seeds. Simulation variability is conditional on one assumed law and does not represent uncertainty in source estimation, transport, dependence, assay effects or selection. No calibration, generator run or numerical scientific verification has been performed."}
+  ],
+  "parameter_provenance": {
+    "design": {"evidence_ids": [], "assumption_ids": ["A_DESIGN"], "derivation": "Task-required count and integer age bounds are represented as settings; they are not derived from any source sample count."},
+    "age_distribution": {"evidence_ids": ["M_B_AGE_MEDIAN", "M_B_AGE_Q1", "M_B_AGE_Q3", "M_J_AGE_MEAN", "M_J_AGE_SD", "M_M_AGE_MEAN"], "assumption_ids": ["A_AGE"], "derivation": "The source summaries establish differing age selections. A broad middle-age kernel with center 54.5 and scale 11 is chosen independently as an assumed restricted-age composition. No weighting of reported means, conversion of Bao quartiles to SD, or reconstruction of MIND's older selection is performed."},
+    "reference_scales": {"evidence_ids": ["M_B_BMI_MEDIAN"], "assumption_ids": ["A_SCALES"], "derivation": "BMI 23.5 coincides with the Bao median as a convenient reference. The other centers and divisors are declared equation scales; none are estimated from synthetic records."},
+    "female_distribution": {"evidence_ids": ["M_J_MALE_FRACTION", "M_B_FEMALE_FRACTION", "M_M_FEMALE_FRACTION"], "assumption_ids": ["A_SEX", "A_DEPENDENCE"], "derivation": "Reported category counts indicate female enrichment in these selected samples, but supply no target fraction or age relationship. Probability 0.55 and age log-odds 0.10 are assumed; Jansen male category is interpreted by name rather than unresolved numeric coding."},
+    "bmi_distribution": {"evidence_ids": ["M_B_BMI_MEDIAN", "M_B_BMI_Q1", "M_B_BMI_Q3", "M_M_BMI_MEAN", "M_M_BMI_SD", "M_J_BMI_MEAN", "M_J_BMI_SD"], "assumption_ids": ["A_BMI", "A_DEPENDENCE", "A_SUPPORT_UNCERTAINTY"], "derivation": "Reference median 23.5 and dispersion anchors 21.4 and 25.9 are Bao facts reused through an assumed conditional lognormal model. Log SD is computed algebraically as log(25.9/21.4)/(2*Phi_inverse(0.75)); this does not relabel an observed IQR as an SD. Other sources indicate population differences and are not pooled. Age and sex coefficients are unsupported transport assumptions."},
+    "elevated_tail": {"evidence_ids": ["M_M_FSG_SD", "M_M_HBA1C_PERCENT_SD"], "assumption_ids": ["A_TAIL", "A_DEPENDENCE"], "derivation": "The broader source laboratory dispersions and MIND inclusion of known diabetes motivate allowing an elevated shared tail. They do not identify its prevalence, severity or covariate slopes. Every numerical parameter in this block is assumed; the gamma mean is shape times scale by definition."},
+    "serum_glucose": {"evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD"], "assumption_ids": ["A_SERUM", "A_DEPENDENCE", "A_SUPPORT_UNCERTAINTY"], "derivation": "MIND serum mean 5.2 and individual SD 1.4 provide native-specimen scale context. The chosen 5.0 conditional core median, log SD 0.11, effects, shared loading and 3.0 additive severity scale are declared assumptions for a distinct central-serum measurement population, not exact mean/SD matching or plasma conversion."},
+    "hba1c_percent": {"evidence_ids": ["M_B_HBA1C_PERCENT_MEDIAN", "M_B_HBA1C_PERCENT_Q1", "M_B_HBA1C_PERCENT_Q3", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "U_NGSP_SCALE"], "assumption_ids": ["A_HBA1C", "A_DEPENDENCE", "A_SUPPORT_UNCERTAINTY"], "derivation": "Bao's 5.6 median and 5.3/5.9 quartiles and MIND's 6.1 mean with individual SD 1.0 motivate a central core and elevated tail without identifying either. Reference 5.5, log SD 0.065, covariate effects, shared loading and severity increment are assumed. NGSP guidance is retained to distinguish scales; no IFCC numerical parameter is used and no unit conversion is executed."}
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000
+    },
+    "age_distribution": {
+      "stratum_lower": [35, 45, 55, 65],
+      "stratum_upper": [44, 54, 64, 74],
+      "stratum_probability": [0.27, 0.31, 0.25, 0.17]
+    },
+    "centering": {
+      "age_reference": 54.5,
+      "age_scale": 10.0,
+      "bmi_reference": 24.0,
+      "bmi_scale": 3.5,
+      "female_reference": 0.56
+    },
+    "female_distribution": {
+      "logit_intercept": 0.24,
+      "logit_age_per_decade": 0.08
+    },
+    "bmi_distribution": {
+      "reference_median": 24.0,
+      "log_age_linear": 0.005,
+      "log_age_quadratic": -0.008,
+      "log_female_difference": 0.012,
+      "log_residual_sd": 0.14
+    },
+    "central_glycemia": {
+      "glucose_reference_median": 5.1,
+      "hba1c_reference_median": 5.55,
+      "glucose_log_age": 0.012,
+      "hba1c_log_age": 0.012,
+      "glucose_log_bmi": 0.018,
+      "hba1c_log_bmi": 0.004,
+      "glucose_log_female": -0.01,
+      "hba1c_log_female": 0.003,
+      "glucose_log_residual_sd": 0.09,
+      "hba1c_log_residual_sd": 0.065,
+      "log_residual_correlation": 0.42
+    },
+    "elevated_component": {
+      "logit_intercept": -2.55,
+      "logit_age": 0.4,
+      "logit_bmi": 0.3,
+      "logit_male": 0.08,
+      "severity_gamma_shape": 2.0,
+      "severity_gamma_scale": 0.2,
+      "glucose_log_offset": 0.12,
+      "hba1c_log_offset": 0.06,
+      "glucose_severity_loading": 1.0,
+      "hba1c_severity_loading": 0.5
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Exactly 3000 exchangeable synthetic individuals are requested by the task. They are not a probability sample, a longitudinal cohort, or a source-study reconstruction. The age support and documented female=1/male=0 categories come from the task contract."
+    },
+    {
+      "id": "A_DEMOGRAPHY",
+      "description": "Age has four assumed stratum probabilities and is discrete-uniform within each ten-year stratum. Female membership is Bernoulli with a mild age-dependent logistic probability. The numerical probabilities and age-sex association are assumptions because no target composition is supplied; source composition is contextual only."
+    },
+    {
+      "id": "A_COORDINATES",
+      "description": "Age is centered at 54.5 and divided by 10; BMI is centered at 24 and divided by 3.5; female is centered at 0.56. These reference coordinates specify conditional equations, not enforced marginal means or SDs. Male in the elevated-component logit equals 1-female and is uncentered."
+    },
+    {
+      "id": "A_BMI",
+      "description": "BMI follows a conditional lognormal law with reference median 24, log residual SD 0.14, mild quadratic age curvature and a small female difference. This chosen positive distribution uses Chinese source margins as scale context, but neither the target median nor its conditional shape is identified by those margins."
+    },
+    {
+      "id": "A_CENTRAL",
+      "description": "Central-component serum glucose and whole-blood HbA1c are conditionally lognormal, with declared age, BMI and female terms. Reference values and residual dispersions are scientifically chosen transport assumptions, not fitted source or target summaries. Positivity follows from exponentiation. No additional rounding, clipping, imputation or source diabetes exclusion is applied."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "Conditional log residuals are bivariate normal with correlation 0.42. A common normal innovation and a separate normal innovation implement this law. Positive source glucose-HbA1c associations motivate shared variability, but the chosen log-scale conditional correlation is neither a transported Pearson coefficient nor a conversion of Spearman correlation. Age, BMI, sex and the elevated component generate further dependence. All remaining innovations are independent conditional on the stated structure; this is a model restriction, not an inference from missing evidence."
+    },
+    {
+      "id": "A_ELEVATED",
+      "description": "An unobserved Bernoulli elevated-glycemia component has an age-, BMI- and male-dependent logistic probability. In that component a shared gamma severity adds the declared shifts on both log measurement scales. Its prevalence, covariate dependence, severity distribution and unequal loadings are assumptions. It is not a diagnosis, treatment status, or an estimate of diabetes prevalence; it permits a right tail because the target has no diabetes exclusion. Gamma severity is not truncated."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "Each source retains its own eligibility, population and measurement context. The target central-serum field is generated directly and is not an alias or conversion of either source plasma FPG or MIND local serum FSG. Whole-blood HbA1c is generated directly on the percentage scale. Differences in fasting, laboratory, year, age eligibility, treatment, sample selection and source imputation remain unestimated. The mixture and chosen centers are one explicitly assumed analytical-population scenario."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_DESIGN"],
+      "derivation": "n_rows=3000 is a task requirement, not an empirical sample-size estimate or a precision calculation."
+    },
+    "age_distribution": {
+      "evidence_ids": ["M_B_AGE_MEDIAN", "M_B_AGE_Q1", "M_B_AGE_Q3", "M_J_AGE_MEAN", "M_M_AGE_MEAN"],
+      "assumption_ids": ["A_DESIGN", "A_DEMOGRAPHY", "A_TRANSPORT"],
+      "derivation": "The task determines ages 35 through 74. Different source age distributions and selection rules cannot identify its age composition. The four probabilities are chosen directly, sum to one by construction, and are not an age-restricted fit or pooled estimate of the source margins."
+    },
+    "centering": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_COORDINATES"],
+      "derivation": "Fixed reference coordinates define units for the conditional equations. The age center is the midpoint (35+74)/2; all other reference values are convenient assumed coordinates rather than recovered population moments."
+    },
+    "female_distribution": {
+      "evidence_ids": ["M_B_FEMALE_FRACTION", "M_M_FEMALE_FRACTION", "M_J_MALE_FRACTION"],
+      "assumption_ids": ["A_DEMOGRAPHY", "A_TRANSPORT"],
+      "derivation": "Source category fractions suggest that female participation need not be one-half, but do not identify target proportions. The chosen logit intercept 0.24 and age coefficient 0.08 define a modest female majority. No source numeric gender coding or source gender coefficient is inferred."
+    },
+    "bmi_distribution": {
+      "evidence_ids": ["M_B_BMI_MEDIAN", "M_B_BMI_Q1", "M_B_BMI_Q3", "M_M_BMI_MEAN", "M_M_BMI_SD", "M_J_BMI_MEAN", "M_J_BMI_SD"],
+      "assumption_ids": ["A_BMI", "A_COORDINATES", "A_TRANSPORT"],
+      "derivation": "The reference median 24 lies near the Shanghai median 23.5, with rural older-adult mean 25 and European mean 26.5 retained as distinct context. Log SD 0.14 is an assumed moderate dispersion compatible in scale with the Chinese source spread; no quartile-to-SD conversion or marginal-moment matching is claimed. All age and sex coefficients are assumptions."
+    },
+    "central_glycemia": {
+      "evidence_ids": ["M_B_FPG_MEDIAN", "M_B_FPG_Q1", "M_B_FPG_Q3", "M_B_HBA1C_PERCENT_MEDIAN", "M_B_HBA1C_PERCENT_Q1", "M_B_HBA1C_PERCENT_Q3", "M_M_FSG_MEAN", "M_M_FSG_SD", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "R_JANSEN_BMI", "R_JANSEN_FPG", "R_BAO_PEARSON", "R_MIND_SPEARMAN"],
+      "assumption_ids": ["A_CENTRAL", "A_DEPENDENCE", "A_COORDINATES", "A_TRANSPORT"],
+      "derivation": "Chinese source glucose and HbA1c summaries motivate plausible central scales while the older inclusive MIND population motivates allowing additional heterogeneity. The 5.1 mmol/L and 5.55 percent conditional reference medians are chosen rather than fitted or pooled source means. Positive separate Jansen projections motivate allowing BMI and glycemia to share variation; neither coefficient is inserted into this equation. Bao Pearson 0.619 and MIND Spearman 0.529 motivate positive shared glucose-HbA1c variation only. The conditional log residual correlation 0.42 and all covariate and residual-scale parameters are explicit assumptions; no source correlation is transformed, installed or used as a target objective."
+    },
+    "elevated_component": {
+      "evidence_ids": ["M_M_FSG_SD", "M_M_HBA1C_PERCENT_SD", "M_B_FPG_Q3", "M_B_HBA1C_PERCENT_Q3", "R_BAO_PEARSON", "R_MIND_SPEARMAN"],
+      "assumption_ids": ["A_ELEVATED", "A_DEPENDENCE", "A_COORDINATES", "A_TRANSPORT"],
+      "derivation": "MIND retains known diabetes and reports broad glucose/HbA1c dispersion whereas Bao excludes known diabetes; the target does not impose either diabetes exclusion. This selection contrast motivates an elevated shared-tail component, but supplies no mixture fraction, gamma law or treatment effect. Every numerical value in this parameter group is assumed. The shared severity affects glucose more strongly on its log scale and provides tail dependence beyond the central normal residual correlation."
+    }
+  }
+}

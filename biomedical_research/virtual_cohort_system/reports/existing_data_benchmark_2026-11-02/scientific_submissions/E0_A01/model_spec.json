@@ -1,0 +1,131 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age": {
+      "minimum": 35,
+      "maximum": 74,
+      "normal_location": 52.0,
+      "normal_scale": 12.0,
+      "reference": 55.0,
+      "unit_scale": 10.0
+    },
+    "female": {
+      "reference_probability": 0.56,
+      "age_log_odds_effect": 0.04
+    },
+    "bmi": {
+      "reference_median": 23.5,
+      "dispersion_quartile_lower": 21.4,
+      "dispersion_quartile_upper": 25.9,
+      "age_log_effect": 0.015,
+      "age_squared_log_effect": -0.004,
+      "female_log_effect": 0.015,
+      "reference": 24.0,
+      "unit_scale": 4.0
+    },
+    "elevated_glycaemia": {
+      "reference_probability": 0.08,
+      "age_log_odds_effect": 0.35,
+      "bmi_log_odds_effect": 0.4,
+      "female_log_odds_effect": -0.1
+    },
+    "glucose": {
+      "component_medians": [5.0, 8.0],
+      "component_log_sd": [0.11, 0.25],
+      "age_log_effect": 0.018,
+      "bmi_log_effect": 0.035,
+      "female_log_effect": -0.012
+    },
+    "hba1c": {
+      "component_medians": [5.6, 7.4],
+      "component_log_sd": [0.07, 0.16],
+      "age_log_effect": 0.012,
+      "bmi_log_effect": 0.012,
+      "female_log_effect": -0.005
+    },
+    "shared_glycaemia": {
+      "glucose_loading": 0.8,
+      "hba1c_loading": 0.8
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Generate 3000 complete synthetic records using the supplied task support: integer age 35 through 74 and female category coded 1, male coded 0. These are representation requirements, not observed target frequencies. Identifiers carry no participant identity."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age follows a discretized normal shape with location 52 and scale 12, conditioned on rounding into 35 through 74. Bin masses use normal CDF differences at integer half-boundaries. The location and scale are judgmental transfer settings, not estimated target moments or the post-truncation mean and SD. Age dependence is expressed relative to 55 years in ten-year units."
+    },
+    {
+      "id": "A_FEMALE",
+      "description": "Female probability is logistic with probability 0.56 at age 55 and log-odds increase 0.04 per ten years. The weaker female predominance than either Chinese source count fraction is an explicit composition assumption about the selected analytical sample. It is not a weighting correction, national demographic estimate or inference from unresolved source numeric coding. Female effects are centered on 0.56, not an asserted marginal proportion."
+    },
+    {
+      "id": "A_BMI",
+      "description": "BMI is conditionally lognormal. Its reference median borrows Bao's 23.5 kg/m^2 as a reference choice. Its residual log SD is log(25.9/21.4)/(2*Phi_inverse(0.75)), using a lognormal approximation to Bao's quartile width. The quartiles are not themselves SDs; applying their width to a conditional residual is an additional assumption. Conditional median shifts use 0.015 times standardized age minus 0.004 times squared standardized age plus 0.015 times centered female. Standardizing BMI at 24 with scale 4 is a modeling coordinate choice, not a claim about its mean or SD."
+    },
+    {
+      "id": "A_ELEVATED_STATE",
+      "description": "A latent elevated-glycaemia component has probability logistic(logit(0.08)+0.35*standardized_age+0.4*standardized_bmi-0.1*centered_female). The component prevalence, effects and biological interpretation are assumptions, not source facts or a diabetes diagnostic rule. The component allows an upper tail in a population with no diabetes or treatment exclusion. Its reference probability is conditional, not the overall disease prevalence."
+    },
+    {
+      "id": "A_SERUM_TRANSPORT",
+      "description": "The generated glucose is the requested central-serum field. Reference component medians 5.0 and 8.0 mmol/L, log SDs 0.11 and 0.25, and log-median effects 0.018 per age unit, 0.035 per BMI unit and -0.012 per centered female are assumed. MIND's serum mean and dispersion motivate a low dominant component with a broader elevated component, but do not identify this decomposition. Local versus central laboratory handling, age, geography, fasting, selection and mean filling remain unresolved. No plasma-to-serum conversion or assay equivalence is asserted."
+    },
+    {
+      "id": "A_HBA1C_TRANSPORT",
+      "description": "HbA1c is generated directly in percent using reference medians 5.6 and 7.4, log SDs 0.07 and 0.16, and log-median effects 0.012 per age unit, 0.012 per BMI unit and -0.005 per centered female. Bao's 5.6 median informs the lower-component reference; its quartiles and MIND's broader HbA1c distribution provide context, not identified conditional component parameters. Differences in age, known diabetes, laboratory method and processing preclude treating either source margin as the target margin. No IFCC conversion is needed in the executable model."
+    },
+    {
+      "id": "A_JOINT_LAW",
+      "description": "Source margins do not identify dependence. Age, female, BMI and elevated-component membership are generated in that order. Conditional biomarker residuals use one shared standard normal glycaemia factor with loading 0.8 in each log biomarker and separate standard normal residuals with loading sqrt(1-0.8^2). Their conditional log-residual correlation is therefore 0.64 by construction, not a reported Pearson or rank correlation. All stated effects, their signs, conditional independences and absence of further interactions are explicit structural assumptions. The shared factor represents unobserved glycaemic variation without identifying treatment, insulin resistance or a causal exposure."
+    },
+    {
+      "id": "A_SUPPORT_AND_UNCERTAINTY",
+      "description": "BMI, serum glucose and HbA1c use positive lognormal support without clipping or upper truncation. Age alone is conditioned on task support; female is Bernoulli. Records are iid under the declared hierarchy, without household, community or survey-weight structure. One fixed set of scientific parameters is used for all seeds. Random draws represent individual variation only; parameter uncertainty, estimator precision, source-fit validation and target transport accuracy are not estimated. Rare tail realism remains untested."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_TASK"],
+      "derivation": "The supplied task mandates 3000 generated records. This is an engineering size, not a source sample size or a basis for inferential precision."
+    },
+    "age": {
+      "evidence_ids": ["M_B_AGE_MEDIAN", "M_B_AGE_Q1", "M_B_AGE_Q3", "M_J_AGE_MEAN", "M_J_AGE_SD", "M_M_AGE_MEAN", "M_M_AGE_SD"],
+      "assumption_ids": ["A_TASK", "A_AGE"],
+      "derivation": "Bao's median 49.4 and quartiles 37.9/57.7, Jansen's older selected sample 55.5 with individual SD 9.9, and MIND's restricted elderly sample 69.5 with individual SD 4.2 show incompatible source compositions. A broad middle-aged normal shape at 52 with scale 12 is chosen rather than pooling these summaries. Task bounds are imposed through conditional bin probabilities; 55 and 10 specify the covariate reference and units. No source or target age distribution is recovered."
+    },
+    "female": {
+      "evidence_ids": ["M_B_FEMALE_FRACTION", "M_M_FEMALE_FRACTION", "M_J_MALE_FRACTION"],
+      "assumption_ids": ["A_FEMALE", "A_JOINT_LAW"],
+      "derivation": "Source category-count fractions suggest female predominance in selected cohorts but cannot identify target composition. The probability 0.56 and small age trend 0.04 are judgmental. Jansen's reported male membership is retained as male; unresolved original numeric coding is not mapped into a coefficient. No empirical sex effect is supplied."
+    },
+    "bmi": {
+      "evidence_ids": ["M_B_BMI_MEDIAN", "M_B_BMI_Q1", "M_B_BMI_Q3", "M_M_BMI_MEAN", "M_M_BMI_SD", "M_J_BMI_MEAN", "M_J_BMI_SD"],
+      "assumption_ids": ["A_BMI", "A_JOINT_LAW", "A_SUPPORT_AND_UNCERTAINTY"],
+      "derivation": "23.5 and 21.4/25.9 are Bao's median and quartile endpoints. Under the assumed lognormal width model, the two endpoint logs determine a residual log SD algebraically; the original quantile convention remains unknown. BMI summaries of 25.0 with SD 3.6 in MIND and 26.5 with SD 4.1 in Jansen are population context, not extra fitted constraints. Age/sex shifts and reference 24/scale 4 are assumed. Conditional use and population transfer mean the generated marginal quartiles need not equal Bao's."
+    },
+    "elevated_glycaemia": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD"],
+      "assumption_ids": ["A_ELEVATED_STATE", "A_JOINT_LAW"],
+      "derivation": "MIND includes known diabetes and has broad serum-glucose and HbA1c margins. That context motivates permitting an elevated joint tail, but supplies no latent component frequency or covariate effects. Every numerical value in this logistic component law is assumed; no diagnostic prevalence is inferred from the source moments."
+    },
+    "glucose": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD"],
+      "assumption_ids": ["A_SERUM_TRANSPORT", "A_ELEVATED_STATE", "A_JOINT_LAW", "A_SUPPORT_AND_UNCERTAINTY"],
+      "derivation": "MIND reports serum glucose mean 5.2 and individual SD 1.4 mmol/L in an older selected rural sample. The component medians, log dispersions and covariate shifts are declared choices informed by this broad level and variability, not a moment-matched decomposition or target calibration. Source plasma FPG is not substituted for the central-serum outcome and no universal specimen offset is applied."
+    },
+    "hba1c": {
+      "evidence_ids": ["M_B_HBA1C_PERCENT_MEDIAN", "M_B_HBA1C_PERCENT_Q1", "M_B_HBA1C_PERCENT_Q3", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "U_NGSP_SCALE"],
+      "assumption_ids": ["A_HBA1C_TRANSPORT", "A_ELEVATED_STATE", "A_JOINT_LAW", "A_SUPPORT_AND_UNCERTAINTY"],
+      "derivation": "Bao's median 5.6% informs the reference lower-component median; its 5.3/5.9 quartiles and MIND's 6.1 mean with individual SD 1.0 give dispersion context without identifying a mixture. All remaining values and conditional reinterpretation are assumed. NGSP guidance preserves percent as distinct from native IFCC mmol/mol; neither its affine relation nor the Jansen assay is used as a fasting-glucose equation or additional empirical constraint."
+    },
+    "shared_glycaemia": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_JOINT_LAW"],
+      "derivation": "The packet contains no relationship records. Both loadings are chosen as 0.8, giving 0.8*0.8=0.64 conditional log-residual correlation and unit marginal residual variance after independent residual completion. These algebraic consequences are not empirical correlations; marginal dependence also arises through age, BMI, female and component membership."
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "parameters": {
+    "cohort": {
+      "n_rows": 3000
+    },
+    "age": {
+      "minimum": 35,
+      "maximum": 74,
+      "kernel_center": 53.0,
+      "kernel_scale": 11.0,
+      "reference": 55.0,
+      "decade": 10.0
+    },
+    "female": {
+      "reference_probability": 0.55,
+      "age_log_odds_per_decade": 0.05
+    },
+    "bmi": {
+      "reference_median": 23.8,
+      "log_residual_sd": 0.145,
+      "age_log_slope_per_decade": 0.012,
+      "age_log_quadratic_per_decade_squared": -0.008,
+      "female_log_shift": 0.018,
+      "risk_log_scale": 0.15
+    },
+    "glycemic_state": {
+      "reference_probability": 0.08,
+      "age_log_odds_per_decade": 0.30,
+      "bmi_score_log_odds": 0.45,
+      "female_log_odds": -0.08
+    },
+    "glucose_body": {
+      "reference_median": 5.05,
+      "age_log_slope_per_decade": 0.015,
+      "bmi_score_log_slope": 0.025,
+      "female_log_shift": -0.010,
+      "log_residual_sd": 0.105
+    },
+    "hba1c_body": {
+      "reference_median": 5.55,
+      "age_log_slope_per_decade": 0.009,
+      "bmi_score_log_slope": 0.008,
+      "female_log_shift": 0.003,
+      "log_residual_sd": 0.060
+    },
+    "residual_dependence": {
+      "shared_variance_fraction": 0.45
+    },
+    "glycemic_tail": {
+      "shared_log_sd": 0.45,
+      "glucose_increment_mmol_L": 2.4,
+      "hba1c_increment_percent": 1.25,
+      "glucose_log_noise_sd": 0.35,
+      "hba1c_log_noise_sd": 0.25
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_CONTRACT",
+      "description": "Generate exactly the task's 3000 complete rows, with integer age 35 through 74 inclusive, female=1 for the documented female category and female=0 for the documented male category. These are representation requirements, not empirical population facts. Continuous biomedical variables remain unrounded and positive; there is no further empirical upper or lower truncation."
+    },
+    {
+      "id": "A_COMPOSITION",
+      "description": "Age has discrete probabilities proportional to exp(-0.5*((age-53)/11)^2) on the required integer support. Female membership has log odds logit(0.55)+0.05*(age-55)/10. The age shape and sex composition are assumed for an eligible, selected analytical cohort; they are not reconstructed from the three differently selected source cohorts. The 55-year and 10-year constants are reference/scaling conventions."
+    },
+    {
+      "id": "A_BMI",
+      "description": "For x=(age-55)/10 and f=female-0.55, log BMI equals log(23.8)+0.012*x-0.008*x*x+0.018*f+0.145*Z_B, with independent standard normal Z_B. This lognormal form, modest age curvature and sex shift are transport assumptions. The downstream adiposity score is log(BMI/23.8)/0.15, a modelling scale rather than a measured population SD."
+    },
+    {
+      "id": "A_STATE",
+      "description": "An unobserved elevated glycemic-burden state D is Bernoulli with log odds logit(0.08)+0.30*x+0.45*adiposity_score-0.08*f. Its reference probability, predictors and coefficients are assumptions. D is a continuous-distribution mixture label, not a diagnostic diabetes, treatment, pregnancy or exclusion indicator. The task does not justify eliminating previously diagnosed diabetes."
+    },
+    {
+      "id": "A_GLUCOSE",
+      "description": "The baseline released-serum glucose component is lognormal with log median log(5.05)+0.015*x+0.025*adiposity_score-0.010*f and residual log SD 0.105. Values are in mmol/L. This is a direct assumption for the task serum field, not a conversion or renaming of fasting plasma FPG. No target fasting protocol or universal serum/plasma correction is inferred."
+    },
+    {
+      "id": "A_HBA1C",
+      "description": "The baseline whole-blood HbA1c component is lognormal with log median log(5.55)+0.009*x+0.008*adiposity_score+0.003*f and residual log SD 0.060, expressed in percent. Conditional levels, slopes and shape are assumed, not a joint equation assembled from separately adjusted source regressions. This implementation needs no IFCC conversion."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "Baseline glucose and HbA1c standardized log residuals are sqrt(0.45)*Z_C+sqrt(0.55)*Z_G and sqrt(0.45)*Z_C+sqrt(0.55)*Z_H. These standard normals are independent of demographic draws, BMI residual and state draw. The 0.45 is an assumed conditional log-residual correlation, not Bao's marginal raw Pearson correlation, MIND's marginal Spearman correlation, or a conversion of either. Shared state and covariates add other dependence. Independent innovations are a structural modelling choice, not an inference from missing source relationships."
+    },
+    {
+      "id": "A_TAIL",
+      "description": "Let S=exp(0.45*Z_S), with Z_S independent standard normal. Add D*2.4*S*exp(0.35*Z_GT) to glucose and D*1.25*S*exp(0.25*Z_HT) to HbA1c, where Z_GT and Z_HT are independent standard normals also independent of all earlier innovations. S and each multiplicative noise have median one, not mean one. Shared severity gives a concordant right tail while distinct noise allows short-term serum glucose and longer-term HbA1c discordance. All tail parameters and distribution choices are assumptions; the state is not observed disease prevalence."
+    },
+    {
+      "id": "A_TRANSFER",
+      "description": "The supplied studies differ in age, geography, calendar time, selection, exclusion criteria, timing, specimen, assay and missing-value processing. Their statistics are contextual anchors and cannot identify the target joint law. Chosen conditional medians and scales are deliberately declared scenario settings. Neither reference values nor mixture probabilities are installed target moments, and the sources are not pooled into one empirical cohort."
+    },
+    {
+      "id": "A_OMITTED",
+      "description": "The generator is a fixed-parameter observational scenario. Treatment, diagnosis history, erythrocyte biology, kidney function, fasting duration and selection mechanisms are not separately generated; their unmeasured contributions are absorbed into the declared component distributions. The resulting conditional independences and tails remain unverified. Sampling 3000 artificial rows supplies no external evidence or source-parameter precision."
+    }
+  ],
+  "parameter_provenance": {
+    "cohort": {
+      "evidence_ids": [],
+      "assumption_ids": ["A_CONTRACT"],
+      "derivation": "n_rows is the fixed task output requirement, not any source sample count."
+    },
+    "age": {
+      "evidence_ids": ["M_B_AGE_MEDIAN", "M_B_AGE_Q1", "M_B_AGE_Q3", "M_J_AGE_MEAN", "M_J_AGE_SD", "M_M_AGE_MEAN", "M_M_AGE_SD"],
+      "assumption_ids": ["A_CONTRACT", "A_COMPOSITION", "A_TRANSFER"],
+      "derivation": "The task determines 35-74 support. Source ages show distinct broad adult and elderly selections, so no source age distribution is imposed. A discrete normal-kernel center of 53 and scale 11 are assumed for this scenario. They are neither pooled source moments nor an IQR-to-SD conversion. Reference 55 and decade 10 define covariate coordinates."
+    },
+    "female": {
+      "evidence_ids": ["M_B_FEMALE_FRACTION", "M_M_FEMALE_FRACTION", "M_J_MALE_FRACTION"],
+      "assumption_ids": ["A_CONTRACT", "A_COMPOSITION", "A_TRANSFER"],
+      "derivation": "The source category counts provide contextual composition only. A reference female probability of 0.55 and weak age log-odds slope of 0.05 are assumed and are not weighted estimates or source coding recovery. The task category labels define the output coding."
+    },
+    "bmi": {
+      "evidence_ids": ["M_B_BMI_MEDIAN", "M_B_BMI_Q1", "M_B_BMI_Q3", "M_M_BMI_MEAN", "M_M_BMI_SD", "M_J_BMI_MEAN", "M_J_BMI_SD"],
+      "assumption_ids": ["A_BMI", "A_TRANSFER", "A_OMITTED"],
+      "derivation": "The 23.8 conditional median and 0.145 log residual SD are scenario choices informed by Bao's 23.5 median with 21.4-25.9 quartiles and the differently selected BMI mean/SD contexts. No sample pooling, quartile-to-Gaussian-SD identification or precision weighting is performed. The age, curvature, sex and risk-scaling coefficients are unsupported explicit assumptions."
+    },
+    "glycemic_state": {
+      "evidence_ids": ["M_M_FSG_SD", "M_M_HBA1C_PERCENT_SD", "M_B_FPG_Q3", "M_B_HBA1C_PERCENT_Q3"],
+      "assumption_ids": ["A_STATE", "A_TRANSFER", "A_OMITTED"],
+      "derivation": "Different source inclusion of diabetes and broader MIND individual dispersions motivate allowing an elevated-burden tail. They identify neither a mixture prevalence nor its risk factors. The 0.08 reference probability and all three log-odds coefficients are chosen assumptions, not estimates derived from marginal SDs."
+    },
+    "glucose_body": {
+      "evidence_ids": ["M_M_FSG_MEAN", "M_M_FSG_SD", "M_B_FPG_MEDIAN", "M_B_FPG_Q1", "M_B_FPG_Q3", "M_J_FPG_MEAN", "M_J_FPG_SD"],
+      "assumption_ids": ["A_GLUCOSE", "A_TRANSFER", "A_OMITTED"],
+      "derivation": "Serum FSG provides specimen-relevant but older selected-population context. Source fasting plasma summaries provide separate biological context only. The 5.05 serum conditional median, 0.105 log SD and covariate shifts are assumptions for a baseline component whose marginal moments differ after covariate mixing and tail addition. No serum/plasma conversion or source moment equality is asserted."
+    },
+    "hba1c_body": {
+      "evidence_ids": ["M_B_HBA1C_PERCENT_MEDIAN", "M_B_HBA1C_PERCENT_Q1", "M_B_HBA1C_PERCENT_Q3", "M_M_HBA1C_PERCENT_MEAN", "M_M_HBA1C_PERCENT_SD", "R_JANSEN_BMI", "R_JANSEN_FPG", "U_NGSP_SCALE"],
+      "assumption_ids": ["A_HBA1C", "A_TRANSFER", "A_OMITTED"],
+      "derivation": "Percent-scale source levels inform an assumed 5.55 conditional median and 0.060 log SD. Jansen's positive separately age/gender-adjusted associations motivate allowing shared metabolic dependence, but neither 0.13 nor 2.29 is used as a target coefficient or inserted into a joint equation. All conditional covariate shifts are assumptions. NGSP guidance preserves scale distinctions; no IFCC value is converted or needed in the generator."
+    },
+    "residual_dependence": {
+      "evidence_ids": ["R_BAO_PEARSON", "R_MIND_SPEARMAN", "R_JANSEN_FPG"],
+      "assumption_ids": ["A_DEPENDENCE", "A_TRANSFER", "A_OMITTED"],
+      "derivation": "Positive source associations motivate a shared glycemic innovation. The chosen 0.45 is a conditional correlation of Gaussian log residuals in the baseline component. It is not a transplanted 0.619 raw Pearson or 0.529 Spearman statistic and does not numerically convert rank correlation. Its factor loadings sqrt(0.45) and sqrt(1-0.45) are algebraic consequences of the assumed variance decomposition."
+    },
+    "glycemic_tail": {
+      "evidence_ids": ["M_M_FSG_SD", "M_M_HBA1C_PERCENT_SD", "R_BAO_PEARSON", "R_MIND_SPEARMAN"],
+      "assumption_ids": ["A_TAIL", "A_STATE", "A_TRANSFER", "A_OMITTED"],
+      "derivation": "Broader source individual dispersion with retained diabetes and positive glucose/HbA1c dependence support considering a shared right-tail mechanism. They do not identify its distribution or scale. Severity log SD 0.45, positive increments 2.4 mmol/L and 1.25 percentage points, and independent log noise SDs 0.35 and 0.25 are explicit scenario assumptions. Their relationship to any output moments is untested."
+    }
+  }
+}
