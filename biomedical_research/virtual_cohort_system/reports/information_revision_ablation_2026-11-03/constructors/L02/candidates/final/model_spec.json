@@ -1,0 +1,218 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_distribution": {
+      "minimum": 35,
+      "maximum": 74,
+      "center": 52.0,
+      "scale": 13.0
+    },
+    "female_distribution": {
+      "reference_probability": 0.54,
+      "age_center": 54.0,
+      "log_odds_per_year": 0.006
+    },
+    "bmi_distribution": {
+      "reference_mean": 24.1,
+      "age_center": 54.0,
+      "female_center": 0.54,
+      "age_linear": 0.015,
+      "age_quadratic": -0.0015,
+      "female_mean_shift": -0.35,
+      "log_sd": 0.14
+    },
+    "glycemic_state": {
+      "reference_probability": 0.075,
+      "age_center": 54.0,
+      "bmi_center": 24.0,
+      "female_center": 0.54,
+      "log_odds_per_year": 0.018,
+      "log_odds_per_bmi": 0.11,
+      "female_log_odds_shift": -0.1
+    },
+    "glucose_distribution": {
+      "reference_means": [
+        5.1,
+        8.9
+      ],
+      "age_center": 54.0,
+      "bmi_center": 24.0,
+      "female_center": 0.54,
+      "age_mean_slope": 0.01,
+      "bmi_mean_slope": 0.05,
+      "female_mean_shift": -0.05,
+      "conditional_cv": [
+        0.12,
+        0.32
+      ]
+    },
+    "hba1c_distribution": {
+      "reference_means": [
+        5.5,
+        7.75
+      ],
+      "age_center": 54.0,
+      "bmi_center": 24.0,
+      "female_center": 0.54,
+      "age_mean_slope": 0.008,
+      "bmi_mean_slope": 0.01,
+      "female_mean_shift": -0.025,
+      "conditional_cv": [
+        0.071,
+        0.19
+      ]
+    },
+    "conditional_log_error_correlation": [
+      0.36,
+      0.55
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "Generate exactly 3000 adults, age 35-74 inclusive, female coded 1 and male 0, without patient input. These are contract settings, not scientific estimates."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Discrete truncated Gaussian weights centered at 52 with scale 13 define age composition. The age limits come from the task; composition is a target assumption. Bao has younger broad support, MIND is older selected, and Jansen is European; none identifies CHNS age frequencies."
+    },
+    {
+      "id": "A_SEX",
+      "description": "Female probability is 0.54 at age 54 with modest positive age log-odds slope 0.006/year. Source female count ratios are contextual, not estimates of this selected target population. The age-sex association is assumed."
+    },
+    {
+      "id": "A_BMI",
+      "description": "BMI has conditional arithmetic mean 24.1 + 0.015*(age-54) - 0.0015*(age-54)^2 - 0.35*(female-0.54), and lognormal residual log-SD 0.14. Values loosely reflect Shanghai BMI quartiles and sex difference, with older MIND BMI context; these are chosen transport and distribution assumptions. Age curvature and sex difference are not recovered target effects."
+    },
+    {
+      "id": "A_STATE",
+      "description": "An unobserved high-glycemia component, with reference probability 0.075 and logistic dependence on age, BMI and sex, represents heterogeneous dysglycemia without labeling clinical diabetes, therapy or pregnancy. No supplied study estimates this component prevalence or its risk gradients in CHNS. Its size and gradients are explicit assumptions accounting for the task having no diabetes exclusion."
+    },
+    {
+      "id": "A_GLUCOSE",
+      "description": "Glucose uses state-specific means 5.10 and 8.90 mmol/L plus modest additive age, BMI and sex terms; conditional CV is 0.12 and 0.32. Bao fasting plasma center and MIND serum dispersion inform plausibility only. Target serum measurements are modeled directly; no plasma-to-serum conversion or exact assay identity is asserted."
+    },
+    {
+      "id": "A_HBA1C",
+      "description": "HbA1c uses state-specific arithmetic means 5.50 and 7.75 percent, plus age slope 0.008 percent/year, BMI slope 0.010 percent/(kg/m^2), and female shift -0.025 percent. Conditional CVs are 0.071 and 0.19. Center/spread choices use Bao and MIND context while leaving high-state tails explicit assumptions. The positive age term is informed by Jansen age coefficients and Pani adjusted 0.010 in the audit, but is not claimed equal to any source or target OLS coefficient. BMI term is not installed from either separate Jansen projection."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "description": "Within-state log residuals of glucose and HbA1c are bivariate Gaussian with correlations 0.36 and 0.55. Shared state, age, BMI and sex create additional dependence. Bao Pearson 0.619 and MIND Spearman 0.529 suggest positive but non-equivalent associations; neither identifies these conditional latent correlations. No arithmetic/rank conversion is made. Remaining conditional independence is a modeling assumption, not absence of evidence."
+    },
+    {
+      "id": "A_FINITE",
+      "description": "Age and sex are bounded. BMI is lognormal with bounded positive conditional mean and fixed log-SD. Biomarker conditional means are positive affine functions of BMI with bounded age/sex terms; positive lognormal errors have all polynomial moments. A bounded mixture probability preserves finite polynomial moments. This avoids exponentiating an unbounded lognormal BMI predictor."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "All target structure is assumption-dependent under selected CHNS 2009 complete-case eligibility. Source selection, disease exclusions, country, age, calendar time, assays and weights differ. This model is not a population reconstruction or a causal model. No source uncertainty, confidence or synthetic sample size is treated as evidence precision."
+    },
+    {
+      "id": "A_SEED",
+      "description": "Seeds control only individual random variation under fixed settings. Repeated seeds do not propagate structural, evidence or transport uncertainty; no probability interpretation for those uncertainties is supplied."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "evidence_ids": [],
+      "derivation": "Fixed task row count."
+    },
+    "age_distribution": {
+      "assumption_ids": [
+        "A_TASK",
+        "A_AGE"
+      ],
+      "evidence_ids": [
+        "M_B_AGE_MEDIAN",
+        "M_B_AGE_Q1",
+        "M_B_AGE_Q3",
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD",
+        "M_M_AGE_MEAN",
+        "M_M_AGE_SD"
+      ],
+      "derivation": "Age support is mandated; center and scale are explicit synthesis choices rather than pooled source estimates."
+    },
+    "female_distribution": {
+      "assumption_ids": [
+        "A_SEX"
+      ],
+      "evidence_ids": [
+        "M_B_FEMALE_FRACTION",
+        "M_M_FEMALE_FRACTION"
+      ],
+      "derivation": "Reference probability and age dependence are transport assumptions, not weighted pooled count ratios."
+    },
+    "bmi_distribution": {
+      "assumption_ids": [
+        "A_BMI",
+        "A_FINITE"
+      ],
+      "evidence_ids": [
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "derivation": "Shanghai central BMI and sex-specific context motivate a moderate positive lognormal BMI distribution; the selected conditional values are assumptions. Normal-log mean is log(arithmetic_mean)-log_sd^2/2."
+    },
+    "glycemic_state": {
+      "assumption_ids": [
+        "A_STATE",
+        "A_TRANSPORT"
+      ],
+      "evidence_ids": [
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "derivation": "All mixture prevalence and risk coefficients are assumptions. Inclusion of diabetes in target, unlike Bao/Jansen exclusions, motivates a high-glycemia component without assigning clinical status."
+    },
+    "glucose_distribution": {
+      "assumption_ids": [
+        "A_GLUCOSE",
+        "A_FINITE"
+      ],
+      "evidence_ids": [
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD"
+      ],
+      "derivation": "Reference centers, slopes and CVs are assumed for target serum. For CV c, log-SD=sqrt(log(1+c*c)) and log-location=log(conditional_mean)-log-SD^2/2. Source IQR is never relabeled SD."
+    },
+    "hba1c_distribution": {
+      "assumption_ids": [
+        "A_HBA1C",
+        "A_FINITE",
+        "A_TRANSPORT"
+      ],
+      "evidence_ids": [
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD",
+        "R_JANSEN_BMI",
+        "E_SOURCE_RECONCILIATION",
+        "U_NGSP_SCALE"
+      ],
+      "derivation": "Age context includes Jansen Table 3 II 0.08 mmol/mol/year with gender/FPG adjustment, giving 0.0073184 percentage points/year by 0.09148 multiplication, and Pani 0.010 adjusted for sex/BMI/FPG with survey weighting. Chosen conditional 0.008 is a transfer assumption, not either recovered estimand. Other levels/CVs/terms are assumptions; CV transformation as for glucose."
+    },
+    "conditional_log_error_correlation": {
+      "assumption_ids": [
+        "A_DEPENDENCE"
+      ],
+      "evidence_ids": [
+        "R_BAO_PEARSON",
+        "R_MIND_SPEARMAN"
+      ],
+      "derivation": "Chosen residual latent correlations 0.36/0.55 are neither reported correlation nor a conversion; between-component dependence can make marginal arithmetic and rank associations differ."
+    }
+  }
+}

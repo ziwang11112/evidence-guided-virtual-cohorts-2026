@@ -1,0 +1,328 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_values": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74
+    ],
+    "age_probabilities": [
+      0.021462003828784777,
+      0.022200140903977515,
+      0.02287095174322128,
+      0.02346690352475012,
+      0.028281525816660925,
+      0.028784618255386956,
+      0.02917837863801107,
+      0.02945811009293995,
+      0.029620449845742938,
+      0.029663436503272654,
+      0.029586549496551894,
+      0.029390719573464317,
+      0.02907831004555731,
+      0.02865306931723498,
+      0.02812005603048116,
+      0.027485538915042917,
+      0.026756874115877103,
+      0.025942363353045256,
+      0.038102128838912994,
+      0.03664455828793486,
+      0.035100458112747264,
+      0.03348567994906326,
+      0.031816214287654875,
+      0.030107932090055006,
+      0.028376341119597547,
+      0.026636361996640556,
+      0.02490212818680414,
+      0.0231868132421042,
+      0.021502487673166277,
+      0.019860006872435422,
+      0.018268930568064633,
+      0.01673747339762981,
+      0.01527248537754182,
+      0.02111512039157759,
+      0.01911170651556261,
+      0.01722853767950614,
+      0.015468222488823475,
+      0.013831696375094422,
+      0.01231837802567579,
+      0.010926338523404178
+    ],
+    "female_probability": 0.5368722666264515,
+    "bmi_log_mean": 3.1552468005995413,
+    "bmi_log_sd": 0.1429932872938595,
+    "high_component_probability": 0.12595876180181098,
+    "glucose_log_parameters": [
+      1.6269960551296263,
+      0.11417508459927427,
+      2.0374823519308785,
+      0.3466583579033988
+    ],
+    "hba1c_log_parameters": [
+      1.6964069755490496,
+      0.06844351470566934,
+      1.9459101490553135,
+      0.25425284245673563
+    ],
+    "latent_correlations": [
+      [
+        [
+          1.0,
+          -0.05,
+          0.20756668213295834,
+          0.2699192837361729
+        ],
+        [
+          -0.05,
+          1.0,
+          0.2,
+          0.3217928392153623
+        ],
+        [
+          0.20756668213295834,
+          0.2,
+          1.0,
+          0.22380706736264036
+        ],
+        [
+          0.2699192837361729,
+          0.3217928392153623,
+          0.22380706736264036,
+          1.0
+        ]
+      ],
+      [
+        [
+          1.0,
+          -0.05,
+          0.20756668213295834,
+          0.2699192837361729
+        ],
+        [
+          -0.05,
+          1.0,
+          0.2,
+          0.3217928392153623
+        ],
+        [
+          0.20756668213295834,
+          0.2,
+          1.0,
+          0.5069326008225287
+        ],
+        [
+          0.2699192837361729,
+          0.3217928392153623,
+          0.5069326008225287,
+          1.0
+        ]
+      ]
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_COHORT",
+      "description": "Exactly 3000 exchangeable synthetic adults, unique synthetic IDs, task order and observed=None; no geography, survey weights, missingness or clinical exclusion model."
+    },
+    {
+      "id": "A_REFERENCE",
+      "description": "Supplied CHNS summaries are descriptive calibration inputs from a selected unweighted sample, not population truth. Estimated individual SD is used as a model population SD approximation; marginal estimator uncertainty is unavailable. The supplied regression CR1 intervals are not fitted or treated as independent constraints."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Maximum entropy on ages 35 through 74, matching supplied mean and squared SD, with assumed CDF(38)=0.09, CDF(52)=0.49, CDF(67)=0.89 to locate reported quantiles. Maximum entropy and within-bin probability allocation are assumptions."
+    },
+    {
+      "id": "A_BMI",
+      "description": "Lognormal BMI fitted to supplied arithmetic mean and individual SD. This family, resulting tails, and continuous precision are assumptions; median and q90 need not agree exactly."
+    },
+    {
+      "id": "A_FEMALE",
+      "description": "Female is Bernoulli at the supplied selected-sample fraction and independent of age, BMI and both biomarkers. No sex coefficient direction is inferred from unresolved external coding. This independence is an unassessed simplification."
+    },
+    {
+      "id": "A_MIXTURE",
+      "description": "A shared two-component lognormal biomarker mixture is a mathematical representation of tail concordance, not a diagnosis. Component membership is independent of age, BMI and sex. One shared fraction and component means/SDs fit two means, SDs and three CDF constraints each approximately. Parameter search bounds and loss scales (mean/SD 0.03; CDF 0.01) are numerical choices, not evidence precision."
+    },
+    {
+      "id": "A_COPULA",
+      "description": "Each component has a Gaussian copula for latent age, BMI, glucose and HbA1c. Latent age-BMI correlation is assumed -0.05 and BMI-glucose is assumed 0.20. Remaining correlations solve the supplied three regression projections and Pearson/Spearman functionals analytically. These matrices are one underidentified completion, not recovered participant covariance or causal equations."
+    },
+    {
+      "id": "A_EVIDENCE_CONTEXT",
+      "description": "External source slopes, correlations, marginals and restored age evidence remain source context; none is forced to equal target estimates. No source-population replay occurred. Shared cohorts, unit conversions and correlated summaries are not independent replications."
+    },
+    {
+      "id": "A_NUMERICS",
+      "description": "Distributional covariance calculations and fixed Gauss-Hermite quadrature are deterministic, not simulated participants. Moment fitting and integration cannot establish generator execution. Individual row randomness does not represent parameter or structural uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_COHORT"
+      ],
+      "derivation": "Task requires 3000 rows."
+    },
+    "age_values": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_COHORT",
+        "A_AGE"
+      ],
+      "derivation": "Integer support 35 to 74 inclusive from task."
+    },
+    "age_probabilities": {
+      "evidence_ids": [
+        "REF_age_mean",
+        "REF_age_sd",
+        "REF_age_q10",
+        "REF_age_median",
+        "REF_age_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_AGE",
+        "A_NUMERICS"
+      ],
+      "derivation": "Maximum-entropy exponential tilt on integer support. Formula and exact assumptions in derive_parameters.py; deterministic output in analytic_report.json."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "REF_female_mean"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_FEMALE"
+      ],
+      "derivation": "Supplied fraction 0.5368722666264515 used as Bernoulli probability."
+    },
+    "bmi_log_mean": {
+      "evidence_ids": [
+        "REF_bmi_mean",
+        "REF_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_BMI"
+      ],
+      "derivation": "log(arithmetic mean)-0.5*log(1+(SD/mean)^2)."
+    },
+    "bmi_log_sd": {
+      "evidence_ids": [
+        "REF_bmi_mean",
+        "REF_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_BMI"
+      ],
+      "derivation": "sqrt(log(1+(SD/mean)^2))."
+    },
+    "high_component_probability": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90",
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_NUMERICS"
+      ],
+      "derivation": "Joint deterministic least-squares fit of a common class weight to both biomarker margins; not disease prevalence."
+    },
+    "glucose_log_parameters": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_NUMERICS"
+      ],
+      "derivation": "[mu0,sigma0,mu1,sigma1] for natural log serum glucose, derived by the retained mixture solver."
+    },
+    "hba1c_log_parameters": {
+      "evidence_ids": [
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_NUMERICS"
+      ],
+      "derivation": "[mu0,sigma0,mu1,sigma1] for natural log HbA1c percent, derived by the retained mixture solver."
+    },
+    "latent_correlations": {
+      "evidence_ids": [
+        "REF_E1",
+        "REF_E2",
+        "REF_E3",
+        "REF_glucose_hba1c_pearson",
+        "REF_glucose_hba1c_spearman",
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_COPULA",
+        "A_EVIDENCE_CONTEXT",
+        "A_NUMERICS"
+      ],
+      "derivation": "Two positive-definite correlation matrices in order age,BMI,glucose,HbA1c. Five unknown entries fitted to the five supplied functionals, two associations assumed. Formula covariance solves preserve the actual distinct adjustment sets; no concatenation of source regression slopes."
+    }
+  }
+}

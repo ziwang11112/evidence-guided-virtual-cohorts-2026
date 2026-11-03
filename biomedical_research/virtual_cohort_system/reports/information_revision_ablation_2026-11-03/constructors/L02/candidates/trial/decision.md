@@ -1,0 +1,11 @@
+# Initial scientific decision
+
+Use a two-component positive glycemia model with dependent age, sex and BMI and correlated lognormal biomarker errors. The high-glycemia component represents heterogeneity in this all-diagnosis task; it is not an imputed diabetes diagnosis. All five variables are generated. The generator produces one 3000-row table per invocation and uses the seed only for individual variation.
+
+The evidence file is an exact copy of the assigned compiled record. Bao Shanghai quartiles, MIND serum/HbA1c means and individual SDs, Jansen separate projections, and the qualified Jansen/Pani age evidence in the audit inform plausibility. No original literature was retrieved. No source means are pooled as target estimates; no IQR or mean SE is relabeled individual SD; no Spearman statistic is substituted for Pearson. Jansen repeated models and unit conversions remain dependent evidence. The Pani age evidence is survey-weighted and selected against diabetes; it does not identify the task's unweighted age coefficient.
+
+Scientific numbers are explicit assumptions with parameter-level provenance. The residual correlations, mixture prevalence, component tails and sex/age/BMI dependence are underidentified. The age coefficient is not forced to equal a source projection, and the separate Jansen BMI and FPG regressions are not concatenated. Positive support and finite polynomial moments follow from bounded age/sex, a lognormal BMI, positive affine conditional biomarker means and lognormal errors. The state probability is bounded. No exponentiated unbounded BMI predictor enters a biomarker mean.
+
+Analyses E1-E3 and all margins/joint associations are supported as calculations under this synthetic model, not validated target conclusions. Causal effects, clinical decisions, disease prevalence, medication effects, pregnancy effects, longitudinal change and measurement savings are unassessed. Repeated seeds do not propagate evidence, structural or transport uncertainty.
+
+Request trial4201 to check executable output and all scheduled generated diagnostics. This is not source replay. No rows have been generated locally; source-context checks are not computable without supplied source execution. Further change requires actual diagnostic feedback, not a preferred p-value or favorable seed.

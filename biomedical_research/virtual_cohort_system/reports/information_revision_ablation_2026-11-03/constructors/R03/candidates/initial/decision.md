@@ -1,0 +1,26 @@
+# R03 initial scientific candidate
+
+This candidate generates all five variables for the selected CHNS adult analytical population. The explicitly supplied CHNS development reference is the principal numerical input. It contains sample estimates, not population truth. The external evidence is retained in full and used to assess applicability rather than pooled into an artificial common study.
+
+The most informative joint feature is the difference between Pearson (0.661) and Spearman (0.361). A shared broad glycemic component with stronger within-component association represents that feature while leaving the central component weakly associated. Two positive lognormal mixtures reproduce the five disclosed summaries of each glycemic margin in their working population. Component membership is not a disease diagnosis. The nested-label assumption, Gaussian copulas and constant covariate couplings are not identified by the supplied summaries.
+
+Age uses discrete maximum entropy within four assumed age bands. BMI uses a positive lognormal distribution fitted to its mean and SD; quantiles are approximate predictions. Female has the disclosed Bernoulli fraction, with independence explicitly assumed because sex-specific dependence is unidentified, not because missing evidence establishes independence. Age-BMI and BMI-glucose latent correlations are explicit weak-dependence assumptions. Other latent couplings are obtained from the covariance equations for the actual three adjusted reference projections, not by concatenating published regression rows.
+
+Source context matters. Bao reports unadjusted plasma Pearson in Shanghai with diagnosed-diabetes exclusions; MIND reports serum Spearman among selected older rural adults; Jansen coefficients concern non-diabetic European participants and different conditioning sets. The audited Pani age coefficient is a weighted survey slope. Their populations, weights, measurements and estimands are not interchangeable with the equal-weight task sample. Jansen age evidence is present and restored; the model does not assert an age-evidence gap. The official NGSP relation converts representation only, not assays or serum/plasma measurements. None of the external source statistics was replayed.
+
+The retained producer derive_parameters.py uses only deterministic moment formulas, CDF equations and scalar quadrature; it never imports the generator or creates synthetic rows. Population fitting uses reference point estimates as working anchors. Reference CR1 intervals are preserved as sample uncertainty but are not converted to individual variability or used as precision weights. Both latent matrices are positive definite. Age support is 35..74 and exponentiation ensures strictly positive BMI, glucose and HbA1c; finite lognormal scales ensure all moments exist.
+
+Requested next stage: one isolated trial at seed 4201. No new original-source queries, downloads, paid APIs or scientific subagents were used. The trial will assess output validity and finite-cohort behavior, not prove source or target validity. No favorable-seed selection, realized-moment rescaling, p-value tuning or hidden optimization cohorts is implemented.
+
+Unassessed uses include diagnosis, clinical decisions, causal inference, treatment effects, sex-specific analyses, subgroups, tail extremes and national prevalence. Structural and reference uncertainty are not calibrated by seeds. Continuous HbA1c approximates an average-tie rank reference; rounded measurement values and full joint dependence remain unresolved. Retain this candidate unchanged after freeze and bind actual feedback if later delivery or revision uses it.
+
+
+## Initial delivery decision after actual trial4201
+
+Retain the scientific model in a new unfrozen candidate, mixture_initial01. The generator, model specification and evidence bytes are identical to mixture_trial01. Bind the complete actual feedback and trial_interpretation.json. The trial produced 3000 valid rows and all 30 requested statistics; no nonpositive glycemia or duplicate measurement rows were reported.
+
+E1=0.0605241, E2=0.401491 and E3=0.00754840; Pearson=0.646977 and Spearman=0.349772. Age quantiles and all binary quantiles match the working anchors. Glycemic SDs are somewhat higher in this draw, while glycemic population moments are anchored by deterministic equations. Model-based mean sampling SD calculations suggest ordinary finite-cohort fluctuations are a plausible explanation, not proof that every discrepancy is noise. The source reference coefficient intervals are not used as synthetic-cohort acceptance thresholds.
+
+BMI population quantiles differ slightly from the reference because its lognormal family is fitted only to mean and SD. That structural approximation is separated from trial fluctuation in the retained interpretation artifact. Female independence, copula/mixture assumptions, continuous HbA1c versus tied reference measurements, and source-transfer uncertainty remain unresolved. No scientific parameter changes, seed selection or additional trial are justified by this one draw.
+
+Requested next stage: initial delivery at fixed seeds 4101, 4102 and 4103. The earlier trial-stage request above is historical. No new retrieval or local row generation occurred.

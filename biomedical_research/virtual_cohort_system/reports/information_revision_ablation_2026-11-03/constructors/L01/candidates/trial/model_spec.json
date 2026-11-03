@@ -1,0 +1,215 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000,
+      "age_min": 35,
+      "age_max": 74,
+      "id_prefix": "L01_"
+    },
+    "centering": {
+      "age": 54.0,
+      "female": 0.55,
+      "bmi": 24.2,
+      "bmi_covariate_scale": 8.0
+    },
+    "age_distribution": {
+      "location": 54.0,
+      "scale": 12.0
+    },
+    "female_distribution": {
+      "probability_at_center": 0.55,
+      "age_logit_slope": 0.004
+    },
+    "bmi_distribution": {
+      "mean_at_center": 24.2,
+      "log_sd": 0.145,
+      "age_quadratic_log": -0.00012,
+      "female_log_effect": 0.012
+    },
+    "core_glucose": {
+      "mean_at_center": 5.05,
+      "log_sd": 0.11,
+      "age_log_slope": 0.0018,
+      "bmi_log_slope": 0.006,
+      "female_log_effect": -0.012
+    },
+    "core_hba1c": {
+      "mean_at_center": 5.5,
+      "log_sd": 0.07263137897921813,
+      "age_log_slope": 0.0016363636363636363,
+      "bmi_log_slope": 0.0007272727272727273,
+      "female_log_effect": -0.0036363636363636364
+    },
+    "joint_glycemia": {
+      "core_normal_correlation": 0.45,
+      "shared_gamma_shape": 0.25,
+      "individual_gamma_shape": 1.75
+    },
+    "glycemic_subgroup": {
+      "probability_at_center": 0.075,
+      "age_logit_slope": 0.025,
+      "bmi_logit_slope": 0.08,
+      "female_logit_effect": -0.1,
+      "glucose_increment_per_gamma_unit": 1.7,
+      "hba1c_increment_per_gamma_unit": 0.9
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Task requires 3000 independent synthetic records, integer age 35-74 and binary female. Row identifiers carry no clinical information. No participant inputs, disease or pregnancy exclusions, or survey weights are imposed."
+    },
+    {
+      "id": "A_TRANSPORT",
+      "description": "All numerical choices describe one exploratory CHNS 2009 analytical-sample scenario. Published populations, sampling, disease selections, years and assays differ; no target population parameter is identified. Source summaries are not pooled as empirical observations, weighted by fabricated precision, or treated as targets to reproduce."
+    },
+    {
+      "id": "A_DEMOGRAPHY",
+      "description": "Age uses a discrete normal kernel at 54 years with scale 12 over task support. Female probability is 0.55 at age 54 with logit slope 0.004/year. These are broad demographic assumptions; reported source female count ratios are contextual. No age-sex independence is inferred from absent evidence."
+    },
+    {
+      "id": "A_BMI",
+      "description": "BMI is lognormal conditional on age/sex, mean 24.2 at centered covariates, log SD 0.145, quadratic log-age term -0.00012/year^2 and female log effect 0.012. Bao BMI quartiles and MIND mean/SD motivate location/spread plausibility but do not identify these target quantities. The curve and sex effect are assumptions."
+    },
+    {
+      "id": "A_CORE",
+      "description": "Core glucose/HbA1c are correlated lognormal variables with conditional means 5.05 mmol/L and 5.5%, log SD 0.11 and a derived log SD corresponding to individual SD 0.4% at mean 5.5. Core latent normal correlation 0.45 is an assumed dependence structure; neither Bao Pearson 0.619 nor MIND Spearman 0.529 is set equal to it. Core lognormal means are corrected by minus half log variance."
+    },
+    {
+      "id": "A_RELATIONSHIPS",
+      "description": "Core glucose log slopes are age 0.0018/year, bounded BMI 0.006/unit and female -0.012. Core HbA1c slopes at centered values are approximately age 0.009 percentage points/year, BMI 0.004 percentage points/unit and female -0.02 percentage points. Age magnitude is qualitatively informed by restored Pani 0.010 and converted Jansen age projections, with their actual adjustment and selection retained. BMI and glucose Jansen Table 2 coefficients are not concatenated into a structural equation. These effects, including sex orientation, are target assumptions."
+    },
+    {
+      "id": "A_TAIL",
+      "description": "A latent high-glycemia subgroup has center probability 0.075 and logit effects age 0.025/year, bounded BMI 0.08/unit and female -0.10. This is not a diagnosis or estimated diabetes prevalence. It allows high tails because target selection does not exclude diagnosed diabetes. Group membership, its effects and gamma-tail forms are assumed. Mean increments conditional on membership are 3.4 mmol/L glucose and 1.8% HbA1c; correlated gamma severities reflect incomplete correspondence of a single serum measure and longer-term glycation."
+    },
+    {
+      "id": "A_JOINT",
+      "description": "Shared gamma shape 0.25 plus separate gamma shapes 1.75, all unit scale, yield total shape 2 per excess and conditional excess correlation 0.125. Primitive random draws are independent except specified shared normals/gamma and demographic conditioning. This conditional independence is an explicit regularizing assumption, not evidence of biological independence. The joint law contains no causal interpretation, clinical treatment status or hematology."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "Age is bounded; sex is binary; BMI is positive lognormal. BMI's biomarker/risk covariate is 8*tanh((BMI-24.2)/8), preserving a near-center association and bounding exponential multipliers. This prevents the infinite moment problem arising from exponentiating an unbounded lognormal BMI. Positive lognormal cores plus nonnegative gamma increments imply positive outcomes and all positive integer moments finite. Gaussian/gamma draws are not sample-normalized or clipped to empirical quantiles."
+    },
+    {
+      "id": "A_LIMITS",
+      "description": "Assay equivalence, source-to-target exchangeability, nonlinear and subgroup associations, causal effects, transport uncertainty, treatment/diabetes mechanisms and source numerical replay remain unassessed. Fixed parameters encode a scenario rather than a posterior; seed variation concerns synthetic sampling only. The task's E1/E2/E3 projections emerge from the complete mixture and need not equal any structural parameter or source projection."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Row count, age support and column identities follow task.json; id prefix is an implementation convention."
+    },
+    "centering": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DEMOGRAPHY",
+        "A_BMI",
+        "A_SUPPORT"
+      ],
+      "derivation": "54, 0.55 and 24.2 define assumed reference covariates; 8 is an assumed saturation scale in BMI units, not an observed cutoff."
+    },
+    "age_distribution": {
+      "evidence_ids": [
+        "M_B_AGE_MEDIAN",
+        "M_B_AGE_Q1",
+        "M_B_AGE_Q3",
+        "M_J_AGE_MEAN",
+        "M_J_AGE_SD"
+      ],
+      "assumption_ids": [
+        "A_DEMOGRAPHY",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Choose broad location 54 and kernel scale 12 within adult 35-74 support. No quartile-to-SD conversion or source-to-target equality is claimed; normalized discrete weights determine the actual moments."
+    },
+    "female_distribution": {
+      "evidence_ids": [
+        "M_B_FEMALE_FRACTION",
+        "M_M_FEMALE_FRACTION"
+      ],
+      "assumption_ids": [
+        "A_DEMOGRAPHY",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Choose 0.55 center probability and mild 0.004 age logit slope; neither is a transported source estimate."
+    },
+    "bmi_distribution": {
+      "evidence_ids": [
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD"
+      ],
+      "assumption_ids": [
+        "A_BMI",
+        "A_TRANSPORT"
+      ],
+      "derivation": "24.2 center conditional arithmetic mean and log SD 0.145 give approximately 3.53 individual SD at center; age curvature and sex term are assumptions. This is a plausible target scenario, not fitted source quartiles."
+    },
+    "core_glucose": {
+      "evidence_ids": [
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD"
+      ],
+      "assumption_ids": [
+        "A_CORE",
+        "A_RELATIONSHIPS",
+        "A_TRANSPORT",
+        "A_SUPPORT"
+      ],
+      "derivation": "5.05 core center and 0.11 log SD are assumptions informed by the source central ranges. No universal plasma-serum conversion is used. All covariate effects are explicit assumptions."
+    },
+    "core_hba1c": {
+      "evidence_ids": [
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD",
+        "E_SOURCE_RECONCILIATION",
+        "U_NGSP_SCALE",
+        "R_JANSEN_BMI"
+      ],
+      "assumption_ids": [
+        "A_CORE",
+        "A_RELATIONSHIPS",
+        "A_TRANSPORT"
+      ],
+      "derivation": "Choose core mean 5.5 and individual SD 0.4; log SD=sqrt(log(1+(0.4/5.5)^2)). Set log-age slope 0.009/5.5, log-BMI 0.004/5.5, female effect -0.02/5.5. Audit Pani adjusted weighted age=0.010 and Jansen age projections (0.11,0.08,0.07)*0.09148 motivate only order of magnitude. Source adjusted projections remain distinct; direct BMI choice does not assert equality to Jansen 0.13*0.09148."
+    },
+    "joint_glycemia": {
+      "evidence_ids": [
+        "R_BAO_PEARSON",
+        "R_MIND_SPEARMAN"
+      ],
+      "assumption_ids": [
+        "A_CORE",
+        "A_JOINT",
+        "A_TRANSPORT"
+      ],
+      "derivation": "0.45 is the assumed core normal correlation, not either published correlation. Gamma shared 0.25 and separate 1.75 imply total shape 2, excess means 2 and conditional correlation 0.25/2=0.125. Shared subgroup membership adds further association. No Pearson/Spearman equivalence is asserted."
+    },
+    "glycemic_subgroup": {
+      "evidence_ids": [
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_SD",
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "assumption_ids": [
+        "A_TAIL",
+        "A_TRANSPORT",
+        "A_JOINT"
+      ],
+      "derivation": "Probability .075 and age/BMI/sex logit effects .025/.08/-.10 are assumptions. Unit-scale gamma total shape 2 gives 1.7*2=3.4 glucose and .9*2=1.8 HbA1c average increments. Broader source dispersions and differing disease exclusions motivate allowing a high tail without identifying target prevalence or treatment."
+    }
+  }
+}

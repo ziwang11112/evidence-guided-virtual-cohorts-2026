@@ -1,0 +1,381 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_values": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74
+    ],
+    "age_probabilities": [
+      0.021462003828651474,
+      0.022200140903809163,
+      0.022870951743020177,
+      0.02346690352451919,
+      0.0282815258167277,
+      0.02878461825543412,
+      0.029178378638042533,
+      0.029458110092960003,
+      0.02962044984575612,
+      0.02966343650328369,
+      0.02958654949656555,
+      0.029390719573485276,
+      0.029078310045590094,
+      0.028653069317283807,
+      0.028120056030549855,
+      0.027485538915134833,
+      0.026756874115995054,
+      0.025942363353191424,
+      0.03810212883839375,
+      0.03664455828749231,
+      0.035100458112383506,
+      0.03348567994877906,
+      0.031816214287449684,
+      0.030107932089927084,
+      0.028376341119544037,
+      0.02663636199665759,
+      0.024902128186887005,
+      0.023186813242247438,
+      0.021502487673363897,
+      0.019860006872681003,
+      0.018268930568351507,
+      0.016737473397951216,
+      0.015272485377891026,
+      0.021115120391416203,
+      0.019111706515492728,
+      0.017228537679514634,
+      0.015468222488897794,
+      0.013831696375222765,
+      0.012318378025847208,
+      0.010926338523608666
+    ],
+    "female_probability": 0.5368722666264515,
+    "bmi_log_mean": 3.1552468005995413,
+    "bmi_log_sd": 0.1429932872938595,
+    "glucose_log_means": [
+      1.6298284133300476,
+      1.8512049090297653
+    ],
+    "glucose_log_sds": [
+      0.10227483771994286,
+      0.3986963883250987
+    ],
+    "hba1c_log_means": [
+      1.6979536762866894,
+      1.8539450292515316
+    ],
+    "hba1c_log_sds": [
+      0.06334013781590292,
+      0.27856384378124394
+    ],
+    "glycemic_label_probabilities": [
+      0.7971005896447597,
+      0.0,
+      0.02969000355224785,
+      0.17320940680299243
+    ],
+    "latent_correlation_narrow": [
+      [
+        1.0,
+        -0.05,
+        0.1907300295579361,
+        0.25305765324327845
+      ],
+      [
+        -0.05,
+        1.0,
+        0.2,
+        0.29583130724507184
+      ],
+      [
+        0.1907300295579361,
+        0.2,
+        1.0,
+        0.16712171513189553
+      ],
+      [
+        0.25305765324327845,
+        0.29583130724507184,
+        0.16712171513189553,
+        1.0
+      ]
+    ],
+    "latent_correlation_broad": [
+      [
+        1.0,
+        -0.05,
+        0.1907300295579361,
+        0.25305765324327845
+      ],
+      [
+        -0.05,
+        1.0,
+        0.2,
+        0.29583130724507184
+      ],
+      [
+        0.1907300295579361,
+        0.2,
+        1.0,
+        0.705047514985946
+      ],
+      [
+        0.25305765324327845,
+        0.29583130724507184,
+        0.705047514985946,
+        1.0
+      ]
+    ]
+  },
+  "assumptions": [
+    {
+      "id": "A_TASK",
+      "description": "The contract requests 3000 independent synthetic adults, observed=None, ages 35-74 inclusive and all five variables generated. Row count and identifier convention are task implementation choices."
+    },
+    {
+      "id": "A_REFERENCE",
+      "description": "The explicitly supplied unweighted CHNS n=6631 complete-case summaries are development sample estimates used as working population moment anchors. Fitting them is not independent validation or recovery of the selected sample joint law. Available CR1 intervals describe three reference coefficients, not individual dispersions or certainty in this generator."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Age uses a discrete distribution on 35..74. Assumed band masses are .09 on 35..38, .40 on 39..52, .40 on 53..67, .11 on 68..74; within bands maximum entropy subject to target mean and variance gives an exponential quadratic tilt. The masses place q10=39, median=53,q90=68; fine age frequencies are unobserved."
+    },
+    {
+      "id": "A_BMI",
+      "description": "BMI is lognormal with mean and variance anchored to the supplied reference. This ensures positive support and finite moments. Other BMI quantiles are approximate predictions; the lognormal family is not established by the summaries."
+    },
+    {
+      "id": "A_MIXTURE",
+      "description": "Glucose and HbA1c each use two lognormal components, fitted by deterministic equations to the corresponding admitted mean, individual SD and 10th/50th/90th percentiles. Narrow and broad labels have overlapping support and do not identify normal glycemia or diabetes. The broad HbA1c label is nested in the broad glucose label to reduce unidentified mixture-class coupling parameters. All component choices and nesting are structural assumptions."
+    },
+    {
+      "id": "A_COPULA",
+      "description": "Within mixture-label states a four-dimensional Gaussian copula links age, BMI, glucose and HbA1c. Glycemic latent association may differ between narrow-narrow and other states; constant age/BMI couplings across these states are assumptions. Two latent correlations are fixed at age-BMI=-.05 and BMI-glucose=.20 as explicit weak-dependence scenarios; no unreported association is inferred absent. Remaining five latent coefficients solve the two supplied glycemic correlations and three supplied OLS projections using population-moment algebra."
+    },
+    {
+      "id": "A_FEMALE",
+      "description": "Female is Bernoulli with the admitted fraction, and independent of the four continuous/ordered variables as an explicit simplifying scenario. The summaries do not establish sex independence; sex-specific effects, prevalence and interactions remain unassessed. The independence choice allows the supplied sex-adjusted projections to be represented without inventing a source sex coefficient."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "description": "The generator represents the task central-serum glucose and whole-blood HbA1c on its native scales; neither plasma-serum equivalence nor common assays across external cohorts is assumed. Glycemic values remain continuous; the provided average-tie Spearman correlation is approximated by a continuous-population Spearman functional. Measurement rounding/ties are not reconstructed."
+    },
+    {
+      "id": "A_UNCERTAINTY",
+      "description": "RNG variation describes finite synthetic cohorts conditional on fixed working parameters. It does not express reference sampling uncertainty, study heterogeneity, mixture ambiguity, transport uncertainty or clinical evidence. No coefficient p-value, CI coverage, exact realized summary, causal effect or national representativeness is guaranteed."
+    },
+    {
+      "id": "A_EXTERNAL",
+      "description": "External Bao, MIND, Jansen and Pani source facts are retained in their own population, units, selection, measurement, weights and adjustment context. They inform plausibility and limitations but are not jointly fit as if observations from one target cohort. Pani and restored Jansen age associations are present; absence of age evidence is not claimed. No source-context replay is supplied."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Fixed task contract and integer support, not a scientific estimate."
+    },
+    "age_values": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TASK"
+      ],
+      "derivation": "Fixed task contract and integer support, not a scientific estimate."
+    },
+    "age_probabilities": {
+      "evidence_ids": [
+        "REF_age_mean",
+        "REF_age_sd",
+        "REF_age_q10",
+        "REF_age_median",
+        "REF_age_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_AGE"
+      ],
+      "derivation": "Deterministic entropy tilt with the declared band masses. derive_parameters.py solves age mean and variance equations, stores probabilities and mathematical results in derivation_result.json."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "REF_female_mean"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_FEMALE"
+      ],
+      "derivation": "Working Bernoulli probability equals the supplied female sample fraction. Other female diagnostics follow from this distribution; they are not separate evidence constraints."
+    },
+    "bmi_log_mean": {
+      "evidence_ids": [
+        "REF_bmi_mean",
+        "REF_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_BMI"
+      ],
+      "derivation": "sigma_log=sqrt(log(1+(SD/mean)^2)); mu_log=log(mean)-sigma_log^2/2. Supplied sample SD is used as working population SD without claiming estimator certainty."
+    },
+    "bmi_log_sd": {
+      "evidence_ids": [
+        "REF_bmi_mean",
+        "REF_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_BMI"
+      ],
+      "derivation": "sigma_log=sqrt(log(1+(SD/mean)^2)); mu_log=log(mean)-sigma_log^2/2. Supplied sample SD is used as working population SD without claiming estimator certainty."
+    },
+    "glucose_log_means": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_MEASUREMENT"
+      ],
+      "derivation": "The two lognormal component locations, scales and marginal label probability solve five deterministic moment/CDF equations. No synthetic data or random quadrature was used; see retained producer and residuals. The marginal probabilities are combined into the joint-label parameter."
+    },
+    "glucose_log_sds": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_MEASUREMENT"
+      ],
+      "derivation": "The two lognormal component locations, scales and marginal label probability solve five deterministic moment/CDF equations. No synthetic data or random quadrature was used; see retained producer and residuals. The marginal probabilities are combined into the joint-label parameter."
+    },
+    "hba1c_log_means": {
+      "evidence_ids": [
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_MEASUREMENT"
+      ],
+      "derivation": "The two lognormal component locations, scales and marginal label probability solve five deterministic moment/CDF equations. No synthetic data or random quadrature was used; see retained producer and residuals. The marginal probabilities are combined into the joint-label parameter."
+    },
+    "hba1c_log_sds": {
+      "evidence_ids": [
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE",
+        "A_MEASUREMENT"
+      ],
+      "derivation": "The two lognormal component locations, scales and marginal label probability solve five deterministic moment/CDF equations. No synthetic data or random quadrature was used; see retained producer and residuals. The marginal probabilities are combined into the joint-label parameter."
+    },
+    "glycemic_label_probabilities": {
+      "evidence_ids": [
+        "REF_glucose_mean",
+        "REF_glucose_sd",
+        "REF_glucose_q10",
+        "REF_glucose_median",
+        "REF_glucose_q90",
+        "REF_hba1c_mean",
+        "REF_hba1c_sd",
+        "REF_hba1c_q10",
+        "REF_hba1c_median",
+        "REF_hba1c_q90"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_MIXTURE"
+      ],
+      "derivation": "Each marginal broad probability is fitted with its mixture. Joint broad probability=min(p_glucose,p_hba1c) is a declared nesting assumption. Four probabilities correspond to (narrow,narrow),(narrow,broad),(broad,narrow),(broad,broad)."
+    },
+    "latent_correlation_narrow": {
+      "evidence_ids": [
+        "REF_glucose_hba1c_pearson",
+        "REF_glucose_hba1c_spearman",
+        "REF_E1",
+        "REF_E2",
+        "REF_E3"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_COPULA",
+        "A_MEASUREMENT",
+        "A_FEMALE"
+      ],
+      "derivation": "Fix age-BMI=-.05 and BMI-glucose=.20. Fit narrow/broad glucose-HbA1c correlations to two distinct observed correlation types via lognormal cross-moments and deterministic bivariate normal-CDF integrals. Fit age-glucose, age-HbA1c and BMI-HbA1c correlations to the three actual reference OLS projection definitions using the full implied covariance. These are neither copied external slopes nor a recovered conditional clinical law. Both correlation matrices are positive definite; values stored in derivation_result.json."
+    },
+    "latent_correlation_broad": {
+      "evidence_ids": [
+        "REF_glucose_hba1c_pearson",
+        "REF_glucose_hba1c_spearman",
+        "REF_E1",
+        "REF_E2",
+        "REF_E3"
+      ],
+      "assumption_ids": [
+        "A_REFERENCE",
+        "A_COPULA",
+        "A_MEASUREMENT",
+        "A_FEMALE"
+      ],
+      "derivation": "Fix age-BMI=-.05 and BMI-glucose=.20. Fit narrow/broad glucose-HbA1c correlations to two distinct observed correlation types via lognormal cross-moments and deterministic bivariate normal-CDF integrals. Fit age-glucose, age-HbA1c and BMI-HbA1c correlations to the three actual reference OLS projection definitions using the full implied covariance. These are neither copied external slopes nor a recovered conditional clinical law. Both correlation matrices are positive definite; values stored in derivation_result.json."
+    }
+  }
+}

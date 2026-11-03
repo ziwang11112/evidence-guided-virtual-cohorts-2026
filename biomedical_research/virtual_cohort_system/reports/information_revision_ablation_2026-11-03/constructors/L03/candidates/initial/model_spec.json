@@ -1,0 +1,188 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_model": {
+      "minimum": 35,
+      "maximum": 74,
+      "location": 53.5,
+      "scale": 11.5
+    },
+    "sex_model": {
+      "reference_probability": 0.55,
+      "age_logodds": 0.006
+    },
+    "bmi_model": {
+      "reference_median": 23.7,
+      "age_knot": 55.0,
+      "age_below_log_slope": 0.0008,
+      "age_above_log_slope": -0.002,
+      "female_log_shift": -0.025,
+      "log_sd": 0.14147883390533622
+    },
+    "tail_model": {
+      "reference_probability": 0.075,
+      "age_logodds": 0.025,
+      "log_bmi_logodds": 1.6,
+      "female_logodds": -0.1
+    },
+    "biomarker_model": {
+      "glucose_medians": [
+        5.1,
+        8.9
+      ],
+      "hba1c_medians": [
+        5.55,
+        7.8
+      ],
+      "glucose_log_sds": [
+        0.11,
+        0.24
+      ],
+      "hba1c_log_sds": [
+        0.062,
+        0.17
+      ],
+      "residual_correlation": 0.45,
+      "glucose_age_log_slope": 0.0015,
+      "glucose_log_bmi_slope": 0.2,
+      "glucose_female_log_shift": -0.01,
+      "hba1c_age_log_slope": 0.0015,
+      "hba1c_log_bmi_slope": 0.025,
+      "hba1c_female_log_shift": -0.005
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_TARGET",
+      "description": "The requested CHNS analytical population is not identified by the external study summaries. All distributional transfers are declared scenarios; no reference summaries or participant data are available in this assignment. No diabetes, treatment, pregnancy or anemia exclusion is imposed."
+    },
+    {
+      "id": "A_AGE",
+      "description": "Integer ages 35 through 74 have probabilities proportional to a Gaussian kernel with location 53.5 and scale 11.5 years. These are target scenario choices, loosely placing the adult cohort between the unrestricted Shanghai and older MIND contexts; neither kernel parameter is a reported target moment."
+    },
+    {
+      "id": "A_SEX",
+      "description": "Female=1 is drawn with logistic probability having reference probability 0.55 at age 53.5 and log-odds age coefficient 0.006/year. Source count fractions suggest female-majority selected samples, but do not identify target composition or age dependence. The chosen probability is not their pooled estimate."
+    },
+    {
+      "id": "A_BMI",
+      "description": "BMI is conditionally lognormal with reference median 23.7 kg/m^2, female log shift -0.025, and age log slope +0.0008 below age 55 and -0.002 above 55, centered at age 53.5. Log residual SD is log(25.9/21.4)/(2*Phi^-1(.75)), using Shanghai quartiles under an explicit lognormal approximation; this does not relabel quartiles as SDs. A mild age peak and the reduced sex contrast are transport assumptions, not recovered source associations."
+    },
+    {
+      "id": "A_TAIL",
+      "description": "A latent high-biomarker component has reference probability 0.075, log-odds age coefficient 0.025/year, log-BMI coefficient 1.6 and centered female coefficient -0.10. This is a mathematical tail component, not a diagnosis or prevalence estimate. Its probability reflects a scenario allowing diagnosed and treated people in the target, unlike Shanghai/Lifelines exclusions. Joint tail membership and all component parameters remain unidentified by the source evidence."
+    },
+    {
+      "id": "A_BIOMARKERS",
+      "description": "Conditional glucose and HbA1c are a two-component bivariate lognormal model. Reference component medians are glucose [5.1,8.9] mmol/L and HbA1c [5.55,7.8] percent; log SDs are [0.11,0.24] and [0.062,0.17]. The central levels/spreads are informed by Shanghai median/quartile context and the wider MIND all-diagnosis dispersion, without equating populations or fitting source means. High-component levels and spreads are explicit assumptions. Log-residual correlation 0.45 in each component is an assumption informed qualitatively by the distinct positive Bao Pearson and MIND Spearman associations; it is neither reported coefficient nor a conversion between them."
+    },
+    {
+      "id": "A_EFFECTS",
+      "description": "Conditional log-glucose coefficients are age 0.0015/year, log-BMI 0.20 and centered female -0.01. Conditional log-HbA1c coefficients are age 0.0015/year, log-BMI 0.025 and centered female -0.005. The direct age term yields about 0.0083 percentage points/year at central HbA1c, a scenario informed by Pani's adjusted 0.010 and Jansen's 0.08*0.09148=0.0073184 with different conditioning. The BMI pathway is split between biomarker shifts and tail composition; Jansen separate projections are not concatenated into this conditional law. Sex effects are assumed, not inferred from Jansen's unresolved coding. Task OLS coefficients emerge from this nonlinear joint law and are not installed as reported source values."
+    },
+    {
+      "id": "A_ERRORS",
+      "description": "Fresh Gaussian residuals for BMI and the two biomarkers, Bernoulli component and sex draws, and the age draw are conditionally independent except for the declared biomarker residual correlation and covariate pathways. This is an explicit closure assumption, not inference from absent source evidence. All rows are iid conditional on fixed scenario parameters; no household, geographic, treatment, measurement-error, imputation or survey-weight model is supplied."
+    },
+    {
+      "id": "A_SUPPORT",
+      "description": "Age is bounded and biomarkers/BMI are exponentials of finite Gaussian linear terms; biomarker dependence uses log BMI, not BMI in an exponential. Each mixture probability is bounded. Consequently all positive-order polynomial moments exist, biomarkers and BMI have positive support, and no clipping or per-draw moment matching is applied. Extreme biological tails are not independently validated."
+    },
+    {
+      "id": "A_USE",
+      "description": "Generated OLS projections and marginals are descriptive consequences of one scenario, not causal effects, calibrated uncertainty, source replay, national estimates or validation of CHNS recovery. Seed variation is Monte Carlo variation only. Source coefficient intervals have unknown confidence levels, SDs describe individuals and Pani mean SEs do not determine individual variance."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_TARGET"
+      ],
+      "derivation": "Fixed task requirement: 3000 synthetic complete rows."
+    },
+    "age_model": {
+      "evidence_ids": [
+        "M_B_AGE_MEDIAN",
+        "M_B_AGE_Q1",
+        "M_B_AGE_Q3",
+        "M_M_AGE_MEAN",
+        "M_J_AGE_MEAN"
+      ],
+      "assumption_ids": [
+        "A_AGE",
+        "A_TARGET"
+      ],
+      "derivation": "Task fixes support 35-74; location 53.5 and scale 11.5 are assumed kernel parameters, not pooled or matched source moments."
+    },
+    "sex_model": {
+      "evidence_ids": [
+        "M_B_FEMALE_FRACTION",
+        "M_M_FEMALE_FRACTION"
+      ],
+      "assumption_ids": [
+        "A_SEX",
+        "A_TARGET"
+      ],
+      "derivation": "Reference probability 0.55 and age coefficient 0.006 are explicit target composition choices; reported count ratios have no estimator precision here."
+    },
+    "bmi_model": {
+      "evidence_ids": [
+        "M_B_BMI_MEDIAN",
+        "M_B_BMI_Q1",
+        "M_B_BMI_Q3",
+        "M_M_BMI_MEAN",
+        "M_M_BMI_SD",
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "assumption_ids": [
+        "A_BMI",
+        "A_TARGET",
+        "A_SUPPORT"
+      ],
+      "derivation": "Only log SD is algebraically derived, under a chosen lognormal approximation to Bao quartiles. Median 23.7, knot 55, age slopes 0.0008/-0.002 and female shift -0.025 are explicit assumptions. Age and sex shifts are applied before the lognormal residual, so these source quartiles are not claimed as marginal target constraints."
+    },
+    "tail_model": {
+      "evidence_ids": [
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_SD",
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "assumption_ids": [
+        "A_TAIL",
+        "A_TARGET",
+        "A_ERRORS"
+      ],
+      "derivation": "All four tail parameters are assumptions, motivated by target disease inclusion and between-study spread differences without estimating disease prevalence from those differences."
+    },
+    "biomarker_model": {
+      "evidence_ids": [
+        "M_B_FPG_MEDIAN",
+        "M_B_FPG_Q1",
+        "M_B_FPG_Q3",
+        "M_B_HBA1C_PERCENT_MEDIAN",
+        "M_B_HBA1C_PERCENT_Q1",
+        "M_B_HBA1C_PERCENT_Q3",
+        "M_M_FSG_MEAN",
+        "M_M_FSG_SD",
+        "M_M_HBA1C_PERCENT_MEAN",
+        "M_M_HBA1C_PERCENT_SD",
+        "R_BAO_PEARSON",
+        "R_MIND_SPEARMAN",
+        "R_JANSEN_BMI",
+        "R_JANSEN_FPG",
+        "U_NGSP_SCALE",
+        "E_SOURCE_RECONCILIATION"
+      ],
+      "assumption_ids": [
+        "A_BIOMARKERS",
+        "A_EFFECTS",
+        "A_TARGET",
+        "A_ERRORS",
+        "A_SUPPORT",
+        "A_USE"
+      ],
+      "derivation": "All model entries are scenario assumptions with the detailed source-context rationale in A_BIOMARKERS/A_EFFECTS. The NGSP multiplier is used only in contextual age-slope arithmetic. No Jansen or Pani coefficient, Bao Pearson, MIND Spearman, serum-plasma correction or source precision is imposed as a target coefficient."
+    }
+  }
+}
