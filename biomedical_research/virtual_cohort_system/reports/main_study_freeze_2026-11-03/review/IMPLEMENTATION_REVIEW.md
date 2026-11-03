@@ -1,0 +1,58 @@
+# Independent main-study implementation and case review
+
+3 November 2026. Reviewer: `ia_protocol_review`.
+
+**Current disposition: ready for unsigned materialization; full campaign release remains pending.** The reviewed case bindings, new session controller and materializer can create 24 disabled sessions. This does not authorize scientific dispatch or generation. The completed sampler/comparator, actual materialized directories/contracts and immutable release payload still require the separate campaign release decision.
+
+## Scope and access boundary
+
+The review used the locked `CORE_METHOD_AND_MAIN_RUN_FREEZE_2026-11-03.md`, new case cards, scoped E0/E1 packets, operators, providers, controller source and existing new-unit test reports. No target-effect report, raw participant table, generated clinical table or old scientific result was opened in this review. Previously exposed results remain historical knowledge of the reviewer; they were not used to select cases, alter estimands or set scientific parameters. No new source acquisition, calibration or generation was performed. Already passed tests were inspected rather than rerun.
+
+The two case families remain researcher-exposed developmental references. Fresh contexts do not restore clinical independence. The recorded CHNS curator incident is explicitly disclosed and does not change this status; the incident note and historical paths must stay outside author allowlists.
+
+## Inspected cases and statistical definitions
+
+CHNS retains adults 35–74 from the fixed 2009 common-complete-case release, unweighted analysis, central-serum glucose in mmol/L, whole-blood HbA1c percent, and no invented diabetes/treatment/pregnancy exclusion. Its generated-only provider calls the original F2 `analyze(..., reference=False)` implementation; it does not call the reference decoder or old release evaluator. The three questions keep their distinct adjustment sets, and E3 has no supplied Pani coefficient in these new packets. The original minimum-n, nonpositive-glycemia withholding, rank and interval rules are preserved. Existing reference CR1/t intervals concern coefficient uncertainty, not means or equivalence margins.
+
+ENSANUT retains the prior 25–79/no-prior-diagnosis/recorded 8–12-hour fasting/serum glucose below 126 mg/dL population and its measurement-routing qualifications. Generated output must satisfy the fixed 8 demographic cells × 375 rows. The reused analytical engine preserves equal-cell WLS, transformed coefficient units, population-SD diagnostics and inverse-weighted-CDF quantiles. This is an equal-cell analytical-use design, not a national-weighted population. The source plasma measurements, diagnosis/anemia restrictions and reference serum measurements are kept distinct. Its stored reference bands retain their empirical cluster-resampling interpretation, not an upgraded confidence-coverage claim.
+
+Both cases have visible scientific questions. The extra conditional use is not directly supplied as a numerical calibration target: CHNS's adjusted age projection and ENSANUT's glucose-adjusted BMI projection remain underidentified by the admitted source constraints. The ENSANUT Q2−Q3 difference is explicitly algebraic and is not an additional independent endpoint or mediation effect.
+
+## Information conditions and numerical evidence operations
+
+The CHNS E0/E1 `shared_base` objects match exactly; E0 has zero relational records and E1 has four. The ENSANUT E0 items are identical copies of the corresponding 17 E1 items; E1 has 30 total items, including alternate-unit representations of the same estimates. Scoped E0 packets and authored source extracts contain no supplied E1 relationship coefficients or direction instructions. References to unknown regression sample size or coefficient units are metadata, not numerical relational exposure. Full papers, broad summaries, other-arm packets, old models/results, curator cards and target references are not author inputs. The final materializer must preserve these allowlists.
+
+The source helpers compute explicitly qualified population projections from supplied moments. CHNS supports separate Jansen BMI/FPG projections and Bao Pearson; ordinary moments cannot supply MIND Spearman. ENSANUT supports separate Jansen projections and the Pani adjusted age projection; optional age-band integrals still require an author-specific derivation. Unit transformations are consistent with HbA1c slope scaling by 0.09148 and glucose scaling by 18; offset terms do not enter slopes. The ENSANUT helper's fixed unit convention and source-selection meaning are caller/reviewer obligations, whereas the CHNS helper additionally checks declared units and binary-gender mean/variance.
+
+An operator returning a mathematically valid slope does not prove that its moments came from the submitted generator, that source selection was reconstructed or that its result transports to the target. Before any candidate is labelled numerically integrated, independent review must bind the law-to-moment derivation, source population/selection, units, assumptions and uptake record to the frozen candidate. A standalone covariance matrix chosen to match a paper is insufficient unless linked to the executable source/target construction. Contextual, declined and unavailable items remain explicit outcomes. No source-population row replay is supplied by this controller.
+
+## Controller and bounded execution
+
+The new controller charges attempts before calling the isolated executor, admits two exploratory seeds total and three fixed final seeds per construction, prevents repeated seed-slot execution, and preserves interrupted slots. Final scientific selection requires a frozen candidate, an author decision and a separate reviewer record with finite-moment/uptake checks and no target-result use. Final outputs are not exposed through the trial-feedback API. The campaign gate requires all 24 declared constructions, with the specified 5-agent/1-statistical allocation in each case/condition, to close before common evaluation. Failed constructions can close explicitly and remain in the completion denominator.
+
+All target-row semantic source checks must be unavailable. Generated-only providers return current-table statistics; source analytic operations are separate retained computations. These are procedural ledger and review boundaries, not a malicious-host security model. One optional revision remains an author-contract constraint; the physical two-trial limit is executable. Runtime and author records must not invent an unobserved provider version, tokens or cost.
+
+The existing controller report records 12 initial passed mocked checks after a fixture-only correction, then two added checks for distinct external-task/constructor IDs and mandatory uptake/mathematical artifacts (14 unique controller tests reported). The current code requires those scientific records before freeze and excludes both the constructor ID and actual author task ID from the independent reviewer identity. CHNS records 17 deterministic arithmetic/boundary checks, and ENSANUT records 5 source-operator plus 2 provider checks. These are toy/metadata checks, not clinical runs. The reviewer did not rerun those passed suites.
+
+## Issue found and repaired before release
+
+**ENSANUT diagnostic coverage on failure.** Initially `generated_statistics()` returned all three unavailable analyses but an empty diagnostic list for invalid input, which would allow the prescribed 28 diagnostics to disappear. This was reported to the coordinator. The provider now declares a fixed diagnostic-ID list and returns all 28 null/status/reason entries on failure. The two affected provider tests were updated and passed; the modified code was inspected. This issue is resolved at provider level. The final common evaluator must retain the same coverage for generation failures, abandoned constructions and interrupted attempts rather than summarize only surviving outputs.
+
+## Remaining release obligations
+
+1. Inspect the completed statistical sampler and same-information constraint path, using the comparator review's findings; no independent-marginal substitute may be silently used for E1.
+2. Inspect actual materialized author directories and all 24 contracts. Bind case provider dependencies, original analytical definitions and hashes, scoped evidence/source artifacts, exact seeds and complete attempt budgets.
+3. Inspect the complete common evaluation wrapper after the coordinator declares it ready: full campaign closure before any reference read; original case estimators; all 72 scheduled final slots including missing/abandoned/interrupted slots; explicit unavailable endpoints/diagnostics; constructor-first summaries and incomplete-arm flags; no survivor-only complete-advantage claim.
+4. Bind an independent ready decision to the exact release payload only after these checks. Current component approval is not that decision.
+
+## Additional materializer and evaluator inspection
+
+`prepare_sessions.py` changes task identity and the declared new-run budget only; it copies per-condition source directories, registry and evidence, validates evidence against the task, and verifies every evidence artifact against the scoped registry before initialization. It uses the case providers at their original new-case paths so their project-relative dependency resolution remains valid. It creates 20 agent and four statistical session contracts, leaves activation disabled and writes an unsigned manifest. It refuses an existing runtime root or manifest. It neither supplies scientific parameters nor calls generation.
+
+The initial broad dependency list would have frozen a still-changing evaluator/test/build script into every session. The materializer now binds only the actual historical analysis engines/CHNS plan in addition to the controller, provider, harness and each constructor's scoped bundle. The final evaluator, comparator and assembler are separately release-bound. Once materialized, this readiness review must remain unchanged; a separate final release-review artifact should bind the complete manifest.
+
+The completed `evaluate_main.py` was also inspected as a component. All 24 closures precede loading reference bindings/aggregates or calling providers. It retains all 72 scheduled final slots, including unattempted and missing-result slots; validates all case-specific analysis/diagnostic IDs and units; suppresses a complete-arm contrast when any required endpoint is missing; and computes constructor-first, per-endpoint MAE contrasts with the four statistical references separate. Existing source writer code confirms the reference JSON paths and interval keys without opening the result files. Six new invented-list/mock evaluator tests are reported passed and were inspected, not rerun.
+
+One minor evaluator reporting issue was repaired: a successfully generated table's hash was initially assigned only after successful provider validation, so a provider error could reduce a counter named `unique_successful_table_contents`. The final inspected code retains the output hash before provider invocation. The affected mocked collector test was extended with three provider failures and passed, preserving 68 output hashes versus 65 complete analyses alongside the unattempted/execution-failure slots. No actual evaluation or extra clinical test was run.
+
+Detailed inspected-file hashes and status are recorded in `IMPLEMENTATION_REVIEW.json`. This document authorizes unsigned materialization only. No old frozen file requires modification for the issue found here.

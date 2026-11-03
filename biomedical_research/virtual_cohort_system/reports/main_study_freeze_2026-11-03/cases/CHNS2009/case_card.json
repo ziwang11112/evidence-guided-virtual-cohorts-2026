@@ -1,0 +1,326 @@
+{
+  "schema_version": 1,
+  "case_id": "CHNS2009",
+  "phase": "metadata_bound_pending_independent_review_and_global_release",
+  "execution_enabled": false,
+  "role": "curator_and_reviewer_only",
+  "exposure": {
+    "status": "researcher_exposed_developmental_reference",
+    "untouched_confirmation": false,
+    "prior_completed_units": [
+      "CHNS_F2",
+      "existing_data_benchmark_2026-11-02",
+      "developmental_continuation_v1_2026-11-03",
+      "adaptive_reference_pilot_2026-11-03"
+    ],
+    "historical_results_unchanged": true,
+    "fresh_authors_do_not_reset_exposure": true,
+    "curator_incident": "curator_exposure_note.md"
+  },
+  "target_contract": {
+    "task": {
+      "path": "task.json",
+      "sha256": "dcf9be247845bde8157e19263fde133b512dbd40844fad6bda67e772922348b1"
+    },
+    "wave": 2009,
+    "common_complete_variables": {
+      "kind": "common_complete_case",
+      "required": [
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ],
+      "additional_eligibility": [
+        "age_interval",
+        "documented_gender",
+        "fixed_measurement_rules"
+      ],
+      "diabetes_exclusion": false,
+      "treatment_exclusion": false,
+      "pregnancy_exclusion": false,
+      "min_n_for_effects": 100,
+      "insufficient_n_action": "report_eligibility_failure_without_population_change"
+    },
+    "linkage": {
+      "base": "biomarker_09.sas7bdat",
+      "wave_specific": "inner_one_to_one_ID_wave",
+      "master": "inner_many_to_one_ID",
+      "invalid_or_duplicate_key": "stop_no_silent_deduplication",
+      "key_domain": "finite_integral_exactly_representable_numeric_ID",
+      "component_flags_required": false
+    },
+    "measurement_policy": {
+      "age": "released_years_label_zero_decimal_points_no_reconstruction",
+      "gender_mapping": {
+        "1": 0,
+        "2": 1
+      },
+      "other_gender_codes": "unavailable",
+      "height_unit": "cm",
+      "weight_unit": "kg",
+      "height_weight_flag_exact_9": "set_corresponding_measurement_unavailable",
+      "other_cleaning_flags": "retain_released_value_and_flag",
+      "bmi": "weight/(height/100)^2_for_finite_positive_height_weight_and_result",
+      "glucose": "central_GLUCOSE_mmol/L_no_field_substitution",
+      "hba1c": "HbA1c_percent",
+      "native_missing": "retain",
+      "generic_sentinel_recoding": false,
+      "nonpositive_glycemia": "interpretation_gate_before_any_affected_effect_without_ad_hoc_recode",
+      "undocumented_positive_sentinels": "residual_release_quality_assumption",
+      "fasting_adherence": "not_verified_per_person",
+      "generated_nonpositive_glycemia": "same_interpretation_or_withholding_gate_before_scientific_estimates; no_row_deletion"
+    },
+    "input_file_identities_from_prior_plan_only": [
+      {
+        "file": "biomarker_09.sas7bdat",
+        "sha256": "cfef4075d994e3ee30a393695d3b05a8df21fe931037c7d9cd28c8709f2f2948",
+        "key": "IDind",
+        "wave": "wave",
+        "columns": [
+          "GLUCOSE",
+          "HbA1c"
+        ]
+      },
+      {
+        "file": "pexam_00.sas7bdat",
+        "sha256": "2dfc31340d291951db011c3e1f29e996d1f45d99fe086fd0ac6192e31c5fd2da",
+        "key": "IDind",
+        "wave": "WAVE",
+        "columns": [
+          "HEIGHT",
+          "WEIGHT",
+          "CLN_HT",
+          "CLN_WT"
+        ]
+      },
+      {
+        "file": "mast_pub_12.sas7bdat",
+        "sha256": "a34324bd0cc9286b731d461433dcc9ab0185ac36ba5e134c295e7bdcc3693af8",
+        "key": "Idind",
+        "wave": null,
+        "columns": [
+          "GENDER"
+        ]
+      },
+      {
+        "file": "surveys_pub_12.sas7bdat",
+        "sha256": "b34cc95d3c03ed13fc1aa11499eaaa44af6037c1cd60a9ca429715eee13480df",
+        "key": "Idind",
+        "wave": "wave",
+        "columns": [
+          "age",
+          "commid"
+        ]
+      }
+    ],
+    "new_patient_decode": false,
+    "no_claimed_exclusions": [
+      "diabetes",
+      "treatment",
+      "pregnancy"
+    ],
+    "composition": "Age/sex empirical composition withheld; no target moments or empirical n in author packet",
+    "scope": "selected unweighted released-data analytical sample, not national inference"
+  },
+  "evaluation": {
+    "author_visible_definitions": {
+      "path": "evaluation.json",
+      "sha256": "1336e7b85a179b4d7b78bd624d6bdd4b062f94b07e70fcc08c62aae9ae243c82"
+    },
+    "generated_only_provider": {
+      "path": "generated_provider.py",
+      "sha256": "aea016b2f3c607ad0a77b3e4a0f914d3bc436b0b7047c690b81606b10d179c12"
+    },
+    "provider_entrypoint": "evaluate_generated(bundle,candidate,run_id,profile)",
+    "numeric_engine": "work/chns_admission_2026-11-01/f2/evaluation/chns_f2_evaluation.py",
+    "pure_functions": [
+      "analyze",
+      "compare_estimates"
+    ],
+    "unchanged_numeric_plan": "work/chns_admission_2026-11-01/f2/analysis_plan.json",
+    "old_entrypoints_not_to_run": [
+      "evaluate_released",
+      "_read_reference_files",
+      "summarize_slots"
+    ],
+    "old_plan_execution_section": "historical only; new global release owns schedule",
+    "old_plan_E3_source_class": "historical Pani context; current E0/E1 exclude Pani, use evaluation.json interpretation",
+    "reference_binding_deferred": {
+      "measured_reference": {
+        "project_relative_path": "work/chns_admission_2026-11-01/f2/evaluation_results/REPORT.json",
+        "sha256": "55c307e230d1d59eded5d5af0dd15b0ca376d8a2b045cb00621c5b0e5409794f"
+      },
+      "independent_reference": {
+        "project_relative_path": "work/chns_admission_2026-11-01/f2/independent_results/REPORT.json",
+        "sha256": "be246b4f33b36d54b981d8b2a5d92ce90e48843861f948522a01ac34948e9d58"
+      },
+      "pure_analysis": {
+        "project_relative_path": "work/chns_admission_2026-11-01/f2/evaluation/chns_f2_evaluation.py",
+        "sha256": "e40f403b13125f5b41f620126a807122bb99796558adda576518fcf50796365a"
+      }
+    },
+    "reference_contents_not_read_for_binding": true,
+    "common_evaluation_barrier": "Both cases and every condition/comparator close all scientific decisions and final attempts before reading frozen reference aggregates"
+  },
+  "information_conditions": {
+    "E0": {
+      "packet": {
+        "path": "E0.json",
+        "sha256": "ef5d6515a995e43c59d5ac4309e890d4bfc27dd1ec2e67e1796fc8829cb6cdd2"
+      },
+      "marginal_records": 15,
+      "relationship_records": 0,
+      "author_allowlist": [
+        "task.json",
+        "evaluation.json",
+        "NGSP_UNITS.md",
+        "AUTHOR_COMMON.md",
+        "E0.json",
+        "E0_evidence.json",
+        "E0_registry.json",
+        "E0_sources/evidence_packet.json",
+        "E0_sources/NGSP_UNITS.md"
+      ]
+    },
+    "E1": {
+      "packet": {
+        "path": "E1.json",
+        "sha256": "254a9bca0c612e4e03a22c9e4457b4b34eb4d5cd4672df8c2a4cd15131f7ab84"
+      },
+      "marginal_records": 15,
+      "relationship_records": 4,
+      "author_allowlist": [
+        "task.json",
+        "evaluation.json",
+        "NGSP_UNITS.md",
+        "AUTHOR_COMMON.md",
+        "E1.json",
+        "E1_evidence.json",
+        "E1_registry.json",
+        "E1_sources/evidence_packet.json",
+        "E1_sources/NGSP_UNITS.md",
+        "source_operations.json",
+        "source_operations.py"
+      ]
+    }
+  },
+  "source_operations": {
+    "path": "source_operations.json",
+    "sha256": "603facfa5de7e5b3420f292a27d8152e2062be4d64e642ee0b02d281c6b7ad7b"
+  },
+  "source_context_plan": "Analytic source-law moments preferred; no source-row replay allocated. Contextual/unavailable status retained where law-derived moments/rank functional are absent.",
+  "numerical_uptake_requirement": "At least one qualified nonmarginal analytic path independently checked before release; per-author use/exclusion records for all quantitative relationships required. No promise every author adopts every constraint.",
+  "applicability": {
+    "shared_sources_with_ENSANUT": [
+      "Lifelines/Jansen 2013"
+    ],
+    "source_family_overlap": "Two Jansen projections share a source sample and are not independent studies; source evidence overlaps between target cases.",
+    "unknown_individual_overlap": "Named source populations differ, but participant-level nonoverlap was not audited.",
+    "transport": [
+      "Lifelines selected western-European diabetes/anemia-excluded adults differs from all-status CHNS.",
+      "Bao excludes known diabetes, retains screen-detected diabetes; its age20 boundary remains unresolved.",
+      "MIND is older rural China and mixes prior-year BMI with later labs; mean/mode filling and tie convention remain incompletely reported.",
+      "Plasma FPG and central-serum glucose are distinct; NGSP/IFCC scale conversion does not harmonize assays or fasting.",
+      "Unreported age/sex composition, joint covariate law, tails, source-selection completeness and transport remain author assumptions."
+    ]
+  },
+  "support_and_validity": {
+    "finite_population_first_second_moments_required": true,
+    "no_exponential_of_unbounded_lognormal_linear_predictor_without_finite_moment_proof": true,
+    "boundedness_not_empirical_target_truncation": true,
+    "source_selection_not_clipping": true,
+    "analysis_nonpositive_withholding_not_row_deletion": true,
+    "source_moment_derivation_must_match_executable_law": true,
+    "existing_checker": "work/evidence_revision_v1_2026-11-02/implementation/scientific_validity_v1.py:assess_law",
+    "checker_scope": "Supported AST proof plus independent law/code review; unsupported declaration is not automatically biologically invalid or accepted."
+  },
+  "allocation": {
+    "agents_per_arm": 5,
+    "statistical_specifications_per_arm": 1,
+    "arms": [
+      "E0",
+      "E1"
+    ],
+    "final_rows_each": 3000,
+    "final_seeds": [
+      5101,
+      5102,
+      5103
+    ],
+    "trial_seeds": [
+      5201,
+      5202
+    ],
+    "final_attempts": 36,
+    "exploratory_attempts_per_construction_max": 2,
+    "all_exploratory_attempts_max": 24,
+    "maximum_physical_attempts": 60,
+    "optional_revision_rounds_max": 1,
+    "retention_valid": true,
+    "source_trials_share_two_attempt_cap": true,
+    "failures_consume_slots": true
+  },
+  "contrast": "For each estimand separately: mean absolute discrepancy over three final seeds per constructor, then mean over all five scheduled authors per arm; E1 minus E0. Missing endpoint/seed means incomplete; survivor means cannot establish complete arm advantage. Statistical specification displayed separately; no pooled heterogeneous score.",
+  "prior_artifact_bindings": [
+    {
+      "path": "docs/CORE_METHOD_AND_MAIN_RUN_FREEZE_2026-11-03.md",
+      "sha256": "6878e2a058c1bb5a1d67782fc30f3808004edb099f45e6e59e8d736e521d1097"
+    },
+    {
+      "path": "work/chns_admission_2026-11-01/f2/analysis_plan.json",
+      "sha256": "a2c5f43969c700474a9466416be8503dc0c92b1c78b12a07a6edc6bc88f247b7"
+    },
+    {
+      "path": "work/chns_admission_2026-11-01/f2/evaluation/chns_f2_evaluation.py",
+      "sha256": "e40f403b13125f5b41f620126a807122bb99796558adda576518fcf50796365a"
+    },
+    {
+      "path": "work/chns_admission_2026-11-01/semantics/MEASUREMENT_POLICY_DECISION.md",
+      "sha256": "affaf39038291eb2f2b0f7371840514e4fc3c5655e66292a94e6fceab8691521"
+    },
+    {
+      "path": "work/existing_data_benchmark_2026-11-02/evidence/E0.json",
+      "sha256": "ef5d6515a995e43c59d5ac4309e890d4bfc27dd1ec2e67e1796fc8829cb6cdd2"
+    },
+    {
+      "path": "work/existing_data_benchmark_2026-11-02/evidence/E1.json",
+      "sha256": "254a9bca0c612e4e03a22c9e4457b4b34eb4d5cd4672df8c2a4cd15131f7ab84"
+    },
+    {
+      "path": "cohort_harness/source_checks.py",
+      "sha256": "bb6e906674d0218e6a71722e2d441df3d603ae8c059291a51617daaf350df853"
+    },
+    {
+      "path": "work/evidence_revision_v1_2026-11-02/implementation/qualified_relationships_v1.py",
+      "sha256": "4e52f23d99e581fbd32f191e7300c00609e0607068be252da415e19eb1a7e045"
+    },
+    {
+      "path": "work/evidence_revision_v1_2026-11-02/implementation/scientific_validity_v1.py",
+      "sha256": "76a6467c066a5b08f5c87a4e26750f3fdb5ed0de530a7501b4bfc2cff7124ae2"
+    },
+    {
+      "path": "work/developmental_continuation_v1_2026-11-03/source_audit/independent_source_audit.py",
+      "sha256": "8b203f88e199239ac309644b00759d364c76b06c6f1696215de4ccc69e02c627"
+    },
+    {
+      "path": "work/developmental_continuation_v1_2026-11-03/source_audit/AUDIT_REVIEW.md",
+      "sha256": "286fb7234aff67398cdedfa69dacac93fbf4191ee3affa3869f0f7ec2b1d1c82"
+    },
+    {
+      "path": "work/existing_data_benchmark_2026-11-02/implementation/prepare_bundles.py",
+      "sha256": "8119cad272d3b6b0e131324334c60617b185301b9017d778e8f0e976f3589f49"
+    }
+  ],
+  "source_registry_materialization": "Copy only assigned E0_sources or E1_sources contents into that constructor's sources directory and the matching arm registry/evidence. Registry origin curator identifies scoped derivative content, not a new primary article.",
+  "unresolved_release_gates": [
+    "Independent source arithmetic and case semantic review",
+    "Global exact seed/runtime/receipt/budget binding",
+    "Same-information statistical comparator review",
+    "Per-author moment derivation, law/code/support and uptake review",
+    "Common two-case closure/evaluation wrapper and immutable release approval"
+  ],
+  "scientific_parameters_set_by_curator": false,
+  "new_generation_or_fit": false
+}

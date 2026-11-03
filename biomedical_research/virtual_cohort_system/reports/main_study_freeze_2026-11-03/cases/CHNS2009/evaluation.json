@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "case_id": "CHNS2009",
+  "role": "author_visible_analysis_definitions_without_reference_values",
+  "uses": [
+    {
+      "id": "E1",
+      "operator": "ols_coefficient",
+      "outcome": "hba1c",
+      "predictors": [
+        "age",
+        "female",
+        "bmi"
+      ],
+      "term": "bmi",
+      "intercept": true,
+      "weights": "none",
+      "unit": "%/(kg/m^2)",
+      "evidence_support": "source_analogous_separate_Jansen_BMI_projection_with_transport_assumptions",
+      "visible_to_author": true,
+      "target_feedback": false,
+      "direct_numerical_calibration_target": false,
+      "source_analogous_calibration_possible": true
+    },
+    {
+      "id": "E2",
+      "operator": "ols_coefficient",
+      "outcome": "hba1c",
+      "predictors": [
+        "age",
+        "female",
+        "glucose"
+      ],
+      "term": "glucose",
+      "intercept": true,
+      "weights": "none",
+      "unit": "%/(mmol/L)",
+      "evidence_support": "source_analogous_separate_Jansen_FPG_projection_with_measurement_and_transport_assumptions",
+      "visible_to_author": true,
+      "target_feedback": false,
+      "direct_numerical_calibration_target": false,
+      "source_analogous_calibration_possible": true
+    },
+    {
+      "id": "E3",
+      "operator": "ols_coefficient",
+      "outcome": "hba1c",
+      "predictors": [
+        "female",
+        "bmi",
+        "glucose",
+        "age"
+      ],
+      "term": "age",
+      "intercept": true,
+      "weights": "none",
+      "unit": "%/year",
+      "evidence_support": "additional_joint_conditional_use_not_directly_supplied_or_numerically_calibrated",
+      "visible_to_author": true,
+      "target_feedback": false,
+      "direct_numerical_calibration_target": false,
+      "source_analogous_calibration_possible": false
+    }
+  ],
+  "population": "All generated rows; all three uses share the same complete five-variable table. No analysis-specific dropping.",
+  "response": "HbA1c percent",
+  "estimator": "unweighted intercept-including raw OLS",
+  "reference_interval": {
+    "method": "community_cluster_sandwich_CR1_t",
+    "level": 0.95,
+    "group": "survey_commid",
+    "group_requirements": "all_analysis_rows_finite_integral_positive",
+    "min_groups": 20,
+    "correction": "G/(G-1)*(n-1)/(n-k)",
+    "degrees_of_freedom": "G-1",
+    "invalid_inference": "retain_unmodified_point_estimate_interval_unavailable_no_IID_fallback",
+    "national_survey_design_claim": false,
+    "k_definition": "number_of_design_columns_including_intercept"
+  },
+  "diagnostics": {
+    "marginal_variables": [
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "marginal_statistics": [
+      "mean",
+      "sample_sd_ddof1",
+      "quantile_0.1_linear",
+      "quantile_0.5_linear",
+      "quantile_0.9_linear"
+    ],
+    "joint": [
+      "pearson_glucose_hba1c",
+      "spearman_glucose_hba1c_average_ties"
+    ],
+    "reference": [
+      "eligibility_flow",
+      "native_missing",
+      "cleaning_flag_counts"
+    ],
+    "fit": [
+      "n",
+      "rank",
+      "condition_number"
+    ],
+    "feedback": false
+  },
+  "minimum_rows_for_existing_evaluator": 100,
+  "validity": "Finite numeric values; integer age 35-74; female 0/1; positive BMI. Nonpositive glucose or HbA1c withholds scientific estimates without dropping rows. Full rank and residual degrees of freedom required.",
+  "interpretation": {
+    "E1_E2": "Source-analogous projections only; no equality with target coefficients is assumed.",
+    "E3": "No supplied Pani coefficient: Pani is absent from both new packets. The age term conditional on BMI and glucose is not determined by the two separate Jansen focal slopes or marginal correlations alone. Any model-implied value is an assumption-dependent consequence, not new empirical evidence.",
+    "algebraic_implication_policy": "Report if a chosen model or constraint set algebraically fixes any use; do not claim such an implication is newly inferred.",
+    "interval": "Existing reference CR1/t interval is sample uncertainty, not a population truth or equivalence margin.",
+    "no_pooled_score": true,
+    "synthetic_p_values_as_clinical_evidence": false
+  }
+}

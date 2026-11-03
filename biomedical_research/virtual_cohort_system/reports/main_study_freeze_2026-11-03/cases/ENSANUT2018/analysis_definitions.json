@@ -1,0 +1,53 @@
+{
+  "analysis_population": "All valid rows, demographic cell-standardized equally; generated table must have375rows/cell. Same weighted estimator for reference and generated.",
+  "transforms": {
+    "age10": "(age-50)/10",
+    "bmi5": "(bmi-25)/5",
+    "glucose10": "(glucose-100)/10"
+  },
+  "uses": [
+    {
+      "id": "Q1_age10",
+      "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10",
+      "coefficient": "age10",
+      "unit": "percentage points per10years",
+      "support_E0": "assumption_dependent_not_numerically_supplied",
+      "support_E1": "source_indexed_adjusted_age_projection_transfer; Pani source coefficient given, target value not supplied",
+      "source_relation_is_supplied_in_E1": true,
+      "target_numeric_calibration_supplied": false,
+      "source_numeric_calibration_relation_available_in_E1": true
+    },
+    {
+      "id": "Q2_bmi5",
+      "formula": "hba1c ~ 1 + age10 + female + bmi5",
+      "coefficient": "bmi5",
+      "unit": "percentage points per5kg/m^2",
+      "support_E0": "assumption_dependent_not_numerically_supplied",
+      "support_E1": "source_indexed_age_sex_adjusted_BMI_projection_transfer; Jansen given, target value not supplied",
+      "source_relation_is_supplied_in_E1": true,
+      "target_numeric_calibration_supplied": false,
+      "source_numeric_calibration_relation_available_in_E1": true
+    },
+    {
+      "id": "Q3_bmi5",
+      "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10",
+      "coefficient": "bmi5",
+      "unit": "percentage points per5kg/m^2",
+      "support_E0": "assumption_dependent",
+      "support_E1": "unreported_joint_structure; exact conditioned projection is not supplied",
+      "source_relation_is_supplied_in_E1": false,
+      "not_algebraically_identified_by_source_packet": true,
+      "target_numeric_calibration_supplied": false,
+      "source_numeric_calibration_relation_available_in_E1": false
+    }
+  ],
+  "derived_contrasts": [
+    {
+      "id": "Q2_minus_Q3_bmi5",
+      "definition": "Q2_bmi5-Q3_bmi5",
+      "role": "algebraic derived descriptive change; not another independent endpoint or causal mediation"
+    }
+  ],
+  "diagnostics": "Preserve engine secondaryglucose10 age-sex projection; weighted mean, populationSD and inverse-CDFq10/q50/q90 of5fields; Q1residualweightedRMS; all scheduled failures.",
+  "instruction": "All analysis questions are visible. No target numeric answer is supplied. Generate valid task-appropriate data and state source/transport/completion assumptions. Do not use the analysis request as evidence of a sign or effect size."
+}

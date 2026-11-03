@@ -1,0 +1,412 @@
+{
+  "schema_version": "main_study_case_v1",
+  "case_id": "ENSANUT2018",
+  "phase": "bound_pending_independent_release",
+  "execution_enabled": false,
+  "exposure": {
+    "status": "researcher_exposed_developmental_reuse",
+    "target_family": "ENSANUT",
+    "new_confirmation": false,
+    "source_family_overlap": "Jansen/Lifelines overlaps CHNS evidence; Pani/NHANES is external to ENSANUT. This adds a target family, not entirely independent source evidence.",
+    "current_binding_reads": "Metadata, source evidence and analysis/preparation code only; no participant rows, generated rows or target effect reports were opened."
+  },
+  "target_contract": {
+    "task_file": "task.json",
+    "task_sha256": "e253a17a373c808cbb1200b1c9940c7348446dc4fcf36ca9d9683c360cc628cb",
+    "mode": "whole_cohort",
+    "n_rows": 3000,
+    "individual_inputs": false,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "string",
+        "unit": "identifier",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "integer",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 25,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "integer",
+        "unit": "1",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0,
+        "maximum": 1
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 5e-324
+      },
+      {
+        "name": "glucose",
+        "kind": "number",
+        "unit": "mg/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 5e-324,
+        "maximum": 125.99999999999999
+      },
+      {
+        "name": "hba1c",
+        "kind": "number",
+        "unit": "%",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 5e-324
+      }
+    ],
+    "population": "Mexico analytical-use design: adults aged 25-79 with no reported prior doctor diagnosis of diabetes/high blood sugar, recorded 8-12-hour fast, positive fasting serum glucose below 126 mg/dL, available HbA1c and valid standing anthropometry with internally consistent measurement documentation (uniformly excluding explicit not-weighed or alternative-standing-route documentation that contradicts usable standing measurements, without asserting which field is correct) under the prespecified measurement restrictions; pregnancy/lactation excluded when documented by questionnaire routing for women aged 25-49; no verified medication or anemia exclusion. Exactly 375 fictional individuals per female=0/1 crossed with age bands 25-39, 40-54, 55-69, 70-79; equal-stratum analytical design, not a nationally representative population.",
+    "demographic_standard": {
+      "age_edges": [
+        25,
+        40,
+        55,
+        70,
+        80
+      ],
+      "age_type": "integer years",
+      "sex_codes": {
+        "0": "male",
+        "1": "female"
+      },
+      "cell_count": 8,
+      "cell_mass": 0.125,
+      "generated_rows_per_cell": 375,
+      "reference_row_weight": "1/(8*n_h)",
+      "national_population_claim": false
+    },
+    "measurement": {
+      "glucose": "VALOR_GLU_SUERO, serum mg/dL; original external evidence uses plasma",
+      "hba1c": "VALOR_HB1AC, whole-blood HbA1c percent",
+      "bmi": "kg/(cm/100)^2 using prespecified same-repeat standing pair and routing; not an official unpublished final-reading reconstruction"
+    },
+    "eligibility": [
+      "Age25–79 and recorded laboratory/anthropometry sex-age agreement.",
+      "P7==2: never reported doctor diagnosis; gestational/unknown/missing excluded.",
+      "Recorded fast8–12h, finite0<serumglucose<126mg/dL and HbA1c>0.",
+      "Pregnancy/lactation negative required under questionnaire routing for women25–49; no invented negative answer in unasked groups.",
+      "First complete valid same-ordinal standing pair, second only if first unavailable; block/routes and explicit not-weighed contradictions excluded per pinned preparation.",
+      "Complete positive BMI/glucose/HbA1c; no data-distribution outlier trimming, no new imputation."
+    ],
+    "not_claimed": [
+      "No verified medication exclusion.",
+      "No anemia exclusion.",
+      "No national survey-weighted estimand.",
+      "No reconstruction of individual clinical measurements."
+    ],
+    "reference_binding": {
+      "path": "work/autonomous_research_cycle2_2026-10-31/custodian/private/reference_v2.csv",
+      "sha256_from_prior_release": "16820ae0471437107a545075030dbf45ca80d5d5c69d07892698480a797ae54c",
+      "current_rows_opened": false
+    },
+    "preparation_rule": "Reuse pinned reference preparation; do not regenerate or modify eligibility from new scientific outcomes."
+  },
+  "evaluation": {
+    "engine": {
+      "path": "work/autonomous_research_cycle2_2026-10-31/analysis/analytical_engine.py",
+      "sha256": "1799c017b60f8fd3a9af409a524d3ebd9e54c81016e52da760aeafaefe03289d"
+    },
+    "function": "analyze_cohort",
+    "unchanged_engine": true,
+    "analysis_population": "All valid rows, demographic cell-standardized equally; generated table must have375rows/cell. Same weighted estimator for reference and generated.",
+    "transforms": {
+      "age10": "(age-50)/10",
+      "bmi5": "(bmi-25)/5",
+      "glucose10": "(glucose-100)/10"
+    },
+    "uses": [
+      {
+        "id": "Q1_age10",
+        "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10",
+        "coefficient": "age10",
+        "unit": "percentage points per10years",
+        "support_E0": "assumption_dependent_not_numerically_supplied",
+        "support_E1": "source_indexed_adjusted_age_projection_transfer; Pani source coefficient given, target value not supplied",
+        "source_relation_is_supplied_in_E1": true,
+        "target_numeric_calibration_supplied": false,
+        "source_numeric_calibration_relation_available_in_E1": true
+      },
+      {
+        "id": "Q2_bmi5",
+        "formula": "hba1c ~ 1 + age10 + female + bmi5",
+        "coefficient": "bmi5",
+        "unit": "percentage points per5kg/m^2",
+        "support_E0": "assumption_dependent_not_numerically_supplied",
+        "support_E1": "source_indexed_age_sex_adjusted_BMI_projection_transfer; Jansen given, target value not supplied",
+        "source_relation_is_supplied_in_E1": true,
+        "target_numeric_calibration_supplied": false,
+        "source_numeric_calibration_relation_available_in_E1": true
+      },
+      {
+        "id": "Q3_bmi5",
+        "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10",
+        "coefficient": "bmi5",
+        "unit": "percentage points per5kg/m^2",
+        "support_E0": "assumption_dependent",
+        "support_E1": "unreported_joint_structure; exact conditioned projection is not supplied",
+        "source_relation_is_supplied_in_E1": false,
+        "not_algebraically_identified_by_source_packet": true,
+        "target_numeric_calibration_supplied": false,
+        "source_numeric_calibration_relation_available_in_E1": false
+      }
+    ],
+    "derived_contrasts": [
+      {
+        "id": "Q2_minus_Q3_bmi5",
+        "definition": "Q2_bmi5-Q3_bmi5",
+        "role": "algebraic derived descriptive change; not another independent endpoint or causal mediation"
+      }
+    ],
+    "diagnostics": "Preserve engine secondaryglucose10 age-sex projection; weighted mean, populationSD and inverse-CDFq10/q50/q90 of5fields; Q1residualweightedRMS; all scheduled failures.",
+    "reference_uncertainty": {
+      "method": "reuse399attempt cluster-resampling empirical stability procedure",
+      "seed": 18301,
+      "clusters": "(lab_est_dis,lab_upm_dis)",
+      "within_stratum": "drawcPSUs withreplacement; singletononce; carrycompleteclusters; recompute8-cellstandard",
+      "failure": "no retries; reportvalid/attempted andemptycell/singularfailures",
+      "interval": "2.5/97.5percentiles NumPylinear overvalidreplicates",
+      "interpretation": "Finite empirical reference stability, not national confidence intervals or equivalence bounds."
+    },
+    "arm_contrast": "Perendpoint E1minusE0 difference of armmeans of each constructor mean absolute discrepancy across3fixedseeds; incomplete summaries explicitly incomplete; no pooledscore.",
+    "generated_only_provider": {
+      "file": "generated_feedback.py",
+      "sha256": "1a5a3cd6126211dc2e24f2d1c7fa58e4afdbc980e29c6fdccb6b637c7cf4e551",
+      "function": "evaluate_generated",
+      "analysis_ids": [
+        "Q1_age10",
+        "Q2_bmi5",
+        "Q3_bmi5"
+      ],
+      "reference_reader_present": false
+    },
+    "provider_dependency": {
+      "path": "work/autonomous_research_cycle2_2026-10-31/analysis/analytical_engine.py",
+      "sha256": "1799c017b60f8fd3a9af409a524d3ebd9e54c81016e52da760aeafaefe03289d"
+    }
+  },
+  "information_conditions": {
+    "E0": {
+      "evidence_file": "E0.json",
+      "evidence_sha256": "5000217ff673310daf3df8862c44a6e7d9899e5d81d9b713d43dd5eddf4d25c9",
+      "normalization_file": "E0_normalization.json",
+      "normalization_sha256": "87f6b394726ceffe1eb170a85a864004dc21abe76b0135075b9c0d7b2d455fdf",
+      "registry_file": "E0_registry.json",
+      "registry_sha256": "ce38c424c552d19a4039e3fdd892934c9a415b5e671c30b38cad6b9bac4095ff",
+      "item_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task",
+        "J_T1_glucose_mean_mmol_L",
+        "J_T1_glucose_sd_mmol_L",
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct",
+        "J_T1_hba1c_mean_ifcc",
+        "J_T1_hba1c_sd_ifcc",
+        "J_T1_male_proportion_reported",
+        "J_T1_female_proportion_derived",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived",
+        "J_T1_hba1c_mean_pct_from_ifcc",
+        "J_T1_hba1c_sd_pct_from_ifcc",
+        "NGSP_UNIT_GUIDANCE"
+      ],
+      "source_ids": [
+        "JANSEN2013",
+        "NGSP"
+      ],
+      "author_allowed_files": [
+        "task.json",
+        "E0.json",
+        "E0_normalization.json",
+        "E0_registry.json",
+        "E0_source_operations.json",
+        "sources/E0/JANSEN2013.md",
+        "sources/E0/NGSP.md",
+        "analysis_definitions.json"
+      ],
+      "excluded_material": "Do not supply original full summaries, raw original packet/normalized records, article bodies, other-arm sources, old generators/results or target reference."
+    },
+    "E1": {
+      "evidence_file": "E1.json",
+      "evidence_sha256": "28f75f5b7f4f497cce69b330d9b781194a044bf09e173e663917764d3d153165",
+      "normalization_file": "E1_normalization.json",
+      "normalization_sha256": "7cdbf67be4bf2f9b9ab5bb103ee6155130af285106484211ba5cff6a663bff05",
+      "registry_file": "E1_registry.json",
+      "registry_sha256": "d1b65f9cab22dc6123f33005173631f4815fe95a6c27cbd2e16ee69d5e92836c",
+      "item_ids": [
+        "J_T1_age_mean_task",
+        "J_T1_age_sd_task",
+        "J_T1_bmi_mean_task",
+        "J_T1_bmi_sd_task",
+        "J_T1_glucose_mean_mmol_L",
+        "J_T1_glucose_sd_mmol_L",
+        "J_T1_hba1c_mean_pct",
+        "J_T1_hba1c_sd_pct",
+        "J_T1_hba1c_mean_ifcc",
+        "J_T1_hba1c_sd_ifcc",
+        "J_T1_male_proportion_reported",
+        "J_T1_female_proportion_derived",
+        "J_T1_glucose_mean_mg_dL_derived",
+        "J_T1_glucose_sd_mg_dL_derived",
+        "J_T1_hba1c_mean_pct_from_ifcc",
+        "J_T1_hba1c_sd_pct_from_ifcc",
+        "NGSP_UNIT_GUIDANCE",
+        "J_T2_bmi_slope_original",
+        "J_T2_bmi_slope_task_derived",
+        "J_T2_glucose_slope_original",
+        "J_T2_glucose_slope_task_derived",
+        "P_NHANES_age_slope",
+        "P_NHANES_hba1c_age_lt40_mean",
+        "P_NHANES_hba1c_age_40_44_mean",
+        "P_NHANES_hba1c_age_45_49_mean",
+        "P_NHANES_hba1c_age_50_54_mean",
+        "P_NHANES_hba1c_age_55_59_mean",
+        "P_NHANES_hba1c_age_60_64_mean",
+        "P_NHANES_hba1c_age_65_69_mean",
+        "P_NHANES_hba1c_age_ge70_mean"
+      ],
+      "source_ids": [
+        "JANSEN2013",
+        "PANI2008",
+        "NGSP"
+      ],
+      "author_allowed_files": [
+        "task.json",
+        "E1.json",
+        "E1_normalization.json",
+        "E1_registry.json",
+        "E1_source_operations.json",
+        "sources/E1/JANSEN2013.md",
+        "sources/E1/PANI2008.md",
+        "sources/E1/NGSP.md",
+        "analysis_definitions.json",
+        "source_operators.py"
+      ],
+      "excluded_material": "Do not supply original full summaries, raw original packet/normalized records, article bodies, other-arm sources, old generators/results or target reference."
+    }
+  },
+  "source_operations": {
+    "E0": "E0_source_operations.json",
+    "E1": "E1_source_operations.json",
+    "analytic_helper": {
+      "file": "source_operators.py",
+      "sha256": "201fa80c0981085c898f7b1e8b8fa5030d702605afdd554496ab8b4c0cc0b6d0"
+    },
+    "prior_row_replay_reuse": "Old source panel defines compatible names/operators but newbounded sessiondoesnotpromise source-rowreplay."
+  },
+  "source_context_plan": {
+    "lifelines": "Qualified analytic populationmoments, if derivationis suppliedandchecked. Source exclusions/row-n/covariances unreported. No genericpopulationreconstruction claim.",
+    "pani": "Optional qualifiedanalytic adjustedage/agebandintegrals; surveydesign cannotbereconstructed; unweightedagecountsnot probabilityweights; strictreplay unavailable.",
+    "target": "Separate taskpopulation and8-cellstandard; never relabel target statistics as sourcereplay."
+  },
+  "numerical_uptake_requirement": "EachE1author accountsfor3separateprojectionand8agebanditems: numericalconstraint/checkedcalculation/contextual/declined withreason. Atleastone nonmarginaloperation is available via analytichelper; availabilitydoesnotforcepositivefit. Scientific momentderivation and generatorlinkage require independentreview.",
+  "unidentified_assumptions": [
+    "Sourcecorrelation/covariance, residualdistribution andtails beyond margins.",
+    "Sourceanalysisrow-nand selectionreconstruction.",
+    "Serum/plasma, assays, ancestry and anemia/medication selectiontransfer.",
+    "Within-target-ageband distributions, BMI/glycemic marginal transfer and dependences.",
+    "Pani populationweights/supportincluding>=70 upperrange.",
+    "Covariancecompletion choices canchangeQ3 evenif all sourceprojectionsmatch."
+  ],
+  "prior_artifact_bindings": [
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/PROTOCOL_v2.md",
+      "sha256": "8f87ecd5bae60958b4e58727f6c09d1d033c739c2aa6d3a645404bf33a431807"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/admission/SOURCE_PACKET_ADMISSION.json",
+      "sha256": "4cff21729cd37431f8ec8f0d556a27ddc17aecd1be926b29b3febfd2ceb498b4"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/evidence/packet/evidence_template.json",
+      "sha256": "618e16efbfc47d971f6a21194648a017efa307fd1e15952b2b999412da901dd1"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/evidence/packet/normalized_quantities.json",
+      "sha256": "33aea760177e6093959fabb3fc603af16608ea62d386f0396917b7dd0bf49670"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/evidence/packet/MANIFEST.json",
+      "sha256": "e27990e865dbd966cf5bc12828d95ae36009c70b58c7f0435d0f68413d5848f1"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/evidence/INDEPENDENT_SOURCE_AUDIT.md",
+      "sha256": "dc4113af88d810833e8c42be3832ce20611edd6e87c3606f31f8f3b85c8f7f1f"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/public_v2/SOURCE_PANEL_SPEC.json",
+      "sha256": "ba7d3d771672029f877f29864f4017801e60fae6c3864742e3a44c02173df4e0"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/public_v2/task.json",
+      "sha256": "e331be5bec28597ee4649592a255583b0b68c9338c565aaae96c3658467bcbbd"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/analysis/analytical_engine.py",
+      "sha256": "1799c017b60f8fd3a9af409a524d3ebd9e54c81016e52da760aeafaefe03289d"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/analysis/run_evaluation.py",
+      "sha256": "a792b9380751ef6dcd6419c51e99ede902d5dc9694f2c5b39bfcaa2fae990005"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/custodian/prepare_reference_v2.py",
+      "sha256": "f80a8986e36761d01156567fed4102abe5abcf1fe6a79b3f330780c8c84a0c8b"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/custodian/PREFLIGHT_METADATA.json",
+      "sha256": "cd903ec8fcf8c685b88f43eae2bb929c372bbaa41bbde9e84766996657a5f9c0"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/custodian/MEASUREMENT_RULE_ADJUDICATION.md",
+      "sha256": "10e99f7d6bf52abb6d74b622813663179eebef3b6a8796379651957560d3e8fd"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/PREPARATION_AMENDMENT_01.md",
+      "sha256": "2db776115fac089b023371517c8af4ecfe2d691ea69a5d4d73f204bc6ab7b936"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/custodian/PREPARATION_RECEIPT_v2.json",
+      "sha256": "7b233adcdabb86f9863bfd42b332ba3ffb65b01c528f1fc931cb4ade4d3c1758"
+    },
+    {
+      "path": "work/autonomous_research_cycle2_2026-10-31/EVALUATION_RELEASE.json",
+      "sha256": "4aaea19f01479d98951286e679b31eeab65f4fdec4fd20909d2bd1bc528b1f4e"
+    }
+  ],
+  "unresolved_release_gates": [
+    "Independentreview ofthiscasecard/armsplit/analytichelper.",
+    "Root comparator/evaluation/session/seedmanifest andglobalclosurebinding.",
+    "Per-author momentderivation-to-generator numericaluptakereview ifanalyticevidenceuseisclaimed."
+  ],
+  "budget_note": "No newpaper,dataacquisitionorpatient/generation run. Old scientific budgets unchanged. Newmain2totalexploratory+3final attempts perconstruction governedbyrootmanifest.",
+  "budget": {
+    "exploratory_attempts": 2,
+    "final_attempts": 3,
+    "total_attempts": 5,
+    "rows": 3000,
+    "trial_seeds": [
+      5201,
+      5202
+    ],
+    "final_seeds": [
+      5101,
+      5102,
+      5103
+    ]
+  }
+}

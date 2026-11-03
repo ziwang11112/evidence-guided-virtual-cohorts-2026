@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "condition": "E1",
+  "non_marginal_operations": [
+    {
+      "operation_id": "J_T2_bmi_slope_task_derived",
+      "source_context": "lifelines",
+      "formula": "hba1c ~ 1 + bmi + age + female",
+      "term": "bmi",
+      "variables_units": {
+        "age": "year",
+        "female": "1",
+        "bmi": "kg/m^2",
+        "glucose": "mg/dL",
+        "hba1c": "%"
+      },
+      "strict_replay_status": "not_computable_from_admitted_aggregates",
+      "qualified_analytic_path": {
+        "file": "source_operators.py",
+        "function": "source_projection",
+        "formula": "beta = solve(Sigma_XX, Sigma_XY); report beta for separately named term",
+        "required_input": "Independently checked moments of the author-declared source-context law after source selection, in stated units; binding to frozen generator and assumptions required.",
+        "status": "operator_available_moment_derivation_and_scientific_linkage_require_candidate_review"
+      },
+      "source_limitations": [
+        "Source marginals do not identify cross-covariances or residual law.",
+        "Jansen Table 2 row-specific n is unresolved; full-cohort margins do not prove same analysis population.",
+        "Separate projections cannot be assigned as coefficients of one joint equation."
+      ],
+      "target_transfer": "External population projection only; serum/plasma and selection/ancestry/assay transfer are unverified. Target standardization is not source-context reconstruction."
+    },
+    {
+      "operation_id": "J_T2_glucose_slope_task_derived",
+      "source_context": "lifelines",
+      "formula": "hba1c ~ 1 + glucose + age + female",
+      "term": "glucose",
+      "variables_units": {
+        "age": "year",
+        "female": "1",
+        "bmi": "kg/m^2",
+        "glucose": "mg/dL",
+        "hba1c": "%"
+      },
+      "strict_replay_status": "not_computable_from_admitted_aggregates",
+      "qualified_analytic_path": {
+        "file": "source_operators.py",
+        "function": "source_projection",
+        "formula": "beta = solve(Sigma_XX, Sigma_XY); report beta for separately named term",
+        "required_input": "Independently checked moments of the author-declared source-context law after source selection, in stated units; binding to frozen generator and assumptions required.",
+        "status": "operator_available_moment_derivation_and_scientific_linkage_require_candidate_review"
+      },
+      "source_limitations": [
+        "Source marginals do not identify cross-covariances or residual law.",
+        "Jansen Table 2 row-specific n is unresolved; full-cohort margins do not prove same analysis population.",
+        "Separate projections cannot be assigned as coefficients of one joint equation."
+      ],
+      "target_transfer": "External population projection only; serum/plasma and selection/ancestry/assay transfer are unverified. Target standardization is not source-context reconstruction."
+    },
+    {
+      "operation_id": "P_NHANES_age_slope",
+      "source_context": "pani",
+      "formula": "hba1c ~ 1 + age + female + bmi + glucose",
+      "term": "age",
+      "variables_units": {
+        "age": "year",
+        "female": "1",
+        "bmi": "kg/m^2",
+        "glucose": "mg/dL",
+        "hba1c": "%"
+      },
+      "strict_replay_status": "not_computable_from_admitted_aggregates",
+      "qualified_analytic_path": {
+        "file": "source_operators.py",
+        "function": "source_projection",
+        "formula": "beta = solve(Sigma_XX, Sigma_XY); report beta for separately named term",
+        "required_input": "Independently checked moments of the author-declared source-context law after source selection, in stated units; binding to frozen generator and assumptions required.",
+        "status": "operator_available_moment_derivation_and_scientific_linkage_require_candidate_review"
+      },
+      "source_limitations": [
+        "Survey weights and original IPD unavailable; this is an assumption-qualified population projection, not exact survey replay.",
+        "Unreported source joint distribution and source support require assumptions."
+      ],
+      "target_transfer": "External population projection only; serum/plasma and selection/ancestry/assay transfer are unverified. Target standardization is not source-context reconstruction."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_lt40_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 25,
+        "maximum_exclusive": 40
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_40_44_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 40,
+        "maximum_exclusive": 45
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_45_49_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 45,
+        "maximum_exclusive": 50
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_50_54_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 50,
+        "maximum_exclusive": 55
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_55_59_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 55,
+        "maximum_exclusive": 60
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_60_64_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 60,
+        "maximum_exclusive": 65
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_65_69_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 65,
+        "maximum_exclusive": 70
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    },
+    {
+      "operation_id": "P_NHANES_hba1c_age_ge70_mean",
+      "source_context": "pani",
+      "kind": "ageband_mean",
+      "age_rule": {
+        "minimum_inclusive": 70,
+        "maximum_exclusive": null
+      },
+      "formula": "E_source[HbA1c * I(age in band)] / P_source(age in band)",
+      "strict_replay_status": "not_computable_without_survey_and_population_information",
+      "qualified_analytic_status": "available_if_author_derives_conditional_integrals_of_its_declared_source_law; no compulsory simulation",
+      "uncertainty": "Reported survey SE is not individual SD; source unweighted age counts are not target probabilities.",
+      "source_support": "The >=70 source band has no admitted upper bound; target79 limit must not be inserted silently."
+    }
+  ],
+  "execution_policy": "New session has no source-row replay. Retained deterministic analytic calculations are permitted, independently checked, and tied to the candidate. At most two target trials globally per construction; no unmetered row-producing calibration."
+}
