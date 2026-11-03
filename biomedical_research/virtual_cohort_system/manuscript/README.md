@@ -1,5 +1,18 @@
 # Manuscript
 
+**Current revision: [DRAFT_v0_6.md](DRAFT_v0_6.md), 3 November 2026.** It centers Agent-generated biomedical data for specified scientific analyses. The completed two-case external-evidence study and the separate CHNS summary-assisted experiment are presented with their original protocols and complete outcomes. Author declarations and submission-specific preparation remain.
+
+- [Current contribution and experiment priorities](../docs/CONTRIBUTION_LED_EXPERIMENT_PRIORITIES_2026-11-03.md): scientific usefulness and one compatible published-method public example; universal statistical superiority is not a drafting gate.
+- [Scientific-utility figures and captions](utility_package_2026-11-03/CAPTIONS.md) and [numeric manifest](utility_package_2026-11-03/NUMERIC_MANIFEST.json): all six main-study endpoints and all L/R authors, from existing aggregates.
+- [Revision and claim mapping](REVISION_v06_2026-11-03.md): exact writing changes and supporting records.
+- [Historical results](SUPPLEMENT_HISTORICAL_RESULTS_v05.md) and [source/assumption supplement](SUPPLEMENT_SOURCE_AND_ASSUMPTIONS_v05.md): retained findings and scientific assumptions.
+- [Completed statistical supplement](../reports/summary_comparator_2026-11-03/RESULTS.md): descriptive calibration results and the technical recovery; no additional bespoke comparator is required.
+- [Previous revision](DRAFT_v0_5.md): preserved unchanged.
+
+This writing revision performs no new generation or patient-level analysis. The earlier navigation below describes historical drafting and proposed campaigns, not current execution status.
+
+## Historical navigation (v0.2)
+
 The current working revision is [DRAFT_v0_2.md](DRAFT_v0_2.md), prepared on 1 November 2026. It centers the biomedical measurement/data-access problem, the evidence-to-joint-data construction method, and the scientific analyses enabled by the resulting virtual cohorts. It incorporates the reviewed G-Sim/LLMSynthor comparison and preserves the complete Results section of v0.1, including quantitative failures and no revision gain. It is a working biomedical methods manuscript, not a submission-ready package.
 
 - [Contribution-to-evidence map](CONTRIBUTION_EVIDENCE_MAP_2026-11-01.md): what the paper contributes, the exact supporting records, existing displays and remaining manuscript work.
