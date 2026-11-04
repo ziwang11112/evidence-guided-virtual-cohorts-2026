@@ -11,7 +11,9 @@ A scientific Agent turns qualified biomedical evidence, a population description
 - [Aggregate reproduction guide](docs/REPRODUCING_MANUSCRIPT_v07.md).
 - [Current focus](docs/CURRENT_RESEARCH_FOCUS.md), [focused experiment gaps](manuscript/KEY_EXPERIMENT_GAPS_v07_2026-11-03.md), and [existing-reference feasibility audit](manuscript/EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md).
 
-- [Current research decision](manuscript/TOP_VENUE_RESEARCH_DECISION_2026-11-03.md): a proposed, bounded test of analysis-directed evidence acquisition for useful data generation; no new results or execution release.
+- [Current system contribution and evaluation plan](docs/AGENT_SYSTEM_CONTRIBUTION_AND_EVALUATION_2026-11-03.md): complete Agent data generation is primary; evidence-selection scoring is optional.
+- [Implemented request intake](docs/REQUEST_INTAKE_V1.md): two request-only demonstrations and 19 passing interface tests. This entry prepares tasks; it does not yet launch the scientific Agent or generate data.
+- [Earlier top-venue assessment and optional acquisition proposal](manuscript/TOP_VENUE_RESEARCH_DECISION_2026-11-03.md).
 - [v0.8 independent writing review](manuscript/REVIEW_v0_8_2026-11-03.md), [earlier fallback venue preparation](manuscript/VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md), and [provisional submission text](manuscript/SUBMISSION_TEXT_v08_2026-11-03.md). PLOS is not the settled destination.
 
 ## Completed experiments

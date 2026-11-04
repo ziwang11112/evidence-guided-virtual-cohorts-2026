@@ -8,7 +8,8 @@ This revision centers the paper on Agent scientific model authorship: turning st
 
 - [Full manuscript](DRAFT_v0_8.md) and [revision record](REVISION_v08_2026-11-03.md).
 - [Independent v0.8 review](REVIEW_v0_8_2026-11-03.md), including the bridge to unchanged v0.7 tables, figures and aggregate reproduction.
-- [Current research decision](TOP_VENUE_RESEARCH_DECISION_2026-11-03.md), supported by the [neighbor audit](TOP_VENUE_NEIGHBOR_AUDIT_2026-11-03.md), [result-based extension](CORE_EXTENSION_CANDIDATES_2026-11-03.md) and [venue strategy review](TOP_VENUE_STRATEGY_REVIEW_2026-11-03.md). Next is a bounded capability-test design; no new experiment or top-venue readiness is claimed.
+- [Current Agent-system contribution plan](../docs/AGENT_SYSTEM_CONTRIBUTION_AND_EVALUATION_2026-11-03.md) and [implemented request entry](../docs/REQUEST_INTAKE_V1.md). The complete generation workflow is primary; interface tests add no scientific result to v0.8.
+- [Earlier acquisition proposal](TOP_VENUE_RESEARCH_DECISION_2026-11-03.md), [neighbor audit](TOP_VENUE_NEIGHBOR_AUDIT_2026-11-03.md), [result-based extension](CORE_EXTENSION_CANDIDATES_2026-11-03.md) and [venue review](TOP_VENUE_STRATEGY_REVIEW_2026-11-03.md). The acquisition experiment is now optional, not a prerequisite.
 - [Earlier venue/submission preparation](VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md): retained PLOS/JBI fallback materials, superseded as the current destination decision.
 - [Provisional Author Summary and submission text](SUBMISSION_TEXT_v08_2026-11-03.md): 177-word plain-language summary, scientific cover-letter paragraph, availability facts and author-specific fields still to complete.
 
