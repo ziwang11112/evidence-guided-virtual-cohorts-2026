@@ -1,12 +1,13 @@
 # Manuscript
 
-**Current full manuscript: [v0.8](DRAFT_v0_8.md), 3 November 2026.**
+**Current full manuscript: [v0.9](DRAFT_v0_9.md), 4 November 2026.**
 
-This revision centers the paper on Agent scientific model authorship: turning study-qualified findings into a joint law and virtual data for a requested biomedical analysis. It strengthens the Abstract, Introduction, Methods overview and Discussion. All four tables, Results, figure assets/captions and bibliography entries are retained from v0.7.
+This revision centers the paper on Agent scientific model authorship and integrates the completed open-search, reviewed-evidence construction and real-sample context analyses. The four original tables and Figures 1–4 remain; Figure 5 and the real-real supplement add the latest seven-term scientific analysis and its missing-dependence sensitivity. Existing empirical versions stay separate.
 
 ## Current review materials
 
-- [Full manuscript](DRAFT_v0_8.md) and [revision record](REVISION_v08_2026-11-03.md).
+- [Full manuscript](DRAFT_v0_9.md), [revision record](../reports/manuscript_consolidation_2026-11-04/DRAFT_REVISION_NOTES.md), [consolidation/rerun decision](../reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](../reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
+- [Figure 5](integrated_figures_v09_2026-11-04/figure5_agent_scientific_utility.svg), [real-real supplement](integrated_figures_v09_2026-11-04/supplement_real_real_context.svg), and [aggregate-only plotting code](integrated_figures_v09_2026-11-04/render_figure5.py).
 - [Independent v0.8 review](REVIEW_v0_8_2026-11-03.md), including the bridge to unchanged v0.7 tables, figures and aggregate reproduction.
 - [Current Agent-system contribution plan](../docs/AGENT_SYSTEM_CONTRIBUTION_AND_EVALUATION_2026-11-03.md) and [implemented request entry](../docs/REQUEST_INTAKE_V1.md). The complete generation workflow is primary; interface tests add no scientific result to v0.8.
 - [Earlier acquisition proposal](TOP_VENUE_RESEARCH_DECISION_2026-11-03.md), [neighbor audit](TOP_VENUE_NEIGHBOR_AUDIT_2026-11-03.md), [result-based extension](CORE_EXTENSION_CANDIDATES_2026-11-03.md) and [venue review](TOP_VENUE_STRATEGY_REVIEW_2026-11-03.md). The acquisition experiment is now optional, not a prerequisite.

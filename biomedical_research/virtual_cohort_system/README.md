@@ -1,13 +1,14 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.8](manuscript/DRAFT_v0_8.md), 3 November 2026.**
+**Current manuscript: [v0.9](manuscript/DRAFT_v0_9.md), 4 November 2026.**
 
 A scientific Agent turns qualified biomedical evidence, a population description, optional observations and a requested analysis into virtual data. The Agent chooses the joint model and parameters; numerical tools sample and inspect it. Complete-cohort generation without participant inputs is central.
 
 ## Paper and evidence
 
-- [Full manuscript](manuscript/DRAFT_v0_8.md), [story and contributions](manuscript/STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md), and [complete evidence ledger](manuscript/INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md).
+- [Full manuscript](manuscript/DRAFT_v0_9.md), [current consolidation and rerun decision](reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
 - [Four main figures and Figure S1](manuscript/integrated_figures_v07_2026-11-03/FIGURE_PLAN.md), with [captions](manuscript/integrated_figures_v07_2026-11-03/CAPTIONS.md).
+- [New Figure 5](manuscript/integrated_figures_v09_2026-11-04/figure5_agent_scientific_utility.svg) joins the completed open-search construction to all seven regression terms and its pre-generation joint-dependence sensitivity. [Real-sample variation context](manuscript/integrated_figures_v09_2026-11-04/supplement_real_real_context.svg) remains a separate supplement.
 - [Aggregate reproduction guide](docs/REPRODUCING_MANUSCRIPT_v07.md).
 - [Current focus](docs/CURRENT_RESEARCH_FOCUS.md), [focused experiment gaps](manuscript/KEY_EXPERIMENT_GAPS_v07_2026-11-03.md), and [existing-reference feasibility audit](manuscript/EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md).
 
@@ -25,6 +26,8 @@ A scientific Agent turns qualified biomedical evidence, a population description
 | Target-summary access: separate CHNS L/R | Six Agent constructions; 42 executions, 24 distinct tables overall and 18 distinct delivery tables | Closer reconstruction of several supplied summaries. Initial/final deliveries identical; no additional-stage revision gain. |
 | Published longitudinal model: HRS | One Agent and one reconstructed published-law model; six valid tables, each 11,509 virtual subjects at four visits; nine physical generations include three invalid initial comparator attempts | Native longitudinal analysis and source-model reconstruction. Weak upper-threshold interaction and upper-HbA1c spread remain imperfect. No HRS participant records used. |
 | Live request-to-data integration | Two fresh-context authors; actual source retrieval; eight 3,000-row executions, including six distinct delivery tables | A age and B glucose relationships have useful agreement; B glucose-adjusted BMI does not. All source replays unavailable, both initial candidates retained. Existing CHNS development reference. |
+| Open search to reviewed-evidence construction | Five seriously reviewed original studies; one fresh scientific constructor; one trial and three final 3,000-person tables | Complete joint model and task-specific analysis with useful secondary BMI/age agreement, remaining conditional/distributional differences and explicit unreported-dependence sensitivity. All final outputs retained; no controlled retrieval or revision-gain claim. |
+| Real-sample interpretation context | 100 community-disjoint resplits of the existing CHNS sample; all 36 metrics; the same three frozen generated tables | Descriptive variation context for each analysis; no new cohort, generation or equivalence cutoff. |
 
 These are separate information settings. Virtual rows, seed draws, authors and clinical references are different units. The evidence ledger retains historical enrichment/direct-output uses and failed studies. Revealed targets remain closed to tuning and renewed confirmation.
 
@@ -48,6 +51,6 @@ Participant-level real/generated files, third-party full articles/codebooks and 
 
 ## Status and history
 
-The empirical versions and v0.7 source draft remain unchanged. v0.8 revises the scientific framing and interpretation, with identical tables, Results, captions and bibliography. Its independent review links those unchanged displays to the versioned v0.7 reproduction package. The metadata-only audit admits no new independent reference; no extra clinical experiment is launched. Author/funding/access/ethics/AI-use declarations, article-type selection and publication-layout inspection remain. The optional prospective extension is not a prerequisite for the bounded construction/reconstruction claim.
+The empirical versions and earlier drafts remain unchanged. v0.9 adds the completed open-search, reviewed construction and real-sample context results while retaining the previous four tables and figures. The [method/version audit](reports/manuscript_consolidation_2026-11-04/METHOD_AND_RERUN_AUDIT.md) finds no shared unresolved error requiring wholesale regeneration. Current work consolidates published aggregate outputs and writing; a new unified cross-case open-retrieval experiment is needed only for that stronger prospective claim. Author/funding/access/ethics/AI-use declarations, article-type selection and publication-layout inspection remain.
 
 Earlier implementation/progress notes remain in the [previous README](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/bec2041d1816432dd744cf875c649e9ea6142e67/biomedical_research/virtual_cohort_system/README.md). They describe their original dates. Frozen protocols, adverse results and disclosure history remain in the [exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md) and linked records.
