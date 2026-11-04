@@ -1,5 +1,7 @@
 # Manuscript
 
+**Completed experimental addendum, 3 November 2026:** [public HRS longitudinal reconstruction](SUPPLEMENT_HRS_PUBLIC_EXAMPLE_2026-11-03.md) adds six valid whole-cohort deliveries, all 16 native scientific coefficients and complete distribution checks. Nine physical attempts include three retained invalid comparator deliveries and a separately reviewed source-parser recovery. This is a source-model reconstruction example, not a new independent target or a method-superiority claim. The v0.6 main draft remains the current full manuscript; the addendum provides ready Methods/Results text and figures for integration.
+
 **Current revision: [DRAFT_v0_6.md](DRAFT_v0_6.md), 3 November 2026.** It centers Agent-generated biomedical data for specified scientific analyses. The completed two-case external-evidence study and the separate CHNS summary-assisted experiment are presented with their original protocols and complete outcomes. Author declarations and submission-specific preparation remain.
 
 - [Current contribution and experiment priorities](../docs/CONTRIBUTION_LED_EXPERIMENT_PRIORITIES_2026-11-03.md): scientific usefulness and one compatible published-method public example; universal statistical superiority is not a drafting gate.

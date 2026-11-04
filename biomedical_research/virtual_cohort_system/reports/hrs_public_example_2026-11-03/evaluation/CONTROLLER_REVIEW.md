@@ -1,0 +1,39 @@
+# Pre-release controller review
+
+3 November 2026. **Changes required before release.** Read-only inspection; no formal generation, fitting, test run or root-owned file modification.
+
+Controller SHA256: `0e31cbd310a546b2ab8430b714b1046cfe6aac930544a05e31745b125f7a40bf`.
+
+## 1. evaluation_failure_closure (blocking)
+
+`run_experiment.py:149`. A GLS timeout/launch exception or malformed native/GLS JSON can escape after an evaluation reservation without a final closure. Native launch errors other than TimeoutExpired and verification failures can do the same. Remaining slots then stop, and resume cannot safely complete this reserved slot automatically.
+
+**Required correction:** Wrap all work after reservation in per-slot try/except/finally; always write one failure-preserving evaluation closure. Preserve native status separately from GLS status; never refit/retry a spent native fit. Catch missing/invalid artifacts and GLS timeouts explicitly, then continue other fixed slots.
+
+## 2. closure_identity_binding (blocking)
+
+`run_experiment.py:107`. Generation closure checks only count/length, not exact expected identities or correspondence to current attempt files/reservations. Successful receipt verification checks internal receipt commitments but not its hash/candidate/seed against this controller slot and the recorded generation receipt.
+
+**Required correction:** Bind closure to exact six (arm,seed,run_id) slots and attempt/reservation hashes plus release hash. Before evaluation verify closure matches actual attempt records, reservations and release; for success require execution.json hash equals the recorded hash, candidate equals candidates/<arm>, and limits.seed equals slot seed. Validate these bindings also when resuming existing final slots.
+
+## 3. stale_evaluation_artifacts (blocking)
+
+`run_experiment.py:128`. A preexisting native.json can be read as computed after the R process fails/refuses overwrite; status is taken from any native file regardless of this invocation return code. The subsequent GLS only binds it to input, not to the reserved fit attempt.
+
+**Required correction:** For a fresh unreserved evaluation reject preexisting native/GLS/result-log artifacts; bind fresh native result input_sha256 and status to the invocation. A nonzero native return code must remain failed even if a JSON file says computed; preserve the artifact for review without crediting it as this fit.
+
+## Properties already correct
+
+- Exactly two named arms and seeds6101/6102/6103 define six slots; no parameter selection in controller.
+- Exclusive reservation files are created before generation; interrupted/failed reservations are not automatically retried.
+- run_candidate uses the isolated configured runtime with120seconds/1024MiB/30,000,000outputbytes/100,000logbytes and verifies retained execution receipts.
+- All six generation slots close before evaluation begins in the all path; evaluate-only requires closure, subject to identity-binding finding.
+- Candidate freezing is checked before each generation; release-listed files are checked for byte changes.
+- Native model runs through wrapper enforcing300seconds; host cap325seconds; no optimizer retry is called.
+- Complete existing evaluation closures are skipped rather than rerun.
+- Windows to WSL path conversion and PROJECT import root are correct for this explicit D: project.
+
+## Release boundary
+
+- The release record is still pending; it must bind controller, candidates/freezes, common source/task files, native/independent evaluators, wrapper and runtime metadata. This review does not certify a not-yet-created release.
+- Re-review only changed controller paths after the corrections; do not run formal generation during implementation review.

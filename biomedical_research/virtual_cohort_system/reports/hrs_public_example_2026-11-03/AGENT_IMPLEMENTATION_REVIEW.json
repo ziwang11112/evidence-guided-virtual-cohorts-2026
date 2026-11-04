@@ -1,0 +1,96 @@
+{
+  "created_utc": "2026-11-03T23:57:26.930415+00:00",
+  "status": "pass",
+  "scope": "Independent source/metadata/static scientific code review before HRS final release. No sampler import/call, HRS generation, clinical fit or output-table read.",
+  "candidate": "bundle/candidates/agent",
+  "candidate_sha256": {
+    "generator.py": "b5035321f7bf076261004f14a9cd4452bbb9797a8dbc94d3973331920dd175c4",
+    "model_spec.json": "522fdd8efb2773b4af75e7dbd7839bab2c13701175479f55fbc9dd11380ad1e6",
+    "evidence.json": "62f20a3dad5547bb0dfbc9de0ccd9519bdd4a018322e29458ab4a49f4a9982ab",
+    "decision.md": "cfcb524f18e5131bd545dcce81e98d035da438da6853adf75aab746c373be278",
+    "checks.json": "df74277940923de094d4b9623f680253e6c338548080f146111e9b761faf95a5",
+    "static_analytic_checks.py": "aa462d24d058575ec09bea5de5df981f8f5dfaeb63777b10fbaa06595fcbd536",
+    "static_analytic_results.json": "bf9340928a99fc08017c2dc9423edb6a9244d165b6df03ff743d5787b53c5b67",
+    "contract_validation.json": "a97a3a0e7f89250da2d663a56a3b6382453bd83d403f0e1cea0c3f542e515078"
+  },
+  "source_sha256": {
+    "sources/original/HRSmodels_20200902_fullDemoTable.txt": "1e1418da2f3c912edf016d7189e064a7bd7fdddd9e370b0ac9c1e80e522677e9",
+    "sources/original/HRS_sim_data_code_postGitHub_20200728.R": "35edbcbc1d636e26a9024caa36fd624b00894e3dba24c77e9f9b530185e822a6",
+    "sources/original/RCTSim1_postGitHub_20200728.R": "9f652ac842d96118645510dc2e078dcfe66f9d7ebe6fa6501ac5c18b0e15c3c2",
+    "sources/original/RCTSim2_postGitHub_20200728.R": "ce49f58cafddcd33b330db4487893baf2a14f17252c638537d6cce9d0c6fa5c7",
+    "sources/original/README.md": "2e72930231789641cd3b9b3ce19c1f3c7e1fd090c763ba466668b3743186aaf7"
+  },
+  "verified": {
+    "source_files_git_and_sha256": 5,
+    "demographic_cells": 28,
+    "coefficient_and_SE_pairs": 36,
+    "memory_fixed_terms": 16,
+    "parameter_provenance_groups": 7,
+    "source_artifacts_registered": true,
+    "output_columns": [
+      "id",
+      "subject_id",
+      "visit_time",
+      "baseline_age",
+      "age",
+      "age60",
+      "sex",
+      "race",
+      "educ",
+      "cses",
+      "hba1c",
+      "mem_s"
+    ],
+    "n_subjects": 11509,
+    "n_rows": 46036,
+    "Gamma": "mu=exp(Xbeta), shape=1/phi, scale=mu*phi; phi=0.02598182; conditional variance phi*mu^2.",
+    "random_dependence": "Shared Gaussian subject intercept and age60 slope, stated correlation; independent visit residuals. Baseline covariates repeat across four visits.",
+    "age_and_spline": "Continuous uniform source bins, including80-100; age60=(baseline_age+visit_time-60)/10; HbA1c branches min/max(hba1c-6.5,0).",
+    "law_structure": "Source recursive cell/age -> CSES -> education -> HbA1c -> longitudinal memory factorization; local seeded NumPy stream; no target calibration, clipping or rescaling."
+  },
+  "variance_precision": {
+    "classification": "Disclosed source-precision choice, not implementation error; candidates are not numerically identical laws.",
+    "components": [
+      {
+        "component": "random_intercept",
+        "agent": 0.373813,
+        "native_sd_based": 0.37380996000000005,
+        "agent_minus_native": 3.0399999999541905e-06,
+        "relative_percent_of_native": 0.0008132474586696914
+      },
+      {
+        "component": "random_slope",
+        "agent": 0.007483,
+        "native_sd_based": 0.007482249999999999,
+        "agent_minus_native": 7.500000000007501e-07,
+        "relative_percent_of_native": 0.010023722810661901
+      },
+      {
+        "component": "residual",
+        "agent": 0.576884,
+        "native_sd_based": 0.5768402499999999,
+        "agent_minus_native": 4.375000000000906e-05,
+        "relative_percent_of_native": 0.00758442220354926
+      },
+      {
+        "component": "intercept_slope_covariance",
+        "agent": 0.014808910359428882,
+        "native_sd_based": 0.014808108000000002,
+        "agent_minus_native": 8.023594288801561e-07,
+        "relative_percent_of_native": 0.005418379099343116
+      }
+    ],
+    "interpretation": "Agent uses printed variances; native reconstructs from printed SDs in source covariance formula. No claim that either convention reproduces unavailable unrounded fitted objects more exactly."
+  },
+  "blocking_findings": [],
+  "nonblocking_notes": [
+    "The Agent preparation record says its author did not import/execute the generator; subsequent isolated invented-parameter checks were performed by the coordinator. Keep those chronological scopes distinct.",
+    "This review verifies implementation and provenance, not generated quality or clinical/causal validity.",
+    "Both candidates consume the rich published conditional law. Their comparison cannot establish independent scientific model discovery, superiority, or population transport."
+  ],
+  "coordinator_fixture_status": "Coordinator reported isolated invented-parameter fixtures PASS; not rerun in this review.",
+  "files_modified_by_review": [
+    "AGENT_IMPLEMENTATION_REVIEW.json",
+    "AGENT_IMPLEMENTATION_REVIEW.md"
+  ]
+}

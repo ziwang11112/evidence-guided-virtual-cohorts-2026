@@ -1,0 +1,180 @@
+{
+  "created_utc": "2026-11-03T23:50:57.285081+00:00",
+  "status": "implementation_prepared_pending_parent_release_review",
+  "source_commit": "6708e43d5e342fa76d57b31d5a6d0bfcc2979539",
+  "source_bindings": [
+    {
+      "path": "sources/original/HRSmodels_20200902_fullDemoTable.txt",
+      "sha256": "1e1418da2f3c912edf016d7189e064a7bd7fdddd9e370b0ac9c1e80e522677e9",
+      "git_blob_sha1": "2943aab557016db49da1791398c510bae18c74bb"
+    },
+    {
+      "path": "sources/original/HRS_sim_data_code_postGitHub_20200728.R",
+      "sha256": "35edbcbc1d636e26a9024caa36fd624b00894e3dba24c77e9f9b530185e822a6",
+      "git_blob_sha1": "40bd9c505a2f1d3226c4ffc51572ba8124ec1593"
+    },
+    {
+      "path": "sources/original/RCTSim1_postGitHub_20200728.R",
+      "sha256": "9f652ac842d96118645510dc2e078dcfe66f9d7ebe6fa6501ac5c18b0e15c3c2",
+      "git_blob_sha1": "55dfe0ad34896f173bee5a140ff034a3b2d82ccb"
+    },
+    {
+      "path": "sources/original/RCTSim2_postGitHub_20200728.R",
+      "sha256": "ce49f58cafddcd33b330db4487893baf2a14f17252c638537d6cce9d0c6fa5c7",
+      "git_blob_sha1": "2ab7a9788c628c7f7fdf92f2d83272fb1d608d89"
+    },
+    {
+      "path": "sources/original/README.md",
+      "sha256": "2e72930231789641cd3b9b3ce19c1f3c7e1fd090c763ba466668b3743186aaf7",
+      "git_blob_sha1": "8ec150ff743f21e5e4a69685c762e91c41f787c0"
+    }
+  ],
+  "files": [
+    {
+      "path": "evaluation/native_evaluate.R",
+      "sha256": "1efa16ff5a11d8efdd41c99fb19ace03c67d8937f8d83e39ba09d07d9521aeec"
+    },
+    {
+      "path": "evaluation/run_r.py",
+      "sha256": "3e04fbf18c6c388b8e556bb9821dec372810bfd5a6cc9976956c0847d3dccdc1"
+    },
+    {
+      "path": "evaluation/independent_gls.py",
+      "sha256": "68154b00ee420ba1063e709f611d865dd3cb39d9a108564c7f255af6e0a4628d"
+    },
+    {
+      "path": "evaluation/prepare_runtime.py",
+      "sha256": "22a1b1992fd527c3492f66199cda53ff04e3eedd7568e00f9c86985a1ed5335d"
+    },
+    {
+      "path": "evaluation/check_runtime.R",
+      "sha256": "4f3f88d73f12c4cf9ab6a149c7ca0116f3424c6a3581d040f3110231a3bcdd2e"
+    },
+    {
+      "path": "evaluation/invented_check.R",
+      "sha256": "0e037e29b4a90e674d7681bf7d56aba7dfa30dfd1a005f427d5349535236b268"
+    },
+    {
+      "path": "evaluation/README.md",
+      "sha256": "500d7d093963640a0f0f253efcd01bf455e50c1ffad62c23a380bc15c56302c1"
+    },
+    {
+      "path": "evaluation/INDEPENDENT_GLS.md",
+      "sha256": "2c8310df9cdc36db97f31283adfbf16d093c85088642b2669b323b2e0ec27e71"
+    }
+  ],
+  "native_formula": "mem_s ~ age60*(hba1c_U65+hba1c_O65+race+educ+sex+cses)+(1+age60|subject_id)",
+  "native_fitting": {
+    "REML": true,
+    "optimizer": "bobyqa",
+    "maxfun": 200000000,
+    "timeout_seconds": 300,
+    "automatic_retries": 0,
+    "source": "RCTSim2_postGitHub_20200728.R lines 315-320; default REML confirmed by original printed lmerMod export"
+  },
+  "diagnostic_definition": {
+    "row_selector": "visit_time == 0; exactly one record per subject",
+    "source": "RCTSim2 lines383-403; HRS source code lines40-61",
+    "hba1c_below": "<6.5",
+    "hba1c_above": ">=6.5",
+    "mean_denominator": "n",
+    "SD_denominator": "n-1",
+    "original_native_summary_fields": [
+      "Count",
+      "Age_mean",
+      "Age_sd",
+      "Hba1c_mean",
+      "Hba1c_sd",
+      "hba1c_U65_mean",
+      "hba1c_U65_sd",
+      "hba1c_O65_mean",
+      "hba1c_O65_sd",
+      "SexMale",
+      "SexFemale",
+      "RaceWhite",
+      "RaceBlack",
+      "EducHS",
+      "EducLessHS",
+      "EducCollege",
+      "cses_mean",
+      "cses_sd",
+      "mem_base_mean",
+      "mem_base_sd"
+    ],
+    "additional_transparency_outputs": [
+      "threshold stratum counts",
+      "all categorical proportions and percentages",
+      "visits count",
+      "full convergence and singularity diagnostics"
+    ]
+  },
+  "runtime": {
+    "R": "R version 4.3.3 (2024-02-29)",
+    "platform": "x86_64-pc-linux-gnu",
+    "packages": {
+      "lme4": "1.1.35.1",
+      "Matrix": "1.6.5",
+      "minqa": "1.2.6",
+      "nloptr": "2.0.3",
+      "Rcpp": "1.0.12",
+      "RcppEigen": "0.3.4.0.0",
+      "jsonlite": "1.8.8"
+    },
+    "libraries": [
+      "/mnt/d/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/hrs_public_example_2026-11-03/evaluation/runtime/extracted/usr/lib/R/site-library",
+      "/mnt/d/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system/work/hrs_public_example_2026-11-03/evaluation/runtime/extracted/usr/lib/R/library",
+      "/usr/local/lib/R/site-library",
+      "/usr/lib/R/site-library",
+      "/usr/lib/R/library"
+    ],
+    "session_info": [
+      "R version 4.3.3 (2024-02-29)",
+      "Platform: x86_64-pc-linux-gnu (64-bit)",
+      "Running under: Ubuntu 24.04.4 LTS",
+      "",
+      "Matrix products: default",
+      "BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.0 ",
+      "LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.0",
+      "",
+      "locale:",
+      " [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       ",
+      " [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   ",
+      " [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          ",
+      "[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   ",
+      "",
+      "time zone: America/Chicago",
+      "tzcode source: system (glibc)",
+      "",
+      "attached base packages:",
+      "[1] stats     graphics  grDevices utils     datasets  methods   base     ",
+      "",
+      "other attached packages:",
+      "[1] jsonlite_1.8.8 lme4_1.1-35.1  Matrix_1.6-5  ",
+      "",
+      "loaded via a namespace (and not attached):",
+      " [1] minqa_1.2.6     MASS_7.3-60.0.1 compiler_4.3.3  Rcpp_1.0.12    ",
+      " [5] splines_4.3.3   nlme_3.1-164    grid_4.3.3      nloptr_2.0.3   ",
+      " [9] boot_1.3-30     lattice_0.22-5 "
+    ],
+    "native_historical_R": "4.0.1",
+    "native_historical_lme4": "1.1-23",
+    "interpretation": "Compatible current binary runtime, not bitwise historical runtime reproduction.",
+    "metadata_note": "Package version display normalized from initial recorded c(...) vector strings; no new runtime test."
+  },
+  "runtime_downloaded_bytes": 14514632,
+  "runtime_budget_bytes": 209715200,
+  "source_code_review_correction": "Recipient RCTSim2 explicitly uses bobyqa/maxfun2e8, unlike default optimizer in original source-data fit; corrected before any clinical generation or fit. Earlier default-optimizer invented test remains historical.",
+  "invented_checks": {
+    "native": "pass",
+    "native_checks": 10,
+    "GLS": "pass",
+    "subjects": 120,
+    "visits": 480,
+    "formal_HRS_generation": 0,
+    "clinical_fits": 0,
+    "max_GLS_coefficient_difference": 1.1803058530546195e-14,
+    "max_GLS_SE_difference": 9.700573677662305e-15
+  },
+  "identity_scope": "Independent GLS verifies fixed coefficients/SE conditional on fitted random/residual variance. It does not independently verify REML optimum, variance estimates, clinical truth, target transfer or source IPD.",
+  "latest_non_numeric_code_edits": "After invented native/GLS pass, added refusal to overwrite aggregate output and explicit convergence boolean fields; neither alters fit/design or existing computed values. Parent review required before formal release."
+}
