@@ -20,7 +20,7 @@ The paper separates three completed settings:
 
 These are distinct information conditions, not three unseen clinical confirmations or a universal superiority claim. The main-study inputs are curated. Autonomous literature processing, arbitrary-query validity and replacement of clinical measurement are not established.
 
-The [v0.8 review](biomedical_research/virtual_cohort_system/manuscript/REVIEW_v0_8_2026-11-03.md) checks the revised scientific framing and its unchanged numerical foundation. [Venue preparation](biomedical_research/virtual_cohort_system/manuscript/VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md) recommends a PLOS Digital Health methods Research Article; [submission text](biomedical_research/virtual_cohort_system/manuscript/SUBMISSION_TEXT_v08_2026-11-03.md) includes a provisional Author Summary. No journal submission has occurred.
+The [v0.8 review](biomedical_research/virtual_cohort_system/manuscript/REVIEW_v0_8_2026-11-03.md) checks the revised framing and unchanged numerical foundation. The [current research decision](biomedical_research/virtual_cohort_system/manuscript/TOP_VENUE_RESEARCH_DECISION_2026-11-03.md) proposes a bounded test of analysis-directed acquisition of study-qualified joint evidence, assessed through generated-data analyses. This is a proposed extension, not a new result or execution release. Earlier [PLOS/JBI preparation](biomedical_research/virtual_cohort_system/manuscript/VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md) remains a fallback; no venue is settled and no submission has occurred.
 
 ## Reproduce the aggregate manuscript results
 

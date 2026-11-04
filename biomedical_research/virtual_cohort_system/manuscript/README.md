@@ -8,7 +8,8 @@ This revision centers the paper on Agent scientific model authorship: turning st
 
 - [Full manuscript](DRAFT_v0_8.md) and [revision record](REVISION_v08_2026-11-03.md).
 - [Independent v0.8 review](REVIEW_v0_8_2026-11-03.md), including the bridge to unchanged v0.7 tables, figures and aggregate reproduction.
-- [Current venue and submission plan](VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md): PLOS Digital Health methods Research Article as the primary preparation target; JBI as a conditional alternative.
+- [Current research decision](TOP_VENUE_RESEARCH_DECISION_2026-11-03.md), supported by the [neighbor audit](TOP_VENUE_NEIGHBOR_AUDIT_2026-11-03.md), [result-based extension](CORE_EXTENSION_CANDIDATES_2026-11-03.md) and [venue strategy review](TOP_VENUE_STRATEGY_REVIEW_2026-11-03.md). Next is a bounded capability-test design; no new experiment or top-venue readiness is claimed.
+- [Earlier venue/submission preparation](VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md): retained PLOS/JBI fallback materials, superseded as the current destination decision.
 - [Provisional Author Summary and submission text](SUBMISSION_TEXT_v08_2026-11-03.md): 177-word plain-language summary, scientific cover-letter paragraph, availability facts and author-specific fields still to complete.
 
 ## Numerical and empirical foundation
