@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "population": "CHNS 2009 released-data analytical population: adults aged 35-74 years inclusive, linked person/wave records with documented male/female category and available age, BMI from released height/weight, central-serum glucose and whole-blood HbA1c under the frozen common-complete-case release policy. No diabetes, treatment or pregnancy exclusion is claimed. Age/sex composition is not supplied. This is a selected analytical sample, not a nationally representative population; no participant input.",
+  "measurement": {
+    "mode": "identity",
+    "description": "No numeric conversion; identical declared task units. Fasting plasma-to-central-serum and assay transport are explicit unverified assumptions. Unknown/nonidentity/weighted source definitions remain unavailable."
+  },
+  "assumption_ids": [
+    "a_feedback",
+    "a_transport",
+    "a_measurement",
+    "a_overlap",
+    "a_uncertainty"
+  ],
+  "checks": [
+    {
+      "id": "all_bmi_mean",
+      "evidence_id": "s1_bmi_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "kg/m^2",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "column": "bmi"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "All-row arithmetic source summary with study eligibility described in source metadata, no additional within-sample filter. Computed on the whole output only as approximate population comparison: different age mix, known-diabetes inclusion and clinical exclusions; cannot identify latent D=0 or certify its constraints. Source sample SD uses ordinary individual dispersion; sampling uncertainty unreported."
+    },
+    {
+      "id": "all_bmi_sd",
+      "evidence_id": "s1_bmi_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "kg/m^2",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "column": "bmi"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "All-row arithmetic source summary with study eligibility described in source metadata, no additional within-sample filter. Computed on the whole output only as approximate population comparison: different age mix, known-diabetes inclusion and clinical exclusions; cannot identify latent D=0 or certify its constraints. Source sample SD uses ordinary individual dispersion; sampling uncertainty unreported."
+    },
+    {
+      "id": "all_glucose_mean",
+      "evidence_id": "s1_glucose_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "mmol/L",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "column": "glucose"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "All-row arithmetic source summary with study eligibility described in source metadata, no additional within-sample filter. Computed on the whole output only as approximate population comparison: different age mix, known-diabetes inclusion and clinical exclusions; cannot identify latent D=0 or certify its constraints. Source sample SD uses ordinary individual dispersion; sampling uncertainty unreported."
+    },
+    {
+      "id": "all_glucose_sd",
+      "evidence_id": "s1_glucose_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "mmol/L",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "column": "glucose"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "All-row arithmetic source summary with study eligibility described in source metadata, no additional within-sample filter. Computed on the whole output only as approximate population comparison: different age mix, known-diabetes inclusion and clinical exclusions; cannot identify latent D=0 or certify its constraints. Source sample SD uses ordinary individual dispersion; sampling uncertainty unreported."
+    },
+    {
+      "id": "all_hba1c_mean",
+      "evidence_id": "s1_hba1c_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "All-row arithmetic source summary with study eligibility described in source metadata, no additional within-sample filter. Computed on the whole output only as approximate population comparison: different age mix, known-diabetes inclusion and clinical exclusions; cannot identify latent D=0 or certify its constraints. Source sample SD uses ordinary individual dispersion; sampling uncertainty unreported."
+    },
+    {
+      "id": "all_hba1c_sd",
+      "evidence_id": "s1_hba1c_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "%",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "All-row arithmetic source summary with study eligibility described in source metadata, no additional within-sample filter. Computed on the whole output only as approximate population comparison: different age mix, known-diabetes inclusion and clinical exclusions; cannot identify latent D=0 or certify its constraints. Source sample SD uses ordinary individual dispersion; sampling uncertainty unreported."
+    },
+    {
+      "id": "all_gh_pearson",
+      "evidence_id": "s2_gh_r",
+      "status": "approximate",
+      "operator": {
+        "kind": "correlation",
+        "unit": "1",
+        "selection": [],
+        "missing_policy": "complete_cases",
+        "x": "glucose",
+        "y": "hba1c"
+      },
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Unadjusted raw-scale Pearson correlation on source enrolled sample. Approximate all-output comparison only: source age >20 excludes known diabetes, output age 35-74 includes surrogate. Model .619 constraint concerns constructed D=0 and is not a full-mixture target or source replay."
+    },
+    {
+      "id": "background_gh_constraint",
+      "evidence_id": "s2_gh_r",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Latent background membership is not output; cannot compute its marginal correlation from all delivered rows. Full-mixture comparison is separate and approximate."
+    },
+    {
+      "id": "latent_known_bmi_mean",
+      "evidence_id": "s2_d_bmi_mean",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source n=301 newly OGTT-detected diabetes differs from previously known surrogate; latent membership and diagnostic OGTT absent from output. No all-row replacement for subgroup statistic."
+    },
+    {
+      "id": "latent_known_bmi_sd",
+      "evidence_id": "s2_d_bmi_sd",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source n=301 newly OGTT-detected diabetes differs from previously known surrogate; latent membership and diagnostic OGTT absent from output. No all-row replacement for subgroup statistic."
+    },
+    {
+      "id": "latent_known_glucose_median",
+      "evidence_id": "s2_d_glucose_median",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source quantile interpolation convention not reported; subgroup requires OGTT/new diagnosis and latent component is absent from output. Do not substitute whole-output quantiles or assume linear interpolation."
+    },
+    {
+      "id": "latent_known_glucose_q25",
+      "evidence_id": "s2_d_glucose_q25",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source quantile interpolation convention not reported; subgroup requires OGTT/new diagnosis and latent component is absent from output. Do not substitute whole-output quantiles or assume linear interpolation."
+    },
+    {
+      "id": "latent_known_glucose_q75",
+      "evidence_id": "s2_d_glucose_q75",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source quantile interpolation convention not reported; subgroup requires OGTT/new diagnosis and latent component is absent from output. Do not substitute whole-output quantiles or assume linear interpolation."
+    },
+    {
+      "id": "latent_known_hba1c_median",
+      "evidence_id": "s2_d_hba1c_median",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source quantile interpolation convention not reported; subgroup requires OGTT/new diagnosis and latent component is absent from output. Do not substitute whole-output quantiles or assume linear interpolation."
+    },
+    {
+      "id": "latent_known_hba1c_q25",
+      "evidence_id": "s2_d_hba1c_q25",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source quantile interpolation convention not reported; subgroup requires OGTT/new diagnosis and latent component is absent from output. Do not substitute whole-output quantiles or assume linear interpolation."
+    },
+    {
+      "id": "latent_known_hba1c_q75",
+      "evidence_id": "s2_d_hba1c_q75",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Source quantile interpolation convention not reported; subgroup requires OGTT/new diagnosis and latent component is absent from output. Do not substitute whole-output quantiles or assume linear interpolation."
+    },
+    {
+      "id": "fos_age_adjusted",
+      "evidence_id": "s3_fos_age",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "FOS adjusted age coefficient requires two-hour glucose absent from task and FPG in mg/dL. Source sample/exclusions differ; no reduced-adjustment substitution or measurement conversion."
+    },
+    {
+      "id": "nhanes_age_adjusted",
+      "evidence_id": "s3_nhanes_age",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Survey-weighted NHANES coefficient is unsupported by unweighted v1; source FPG mg/dL, no approved conversion; nondiabetic selection differs. No unweighted replacement."
+    },
+    {
+      "id": "s4_glucose_r_squared",
+      "evidence_id": "s4_general_glucose_age_sex_bmi",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Weighted R-squared with binary age (and extra fasting-time adjustment for glucose) is not a supported operator; no correlation or coefficient substitution. General Finnish sample is not target."
+    },
+    {
+      "id": "s4_hba1c_r_squared",
+      "evidence_id": "s4_general_hba1c_age_sex_bmi",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "a_feedback",
+        "a_transport",
+        "a_measurement"
+      ],
+      "reason": "Weighted R-squared with binary age (and extra fasting-time adjustment for glucose) is not a supported operator; no correlation or coefficient substitution. General Finnish sample is not target."
+    }
+  ]
+}

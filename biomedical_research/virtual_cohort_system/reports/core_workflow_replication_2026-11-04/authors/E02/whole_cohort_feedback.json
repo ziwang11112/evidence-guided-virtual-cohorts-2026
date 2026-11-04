@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "population": "Mexico analytical-use design: adults aged 25-79 with no reported prior doctor diagnosis of diabetes/high blood sugar, recorded 8-12-hour fast, positive fasting serum glucose below 126 mg/dL, available HbA1c and valid standing anthropometry with internally consistent measurement documentation (uniformly excluding explicit not-weighed or alternative-standing-route documentation that contradicts usable standing measurements, without asserting which field is correct) under the prespecified measurement restrictions; pregnancy/lactation excluded when documented by questionnaire routing for women aged 25-49; no verified medication or anemia exclusion. Exactly 375 fictional individuals per female=0/1 crossed with age bands 25-39, 40-54, 55-69, 70-79; equal-stratum analytical design, not a nationally representative population.",
+  "measurement": {
+    "mode": "identity",
+    "description": "No numeric unit conversion; assay and plasma-to-serum identity are declared unvalidated transport assumptions."
+  },
+  "assumption_ids": [
+    "A_feedback",
+    "A_transport",
+    "A_measurement"
+  ],
+  "checks": [
+    {
+      "id": "check_s2_age",
+      "evidence_id": "S2_age",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "NHANES source survey weights unsupported. Adjustment matches raw columns but task equal-cell WLS is not source survey analysis; remains unavailable."
+    },
+    {
+      "id": "check_s2_bmi_mean",
+      "evidence_id": "S2_bmi_mean",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Survey-weighted source mean; no equivalent source weighting available; not substituted with unweighted target mean."
+    },
+    {
+      "id": "check_s1_male",
+      "evidence_id": "S1_male",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Source term is male, absent from task columns; reversing to female requires nonidentity recoding. No transformed statistic implementation; richer model effect is not this source estimand."
+    },
+    {
+      "id": "check_s3_bmi_q25",
+      "evidence_id": "S3_bmi_q25",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Source quantile interpolation is not reported. Whole SHIP-Trend also includes diabetes; do not silently substitute linear interpolation."
+    },
+    {
+      "id": "check_s3_bmi_q75",
+      "evidence_id": "S3_bmi_q75",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Source quantile interpolation is not reported. Whole SHIP-Trend also includes diabetes; do not silently substitute linear interpolation."
+    },
+    {
+      "id": "check_s4_age_mean",
+      "evidence_id": "S4_age_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "year",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "age"
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "id": "check_s4_age_sd",
+      "evidence_id": "S4_age_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "year",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "age"
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "id": "check_s4_glucose_mean",
+      "evidence_id": "S4_glucose_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "mg/dL",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "glucose"
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "id": "check_s4_glucose_sd",
+      "evidence_id": "S4_glucose_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "mg/dL",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "glucose"
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "id": "check_s4_hba1c_mean",
+      "evidence_id": "S4_hba1c_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "id": "check_s4_hba1c_sd",
+      "evidence_id": "S4_hba1c_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "id": "check_s4_glucose_hba1c_slope",
+      "evidence_id": "S4_glucose_hba1c_slope",
+      "status": "approximate",
+      "operator": {
+        "kind": "ols_coefficient",
+        "unit": "%/mg/dL",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "outcome": "hba1c",
+        "predictors": [
+          "glucose"
+        ],
+        "term": "glucose",
+        "include_intercept": true
+      },
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Unadjusted source HbA1c-on-FPG slope with intercept. Source-surrogate calibration was untruncated algebra; selected target comparison can differ. Medical/risk selection and transport unverified; never substitute adjusted slope."
+    },
+    {
+      "id": "check_s4_reported_correlation",
+      "evidence_id": "S4_reported_correlation",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Source labels r=.55 but admitted text does not explicitly name Pearson versus rank correlation. Further, r/SDs conflict with slope; do not supply an assumed correlation estimator or claim it fitted."
+    },
+    {
+      "id": "check_s4_equation_intercept",
+      "evidence_id": "S4_equation_intercept",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "Reported intercept unsupported by semantic v1 non-intercept coefficient operators; source equation intercept also not selected as model constraint."
+    },
+    {
+      "id": "check_s4_hgi_context",
+      "evidence_id": "S4_HGI_context",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback",
+        "A_transport",
+        "A_measurement"
+      ],
+      "reason": "HGI-defined groups, missing within-group covariances and ecological construction cannot be represented by an available task-column statistic. No individual BMI coefficient is reported."
+    }
+  ]
+}

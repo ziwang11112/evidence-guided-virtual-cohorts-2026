@@ -1,0 +1,322 @@
+{
+  "parameters": {
+    "age_bands": [
+      [
+        25,
+        39
+      ],
+      [
+        40,
+        54
+      ],
+      [
+        55,
+        69
+      ],
+      [
+        70,
+        79
+      ]
+    ],
+    "female_levels": [
+      0,
+      1
+    ],
+    "rows_per_cell": 375,
+    "row_id_prefix": "E02_",
+    "age_reference": 47.8,
+    "female_reference": 0.5,
+    "bmi_reference_mean": 28.01,
+    "bmi_log_location": 3.3173471777916994,
+    "bmi_log_sd": 0.17443859366732878,
+    "glucose_reference_mean": 93.0,
+    "glucose_age_slope": 0.15,
+    "glucose_bmi_slope": 0.4,
+    "glucose_residual_sd": 10.59837123353435,
+    "glucose_lower": 0.0,
+    "glucose_upper": 126.0,
+    "hba1c_reference_mean": 5.4,
+    "hba1c_age_slope": 0.01,
+    "hba1c_female_slope": -0.08301,
+    "hba1c_bmi_slope": 0.01,
+    "hba1c_glucose_slope": 0.012356192728059587,
+    "hba1c_residual_sd": 0.32521671975631705,
+    "sampler_attempt_limit": 10000
+  },
+  "assumptions": [
+    {
+      "id": "A_design",
+      "description": "Task fixes eight cells375 each; uniform integer ages inside bands, deterministic unique fictional identifiers."
+    },
+    {
+      "id": "A_transport",
+      "description": "US/Taiwan/German/Italian source relationships transfer to Mexico analytical eligibility without calibrated uncertainty. No source matches all fasting/anthropometry/pregnancy/medication/anemia restrictions; target is not national-survey representative."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Identity numeric units for external plasma glucose and task serum glucose, HbA1c assays, BMI measurement; no empirically validated assay or plasma-serum correction."
+    },
+    {
+      "id": "A_bmi",
+      "description": "Lognormal BMI with NHANES mean and SHIP-Trend log-IQR spread; independent of age and sex. No upper cap; shape and cross-population pooling are assumptions, not exact source fit."
+    },
+    {
+      "id": "A_glucose",
+      "description": "Conditional normal location age slope .15 and BMI slope .40, no female term, conditioned0<glucose<126; these dependence slopes are assumptions. Age rise only qualitatively informed by Pani. Do not reject/resample covariates upon glucose selection."
+    },
+    {
+      "id": "A_surrogate",
+      "description": "Untruncated analytic source surrogate with ageSD14.6, independent BMI/age/sex, female probability.5 and BMI mean28.01/derived variance; permits algebraic residual variances and marginal-slope subtraction but is not source-population reconstruction."
+    },
+    {
+      "id": "A_sex",
+      "description": "Negate Huang male-v-female age-only adjusted coefficient and transport as female effect in richer conditional HbA1c mean, omitting age-sex interaction/nonlinearity."
+    },
+    {
+      "id": "A_direct_bmi",
+      "description": "Direct HbA1c BMI term .010 is an assumption rounded from ecological guide .00964983119. Equal HGI-tertile covariance calculation supposes zero within-group adjusted-outcome covariance; it does not identify individual adjusted association."
+    },
+    {
+      "id": "A_hba1c",
+      "description": "Linear arithmetic conditional HbA1c mean; conditional lognormal with constant arithmetic residualSD. No HbA1c cutoff. Source mean/SD and equation slope prioritized; incompatible intercept/r not fitted. Residuals are individual variation, not model/evidence uncertainty."
+    },
+    {
+      "id": "A_numeric",
+      "description": "Only NumPy,pandas,math; bounded sampler attempts10000. Central normal rejection and exact real-arithmetic truncated-exponential tail envelope; numerical unrepresentability or exhaustion raises visible failure. Never clip endpoints, cap/resample BMI, or substitute a distribution."
+    },
+    {
+      "id": "A_feedback",
+      "description": "Feedback on target rows is approximate source comparison, not replay. Apply expressible source age/glucose/HbA1c selection where specified; omitted risk/treatment/anemia selection and different age/sex design remain. Survey weighting/nonidentity transforms/unknown quantiles/rich HGI context stay unavailable. Raw discrepancies not independent validity tests."
+    }
+  ],
+  "parameter_provenance": {
+    "age_bands": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Task design and declared identifier/within-band convention."
+    },
+    "female_levels": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Task design and declared identifier/within-band convention."
+    },
+    "rows_per_cell": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Task design and declared identifier/within-band convention."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Task design and declared identifier/within-band convention."
+    },
+    "age_reference": {
+      "evidence_ids": [
+        "S4_age_mean"
+      ],
+      "assumption_ids": [
+        "A_surrogate",
+        "A_transport"
+      ],
+      "derivation": "Reported sample1 mean47.8; centering constant in transported model."
+    },
+    "female_reference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_surrogate",
+        "A_sex"
+      ],
+      "derivation": "Assumed source surrogate sex balance0.5, also task design balance."
+    },
+    "bmi_reference_mean": {
+      "evidence_ids": [
+        "S2_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_bmi",
+        "A_transport"
+      ],
+      "derivation": "Use reported mean28.01 only; ambiguous +/-0.14 not dispersion."
+    },
+    "bmi_log_location": {
+      "evidence_ids": [
+        "S2_bmi_mean",
+        "S3_bmi_q25",
+        "S3_bmi_q75"
+      ],
+      "assumption_ids": [
+        "A_bmi",
+        "A_transport"
+      ],
+      "derivation": "s=(ln31-ln24.5)/(2*Phi^-1(.75)); mu=ln28.01-s²/2; variance28.01²*expm1(s²). Distributional derivation, not empirical SD."
+    },
+    "bmi_log_sd": {
+      "evidence_ids": [
+        "S2_bmi_mean",
+        "S3_bmi_q25",
+        "S3_bmi_q75"
+      ],
+      "assumption_ids": [
+        "A_bmi",
+        "A_transport"
+      ],
+      "derivation": "s=(ln31-ln24.5)/(2*Phi^-1(.75)); mu=ln28.01-s²/2; variance28.01²*expm1(s²). Distributional derivation, not empirical SD."
+    },
+    "glucose_reference_mean": {
+      "evidence_ids": [
+        "S4_glucose_mean"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_surrogate"
+      ],
+      "derivation": "Reported93 mg/dL used as reference location, not promised selected target mean."
+    },
+    "glucose_age_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose"
+      ],
+      "derivation": "Explicit assumed coefficients0.15 mg/dL/year and0.40 mg/dL per BMI unit; not reported adjusted source slopes."
+    },
+    "glucose_bmi_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose"
+      ],
+      "derivation": "Explicit assumed coefficients0.15 mg/dL/year and0.40 mg/dL per BMI unit; not reported adjusted source slopes."
+    },
+    "glucose_residual_sd": {
+      "evidence_ids": [
+        "S4_glucose_sd",
+        "S4_age_sd",
+        "S2_bmi_mean",
+        "S3_bmi_q25",
+        "S3_bmi_q75"
+      ],
+      "assumption_ids": [
+        "A_glucose",
+        "A_surrogate",
+        "A_bmi"
+      ],
+      "derivation": "sqrt(121-.15²*14.6²-.40²*24.240169976197524); untruncated surrogate variance112.3254728038084."
+    },
+    "glucose_lower": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose",
+        "A_design"
+      ],
+      "derivation": "Task open interval0<glucose<126; actual conditioning, no clipping."
+    },
+    "glucose_upper": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose",
+        "A_design"
+      ],
+      "derivation": "Task open interval0<glucose<126; actual conditioning, no clipping."
+    },
+    "hba1c_reference_mean": {
+      "evidence_ids": [
+        "S4_hba1c_mean",
+        "S4_equation_intercept",
+        "S4_reported_correlation"
+      ],
+      "assumption_ids": [
+        "A_hba1c",
+        "A_surrogate",
+        "A_transport"
+      ],
+      "derivation": "Select reported mean5.4; do not simultaneously fit source incompatible intercept or correlation."
+    },
+    "hba1c_age_slope": {
+      "evidence_ids": [
+        "S2_age"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_hba1c"
+      ],
+      "derivation": "Use reported sex/BMI/FPG adjusted age coefficient0.010 per year; no SE provided."
+    },
+    "hba1c_female_slope": {
+      "evidence_ids": [
+        "S1_male"
+      ],
+      "assumption_ids": [
+        "A_sex",
+        "A_transport"
+      ],
+      "derivation": "Negate reported male coefficient: -0.08301; transport to richer conditional model is assumed."
+    },
+    "hba1c_bmi_slope": {
+      "evidence_ids": [
+        "S4_group1_age",
+        "S4_group1_bmi",
+        "S4_group1_bmi_sd",
+        "S4_group1_hba1c",
+        "S4_group1_glucose",
+        "S4_group2_age",
+        "S4_group2_bmi",
+        "S4_group2_bmi_sd",
+        "S4_group2_hba1c",
+        "S4_group2_glucose",
+        "S4_group3_age",
+        "S4_group3_bmi",
+        "S4_group3_bmi_sd",
+        "S4_group3_hba1c",
+        "S4_group3_glucose"
+      ],
+      "assumption_ids": [
+        "A_direct_bmi"
+      ],
+      "derivation": "Equal-tertile Cov(B,H-.0158G-.01A)/[mean(SD_B²)+Var(Bmeans)]=.009649831190533023; rounded to assumed individual term.010, without identifying an empirical adjusted coefficient."
+    },
+    "hba1c_glucose_slope": {
+      "evidence_ids": [
+        "S4_glucose_hba1c_slope",
+        "S4_glucose_sd",
+        "S4_age_sd"
+      ],
+      "assumption_ids": [
+        "A_surrogate",
+        "A_glucose",
+        "A_direct_bmi",
+        "A_bmi"
+      ],
+      "derivation": ".0158-[.010*.15*14.6²+.010*.40*24.240169976197524]/121=.012356192728059587. Derived conditional coefficient only under surrogate covariance assumptions."
+    },
+    "hba1c_residual_sd": {
+      "evidence_ids": [
+        "S4_hba1c_sd",
+        "S4_age_sd",
+        "S1_male"
+      ],
+      "assumption_ids": [
+        "A_hba1c",
+        "A_surrogate",
+        "A_direct_bmi",
+        "A_glucose",
+        "A_bmi",
+        "A_sex"
+      ],
+      "derivation": "sqrt(.4²-[(.010+.15*bG)²*14.6²+(.010+.40*bG)²*VB+bG²*Var(eG)+.08301²*.25]); residual variance.10576591480905888. Conditional lognormal preserves mean and variance."
+    },
+    "sampler_attempt_limit": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_numeric"
+      ],
+      "derivation": "Mechanical termination bound10000 per draw/subdraw, with explicit failure. No scientific truncation is introduced."
+    }
+  }
+}

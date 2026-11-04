@@ -1,0 +1,306 @@
+{
+  "parameters": {
+    "design": {
+      "n_rows": 3000,
+      "cells": [
+        {
+          "female": 0,
+          "age_low": 25,
+          "age_high": 39,
+          "n": 375
+        },
+        {
+          "female": 0,
+          "age_low": 40,
+          "age_high": 54,
+          "n": 375
+        },
+        {
+          "female": 0,
+          "age_low": 55,
+          "age_high": 69,
+          "n": 375
+        },
+        {
+          "female": 0,
+          "age_low": 70,
+          "age_high": 79,
+          "n": 375
+        },
+        {
+          "female": 1,
+          "age_low": 25,
+          "age_high": 39,
+          "n": 375
+        },
+        {
+          "female": 1,
+          "age_low": 40,
+          "age_high": 54,
+          "n": 375
+        },
+        {
+          "female": 1,
+          "age_low": 55,
+          "age_high": 69,
+          "n": 375
+        },
+        {
+          "female": 1,
+          "age_low": 70,
+          "age_high": 79,
+          "n": 375
+        }
+      ],
+      "age_family": "discrete_uniform"
+    },
+    "bmi": {
+      "lower": 15.0,
+      "upper": 45.0,
+      "alpha": 6.20467382040628,
+      "beta": 8.102798478762697,
+      "mean": 28.01,
+      "sd": 3.8
+    },
+    "glucose": {
+      "lower": 50.0,
+      "upper": 126.0,
+      "base": 91.2,
+      "age_center": 43.8,
+      "female_center": 0.5638095238095238,
+      "bmi_center": 28.01,
+      "age_slope": 0.2,
+      "female_slope": -5.405459999999997,
+      "bmi_slope": 0.7514136040435673,
+      "variance": 145.60685248130525
+    },
+    "hba1c": {
+      "base": 5.4,
+      "age_center": 52.0,
+      "female_center": 0.52,
+      "bmi_center": 28.01,
+      "glucose_center": 93.07681062857144,
+      "age_slope": 0.01,
+      "female_slope": -0.08301,
+      "bmi_slope": 0.015256066586887239,
+      "glucose_slope": 0.004601604141344884,
+      "variance": 0.08557424216967495
+    },
+    "residual_moments": {
+      "bmi_sd": 3.8,
+      "glucose_sd": 12.4,
+      "hba1c_sd": 0.30612807415479226,
+      "r_bg": 0.23027191091657706,
+      "r_bh": 0.23229605270598924,
+      "r_gh": 0.23,
+      "normal_q975": 1.9599639845400536,
+      "glucose_mmol_to_mgdl": 18.0182
+    },
+    "output": {
+      "columns": [
+        "row_id",
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ],
+      "id_prefix": "E01I-",
+      "id_digits": 6
+    }
+  },
+  "assumptions": [
+    {
+      "id": "design",
+      "description": "Task-mandated eight female-by-age-band cells of375; integer uniform ages within bands is author assumption; no participant input and equal-cell mass."
+    },
+    {
+      "id": "transport",
+      "description": "No Mexico source. Cross-population use is uncalibrated transport; no causal or individual-recovery interpretation. Different original populations are not pooled as independent parameter replicates."
+    },
+    {
+      "id": "selection",
+      "description": "Condition on task eligibility rather than simulate undocumented selection. No additional medication/anemia exclusion. S1 plasma,FPG<126;S2 broad/nonuniversal fasting;S3 age30-64,HbA1c<6.5,fast4-17h;S4 age18-75,known diabetes present differ."
+    },
+    {
+      "id": "measurement",
+      "description": "Target serum glucose mg/dL. Plasma-to-serum and unspecified Kerman matrix/calibration equivalence assumed; no empirical correction. mmol/L difference converted with18.0182, not feedback identity conversion."
+    },
+    {
+      "id": "bmi_law",
+      "description": "BMI beta support15-45, mean28.01 SD3.8, independent age/sex; mean and SD transferred from different populations; bounds/shape/independence unsupported."
+    },
+    {
+      "id": "glucose_law",
+      "description": "Scaled-beta glucose support50-126 with linear conditional mean and constant conditional variance; lower50 and family assumed; strict upper126 required by task."
+    },
+    {
+      "id": "hba1c_law",
+      "description": "Gamma HbA1c with linear conditional mean and constant conditional variance, no upper6.5 exclusion; family and lack of interactions assumed."
+    },
+    {
+      "id": "normal_scale",
+      "description": "Use (q97.5-mean)/Phi^-1(.975) from NHANES50-54 as a working age/sex-residual HbA1c SD. Normal-location approximation, use as conditional scale and gamma transfer are assumptions; it is not reported SD."
+    },
+    {
+      "id": "conditional_scales",
+      "description": "Transfer Kerman marginal BMI SD3.8 and glucose SD12.4 to age/sex residual scales; data do not identify these conditional scales."
+    },
+    {
+      "id": "r2_transport",
+      "description": "Finnish R-squared and margins are survey-weighted and use BINARY age30-44 vs45-64, plus fasting time for glucose. Nested common-sample projection interpretation and transfer to CONTINUOUS-age adjustment at fixed fasting context are assumptions; positive roots/signs assumed."
+    },
+    {
+      "id": "r_transport",
+      "description": "Use Kerman raw Pearson0.23 as age/sex-residual correlation by assumption. It remains raw Pearson in feedback; no substitution with partial/weighted/Spearman."
+    },
+    {
+      "id": "combined_covariance",
+      "description": "Combine residual magnitudes/scales from different cohorts into one positive-definite working covariance; no common cohort identifies it and no statistical probability for transport uncertainty is claimed."
+    },
+    {
+      "id": "sex_transfer",
+      "description": "Negate Taiwan male0.08301 coefficient adjusted age only, then treat as fully adjusted female contrast. Finnish weighted female-minus-male glucose margin transported as conditional contrast."
+    },
+    {
+      "id": "age_transfer",
+      "description": "Transfer NHANES age-HbA1c0.010/year conditional slope; glucose8mg/dL contrast over an assumed40year span gives0.2/year. Anchor age52 for50-54 row is an assumption."
+    },
+    {
+      "id": "centering",
+      "description": "Center at NHANES BMI28.01,female.52,HbA1c5.40,age52; glucose at Kerman91.2,age43.8,female296/525; glucose Hb anchor derived at NHANES centers. Centers are not an empirical common population."
+    },
+    {
+      "id": "feedback_approximation",
+      "description": "Feedback compares the existing target design output in source-compatible observed age/glucose ranges, not a reconstructed source population; source-selection, age/sex distribution, assays and diagnosis differ. Raw discrepancy is not significance, transport validation or a calibration objective."
+    },
+    {
+      "id": "sd_convention",
+      "description": "Kerman table SD is interpreted as ordinary sample SD(ddof1) for approximate feedback; denominator unreported. No SE or sample size conversion is made."
+    },
+    {
+      "id": "floating_point",
+      "description": "Only machine-rounded support endpoints are moved to nearest interior float; underflowed HbA1c zero moves to least positive float. No statistical resampling/clipping to tune results."
+    },
+    {
+      "id": "identifiers",
+      "description": "Deterministic unique identifiers and output ordering carry no scientific relationship."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "design"
+      ],
+      "derivation": "Task n3000/exact375 in eight cells; uniform integer ages within each cell chosen."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "s1_bmi_mean",
+        "s4_bmi_sd"
+      ],
+      "assumption_ids": [
+        "bmi_law",
+        "transport",
+        "conditional_scales"
+      ],
+      "derivation": "p=(28.01-15)/30;k=p(1-p)/(3.8^2/30^2)-1;alpha=p*k;beta=(1-p)*k."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "s4_g_mean",
+        "s4_g_sd",
+        "s4_age_mean",
+        "s4_female",
+        "s1_bmi_mean",
+        "s1_g_age_contrast",
+        "s3_male_g",
+        "s3_female_g",
+        "s3_g_r2_as",
+        "s3_g_r2_asb",
+        "s4_bmi_sd"
+      ],
+      "assumption_ids": [
+        "glucose_law",
+        "transport",
+        "selection",
+        "measurement",
+        "age_transfer",
+        "sex_transfer",
+        "conditional_scales",
+        "r2_transport",
+        "centering",
+        "floating_point"
+      ],
+      "derivation": "age slope8/40;female slope(4.9-5.2)*18.0182;bmi slope=rBG*12.4/3.8;variance=12.4^2*(1-rBG^2);mean affine as proposal."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "s1_h_mean",
+        "s1_h_q975",
+        "s1_age",
+        "s2_male",
+        "s3_h_r2_as",
+        "s3_h_r2_asb",
+        "s3_g_r2_as",
+        "s3_g_r2_asb",
+        "s4_pearson",
+        "s4_g_sd",
+        "s4_bmi_sd",
+        "s1_female",
+        "s1_bmi_mean",
+        "s4_g_mean",
+        "s4_age_mean",
+        "s4_female",
+        "s1_g_age_contrast",
+        "s3_male_g",
+        "s3_female_g"
+      ],
+      "assumption_ids": [
+        "hba1c_law",
+        "normal_scale",
+        "conditional_scales",
+        "combined_covariance",
+        "r_transport",
+        "r2_transport",
+        "sex_transfer",
+        "age_transfer",
+        "centering",
+        "transport",
+        "selection",
+        "floating_point"
+      ],
+      "derivation": "bH=(sH/sB)*(rBH-rBG*rGH)/(1-rBG^2);gH=(sH/sG)*(rGH-rBG*rBH)/(1-rBG^2);vH=sH^2*(1-(rBH^2+rGH^2-2*rBG*rBH*rGH)/(1-rBG^2));Gcenter=mG(age52,F.52,B28.01)."
+    },
+    "residual_moments": {
+      "evidence_ids": [
+        "s1_h_mean",
+        "s1_h_q975",
+        "s4_bmi_sd",
+        "s4_g_sd",
+        "s4_pearson",
+        "s3_h_r2_as",
+        "s3_h_r2_asb",
+        "s3_g_r2_as",
+        "s3_g_r2_asb"
+      ],
+      "assumption_ids": [
+        "normal_scale",
+        "conditional_scales",
+        "r2_transport",
+        "r_transport",
+        "combined_covariance",
+        "measurement"
+      ],
+      "derivation": "sH=(6-5.4)/Phi^-1(.975);rBG=positive sqrt((.1642-.1174)/(1-.1174));rBH=positive sqrt((.1164-.0660)/(1-.0660));rGH=.23 assumed residual;unit factor18.0182 declared."
+    },
+    "output": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "identifiers"
+      ],
+      "derivation": "Task column order and unique sequential row identifiers, no row selection."
+    }
+  }
+}

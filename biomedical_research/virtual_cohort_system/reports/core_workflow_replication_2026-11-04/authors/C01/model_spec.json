@@ -1,0 +1,331 @@
+{
+  "parameters": {
+    "family": "age_conditioned_two_component_multivariate_lognormal",
+    "n_rows": 3000,
+    "age_bounds": [
+      35,
+      74
+    ],
+    "female_probability": 0.5789595375722544,
+    "known_component_probability": 0.06862371330537552,
+    "background_reference_age": 63.1,
+    "background_means_at_reference_age": [
+      24.1,
+      5.36,
+      5.7
+    ],
+    "background_age_slopes": [
+      0.039325842696629164,
+      0.011235955056179782,
+      0.008426966292134849
+    ],
+    "background_conditional_sds": [
+      3.3,
+      1.07,
+      0.63
+    ],
+    "conditional_female_offsets": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "conditional_raw_correlation_matrix": [
+      [
+        1.0,
+        0.2,
+        0.15
+      ],
+      [
+        0.2,
+        1.0,
+        0.6122036085261267
+      ],
+      [
+        0.15,
+        0.6122036085261267,
+        1.0
+      ]
+    ],
+    "known_component_arithmetic_means": [
+      25.5,
+      7.3427605196618435,
+      6.561507964034082
+    ],
+    "known_component_arithmetic_sds": [
+      3.7,
+      1.4694484464271897,
+      0.9048000987171936
+    ],
+    "continuous_columns": [
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "output_columns": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "row_id_prefix": "C01_"
+  },
+  "assumptions": [
+    {
+      "id": "a_contract",
+      "description": "Generate independent synthetic rows, all task variables, exactly task n and allowed age range; IDs/order are implementation choices, not observed participants."
+    },
+    {
+      "id": "a_family",
+      "description": "Conditional multivariate lognormal family on positive raw-scale measurements; two-component finite mixture. Shape is an assumption; all polynomial moments finite."
+    },
+    {
+      "id": "a_age",
+      "description": "Uniform integer age 35-74; no target age composition supplied. Independent of female and latent component."
+    },
+    {
+      "id": "a_sex",
+      "description": "Transfer Changfeng sex count ratio to target; sex independent of age and latent component although source sex composition varies by age."
+    },
+    {
+      "id": "a_zero_sex",
+      "description": "All conditional female offsets are fixed to zero as a simplifying unsupported assumption. Missing contrast evidence does not establish zero."
+    },
+    {
+      "id": "a_age_mean",
+      "description": "Transfer S1 total means at total mean age; use between-group ecological secants as individual conditional age trends, extrapolating to 35-44. These are not reported person-level slopes."
+    },
+    {
+      "id": "a_sd",
+      "description": "Transfer S1 total individual SDs to constant within-age/sex/background SDs even though totals include between-age variation and people >=75."
+    },
+    {
+      "id": "a_bmi_r",
+      "description": "Raw-scale conditional BMI-glucose .20 and BMI-HbA1c .15, including positive signs, are author assumptions. S4 magnitude-only partial R-squared supplies loose heterogeneous context, not Chinese parameter estimates."
+    },
+    {
+      "id": "a_corr_transport",
+      "description": "Transfer S2 unadjusted Pearson glucose-HbA1c r=.619 to constructed background law under a different age distribution/S1 marginals. Remove constructed age covariance algebraically. Not source-population replay."
+    },
+    {
+      "id": "a_weight",
+      "description": "Use 360/(360+4886) as latent known-diabetes weight proxy; not a reported prevalence or target estimate. Weight independent of age/sex."
+    },
+    {
+      "id": "a_known_surrogate",
+      "description": "Use newly OGTT-detected, untreated S2 subgroup distribution as provisional surrogate for previously known/treated diabetes. Treatment, duration, extremes and source-to-target population changes remain unidentified."
+    },
+    {
+      "id": "a_known_shape",
+      "description": "Fit lognormal to reported median and IQR ratio, not all three quantiles; use no age/sex shift and same conditional correlation matrix in known surrogate. These are assumptions."
+    },
+    {
+      "id": "a_measurement",
+      "description": "Identity mapping of published units and source fasting plasma glucose/HPLC HbA1c to task central-serum glucose/whole-blood HbA1c. Assay, fasting and matrix equivalence are not established; no numerical conversion invented."
+    },
+    {
+      "id": "a_transport",
+      "description": "Selected Chinese and non-Chinese source populations do not establish target complete-case distribution. No clinical exclusions, medication, pregnancy, anemia, kidney disease or clustering effects modeled."
+    },
+    {
+      "id": "a_feedback",
+      "description": "All computable checks compare a whole generated task population to selected-source marginal statistics approximately. They are not exact latent-component checks, source-population replay, target validity or a loss function."
+    },
+    {
+      "id": "a_overlap",
+      "description": "No meta-analytic weighting or independence precision gain. Shanghai individual overlap unknown; Bao diagnostic groups and FOS subsets overlap."
+    },
+    {
+      "id": "a_uncertainty",
+      "description": "Individual residual variation is distinct from unreported estimator precision, evidence uncertainty and model/transport uncertainty. No confidence weights or fabricated source CI/SE."
+    }
+  ],
+  "parameter_provenance": {
+    "family": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_family",
+        "a_known_surrogate"
+      ],
+      "derivation": "Author selected finite lognormal mixture; not a distribution reported in a source."
+    },
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_contract"
+      ],
+      "derivation": "Task contract or transparent identifier/order convention; no evidence-derived target information."
+    },
+    "age_bounds": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_contract",
+        "a_age"
+      ],
+      "derivation": "Task contract or transparent identifier/order convention; no evidence-derived target information."
+    },
+    "continuous_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_contract"
+      ],
+      "derivation": "Task contract or transparent identifier/order convention; no evidence-derived target information."
+    },
+    "output_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_contract"
+      ],
+      "derivation": "Task contract or transparent identifier/order convention; no evidence-derived target information."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_contract"
+      ],
+      "derivation": "Task contract or transparent identifier/order convention; no evidence-derived target information."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "s1_n",
+        "s1_male_n"
+      ],
+      "assumption_ids": [
+        "a_sex"
+      ],
+      "derivation": "(4325-1821)/4325; count-derived, with assumed transport/independence."
+    },
+    "known_component_probability": {
+      "evidence_ids": [
+        "s2_known_n",
+        "s2_n"
+      ],
+      "assumption_ids": [
+        "a_weight",
+        "a_known_surrogate"
+      ],
+      "derivation": "360/(360+4886), selection-count proxy, not prevalence estimate."
+    },
+    "background_reference_age": {
+      "evidence_ids": [
+        "s1_age_mean"
+      ],
+      "assumption_ids": [
+        "a_age_mean"
+      ],
+      "derivation": "Reported total mean age 63.1, used as transferred conditional mean anchor."
+    },
+    "background_means_at_reference_age": {
+      "evidence_ids": [
+        "s1_bmi_mean",
+        "s1_glucose_mean",
+        "s1_hba1c_mean"
+      ],
+      "assumption_ids": [
+        "a_age_mean",
+        "a_transport",
+        "a_measurement"
+      ],
+      "derivation": "Reported source arithmetic means used at reference age under ecological-to-individual transfer."
+    },
+    "background_age_slopes": {
+      "evidence_ids": [
+        "s1_45_54_age",
+        "s1_45_54_bmi",
+        "s1_45_54_glucose",
+        "s1_45_54_hba1c",
+        "s1_65_74_age",
+        "s1_65_74_bmi",
+        "s1_65_74_glucose",
+        "s1_65_74_hba1c"
+      ],
+      "assumption_ids": [
+        "a_age_mean"
+      ],
+      "derivation": "Per-variable (65-74 group mean minus 45-54 group mean)/(69.7-51.9); ecological slopes, not reported regressions."
+    },
+    "background_conditional_sds": {
+      "evidence_ids": [
+        "s1_bmi_sd",
+        "s1_glucose_sd",
+        "s1_hba1c_sd"
+      ],
+      "assumption_ids": [
+        "a_sd"
+      ],
+      "derivation": "Reported total individual SD values transplanted to constant conditional SD; no SE substitution."
+    },
+    "conditional_female_offsets": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "a_zero_sex"
+      ],
+      "derivation": "Exactly zero conditional effects by explicit author assumption; not inferred from absence of evidence."
+    },
+    "conditional_raw_correlation_matrix": {
+      "evidence_ids": [
+        "s2_gh_r",
+        "s4_general_hba1c_age_sex",
+        "s4_general_hba1c_age_sex_bmi",
+        "s4_general_glucose_age_sex",
+        "s4_general_glucose_age_sex_bmi",
+        "s4_russian_hba1c_age_sex",
+        "s4_russian_hba1c_age_sex_bmi",
+        "s4_russian_glucose_age_sex",
+        "s4_russian_glucose_age_sex_bmi",
+        "s4_somali_hba1c_age_sex",
+        "s4_somali_hba1c_age_sex_bmi",
+        "s4_somali_glucose_age_sex",
+        "s4_somali_glucose_age_sex_bmi",
+        "s4_kurdish_hba1c_age_sex",
+        "s4_kurdish_hba1c_age_sex_bmi",
+        "s4_kurdish_glucose_age_sex",
+        "s4_kurdish_glucose_age_sex_bmi"
+      ],
+      "assumption_ids": [
+        "a_bmi_r",
+        "a_corr_transport",
+        "a_known_shape",
+        "a_age"
+      ],
+      "derivation": "Diagonal 1. BMI correlations .20/.15 assumed. GH=(.619*sqrt((1.07^2+bG^2*133.25)*(.63^2+bH^2*133.25))-bG*bH*133.25)/(1.07*.63)=.6122036085261267. Same raw matrix in both components by assumption. S4 R2 only loose magnitude context."
+    },
+    "known_component_arithmetic_means": {
+      "evidence_ids": [
+        "s2_d_bmi_mean",
+        "s2_d_bmi_sd",
+        "s2_d_glucose_median",
+        "s2_d_glucose_q25",
+        "s2_d_glucose_q75",
+        "s2_d_hba1c_median",
+        "s2_d_hba1c_q25",
+        "s2_d_hba1c_q75"
+      ],
+      "assumption_ids": [
+        "a_known_surrogate",
+        "a_known_shape",
+        "a_measurement"
+      ],
+      "derivation": "BMI reported arithmetic 25.5/3.7. For G/H sigma_log=log(Q75/Q25)/(2*0.6744897501960817); arithmetic m=median*exp(sigma_log^2/2), s=m*sqrt(exp(sigma_log^2)-1). Conditional independent of age; numerical parameters derived, not reported means/SDs. Implied quartiles approximate."
+    },
+    "known_component_arithmetic_sds": {
+      "evidence_ids": [
+        "s2_d_bmi_mean",
+        "s2_d_bmi_sd",
+        "s2_d_glucose_median",
+        "s2_d_glucose_q25",
+        "s2_d_glucose_q75",
+        "s2_d_hba1c_median",
+        "s2_d_hba1c_q25",
+        "s2_d_hba1c_q75"
+      ],
+      "assumption_ids": [
+        "a_known_surrogate",
+        "a_known_shape",
+        "a_measurement"
+      ],
+      "derivation": "BMI reported arithmetic 25.5/3.7. For G/H sigma_log=log(Q75/Q25)/(2*0.6744897501960817); arithmetic m=median*exp(sigma_log^2/2), s=m*sqrt(exp(sigma_log^2)-1). Conditional independent of age; numerical parameters derived, not reported means/SDs. Implied quartiles approximate."
+    }
+  }
+}

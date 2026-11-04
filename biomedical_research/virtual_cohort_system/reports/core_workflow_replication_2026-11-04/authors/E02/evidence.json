@@ -1,0 +1,598 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "PMC8038122",
+      "identifier": "Huang et al. 2021; DOI 10.3390/ijerph18073390; PMC8038122.1",
+      "population": "Taiwan Biobank 2008–2014; n=4748 ages30–70, no prior diabetes diagnosis; not all fasted, no FPG-based or HbA1c-based exclusion. Methods/results female counts conflict. Pregnancy and medication confounding acknowledged.",
+      "measurement": "Venous K2EDTA HbA1c in percent; exact assay not given in admitted Methods; fasting nonuniversal.",
+      "cohort_ids": [
+        "Taiwan Biobank"
+      ],
+      "artifacts": [
+        {
+          "path": "sources/gateway/f0b63761a7f6639ff9f5bd266fbbcf736bc3ab0ccb2324936f928f0e8213cbff.xml",
+          "sha256": "f0b63761a7f6639ff9f5bd266fbbcf736bc3ab0ccb2324936f928f0e8213cbff"
+        }
+      ]
+    },
+    {
+      "id": "PMC2551641",
+      "identifier": "Pani et al. 2008; DOI 10.2337/dc08-0577; PMC2551641.1",
+      "population": "NHANES2001–2004 n=3270 age>=25; excludes reported diagnosed diabetes and FPG>=126; survey weighted. FOS n=2473 and overlapping NGT/longitudinal subsets are context only, not pooled replicates.",
+      "measurement": "NHANES NGSP/DCCT standardized boronate-affinity HPLC HbA1c percent; plasma glucose hexokinase; BMI kg/m^2. Target serum/fasting/anthropometry restrictions not established equivalent.",
+      "cohort_ids": [
+        "NHANES 2001-2004",
+        "Framingham Offspring Study"
+      ],
+      "artifacts": [
+        {
+          "path": "sources/gateway/fac9d24329896a04d65a0f5858c64238365c01bc0b9616e64ee5bc00271c64f6.xml",
+          "sha256": "fac9d24329896a04d65a0f5858c64238365c01bc0b9616e64ee5bc00271c64f6"
+        }
+      ]
+    },
+    {
+      "id": "PMC6371438",
+      "identifier": "Masuch et al. 2019; DOI 10.1186/s12902-019-0338-7; PMC6371438.1",
+      "population": "Nonoverlapping Caucasian regional German SHIP-0 n4263 and SHIP-Trend n4402, ages20–79; pregnancy/missing HbA1c excluded but main samples include diabetes. Healthy subgroups817/987 further restrict obesity, anemia, disease and medications; not used for BMI spread.",
+      "measurement": "Measured height/weight without shoes in light clothing; BMI kg/m^2; HbA1c Bio-Rad Diamat HPLC; SHIP-0 nonfasting and SHIP-Trend fasting.",
+      "cohort_ids": [
+        "SHIP-0",
+        "SHIP-Trend"
+      ],
+      "artifacts": [
+        {
+          "path": "sources/gateway/981a683f2de49ba8e75cd6f92d5daeb058e4d1309e10e1014e3c04b7312d9e39.xml",
+          "sha256": "981a683f2de49ba8e75cd6f92d5daeb058e4d1309e10e1014e3c04b7312d9e39"
+        }
+      ]
+    },
+    {
+      "id": "PMC5398507",
+      "identifier": "Marini et al. 2017; DOI 10.1371/journal.pone.0175547; PMC5398507.1",
+      "population": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "measurement": "HbA1c NGSP-certified Menarini Adams HA-8160 HPLC percent; Roche enzymatic plasma glucose mg/dL; measured BMI kg/m^2; sample2 12-hour fast/OGTT. No automatic plasma-serum correction.",
+      "cohort_ids": [
+        "Italian cardiometabolic risk clinical sample",
+        "EUGENE2 Italian offspring sample"
+      ],
+      "artifacts": [
+        {
+          "path": "sources/gateway/08d799ec00795ab12dc18a01bc149d2bd1068ec2547d0ab8adee08926707ef8f.xml",
+          "sha256": "08d799ec00795ab12dc18a01bc149d2bd1068ec2547d0ab8adee08926707ef8f"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "S2_age",
+      "source_id": "PMC2551641",
+      "locator": "Results: paragraph beginning There was no difference in BMI; NHANES multivariable result",
+      "variables": [
+        "hba1c",
+        "age"
+      ],
+      "kind": "ols_coefficient",
+      "estimate": 0.01,
+      "unit": "%/year",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [
+        "female",
+        "bmi",
+        "glucose"
+      ],
+      "selection": "NHANES2001–2004 n=3270 age>=25; excludes reported diagnosed diabetes and FPG>=126; survey weighted. FOS n=2473 and overlapping NGT/longitudinal subsets are context only, not pooled replicates.",
+      "applicability": "Reported age slope adjusts sex, BMI, FPG; source survey weighting unsupported by v1; selected for model age slope, not target validation. No SE/CI in admitted body."
+    },
+    {
+      "id": "S2_bmi_mean",
+      "source_id": "PMC2551641",
+      "locator": "Results first paragraph: NHANES BMI 28.01 +/-0.14",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "mean",
+      "estimate": 28.01,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "NHANES2001–2004 n=3270 age>=25; excludes reported diagnosed diabetes and FPG>=126; survey weighted. FOS n=2473 and overlapping NGT/longitudinal subsets are context only, not pooled replicates.",
+      "applicability": "Only mean used. Ambiguous tiny +/-0.14 not individual SD; no uncertainty conversion. Survey weighting unsupported."
+    },
+    {
+      "id": "S1_male",
+      "source_id": "PMC8038122",
+      "locator": "Table ijerph-18-03390-t001: Male (ref Female)",
+      "variables": [
+        "hba1c",
+        "male"
+      ],
+      "kind": "ols_coefficient",
+      "estimate": 0.08301,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "se",
+        "value": 0.01725
+      },
+      "adjustment": [
+        "age"
+      ],
+      "selection": "Taiwan Biobank 2008–2014; n=4748 ages30–70, no prior diabetes diagnosis; not all fasted, no FPG-based or HbA1c-based exclusion. Methods/results female counts conflict. Pregnancy and medication confounding acknowledged.",
+      "applicability": "Age-only adjusted male effect. Generator negates to female and transports into richer mean; neither is a reported glucose/BMI-adjusted source estimate."
+    },
+    {
+      "id": "S3_bmi_q25",
+      "source_id": "PMC6371438",
+      "locator": "Table Tab1: whole SHIP-Trend BMI",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "quantile",
+      "estimate": 24.5,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Nonoverlapping Caucasian regional German SHIP-0 n4263 and SHIP-Trend n4402, ages20–79; pregnancy/missing HbA1c excluded but main samples include diabetes. Healthy subgroups817/987 further restrict obesity, anemia, disease and medications; not used for BMI spread.",
+      "applicability": "Published quartile with unreported interpolation; only ratio informs assumed lognormal spread. Main sample includes diabetes.",
+      "q": 0.25,
+      "method": "not_reported"
+    },
+    {
+      "id": "S3_bmi_q75",
+      "source_id": "PMC6371438",
+      "locator": "Table Tab1: whole SHIP-Trend BMI",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "quantile",
+      "estimate": 31.0,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Nonoverlapping Caucasian regional German SHIP-0 n4263 and SHIP-Trend n4402, ages20–79; pregnancy/missing HbA1c excluded but main samples include diabetes. Healthy subgroups817/987 further restrict obesity, anemia, disease and medications; not used for BMI spread.",
+      "applicability": "Published quartile with unreported interpolation; only ratio informs assumed lognormal spread. Main sample includes diabetes.",
+      "q": 0.75,
+      "method": "not_reported"
+    },
+    {
+      "id": "S4_age_mean",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "age"
+      ],
+      "kind": "mean",
+      "estimate": 47.8,
+      "unit": "year",
+      "uncertainty": {
+        "kind": "sd",
+        "value": 14.6
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Rounded sample1 moment; no estimate SE/CI. Analytic surrogate uses these scales but selected target moments need not equal them."
+    },
+    {
+      "id": "S4_age_sd",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "age"
+      ],
+      "kind": "sd",
+      "estimate": 14.6,
+      "unit": "year",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Rounded sample1 moment; no estimate SE/CI. Analytic surrogate uses these scales but selected target moments need not equal them."
+    },
+    {
+      "id": "S4_glucose_mean",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "glucose"
+      ],
+      "kind": "mean",
+      "estimate": 93.0,
+      "unit": "mg/dL",
+      "uncertainty": {
+        "kind": "sd",
+        "value": 11.0
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Rounded sample1 moment; no estimate SE/CI. Analytic surrogate uses these scales but selected target moments need not equal them."
+    },
+    {
+      "id": "S4_glucose_sd",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "glucose"
+      ],
+      "kind": "sd",
+      "estimate": 11.0,
+      "unit": "mg/dL",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Rounded sample1 moment; no estimate SE/CI. Analytic surrogate uses these scales but selected target moments need not equal them."
+    },
+    {
+      "id": "S4_hba1c_mean",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "hba1c"
+      ],
+      "kind": "mean",
+      "estimate": 5.4,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "sd",
+        "value": 0.4
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Rounded sample1 moment; no estimate SE/CI. Analytic surrogate uses these scales but selected target moments need not equal them."
+    },
+    {
+      "id": "S4_hba1c_sd",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "hba1c"
+      ],
+      "kind": "sd",
+      "estimate": 0.4,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Rounded sample1 moment; no estimate SE/CI. Analytic surrogate uses these scales but selected target moments need not equal them."
+    },
+    {
+      "id": "S4_glucose_hba1c_slope",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "hba1c",
+        "glucose"
+      ],
+      "kind": "ols_coefficient",
+      "estimate": 0.0158,
+      "unit": "%/mg/dL",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Unadjusted equation slope; conditional model coefficient is derived only under surrogate covariance assumptions. Equation intercept/r/means not mutually compatible as exact constraints."
+    },
+    {
+      "id": "S4_reported_correlation",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "hba1c",
+        "glucose"
+      ],
+      "kind": "correlation",
+      "estimate": 0.55,
+      "unit": "1",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Not fitted: reported r/SDs imply slope .020 whereas source equation reports .0158. Recorded discrepancy, not corrected or pooled."
+    },
+    {
+      "id": "S4_equation_intercept",
+      "source_id": "PMC5398507",
+      "locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "variables": [
+        "hba1c",
+        "glucose"
+      ],
+      "kind": "reported_other",
+      "estimate": 4.0311,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Not fitted: equation gives5.5005 at reported glucose mean93 rather than reported HbA1c mean5.4.",
+      "statistic_name": "intercept of unadjusted HbA1c on fasting glucose equation"
+    },
+    {
+      "id": "S4_group1_age",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 1, n129",
+      "variables": [
+        "age"
+      ],
+      "kind": "mean",
+      "estimate": 36,
+      "unit": "year",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile1, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group1_bmi",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 1, n129",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "mean",
+      "estimate": 29.0,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile1, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group1_bmi_sd",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 1, n129",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "sd",
+      "estimate": 7.6,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile1, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group1_hba1c",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 1, n129",
+      "variables": [
+        "hba1c"
+      ],
+      "kind": "mean",
+      "estimate": 4.9,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile1, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group1_glucose",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 1, n129",
+      "variables": [
+        "glucose"
+      ],
+      "kind": "mean",
+      "estimate": 93,
+      "unit": "mg/dL",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile1, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group2_age",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 2, n129",
+      "variables": [
+        "age"
+      ],
+      "kind": "mean",
+      "estimate": 37,
+      "unit": "year",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile2, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group2_bmi",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 2, n129",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "mean",
+      "estimate": 29.5,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile2, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group2_bmi_sd",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 2, n129",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "sd",
+      "estimate": 7.4,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile2, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group2_hba1c",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 2, n129",
+      "variables": [
+        "hba1c"
+      ],
+      "kind": "mean",
+      "estimate": 5.3,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile2, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group2_glucose",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 2, n129",
+      "variables": [
+        "glucose"
+      ],
+      "kind": "mean",
+      "estimate": 90,
+      "unit": "mg/dL",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile2, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group3_age",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 3, n129",
+      "variables": [
+        "age"
+      ],
+      "kind": "mean",
+      "estimate": 39,
+      "unit": "year",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile3, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group3_bmi",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 3, n129",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "mean",
+      "estimate": 32.9,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile3, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group3_bmi_sd",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 3, n129",
+      "variables": [
+        "bmi"
+      ],
+      "kind": "sd",
+      "estimate": 8.6,
+      "unit": "kg/m^2",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile3, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group3_hba1c",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 3, n129",
+      "variables": [
+        "hba1c"
+      ],
+      "kind": "mean",
+      "estimate": 5.8,
+      "unit": "%",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile3, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_group3_glucose",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001; HGI tertile 3, n129",
+      "variables": [
+        "glucose"
+      ],
+      "kind": "mean",
+      "estimate": 88,
+      "unit": "mg/dL",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Sample2 EUGENE2 Italian offspring; HGI tertile3, n129. Table summaries; group comparison P-values adjusted separately, not adjusted means.",
+      "applicability": "Ecological construction guide only; unknown within-group covariances and HGI-defined selection preclude individual adjusted coefficient identification."
+    },
+    {
+      "id": "S4_HGI_context",
+      "source_id": "PMC5398507",
+      "locator": "Table pone.0175547.t001 and Statistical analysis; group summaries and footnotes",
+      "variables": [],
+      "kind": "contextual",
+      "estimate": null,
+      "unit": "",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "White Italian cardiometabolic risk sample1 n2055, age>=20, HbA1c<6.5 and FPG<126, extensive medical/treatment exclusions; sample2 EUGENE2 offspring n387 with one diabetic parent. Sample1 equation defines sample2 HGI; overlap not excluded. Sample2 narrative count530 and BMI aggregate conflict with Table1.",
+      "applicability": "Three n129 HGI groups; derived ecological BMI guide is not an individual adjusted regression. BMI P-values adjusted age/sex, not an HbA1c-on-BMI coefficient."
+    }
+  ]
+}

@@ -1,0 +1,501 @@
+{
+  "schema_version": 1,
+  "evidence_sha256": "d0f415916df3225725438fd71b2f7c2913b0970305c0b40e471954a5d4bdacc9",
+  "recipe_sha256": "257c8d62400b2ca25a64f66174f79eafae8e45d18ed61a7d8f92a9c00314a1cc",
+  "bindings": [
+    {
+      "check_id": "check_s2_age",
+      "evidence_id": "S2_age",
+      "source_locator": "Results: paragraph beginning There was no difference in BMI; NHANES multivariable result",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "ols_coefficient",
+        "unit": "%/year",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 25
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          }
+        ],
+        "missing_policy": "error",
+        "outcome": "hba1c",
+        "predictors": [
+          "age",
+          "female",
+          "bmi",
+          "glucose"
+        ],
+        "term": "age",
+        "include_intercept": true
+      },
+      "source_variable_units": {
+        "hba1c": "%",
+        "female": "1",
+        "bmi": "kg/m^2",
+        "glucose": "mg/dL",
+        "age": "year"
+      },
+      "weights": "weighted",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 3270,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "NHANES source survey weights unsupported. Adjustment matches raw columns but task equal-cell WLS is not source survey analysis; remains unavailable."
+    },
+    {
+      "check_id": "check_s2_bmi_mean",
+      "evidence_id": "S2_bmi_mean",
+      "source_locator": "Results first paragraph: NHANES BMI 28.01 +/-0.14",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "mean",
+        "unit": "kg/m^2",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 25
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          }
+        ],
+        "missing_policy": "error",
+        "column": "bmi"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "bmi": "kg/m^2",
+        "age": "year"
+      },
+      "weights": "weighted",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 3270,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Survey-weighted source mean; no equivalent source weighting available; not substituted with unweighted target mean."
+    },
+    {
+      "check_id": "check_s1_male",
+      "evidence_id": "S1_male",
+      "source_locator": "Table ijerph-18-03390-t001: Male (ref Female)",
+      "definition_status": "unsupported",
+      "source_operator": null,
+      "source_variable_units": {},
+      "weights": "none",
+      "transform": "nonidentity",
+      "source_n": {
+        "status": "reported",
+        "value": 4748,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "estimate",
+      "reason": "Source term is male, absent from task columns; reversing to female requires nonidentity recoding. No transformed statistic implementation; richer model effect is not this source estimand."
+    },
+    {
+      "check_id": "check_s3_bmi_q25",
+      "evidence_id": "S3_bmi_q25",
+      "source_locator": "Table Tab1: whole SHIP-Trend BMI",
+      "definition_status": "not_reported",
+      "source_operator": null,
+      "source_variable_units": {},
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 4402,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Source quantile interpolation is not reported. Whole SHIP-Trend also includes diabetes; do not silently substitute linear interpolation."
+    },
+    {
+      "check_id": "check_s3_bmi_q75",
+      "evidence_id": "S3_bmi_q75",
+      "source_locator": "Table Tab1: whole SHIP-Trend BMI",
+      "definition_status": "not_reported",
+      "source_operator": null,
+      "source_variable_units": {},
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 4402,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Source quantile interpolation is not reported. Whole SHIP-Trend also includes diabetes; do not silently substitute linear interpolation."
+    },
+    {
+      "check_id": "check_s4_age_mean",
+      "evidence_id": "S4_age_mean",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "mean",
+        "unit": "year",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "age"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "age": "year",
+        "hba1c": "%"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "individual_dispersion",
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "check_id": "check_s4_age_sd",
+      "evidence_id": "S4_age_sd",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "sd",
+        "unit": "year",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "age"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "age": "year",
+        "hba1c": "%"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "check_id": "check_s4_glucose_mean",
+      "evidence_id": "S4_glucose_mean",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "mean",
+        "unit": "mg/dL",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "glucose"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "age": "year",
+        "hba1c": "%"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "individual_dispersion",
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "check_id": "check_s4_glucose_sd",
+      "evidence_id": "S4_glucose_sd",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "sd",
+        "unit": "mg/dL",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "glucose"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "age": "year",
+        "hba1c": "%"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "check_id": "check_s4_hba1c_mean",
+      "evidence_id": "S4_hba1c_mean",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "mean",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "age": "year",
+        "hba1c": "%"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "individual_dispersion",
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "check_id": "check_s4_hba1c_sd",
+      "evidence_id": "S4_hba1c_sd",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "sd",
+        "unit": "%",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "column": "hba1c"
+      },
+      "source_variable_units": {
+        "glucose": "mg/dL",
+        "age": "year",
+        "hba1c": "%"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Unweighted reported sample1 arithmetic summary on its eligible sample; approximate target-row comparison uses expressible age/FPG/HbA1c filters only. Source risk/medical/treatment exclusions, age design and plasma/serum transfer remain assumptions. Sample SD uses ddof1; source convention not detailed. Not a target fitting objective."
+    },
+    {
+      "check_id": "check_s4_glucose_hba1c_slope",
+      "evidence_id": "S4_glucose_hba1c_slope",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "specified",
+      "source_operator": {
+        "kind": "ols_coefficient",
+        "unit": "%/mg/dL",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 20
+          },
+          {
+            "column": "glucose",
+            "op": "lt",
+            "value": 126
+          },
+          {
+            "column": "hba1c",
+            "op": "lt",
+            "value": 6.5
+          }
+        ],
+        "missing_policy": "error",
+        "outcome": "hba1c",
+        "predictors": [
+          "glucose"
+        ],
+        "term": "glucose",
+        "include_intercept": true
+      },
+      "source_variable_units": {
+        "hba1c": "%",
+        "glucose": "mg/dL",
+        "age": "year"
+      },
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Unadjusted source HbA1c-on-FPG slope with intercept. Source-surrogate calibration was untruncated algebra; selected target comparison can differ. Medical/risk selection and transport unverified; never substitute adjusted slope."
+    },
+    {
+      "check_id": "check_s4_reported_correlation",
+      "evidence_id": "S4_reported_correlation",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "not_reported",
+      "source_operator": null,
+      "source_variable_units": {},
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Source labels r=.55 but admitted text does not explicitly name Pearson versus rank correlation. Further, r/SDs conflict with slope; do not supply an assumed correlation estimator or claim it fitted."
+    },
+    {
+      "check_id": "check_s4_equation_intercept",
+      "evidence_id": "S4_equation_intercept",
+      "source_locator": "Results first paragraph: sample 1 n2055 glycemic summaries and equation; Fig1",
+      "definition_status": "unsupported",
+      "source_operator": null,
+      "source_variable_units": {},
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 2055,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "Reported intercept unsupported by semantic v1 non-intercept coefficient operators; source equation intercept also not selected as model constraint."
+    },
+    {
+      "check_id": "check_s4_hgi_context",
+      "evidence_id": "S4_HGI_context",
+      "source_locator": "Table pone.0175547.t001 and Statistical analysis; group summaries and footnotes",
+      "definition_status": "unsupported",
+      "source_operator": null,
+      "source_variable_units": {},
+      "weights": "none",
+      "transform": "identity",
+      "source_n": {
+        "status": "reported",
+        "value": 387,
+        "scope": "Reported source analysis sample; not generated row count"
+      },
+      "uncertainty_role": "not_reported",
+      "reason": "HGI-defined groups, missing within-group covariances and ecological construction cannot be represented by an available task-column statistic. No individual BMI coefficient is reported."
+    }
+  ]
+}

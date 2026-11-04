@@ -1,0 +1,11 @@
+# Initial C01 decision
+
+Implement the independently reviewed two-component multivariate lognormal proposal without scientific changes. The source review passed extraction, correlation conversion and finite-moment arithmetic, while preserving substantial transport limitations. The program uses only specification parameters and the supplied seed; no candidate execution has occurred.
+
+Changfeng supplies background arithmetic means/SDs and ecological age secants. Shanghai Diabetes Study II supplies an unadjusted Pearson glucose–HbA1c correlation and newly OGTT-detected subgroup summaries. That untreated subgroup is an explicitly assumption-dependent surrogate for previously known/treated diabetes; its mixture weight is a selection-count ratio, not a target prevalence. Uniform age, sex independence, zero conditional sex effects, constant within-age SDs, BMI correlations and disease-component transport remain assumptions. Pani and Skogberg supply contextual evidence and applicability limits rather than target coefficients or independent precision weights.
+
+All statistical estimands remain distinct: mean versus median, SD versus SE, unadjusted correlation versus adjusted slope, and source versus target or latent-component populations. All seven numerically supported feedback recipes are approximate whole-output comparisons. Latent-component summaries, unreported quantile conventions, weighted models and unsupported adjustments remain unavailable; no exact source-population replay is claimed.
+
+The family has finite fourth moments; reviewed covariance matrices are positive definite. Population OLS projections E1/E2/E3 are defined, but source agreement is not target validity or a causal claim. Actual output bounds, finite-sample rank, tails and Monte Carlo behavior require the controller's isolated trial. No target record/result, other author material or additional paper was read. Four-source read ceiling remains exhausted.
+
+Contract validation returned valid for the program route with generator_executed=false. Semantic preflight matched seven declared approximate comparisons and retained thirteen unavailable checks. The actual reports are bound in checks.json. Stop for independent static/schema review; do not freeze or execute locally. Scientific validity, medication/clinical-selection effects and measurement transport remain unassessed.

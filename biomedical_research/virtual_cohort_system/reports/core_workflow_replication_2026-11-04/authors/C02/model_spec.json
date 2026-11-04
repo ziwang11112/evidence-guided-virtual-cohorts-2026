@@ -1,0 +1,428 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "row_id_prefix": "C02",
+    "output_columns": [
+      "row_id",
+      "age",
+      "female",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "law": {
+      "latent_family": "multivariate_normal",
+      "bmi_family": "lognormal",
+      "glucose_family": "shifted_lognormal",
+      "residual_family": "symmetric_uniform",
+      "hba1c_mean": "affine_in_glucose_age_female_and_zero_direct_bmi",
+      "latent_order": [
+        "age",
+        "log_bmi",
+        "log_shifted_glucose"
+      ]
+    },
+    "pooling_inputs": {
+      "n": [
+        40,
+        3084
+      ],
+      "bmi_means": [
+        25.9,
+        26.2
+      ],
+      "bmi_sds": [
+        3.8,
+        3.8
+      ],
+      "glucose_means": [
+        8.4,
+        5.9
+      ],
+      "glucose_sds": [
+        2.8,
+        1.5
+      ],
+      "hba1c_means": [
+        7.2,
+        5.6
+      ],
+      "hba1c_sds": [
+        1.6,
+        0.9
+      ],
+      "male_percent": [
+        42.5,
+        48.0
+      ]
+    },
+    "age": {
+      "minimum": 35,
+      "maximum": 74,
+      "mean": 54.5,
+      "variance": 133.25
+    },
+    "female_probability": 0.5207042253521127,
+    "bmi": {
+      "mean": 26.196158770806658,
+      "sd": 3.7995413168933845,
+      "log_sd": 0.14428767947355653
+    },
+    "glucose": {
+      "mean": 5.932010243277849,
+      "sd": 1.5485844067924368,
+      "shift": 2.5,
+      "log_sd": 0.4304823523603136
+    },
+    "hba1c": {
+      "mean": 5.6204865556978225,
+      "sd": 0.9294965154068556
+    },
+    "coefficient_glucose": 0.493,
+    "coefficient_age": 0.005,
+    "coefficient_female": 0.085,
+    "coefficient_direct_bmi": 0.0,
+    "correlation_constraints": {
+      "age_hba1c_pearson": 0.208,
+      "log_bmi_hba1c_pearson": 0.21
+    },
+    "latent_correlation": [
+      [
+        1.0,
+        0.0,
+        0.1908002626783079
+      ],
+      [
+        0.0,
+        1.0,
+        0.2679885345298003
+      ],
+      [
+        0.1908002626783079,
+        0.2679885345298003,
+        1.0
+      ]
+    ],
+    "residual_half_width": 0.8837114075459475,
+    "analytic_audit": {
+      "covariance_age_glucose": 3.175447699883007,
+      "residual_variance": 0.2603152839422799,
+      "hba1c_lower_bound": 2.903034239060965,
+      "latent_correlation_determinant": 0.8917774051224586,
+      "E1_population_coefficient": 0.05153367947230871,
+      "E2_population_coefficient": 0.493,
+      "E3_population_coefficient": 0.005
+    }
+  },
+  "assumptions": [
+    {
+      "id": "task_contract",
+      "description": "Generate 3000 independent whole-cohort rows and required columns; seed controls one draw; identifiers encode author/seed/index. No participant input."
+    },
+    {
+      "id": "pinggu_transport",
+      "description": "Transport pooled rounded Pinggu BMI/glucose/HbA1c moments and sex composition to 2009 selected task sample age35-74; region, period, clinical mix and common-complete-case selection differ."
+    },
+    {
+      "id": "measurement_identity",
+      "description": "Numerical identity from fasting source plasma glucose to target central-serum glucose; target source-equivalent fasting is not established. HbA1c percent treated comparable despite incomplete P1 assay details. This is a transfer assumption, not certified measurement equivalence."
+    },
+    {
+      "id": "pooling_sample_sd",
+      "description": "P1 exhaustive DR strata combined with (n-1) within and n between mean sums over N-1. Reported inputs rounded; choose usual sample-SD convention; no new precision implied."
+    },
+    {
+      "id": "age_uniform",
+      "description": "Discrete uniform integer age35-74 because target composition and applicable source-age eligibility unknown; ignore P1 pooled age summary."
+    },
+    {
+      "id": "latent_gaussian",
+      "description": "Gaussian copula for age/logBMI/log shifted glucose; latent order A,B,G; normal latents give lognormal margins, not reported tail shape."
+    },
+    {
+      "id": "predictor_independence",
+      "description": "Latent age-BMI correlation zero and female independent of all three predictor latents. Unsupported simplifying choices; P3 sex differences are not reproduced."
+    },
+    {
+      "id": "glucose_shift",
+      "description": "Shifted lognormal glucose support begins at assumed c=2.5 mmol/L; this is not a reported source minimum."
+    },
+    {
+      "id": "coefficient_transport",
+      "description": "Use P2 Chinese-reference FPG0.493 and shared age0.005/female0.085 as reduced conditional-mean coefficients despite original waist/lipid/HOMA-IR/ethnicity interactions and known-diabetes exclusion. Omitted covariates absorbed into intercept/residual and stipulated covariances; not a source-equivalent OLS model."
+    },
+    {
+      "id": "correlation_transport",
+      "description": "Transport P2 pooled multiethnic unadjusted Pearson Corr(H,age)=.208 and Corr(H,logBMI)=.21 to task design; reported correlations do not identify target covariance."
+    },
+    {
+      "id": "no_direct_bmi",
+      "description": "Conditional H mean has zero direct BMI coefficient; assign borrowed marginal logBMI association through glucose as a structural statistical assumption, not a reported null or causal mediation."
+    },
+    {
+      "id": "uniform_residual",
+      "description": "Independent symmetric uniform residual, with variance algebraically chosen to preserve P1 H variance; bounded variation ensures H positivity. Residual dispersion is not source SE or model/evidence uncertainty."
+    },
+    {
+      "id": "single_law",
+      "description": "One conditional law across unrepresented disease/treatment/pregnancy states; no exclusions of those states claimed. Homoscedasticity, independence and linearity are assumptions."
+    },
+    {
+      "id": "feedback_approximation",
+      "description": "All supported source comparisons are approximate all-row calculations on actual task population, with no source-population reconstruction, reweighting or measurement conversion. Incompatible transformation or adjustment remains unavailable."
+    },
+    {
+      "id": "context_only",
+      "description": "P3/P4 statistics and P2 FPG-H Pearson .79/R2 .632 are context, not additional model-fitting constraints; do not pool incompatible adjusted effects or source cohorts as independent precision."
+    },
+    {
+      "id": "finite_moments",
+      "description": "Bounded age/sex/residual; lognormal B and shifted G have finite moments of every positive integer order; H affine. Positive-definite copula and nondegenerate predictors support nonsingular population OLS designs. Finite realized rows/rank remain untested."
+    },
+    {
+      "id": "source_flow_note",
+      "description": "Source flow inconsistency: 5157 examinations minus stated exclusions 325, 932 and 2 equals 3898, whereas reported analytic N and ethnic counts total 3895. Retain reported N=3895; unexplained difference of three, no invented exclusion and no model parameter depends on its resolution."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_contract"
+      ],
+      "derivation": "Contract/output bookkeeping; no biological parameter is inferred."
+    },
+    "row_id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_contract"
+      ],
+      "derivation": "Contract/output bookkeeping; no biological parameter is inferred."
+    },
+    "output_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_contract"
+      ],
+      "derivation": "Contract/output bookkeeping; no biological parameter is inferred."
+    },
+    "law": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "latent_gaussian",
+        "no_direct_bmi",
+        "uniform_residual",
+        "single_law",
+        "finite_moments"
+      ],
+      "derivation": "Reviewed distributional choices, not a source-reported joint law."
+    },
+    "pooling_inputs": {
+      "evidence_ids": [
+        "p1_dr_bmi_mean",
+        "p1_nodr_bmi_mean",
+        "p1_dr_glucose_mean",
+        "p1_nodr_glucose_mean",
+        "p1_dr_hba1c_mean",
+        "p1_nodr_hba1c_mean",
+        "p1_dr_male_percent",
+        "p1_nodr_male_percent"
+      ],
+      "assumption_ids": [
+        "pooling_sample_sd"
+      ],
+      "derivation": "Exact rounded Table1 inputs and source stratum n=40/3084; n from table headings."
+    },
+    "age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_contract",
+        "age_uniform"
+      ],
+      "derivation": "Uniform35,...,74: mean54.5 and variance(40^2-1)/12=133.25."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "p1_dr_male_percent",
+        "p1_nodr_male_percent",
+        "p1_pooled_female"
+      ],
+      "assumption_ids": [
+        "pinggu_transport",
+        "pooling_sample_sd",
+        "predictor_independence"
+      ],
+      "derivation": "1-(40*0.425+3084*0.48)/3124."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "p1_dr_bmi_mean",
+        "p1_nodr_bmi_mean",
+        "p1_pooled_bmi_mean",
+        "p1_pooled_bmi_sd"
+      ],
+      "assumption_ids": [
+        "pinggu_transport",
+        "pooling_sample_sd",
+        "measurement_identity",
+        "latent_gaussian"
+      ],
+      "derivation": "Pooled arithmetic m=sum(n*m)/N; v=[sum((n-1)*sd^2+n*(m-mpool)^2)]/(N-1). log_sd=sqrt(log(1+v/m^2)); exp centering preserves m and v."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "p1_dr_glucose_mean",
+        "p1_nodr_glucose_mean",
+        "p1_pooled_glucose_mean",
+        "p1_pooled_glucose_sd"
+      ],
+      "assumption_ids": [
+        "pinggu_transport",
+        "pooling_sample_sd",
+        "measurement_identity",
+        "latent_gaussian",
+        "glucose_shift"
+      ],
+      "derivation": "Pooled arithmetic m=sum(n*m)/N; v=[sum((n-1)*sd^2+n*(m-mpool)^2)]/(N-1). Assume shift c=2.5; log_sd=sqrt(log(1+v/(m-c)^2)); shift+exp law preserves m and v."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "p1_dr_hba1c_mean",
+        "p1_nodr_hba1c_mean",
+        "p1_pooled_hba1c_mean",
+        "p1_pooled_hba1c_sd"
+      ],
+      "assumption_ids": [
+        "pinggu_transport",
+        "pooling_sample_sd",
+        "measurement_identity"
+      ],
+      "derivation": "Pooled arithmetic m=sum(n*m)/N; v=[sum((n-1)*sd^2+n*(m-mpool)^2)]/(N-1). "
+    },
+    "coefficient_glucose": {
+      "evidence_ids": [
+        "p2_glucose_coefficient"
+      ],
+      "assumption_ids": [
+        "coefficient_transport",
+        "single_law"
+      ],
+      "derivation": "Use the reported point coefficient as a reduced-model setting; source CI/SE remain evidence uncertainty and are not residual SDs."
+    },
+    "coefficient_age": {
+      "evidence_ids": [
+        "p2_age_coefficient"
+      ],
+      "assumption_ids": [
+        "coefficient_transport",
+        "single_law"
+      ],
+      "derivation": "Use the reported point coefficient as a reduced-model setting; source CI/SE remain evidence uncertainty and are not residual SDs."
+    },
+    "coefficient_female": {
+      "evidence_ids": [
+        "p2_female_coefficient"
+      ],
+      "assumption_ids": [
+        "coefficient_transport",
+        "single_law"
+      ],
+      "derivation": "Use the reported point coefficient as a reduced-model setting; source CI/SE remain evidence uncertainty and are not residual SDs."
+    },
+    "coefficient_direct_bmi": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "no_direct_bmi"
+      ],
+      "derivation": "Structural zero; not a reported null."
+    },
+    "correlation_constraints": {
+      "evidence_ids": [
+        "p2_age_hba1c_pearson",
+        "p2_log_bmi_hba1c_pearson"
+      ],
+      "assumption_ids": [
+        "correlation_transport"
+      ],
+      "derivation": "Transport exact reported Pearson operands, including logBMI rather than BMI."
+    },
+    "latent_correlation": {
+      "evidence_ids": [
+        "p1_pooled_bmi_mean",
+        "p1_pooled_bmi_sd",
+        "p1_pooled_glucose_mean",
+        "p1_pooled_glucose_sd",
+        "p1_pooled_hba1c_mean",
+        "p1_pooled_hba1c_sd",
+        "p1_pooled_female",
+        "p2_glucose_coefficient",
+        "p2_age_coefficient",
+        "p2_female_coefficient",
+        "p2_age_hba1c_pearson",
+        "p2_log_bmi_hba1c_pearson"
+      ],
+      "assumption_ids": [
+        "latent_gaussian",
+        "age_uniform",
+        "predictor_independence",
+        "correlation_transport",
+        "coefficient_transport",
+        "glucose_shift",
+        "no_direct_bmi"
+      ],
+      "derivation": "rAB=0. CovAG=(.208*sA*sH-bA*vA)/bG. Solve CovAG=(mG-c)*(sum_a a*(Phi(z_hi-sigmaG*rAG)-Phi(z_lo-sigmaG*rAG))-54.5) using standard-normal age quantile intervals. rBG=.21*sH/[bG*(mG-c)*sigmaG]. Deterministic retained algebra; no rows."
+    },
+    "residual_half_width": {
+      "evidence_ids": [
+        "p1_pooled_bmi_mean",
+        "p1_pooled_bmi_sd",
+        "p1_pooled_glucose_mean",
+        "p1_pooled_glucose_sd",
+        "p1_pooled_hba1c_mean",
+        "p1_pooled_hba1c_sd",
+        "p1_pooled_female",
+        "p2_glucose_coefficient",
+        "p2_age_coefficient",
+        "p2_female_coefficient",
+        "p2_age_hba1c_pearson",
+        "p2_log_bmi_hba1c_pearson"
+      ],
+      "assumption_ids": [
+        "uniform_residual",
+        "single_law",
+        "predictor_independence",
+        "coefficient_transport",
+        "correlation_transport"
+      ],
+      "derivation": "vE=vH-bG^2*vG-bA^2*vA-bF^2*pF*(1-pF)-2*bG*bA*CovAG. w=sqrt(3*vE)."
+    },
+    "analytic_audit": {
+      "evidence_ids": [
+        "p1_pooled_bmi_mean",
+        "p1_pooled_bmi_sd",
+        "p1_pooled_glucose_mean",
+        "p1_pooled_glucose_sd",
+        "p1_pooled_hba1c_mean",
+        "p1_pooled_hba1c_sd",
+        "p1_pooled_female",
+        "p2_glucose_coefficient",
+        "p2_age_coefficient",
+        "p2_female_coefficient",
+        "p2_age_hba1c_pearson",
+        "p2_log_bmi_hba1c_pearson"
+      ],
+      "assumption_ids": [
+        "finite_moments",
+        "latent_gaussian",
+        "uniform_residual",
+        "no_direct_bmi",
+        "predictor_independence",
+        "age_uniform",
+        "coefficient_transport",
+        "correlation_transport",
+        "glucose_shift"
+      ],
+      "derivation": "Deterministic consequences only: lower H=mH+bG*(c-mG)+bA*(35-54.5)-bF*pF-w; E1=bG*(mG-c)*mB*expm1(sigmaG*sigmaB*rBG)/vB; E2=bG; E3=bA. Not source estimates under task formulas or target findings."
+    }
+  }
+}
