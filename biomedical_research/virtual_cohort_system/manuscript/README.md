@@ -8,6 +8,8 @@
 - [Key experiment gaps](KEY_EXPERIMENT_GAPS_v07_2026-11-03.md): one prospective transfer case is the priority optional scientific extension; an extraction audit is needed only for an autonomy claim. Neither launches a new campaign.
 - [Integrated evidence ledger](INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md): principal studies, historical enrichment/direct-output uses and retained failures, with distinct denominators.
 - [Independent manuscript review](REVIEW_v0_7_2026-11-03.md) and [presentation/link check](PACKAGE_REVIEW_v07_2026-11-03.json)
+- [Aggregate reproduction guide](../docs/REPRODUCING_MANUSCRIPT_v07.md) and [independent reproduction review](../reproducibility/INDEPENDENT_REVIEW_v07_2026-11-03.md): Tables 2-4 numeric cells reconstructed; Figures 2-4/S1 redrawn; Figure 1 copied as a schematic.
+- [Existing-reference feasibility](EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md): three metadata leads reviewed, zero new cases admitted; the optional prospective extension is deferred.
 
 The HRS example is now integrated, rather than pending. It supplies six valid comparison tables from one Agent-authored and one reconstructed published-law model; its three invalid initial comparator attempts and technical recovery remain disclosed. It tests source-model reconstruction, not new-patient validation. Historical references remain exposed and closed.
 
@@ -26,4 +28,4 @@ The HRS example is now integrated, rather than pending. It supplies six valid co
 
 [v0.6](DRAFT_v0_6.md), [v0.5](DRAFT_v0_5.md) and earlier drafts remain unchanged. This revision adds writing and presentation artifacts only: no new generation, target fitting, reference analysis or scientific parameters. No universal statistical-superiority claim is required.
 
-The manuscript is ready for substantive author review, not submission-certified. Remaining preparation includes a clean reproduction entry point, author/funding/access/ethics/AI-use declarations, final article-type formatting and inspection at the actual journal layout. Competitive publication depends on the substantive contribution; a completed draft and successful audits do not guarantee acceptance.
+The manuscript is ready for substantive author review, not submission-certified. The public aggregate reproduction entry point is now independently checked: it reconstructs display values and redraws result figures without accessing participant records or rerunning clinical experiments. The earlier v0.7 review/checklist retains its historical state. Remaining preparation includes author/funding/access/ethics/AI-use declarations, final article-type formatting and inspection at the actual journal layout. Competitive publication depends on the substantive contribution; a completed draft and successful audits do not guarantee acceptance.

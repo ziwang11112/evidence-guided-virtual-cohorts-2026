@@ -15,9 +15,11 @@ All these units are closed. The integrated ledger also retains earlier enrichmen
 
 ## Current next actions
 
-1. Complete substantive manuscript review, reproducible entry points and author/access/ethics/AI-use declarations.
+1. Continue substantive author review and complete author/access/ethics/AI-use declarations. The [public aggregate reproduction entry point](REPRODUCING_MANUSCRIPT_v07.md) is complete and [independently checked](../reproducibility/INDEPENDENT_REVIEW_v07_2026-11-03.md): numeric tables and result figures can be rebuilt without clinical records.
 2. Select the article type and inspect the manuscript and figures at the actual publication layout.
-3. If strengthening the empirical claim is necessary, prioritize one prospectively selected project-unexposed reference from already accessible data, under a new bounded protocol. An original-document extraction audit is relevant only for an autonomous evidence-processing claim. Neither study is released by this writing checkpoint.
+3. The [bounded existing-reference audit](../manuscript/EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md) admits no new case: HAALSI lipids remains only a qualified metadata lead; CHNS urate and ENSANUT lipids are deferred. Do not start another data search or clinical experiment merely to fill this optional extension. An original-document extraction audit is relevant only if an autonomous evidence-processing claim is chosen; it is not launched.
+
+The reproduction follow-up verifies 21 pinned public inputs, 306 cross-sectional seed statistics, 96 HRS coefficient records and all 45 manuscript-rounded numeric cells in Tables 2-4. Two independently executed full renders produce identical output files in the tested Windows/Python environment. Figure 1 is a verified schematic copy; Figures 2-4 and S1 are actually redrawn. No participant tables, generator execution, clinical fit, network request or new scientific result is part of this entry point. See the [follow-up decision](../manuscript/FOLLOWUP_DECISION_v07_2026-11-03.md).
 
 The HRS example supports reconstruction; CHNS/ENSANUT support developmental, analysis-specific comparisons. Current support for a bounded method paper does not guarantee competitive publication. Known targets may not be retuned or renamed as new confirmation. No new cohort search, generation, fitting, training, HPC or paid API call is authorized by this consolidation.
 
