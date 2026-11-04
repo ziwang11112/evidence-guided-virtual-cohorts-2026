@@ -1,0 +1,616 @@
+\documentclass[10pt,twocolumn]{article}
+\pdfvariable minorversion=7
+\usepackage[letterpaper,margin=0.72in,columnsep=0.24in]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{TeX Gyre Termes}}
+\IfFontExistsTF{Arial}{\setsansfont{Arial}}{\setsansfont{TeX Gyre Heros}}
+\IfFontExistsTF{Courier New}{\setmonofont{Courier New}}{\setmonofont{TeX Gyre Cursor}}
+\usepackage{graphicx,booktabs,tabularx,array,caption,listings,float}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black]{hyperref}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,
+  keepspaces=true,showstringspaces=false,frame=single,framerule=0.2pt,xleftmargin=2pt,xrightmargin=2pt}
+\raggedbottom
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{10pt plus 2pt minus 2pt}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dblfloatpagefraction}{0.75}
+\setcounter{dbltopnumber}{2}
+\emergencystretch=1.5em
+\title{Evidence-Guided Agents for Analyzable Virtual Biomedical Cohorts}
+\author{\small Working research draft --- 4 November 2026}
+\date{}
+\begin{document}
+\maketitle
+\begingroup\footnotesize\noindent This is a two-column reading copy, not an official conference submission format.\par\endgroup
+\begin{abstract}
+
+Individual biomedical records may be inaccessible or omit variables needed for a scientific analysis, while relevant summaries and associations are available in published studies. We investigate whether a scientific Agent can turn that partial evidence into useful complete virtual cohorts without individual-level construction records. The Agent interprets findings under their original study conditions, chooses a joint generating law, translates usable statistics into numerical constraints and records assumptions for unreported relationships. Numerical tools execute and inspect the construction. In a developmental study using CHNS and ENSANUT references, 20 Agent and four statistical constructions produced 72 complete tables; additional relational evidence reduced mean absolute discrepancy for five of six specified coefficients. Separate experiments demonstrated supplied-summary reconstruction and longitudinal analysis from published model artifacts. A unified open-retrieval workflow then produced twelve 3,000-person tables from four fresh Agent constructions across both population requests. All prespecified coefficient directions agreed with the existing sample references, while effect magnitudes, rank dependence and residual variability remained imperfect. An earlier analytical sensitivity identified an unreported dependence capable of reversing a conditional coefficient despite unchanged marginal relationships. These results support repeated evidence-to-cohort construction and analysis-specific usefulness, while exposing the joint-model and transport assumptions that limit scientific interpretation.
+
+\end{abstract}
+
+\section{Introduction}
+
+A research question can be well defined before the necessary biomedical records are available. A cohort may never have measured a biomarker, another study's individual records may be inaccessible, or no accessible dataset may contain the required combination of variables. Published means, distributions, adjusted associations and subgroup findings nevertheless contain relevant information. A researcher could use a virtual dataset assembled from that evidence to run an intended analysis, inspect its implications and plan subsequent data collection. The practical output is a table that ordinary scientific software can analyze, accompanied by the assumptions that make the table possible.
+
+
+The difficult step lies between a published finding and a joint data-generating process. An age-adjusted regression coefficient, a marginal correlation and a grouped contrast describe different statistical quantities. Their populations, measurements and adjustment sets also differ. Even two correctly extracted coefficients cannot generally be inserted unchanged into one joint model. Further relationships needed to generate a complete table may never have been reported. An automated system therefore has to make scientific modeling decisions, in addition to extracting numbers or sampling rows.
+
+
+We investigate an evidence-guided Agent workflow for this task. Given a population description, requested variables and scientific analyses, the Agent acquires or receives relevant studies, chooses the numerical role of each finding, authors a joint model and inspects the resulting data. Deterministic tools perform calculations and sampling. A request may lead to a different generator when the target population, available evidence or intended analysis changes. The scientific question is whether the resulting data preserve useful properties for the requested analysis, and which properties still depend on unsupported completion or transport assumptions.
+
+
+This focus builds on established synthesis methods. Filshtein et al. generate complete cohorts using source-specific models estimated by collaborating analysts [1]. SynthIPD constructs survival records and categorical covariates from published trial material [2]. Multilevel network meta-regression relates aggregate findings to individual-level models under population assumptions [3]. LLM-based systems additionally automate consequential construction decisions: G-Sim combines simulator authorship, numerical calibration and structural refinement [4]; LLMSynthor plans micro-record generation from aggregate information and uses discrepancy feedback [5]; SynthCraft supports synthetic-data workflows in healthcare [6]. SPADA separates an LLM-induced dependency graph from statistical sampling fitted to an observed table [15]. Our investigation concerns the scientific work required to connect a biomedical analysis request, study-qualified partial evidence and an analyzable joint dataset when individual construction records are absent.
+
+
+The paper makes three contributions. \textbf{First}, it implements and repeatedly exercises an evidence-to-cohort workflow: from a biomedical request, the Agent selects studies and their numerical roles, authors a joint law and delivers analysable data without individual construction records. \textbf{Second}, it makes scientific modeling decisions inspectable, including reconciliation of separate adjusted projections and explicit assumptions for missing dependence; a worked sensitivity shows how such a dependence changes a conditional conclusion. \textbf{Third}, it evaluates the data through ordinary scientific analyses under complementary information conditions: a larger external-evidence contrast, supplied-summary reconstruction, a published longitudinal model and repeated open-retrieval constructions. The contribution is a qualified, reusable biomedical data-generation procedure, rather than a new estimator or a claim that every inferred relationship is identified.
+
+
+The experiments answer successive questions: does more informative evidence improve analysis results; can accessible summaries support joint data; can the data structure extend to repeated follow-up; and can the workflow complete new constructions when Agents select their own sources and model families? They are complementary experiments with distinct information boundaries, not one pooled benchmark. Ordinary Agents are valid implementations; specialized training and multi-Agent collaboration are not prerequisites.
+
+
+\section{Problem: evidence-conditioned data for a scientific request}
+
+Let a request contain the target population, eligibility and measurement definitions, desired variables, permitted observations and intended analyses. A study evidence record identifies its population, measurement scale, statistical operator and adjustment set, reported estimate, available uncertainty and provenance. A set of such records provides only partial information about the joint law needed by the request.
+
+
+The Agent's construction is an executable generator and its scientific specification:
+
+
+\begin{lstlisting}
+
+(generator, evidence uses, completion assumptions) = Agent(request, evidence, optional observations)
+
+virtual data = generator(number of rows, fixed random seed)
+
+analysis results = requested scientific analyses(virtual data).
+
+\end{lstlisting}
+
+This notation describes the implemented procedure; it does not introduce a trained conditional model or a new optimization objective. In complete-cohort generation, the optional observations are empty and the generator supplies every requested variable. In enrichment, observed covariates remain fixed while an unmeasured variable is generated. The present principal experiments concern complete cohorts. Earlier enrichment experiments are supporting evidence under their own versions; missing-cell completion remains an unevaluated mode.
+
+
+We distinguish three legitimate uses of evidence. A reported statistic can constrain the model numerically, provide a check on its implications, or remain contextual when its meaning or applicability is insufficiently resolved. Algebraic consequences of accepted statistics are derived evidence, whereas unspecified dependence and source-to-target transport remain assumptions. A numerical constraint from another population does not automatically identify the corresponding target coefficient.
+
+
+Quality is assessed at the level of scientific analysis. For an analysis statistic, such as an adjusted regression coefficient, we report the generated estimate alongside the relevant sample reference, effect direction, magnitude and available uncertainty. Source-summary agreement measures reconstruction of supplied information. Agreement with a target result not supplied to the author addresses a different question. Neither requires individual-row recovery or exact agreement with one real sample. A complete virtual table can support more than one analysis, but different uses may have different evidential support.
+
+
+This problem is generally underidentified. Several joint laws can reproduce available margins and associations while implying different conditional or subgroup effects. The system consequently delivers a data product together with its construction assumptions. More generated rows improve Monte Carlo precision under a law; they do not establish unreported biological relationships. Identifying which missing relationship matters for a requested use is itself a useful outcome of constructing an explicit model.
+
+
+\section{Method}
+
+\subsection{Qualify evidence against the request}
+
+The workflow begins with a structured task containing population, era, measurements, units, eligibility and visible scientific questions. It accepts curated evidence and Agent-directed acquisition. When retrieval is enabled, the Agent can formulate queries and select primary studies relevant to its evidence gaps. The retained record distinguishes original full text, partial access and bibliographic metadata, and records study overlap or exclusions.
+
+
+Each extracted finding is interpreted through its original analysis definition. Logistic disease coefficients cannot silently become continuous-biomarker slopes; grouped contrasts cannot become per-unit effects; Pearson and Spearman associations require different numerical treatment. Likewise, a change of measurement scale supplies an algebraic conversion, not additional information about transport. Source comparisons are classified as directly supported calculations, explicitly assumption-qualified approximations or unavailable operations. Reconstructing every original study population is not a prerequisite for generating a target dataset.
+
+
+In the principal information-contrast study, researchers supplied audited source packets and measurement guidance [7,8,9,10,11], and the Agent selected their scientific use. An initial open-search example separated acquisition from construction. In the subsequent unified workflow, each of four fresh authors selected its own queries and sources, proposed a scientific law, received independent source/implementation review, and executed that law. Acquisition used a fixed Europe PMC/PMC gateway, at most eight query credits and four original papers per author, without bibliographic seeds. Source retrieval closed at the first candidate freeze. The host dispatched authors and the coordinator managed access, review, execution and closure; this is implemented bounded retrieval, not unrestricted standalone autonomy.
+
+
+\subsection{Author a joint law and explain its numerical use}
+
+The scientific Agent chooses a probability family, dependencies, numerical parameters and any unreported completion assumptions. It supplies generator code, a model specification, evidence-use records and a decision explanation. A cited relationship counts as numerical use only when the implemented law or an explicit calculation shows how it enters a constraint or check. The coordinator does not insert target-derived coefficients or desired signs into the scientific model.
+
+
+A worked construction illustrates the distinction. Jansen et al. report separate age/sex-adjusted HbA1c projections for BMI and glucose [9]. For residual BMI and glucose variables with SDs \texttt{sB} and \texttt{sG} and assumed correlation \texttt{r}, a joint response equation with coefficients \texttt{thetaB} and \texttt{thetaG} implies
+
+
+\begin{lstlisting}
+
+cB = thetaB + thetaG * r * sG/sB
+
+cG = thetaG + thetaB * r * sB/sG.
+
+\end{lstlisting}
+
+CHNS E1 constructor A01, selected by ordinal identifier rather than performance, solved these equations using reported slopes \texttt{cB = 0.13} and \texttt{cG = 2.29}, residual SDs 4.07611 and 0.49694, and the declared assumption \texttt{r = 0.25}. The resulting coefficients were 0.0642173 and 2.1583154 in IFCC response units. Multiplying by 0.09148 gave 0.00587460 and 0.19744269 in HbA1c percentage-point units [11]. Thus the Agent used both projections without assigning them unchanged to one joint equation. Residual correlation, factor distributions, age/sex contributions and target transport remained assumptions.
+
+
+The worked trace links this derivation to frozen code, an unfitted source-correlation check and the constructor's target BMI mismatch. The mathematical identities are established statistics. The implemented contribution is the Agent's evidence-specific selection, derivation and use of them within data construction, with the consequences made inspectable.
+
+
+\subsection{Execute, inspect and finalize}
+
+Deterministic tools execute the authored program through an isolated WSL/bubblewrap adapter, calculate the allowed statistics and return source/generated-data feedback. Semantic checks assess the declared measurement, operator and role. Separate reviews inspect numerical calculations, support and required finite moments. These checks establish implementation properties; source extraction, biological plausibility and population transfer require their own evidence.
+
+
+The Agent can revise or retain its model within the task budget. A valid no-op ends the construction; the process does not require an extra revision to manufacture improvement. Each candidate, final seed allocation and evaluation contract is fixed before the corresponding execution or comparison. The final data and model assumptions are delivered together, so the intended analyses can be run in standard software. Author access boundaries are procedural even though generator execution is isolated.
+
+
+The shared procedure has separately frozen implementations, evidence budgets, feedback opportunities and evaluators. Cross-sectional requests generated all five variables: age, recorded sex, BMI, glucose and HbA1c. The longitudinal case used a separate native mixed-model evaluator. The unified controller applied the same construction/review policy to two prespecified population requests and explicitly connected semantic\_feedback\_v1. Its source comparisons retained original statistic definitions and qualified target/source differences; unavailable operations were not relabelled as successful checks. General interpretation and execution of arbitrary requests remain outside the demonstrated scope.
+
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/fig1-agent-framework.drawio.pdf}
+
+\caption{A worked evidence-to-generator implementation. The completed whole-cohort case connects a reviewed study result to actual model parameters and sampling operations. The Agent selects a sex-stratified Gaussian copula and converts the Hainan male glucose–HbA1c Spearman coefficient 0.44 to latent correlation 0.457. The matrix shows selected entries only: A/B/G/H denote age/BMI/glucose/HbA1c; dots omit other entries, and the BMI–glucose value 0.25 is an explicit assumption. With standard-normal noise ε, Cholesky sampling and the displayed shifted-lognormal transform generate BMI, glucose and HbA1c; age uses a separate bounded-integer transform. The table cells are schematic placeholders. Positive-definiteness and finite-moment audits precede execution; runtime statistics and semantic\_feedback\_v1 inform the retain-or-revise decision. This instance retained its model after 11 approximate comparisons and 23 unavailable checks per execution. Search, evidence review and fresh-context construction were host-dispatched stages. The figure illustrates an implemented construction, not a mandatory copula for all requests or a demonstrated revision gain.}
+
+\label{fig:1}
+
+\end{figure*}
+
+\section{Experiments}
+
+We organize evaluation around four questions: \textbf{Q1}, does additional relational evidence support useful target analyses? \textbf{Q2}, can accessible summaries become a coherent joint dataset? \textbf{Q3}, can the procedure construct longitudinal data for a published analysis? \textbf{Q4}, can one bounded open-retrieval workflow repeatedly construct analysable cohorts across population requests? A preceding open-search example additionally investigates an analysis-sensitive evidence gap. Table 1 separates these conditions. Individual-level records were not supplied to any constructor in these settings.
+
+
+\begin{table*}[t]
+
+\caption{Evaluation questions and information conditions. A construction is an authored model; seeds sample that model. Reused CHNS analyses are not additional target families.}
+
+\label{tab:1}
+
+\centering\fontsize{8}{9.5}\selectfont
+
+\setlength{\tabcolsep}{4pt}
+
+\renewcommand{\arraystretch}{1.12}
+
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+
+\toprule
+
+Question and setting & Construction inputs & Constructions and final data & Reference role \\
+
+\midrule
+
+Q1: external evidence, CHNS and ENSANUT & Population/measurement requests; E0 basic/marginal evidence or E1 additional relational evidence & 20 Agent + 4 statistical constructions; 72 tables of 3,000 rows & Previously exposed selected-sample references; target coefficients not supplied to fresh authors \\
+
+Q2: CHNS summary assistance & Literature in L; literature plus 30 target summaries and metadata in R & 6 Agent constructions; 18 distinct final tables of 3,000 rows & Reconstruction of explicitly supplied information in R \\
+
+Q3: HRS published model & Published model artifacts and requested longitudinal analysis & 1 Agent + 1 reconstructed published law; 6 valid tables, each 11,509 subjects at 4 visits & Published-model reconstruction; no HRS participant records \\
+
+Q4: repeated open-retrieval workflow & Population/analysis requests; self-selected external studies; no DOI seeds & 4 fresh Agent constructions; 12 final tables of 3,000 rows & Existing CHNS/ENSANUT aggregates read after all constructions closed; developmental replication \\
+
+Supporting open-search example & Five Agent-retrieved, reviewed studies and a population/analysis request & 1 fresh constructor; 3 final tables of 3,000 rows & Reused CHNS aggregates; pre-generation analytical dependence sensitivity \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+\subsection{Evaluation design}
+
+CHNS included 6,631 selected adults aged 35–74 with complete age, recorded sex, BMI, central glucose and HbA1c. Analyses were unweighted selected-sample estimates; diabetes/treatment exclusions were not imposed and individual fasting adherence was unverified. ENSANUT included 6,931 selected adults aged 25–79 under fixed fasting, prior-diagnosis, glucose and anthropometry criteria. It assigned equal mass to eight sex-by-age cells rather than estimating national survey effects. These populations, measurement units and estimators remain distinct.
+
+
+Q1 allocated five fresh Agent contexts to each case/condition and one fixed statistical specification to each case/condition. Each construction had three 3,000-row final attempts, seeds 5101–5103, and at most two exploratory row-producing attempts. The fixed statistical specifications used the same admitted numerical information and explicit completion assumptions. One prescribed specification versus five independently authored Agent laws is an asymmetric descriptive comparison. Matching author labels across E0/E1 do not imply pairing.
+
+
+All constructions closed before common reference evaluation. Each case retained three focal regressions and 27 CHNS or 28 ENSANUT marginal/joint diagnostics. Four focal analyses had source-analogous projections; CHNS conditional age and ENSANUT conditional BMI were neither directly supplied as target coefficients nor identified by the admitted packet. For each focal statistic, absolute reference discrepancy was averaged over three seeds within each constructor, then across five Agent constructors. E1–E0 compared these arm means. Three-seed ranges quantify sampling under a fixed law. CHNS community-cluster CR1-t intervals and ENSANUT prespecified cluster-resampling stability bands contextualize their sample estimates; neither defines equivalence.
+
+
+Both target families had been exposed during earlier development. Fresh author contexts restrict construction inputs but do not restore untouched clinical validation. Separately written numerical audits checked generated statistics and frozen reference mappings. Complete eligibility, formulas, reference intervals, allocations, failures and diagnostics are preserved in the extended methods and results. The principal comparison, summary study, longitudinal example and later workflow units are not pooled into a single success score.
+
+
+\subsection{Q1: external relations improve several requested analyses}
+
+All 24 Q1 constructions produced their three scheduled final tables. The 72 final tables were distinct and supported every requested regression and diagnostic; seven exploratory tables brought physical executions to 79. Additional relational evidence reduced constructor-averaged mean absolute discrepancy for five of the six designated coefficients (Table 2). CHNS glucose discrepancy decreased from 0.134019 to 0.024079 HbA1c percentage points per mmol/L. All three ENSANUT contrasts improved. CHNS BMI discrepancy increased from 0.020380 to 0.031557.
+
+
+\begin{table*}[t]
+
+\caption{Complete main-study information contrast. Discrepancies retain the units of each row; they are not pooled. The reference response is HbA1c percentage points. E1–E0 uses unrounded quantities before display rounding.}
+
+\label{tab:2}
+
+\centering\fontsize{8}{9.5}\selectfont
+
+\setlength{\tabcolsep}{4pt}
+
+\renewcommand{\arraystretch}{1.12}
+
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+
+\toprule
+
+Case / focal analysis & Predictor increment & E0 mean absolute discrepancy & E1 mean absolute discrepancy & E1 − E0 \\
+
+\midrule
+
+CHNS BMI, adjusted age/sex & 1 kg/m² & 0.020380 & 0.031557 & +0.011178 \\
+
+CHNS glucose, adjusted age/sex & 1 mmol/L & 0.134019 & 0.024079 & −0.109939 \\
+
+CHNS age, adjusted sex/BMI/glucose & 1 year & 0.007281 & 0.004854 & −0.002426 \\
+
+ENSANUT age, adjusted sex/BMI/glucose & 10 years & 0.063944 & 0.024670 & −0.039274 \\
+
+ENSANUT BMI, adjusted age/sex & 5 kg/m² & 0.056883 & 0.023732 & −0.033151 \\
+
+ENSANUT BMI, adjusted age/sex/glucose & 5 kg/m² & 0.048797 & 0.025649 & −0.023147 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/fig2-evidence-results.pdf}
+
+\caption{External evidence and six scientific analyses. All six coefficients use native units and the indicated adjustment sets. E0 supplies basic/marginal evidence; E1 adds relational evidence. Each Agent condition contains five independently authored generators, ordered A01–A05; each statistical condition contains one prescribed generator. Dots show three final seed estimates, open diamonds constructor means, and vertical segments seed min–max ranges. Author labels do not pair E0 and E1. Dashed lines denote selected-sample reference estimates; gray regions are CHNS 95\% community-cluster CR1-t intervals or ENSANUT cluster-resampling stability bands. Neither is a within-generator seed interval or an equivalence margin. All 24 constructions, 72 tables and 216 coefficient estimates appear. Additional evidence lowers mean absolute reference discrepancy for five endpoints, while CHNS BMI worsens; endpoint-specific contrasts are reported in the text. The reference populations were exposed during development.}
+
+\label{fig:2}
+
+\end{figure*}
+
+The effect displays explain what these changes mean. CHNS E1 glucose constructor means were 0.363363–0.414189 around the 0.402093 reference. Its BMI means were positive but lower, 0.012400–0.045757 versus 0.054946. Conditional-age means ranged from −0.000509 to 0.007393 versus 0.008107; one author retained a negative mean and two negative seeds. All ENSANUT E1 focal coefficients were positive, although its age means of 0.097769–0.102452 per decade exceeded 0.075132 and its BMI means remained below their references. Preserving a direction and recovering its magnitude are distinct aspects of usefulness.
+
+
+Every E1 author used at least one relationship as a numerical constraint. The complete uptake records include constraints, unfitted analytic checks and contextual uses, including the projection calculation in Section 3.2. Statistical references also achieved useful results: under E1, the prescribed constructions had lower seed-averaged discrepancies than every corresponding Agent for CHNS glucose and ENSANUT conditional BMI. Other comparisons favored Agent constructions. The evidence therefore supports scientific utility and the value of additional information, rather than a universal algorithmic ranking.
+
+
+\subsection{Q2: accessible summaries become useful joint data}
+
+The separate CHNS experiment gave three authors external literature (L) and three authors that literature plus 30 target summaries and their metadata (R). Each author delivered three tables and had one additional diagnostic-review opportunity. All six retained their models. There were 42 physical executions: six trials and 36 initial/final deliveries. Final bytes duplicated their matching initial outputs, leaving 24 distinct tables overall and 18 distinct delivery tables. The identical stages are displayed once.
+
+
+R supported close reconstruction of all five highlighted scientific analyses (Table 3; Figure 3). These values were legitimate construction inputs; their agreement measures reconstruction rather than prediction of hidden coefficients. The L/R packet and authors differ from Q1, so those two information comparisons are kept separate.
+
+
+\begin{table*}[t]
+
+\caption{Joint-statistic reconstruction with available summaries. Ranges span three constructor means over three fixed seeds, not confidence intervals. Regression units are HbA1c percentage points per kg/m², mmol/L and year, respectively.}
+
+\label{tab:3}
+
+\centering\fontsize{8}{9.5}\selectfont
+
+\setlength{\tabcolsep}{4pt}
+
+\renewcommand{\arraystretch}{1.12}
+
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+
+\toprule
+
+Analysis & Supplied reference & External literature L & Literature + summaries R \\
+
+\midrule
+
+BMI coefficient, age/sex adjusted & 0.054946 & 0.013001–0.034287 & 0.052821–0.055789 \\
+
+Glucose coefficient, age/sex adjusted & 0.402093 & 0.356064–0.487815 & 0.396941–0.413715 \\
+
+Age coefficient, sex/BMI/glucose adjusted & 0.008107 & 0.003552–0.006910 & 0.007569–0.007947 \\
+
+Glucose–HbA1c Pearson correlation & 0.660968 & 0.633764–0.813170 & 0.650561–0.666438 \\
+
+Glucose–HbA1c Spearman correlation & 0.361457 & 0.501339–0.566477 & 0.357571–0.360983 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/fig3-summary-results.pdf}
+
+\caption{Supplied summaries become jointly analyzable data. The five panels show three adjusted regression coefficients and the glucose–HbA1c Pearson and Spearman correlations. L01–L03 use literature evidence; R01–R03 additionally receive 30 target summaries and metadata. Dots are all three final seed statistics, diamonds constructor means and thin segments seed ranges. Labels denote independently authored generators, not paired versions. Dashed lines mark reference summaries available to R; gray bands are the available 95\% community-cluster CR1-t intervals for regression references. No correlation interval is supplied. All six constructors, 18 distinct delivery tables and 90 statistics are shown once; retained initial/final outputs are identical. Closer R agreement demonstrates supplied-information reconstruction, not prediction of hidden reference results or a revision benefit.}
+
+\label{fig:3}
+
+\end{figure*}
+
+Agreement extended beyond central values. R constructor-mean BMI SDs were 3.38965–3.40243 versus 3.40632, glucose SDs were 1.48817–1.58968 versus 1.54455, and HbA1c SDs were 0.95208–0.96554 versus 0.95357. A separate three-table statistical calibration supplement also closely reconstructed the regression summaries, with mean coefficients 0.055726, 0.412568 and 0.007679. That purpose-built family was developed with coding-Agent assistance and is not an Agent-removal ablation. Both approaches demonstrated the usefulness of constructing a joint table from accessible aggregate information.
+
+
+\subsection{Q3: a published model supports longitudinal analysis}
+
+The HRS recipient-stage example [1] tested a different data product. A fresh Agent received published model exports, a variable specification and the intended mixed-model analysis. It authored the recursive conditional generating family with parameter provenance. A separate implementation reconstructed the published law. Each generated 11,509 subjects at 0, 2, 4 and 6 years, producing 46,036 rows per table. No HRS individual records were used, and the source analysis coefficients were construction inputs.
+
+
+All three Agent and three corrected-law tables supported the native R/lme4 model with 16 fixed effects, individual intercepts/slopes and piecewise HbA1c terms around 6.5\%, with age centered at 60 and scaled per decade. The below-threshold HbA1c-by-age interaction averaged −0.044635 in Agent data, with range −0.051059 to −0.038247, against the supplied −0.046837. The reconstructed law averaged −0.040500. Both preserved its negative direction in all three draws (Figure 4).
+
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/fig4-longitudinal-use.pdf}
+
+\caption{Longitudinal analysis of reconstructed cohorts. Panels show the interactions of memory-score change per decade with HbA1c splines below and at or above 6.5\%. Blue circles are Agent-generated and violet squares published-law reconstruction estimates for three fixed seeds; bars are all 12 stored model-conditional 95\% Wald intervals. Dashed lines mark supplied source coefficients and solid lines mark zero; source standard errors are not plotted. Each table has 11,509 synthetic subjects at four visits (46,036 records). Both constructions receive source-model exports and method code. The negative lower-branch interaction is retained; upper-branch point estimates and significance decisions vary. All 16 effects, the high-HbA1c spread discrepancy and three invalid initial comparator attempts remain in the supporting record. This is source-rich reconstruction, not independent clinical confirmation.}
+
+\label{fig:4}
+
+\end{figure*}
+
+The weaker above-threshold interaction was less stable: Agent estimates averaged 0.026485 against 0.012867, while corrected-law estimates averaged −0.011691. Overall Agent HbA1c mean/SD was 5.8725/0.9676 versus the original published 5.9/1.0. The high-HbA1c subgroup had mean/SD 7.1515/0.5630, compared with original 7.7/1.4 and published synthetic 7.2/0.6. Thus useful source-model behavior coexisted with inadequate upper-group spread.
+
+
+A CRLF-sensitive parser initially overwrote seven coefficient/SE pairs in our comparator preparation. A separately reviewed source-bound repair produced the three corrected comparator tables without changing the frozen Agent outputs. The full record contains nine physical generations, six valid comparison tables and three invalid initial comparator attempts. This was our implementation defect, not a failure of the published method. The incident record and complete effects retain the correction and all outcomes.
+
+
+\subsection{Q4: repeated open retrieval produces useful complete cohorts}
+
+The unified workflow allocated two fresh scientific authors to each of the existing CHNS and ENSANUT requests. Each author received the intended analyses, population/measurement definitions, task interface and retrieval budget, but no target coefficients, desired signs, individual records or prior construction. CHNS- and ENSANUT-derived studies were excluded as generating evidence. Across 24 query credits, the authors selected sixteen paper uses representing twelve distinct originals. Independent review checked the original statistical definitions, numerical derivations, source applicability and required finite moments before execution. Sources could overlap across authors; four constructions do not imply four independent bodies of clinical evidence.
+
+
+The Agents chose materially different laws. C01 used an age-conditioned multivariate-lognormal mixture informed by Chinese population summaries [7,16] and contextual age/body-size findings [10,17]. C02 combined copula predictors with an affine HbA1c conditional mean using Pinggu summaries and Singapore coefficients [18,19], with other populations as applicability context [14,20]. E01 used bounded beta predictors and a conditional gamma response [10,17,21,22]. E02 combined lognormal BMI, conditional truncated-normal glucose and a positive conditional-mean lognormal response [10,21,23,24]. Their unreported dependencies, population transfers and residual choices remained declared assumptions. The shared controller did not prescribe these families or insert target coefficients.
+
+
+Each author completed one 3,000-row trial, inspected generated-only diagnostics and source feedback, then selected its final model before three fixed draws. All four retained the initial law. The sixteen physical executions comprised four trials and twelve unique final tables, or 36,000 final virtual rows. Feedback contained 29 qualified approximate comparisons and 39 unavailable checks across the four trials, not source-population replays or 29 passed constraints. After all sessions closed, the evaluator reused the fixed sample references. A separate numerical implementation reproduced all 366 final coefficient/diagnostic values; no clinical data were downloaded or refitted.
+
+
+All 36 primary seed estimates had the same positive directions as their corresponding references (Figure 5). These are repeated measurements of six analysis definitions across four laws, not 36 independent confirmations. Magnitude recovery varied by analysis. CHNS C01/C02 means were 0.03992/0.05338 for BMI against 0.05495, 0.37754/0.49241 for glucose against 0.40209, and 0.00311/0.00563 for age against 0.00811. Units are respectively HbA1c percentage points per kg/m², mmol/L and year. C02 was closer for BMI and age, while C01 was closer for glucose; no construction dominated all analyses.
+
+
+\begin{figure*}[t]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/fig5-open-retrieval.pdf}
+
+\caption{Repeated open-retrieval construction across two biomedical requests. All six prespecified primary analyses are shown for four Agent-authored laws and twelve final 3,000-row virtual tables. Blue and purple identify the two constructions within each request. Open circles show seeds 8101–8103, ordered top to bottom within each author row; vertical spacing is solely for legibility. Diamonds and horizontal segments below the circles show the three-seed mean and minimum–maximum range. Coral squares in separate reference rows show previously exposed selected-sample estimates. Solid coral intervals are CHNS community-cluster CR1-t 95\% confidence intervals; dashed coral intervals are ENSANUT empirical cluster-resampling stability bands from 399 attempts. These reference intervals have different meanings and neither is an acceptance or equivalence threshold. Axes retain native effect units and zero; pp denotes HbA1c percentage points. All generated coefficients are positive, while both CHNS age estimates are weaker and both ENSANUT age estimates stronger than their references. Seed ranges describe sampling under each fixed law, not confidence intervals or uncertainty over evidence, model choice or transport. The four constructions provide developmental workflow replication on two existing references, not independent clinical replication.}
+
+\label{fig:5}
+
+\end{figure*}
+
+For ENSANUT, E01/E02 means were 0.10308/0.09772 for adjusted age against 0.07513 pp/decade, 0.09165/0.07140 for age/sex-adjusted BMI against 0.08364 pp per 5 kg/m², and 0.07509/0.04733 after additionally adjusting for glucose against 0.05664. Every draw retained the reduction of the BMI coefficient after glucose adjustment, an association pattern rather than causal mediation. Both authors built an age coefficient near 0.10 pp/decade and shared some sources; their agreement does not establish independent evidence convergence.
+
+
+The complete diagnostics reveal remaining limits. CHNS C01 glucose–HbA1c Pearson correlation was approximately 0.666 versus 0.661, but Spearman correlation was 0.635 versus 0.361. ENSANUT residual HbA1c RMS was approximately 0.295/0.324 versus 0.488, and total SD was 0.362/0.406 versus 0.527. Correct directions and a close Pearson coefficient therefore coexisted with rank and dispersion mismatches. The complete replication report, every diagnostic and Supplementary Table S1 retain the full results. A scalar-type interface defect in the original evaluator was corrected additively on unchanged frozen tables, with its failed output and independent audit preserved; no scientific model was adjusted after comparison.
+
+
+\subsection{A worked evidence gap explains analysis-specific sensitivity}
+
+The preceding open-search example acquired five seriously reviewed studies [9,10,12,13,14] without bibliographic seeds or desired signs. A fresh constructor selected a sex-stratified Gaussian copula with positive biomarker margins and generated one trial plus three complete 3,000-person tables. It retained the model after eleven approximate and 23 unavailable source comparisons per execution. Secondary BMI coefficients were 0.04217–0.05176 versus 0.05495 in the reused CHNS reference, secondary age was 0.01613–0.01771 versus 0.01530, and primary age was 0.00842–0.01084 versus 0.00811. Primary BMI/glucose were attenuated, and the female point direction and distributional tails remained imperfect. Supplementary Figure S1 retains all seven nonintercept effects and their uncertainty labels.
+
+
+Before generating data or comparing targets, the source review identified an unreported BMI–glucose dependence. Two valid latent correlations, 0.10 and 0.40, implied conditional BMI coefficients of +0.03422 and −0.01095 while retaining the same margins, other bivariate laws and secondary projection. The delivered model used the declared assumption 0.25. This is an analytical sensitivity, not additional generated cohorts or a causal intervention. It demonstrates why an explicit data-generating law can identify which missing relationship matters to an intended use.
+
+
+A separate analysis contextualized the same three tables with 100 community-disjoint resplits of the existing CHNS sample, drawing 3,000 people per side and retaining all 36 metrics. Secondary BMI and age discrepancies were on scales comparable with within-sample variation, while primary glucose/female and several joint/tail discrepancies were larger. The complete table preserves the nonexchangeable real-real and generated comparisons. These are descriptive interpretation aids, not a new population or retrospectively selected equivalence cutoff.
+
+
+\section{Discussion}
+
+The results support a practical role for a scientific Agent: translate dispersed, study-qualified biomedical evidence into a complete data product that ordinary analysis software can use. The larger information contrast, supplied-summary reconstruction and longitudinal example show complementary kinds of analytical usefulness. The repeated open-retrieval experiment adds evidence that the procedure can complete new constructions with different retrieved studies and generating families under a shared policy. It extends workflow replication; it does not add new clinical reference populations.
+
+
+The methodological contribution lies in the connection between a scientific request, heterogeneous evidence and an executable joint law. Statistical transformations and simulation are established tools [3–6]; the Agent selects which findings can constrain that law, derives their numerical roles and exposes the assumptions needed to complete it. The source-to-model trace and dependence sensitivity make those consequential decisions inspectable. G-Sim and LLMSynthor also give LLMs important construction and feedback roles, so Agent participation alone is not a priority claim. Here the applied biomedical problem, low individual-data requirements, explicit study conditions and analysis-level evaluation define the contribution.
+
+
+Useful virtual data need not duplicate a particular real sample. Nevertheless, usefulness depends on the requested analysis. Additional relations improved five main-study discrepancies while CHNS BMI worsened. Open-retrieval authors preserved directions but showed systematic age displacement and compressed ENSANUT residual variability. Increasing the number of generated rows would reduce conditional Monte Carlo variation without identifying missing dependence or repairing population transfer. These data may support exploratory relationship analysis under documented assumptions; the present dispersion results do not validate downstream power calculations or interval coverage.
+
+
+Three boundaries determine the interpretation. First, CHNS and ENSANUT are exposed developmental references with partly shared source evidence. Summary-assisted R and the HRS example intentionally receive relevant numerical information. Fresh author contexts and delayed reference reads preserve construction boundaries but do not restore untouched external validation. Second, three seeds and conditional model intervals do not quantify source-estimation, extraction, structural or transport uncertainty. The real-real context describes one selected sample, not between-population variation. Third, the demonstrated workflow is host-dispatched and reviewed; arbitrary-request autonomy, broad biochemical coverage and total preparation-time savings have not been measured. Different author laws demonstrate construction flexibility, not a calibrated uncertainty ensemble.
+
+
+Feedback is operational, but improvement from revision remains unestablished. Seven main-study authors reviewed exploratory outputs and retained their laws; thirteen finalized without exploration. All six L/R authors, the preceding open-search constructor, the two earlier live authors and all four new workflow authors also retained their models after available review. One earlier live author had repaired a coordinator-detected divergent-moment defect before freeze; that repair is distinct from a demonstrated feedback-driven gain in analytical quality. These records show inspection and valid retention. They do not justify an iterative-improvement claim or an automatic requirement to revise a coherent model. Historical enrichment, direct-row construction, failed transport criteria, tail defects and revision trade-offs remain in the historical supplement; missing-cell completion is unvalidated.
+
+
+The current evidence supports a scoped applied-method paper without requiring superiority over every purpose-built generator. A stronger transport claim would require a prospectively frozen, previously unexposed reference evaluation. The most focused optional mechanism question is sensitivity to unsupported conditional-dispersion and dependence assumptions while holding retrieved evidence fixed, preserving every analysis rather than selecting a target-fitted winner. Neither extension is needed to describe the completed capability honestly: Agents can construct useful virtual biomedical data from published evidence, and explicit joint models show where the scientific support ends.
+
+
+\section{Supporting results, code and reproducibility}
+
+The \href{https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026}{public repository} provides original code, protocols, aggregate results and independent checks. The complete v0.9 extended record preserves all six original numerical tables and full methods/results. Its Table 2 supplies every main endpoint's adjustment set, units and reference interval; Tables 3–4 retain the main and summary-assisted values; Table 5 retains all latest seven effects; Table 6 retains the real-real comparison values. No result was discarded by this narrative condensation.
+
+
+The main study, summary-assisted study, statistical supplement, HRS example, preceding open-search construction and unified workflow replication preserve separate frozen identities and complete endpoint outputs. Earlier live A/B results, including the conditioned BMI mismatch and source-replay unavailability, remain in the extended record. The new figure and supplement consume reviewed aggregates only; manuscript integration creates no cohorts or clinical fits.
+
+
+Individual real/generated tables, third-party originals and credentials remain local; clinical reruns require lawful access and the appropriate environment. Historical model identifiers and token costs are incompletely metered. Author/affiliation/funding/conflict/ethics/access/AI declarations and final submission formatting remain to be completed. No manuscript has been submitted.
+
+
+\clearpage
+
+\section*{References}
+
+\begingroup\small
+
+\begin{enumerate}
+
+\setlength{\itemsep}{3pt}
+
+\item Filshtein TJ, Li X, Zimmerman SC, Ackley SF, Glymour MM, Power MC. Proof of concept example for use of simulation to allow data pooling despite privacy restrictions. \emph{Epidemiology}. 2021;32(5):638–647. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC8338788/}{DOI and full text}.
+
+\item Zhao Z et al. SynthIPD: training-free synthetic individual patient data generation. arXiv:2509.16466v2, 24 July 2026. \href{https://arxiv.org/html/2509.16466v2}{Versioned full text}. Publication beyond this preprint was not established in the positioning audit.
+
+\item Phillippo DM et al. Multilevel network meta-regression for population-adjusted treatment comparisons. \emph{Journal of the Royal Statistical Society: Series A}. 2020;183(3):1189–1210. \href{https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssa.12579}{DOI/full text}.
+
+\item Holt S, Ruiz Luyten M, Berthon A, van der Schaar M. G-Sim: Generative Simulations with Large Language Models and Gradient-Free Calibration. \emph{Proceedings of ICML}. PMLR 267;2025:23513–23561. \href{https://proceedings.mlr.press/v267/holt25b.html}{Published record}.
+
+\item Tang Y, Kong M, He J, Nie T, Ma W, Sun L. LLMSynthor: Macro-Aligned Micro-Records Synthesis with Large Language Models. KDD 2026. \href{https://doi.org/10.1145/3770855.3818965}{DOI}; \href{https://arxiv.org/html/2505.14752v4}{full text v4}.
+
+\item Callender T, Boyd A, Davis R, Ruhrberg Estevez S, Lavista Ferres JM, van der Schaar M. SynthCraft: An AI partner for synthetic data generation to support data access and augmentation in healthcare. \emph{PLOS Digital Health}. 2026;5(3):e0001290. \href{https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0001290}{Published article}.
+
+\item Bao Y, Ma X, Li H, Zhou M, Hu C, Wu H, Tang J, Hou X, Xiang K, Jia W. Glycated haemoglobin A1c for diagnosing diabetes in Chinese population: cross sectional epidemiological survey. \emph{BMJ}. 2010;340:c2249. \href{https://doi.org/10.1136/bmj.c2249}{DOI}; \href{https://pubmed.ncbi.nlm.nih.gov/20478961/}{bibliographic record}.
+
+\item Wang P, Li Y, Wang M, Song L, Dong Y, Han X, Tuomilehto J, Wang Y, Du Y, Qiu C. Comparing glycemic traits in defining diabetes among rural Chinese older adults. \emph{PLOS ONE}. 2024;19(1):e0296694. \href{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0296694}{Published article}.
+
+\item Jansen H, Stolk RP, Nolte IM, Kema IP, Wolffenbuttel BHR, Snieder H. Determinants of HbA1c in nondiabetic Dutch adults: genetic loci and clinical and lifestyle parameters, and their interactions in the lifelines cohort study. \emph{Journal of Internal Medicine}. 2013;273(3):283–293. \href{https://onlinelibrary.wiley.com/doi/10.1111/joim.12010}{Published article}.
+
+\item Pani LN, Korenda L, Meigs JB, Driver C, Chamany S, Fox CS, Sullivan L, D'Agostino RB, Nathan DM. Effect of aging on A1C levels in individuals without diabetes: evidence from the Framingham Offspring Study and the National Health and Nutrition Examination Survey 2001-2004. \emph{Diabetes Care}. 2008;31(10):1991–1996. \href{https://doi.org/10.2337/dc08-0577}{DOI}; \href{https://pubmed.ncbi.nlm.nih.gov/18628569/}{bibliographic record}.
+
+\item NGSP. The IFCC and NGSP, Table 2. \href{https://ngsp.org/ifccngsp.asp}{Official measurement-scale guidance}.
+
+\item Li T, Quan H, Zhang H, Lin L, Lin L, Ou Q, Chen K. Type 2 diabetes is more predictable in women than men by multiple anthropometric and biochemical measures. \emph{Scientific Reports}. 2021;11:6062. \href{https://doi.org/10.1038/s41598-021-85581-z}{DOI}; \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC7960723/}{original full text}.
+
+\item Sakane N, Sato J, Tsushita K, Tsujii S, Kotani K, Tominaga M, Kawazu S, Sato Y, Usui T, Kamae I, Yoshida T, Kiyohara Y, Sato S, Tsuzaki K, Nirengi S, Takahashi K, Kuzuya H, JDPP Research Group. Determinants of Glycated Hemoglobin in Subjects With Impaired Glucose Tolerance: Subanalysis of the Japan Diabetes Prevention Program. \emph{Journal of Clinical Medicine Research}. 2017;9(4):360–365. \href{https://doi.org/10.14740/jocmr2928w}{DOI}; \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC5330780/}{original full text}.
+
+\item Wisgerhof W, Ruijgrok C, den Braver NR, Borgonjen—van den Berg KJ, van der Heijden AAWA, Elders PJM, Beulens JWJ, Alssema M. Phenotypic and lifestyle determinants of HbA1c in the general population–The Hoorn Study. \emph{PLOS ONE}. 2020;15(6):e0233769. \href{https://doi.org/10.1371/journal.pone.0233769}{DOI}; \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC7272077/}{original full text}.
+
+\item Yang S, Zhang Z, Prenkaj B, Kasneci G. Doubling Your Data in Minutes: Ultra-fast Tabular Data Generation via LLM-Induced Dependency Graphs. \emph{Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing}. 2025:10337–10358. \href{https://aclanthology.org/2025.emnlp-main.525/}{Official article and PDF}; \href{https://doi.org/10.18653/v1/2025.emnlp-main.525}{DOI}.
+
+\item Wu et al. Effect of age on the diagnostic efficiency of HbA1c for diabetes in a Chinese middle-aged and elderly population: The Shanghai Changfeng Study. \emph{PLoS ONE}. 2017. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC5591004/}{Admitted original}.
+
+\item Skogberg et al. The association between anthropometric measures and glycated haemoglobin (HbA1c) is different in Russian, Somali and Kurdish origin migrants compared with the general population in Finland: a cross-sectional population-based study. \emph{BMC Public Health}. 2019. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC6458679/}{Admitted original}.
+
+\item Zhang et al. The Association of Retinopathy and Plasma Glucose and HbA1c: A Validation of Diabetes Diagnostic Criteria in a Chinese Population. \emph{Journal of Diabetes Research}. 2016. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC5078665/}{Admitted original}.
+
+\item Venkataraman et al. Ethnicity modifies the relation between fasting plasma glucose and HbA1c in Indians, Malays and Chinese. \emph{Diabetic Medicine}. 2012. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC3504343/}{Admitted original}.
+
+\item Liu et al. Ideal glycated hemoglobin cut-off points for screening diabetes and prediabetes in a Chinese population. \emph{Journal of Diabetes Investigation}. 2016. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC5009131/}{Admitted original}.
+
+\item Huang et al. Hemoglobin A1c Levels Associated with Age and Gender in Taiwanese Adults without Prior Diagnosis with Diabetes. \emph{International Journal of Environmental Research and Public Health}. 2021. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC8038122/}{Admitted original}.
+
+\item Ghazanfari et al. A Comparison of HbA1c and Fasting Blood Sugar Tests in General Population. \emph{International Journal of Preventive Medicine}. 2010. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC3075530/}{Admitted original}.
+
+\item Masuch et al. Preventing misdiagnosis of diabetes in the elderly: age-dependent HbA1c reference intervals derived from two population-based study cohorts. \emph{BMC Endocrine Disorders}. 2019. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC6371438/}{Admitted original}.
+
+\item Marini et al. Association between hemoglobin glycation index with insulin resistance and carotid atherosclerosis in non-diabetic individuals. \emph{PLoS ONE}. 2017. \href{https://pmc.ncbi.nlm.nih.gov/articles/PMC5398507/}{Admitted original}.
+
+\end{enumerate}
+
+\endgroup
+
+\clearpage
+
+\onecolumn
+
+\section*{Supplementary results}
+
+\setcounter{figure}{0}
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\setcounter{table}{0}
+
+\renewcommand{\thetable}{S\arabic{table}}
+
+The supporting displays preserve all results under their own information conditions. They add no generated table, patient analysis or empirical replication.
+
+
+\begin{figure}[H]
+
+\centering
+
+\includegraphics[width=\textwidth]{figures/figS1-analysis-use.pdf}
+
+\caption{Analysis-specific usefulness and an unresolved joint dependence. Panels (a–d) show all primary-model nonintercept effects and (e–g) all secondary-model effects. Blue points are three fixed 3,000-person draws with conditional 95\% HC3-t intervals. Gray dashed lines and bands are exposed CHNS reference estimates and 95\% community-cluster CR1-t intervals; solid lines mark zero. All effects retain native units (pp: HbA1c percentage points), with shared limits for matching predictors. Generated intervals omit source, structural and transport uncertainty; overlap is not equivalence. Panel (h) displays two pre-generation analytical scenarios: latent BMI–glucose correlations 0.10 and 0.40 imply conditional BMI coefficients +0.03422 and −0.01095 while leaving marginal laws, other bivariate laws and the secondary projection unchanged. The delivered model used 0.25. These are not new draws, a fitted curve or a causal intervention. Retained initial/final stages alias the same three tables.}
+
+\label{fig:6}
+
+\end{figure}
+
+\begin{table}[H]
+
+\caption{Complete new workflow primary summaries. Means and ranges summarize three final seeds under each fixed construction. Units are HbA1c percentage points per stated predictor increment. No row is omitted; ranges are not confidence intervals.}
+
+\label{tab:4}
+
+\centering\fontsize{8}{9.5}\selectfont
+
+\setlength{\tabcolsep}{4pt}
+
+\renewcommand{\arraystretch}{1.12}
+
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+
+\toprule
+
+Request / analysis & Author & Increment & Reference & Generated mean & Seed min–max \\
+
+\midrule
+
+CHNS BMI & C01 & 1 kg/m² & 0.054946 & 0.039923 & 0.034342–0.045708 \\
+
+CHNS glucose & C01 & 1 mmol/L & 0.402093 & 0.377538 & 0.357560–0.398892 \\
+
+CHNS adjusted age & C01 & 1 year & 0.008107 & 0.003109 & 0.002461–0.003755 \\
+
+CHNS BMI & C02 & 1 kg/m² & 0.054946 & 0.053375 & 0.047088–0.059055 \\
+
+CHNS glucose & C02 & 1 mmol/L & 0.402093 & 0.492412 & 0.488649–0.494875 \\
+
+CHNS adjusted age & C02 & 1 year & 0.008107 & 0.005628 & 0.005137–0.006301 \\
+
+ENSANUT adjusted age & E01 & 10 years & 0.075132 & 0.103084 & 0.101546–0.104315 \\
+
+ENSANUT BMI & E01 & 5 kg/m² & 0.083643 & 0.091651 & 0.089940–0.094413 \\
+
+ENSANUT glucose-adjusted BMI & E01 & 5 kg/m² & 0.056638 & 0.075089 & 0.072005–0.076661 \\
+
+ENSANUT adjusted age & E02 & 10 years & 0.075132 & 0.097724 & 0.094947–0.099135 \\
+
+ENSANUT BMI & E02 & 5 kg/m² & 0.083643 & 0.071399 & 0.071232–0.071563 \\
+
+ENSANUT glucose-adjusted BMI & E02 & 5 kg/m² & 0.056638 & 0.047325 & 0.045022–0.048592 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+CHNS BMI/glucose analyses adjust for age and sex; CHNS age adjusts for sex, BMI and glucose. ENSANUT age adjusts for sex, BMI and glucose; its BMI analyses adjust for age/sex, with or without glucose. All new diagnostic values remain in the complete diagnostic table.
+
+
+\begin{table}[H]
+
+\caption{Original-source inventory for the new workflow. Twelve unique originals supplied sixteen author-specific paper uses. Sharing a source is not independent clinical evidence; source populations are not the target populations.}
+
+\label{tab:5}
+
+\centering\fontsize{8}{9.5}\selectfont
+
+\setlength{\tabcolsep}{4pt}
+
+\renewcommand{\arraystretch}{1.12}
+
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+
+\toprule
+
+Original & Reference & Constructing authors \\
+
+\midrule
+
+Wu et al., 2017 & [16]; PMC5591004 & C01 \\
+
+Bao et al., 2010 & [7]; PMC2871988 & C01 \\
+
+Pani et al., 2008 & [10]; PMC2551641 & C01, E01, E02 \\
+
+Skogberg et al., 2019 & [17]; PMC6458679 & C01, E01 \\
+
+Zhang et al., 2016 & [18]; PMC5078665 & C02 \\
+
+Venkataraman et al., 2012 & [19]; PMC3504343 & C02 \\
+
+Liu et al., 2016 & [20]; PMC5009131 & C02 \\
+
+Wisgerhof et al., 2020 & [14]; PMC7272077 & C02 \\
+
+Huang et al., 2021 & [21]; PMC8038122 & E01, E02 \\
+
+Ghazanfari et al., 2010 & [22]; PMC3075530 & E01 \\
+
+Masuch et al., 2019 & [23]; PMC6371438 & E02 \\
+
+Marini et al., 2017 & [24]; PMC5398507 & E02 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+The reviewed evidence/specification files distinguish reported statistics, algebraic derivations and assumed relations. The public experiment record includes per-source eligibility, measurement, adjustment, overlap and reporting-quality notes; full third-party originals and participant-like rows remain local.
+
+\end{document}
