@@ -1,12 +1,15 @@
 # Manuscript
 
-**Current full manuscript: [v0.9](DRAFT_v0_9.md), 4 November 2026.**
+**Current full manuscript: [v0.10](DRAFT_v0_10.md), 4 November 2026.**
 
-This revision centers the paper on Agent scientific model authorship and integrates the completed open-search, reviewed-evidence construction and real-sample context analyses. The four original tables and Figures 1–4 remain; Figure 5 and the real-real supplement add the latest seven-term scientific analysis and its missing-dependence sensitivity. Existing empirical versions stay separate.
+This revision presents the Agent scientific model-author contribution through four empirical questions, five compact original figures and three tables. It preserves all core numerical results, with the preceding complete v0.9 and its supplements providing extended records. G-Sim, LLMSynthor and SPADA informed the narrative and visual organization. Existing empirical versions stay separate; presentation changes add no experiment.
 
 ## Current review materials
 
-- [Full manuscript](DRAFT_v0_9.md), [revision record](../reports/manuscript_consolidation_2026-11-04/DRAFT_REVISION_NOTES.md), [consolidation/rerun decision](../reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](../reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
+- [Two-column reading PDF](conference_draft_v10_2026-11-04/paper.pdf), [LaTeX/Overleaf bundle](conference_draft_v10_2026-11-04/overleaf_v10.zip), [format/build notes](conference_draft_v10_2026-11-04/README.md), [story/visual design](../reports/conference_draft_v10_2026-11-04/STORY_AND_VISUAL_DESIGN.md), and [independent v0.10 review](../reports/conference_draft_v10_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md).
+- [Previous complete v0.9](DRAFT_v0_9.md) and its numerical supplements remain unchanged. The new main text uses four questions, three contributions, five original compact figures and three tables.
+
+- [Full manuscript](DRAFT_v0_10.md), [revision record](../reports/manuscript_consolidation_2026-11-04/DRAFT_REVISION_NOTES.md), [consolidation/rerun decision](../reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](../reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
 - [Figure 5](integrated_figures_v09_2026-11-04/figure5_agent_scientific_utility.svg), [real-real supplement](integrated_figures_v09_2026-11-04/supplement_real_real_context.svg), and [aggregate-only plotting code](integrated_figures_v09_2026-11-04/render_figure5.py).
 - [Independent v0.8 review](REVIEW_v0_8_2026-11-03.md), including the bridge to unchanged v0.7 tables, figures and aggregate reproduction.
 - [Current Agent-system contribution plan](../docs/AGENT_SYSTEM_CONTRIBUTION_AND_EVALUATION_2026-11-03.md) and [implemented request entry](../docs/REQUEST_INTAKE_V1.md). The complete generation workflow is primary; interface tests add no scientific result to v0.8.
@@ -25,7 +28,7 @@ These settings retain separate information conditions and interpretations. Expos
 
 ## Remaining work
 
-The scientific writing is available for author review. Preparation still requires final article formatting and publication-size inspection, authorship/funding/conflicts/access/ethics/AI declarations, and a resolved software/data release statement. Public availability alone does not establish software licensing or grant access to cohort records. No manuscript has been submitted.
+The scientific writing is available for author review. The generic two-column reading copy has been compiled and visually inspected. Preparation still requires venue-specific formatting, authorship/funding/conflicts/access/ethics/AI declarations, and a resolved software/data release statement. Public availability alone does not establish software licensing or grant access to cohort records. No manuscript has been submitted.
 
 The [focused experiment-gap review](KEY_EXPERIMENT_GAPS_v07_2026-11-03.md) and [three-candidate metadata audit](EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md) remain the basis for deferring an optional prospective extension. This prose revision launches no new case, generation, fit or data acquisition.
 

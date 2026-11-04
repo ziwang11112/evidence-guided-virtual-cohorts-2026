@@ -1,12 +1,15 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.9](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_9.md), 4 November 2026.**
+**Current manuscript: [v0.10](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_10.md), 4 November 2026.**
 
 A scientific Agent turns published evidence, a target-population description, optional observations and an intended analysis into useful virtual biomedical data. Complete-cohort generation without participant inputs is central. The Agent chooses scientific structure and parameters; numerical tools sample and inspect the model.
 
 ## Paper and results
 
-- [Full manuscript](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_9.md).
+- [Reading PDF](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v10_2026-11-04/paper.pdf), [Overleaf bundle](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v10_2026-11-04/overleaf_v10.zip), and [v0.10 story/visual design](biomedical_research/virtual_cohort_system/reports/conference_draft_v10_2026-11-04/STORY_AND_VISUAL_DESIGN.md).
+- [Independent v0.10 review](biomedical_research/virtual_cohort_system/reports/conference_draft_v10_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md): all main numerical values retained; original compact figures, four evaluation questions.
+
+- [Full manuscript](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_10.md).
 - [Current consolidation and rerun decision](biomedical_research/virtual_cohort_system/reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md).
 - [Method/version audit](biomedical_research/virtual_cohort_system/reports/manuscript_consolidation_2026-11-04/METHOD_AND_RERUN_AUDIT.md) and [contribution/figure audit](biomedical_research/virtual_cohort_system/reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
 - [Figures 1–4 and S1](biomedical_research/virtual_cohort_system/manuscript/integrated_figures_v07_2026-11-03/FIGURE_PLAN.md), [new Figure 5](biomedical_research/virtual_cohort_system/manuscript/integrated_figures_v09_2026-11-04/figure5_agent_scientific_utility.svg), and [real-sample context supplement](biomedical_research/virtual_cohort_system/manuscript/integrated_figures_v09_2026-11-04/supplement_real_real_context.svg).

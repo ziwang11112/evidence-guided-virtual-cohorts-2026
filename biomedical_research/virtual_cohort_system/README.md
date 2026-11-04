@@ -1,12 +1,15 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.9](manuscript/DRAFT_v0_9.md), 4 November 2026.**
+**Current manuscript: [v0.10](manuscript/DRAFT_v0_10.md), 4 November 2026.**
 
 A scientific Agent turns qualified biomedical evidence, a population description, optional observations and a requested analysis into virtual data. The Agent chooses the joint model and parameters; numerical tools sample and inspect it. Complete-cohort generation without participant inputs is central.
 
 ## Paper and evidence
 
-- [Full manuscript](manuscript/DRAFT_v0_9.md), [current consolidation and rerun decision](reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
+- [Two-column reading PDF](manuscript/conference_draft_v10_2026-11-04/paper.pdf), [Overleaf bundle](manuscript/conference_draft_v10_2026-11-04/overleaf_v10.zip), and [story/visual design](reports/conference_draft_v10_2026-11-04/STORY_AND_VISUAL_DESIGN.md).
+- [Independent v0.10 review](reports/conference_draft_v10_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md). The current main text has four evaluation questions, five redrawn figures and three tables; [v0.9](manuscript/DRAFT_v0_9.md) retains extended details. No new experiment was run for this revision.
+
+- [Full manuscript](manuscript/DRAFT_v0_10.md), [current consolidation and rerun decision](reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
 - [Four main figures and Figure S1](manuscript/integrated_figures_v07_2026-11-03/FIGURE_PLAN.md), with [captions](manuscript/integrated_figures_v07_2026-11-03/CAPTIONS.md).
 - [New Figure 5](manuscript/integrated_figures_v09_2026-11-04/figure5_agent_scientific_utility.svg) joins the completed open-search construction to all seven regression terms and its pre-generation joint-dependence sensitivity. [Real-sample variation context](manuscript/integrated_figures_v09_2026-11-04/supplement_real_real_context.svg) remains a separate supplement.
 - [Aggregate reproduction guide](docs/REPRODUCING_MANUSCRIPT_v07.md).
