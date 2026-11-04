@@ -1,29 +1,29 @@
 # Manuscript
 
-**Completed experimental addendum, 3 November 2026:** [public HRS longitudinal reconstruction](SUPPLEMENT_HRS_PUBLIC_EXAMPLE_2026-11-03.md) adds six valid whole-cohort deliveries, all 16 native scientific coefficients and complete distribution checks. Nine physical attempts include three retained invalid comparator deliveries and a separately reviewed source-parser recovery. This is a source-model reconstruction example, not a new independent target or a method-superiority claim. The v0.6 main draft remains the current full manuscript; the addendum provides ready Methods/Results text and figures for integration.
+**Current full manuscript: [v0.7](DRAFT_v0_7.md), 3 November 2026.** It integrates the completed CHNS/ENSANUT external-evidence study, the separate CHNS summary-assisted experiment and the HRS longitudinal public-model example. The central contribution is Agent construction of useful biomedical virtual data from qualified evidence and an intended scientific analysis. The three information settings retain separate protocols and interpretation.
 
-**Current revision: [DRAFT_v0_6.md](DRAFT_v0_6.md), 3 November 2026.** It centers Agent-generated biomedical data for specified scientific analyses. The completed two-case external-evidence study and the separate CHNS summary-assisted experiment are presented with their original protocols and complete outcomes. Author declarations and submission-specific preparation remain.
+- [Story, contributions and draft checklist](STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md)
+- [Four main figures, Figure S1 and numeric provenance](integrated_figures_v07_2026-11-03/FIGURE_PLAN.md)
+- [Complete figure captions](integrated_figures_v07_2026-11-03/CAPTIONS.md)
+- [Key experiment gaps](KEY_EXPERIMENT_GAPS_v07_2026-11-03.md): one prospective transfer case is the priority optional scientific extension; an extraction audit is needed only for an autonomy claim. Neither launches a new campaign.
+- [Integrated evidence ledger](INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md): principal studies, historical enrichment/direct-output uses and retained failures, with distinct denominators.
+- [Independent manuscript review](REVIEW_v0_7_2026-11-03.md) and [presentation/link check](PACKAGE_REVIEW_v07_2026-11-03.json)
 
-- [Current contribution and experiment priorities](../docs/CONTRIBUTION_LED_EXPERIMENT_PRIORITIES_2026-11-03.md): scientific usefulness and one compatible published-method public example; universal statistical superiority is not a drafting gate.
-- [Scientific-utility figures and captions](utility_package_2026-11-03/CAPTIONS.md) and [numeric manifest](utility_package_2026-11-03/NUMERIC_MANIFEST.json): all six main-study endpoints and all L/R authors, from existing aggregates.
-- [Revision and claim mapping](REVISION_v06_2026-11-03.md): exact writing changes and supporting records.
-- [Historical results](SUPPLEMENT_HISTORICAL_RESULTS_v05.md) and [source/assumption supplement](SUPPLEMENT_SOURCE_AND_ASSUMPTIONS_v05.md): retained findings and scientific assumptions.
-- [Completed statistical supplement](../reports/summary_comparator_2026-11-03/RESULTS.md): descriptive calibration results and the technical recovery; no additional bespoke comparator is required.
-- [Previous revision](DRAFT_v0_5.md): preserved unchanged.
+The HRS example is now integrated, rather than pending. It supplies six valid comparison tables from one Agent-authored and one reconstructed published-law model; its three invalid initial comparator attempts and technical recovery remain disclosed. It tests source-model reconstruction, not new-patient validation. Historical references remain exposed and closed.
 
-This writing revision performs no new generation or patient-level analysis. The earlier navigation below describes historical drafting and proposed campaigns, not current execution status.
+## Supporting records
 
-## Historical navigation (v0.2)
+- [Source-to-generator trace and assumptions](SUPPLEMENT_SOURCE_AND_ASSUMPTIONS_v05.md)
+- [Historical developmental results](SUPPLEMENT_HISTORICAL_RESULTS_v05.md)
+- [HRS detailed addendum](SUPPLEMENT_HRS_PUBLIC_EXAMPLE_2026-11-03.md)
+- [Completed main-study results](../reports/main_study_freeze_2026-11-03/RESULTS.md)
+- [Completed information-provision results](../reports/information_revision_ablation_2026-11-03/RESULTS.md)
+- [Completed statistical supplement](../reports/summary_comparator_2026-11-03/RESULTS.md)
+- [Completed HRS results](../reports/hrs_public_example_2026-11-03/RESULTS.md)
+- [Existing primary-literature positioning](CORE_CONTRIBUTION_POSITIONING_2026-11-03.md): predecessor method facts remain relevant; its then-proposed HRS comparison is superseded by the completed record.
 
-The current working revision is [DRAFT_v0_2.md](DRAFT_v0_2.md), prepared on 1 November 2026. It centers the biomedical measurement/data-access problem, the evidence-to-joint-data construction method, and the scientific analyses enabled by the resulting virtual cohorts. It incorporates the reviewed G-Sim/LLMSynthor comparison and preserves the complete Results section of v0.1, including quantitative failures and no revision gain. It is a working biomedical methods manuscript, not a submission-ready package.
+## Version and submission status
 
-- [Contribution-to-evidence map](CONTRIBUTION_EVIDENCE_MAP_2026-11-01.md): what the paper contributes, the exact supporting records, existing displays and remaining manuscript work.
-- [G-Sim / LLMSynthor positioning](POSITIONING_GSIM_LLMSYNTHOR_2026-11-01.md): corrected primary-source comparison of problems, capabilities and mechanisms, implemented differences versus unproved innovation, and wording for the paper. Includes a fresh LLMSynthor v4 check; no new experiment.
-- [Independent v0.2 review](REVIEW_v0_2_2026-11-01.md): contribution framing, predecessor fairness, implementation and analysis-use boundaries, and preservation of the Results section.
-- [Previous consolidated draft](DRAFT_v0_1.md) and [its independent review](REVIEW_v0_1_2026-11-01.md): preserved numerical and implementation account.
-- [Current research scope](../docs/CURRENT_RESEARCH_FOCUS.md): no peripheral experimental expansion; new experiments require a named essential contribution gap.
-- [Experimental sufficiency](../docs/EXPERIMENT_SUFFICIENCY_2026-11-01.md): the current results support a bounded draft; reliable quantitative biomedical use remains a core evidence gap, with one prioritized prospective design rather than automatic experimental expansion.
-- [Larger experiment campaign](../docs/SCALED_EXPERIMENT_CAMPAIGN_2026-11-01.md): subsequent user-authorized scale target of four independent cohorts and twenty Agent constructions, with a statistical reference and at most 144 table slots. This is a prospective design with no new generated data or admitted case yet; the draft Results remain unchanged.
-- [Earlier draft](DRAFT_v0.md): preserved historical version, including its then-pending case status.
+[v0.6](DRAFT_v0_6.md), [v0.5](DRAFT_v0_5.md) and earlier drafts remain unchanged. This revision adds writing and presentation artifacts only: no new generation, target fitting, reference analysis or scientific parameters. No universal statistical-superiority claim is required.
 
-This revision adds no scientific experiment or target analysis. Biomedical method contribution does not require a new loss, model family or superiority to another Agent. The current data support a bounded analytical-feasibility claim; stronger accuracy or comparative claims require their own evidence. Remaining writing work includes the broader statistical-prior-work context, full source bibliography, author/access/ethics declarations, and submission-specific reproducibility and formatting. The G-Sim/LLMSynthor comparison is complete within its stated scope. No venue or submission-readiness claim has been made.
+The manuscript is ready for substantive author review, not submission-certified. Remaining preparation includes a clean reproduction entry point, author/funding/access/ethics/AI-use declarations, final article-type formatting and inspection at the actual journal layout. Competitive publication depends on the substantive contribution; a completed draft and successful audits do not guarantee acceptance.
