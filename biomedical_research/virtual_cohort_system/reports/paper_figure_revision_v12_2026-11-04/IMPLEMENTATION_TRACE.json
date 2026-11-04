@@ -1,0 +1,473 @@
+{
+  "schema_version": 1,
+  "reviewer": "v10_conference_draft independent implementation trace",
+  "date": "2026-11-04",
+  "status": "PASS_FOR_FIGURE_TRACE_WITH_STATED_SCOPE",
+  "case": "reviewed-evidence-construction-2026-11-04; sex-stratified Gaussian copula",
+  "read_scope": "Source metadata, code and revealed aggregates only; no participant or synthetic table opened; no generation, fitting or scientific edits",
+  "request": {
+    "schema_version": 1,
+    "purpose": "Generate a complete virtual biomedical cohort from the independently searched/reviewed evidence packet and target description, for the declared scientific analyses. No individual observations are supplied.",
+    "analyses": [
+      "Primary: hba1c ~ 1 + bmi + glucose + age + female",
+      "Secondary: hba1c ~ 1 + bmi + age + female; marginal distributions and Pearson/Spearman relations"
+    ],
+    "task": {
+      "schema_version": 1,
+      "task_id": "reviewed-evidence-construction-2026-11-04",
+      "mode": "whole_cohort",
+      "population": "Community-dwelling Chinese adults, age35-74, both sexes, around2009; complete BMI, age, sex, central serum glucose and HbA1c measurements; no diabetes/treatment exclusions. This describes a selected analytical population, not national representation.",
+      "row_id": "person_id",
+      "n_rows": 3000,
+      "columns": [
+        {
+          "name": "person_id",
+          "kind": "string",
+          "unit": "identifier",
+          "role": "identifier",
+          "nullable": false
+        },
+        {
+          "name": "age",
+          "kind": "integer",
+          "unit": "years",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 35,
+          "maximum": 74
+        },
+        {
+          "name": "female",
+          "kind": "integer",
+          "unit": "indicator",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "name": "bmi",
+          "kind": "number",
+          "unit": "kg/m^2",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0
+        },
+        {
+          "name": "hba1c",
+          "kind": "number",
+          "unit": "percent",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0
+        },
+        {
+          "name": "glucose",
+          "kind": "number",
+          "unit": "mmol/L",
+          "role": "generated",
+          "nullable": false,
+          "minimum": 0
+        }
+      ],
+      "information_policy": {
+        "mode": "published_evidence",
+        "excluded_cohorts": [
+          "CHNS",
+          "China Health and Nutrition Survey"
+        ],
+        "allowed_tools": []
+      },
+      "budget": {
+        "source_queries": 0,
+        "source_downloads": 0,
+        "revisions": 1
+      }
+    }
+  },
+  "acquisition_usage": {
+    "gateway_queries": 7,
+    "web_queries": 3,
+    "combined_queries": 10,
+    "combined_query_limit": 12,
+    "gateway_downloads": 4,
+    "gateway_download_limit": 5,
+    "seriously_reviewed_original_studies": 5,
+    "serious_study_limit": 5,
+    "acquisition_web_open_requests": 5,
+    "reviewer_web_open_requests": 2,
+    "shared_web_open_limit": 20,
+    "web_traffic_bytes": "Not metered by web tool; no total-network-byte claim. Saved artifacts inventoried separately.",
+    "saved_file_limit_bytes": 10485760,
+    "saved_total_limit_bytes": 52428800,
+    "combined_acquisition_and_reviewer_web_opens": 7,
+    "reviewer_queries": 0,
+    "reviewer_downloads": 0
+  },
+  "source_examples": [
+    {
+      "id": "Hainan_male_HG_spearman",
+      "source_id": "PMC7960723",
+      "locator": "Results same subsection, Fig1A prose; male Spearman rho; Methods > Data analysis.",
+      "variables": [
+        "hba1c",
+        "glucose"
+      ],
+      "kind": "spearman_correlation",
+      "estimate": 0.44,
+      "unit": "1",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Hainan volunteer sample, male stratum; no diabetes or medication exclusion; source age limits and recruitment dates not reported.",
+      "applicability": "Unadjusted within-sex Spearman, not Pearson. Converted to latent Gaussian correlation only under the declared continuous Gaussian copula. Source sampling CI/SE not given."
+    },
+    {
+      "id": "Hainan_female_HG_spearman",
+      "source_id": "PMC7960723",
+      "locator": "Results same subsection, Fig1A prose; female Spearman rho; Methods > Data analysis.",
+      "variables": [
+        "hba1c",
+        "glucose"
+      ],
+      "kind": "spearman_correlation",
+      "estimate": 0.5,
+      "unit": "1",
+      "uncertainty": {
+        "kind": "not_reported"
+      },
+      "adjustment": [],
+      "selection": "Hainan volunteer sample, female stratum; no diabetes or medication exclusion; source age limits and recruitment dates not reported.",
+      "applicability": "Unadjusted within-sex Spearman, not Pearson. Converted to latent Gaussian correlation only under the declared continuous Gaussian copula. Source sampling CI/SE not given."
+    }
+  ],
+  "mapping": {
+    "actual_function": "group_law(sex,bg=.25,calibrate_age=True,fixed_ah=None)",
+    "source_file": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\drafts\\assemble_initial.py",
+    "line": 125,
+    "exact_code": "gh=2*math.sin(math.pi*d['rho']/6)",
+    "derived": {
+      "male": 0.45670174022131144,
+      "female": 0.5176380902050415
+    },
+    "spec_pointer": "parameters.sex_models.<sex>.latent_correlation[2][3]",
+    "order": [
+      "age",
+      "bmi",
+      "glucose",
+      "hba1c"
+    ],
+    "scope": "Continuous Gaussian copula identity, then transferred to target; not distribution-free nor a raw-scale Pearson conversion"
+  },
+  "generator_interface": "generate(observed, spec, seed)",
+  "observed_input": null,
+  "feedback_examples": [
+    {
+      "id": "check_Hainan_male_HG_spearman",
+      "evidence_id": "Hainan_male_HG_spearman",
+      "semantics": {
+        "check_id": "check_Hainan_male_HG_spearman",
+        "evidence_id": "Hainan_male_HG_spearman",
+        "source_locator": "Results same subsection, Fig1A prose; male Spearman rho; Methods > Data analysis.",
+        "definition_status": "specified",
+        "source_operator": {
+          "kind": "spearman_correlation",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "female",
+              "op": "eq",
+              "value": 0
+            }
+          ],
+          "missing_policy": "error",
+          "x": "hba1c",
+          "y": "glucose"
+        },
+        "source_variable_units": {
+          "female": "indicator",
+          "glucose": "mmol/L",
+          "hba1c": "percent"
+        },
+        "weights": "none",
+        "transform": "identity",
+        "source_n": {
+          "status": "reported",
+          "value": 567,
+          "scope": "Reported source sex-stratum cohort size; not verified variable-specific complete-pair/model denominator."
+        },
+        "uncertainty_role": "not_reported",
+        "reason": "Unadjusted within-sex Spearman correlation explicitly specified by source. Complete synthetic rows, identity measurement and target transport are approximate; reported source cohort n is not proven pairwise n."
+      },
+      "semantic_status": "matched_declared",
+      "unavailable_reason": null,
+      "estimator_uncertainty": {
+        "kind": "not_reported"
+      },
+      "individual_dispersion": {
+        "kind": "not_reported"
+      },
+      "unresolved_source_uncertainty": {
+        "kind": "not_reported"
+      },
+      "monte_carlo_uncertainty": {
+        "status": "not_estimated"
+      },
+      "source_id": "PMC7960723",
+      "declared_status": "approximate",
+      "status": "approximate",
+      "operator": {
+        "kind": "spearman_correlation",
+        "unit": "1",
+        "selection": [
+          {
+            "column": "female",
+            "op": "eq",
+            "value": 0
+          }
+        ],
+        "missing_policy": "error",
+        "x": "hba1c",
+        "y": "glucose"
+      },
+      "reason": "Unadjusted within-sex Spearman correlation explicitly specified by source. Complete synthetic rows, identity measurement and target transport are approximate; reported source cohort n is not proven pairwise n.",
+      "assumption_ids": [
+        "hainan_transport",
+        "measurement_identity",
+        "source_missingness",
+        "source_operator_scope"
+      ],
+      "reported_value": 0.44,
+      "reported_uncertainty": {
+        "kind": "not_reported"
+      },
+      "calculation": {
+        "value": 0.44681338820017125,
+        "n_input": 3000,
+        "n_selected": 1088,
+        "n_used": 1088,
+        "n_missing_dropped": 0,
+        "unit": "1"
+      },
+      "difference": 0.006813388200171244,
+      "difference_interpretation": "unstandardized_raw_discrepancy_only"
+    },
+    {
+      "id": "check_Hainan_female_HG_spearman",
+      "evidence_id": "Hainan_female_HG_spearman",
+      "semantics": {
+        "check_id": "check_Hainan_female_HG_spearman",
+        "evidence_id": "Hainan_female_HG_spearman",
+        "source_locator": "Results same subsection, Fig1A prose; female Spearman rho; Methods > Data analysis.",
+        "definition_status": "specified",
+        "source_operator": {
+          "kind": "spearman_correlation",
+          "unit": "1",
+          "selection": [
+            {
+              "column": "female",
+              "op": "eq",
+              "value": 1
+            }
+          ],
+          "missing_policy": "error",
+          "x": "hba1c",
+          "y": "glucose"
+        },
+        "source_variable_units": {
+          "female": "indicator",
+          "glucose": "mmol/L",
+          "hba1c": "percent"
+        },
+        "weights": "none",
+        "transform": "identity",
+        "source_n": {
+          "status": "reported",
+          "value": 1012,
+          "scope": "Reported source sex-stratum cohort size; not verified variable-specific complete-pair/model denominator."
+        },
+        "uncertainty_role": "not_reported",
+        "reason": "Unadjusted within-sex Spearman correlation explicitly specified by source. Complete synthetic rows, identity measurement and target transport are approximate; reported source cohort n is not proven pairwise n."
+      },
+      "semantic_status": "matched_declared",
+      "unavailable_reason": null,
+      "estimator_uncertainty": {
+        "kind": "not_reported"
+      },
+      "individual_dispersion": {
+        "kind": "not_reported"
+      },
+      "unresolved_source_uncertainty": {
+        "kind": "not_reported"
+      },
+      "monte_carlo_uncertainty": {
+        "status": "not_estimated"
+      },
+      "source_id": "PMC7960723",
+      "declared_status": "approximate",
+      "status": "approximate",
+      "operator": {
+        "kind": "spearman_correlation",
+        "unit": "1",
+        "selection": [
+          {
+            "column": "female",
+            "op": "eq",
+            "value": 1
+          }
+        ],
+        "missing_policy": "error",
+        "x": "hba1c",
+        "y": "glucose"
+      },
+      "reason": "Unadjusted within-sex Spearman correlation explicitly specified by source. Complete synthetic rows, identity measurement and target transport are approximate; reported source cohort n is not proven pairwise n.",
+      "assumption_ids": [
+        "hainan_transport",
+        "measurement_identity",
+        "source_missingness",
+        "source_operator_scope"
+      ],
+      "reported_value": 0.5,
+      "reported_uncertainty": {
+        "kind": "not_reported"
+      },
+      "calculation": {
+        "value": 0.49220202821884956,
+        "n_input": 3000,
+        "n_selected": 1912,
+        "n_used": 1912,
+        "n_missing_dropped": 0,
+        "unit": "1"
+      },
+      "difference": -0.007797971781150437,
+      "difference_interpretation": "unstandardized_raw_discrepancy_only"
+    }
+  ],
+  "feedback_counts": {
+    "approximate": 11,
+    "not_computable": 23
+  },
+  "decision": {
+    "choice": "retain",
+    "revisions_used": 0,
+    "candidate_unchanged": true,
+    "source_checks_reviewed": 136
+  },
+  "execution_tool": "cohort_harness.execution.run_candidate",
+  "feedback_tool": "cohort_harness.semantic_feedback_v1.collect_feedback",
+  "authorship_scope": "Host-dispatched scientific author; execution receipt does not attest Agent authorship or isolate all Agent tools",
+  "outputs": {
+    "run_example": "b_initial_delivery_7401",
+    "generated_path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\executions\\b_initial_delivery_7401\\output\\generated.csv",
+    "generated_sha256_from_receipt": "9c8f8322768a5b4f014faa3f62c75c0e53c858f162fa3e9a4257d0166882b026",
+    "rows_per_table": 3000,
+    "physical_executions": 4,
+    "delivery_tables": 3,
+    "trial_seed": 7400,
+    "delivery_seeds": [
+      7401,
+      7402,
+      7403
+    ],
+    "raw_rows_read": false
+  },
+  "bindings": [
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\manuscript\\DRAFT_v0_11.md",
+      "sha256": "f67ab6d6ea1e41e79b026b76c49618c645e7eb0fe6651f2d1a5ff90d5e884d77"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\gap_search_2026-11-04\\RESULTS.md",
+      "sha256": "480e4f867964b716c93651578c707e7b6357ff6d142245a383460d9fcee31aeb"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcGap01\\request.json",
+      "sha256": "9f3862ce62de1fd5689660f0d1f2d68ddb96ab9c074a91316ab1553eeab13570"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcGap01\\reports\\SEARCH_LOG.json",
+      "sha256": "33f0a2b00f926c54b207f9f04ae13840712e9013cdbb27bdfe166f15e9d25d71"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcGap01\\reports\\EVIDENCE_CANDIDATES.json",
+      "sha256": "ab4ba0b76227faeb5a486566b30b1aacf49271c70fd56431714d8149a9f84c99"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\gap_search_2026-11-04\\EVIDENCE_INDEPENDENT_REVIEW.md",
+      "sha256": "c55d53e96b0641175ab8bf2a7a0ac65b2a8bf66257d76bf7c4dd5db89a36a0e2"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\request.json",
+      "sha256": "0d5e258f3eccd6ec265ca0df816f11092410903b45b952c01af221797db685ff"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\CONSTRUCTION_ASSIGNMENT.md",
+      "sha256": "b0b3350a2e24ac28af8f53066256916aa20fa78484daa2459ddedb23257b9ece"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\SOURCE_ADMISSION.json",
+      "sha256": "67fc918ec6764e4ff6e9146ff1f47871857ed43a6affc77ead89199f492b55f6"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\registry.json",
+      "sha256": "f472bda15bed4a2c7822b8d4f8ab2eae903e62174cd8c0460e01bcda621e078e"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\drafts\\assemble_initial.py",
+      "sha256": "858fcfc101ff245e4217e7d6a4325d24254d67c258897373abcf96bcf4fa562a"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\candidates\\initial\\generator.py",
+      "sha256": "6915bfdbae9647d5200cdcf79c2378a5836d5fc5388bd7c2ee0d523bd20ddb40"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\candidates\\initial\\model_spec.json",
+      "sha256": "dff9fdc9a79548772411a5cb24134c5ec839a564f4ed8020a0c278f4a0465e92"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\candidates\\initial\\evidence.json",
+      "sha256": "898e38d0010ff3adcca762ed7cc595e9f8919cc7ec2ae0f4cc0efaa514afdb09"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\candidates\\initial\\source_semantics_v1.json",
+      "sha256": "cf2f10e8858bd53719c69c6ff5914af22e41d662c7bc44ddb332c12af6f8e965"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\candidates\\initial\\whole_cohort_feedback.json",
+      "sha256": "a9968ab0211aee7ea1fa337dfd761eb17c7342f67787e12713f11abffe78ee02"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\FINAL_DECISION.json",
+      "sha256": "b06ffc32889a32007e5552579baab601d413b32d08df0f690d1b43dba249bce3"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\executions\\b_initial_delivery_7401\\execution.json",
+      "sha256": "75352763c3ff36a473d73a4fd12abe123d3d40480503d415e3da18b29d4ba59c"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcBuild01\\semantic_feedback_v1\\b_initial_delivery_7401_source\\feedback.json",
+      "sha256": "e0f96c9f774bbd5d8c094e6acd0f0deff33e9f07c3c5867fc212f90b2085597c"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\evidence_to_generation_2026-11-04\\run_session.py",
+      "sha256": "181098dd30ac2bcc0d791b8d569cac1995201d4d03f5cc500552a4f919215614"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\evidence_to_generation_2026-11-04\\INITIAL_CANDIDATE_REVIEW.md",
+      "sha256": "3e08b657af08a8906de3560526836477592a61ad3750075df3af94f1a3c544c2"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\evidence_to_generation_2026-11-04\\CANDIDATE_MATH_REVIEW.json",
+      "sha256": "c51fcbfa9f55b7eee897e6f49d49848e648d31760eb57680e6d41c327f935467"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\evidence_to_generation_2026-11-04\\LIVE_CLOSURE.json",
+      "sha256": "47f93038512cafcd079da53dc3a6f9f8b3bee183e9ff0d4f97665f783f043840"
+    },
+    {
+      "path": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\evidence_to_generation_2026-11-04\\evaluation\\REPORT.json",
+      "sha256": "2dfe84dca528adcc4edc6035b1f70ffbf13df72697ef82ac273344660824e2c6"
+    }
+  ]
+}

@@ -1,17 +1,19 @@
 # Evidence-guided virtual biomedical data
 
-**New visual edition:** [Figure gallery](manuscript/visual_redesign_v11_2026-11-04/index.html), [reading PDF](manuscript/conference_draft_v11_2026-11-04/paper.pdf), [Overleaf bundle](manuscript/conference_draft_v11_2026-11-04/overleaf_v11.zip). Five redesigned figures; unchanged scientific body and results.
+**Current paper edition:** [Reading PDF](manuscript/conference_draft_v12_2026-11-04/paper.pdf), [Overleaf bundle](manuscript/conference_draft_v12_2026-11-04/overleaf_v12.zip), [figure guide](manuscript/paper_figures_v12_2026-11-04/README.md), and [中文读图说明](manuscript/paper_figures_v12_2026-11-04/READING_GUIDE_ZH.md). Native-unit result figures and an implementation-grounded method diagram; unchanged scientific body, tables and experiments.
 
-**Current manuscript: [v0.11](manuscript/DRAFT_v0_11.md), 4 November 2026.**
+**Current manuscript: [v0.12](manuscript/DRAFT_v0_12.md), 4 November 2026.**
 
 A scientific Agent turns qualified biomedical evidence, a population description, optional observations and a requested analysis into virtual data. The Agent chooses the joint model and parameters; numerical tools sample and inspect it. Complete-cohort generation without participant inputs is central.
 
 ## Paper and evidence
 
-- [Two-column reading PDF](manuscript/conference_draft_v10_2026-11-04/paper.pdf), [Overleaf bundle](manuscript/conference_draft_v10_2026-11-04/overleaf_v10.zip), and [story/visual design](reports/conference_draft_v10_2026-11-04/STORY_AND_VISUAL_DESIGN.md).
-- [Independent v0.10 review](reports/conference_draft_v10_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md). The current main text has four evaluation questions, five redrawn figures and three tables; [v0.9](manuscript/DRAFT_v0_9.md) retains extended details. No new experiment was run for this revision.
+- [Current build notes](manuscript/conference_draft_v12_2026-11-04/README.md), [independent figure/guide review](reports/paper_figure_revision_v12_2026-11-04/FIGURES_AND_GUIDE_REVIEW.md), [final PDF review](reports/paper_figure_revision_v12_2026-11-04/FINAL_PDF_REVIEW.md), and [implementation trace](reports/paper_figure_revision_v12_2026-11-04/IMPLEMENTATION_TRACE.md).
+- [Six-endpoint numerical interpretation](reports/paper_figure_revision_v12_2026-11-04/FIG23_READING_GUIDE_ZH.md), [G-Sim/SPADA result-page reading](reports/paper_figure_revision_v12_2026-11-04/GSIM_SPADA_RESULT_READING.md), and [LLMSynthor result-page reading](reports/paper_figure_revision_v12_2026-11-04/LLMSYNTHOR_FIGURES_AND_RESULT_READING.md). “Five of six improved” concerns mean absolute coefficient discrepancy; CHNS BMI worsens and other residual mismatches remain visible.
+- Historical editions: [v0.11](manuscript/DRAFT_v0_11.md) and its [gallery](manuscript/visual_redesign_v11_2026-11-04/index.html); [v0.10 reading PDF](manuscript/conference_draft_v10_2026-11-04/paper.pdf), [Overleaf bundle](manuscript/conference_draft_v10_2026-11-04/overleaf_v10.zip), and [story/visual design](reports/conference_draft_v10_2026-11-04/STORY_AND_VISUAL_DESIGN.md).
+- [Independent v0.10 review](reports/conference_draft_v10_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md). The main text retains four evaluation questions, five figures and three tables; [v0.9](manuscript/DRAFT_v0_9.md) retains extended details. Presentation revisions add no experiment.
 
-- [Full manuscript](manuscript/DRAFT_v0_10.md), [current consolidation and rerun decision](reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
+- [v0.10 narrative checkpoint](manuscript/DRAFT_v0_10.md), [consolidation and rerun decision](reports/manuscript_consolidation_2026-11-04/CONSOLIDATION_DECISION.md), and [claim/figure audit](reports/manuscript_consolidation_2026-11-04/SUPPORT_AND_FIGURE_AUDIT.md).
 - [Four main figures and Figure S1](manuscript/integrated_figures_v07_2026-11-03/FIGURE_PLAN.md), with [captions](manuscript/integrated_figures_v07_2026-11-03/CAPTIONS.md).
 - [New Figure 5](manuscript/integrated_figures_v09_2026-11-04/figure5_agent_scientific_utility.svg) joins the completed open-search construction to all seven regression terms and its pre-generation joint-dependence sensitivity. [Real-sample variation context](manuscript/integrated_figures_v09_2026-11-04/supplement_real_real_context.svg) remains a separate supplement.
 - [Aggregate reproduction guide](docs/REPRODUCING_MANUSCRIPT_v07.md).
@@ -49,6 +51,8 @@ Different requests may receive different generators. Multiple Agents, model trai
 Implementation references: [generation skill](skills/evidence-cohort-generation/SKILL.md), [execution adapter](docs/EXECUTION_ADAPTER.md), and [source replay](docs/SOURCE_REPLAY.md). Individual records identify their actual interface versions. Source-statistic consistency does not certify extraction, transport or analytical usefulness.
 
 ## Reproduction and access
+
+The [current figure package](manuscript/paper_figures_v12_2026-11-04/README.md) supplies original drawing/plotting scripts, exact native-value bindings and caption definitions. It redraws existing aggregates only. The editable diagram is embedded in its SVG/PNG/PDF exports and regenerated by its builder; no standalone diagram source or patient-level file is included in the new release.
 
 The [public reproduction entry point](docs/REPRODUCING_MANUSCRIPT_v07.md) verifies pinned aggregate inputs, reconstructs numerical tables, redraws Figures 2-4/S1 and copies Figure 1 as a schematic. It does not run an LLM, generate participant-like records or refit clinical data.
 
