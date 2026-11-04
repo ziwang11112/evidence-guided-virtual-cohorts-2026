@@ -1,6 +1,8 @@
 # Manuscript
 
-**Current full manuscript: [v0.10](DRAFT_v0_10.md), 4 November 2026.**
+**Current visual edition:** [Figure gallery](visual_redesign_v11_2026-11-04/index.html), [reading PDF](conference_draft_v11_2026-11-04/paper.pdf), [Overleaf bundle](conference_draft_v11_2026-11-04/overleaf_v11.zip). [v0.10](DRAFT_v0_10.md) remains the preceding narrative checkpoint.
+
+**Current full manuscript: [v0.11](DRAFT_v0_11.md), 4 November 2026.**
 
 This revision presents the Agent scientific model-author contribution through four empirical questions, five compact original figures and three tables. It preserves all core numerical results, with the preceding complete v0.9 and its supplements providing extended records. G-Sim, LLMSynthor and SPADA informed the narrative and visual organization. Existing empirical versions stay separate; presentation changes add no experiment.
 

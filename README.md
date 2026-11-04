@@ -1,6 +1,8 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.10](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_10.md), 4 November 2026.**
+**New visual edition:** [Figure gallery](biomedical_research/virtual_cohort_system/manuscript/visual_redesign_v11_2026-11-04/index.html), [reading PDF](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v11_2026-11-04/paper.pdf), [Overleaf bundle](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v11_2026-11-04/overleaf_v11.zip). An expanded Agent framework and integrated result displays, with the same scientific results.
+
+**Current manuscript: [v0.11](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_11.md), 4 November 2026.**
 
 A scientific Agent turns published evidence, a target-population description, optional observations and an intended analysis into useful virtual biomedical data. Complete-cohort generation without participant inputs is central. The Agent chooses scientific structure and parameters; numerical tools sample and inspect the model.
 

@@ -1,6 +1,8 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.10](manuscript/DRAFT_v0_10.md), 4 November 2026.**
+**New visual edition:** [Figure gallery](manuscript/visual_redesign_v11_2026-11-04/index.html), [reading PDF](manuscript/conference_draft_v11_2026-11-04/paper.pdf), [Overleaf bundle](manuscript/conference_draft_v11_2026-11-04/overleaf_v11.zip). Five redesigned figures; unchanged scientific body and results.
+
+**Current manuscript: [v0.11](manuscript/DRAFT_v0_11.md), 4 November 2026.**
 
 A scientific Agent turns qualified biomedical evidence, a population description, optional observations and a requested analysis into virtual data. The Agent chooses the joint model and parameters; numerical tools sample and inspect it. Complete-cohort generation without participant inputs is central.
 
