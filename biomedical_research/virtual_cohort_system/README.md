@@ -1,15 +1,17 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.7](manuscript/DRAFT_v0_7.md), 3 November 2026.**
+**Current manuscript: [v0.8](manuscript/DRAFT_v0_8.md), 3 November 2026.**
 
 A scientific Agent turns qualified biomedical evidence, a population description, optional observations and a requested analysis into virtual data. The Agent chooses the joint model and parameters; numerical tools sample and inspect it. Complete-cohort generation without participant inputs is central.
 
 ## Paper and evidence
 
-- [Full manuscript](manuscript/DRAFT_v0_7.md), [story and contributions](manuscript/STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md), and [complete evidence ledger](manuscript/INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md).
+- [Full manuscript](manuscript/DRAFT_v0_8.md), [story and contributions](manuscript/STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md), and [complete evidence ledger](manuscript/INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md).
 - [Four main figures and Figure S1](manuscript/integrated_figures_v07_2026-11-03/FIGURE_PLAN.md), with [captions](manuscript/integrated_figures_v07_2026-11-03/CAPTIONS.md).
 - [Aggregate reproduction guide](docs/REPRODUCING_MANUSCRIPT_v07.md).
 - [Current focus](docs/CURRENT_RESEARCH_FOCUS.md), [focused experiment gaps](manuscript/KEY_EXPERIMENT_GAPS_v07_2026-11-03.md), and [existing-reference feasibility audit](manuscript/EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md).
+
+- [v0.8 independent writing review](manuscript/REVIEW_v0_8_2026-11-03.md), [venue preparation](manuscript/VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md), and [Author Summary / submission text](manuscript/SUBMISSION_TEXT_v08_2026-11-03.md).
 
 ## Completed experiments
 
@@ -41,6 +43,6 @@ Participant-level real/generated files, third-party full articles/codebooks and 
 
 ## Status and history
 
-The empirical versions and v0.7 draft remain unchanged. The metadata-only audit admits no new independent reference; no extra clinical experiment is launched. Author/funding/access/ethics/AI-use declarations, article-type selection and publication-layout inspection remain. The optional prospective extension is not a prerequisite for the bounded construction/reconstruction claim.
+The empirical versions and v0.7 source draft remain unchanged. v0.8 revises the scientific framing and interpretation, with identical tables, Results, captions and bibliography. Its independent review links those unchanged displays to the versioned v0.7 reproduction package. The metadata-only audit admits no new independent reference; no extra clinical experiment is launched. Author/funding/access/ethics/AI-use declarations, article-type selection and publication-layout inspection remain. The optional prospective extension is not a prerequisite for the bounded construction/reconstruction claim.
 
 Earlier implementation/progress notes remain in the [previous README](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/bec2041d1816432dd744cf875c649e9ea6142e67/biomedical_research/virtual_cohort_system/README.md). They describe their original dates. Frozen protocols, adverse results and disclosure history remain in the [exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md) and linked records.

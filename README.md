@@ -1,12 +1,12 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.7](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_7.md).**
+**Current manuscript: [v0.8](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_8.md).**
 
 A scientific Agent turns published evidence, a target-population description, optional observations and an intended analysis into useful virtual biomedical data. Complete-cohort generation without individual records is central. The Agent selects scientific structure and parameters; numerical tools sample and inspect the model.
 
 ## Paper and results
 
-- [Full manuscript](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_7.md).
+- [Full manuscript](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_8.md).
 - [Story and contributions](biomedical_research/virtual_cohort_system/manuscript/STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md).
 - [Figures and captions](biomedical_research/virtual_cohort_system/manuscript/integrated_figures_v07_2026-11-03/FIGURE_PLAN.md).
 - [Integrated evidence ledger](biomedical_research/virtual_cohort_system/manuscript/INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md), including failed studies.
@@ -20,6 +20,8 @@ The paper separates three completed settings:
 
 These are distinct information conditions, not three unseen clinical confirmations or a universal superiority claim. The main-study inputs are curated. Autonomous literature processing, arbitrary-query validity and replacement of clinical measurement are not established.
 
+The [v0.8 review](biomedical_research/virtual_cohort_system/manuscript/REVIEW_v0_8_2026-11-03.md) checks the revised scientific framing and its unchanged numerical foundation. [Venue preparation](biomedical_research/virtual_cohort_system/manuscript/VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md) recommends a PLOS Digital Health methods Research Article; [submission text](biomedical_research/virtual_cohort_system/manuscript/SUBMISSION_TEXT_v08_2026-11-03.md) includes a provisional Author Summary. No journal submission has occurred.
+
 ## Reproduce the aggregate manuscript results
 
 Run from the repository root with an output directory outside the checkout:
@@ -28,7 +30,7 @@ Run from the repository root with an output directory outside the checkout:
 python biomedical_research/virtual_cohort_system/reproducibility/reproduce_manuscript.py --repo-root . --output ../v07-reproduced
 ```
 
-See [prerequisites and exact scope](biomedical_research/virtual_cohort_system/docs/REPRODUCING_MANUSCRIPT_v07.md). This reconstructs numerical tables and redraws Figures 2-4/S1 from pinned public aggregate inputs; Figure 1 is copied as a schematic. It does not call an LLM, generate participant-like records, fit clinical data or automatically install dependencies. A standard-library-only verification mode is documented separately.
+The v0.7 input lock remains unchanged; v0.8 retains its numerical tables and figure assets. See [prerequisites and exact scope](biomedical_research/virtual_cohort_system/docs/REPRODUCING_MANUSCRIPT_v07.md). This reconstructs numerical tables and redraws Figures 2-4/S1 from pinned public aggregate inputs; Figure 1 is copied as a schematic. It does not call an LLM, generate participant-like records, fit clinical data or automatically install dependencies. A standard-library-only verification mode is documented separately.
 
 This is a reviewed research export, not a full workspace backup. Participant-level real/generated tables, third-party originals and credentials are excluded. Clinical reruns require dataset permissions and the relevant execution environment.
 

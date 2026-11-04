@@ -1,31 +1,29 @@
 # Manuscript
 
-**Current full manuscript: [v0.7](DRAFT_v0_7.md), 3 November 2026.** It integrates the completed CHNS/ENSANUT external-evidence study, the separate CHNS summary-assisted experiment and the HRS longitudinal public-model example. The central contribution is Agent construction of useful biomedical virtual data from qualified evidence and an intended scientific analysis. The three information settings retain separate protocols and interpretation.
+**Current full manuscript: [v0.8](DRAFT_v0_8.md), 3 November 2026.**
 
-- [Story, contributions and draft checklist](STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md)
-- [Four main figures, Figure S1 and numeric provenance](integrated_figures_v07_2026-11-03/FIGURE_PLAN.md)
-- [Complete figure captions](integrated_figures_v07_2026-11-03/CAPTIONS.md)
-- [Key experiment gaps](KEY_EXPERIMENT_GAPS_v07_2026-11-03.md): one prospective transfer case is the priority optional scientific extension; an extraction audit is needed only for an autonomy claim. Neither launches a new campaign.
-- [Integrated evidence ledger](INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md): principal studies, historical enrichment/direct-output uses and retained failures, with distinct denominators.
-- [Independent manuscript review](REVIEW_v0_7_2026-11-03.md) and [presentation/link check](PACKAGE_REVIEW_v07_2026-11-03.json)
-- [Aggregate reproduction guide](../docs/REPRODUCING_MANUSCRIPT_v07.md) and [independent reproduction review](../reproducibility/INDEPENDENT_REVIEW_v07_2026-11-03.md): Tables 2-4 numeric cells reconstructed; Figures 2-4/S1 redrawn; Figure 1 copied as a schematic.
-- [Existing-reference feasibility](EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md): three metadata leads reviewed, zero new cases admitted; the optional prospective extension is deferred.
+This revision centers the paper on Agent scientific model authorship: turning study-qualified findings into a joint law and virtual data for a requested biomedical analysis. It strengthens the Abstract, Introduction, Methods overview and Discussion. All four tables, Results, figure assets/captions and bibliography entries are retained from v0.7.
 
-The HRS example is now integrated, rather than pending. It supplies six valid comparison tables from one Agent-authored and one reconstructed published-law model; its three invalid initial comparator attempts and technical recovery remain disclosed. It tests source-model reconstruction, not new-patient validation. Historical references remain exposed and closed.
+## Current review materials
 
-## Supporting records
+- [Full manuscript](DRAFT_v0_8.md) and [revision record](REVISION_v08_2026-11-03.md).
+- [Independent v0.8 review](REVIEW_v0_8_2026-11-03.md), including the bridge to unchanged v0.7 tables, figures and aggregate reproduction.
+- [Current venue and submission plan](VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md): PLOS Digital Health methods Research Article as the primary preparation target; JBI as a conditional alternative.
+- [Provisional Author Summary and submission text](SUBMISSION_TEXT_v08_2026-11-03.md): 177-word plain-language summary, scientific cover-letter paragraph, availability facts and author-specific fields still to complete.
 
-- [Source-to-generator trace and assumptions](SUPPLEMENT_SOURCE_AND_ASSUMPTIONS_v05.md)
-- [Historical developmental results](SUPPLEMENT_HISTORICAL_RESULTS_v05.md)
-- [HRS detailed addendum](SUPPLEMENT_HRS_PUBLIC_EXAMPLE_2026-11-03.md)
-- [Completed main-study results](../reports/main_study_freeze_2026-11-03/RESULTS.md)
-- [Completed information-provision results](../reports/information_revision_ablation_2026-11-03/RESULTS.md)
-- [Completed statistical supplement](../reports/summary_comparator_2026-11-03/RESULTS.md)
-- [Completed HRS results](../reports/hrs_public_example_2026-11-03/RESULTS.md)
-- [Existing primary-literature positioning](CORE_CONTRIBUTION_POSITIONING_2026-11-03.md): predecessor method facts remain relevant; its then-proposed HRS comparison is superseded by the completed record.
+## Numerical and empirical foundation
 
-## Version and submission status
+- [Four main figures, Figure S1 and numeric provenance](integrated_figures_v07_2026-11-03/FIGURE_PLAN.md), with [complete captions](integrated_figures_v07_2026-11-03/CAPTIONS.md).
+- [Public aggregate reproduction guide](../docs/REPRODUCING_MANUSCRIPT_v07.md) and [independent reproduction review](../reproducibility/INDEPENDENT_REVIEW_v07_2026-11-03.md). The versioned v0.7 inputs intentionally remain unchanged: Tables 2-4 numeric cells are reconstructed, Figures 2-4/S1 redrawn, and Figure 1 copied as a schematic.
+- [Integrated evidence ledger](INTEGRATED_EVIDENCE_LEDGER_v07_2026-11-03.md), [source-to-model worked trace](SUPPLEMENT_SOURCE_AND_ASSUMPTIONS_v05.md), [historical results](SUPPLEMENT_HISTORICAL_RESULTS_v05.md), and [HRS addendum](SUPPLEMENT_HRS_PUBLIC_EXAMPLE_2026-11-03.md).
+- [Main-study results](../reports/main_study_freeze_2026-11-03/RESULTS.md), [separate CHNS information study](../reports/information_revision_ablation_2026-11-03/RESULTS.md), [statistical supplement](../reports/summary_comparator_2026-11-03/RESULTS.md), and [HRS public-model results](../reports/hrs_public_example_2026-11-03/RESULTS.md).
 
-[v0.6](DRAFT_v0_6.md), [v0.5](DRAFT_v0_5.md) and earlier drafts remain unchanged. This revision adds writing and presentation artifacts only: no new generation, target fitting, reference analysis or scientific parameters. No universal statistical-superiority claim is required.
+These settings retain separate information conditions and interpretations. Exposed developmental references, supplied-summary reconstruction and published-law reconstruction are not pooled as unseen clinical validation. Every unfavorable result remains.
 
-The manuscript is ready for substantive author review, not submission-certified. The public aggregate reproduction entry point is now independently checked: it reconstructs display values and redraws result figures without accessing participant records or rerunning clinical experiments. The earlier v0.7 review/checklist retains its historical state. Remaining preparation includes author/funding/access/ethics/AI-use declarations, final article-type formatting and inspection at the actual journal layout. Competitive publication depends on the substantive contribution; a completed draft and successful audits do not guarantee acceptance.
+## Remaining work
+
+The scientific writing is available for author review. Preparation still requires final article formatting and publication-size inspection, authorship/funding/conflicts/access/ethics/AI declarations, and a resolved software/data release statement. Public availability alone does not establish software licensing or grant access to cohort records. No manuscript has been submitted.
+
+The [focused experiment-gap review](KEY_EXPERIMENT_GAPS_v07_2026-11-03.md) and [three-candidate metadata audit](EXISTING_REFERENCE_FEASIBILITY_v07_2026-11-03.md) remain the basis for deferring an optional prospective extension. This prose revision launches no new case, generation, fit or data acquisition.
+
+[v0.7](DRAFT_v0_7.md), [v0.6](DRAFT_v0_6.md), [v0.5](DRAFT_v0_5.md) and all frozen protocols, figures, results and original reviews remain unchanged. The earlier [story/checklist](STORY_AND_CONTRIBUTIONS_v07_2026-11-03.md) describes its original checkpoint; the current statuses above supersede its then-pending aggregate reproduction entry.
