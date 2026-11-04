@@ -29,7 +29,7 @@ These are candidate system contributions. Autonomy, reduced preparation and broa
 | The [adaptive pilot](../reports/adaptive_reference_pilot_2026-11-03/RESULTS.md) executed tool feedback and scientific revision. | One supplied-reference construction improved rank agreement while slightly worsening three regression discrepancies. |
 | [Literature access](../cohort_harness/literature.py) and [recorded scientific decisions](../cohort_harness/scientific_loop.py) have adapters. | The latter does not launch an LLM. Availability is not proof of an integrated autonomous run. |
 
-The minimal [request entry](REQUEST_INTAKE_V1.md) is now implemented: two request-only CLI demonstrations and 19 new interface tests passed. It prepares tasks and author packets; it does not launch a model or certify an end-to-end system.
+The minimal [request entry](REQUEST_INTAKE_V1.md) is implemented: two request-only CLI demonstrations and 19 new interface tests passed. A subsequent [bounded live integration](../reports/agent_system_live_2026-11-03/RESULTS.md) actually dispatched two scientific Agents through the host, retrieved originals, executed eight tables and delivered six. The library entry itself still does not launch a model. The live result shows partial analytical utility and a substantive source-population replay gap; it does not certify a general autonomous system.
 
 ## Positioning against neighbors
 
@@ -42,7 +42,7 @@ Our intended distinction concerns the complete research task, evidence semantics
 Prepare two request-only fixtures using the already studied variable family:
 
 - **Request A:** complete adult virtual cohort containing age, sex, BMI and HbA1c; request an age/sex-adjusted BMI association.
-- **Request B:** add fasting glucose and request the BMI association additionally adjusted for glucose.
+- **Request B:** add glucose and request the BMI association additionally adjusted for glucose. In the executed case this was central serum glucose with unverified individual fasting adherence, not a verified fasting measurement for every participant.
 
 No desired coefficient, sign or probability family is inserted. These are interface fixtures, not new clinical cases or generation experiments.
 

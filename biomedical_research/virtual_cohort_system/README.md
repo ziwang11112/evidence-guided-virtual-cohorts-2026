@@ -13,6 +13,7 @@ A scientific Agent turns qualified biomedical evidence, a population description
 
 - [Current system contribution and evaluation plan](docs/AGENT_SYSTEM_CONTRIBUTION_AND_EVALUATION_2026-11-03.md): complete Agent data generation is primary; evidence-selection scoring is optional.
 - [Implemented request intake](docs/REQUEST_INTAKE_V1.md): two request-only demonstrations and 19 passing interface tests. This entry prepares tasks; it does not yet launch the scientific Agent or generate data.
+- [Completed live Agent integration](reports/agent_system_live_2026-11-03/RESULTS.md): actual retrieval, two Agent-authored whole-cohort models, eight executions and six delivered tables. Host-dispatched Agents use the intake and tools; partial analytical utility, unavailable source replays and both retention decisions are reported.
 - [Earlier top-venue assessment and optional acquisition proposal](manuscript/TOP_VENUE_RESEARCH_DECISION_2026-11-03.md).
 - [v0.8 independent writing review](manuscript/REVIEW_v0_8_2026-11-03.md), [earlier fallback venue preparation](manuscript/VENUE_AND_SUBMISSION_PLAN_v08_2026-11-03.md), and [provisional submission text](manuscript/SUBMISSION_TEXT_v08_2026-11-03.md). PLOS is not the settled destination.
 
@@ -23,6 +24,7 @@ A scientific Agent turns qualified biomedical evidence, a population description
 | External evidence: CHNS and ENSANUT | 20 Agent and four statistical constructions; 72 final 3,000-row tables; six focal regression endpoints | Added relationship evidence lowered five discrepancies and increased CHNS BMI discrepancy. Exposed developmental references. |
 | Target-summary access: separate CHNS L/R | Six Agent constructions; 42 executions, 24 distinct tables overall and 18 distinct delivery tables | Closer reconstruction of several supplied summaries. Initial/final deliveries identical; no additional-stage revision gain. |
 | Published longitudinal model: HRS | One Agent and one reconstructed published-law model; six valid tables, each 11,509 virtual subjects at four visits; nine physical generations include three invalid initial comparator attempts | Native longitudinal analysis and source-model reconstruction. Weak upper-threshold interaction and upper-HbA1c spread remain imperfect. No HRS participant records used. |
+| Live request-to-data integration | Two fresh-context authors; actual source retrieval; eight 3,000-row executions, including six distinct delivery tables | A age and B glucose relationships have useful agreement; B glucose-adjusted BMI does not. All source replays unavailable, both initial candidates retained. Existing CHNS development reference. |
 
 These are separate information settings. Virtual rows, seed draws, authors and clinical references are different units. The evidence ledger retains historical enrichment/direct-output uses and failed studies. Revealed targets remain closed to tuning and renewed confirmation.
 

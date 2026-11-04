@@ -1,0 +1,9 @@
+# Scope of this live-run export
+
+This archive contains original authored models, evidence/assumption specifications, task metadata, aggregate analyses, execution receipts and independent reviews. All clinical participant rows, virtual participant rows, downloaded originals and credentials are omitted. Initial/final retained outputs are aliases, not additional tables.
+
+The figure can be regenerated from the included `evaluation/REPORT.json` by running `render_aggregate_figure.py` with matplotlib installed. It reads aggregates only. Scientific reruns are different: they require the original lawful data access, approved source artifacts, case environment and host-dispatched Agent orchestration. Local absolute paths and original hashes are preserved as historical provenance; this is not a portable one-command rerun of the live session. Missing original articles cannot be replaced by invented content, and the reference-read gate must not be bypassed to tune the already exposed models.
+
+Candidate receipts refer to the original local approved evidence and source-feedback artifacts. The export includes each initial trial source report, all eight execution receipts and all physical-slot reservation/result records; it does not pretend to include the entire local bundle or full model conversation. Live dispatch and scientific ownership were observed in the host session. Artifact prose alone is not cryptographic proof of model authorship, and semantic_feedback_v1 does not certify authorship or source applicability.
+
+The two requests share the existing CHNS development reference. No new clinical confirmation, source calibration success, post-feedback revision gain or universal analytical validity is claimed. The complete numerical comparison retains adverse outcomes. The existing manuscript and its reproduction input lock are unchanged.

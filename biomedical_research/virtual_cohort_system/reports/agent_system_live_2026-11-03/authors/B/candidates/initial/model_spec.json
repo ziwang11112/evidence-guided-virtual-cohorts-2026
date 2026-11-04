@@ -1,0 +1,213 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age": {
+      "minimum": 35,
+      "maximum": 74,
+      "center": 55
+    },
+    "female_probability": 0.55,
+    "bmi": {
+      "shift": 16.0,
+      "excess_median": 8.5,
+      "log_sd": 0.36,
+      "age_log_slope": 0.001,
+      "female_log_shift": -0.03,
+      "center": 24.5
+    },
+    "elevated_component": {
+      "reference_probability": 0.1,
+      "age_logit_slope": 0.025,
+      "bmi_logit_slope": 0.1
+    },
+    "serum_components": {
+      "mean": [
+        5.0,
+        7.4
+      ],
+      "sd": [
+        0.65,
+        2.4
+      ],
+      "age_log_slope": 0.003,
+      "bmi_linear_slope": 0.012
+    },
+    "hba1c_components": {
+      "mean": [
+        5.55,
+        7.4
+      ],
+      "sd": [
+        0.4,
+        1.5
+      ],
+      "age_log_slope": 0.0012,
+      "female_log_shift": -0.005,
+      "bmi_linear_slope": 0.002
+    },
+    "conditional_normal_correlation": [
+      0.5,
+      0.65
+    ],
+    "meal": {
+      "probability": 0.15,
+      "mean_increment": 1.5,
+      "sd_increment": 0.8
+    },
+    "round_decimals": 4,
+    "family": "shifted_lognormal_BMI_and_two_component_correlated_lognormal_glycaemia_with_unverified_fasting_scenario"
+  },
+  "assumptions": [
+    {
+      "id": "A_design",
+      "description": "No target sampling frame, geography, age histogram or sex ratio is provided. Independently choose a design distribution uniform on integer ages35-74 and female probability0.55. These are scenario composition, not population estimates. No missingness mechanism is estimated; all requested measurements are available by design."
+    },
+    {
+      "id": "A_bmi",
+      "description": "Shifted lognormal BMI with lower shift16, excess median8.5 and log-SD0.36 provides positive right skew. Weak age/sex log shifts are assumptions, not adjusted source estimates. Scale is contextualized by Shanghai median23.5 (IQR21.4-25.9) and older MIND mean25.0 SD3.6; no formal pooling across populations. BMI remains unbounded above; glycaemia means now grow only linearly in BMI, so no arbitrary clinical ceiling is introduced."
+    },
+    {
+      "id": "A_mixture",
+      "description": "A latent elevated glycaemia component represents heterogeneity including untreated and treated disease without assigning a clinical diabetes label. Reference probability0.10 at age55/BMI24.5, logit age slope0.025/year and BMI slope0.10/unit are chosen assumptions; no sex coefficient is an explicit simplification, not evidence of no association. Component membership is not exported or equated with source case definitions. Treatment and history cannot be identified separately."
+    },
+    {
+      "id": "A_transport",
+      "description": "Original source means and SDs are context, not transferable target moments. Set lower HbA1c mean5.55 SD0.40, elevated mean7.4 SD1.5; lower serum glucose mean5.0 SD0.65, elevated mean7.4 SD2.4 at reference covariates. Lower HbA1c is near Shanghai normal5.5, whereas MIND older non-diabetes5.8; elevated HbA1c is a chosen moderated analogue of7.7. Serum values near MIND4.9 and7.4 assume approximate serum scale but do not copy plasma as serum. Differences by region, era, selection, assay and treatment remain unquantified."
+    },
+    {
+      "id": "A_dependence",
+      "description": "Conditional Gaussian copula correlations0.50 (lower) and0.65 (elevated) are assumptions. They are not the MIND marginal Spearman0.529 or Shanghai Pearson0.619. Bivariate lognormal component marginals preserve positivity and right tails. Mixture and covariates induce additional dependence; no exact marginal source correlation is targeted."
+    },
+    {
+      "id": "A_covariate",
+      "description": "Serum means use exp(0.003*(age-55)) * (1+0.012*(BMI-24.5)); HbA1c means use exp(0.0012*(age-55)-0.005*female) * (1+0.002*(BMI-24.5)). These small age, BMI and female pathways and their signs are autonomous assumptions, not extracted adjusted slopes. BMI>16 guarantees serum multiplier>0.898 and HbA1c multiplier>0.983. Linear BMI mean multipliers avoid exponentiating an unbounded lognormal covariate; bounded age and products of finite-moment lognormal factors retain finite moments. Lifelines abstract motivates nonglycaemic variation but supplies no numeric slopes."
+    },
+    {
+      "id": "A_fasting",
+      "description": "Target fasting adherence is unverified. In the primary scenario an independent15% of rows receive an additive meal increment drawn lognormal with mean1.5 and SD0.8 mmol/L. This is explicitly unidentified by retrieved evidence. Central serum processing is assumed adequately controlled; no fixed plasma-serum conversion or extra assay noise is added. Source component SDs already contain measurement/biological variation. Unexecuted sensitivity alternatives are0% and30% contamination, with no probability interpretation."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Seed variation is individual/residual Monte Carlo variation conditional on fixed assumptions. Source SDs are individual dispersion, not standard errors. Parameter, transport, fasting and model uncertainty are not sampled or calibrated; three seeds are not three independent studies."
+    },
+    {
+      "id": "A_feedback",
+      "description": "Neither whole-cohort output nor age-restricted subsets reconstructs original source selection, OGTT status, treatment history or assay handling. Source checks remain not_computable; no target statistic is passed off as source replay. Quantile interpolation in Shanghai is unreported. Full Lifelines text is unavailable through the supplied PMC gateway."
+    },
+    {
+      "id": "A_tail_review",
+      "description": "A coordinator pre-execution mathematical review identified that positive exp(k*lognormal BMI) mean terms in the original draft imply divergent moments. The scientific author accepted the concern, preserved the original draft, and changed only BMI-to-glycaemia mean links to positive linear multipliers. No generated table, source-feedback discrepancy, target result or desired coefficient informed this change."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "3000 required by task. No row generation during preparation."
+    },
+    "age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Task bounds35-74; chosen uniform composition and centering55."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Chosen0.55 design mixture; no target sex prevalence estimate."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "B_bmi_median",
+        "B_bmi_q25",
+        "B_bmi_q75",
+        "M_bmi_all"
+      ],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "Choose intermediate distribution scale; all shape/covariate settings assumed. Unshifted excess mean=8.5*exp(0.36^2/2), SD=mean*sqrt(exp(0.36^2)-1). No sample fitting."
+    },
+    "elevated_component": {
+      "evidence_ids": [
+        "M_hba_no",
+        "M_hba_yes",
+        "M_serum_no",
+        "M_serum_yes"
+      ],
+      "assumption_ids": [
+        "A_mixture"
+      ],
+      "derivation": "Source between-stratum heterogeneity motivates mixture, not exact membership prevalence or logit slopes."
+    },
+    "serum_components": {
+      "evidence_ids": [
+        "M_serum_no",
+        "M_serum_yes",
+        "B_fpg_median"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_covariate",
+        "A_tail_review"
+      ],
+      "derivation": "Choose mean5.0 SD0.65 near older fasting-serum non-diabetes4.9 SD0.7; upper mean7.4 SD2.4 retains source scale only. Plasma median is context. Lognormal sigma=sqrt(log(1+(SD/mean)^2)); mu=log(mean)-sigma^2/2. Multiply by exp(age_log_slope*(age-55)) and 1+bmi_linear_slope*(BMI-24.5). The BMI link preserves the chosen local derivative at the center while ensuring finite moments; it is an assumption, not a reported slope."
+    },
+    "hba1c_components": {
+      "evidence_ids": [
+        "B_hba_normal",
+        "M_hba_no",
+        "M_hba_yes",
+        "J_predictors"
+      ],
+      "assumption_ids": [
+        "A_transport",
+        "A_covariate",
+        "A_tail_review"
+      ],
+      "derivation": "Choose means/SDs5.55/0.4 and7.4/1.5 with explicit transport. Lognormal moment conversion as for serum; multiply by exp(age_log_slope*(age-55)+female_log_shift*female) and 1+bmi_linear_slope*(BMI-24.5). All covariate shifts assumed, not source regression estimates; linear BMI link prevents divergent moments."
+    },
+    "conditional_normal_correlation": {
+      "evidence_ids": [
+        "M_rank_serum_hba",
+        "B_pearson"
+      ],
+      "assumption_ids": [
+        "A_dependence"
+      ],
+      "derivation": "Use positive shared-glycaemia structure with assumed conditional copula rho0.5/0.65. Do not convert reported Spearman to Pearson or set source marginal correlations equal to conditional rho."
+    },
+    "meal": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_fasting"
+      ],
+      "derivation": "Assumed probability and lognormal increment moments; not extracted from source fasting cohorts."
+    },
+    "round_decimals": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Four decimal places for output serialization, not claimed assay precision."
+    },
+    "family": {
+      "evidence_ids": [
+        "J_predictors",
+        "M_hba_no",
+        "M_hba_yes"
+      ],
+      "assumption_ids": [
+        "A_dependence",
+        "A_mixture",
+        "A_uncertainty"
+      ],
+      "derivation": "Chosen generative family distinguishes glycaemic shared variation and residual nonglycaemic variation; target OLS is a descriptive projection of this nonlinear mixture."
+    }
+  }
+}

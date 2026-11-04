@@ -1,0 +1,265 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_min": 35,
+    "age_max": 74,
+    "age_center": 54.5,
+    "female_probability": 0.55,
+    "stratum_reference_probability": 0.12,
+    "stratum_age_logodds": 0.03,
+    "bmi_male_reference_mean": 24.1,
+    "bmi_female_mean_shift": -0.6,
+    "bmi_age_slope": 0.025,
+    "bmi_stratum_mean_shift": 1.2,
+    "bmi_conditional_sd": 3.5,
+    "hba1c_lower_reference_mean": 5.6,
+    "hba1c_age_slope": 0.008,
+    "hba1c_bmi_center": 24.5,
+    "hba1c_bmi_slope": 0.012,
+    "hba1c_female_shift": -0.03,
+    "hba1c_stratum_mean_shift": 1.9,
+    "hba1c_lower_sd": 0.4,
+    "hba1c_upper_sd": 1.6,
+    "hba1c_floor": 3.5
+  },
+  "assumptions": [
+    {
+      "id": "task_design",
+      "description": "Generate3000 independent complete records; age integer35-74; female binary indicator. No observed individual values, survey weights or target geography are supplied."
+    },
+    {
+      "id": "population_transport",
+      "description": "Choose a Chinese-study-informed developmental scenario despite unspecified target geography. Shanghai and rural Shandong summaries are not pooled estimates and do not identify the requested population. Cross-study differences can reflect age, assay, selection, region and time."
+    },
+    {
+      "id": "age_sex_distribution",
+      "description": "Age is discrete uniform35-74 and female Bernoulli0.55 independent of age. These are explicit design choices, not fitted demographics or an inference that true independence holds."
+    },
+    {
+      "id": "latent_stratum",
+      "description": "Use a latent elevated-glycemia stratum D, not an output diagnosis: logistic prevalence0.12 at age54.5 and log-odds increase0.03/year. No direct sex effect on D is imposed as a simplifying scenario, not as evidence of no sex association. Source sex and age patterns differ, and source definitions of diabetes are incompatible."
+    },
+    {
+      "id": "bmi_family",
+      "description": "BMI conditional on age, sex and D is lognormal with arithmetic mean24.1-0.6*female+0.025*(age-54.5)+1.2*D and SD3.5. Male source mean24.1 is an anchor; female median cannot establish a mean difference, so -0.6 is assumed. BMI age slope, SD transport and lognormal form are assumptions."
+    },
+    {
+      "id": "hba1c_location",
+      "description": "Lower-stratum conditional arithmetic HbA1c mean is5.6+0.008*(age-54.5)+0.012*(bmi-24.5)-0.03*female. Center5.6 is a chosen scenario center between Shanghai NGT mean5.5 and rural no-diabetes mean5.8, not a conversion of Shanghai median5.6 or pooled mean. All conditional slopes are assumptions: no source estimates the requested regression."
+    },
+    {
+      "id": "hba1c_stratum_transport",
+      "description": "Upper-stratum mean adds1.9 percentage points, the rural diabetes/no-diabetes mean contrast7.7-5.8. Transporting this unadjusted contrast and SDs0.4/1.6 into conditional strata is assumed. D does not exactly reproduce either published diabetes definition."
+    },
+    {
+      "id": "hba1c_family",
+      "description": "HbA1c equals3.5 plus a gamma variate parameterized by conditional mean and SD. Lower support3.5% and gamma shape are assumptions; component SDs represent individual residual variation, not SEs. No truncation or exclusion of high HbA1c records."
+    },
+    {
+      "id": "complete_case_and_treatment",
+      "description": "The requested complete-measurement cohort is treated as exchangeable with the chosen scenario. Missingness selection is not modeled. Diagnosis and medication are marginalized into the elevated component; medication types, control trajectories and selection effects are unavailable."
+    },
+    {
+      "id": "uncertainty_and_uses",
+      "description": "Seed changes represent individual sampling variation only. Parameter, transport and model uncertainty are not assigned probability distributions. Intended regression is analyzable but its coefficients and P values are outputs of assumptions; no causal or target-validity claim."
+    },
+    {
+      "id": "source_replay_unavailable",
+      "description": "Target execution cannot recreate source age ranges, NGT/diabetes strata, exclusions, missing-value imputation or weighting. All source replay checks are explicitly unavailable; target output is not substituted for source-context simulation."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_design"
+      ],
+      "derivation": "Fixed task contract:3000 adults age35-74."
+    },
+    "age_min": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_design"
+      ],
+      "derivation": "Fixed task contract:3000 adults age35-74."
+    },
+    "age_max": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "task_design"
+      ],
+      "derivation": "Fixed task contract:3000 adults age35-74."
+    },
+    "age_center": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "age_sex_distribution"
+      ],
+      "derivation": "(35+74)/2=54.5, mean of discrete uniform ages."
+    },
+    "female_probability": {
+      "evidence_ids": [
+        "wang_female_percent"
+      ],
+      "assumption_ids": [
+        "age_sex_distribution",
+        "population_transport"
+      ],
+      "derivation": "Chosen0.55; source57.8% is contextual, not pooled or directly transported."
+    },
+    "stratum_reference_probability": {
+      "evidence_ids": [
+        "bao_undiagnosed_percent",
+        "wang_diabetes_count"
+      ],
+      "assumption_ids": [
+        "latent_stratum",
+        "population_transport"
+      ],
+      "derivation": "Choose0.12 at54.5 and0.03 log-odds/year. Bao6.2% undiagnosed and Wang506/3547=14.27% total diabetes are noncomparable contextual anchors, not a meta-analysis. Neither identifies these parameters."
+    },
+    "stratum_age_logodds": {
+      "evidence_ids": [
+        "bao_undiagnosed_percent",
+        "wang_diabetes_count"
+      ],
+      "assumption_ids": [
+        "latent_stratum",
+        "population_transport"
+      ],
+      "derivation": "Choose0.12 at54.5 and0.03 log-odds/year. Bao6.2% undiagnosed and Wang506/3547=14.27% total diabetes are noncomparable contextual anchors, not a meta-analysis. Neither identifies these parameters."
+    },
+    "bmi_male_reference_mean": {
+      "evidence_ids": [
+        "bao_male_bmi"
+      ],
+      "assumption_ids": [
+        "bmi_family",
+        "population_transport"
+      ],
+      "derivation": "24.1 is reported male BMI mean; use at reference age in lower latent stratum is assumed."
+    },
+    "bmi_female_mean_shift": {
+      "evidence_ids": [
+        "bao_female_bmi_median"
+      ],
+      "assumption_ids": [
+        "bmi_family"
+      ],
+      "derivation": "Assume -0.6kg/m^2 conditional mean shift. Source female median23.2 motivates direction only; do not subtract a median from a mean as an effect."
+    },
+    "bmi_age_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "bmi_family"
+      ],
+      "derivation": "Assume0.025kg/m^2 per year within each sex/latent stratum."
+    },
+    "bmi_stratum_mean_shift": {
+      "evidence_ids": [
+        "wang_diabetes_bmi",
+        "wang_nondiabetes_bmi"
+      ],
+      "assumption_ids": [
+        "bmi_family",
+        "population_transport"
+      ],
+      "derivation": "26.0-24.8=1.2kg/m^2 unadjusted source difference; conditional and target use are assumptions."
+    },
+    "bmi_conditional_sd": {
+      "evidence_ids": [
+        "bao_male_bmi",
+        "wang_diabetes_bmi",
+        "wang_nondiabetes_bmi"
+      ],
+      "assumption_ids": [
+        "bmi_family",
+        "population_transport"
+      ],
+      "derivation": "Choose3.5kg/m^2, within source individual SD3.3-3.6; conditional residual interpretation assumed."
+    },
+    "hba1c_lower_reference_mean": {
+      "evidence_ids": [
+        "bao_ngt_hba1c",
+        "wang_nondiabetes_hba1c"
+      ],
+      "assumption_ids": [
+        "hba1c_location",
+        "population_transport"
+      ],
+      "derivation": "Choose arithmetic mean5.6 atreference age/BMI for male lower stratum. This is a scenario center, not a pooled source statistic or median-to-mean conversion."
+    },
+    "hba1c_age_slope": {
+      "evidence_ids": [
+        "jansen_predictor_context"
+      ],
+      "assumption_ids": [
+        "hba1c_location"
+      ],
+      "derivation": "Assume0.008 percentage-point/year,0.012 percentage-point/(kg/m^2), and -0.03 percentage-point female shift. Abstract establishes no magnitudes or directions; these are scientific scenario choices, not extracted coefficients."
+    },
+    "hba1c_bmi_slope": {
+      "evidence_ids": [
+        "jansen_predictor_context"
+      ],
+      "assumption_ids": [
+        "hba1c_location"
+      ],
+      "derivation": "Assume0.008 percentage-point/year,0.012 percentage-point/(kg/m^2), and -0.03 percentage-point female shift. Abstract establishes no magnitudes or directions; these are scientific scenario choices, not extracted coefficients."
+    },
+    "hba1c_female_shift": {
+      "evidence_ids": [
+        "jansen_predictor_context"
+      ],
+      "assumption_ids": [
+        "hba1c_location"
+      ],
+      "derivation": "Assume0.008 percentage-point/year,0.012 percentage-point/(kg/m^2), and -0.03 percentage-point female shift. Abstract establishes no magnitudes or directions; these are scientific scenario choices, not extracted coefficients."
+    },
+    "hba1c_bmi_center": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "hba1c_location"
+      ],
+      "derivation": "Chosen centering BMI24.5kg/m^2; centering is part of scenario intercept definition."
+    },
+    "hba1c_stratum_mean_shift": {
+      "evidence_ids": [
+        "wang_diabetes_hba1c",
+        "wang_nondiabetes_hba1c"
+      ],
+      "assumption_ids": [
+        "hba1c_stratum_transport"
+      ],
+      "derivation": "7.7-5.8=1.9 percentage points; source unadjusted contrast transported to conditional latent mixture by assumption."
+    },
+    "hba1c_lower_sd": {
+      "evidence_ids": [
+        "bao_ngt_hba1c",
+        "wang_nondiabetes_hba1c"
+      ],
+      "assumption_ids": [
+        "hba1c_family",
+        "hba1c_stratum_transport"
+      ],
+      "derivation": "Reported individual SD0.4% in both different lower-glycemia source contexts; using as conditional residual SD is assumed, not reported SE."
+    },
+    "hba1c_upper_sd": {
+      "evidence_ids": [
+        "wang_diabetes_hba1c"
+      ],
+      "assumption_ids": [
+        "hba1c_family",
+        "hba1c_stratum_transport"
+      ],
+      "derivation": "Reported individual SD1.6% in rural diabetes group; use as conditional residual SD is assumed."
+    },
+    "hba1c_floor": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "hba1c_family"
+      ],
+      "derivation": "Chosen support lower bound3.5%; no source support estimate is claimed."
+    }
+  }
+}
