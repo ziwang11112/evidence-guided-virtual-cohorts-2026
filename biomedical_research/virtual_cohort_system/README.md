@@ -1,10 +1,10 @@
 # Evidence-guided virtual biomedical data
 
-**Current paper: [v0.13](manuscript/DRAFT_v0_13.md), 4 November 2026.**
+**Current working paper [v0.13.1](manuscript/DRAFT_v0_13_1.md), 4 November 2026.**
 
-[Reading PDF](manuscript/conference_draft_v13_2026-11-04/paper.pdf) · [Overleaf-ready ZIP](manuscript/conference_draft_v13_2026-11-04/overleaf_v13.zip) · [Figure package](manuscript/paper_figures_v13_2026-11-04/README.md) · [Experiment-gap checklist](manuscript/KEY_EXPERIMENT_GAPS_v13_2026-11-04.md)
+[Reading PDF](manuscript/conference_draft_v13_1_2026-11-04/paper.pdf) · [Overleaf-ready ZIP](manuscript/conference_draft_v13_1_2026-11-04/overleaf_v13_1.zip) · [Figure package](manuscript/paper_figures_v13_2026-11-04/README.md) · [Experiment-gap checklist](manuscript/KEY_EXPERIMENT_GAPS_v13_1_2026-11-04.md)
 
-A scientific Agent turns qualified biomedical evidence, a population description, optional observations and a requested analysis into virtual data. The Agent chooses the joint law and numerical parameters; tools sample and inspect it. Complete-cohort generation without individual construction inputs is central. Ordinary Agents are valid; multiple Agents, training or universal superiority over a bespoke statistical generator are not prerequisites.
+The paper evaluates whether a complete virtual cohort can support a researcher’s intended analysis. An Agent uses qualified biomedical evidence, a population description and any available observations to choose a joint law. Numerical tools sample it. We run the intended analysis on the final table and compare the resulting estimates with an appropriate reference.
 
 ## Integrated scientific story
 
@@ -13,12 +13,12 @@ The [story/figure plan](reports/manuscript_integration_v13_2026-11-04/STORY_AND_
 | Experiment | Distinct scale | Supported use and boundary |
 |---|---|---|
 | External-evidence main study | 20 Agent + 4 statistical constructions; 72 final tables | Additional relationships lower five of six mean coefficient discrepancies; CHNS BMI worsens. Exposed references. |
-| CHNS target-summary reconstruction | 6 Agents; 18 distinct final tables | Provided summaries support joint reconstruction; no revision gain. |
+| CHNS target-summary reconstruction | 6 Agents; 18 distinct final tables | The final tables were analyzed for agreement with the supplied regressions and correlations. |
 | HRS published-model reconstruction | 2 constructions; 6 valid longitudinal tables | Data support source-model follow-up analysis; source coefficients supplied, no HRS individual data. Weak branch/spread limitations remain. |
 | Earlier reviewed open search | 5 reviewed studies; 1 constructor; 3 final tables | Useful selected relations and explicit dependence sensitivity; conditional/distributional differences remain. |
 | New unified open-retrieval workflow | 4 constructors; 2 requests; 12 final tables | 12 unique studies, 16 paper uses; all six primary directions retained, mixed magnitudes/ranks/dispersion. Developmental repetition, not fresh clinical confirmation. |
 
-The [complete new batch](reports/core_workflow_replication_2026-11-04/RESULTS.md) records 366 independently reproduced aggregate endpoints, four initial trials and twelve final 3,000-row tables. All four authors retained their initial models. Its information and author roles differ from the earlier main study, so the new batch is not treated as another comparable arm or a controlled improvement over it. Seeds, generated rows, authors and clinical references are different units.
+The [complete new batch](reports/core_workflow_replication_2026-11-04/RESULTS.md) records 366 independently reproduced aggregate endpoints, four initial trials and twelve final 3,000-row tables. Its information and author roles differ from the earlier main study, so the new batch is not treated as another comparable arm or a controlled improvement over it. Seeds, generated rows, authors and clinical references are different units.
 
 ## Method and implementation
 
@@ -34,12 +34,12 @@ Implementation: [generation skill](skills/evidence-cohort-generation/SKILL.md), 
 
 ## Manuscript, review and reproduction
 
-- [Manuscript navigation](manuscript/README.md), [independent content review](reports/manuscript_integration_v13_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md), and [13-page PDF review](reports/manuscript_integration_v13_2026-11-04/FINAL_PDF_REVIEW.md).
+- [Manuscript navigation](manuscript/README.md), [archived v0.13 content review](reports/manuscript_integration_v13_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md), and [archived v0.13 PDF review](reports/manuscript_integration_v13_2026-11-04/FINAL_PDF_REVIEW.md).
 - [New Figure 5](manuscript/paper_figures_v13_2026-11-04/fig5-open-retrieval.svg) and [中文读图说明](manuscript/paper_figures_v13_2026-11-04/FIG5_READING_GUIDE_ZH.md). Three-seed ranges are not confidence intervals; reference intervals are not acceptance margins.
 - [Earlier six-endpoint interpretation](reports/paper_figure_revision_v12_2026-11-04/FIG23_READING_GUIDE_ZH.md), [aggregate reproduction entry](docs/REPRODUCING_MANUSCRIPT_v07.md), and [exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md).
 
 The manuscript integrates completed evidence without new generation or clinical fitting. Historical Figures 1–4 are unchanged; former Figure 5 is Figure S1. Old protocols, empirical results and adverse findings are preserved. The generic reading PDF is not an official submission template. Authorship/declarations and venue-specific production remain.
 
-Patient-level real/generated data, third-party full articles/codebooks and credentials remain local. Clinical reruns require lawful access. The [public scope](reports/manuscript_integration_v13_2026-11-04/PUBLIC_SCOPE.md) specifies this release; aggregate-only plotting is not regeneration of clinical records.
+Patient-level real/generated data, third-party full articles/codebooks and credentials remain local. Clinical reruns require lawful access. The [v0.13 public scope](reports/manuscript_integration_v13_2026-11-04/PUBLIC_SCOPE.md) describes that release; aggregate-only plotting is not regeneration of clinical records.
 
 Earlier navigation and additional historical links remain in the [previous README](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/baeaf8cf11be00a6f79df5971ad3279a8c6f5aa3/biomedical_research/virtual_cohort_system/README.md). [Current focus](docs/CURRENT_RESEARCH_FOCUS.md) and the focused gap checklist supersede old pending-work statements.

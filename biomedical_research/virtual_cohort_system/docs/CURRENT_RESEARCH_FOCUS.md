@@ -1,27 +1,27 @@
 # Current research focus: useful evidence-guided virtual biomedical data
 
-Updated 4 November 2026. **The v0.13 manuscript integration is complete.** [Draft](../manuscript/DRAFT_v0_13.md) · [Reading PDF](../manuscript/conference_draft_v13_2026-11-04/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v13_2026-11-04/overleaf_v13.zip) · [Story/figure plan](../reports/manuscript_integration_v13_2026-11-04/STORY_AND_FIGURE_PLAN.md).
+Updated 4 November 2026. **The current working manuscript is v0.13.1.** [Draft](../manuscript/DRAFT_v0_13_1.md) · [Reading PDF](../manuscript/conference_draft_v13_1_2026-11-04/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v13_1_2026-11-04/overleaf_v13_1.zip) · [Story/figure plan](../reports/manuscript_integration_v13_2026-11-04/STORY_AND_FIGURE_PLAN.md).
 
-The purpose is to turn published biomedical evidence, a population description, optional observations and a requested analysis into analyzable virtual data. Complete-cohort generation remains central. Agents choose substantive scientific structure and parameters; programs provide numerical sampling. Different requests can receive different laws. Ordinary Agents are valid; multiple Agents, new training and universal bespoke-statistical superiority are not required.
+The research question is which scientific analyses a final virtual cohort can support. An Agent uses published biomedical evidence, a population description and any available observations to choose a joint law for the requested use. A program samples that law. We fit the requested analyses to the final tables and report how their conclusions compare with the relevant references. Different requests can receive different laws. Ordinary Agents are valid; multiple Agents, new training and universal bespoke-statistical superiority are not required.
 
 ## Completed writing unit
 
-The new [open-retrieval batch](../reports/core_workflow_replication_2026-11-04/RESULTS.md) is incorporated in Q4, new Figure 5 and Tables S1/S2: four fresh constructors, two existing requests, twelve final tables, twelve distinct studies/sixteen paper uses and 366 independently reproduced endpoints. All six primary directions were retained; effect sizes, rank dependence and HbA1c dispersion remained mixed. All authors retained their initial laws. CHNS/ENSANUT references were already exposed. No fresh clinical confirmation or revision benefit is claimed.
+The new [open-retrieval batch](../reports/core_workflow_replication_2026-11-04/RESULTS.md) is incorporated in Q4, new Figure 5 and Tables S1/S2: four fresh constructors, two existing requests, twelve final tables, twelve distinct studies/sixteen paper uses and 366 independently reproduced endpoints. All six primary directions were retained; effect sizes, rank dependence and HbA1c dispersion remained mixed. The evaluations used previously exposed CHNS and ENSANUT references.
 
 The manuscript keeps the historical main E0/E1 study, separate target-summary reconstruction and HRS source-model reconstruction as distinct settings. New authors are not appended to an old comparison arm. Old numerical Tables 2/3 and Results 4.2–4.4 are preserved. The earlier single-constructor dependence-sensitivity figure is retained unchanged as Figure S1. All failed, mixed and adverse results remain available.
 
-Independent [content/numerical review](../reports/manuscript_integration_v13_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md) and [full PDF visual review](../reports/manuscript_integration_v13_2026-11-04/FINAL_PDF_REVIEW.md) passed. Five main figures, three main tables, one supplementary figure, two supplementary tables and 24 references appear in the 13-page generic reading copy. This writing unit performed no new clinical reads/fits or generation.
+For the archived v0.13 manuscript, independent [content/numerical review](../reports/manuscript_integration_v13_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md) and [full PDF visual review](../reports/manuscript_integration_v13_2026-11-04/FINAL_PDF_REVIEW.md) passed. Five main figures, three main tables, one supplementary figure, two supplementary tables and 24 references appear in that 13-page generic reading copy. This writing unit performed no new clinical reads/fits or generation.
 
 ## Current decision and next work
 
-**Proceed with the scoped applied-method draft.** The [experiment-gap checklist](../manuscript/KEY_EXPERIMENT_GAPS_v13_2026-11-04.md) and [independent gap review](../reports/manuscript_integration_v13_2026-11-04/EXPERIMENT_GAP_REVIEW.md) support this decision.
+**Proceed with the scoped applied-method draft.** The [experiment-gap checklist](../manuscript/KEY_EXPERIMENT_GAPS_v13_1_2026-11-04.md) and [archived v0.13 gap review](../reports/manuscript_integration_v13_2026-11-04/EXPERIMENT_GAP_REVIEW.md) support this decision.
 
 1. Scientific author review of the integrated evidence-to-data contribution and its concrete analysis uses.
 2. Select destination and finish article-length/template editing plus authorship, funding/conflicts, ethics/access, AI-use and software/data-release declarations.
 3. For a stronger transport/generalization claim, prospectively freeze a previously unexposed real reference. First check existing access/exposure records; no acquisition or new case is automatically authorized by this checklist.
 4. Optionally isolate one declared unmeasured-dependence or residual-allocation assumption under fixed evidence. Preserve every scenario rather than selecting the closest result. This is not a required new large benchmark.
 
-Do not reopen exposed targets for tuning, multiply seeds to imply independent replication, add unrelated datasets or announce revision benefits from retention. A latest-batch finite NumPy scalar evaluation defect was fixed additively using unchanged frozen rows; the original failure is retained and all outputs independently recalculated. No shared unresolved implementation error requires wholesale regeneration.
+Do not reopen exposed targets for tuning, multiply seeds to imply independent replication, add unrelated datasets or use the same reference to guide model changes. A latest-batch finite NumPy scalar evaluation defect was fixed additively using unchanged frozen rows; the original failure is retained and all outputs independently recalculated. No shared unresolved implementation error requires wholesale regeneration.
 
 ## Preserved record
 
