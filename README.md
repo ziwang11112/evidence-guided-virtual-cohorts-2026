@@ -1,30 +1,30 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.14](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_14.md), 5 November 2026.**
+**Current manuscript: [v0.15](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_15.md), 5 November 2026.**
 
-**Evidence-Guided Agents for Analyzable Virtual Biomedical Cohorts**
+**From Published Evidence to Analyzable Biomedical Cohorts with Scientific Agents**
 
-[Reading PDF](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v14_2026-11-05/paper.pdf) · [Overleaf-ready ZIP](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v14_2026-11-05/overleaf_v14.zip) · [Figures](biomedical_research/virtual_cohort_system/manuscript/paper_figures_v14_2026-11-05/README.md) · [Draft checklist](biomedical_research/virtual_cohort_system/manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md)
+[Reading PDF](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v15_2026-11-05/paper.pdf) · [Overleaf-ready ZIP](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v15_2026-11-05/overleaf_v15.zip) · [Figures](biomedical_research/virtual_cohort_system/manuscript/paper_figures_v15_2026-11-05/README.md) · [Venue and story audit](biomedical_research/virtual_cohort_system/reports/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md)
 
-A scientific Agent turns published biomedical evidence, a population description, optional observations and intended analyses into a joint generating model and virtual data. Whole-cohort generation without individual construction records is central. The Agent chooses substantive structure and numerical evidence use; deterministic tools sample, inspect and analyze the result. Different research requests can receive different models.
+A scientific Agent translates heterogeneous published evidence, a population description, optional observations and intended analyses into a joint generating model and virtual data. Whole-cohort generation without individual construction records is central. The Agent chooses the scientific structure and numerical evidence use; deterministic tools execute sampling, inspection and analysis. Different requests can receive different laws.
 
-## Completed scientific story
+## Current scientific argument
 
-The paper combines an external-evidence information contrast, supplied-summary reconstruction, a published longitudinal model, repeated open retrieval, and a new glycemic/lipid cross-task study. These settings have different inputs and references and retain separate denominators. The contribution is an inspectable evidence-to-data workflow and demonstrated analysis-specific uses, not a new statistical family or universal superiority claim.
+1. Study-qualified evidence becomes an executable model through explicit numerical derivations and completion assumptions.
+2. Relational evidence improves five of six designated mean-discrepancy comparisons; all six results and statistical comparisons remain visible.
+3. The workflow constructs complete glycemic and lipid data, with analysis-specific successes and quantitative limits. Supplied-summary reconstruction, open retrieval and longitudinal examples demonstrate different information settings.
 
-The [new cross-task experiment](biomedical_research/virtual_cohort_system/reports/evidence_use_cross_task_2026-11-05/RESULTS.md) contains six fresh Agent constructions, two requests and 18 final tables of 3,000 fictional rows. All 54 primary point directions agreed with the corresponding sample estimates, but effect magnitudes, residual dependence and dispersion differed. The TC slope reference interval crosses zero. All 513 aggregate outputs were independently recomputed; 324 matched cached references and 189 were generated-only diagnostics. These references were already exposed in development.
+The completed cross-task study contains six constructions and 18 final tables. All 54 primary point directions agree with corresponding cached sample estimates, but effect magnitudes, residual dependence and dispersion remain mixed. The TC reference interval crosses zero. All 513 aggregate outputs were independently recomputed; references were previously exposed. All six authors retained their initial laws, and runtime source checks were unavailable, so this study does not demonstrate numerical source-fit feedback or revision improvement.
 
-All six authors retained their initial laws. The 132 source checks were unavailable under their declared definitions, so numerical source-replay or feedback-driven improvement is not established. The data support transparent, assumption-dependent relationship exploration and analysis-workflow inspection; quantitative replacement of a measured target cohort remains unsupported. All six constructions and unfavorable results remain visible.
+## Reading package and next decision
 
-## Read, inspect and reproduce
+The 18-page generic reading copy has four main figures, four supplementary figures, one main table, six supplementary tables and 28 references. Four plots have been redesigned from frozen aggregates; no experiment was rerun or retuned. The narrative follows the scientific argument rather than the chronology of project batches.
 
-- [Manuscript history and reviews](biomedical_research/virtual_cohort_system/manuscript/README.md)
-- [Story and figure roles](biomedical_research/virtual_cohort_system/reports/manuscript_integration_v14_2026-11-05/STORY_AND_FIGURE_PLAN.md)
-- [New Figure 6: scientific analyses](biomedical_research/virtual_cohort_system/manuscript/paper_figures_v14_2026-11-05/fig6-cross-task.svg) and [Figure 7: dispersion](biomedical_research/virtual_cohort_system/manuscript/paper_figures_v14_2026-11-05/fig7-dispersion.svg)
-- [Evidence-use implementation](biomedical_research/virtual_cohort_system/cohort_harness/evidence_use_v1.py) and [design](biomedical_research/virtual_cohort_system/docs/EVIDENCE_USE_V1.md)
-- [Portable aggregate plotting](biomedical_research/virtual_cohort_system/manuscript/paper_figures_v14_2026-11-05/render_cross_task_aggregates.py): both new PNGs were reproduced pixel-for-pixel without participant or generated-row access.
-- [Exposure registry](biomedical_research/virtual_cohort_system/docs/DATASET_EXPOSURE_REGISTRY.md) and [public release scope](biomedical_research/virtual_cohort_system/reports/manuscript_integration_v14_2026-11-05/PUBLIC_SCOPE.md)
+- [Manuscript history](biomedical_research/virtual_cohort_system/manuscript/README.md) and [editorial explanation in Chinese](biomedical_research/virtual_cohort_system/reports/manuscript_refinement_v15_2026-11-05/EDITORIAL_DECISIONS_ZH.md)
+- [Independent content review](biomedical_research/virtual_cohort_system/reports/manuscript_refinement_v15_2026-11-05/INDEPENDENT_CONTENT_REVIEW.md) and [actual PDF review](biomedical_research/virtual_cohort_system/reports/manuscript_refinement_v15_2026-11-05/FINAL_PDF_REVIEW.md)
+- [Completed cross-task study](biomedical_research/virtual_cohort_system/reports/evidence_use_cross_task_2026-11-05/RESULTS.md) and [evidence-use implementation](biomedical_research/virtual_cohort_system/cohort_harness/evidence_use_v1.py)
+- [Claim-specific experiment gaps](biomedical_research/virtual_cohort_system/manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) and [exposure registry](biomedical_research/virtual_cohort_system/docs/DATASET_EXPOSURE_REGISTRY.md)
 
-The 16-page generic reading copy contains seven main figures, one supplementary figure, three main tables, four supplementary tables and 28 references. Scientific author review, venue/length selection and author declarations remain. The ZIP is a local LaTeX package, not an uploaded Overleaf project or a submission.
+The venue audit prioritizes MLHC for conference fit, a future AAMAS cycle for the Agent community, and PLOS Digital Health as a separate journal route. KDD Research/AI for Sciences are conditional ambitious options. Official 2027 rules and deadline availability are recorded in the audit; no acceptance probability is implied.
 
-Patient-level real/generated tables, third-party originals/codebooks and credentials remain local. Public plotting is portable; the historical construction controllers retain documented local layout/runtime/source-access requirements. This release did not rerun a generator, read participant rows, refit a clinical reference or retune an exposed target. [Current focus](biomedical_research/virtual_cohort_system/docs/CURRENT_RESEARCH_FOCUS.md).
+Scientific author review and venue-specific formatting/declarations remain. The ZIP is a local LuaLaTeX package, not an online Overleaf project or a submission. Patient-level real/generated data, third-party originals and credentials remain local. [Current focus](biomedical_research/virtual_cohort_system/docs/CURRENT_RESEARCH_FOCUS.md).
