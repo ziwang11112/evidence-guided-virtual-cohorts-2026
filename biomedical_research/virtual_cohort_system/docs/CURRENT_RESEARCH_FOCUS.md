@@ -16,10 +16,10 @@ For the archived v0.13 manuscript, independent [content/numerical review](../rep
 
 **Proceed with the scoped applied-method draft.** The [experiment-gap checklist](../manuscript/KEY_EXPERIMENT_GAPS_v13_1_2026-11-04.md) and [archived v0.13 gap review](../reports/manuscript_integration_v13_2026-11-04/EXPERIMENT_GAP_REVIEW.md) support this decision.
 
-1. Scientific author review of the integrated evidence-to-data contribution and its concrete analysis uses.
-2. Select destination and finish article-length/template editing plus authorship, funding/conflicts, ethics/access, AI-use and software/data-release declarations.
-3. For a stronger transport/generalization claim, prospectively freeze a previously unexposed real reference. First check existing access/exposure records; no acquisition or new case is automatically authorized by this checklist.
-4. Optionally isolate one declared unmeasured-dependence or residual-allocation assumption under fixed evidence. Preserve every scenario rather than selecting the closest result. This is not a required new large benchmark.
+1. Broaden current-workflow coverage using existing data. The [coverage plan](../manuscript/DATASET_AND_ANALYSIS_BREADTH_PLAN_2026-11-04.md) selects Turkana measured TC/HDL for protocol preparation, followed by DIETFITS paired follow-up using published source statistics. Candidate definitions and evidence checks precede generation.
+2. Evaluate the final tables through the declared scientific analyses, joint or paired relationships and relevant variability. Show all constructions and outcomes. Existing cohort exposure accompanies developmental reuse.
+3. Continue scientific author review of the integrated manuscript. Prepare venue-specific length/formatting and declarations as the expanded empirical scope becomes clear.
+4. A previously unexposed population can provide additional transfer evidence. The immediate expansion addresses the narrow biomarker and task coverage of the two HbA1c-centered reference families.
 
 Do not reopen exposed targets for tuning, multiply seeds to imply independent replication, add unrelated datasets or use the same reference to guide model changes. A latest-batch finite NumPy scalar evaluation defect was fixed additively using unchanged frozen rows; the original failure is retained and all outputs independently recalculated. No shared unresolved implementation error requires wholesale regeneration.
 
