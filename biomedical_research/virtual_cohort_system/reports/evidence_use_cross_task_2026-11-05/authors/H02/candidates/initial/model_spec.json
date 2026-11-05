@@ -1,0 +1,400 @@
+{
+  "parameters": {
+    "rows_per_cell": 375,
+    "female_levels": [
+      0,
+      1
+    ],
+    "age_bands": [
+      [
+        25,
+        39
+      ],
+      [
+        40,
+        54
+      ],
+      [
+        55,
+        69
+      ],
+      [
+        70,
+        79
+      ]
+    ],
+    "age_center": 50,
+    "bmi_center": 28,
+    "bmi_lower": 14,
+    "bmi_upper": 56,
+    "bmi_alpha": 4,
+    "bmi_beta": 8,
+    "glucose_center": 94,
+    "glucose_lower": 55,
+    "glucose_upper": 126,
+    "glucose_precision": 8.5,
+    "glucose_age_coefficient": 0.2041714285714286,
+    "glucose_female_coefficient": -4.4496,
+    "glucose_bmi_coefficient": 0.432,
+    "hba1c_intercept": 5.45,
+    "hba1c_age_coefficient": 0.01,
+    "hba1c_bmi_coefficient": 0.006650580645161291,
+    "hba1c_female_coefficient": 0.08324901935483871,
+    "hba1c_glucose_coefficient": 0.013540322580645161,
+    "hba1c_residual_alpha": 3,
+    "hba1c_residual_beta": 3,
+    "hba1c_residual_sd": 0.4
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "Transport source component associations from US, Finland and Iran to the specified Mexico equal-cell design is unverified, including country, age ranges and composition. Repeated sources/seeds do not supply independent evidence."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Bridge plasma/serum, HbA1c assay differences and unverified preanalytical differences as sufficiently comparable for chosen parameters; this is not an established measurement conversion."
+    },
+    {
+      "id": "A_selection",
+      "description": "Source fasting, diabetes, HbA1c, medication and complete-case restrictions differ; use the chosen law for the already-selected task population without asserting verified anemia or medication exclusions."
+    },
+    {
+      "id": "A_weighting",
+      "description": "Using weighted or incompletely described source estimands in an equal-cell law assumes portability; it does not make an unweighted operator an estimator of the same source quantity. Unknown weighting remains unknown."
+    },
+    {
+      "id": "A_adjustment",
+      "description": "Finnish binary-age and fasting-duration adjustment differ from H02 continuous age and absent duration. Their transfer and omission of interactions are unverified. A common linear conditional mean is assumed."
+    },
+    {
+      "id": "A_units",
+      "description": "Finnish S1 response units are inferred as mmol/L and S2 as HbA1c percentage points from main-text/numerical context, not printed supplement headers. Convert glucose by18 mg/dL per mmol/L. Reported raw coefficients, this interpretation and derived spec values remain distinct. Requested age10/bmi5 coefficients multiply raw-scale effects by10/5."
+    },
+    {
+      "id": "A_marginal_conditional",
+      "description": "Assume Kerman marginal r*SD(H)/SD(G) may serve as a target conditional glucose coefficient after age, sex and BMI adjustment; source moments identify only the marginal projection. Printed Table2 slopes are rejected, not corrected."
+    },
+    {
+      "id": "A_cross_source",
+      "description": "Assume cross-source linear mean coherence for the omitted-variable BMI/sex decompositions; reduced effect=conditional effect plus glucose coefficient times glucose-covariate effect. Q3 is not directly reported or causal."
+    },
+    {
+      "id": "A_design",
+      "description": "Task requires exactly375 per female0/1 by four stated age bands; within-band discrete uniform ages and deterministic unique IDs are construction assumptions, not national sampling."
+    },
+    {
+      "id": "A_bmi_law",
+      "description": "BMI=14+42*Beta(4,8), independent of age and female, is an unverified bounded right-skewed law with rounded mean28 and SD5.49125. Neither the family, support nor independence is source-estimated."
+    },
+    {
+      "id": "A_glucose_law",
+      "description": "For the selected cohort, glucose conditional beta support55 to126 and precision8.5 are assumed. This gives a mean-preserving bounded law and heteroscedastic variance; 12.4 is a Kerman marginal SD, not a target conditional SD."
+    },
+    {
+      "id": "A_age_bridge",
+      "description": "Divide Finnish older-minus-younger glucose contrast by midpoint gap17.5 years and extrapolate the continuous linear slope through ages25-79; source binary contrast does not identify this gradient."
+    },
+    {
+      "id": "A_locations",
+      "description": "Use chosen rounded glucose baseline94 and HbA1c5.45 at age50, male and BMI28. Finnish displayed intercepts contextualize but do not identify these target locations; fasting-time reference is unavailable."
+    },
+    {
+      "id": "A_residual",
+      "description": "Independent standardized Beta(3,3) HbA1c innovation with conditional SD0.40 is assumed; symmetry, bounded tails and homoscedasticity are not estimated by source marginal SDs or SEs. No HbA1c diagnostic cutoff is imposed."
+    },
+    {
+      "id": "A_finite_law",
+      "description": "All variables have bounded support and finite moments; resulting population projection identities follow from the proposed law, not target evidence. Numerical glucose endpoint protection only guards rounding to126."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "No probability model for parameter, source or transport uncertainty is supplied. Individual residuals and repeated seeds do not estimate such uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "rows_per_cell": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Fixed task balance; within-band uniform integer ages. Scientific cohort construction settings are consumed by generator."
+    },
+    "female_levels": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Fixed task balance; within-band uniform integer ages. Scientific cohort construction settings are consumed by generator."
+    },
+    "age_bands": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Fixed task balance; within-band uniform integer ages. Scientific cohort construction settings are consumed by generator."
+    },
+    "age_center": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_locations"
+      ],
+      "derivation": "Chosen age50 centering point; centering has no independent empirical estimate."
+    },
+    "bmi_center": {
+      "evidence_ids": [
+        "E_N_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_bmi_law",
+        "A_locations",
+        "A_population",
+        "A_weighting"
+      ],
+      "derivation": "Rounded28.01 to28 for centering/level anchor; no person-level SD inferred."
+    },
+    "bmi_lower": {
+      "evidence_ids": [
+        "E_N_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_bmi_law",
+        "A_population",
+        "A_weighting"
+      ],
+      "derivation": "Assumed14+42*Beta(4,8); mean28 and marginal SD42*sqrt(32/(144*13))=5.491251784; only location contextualized by source."
+    },
+    "bmi_upper": {
+      "evidence_ids": [
+        "E_N_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_bmi_law",
+        "A_population",
+        "A_weighting"
+      ],
+      "derivation": "Assumed14+42*Beta(4,8); mean28 and marginal SD42*sqrt(32/(144*13))=5.491251784; only location contextualized by source."
+    },
+    "bmi_alpha": {
+      "evidence_ids": [
+        "E_N_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_bmi_law",
+        "A_population",
+        "A_weighting"
+      ],
+      "derivation": "Assumed14+42*Beta(4,8); mean28 and marginal SD42*sqrt(32/(144*13))=5.491251784; only location contextualized by source."
+    },
+    "bmi_beta": {
+      "evidence_ids": [
+        "E_N_bmi_mean"
+      ],
+      "assumption_ids": [
+        "A_bmi_law",
+        "A_population",
+        "A_weighting"
+      ],
+      "derivation": "Assumed14+42*Beta(4,8); mean28 and marginal SD42*sqrt(32/(144*13))=5.491251784; only location contextualized by source."
+    },
+    "glucose_center": {
+      "evidence_ids": [
+        "E_F_g_intercept",
+        "E_F_g_male",
+        "E_F_g_bmi"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units",
+        "A_locations"
+      ],
+      "derivation": "Chosen94 mg/dL, near18*(4.2966+0.2472+0.024*28)=93.8844 under inferred scale; fasting-time reference unavailable."
+    },
+    "glucose_lower": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose_law",
+        "A_finite_law"
+      ],
+      "derivation": "Assumed support55 to task exclusion126 and precision8.5; mean-preserving beta shapes determined by conditional mean."
+    },
+    "glucose_upper": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose_law",
+        "A_finite_law"
+      ],
+      "derivation": "Assumed support55 to task exclusion126 and precision8.5; mean-preserving beta shapes determined by conditional mean."
+    },
+    "glucose_precision": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_glucose_law",
+        "A_finite_law"
+      ],
+      "derivation": "Assumed support55 to task exclusion126 and precision8.5; mean-preserving beta shapes determined by conditional mean."
+    },
+    "glucose_age_coefficient": {
+      "evidence_ids": [
+        "E_F_g_age"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units",
+        "A_age_bridge"
+      ],
+      "derivation": "Reverse younger-minus-older sign;0.1985*18/17.5=0.2041714285714286 mg/dL/year, using assumed age-midpoint bridge."
+    },
+    "glucose_female_coefficient": {
+      "evidence_ids": [
+        "E_F_g_male"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units"
+      ],
+      "derivation": "Reverse male-minus-female sign and convert inferred mmol/L scale:-0.2472*18=-4.4496 mg/dL for female."
+    },
+    "glucose_bmi_coefficient": {
+      "evidence_ids": [
+        "E_F_g_bmi"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units"
+      ],
+      "derivation": "Original0.0240 on unstated source response scale; A_units infers mmol/L, then separate conversion0.0240*18=0.432 mg/dL per kg/m^2."
+    },
+    "hba1c_intercept": {
+      "evidence_ids": [
+        "E_F_h_intercept",
+        "E_F_h_male",
+        "E_F_h_bmi"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units",
+        "A_locations"
+      ],
+      "derivation": "Choose5.45%, near5.1281+0.0125*28-0.023=5.4551 under inferred percent scale; no target mean fit."
+    },
+    "hba1c_age_coefficient": {
+      "evidence_ids": [
+        "E_N_age"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units"
+      ],
+      "derivation": "Retain source-adjusted0.010 percentage points/year as conditional age slope under explicit bridges; Q1 age10 is ten times this coefficient."
+    },
+    "hba1c_glucose_coefficient": {
+      "evidence_ids": [
+        "E_K_r",
+        "E_K_h_sd",
+        "E_K_g_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units",
+        "A_marginal_conditional",
+        "A_cross_source"
+      ],
+      "derivation": "First derive marginal simple-projection0.23*0.73/12.4=0.013540322580645161 pp/(mg/dL). Conditional use is A_marginal_conditional; not a corrected source-adjusted slope."
+    },
+    "hba1c_bmi_coefficient": {
+      "evidence_ids": [
+        "E_F_h_bmi",
+        "E_F_g_bmi",
+        "E_K_r",
+        "E_K_h_sd",
+        "E_K_g_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units",
+        "A_marginal_conditional",
+        "A_cross_source"
+      ],
+      "derivation": "Under inferred Finnish percent scale and cross-source linear coherence,0.0125-(0.23*0.73/12.4)*(0.0240*18)=0.006650580645161291 pp/(kg/m^2). Q2 reduced slope0.0125; Q3 is assumption-dependent."
+    },
+    "hba1c_female_coefficient": {
+      "evidence_ids": [
+        "E_F_h_male",
+        "E_F_g_male",
+        "E_K_r",
+        "E_K_h_sd",
+        "E_K_g_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_adjustment",
+        "A_units",
+        "A_marginal_conditional",
+        "A_cross_source"
+      ],
+      "derivation": "Female reduced contrast is-(-0.023)=0.023; conditional coefficient0.023-(0.23*0.73/12.4)*(-0.2472*18)=0.08324901935483871. Nonsignificance is not replaced by zero."
+    },
+    "hba1c_residual_alpha": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_residual",
+        "A_finite_law",
+        "A_uncertainty"
+      ],
+      "derivation": "Assumed standardized Beta(3,3) innovation and conditional SD0.40; standardization uses its theoretical beta mean/variance, equivalent to sqrt(7)*(2U-1)."
+    },
+    "hba1c_residual_beta": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_residual",
+        "A_finite_law",
+        "A_uncertainty"
+      ],
+      "derivation": "Assumed standardized Beta(3,3) innovation and conditional SD0.40; standardization uses its theoretical beta mean/variance, equivalent to sqrt(7)*(2U-1)."
+    },
+    "hba1c_residual_sd": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_residual",
+        "A_finite_law",
+        "A_uncertainty"
+      ],
+      "derivation": "Assumed standardized Beta(3,3) innovation and conditional SD0.40; standardization uses its theoretical beta mean/variance, equivalent to sqrt(7)*(2U-1)."
+    }
+  }
+}

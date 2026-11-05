@@ -1,0 +1,15 @@
+# Implementation clarifications after proposal review
+
+The reviewed scientific law and all numerical choices are unchanged. This file adds the provenance annotations requested in the source-only review; it does not rewrite the retained proposal.
+
+Finnish supplement Tables S1/S2 print the coefficients but omit outcome units. `evidence.json` retains the raw coefficients with unit `not_reported`. The model infers S1 mmol/L and S2 HbA1c percent from the article's measurement/table context and plausible intercept scales. These are explicit A_units assumptions. Multiplication by the recorded rounded18.0 and reversal of male-minus-female contrasts are separate derivations in model provenance. The raw coefficients are not falsely described as printed mg/dL or percent coefficients.
+
+NHANES and Finnish estimates are survey weighted. Kerman reports cluster sampling and Pearson/multiple regression methods but does not explicitly state analysis weighting; that remains `not_reported`. Taiwan and the contextual FOS regression weighting are also not declared as known unweighted operators here. Source means/SDs/correlations retain their actual source populations and selections. The equal-cell generated design is not used as a substitute source context.
+
+All32 source-feedback records are retained as `not_computable` because the supplied v1 operators cannot faithfully represent survey weighting, unknown weighting or incomplete definitions. Null operators do not assert that the named source statistics were absent; they mean that a complete computable source operator is not supplied. Finnish unit/contrast conversion, source binary-age adjustment, ungenerated fasting/2-hour covariates and unreported quantile convention are not silently repaired by the feedback recipe. A successful semantic preflight would verify only these declarations.
+
+The generator derives beta shapes, design age moments, glucose variance partition, the signed Pearson moment root and HbA1c residual variance from specification values. The rejected squared-equation root is excluded only because it fails the signed correlation equation. No realized sample moments or desired target results enter these derivations. The reviewed scalar values remain in retained algebra/check artifacts instead of becoming unused duplicate generator settings.
+
+All source extraction, design, unit, support, distribution, transport and uncertainty assumptions remain explicit. The reference-age SD is a normal-shape approximation from a mean and upper quantile; it is neither a reported SD nor a conversion of SE into residual SD. The final conditional beta law is not claimed to have exactly the source's unreported quantile estimator.
+
+Preparation checks are source review, retained deterministic algebra and generator AST/signature inspection. Static contract/preflight/evidence-use validation attempts are saved outside this candidate with their input hashes. No generator import, execution, sampling or target/reference access occurred during implementation. Root must review code, freeze and invoke the supplied isolated adapter before any generated-output claim is possible.

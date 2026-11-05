@@ -1,0 +1,11 @@
+# H02 initial scientific decision
+
+Implement the reviewed bounded conditional joint law in the preserved bundle-level proposal, with the implementation clarifications qualifying Finnish response units and source-feedback availability. There is no numerical redesign.
+
+The closest reported relationship is the NHANES age coefficient adjusted for sex, BMI and fasting glucose. The Finnish age/sex-adjusted BMI coefficient for HbA1c omits glucose. Q3 is therefore constructed using the explicit cross-source linear decomposition: reduced BMI slope minus the assumed conditional HbA1c–glucose slope times the glucose–BMI slope. The Kerman correlation and marginal SDs identify only a marginal simple-projection slope. Its conditional use is an unverified bridge, not a recovered adjusted estimate. Printed Kerman Table 2 slopes are declined because their scale does not reconcile with the reported marginal moments.
+
+BMI, conditional glucose and standardized HbA1c innovations use bounded beta laws. All joint moments are finite. HbA1c positivity follows from support bounds without truncating HbA1c at a diagnostic threshold. Chosen dispersion, tails, independence and location parameters are assumptions, not source precision. The equal age/sex-cell design and within-cell uniform ages do not represent national population sampling.
+
+All three requested analyses are retained as declared analytical uses. Q1 has a transported source coefficient; Q2 and Q3 depend on broader component and joint-law bridges. No coefficient is causal, no transport uncertainty is calibrated, and repeated seeds do not add clinical evidence. Medications, anemia, erythrocyte biology and selection beyond supplied fields are unmeasured, not verified absent.
+
+Source-semantic feedback preserves weighted or incompletely defined source comparisons as unavailable. Own-output diagnostics can assess the implemented law after root-authorized isolated execution; they cannot identify the missing target relationships. Only actually executed static/deterministic checks are recorded here. No initial trial, freeze, generator import or sampling has occurred during candidate preparation. The implementation stops for root review before execution, preserving the one-revision and fixed-seed schedule in AUTHOR_TASK.md.

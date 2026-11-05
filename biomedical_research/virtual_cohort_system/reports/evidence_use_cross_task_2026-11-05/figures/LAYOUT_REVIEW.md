@@ -1,0 +1,3 @@
+# Figure layout review
+
+Root visually inspected both exported PNGs after rendering. The first primary-analysis render clipped its long panel C title; only plot labels were shortened and wrapped, then the figure was rendered and inspected again. Final panels, tick labels, axis units, source-reference markers, legend and captions are visible without clipping. The dispersion figure required no layout correction. PNG, vector PDF and SVG exports share the same Matplotlib layout. Numerical data, frozen models and evaluated values were unchanged. Blue, violet, terracotta and neutral grey are used; no green palette.

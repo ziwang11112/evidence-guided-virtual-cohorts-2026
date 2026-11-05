@@ -1,0 +1,28 @@
+# Evidence-use gate engineering increment
+
+Implemented an additive, optional `cohort_harness/evidence_use_v1.py` pure API and `docs/EVIDENCE_USE_V1.md`. Existing `analysis_evidence`, action planning, contracts, lifecycle, frozen artifacts and controllers are unchanged. No target data/results were inspected, no scientific parameter was selected for a real candidate, no generator was executed and no retrieval or broader experiment was started.
+
+The gate binds exact candidate task/evidence/spec/analysis/check/generator bytes; resolves existing IDs; requires declared relationship, dispersion, scenario, check-only or retention use to appear in actual specification paths and existing check records; and enforces complete exact parameter-diff coverage for revisions. Initial construction needs no baseline and makes no change/improvement claim. Generator byte changes and full specification byte changes are reported independently from parameter changes. Per-path changed/retained status is derived, and support is explicitly labeled evidence-only, evidence-plus-assumptions or assumption-only.
+
+No evidence/rationale ledger was added. Existing analysis comparisons/gaps, model assumptions/provenance and checks retain their meanings. Declared unit/transport differences or unknowns need shared gap/link assumptions plus decision/parameter provenance when used in the model. Check failures remain accepted feedback; non-computable checks remain non-computable. No scientific validity, execution, uncertainty or data-quality certification is issued.
+
+API for the new controller:
+
+```python
+from cohort_harness.evidence_use_v1 import validate_evidence_use
+report = validate_evidence_use(
+    manifest, artifacts, required_analysis_ids=request_analysis_ids,
+)
+```
+
+`manifest` is the optional `evidence_use_v1.json` object; `artifacts` maps controller-selected portable paths to exact bytes. Required binding roles: task/evidence/model_spec/analysis_evidence/checks/generator. Revisions additionally provide baseline_evidence/baseline_model_spec/baseline_generator. The controller must check role paths against its chosen candidate and baseline, call before freeze, bind sidecar/report commitments to its new freeze event, retain normal registry/freeze checks and reload/rerun during verify. The API does not read paths or authenticate caller-supplied inputs. See the full controller sequence and schema in `docs/EVIDENCE_USE_V1.md`.
+
+Targeted validation uses only invented metadata and opaque generator bytes. The final run of `python -m pytest tests/test_evidence_use_v1.py tests/test_evidence_use_controller.py tests/test_evidence_actions_v1.py -q --basetemp work/evidence_use_cross_task_2026-11-05/engineering/pytest-loader-01 --tb=short` passed **95 tests in 0.65 seconds**. The explicit temporary directory was new before this run. The first loader-test attempt had 88 passes and seven fixture-setup errors because the OS denied access to the default Windows pytest temporary directory; no test body failed, and the dedicated workspace temp directory resolved that environment issue.
+
+Coverage includes initial construction, exact revision changes, stale metadata/generator hashes, altered check artifacts, omitted/wrong changed paths, retained parameters with changed code/provenance, missing unit/transport assumptions in gap/link/decision/provenance, strict JSON, unavailable checks, failed-check retention, initial unmapped nuisance parameters, reference failures, nested/list/escaped-pointer scenario changes, unchanged direct evidence use, shared parameters across requested analyses, assumption-only changes and case-alias rejection. The seven loader tests also check actual file binding, task/baseline substitution rejection, code-edit detection, auxiliary traversal rejection and the controller-supplied required-use list.
+
+Targeted integration read: the new `controller_evidence_use.py` anchors each role to the actual selected candidate/baseline and uses safe-root/no-link reads. The new `runner.py` calls the gate before freeze, commits the returned report inline in its hash-chained freeze event, relies on lifecycle freezing to bind the sidecar and all candidate files, and reloads/revalidates during `Session.verify`. These paths were read; no Session, freeze, trial or generator was dispatched by this engineering task. An inherited runner docstring allowing authored-row submissions was reported to the root agent for correction because this pilot/gate requires the program route.
+
+An independent pre-implementation contract review identified separate code/spec/parameter statuses, exact diff coverage, strict byte bindings, shared gap/link/provenance bridge references and honest failed/non-computable check status. Those requirements were incorporated. A separate cross-task reviewer then found three valid-use cases rejected by the initial draft: unchanged directly evidence-backed use, a changed parameter shared by multiple analyses, and assumption-only updates. All were fixed and covered by targeted tests. Source-use role is now distinct from the derived changed/retained status. Final independent re-review remains pending at this report version.
+
+Limitations: choice semantics, source truth, parameter interpretation, omitted scientific assumptions, record-to-check-artifact meaning and intended request completeness remain Agent/controller declarations. Top-level parameter provenance cannot establish nested generator dependencies. Baseline selection and source registry admission remain controller/lifecycle responsibilities. No fresh cross-task empirical result follows from these engineering checks.

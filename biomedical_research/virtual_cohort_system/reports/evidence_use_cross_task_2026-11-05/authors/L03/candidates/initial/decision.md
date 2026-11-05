@@ -1,0 +1,11 @@
+# L03 initial decision
+
+Implement the controller-reviewed proposal unchanged: balanced sex composition, rural Malawi age quartiles with assumed cap90/declining upper-quarter density, age independent of biomarkers given sex, and a sex-conditional Gaussian-lognormal BMI/TC/HDL vector. Agongo arithmetic marginal moments anchor scale; Greiner rural geometric sex ratios set log shifts; rural Ashanti unadjusted Spearman entries set assumed within-sex copula dependence. No unresolved source log regression is calibrated.
+
+The source women/men-to-literal-F/M correspondence is explicitly assumed because the target legend is unverified. Source selection, assay/fasting, population composition, equal log variance, pooled-to-within-sex ranks, age independence and continuous quantile shape remain unresolved assumptions. No source exclusions become target filters. No clipping, rejection, TC>=HDL repair or desired-result fitting occurs. Finite Gaussian log variance gives all polynomial moments finite; age is bounded by an assumed modelling cap, not an eligibility condition.
+
+All three requested analyses are partial and assumption-dependent. Retained model-implied population effects are algebraic implementation references, not source-reported adjusted effects or target estimates. The residual Pearson statistic is derived from the full raw covariance projection, not substituted from a Spearman entry. Source CIs remain estimate uncertainty and SDs remain marginal individual dispersion; neither becomes transport uncertainty.
+
+Source-semantic checks are unavailable because source weighting is unknown; additional unsupported or unreported geometric, quantile, SD and rank definitions stay explicit. No generated-data calculation, output check or execution is claimed. Preparation retained actual source aggregate algebra, controller review/recheck, source hash checks and AST-only inspection. Additional static contract attempts will be retained outside this candidate. The controller reviews, freezes and executes the fixed initial trial; no local execution is permitted.
+
+Stop implementation after static gates pass. A later one permitted revision must address a concrete definition/implementation/source-feedback finding; no source fit or seed count can establish independent target validity. No additional retrieval occurred.

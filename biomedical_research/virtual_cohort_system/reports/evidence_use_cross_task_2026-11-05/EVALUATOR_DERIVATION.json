@@ -1,0 +1,48 @@
+{
+  "source": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\biomedical_research\\virtual_cohort_system\\work\\core_workflow_replication_2026-11-04\\evaluator_v2.py",
+  "source_sha256": "9515e5b35a4ba38b6dfbbc2f8f3b9d569dcc0db1240dffc4eb8094294947014b",
+  "destination_sha256": "9268a4c709450127c89f17d60a78badfb00ac6749e578901406f641a6163af49",
+  "changes": [
+    [
+      "all-four closure gate",
+      "all-six closure gate"
+    ],
+    [
+      "    correction=runner.READ(ROOT/'EVALUATOR_V2_CORRECTION.json')\n    for artifact in correction['bindings']:runner.verify_bound(artifact)\n",
+      ""
+    ],
+    [
+      "    refinfo=protocol['reference']\n    runner.verify_bound(refinfo)\n    refs=runner.READ(refinfo['path'])['references']\n    schema=runner.READ(ROOT/'ENDPOINT_CONTRACT.json')['cases']",
+      "    schema=runner.READ(ROOT/'ENDPOINT_CONTRACT.json')['cases']\n    refs=load_references(protocol,schema)\n    refhashes={case:r['sha256'] for case,r in protocol['references'].items()}"
+    ],
+    [
+      "dest=ROOT/'evaluation_v2'",
+      "dest=ROOT/'evaluation'"
+    ],
+    [
+      "'reference_sha256':refinfo['sha256']",
+      "'reference_sha256':refhashes"
+    ],
+    [
+      "runner.closure_gate();runner.verify_bound(refinfo)",
+      "runner.closure_gate()\n        for refinfo in protocol['references'].values(): runner.verify_bound(refinfo)"
+    ],
+    [
+      "'schema_version':'core_workflow_replication_results_v2_numeric_scalar_correction','correction_manifest_sha256':runner.SHA(ROOT/'EVALUATOR_V2_CORRECTION.json')",
+      "'schema_version':'evidence_use_cross_task_results_v1'"
+    ],
+    [
+      "'scheduled_authors':4",
+      "'scheduled_authors':6"
+    ],
+    [
+      "'scheduled_final_slots':12",
+      "'scheduled_final_slots':18"
+    ],
+    [
+      "Open author-selected PMC/EuropePMC evidence under fixed budgets;",
+      "Curated external evidence plus optional gap-directed PMC/EuropePMC acquisition; six fresh constructions and eighteen scheduled delivery slots;"
+    ]
+  ],
+  "new_adapter": "def load_references(protocol, schema):\n    \"\"\"Called only after full author closure. Never load participant records.\"\"\"\n    refs = {}\n    for case, spec in protocol['references'].items():\n        runner.verify_bound(spec)\n        record = runner.READ(spec['path'])\n        for key in spec['selector']: record = record[key]\n        if case == 'ENSANUT2018':\n            refs[case] = record\n            continue\n        out = {}\n        for endpoint in schema[case]['analyses']:\n            value = record['estimands'][endpoint['id']]\n            runner.require(value['unit'] == endpoint['unit'], 'Lipid reference unit mismatch')\n            out[endpoint['id']] = {'unit':value['unit'], 'value':value['estimate'],\n                'status':value['status'], 'interval':value['interval'],\n                'scope':'Existing exposed selected sample; identical K02 estimator'}\n        for endpoint in schema[case]['diagnostics']:\n            value = None\n            for col in ('total_cholesterol', 'hdl_cholesterol'):\n                if endpoint['id'] == col+'.sd_sample':\n                    value = record['metric_denominators'][col]['sample_sd']\n            out[endpoint['id']] = {'unit':endpoint['unit'], 'value':value,\n                'status':'computed' if finite(value) else 'unavailable',\n                'scope':'Existing sample ddof=1 SD' if finite(value) else 'Not present in pinned aggregate; generated diagnostic only'}\n        refs[case] = out\n    return refs\n\n"
+}

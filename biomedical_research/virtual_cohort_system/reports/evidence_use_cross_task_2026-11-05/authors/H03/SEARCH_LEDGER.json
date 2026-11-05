@@ -1,0 +1,82 @@
+{
+  "author_id": "H03",
+  "phase": "preimplementation_proposal",
+  "instruction": "Log actual optional acquisition and source choices; do not replace task-bound gateway session",
+  "actions": [
+    {
+      "sequence": 1,
+      "tool": "cohort_harness.literature.run_literature search via supplied CLI",
+      "query": "HbA1c nondiabetic fasting glucose BMI multivariable coefficient",
+      "purpose": "Find a directly reported HbA1c-glucose or BMI coefficient after age/sex/BMI/glucose adjustment for the missing Q3 relationship.",
+      "limit": 10,
+      "status": "ok",
+      "retrieved_count": 10,
+      "accepted_count": 9,
+      "rejected_count": 1,
+      "total_hit_count": 419,
+      "artifact": "sources/gateway/a9d11d1b04179bb3c181f4ded5283d26a68a5be5cd124118ba36331063aac17a.json",
+      "sha256": "a9d11d1b04179bb3c181f4ded5283d26a68a5be5cd124118ba36331063aac17a",
+      "decision": "Returned accepted metadata were dominated by diabetes case-control/complication studies; no directly usable missing adjusted relationship was identified. No original article fetched, and no metadata statistic enters the model.",
+      "cumulative_query_credits": 1,
+      "cumulative_downloads": 0
+    },
+    {
+      "sequence": 2,
+      "tool": "cohort_harness.literature.run_literature search",
+      "query": "TITLE:(HbA1c OR glycated haemoglobin OR glycated hemoglobin) AND TITLE:(determinants OR factors) AND (nondiabetic OR non-diabetic) AND FIRST_PDATE:[1990-01-01 TO 2020-12-31]",
+      "purpose": "Narrow the same missing adjusted-relationship search toward HbA1c determinants in non-diabetic adults.",
+      "limit": 10,
+      "status": "ok",
+      "retrieved_count": 10,
+      "accepted_count": 10,
+      "rejected_count": 0,
+      "total_hit_count": 31,
+      "artifact": "sources/gateway/6b5eaad5c98840ccb230392253f452a76c2b6511daa01e3e542088a09000bce6.json",
+      "sha256": "6b5eaad5c98840ccb230392253f452a76c2b6511daa01e3e542088a09000bce6",
+      "decision": "Screened returned titles/abstracts. Genetics, diabetic treatment and pediatric reports do not supply the needed adult adjusted coefficient. The older-adult report PMC3395860 includes ages65-95 and mixed glycemic status; its abstract does not report a usable fasting-glucose-adjusted BMI effect. No download or quantitative use.",
+      "cumulative_query_credits": 2,
+      "cumulative_downloads": 0
+    },
+    {
+      "sequence": 3,
+      "tool": "cohort_harness.literature.run_literature search",
+      "query": "TITLE_ABS:(nonglycemic OR non-glycemic) AND TITLE_ABS:(HbA1c OR glycated hemoglobin) AND FIRST_PDATE:[1990-01-01 TO 2020-12-31]",
+      "purpose": "Look for nonglycemic HbA1c determinants that could directly identify the glucose-adjusted BMI component.",
+      "limit": 10,
+      "status": "ok",
+      "retrieved_count": 10,
+      "accepted_count": 10,
+      "rejected_count": 0,
+      "total_hit_count": 1103,
+      "artifact": "sources/gateway/a0219950c933c89adf9f0c98068fff225d1a876fc71637824b8d9bef779bc096.json",
+      "sha256": "a0219950c933c89adf9f0c98068fff225d1a876fc71637824b8d9bef779bc096",
+      "decision": "Screened returned metadata include diabetic kinetic models, albumin/genetics, clinical disease or treatment contexts. No directly usable new Q3 coefficient identified. No download or source-model statistic taken from search metadata. This was a limited search, not a claim of literature exhaustion.",
+      "cumulative_query_credits": 3,
+      "cumulative_downloads": 0
+    }
+  ],
+  "actual_usage": {
+    "queries": 3,
+    "downloads": 0,
+    "http_attempts": 3,
+    "http_successes": 3,
+    "auxiliary_requests": 0
+  },
+  "remaining_before_first_freeze": {"query_credits": 1, "download_slots": 2},
+  "source_choices": [
+    {"source_id": "PMC2551641", "choice": "Use NHANES adjusted age slope, BMI mean, and age50-54 HbA1c mean/quantile with explicit transport and approximate dispersion derivation; preserve FOS/other-age observations as context/checks. Do not treat tiny prose +/- values or Table1 SEs as residual SDs."},
+    {"source_id": "PMC6458679", "choice": "Use Finnish general-population continuous-BMI S1/S2 coefficients. Select admitted supplement text894ba816... corroborated by page-oriented480cb548...; both are the same source. Retain fasting-adjustment ambiguity and stricter HbA1c/diabetes exclusions."},
+    {"source_id": "PMC3075530", "choice": "Use reported marginal Pearson r0.23, BMI SD3.8, glucose mean91.2 and SD12.4 under named transport assumptions. Decline Table2 printed regression slopes because their raw-unit relation to r and SDs is unresolved; do not silently repair their scale. HbA1c mean/SD and BMI mean are not transferred."},
+    {"source_id": "PMC8038122", "choice": "Read Methods and Tables1,3-6 for age/sex heterogeneity and selection limitations; contextual/check-only role, no fitted numerical parameter."}
+  ],
+  "calculation_record": {
+    "program": "PROPOSAL_ALGEBRA.py",
+    "result": "PROPOSAL_ALGEBRA.json",
+    "status": "executed_successfully",
+    "scope": "Deterministic proposed-law moments and support feasibility; no individual rows, random draws or generator execution. Not target validation."
+  },
+  "operational_read_errors": [
+    {"operation": "Initial compact XML-to-stdout source read", "result": "Stopped on Windows cp1252 UnicodeEncodeError at a >= symbol", "resolution": "Repeated read with UTF-8 stdout; original source bytes were unchanged", "budget_effect": "No literature action or budget charge"}
+  ],
+  "stopping_reason": "Sufficient admitted components for an explicitly assumption-dependent proposal; no promising returned record currently justifies another search/download. Independent scientific review is required before writing the candidate. No freeze has occurred."
+}

@@ -1,0 +1,32 @@
+# H01 initial candidate review
+
+Reviewer: `/root/candidate_code_review_h`  
+Date: 2026-11-05  
+Candidate: `evcUseH01/candidates/initial`  
+Decision: **APPROVED for the controller's next prescribed stage.** No blocking code/specification or source-annotation inconsistency was found. This is a static scientific implementation review, not execution, source reproduction, or target validation.
+
+The review read the task/request, source-review request, proposed construction, implementation clarifications, independent H01 source-proposal review, generator and specification, evidence and analysis declarations, semantic bindings, feedback recipe, decision and check records. Source meanings were compared with the supplied independent source review; this review did not conduct new literature retrieval or independently repeat its complete original-source extraction. Referenced admitted source bytes were hash-checked against the registry. No candidate was imported or executed; no random draws, generated rows, participant rows, target/reference results, other authors' candidates, or frozen controller files were used or changed.
+
+## Code and probability law
+
+- The sole synchronous entry point has the three required positional parameters. Module scope contains only a docstring, NumPy/Pandas imports and the function definition. All scientific settings, cell definitions and output settings come from the specification. The code has no file, network or subprocess access and no target lookup, regression fitting, fitted-residual orthogonalization, favorable-seed selection, or hardcoded target relationship.
+- `default_rng(seed)` supplies the integer-age, beta, normal and gamma draws. The seed is consumed normally. All eight declared age-by-sex cells receive exactly 375 rows, totaling 3,000. Ages are inclusive integer uniforms over the specified bands. Sequential prefixed IDs are unique, and the six-column schema is explicit.
+- The BMI moment-to-shape algebra is correct: alpha = 6.853607923773584 and beta = 15.834788076226413, giving mean 28.01 and SD 5 on the declared 12–65 support. Age/sex independence remains an assumption.
+- Glucose is drawn from the declared normal kernel and rejected only when outside strict 0–126 support. Redraws leave age, sex and BMI fixed. The 1,000-round guard raises an error instead of clipping or changing another variable. This implements conditional truncation; it does not reproduce the untruncated Finnish slope exactly.
+- The HbA1c affine mean matches the specification and reviewed decomposition. The marginal covariance scale 0.23 × 0.73 / 12.4 = 0.013540322580645161 is explicitly assumed to be conditional. BMI coefficient 0.0125 − gamma × 0.432 = 0.006650580645161291 and female coefficient 0.023 − gamma × (−4.4496) = 0.08324901935483871 are correct, including sex reversal. These are source-derived/model-assumed quantities, not prescribed target results.
+- Gamma residual scale is 0.35 / sqrt(9), with mean 1.05 subtracted and SD 0.35 retained. All predictors are bounded and the independent gamma innovation has all positive integer moments finite; therefore HbA1c does too. A conservative support infimum is 2.7291093716129033%, so no positivity clipping is needed. The unbounded upper HbA1c tail remains disclosed. A nonfinite output causes failure, not repair.
+- The full-model age and BMI coefficients map to 0.100 percentage points per 10 years and 0.03325290322580646 per 5 BMI units as implications of this law. The reduced BMI coefficient is altered by glucose truncation and is not claimed to exactly reproduce the Finnish coefficient. No generated regression was run to test these claims.
+
+## Source semantics and evidence-use trace
+
+The required Finnish provenance correction is implemented: original S1/S2 coefficients retain `unit: not_reported`; `A_FIN_UNIT` states the scale inference and 18.0 conversion. Binary versus continuous age, fasting-duration adjustment, serum/plasma/assay mapping, selection, and survey weighting differences remain visible. The Kerman Pearson coefficient and marginal SDs are not called conditional dispersion; its inconsistent printed slope is declined, not silently repaired. The residual SD and distribution are assumptions. Hoorn retains quartile contrasts, standardized continuous predictors, expanded adjustment, multiple imputation/Rubin pooling and model selection; it is check-only, without a forced Q3 sign. Taiwan remains context. Shared settings/cohorts are not treated as independent precision contributions.
+
+All three requested analyses have matching formulas/adjustment sets and evidence-use decisions. Parameter pointers, evidence IDs, assumption IDs, named checks and artifact paths resolve. Q1/Q2 are declared transported and Q3 partial; the missing direct glucose-adjusted BMI relationship is not promoted to an identified source effect. Location, dispersion, joint structure and transport assumptions remain distinct. The decisions bind the actual generator, specification, evidence, analysis and checks hashes.
+
+All 13 feedback checks remain `not_computable`, with null operators and corresponding source-semantic bindings. The unavailable weighting, unknown missingness, inferred scales and unsupported operators are not replaced with unweighted or differently defined statistics. This leaves numerical source feedback unavailable, a material limitation rather than evidence of source agreement.
+
+## Verification and limits
+
+Independent deterministic checks confirmed the eight cells, scalar algebra, positive support bound, AST signature/imports, referenced source registration/hashes, check-artifact hashes, semantic evidence/recipe hashes and all evidence-use binding hashes. The first reviewer helper used the wrong JSON key (`evidence` instead of `items`) and stopped with `KeyError` after the early hash checks; the corrected helper completed. That was a reviewer helper error, not a candidate modification or generator run. The author's retained failed semantic-preflight receipt and subsequent correction remain intact.
+
+The accompanying JSON records every filename returned by `cohort_harness.lifecycle._files(candidate)` and its SHA256, plus this narrative's hash. Approval is limited to these reviewed bytes. Runtime success, finite-sample regression results, source-population validity, Mexican-population transport, causality and clinical utility remain unverified. No candidate or frozen controller file was modified.

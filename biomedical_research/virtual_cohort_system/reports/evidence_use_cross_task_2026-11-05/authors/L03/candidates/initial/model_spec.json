@@ -1,0 +1,244 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "female_probability": 0.5,
+    "age": {
+      "probabilities": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "knots": {
+        "M": [
+          18,
+          24,
+          33,
+          46,
+          90
+        ],
+        "F": [
+          18,
+          25,
+          34,
+          48,
+          90
+        ]
+      },
+      "upper_tail_power": 0.5
+    },
+    "age_biomarker_conditional_independence": true,
+    "biomarker_order": [
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "marginal_moments": {
+      "bmi": {
+        "mean": 21.63,
+        "sd": 3.61
+      },
+      "total_cholesterol": {
+        "mean": 3.23,
+        "sd": 0.92
+      },
+      "hdl_cholesterol": {
+        "mean": 1.14,
+        "sd": 0.38
+      }
+    },
+    "female_to_male_geometric_ratios": {
+      "bmi": 1.0790697674418603,
+      "total_cholesterol": 1.0833333333333333,
+      "hdl_cholesterol": 1.0476190476190477
+    },
+    "copula_spearman": {
+      "bmi_tc": 0.212,
+      "bmi_hdl": -0.1,
+      "tc_hdl": 0.106
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "Use one rural external-source archetype for the target whose site/lifestyle mixture is unspecified. Ghana/Malawi population relationships do not identify the selected Kenyan target; same-paper constraints are dependent and participant non-overlap across studies is unaudited."
+    },
+    {
+      "id": "A_selection",
+      "description": "Transport selected source summaries despite source age/health/residence restrictions. No source exclusions for pregnancy, HIV, diabetes, fasting or health are applied to target rows."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Treat BMI definitions and mmol/L lipid numbers as usable on the requested scale despite unverified assay/specimen/fasting equivalence: source central laboratory serum/unknown matrix versus target CardioChek Plus venous EDTA and unknown fasting."
+    },
+    {
+      "id": "A_unweighted_operational",
+      "description": "Source weighting remains not_reported. Use reported aggregate values as constants in an unweighted model; this is an assumption and cannot make source-semantic feedback computable or relabel unknown weighting as reported none."
+    },
+    {
+      "id": "A_marginal_dispersion",
+      "description": "Treat Agongo reported marginal sample SDs as population dispersion anchors under unknown denominator convention and transport; do not treat them as conditional residual SDs, SEs or uncertainty in transported parameters."
+    },
+    {
+      "id": "A_equal_logvariance",
+      "description": "For each biomarker assume equal log variance in male/female source-label strata mapped to M/F. Decompose pooled arithmetic variance using the balanced mixture and geometric ratio; no sex-specific dispersion is reported as such."
+    },
+    {
+      "id": "A_sex_ratio_transfer",
+      "description": "Transfer only Greiner rural Malawi female/male geometric mean ratios to log location differences. Do not impose their absolute means or convert geometric means to arithmetic without the declared law."
+    },
+    {
+      "id": "A_rank_to_conditional",
+      "description": "Transfer the pooled rural Ashanti unadjusted Spearman matrix as within-sex rank dependence; this strong conditioning bridge is unreported. Pooled output ranks need not equal the source ranks after sex shifts."
+    },
+    {
+      "id": "A_gaussian_copula",
+      "description": "Use a continuous Gaussian copula. Convert source Spearman r to latent normal 2*sin(pi*r/6); neither this latent Pearson nor raw residual Pearson is reported by the source."
+    },
+    {
+      "id": "A_lognormal",
+      "description": "Use sex-conditional multivariate lognormal biomarkers with finite Gaussian covariance, positivity and all polynomial moments finite. No clipping/rejection or TC>=HDL selection; occasional reversed measured lipids are a disclosed model limitation."
+    },
+    {
+      "id": "A_age_independence",
+      "description": "Assume age independent of the biomarker vector conditional on sex. This deliberately chosen simplification is not inferred from absent evidence and removes within-sex age confounding from population OLS; age-dependent biological relations remain unidentified."
+    },
+    {
+      "id": "A_age_quantile_shape",
+      "description": "Use reported rural Malawi sex quartiles as continuous quantile locations. Assume linear lower three quarters, cap90, upper-quarter inverse CDF q75+(90-q75)*(1-sqrt(1-v)). Quantile convention and age maximum are unreported; cap90 is not an eligibility restriction."
+    },
+    {
+      "id": "A_balanced_sex",
+      "description": "F probability .5 is an assumed balanced composition, not target or source estimated composition; sample sex counts fluctuate by iid draws."
+    },
+    {
+      "id": "A_sex_mapping",
+      "description": "Map source women/men summaries to literal target F/M as an explicit assumption. The target field's biological label legend has not been independently verified in admitted metadata."
+    },
+    {
+      "id": "A_scale_mapping",
+      "description": "Derive the requested raw unweighted OLS projections and Pearson residual statistic from the whole assumed law; never substitute Spearman or unresolved log slopes. Delivered lipids mmol/L; multiplying by38.67 and five is a numerical unit/effect-scale map, not an assay bridge."
+    },
+    {
+      "id": "A_task_design",
+      "description": "Use task-prescribed3000 rows and unique sequential string identifiers. Row count and seed do not add clinical evidence or quantify source/transport/model uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task_design"
+      ],
+      "derivation": "Exactly task.n_rows; no target observed count supplied."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_balanced_sex",
+        "A_sex_mapping"
+      ],
+      "derivation": "Balanced Bernoulli scenario; not derived from source sex counts."
+    },
+    "age": {
+      "evidence_ids": [
+        "malawi_rural_men__age__q1",
+        "malawi_rural_men__age__median",
+        "malawi_rural_men__age__q3",
+        "malawi_rural_women__age__q1",
+        "malawi_rural_women__age__median",
+        "malawi_rural_women__age__q3"
+      ],
+      "assumption_ids": [
+        "A_age_independence",
+        "A_age_quantile_shape",
+        "A_measurement",
+        "A_population",
+        "A_scale_mapping",
+        "A_selection",
+        "A_sex_mapping",
+        "A_unweighted_operational"
+      ],
+      "derivation": "Reported rural Malawi M quartiles24/33/46 and F25/34/48; task minimum18; assumed90 and half-power upper-quarter quantile tail. Source women/men mapping to F/M explicitly assumed."
+    },
+    "age_biomarker_conditional_independence": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_age_independence"
+      ],
+      "derivation": "Structural scenario independence, explicitly true; not identified by reported evidence."
+    },
+    "biomarker_order": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task_design"
+      ],
+      "derivation": "Ordered BMI/TC/HDL schema for the vector law."
+    },
+    "marginal_moments": {
+      "evidence_ids": [
+        "agongo_bmi_mean",
+        "agongo_bmi_sd",
+        "agongo_total_cholesterol_mean",
+        "agongo_total_cholesterol_sd",
+        "agongo_hdl_cholesterol_mean",
+        "agongo_hdl_cholesterol_sd"
+      ],
+      "assumption_ids": [
+        "A_age_independence",
+        "A_equal_logvariance",
+        "A_lognormal",
+        "A_marginal_dispersion",
+        "A_measurement",
+        "A_population",
+        "A_scale_mapping",
+        "A_selection",
+        "A_unweighted_operational"
+      ],
+      "derivation": "Original arithmetic moments in source units. With A1=(1-p)+p*r and A2=(1-p)+p*r^2, v=ln((1+sd^2/mean^2)*A1^2/A2), a=ln(mean)-ln(A1)-v/2; not conditional dispersion inputs."
+    },
+    "female_to_male_geometric_ratios": {
+      "evidence_ids": [
+        "malawi_rural_men__bmi__geometric_mean",
+        "malawi_rural_men__total_cholesterol__geometric_mean",
+        "malawi_rural_men__hdl_cholesterol__geometric_mean",
+        "malawi_rural_women__bmi__geometric_mean",
+        "malawi_rural_women__total_cholesterol__geometric_mean",
+        "malawi_rural_women__hdl_cholesterol__geometric_mean"
+      ],
+      "assumption_ids": [
+        "A_age_independence",
+        "A_equal_logvariance",
+        "A_lognormal",
+        "A_measurement",
+        "A_population",
+        "A_scale_mapping",
+        "A_selection",
+        "A_sex_mapping",
+        "A_sex_ratio_transfer",
+        "A_unweighted_operational"
+      ],
+      "derivation": "Ratio of reported female and male geometric means for each variable; log ratio is a sex shift under the equal-logvariance law. Not arithmetic means or independent CI-derived precision."
+    },
+    "copula_spearman": {
+      "evidence_ids": [
+        "obirikorang_rural_bmi_tc",
+        "obirikorang_rural_bmi_hdl",
+        "obirikorang_rural_tc_hdl"
+      ],
+      "assumption_ids": [
+        "A_age_independence",
+        "A_gaussian_copula",
+        "A_lognormal",
+        "A_measurement",
+        "A_population",
+        "A_rank_to_conditional",
+        "A_scale_mapping",
+        "A_selection",
+        "A_unweighted_operational"
+      ],
+      "derivation": "Three rural pooled unadjusted rank correlations from the same Table7 triangle are assumed within sex, then mapped R_ij=2*sin(pi*r_ij/6); diagonal1. All raw projections are law-implied, not source reported."
+    }
+  }
+}

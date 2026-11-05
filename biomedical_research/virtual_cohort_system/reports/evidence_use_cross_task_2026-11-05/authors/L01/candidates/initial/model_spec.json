@@ -1,0 +1,277 @@
+{
+  "parameters": {
+    "output": {
+      "n_rows": 3000,
+      "columns": [
+        "id",
+        "age",
+        "sex",
+        "bmi",
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "id_prefix": "L01_",
+      "id_width": 6,
+      "sex_codes": [
+        "M",
+        "F"
+      ]
+    },
+    "female_probability": 0.5,
+    "age": {
+      "probability_knots": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "value_knots_years": [
+        18,
+        24.5,
+        33.5,
+        47,
+        90
+      ]
+    },
+    "bmi": {
+      "M": {
+        "mean": 20.87,
+        "sd": 3.15
+      },
+      "F": {
+        "mean": 22.28,
+        "sd": 3.85
+      }
+    },
+    "lipids": {
+      "tc": {
+        "pooled_mean": 3.23,
+        "pooled_sd": 0.92,
+        "female_male_ratio": 1.0833333333333333
+      },
+      "hdl": {
+        "pooled_mean": 1.14,
+        "pooled_sd": 0.38,
+        "female_male_ratio": 1.0476190476190477
+      }
+    },
+    "copula": {
+      "source_spearman": {
+        "bmi_tc": 0.212,
+        "bmi_hdl": -0.1,
+        "tc_hdl": 0.106
+      },
+      "age_latent_correlations": {
+        "bmi": 0.1,
+        "tc": 0.15,
+        "hdl": 0.05
+      }
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "Combine Agongo Ghana arithmetic scales, Ashanti Ghana rank dependence and Greiner Malawi relative sex contrasts as a hypothetical adult target-context scenario; no transport validity or site/lifestyle mixture is established."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Same numeric analyte/unit transfer despite fasting serum laboratory source protocols and target venous EDTA CardioChek Plus with unknown fasting; no validated assay-error bridge."
+    },
+    {
+      "id": "A_selection",
+      "description": "Source residence, health, pregnancy and complete-case exclusions differ from target; no unavailable flags or source exclusions are imposed on target output."
+    },
+    {
+      "id": "A_weighting",
+      "description": "Model and requested analyses use equal row weights; original source weighting remains not_reported, so source feedback is not_computable."
+    },
+    {
+      "id": "A_sex_mapping",
+      "description": "Map external women/men to F/M literals; metadata biological legend is not independently verified."
+    },
+    {
+      "id": "A_demography",
+      "description": "Assume pF=.5, age distribution shared across sex, iid rows and no site/lifestyle clusters; age support and within-quartile shape are choices, not target eligibility."
+    },
+    {
+      "id": "A_age_dependence",
+      "description": "Latent age correlations .10 BMI, .15 TC, .05 HDL are assumed modest associations; directions and magnitudes are not source-estimated."
+    },
+    {
+      "id": "A_copula",
+      "description": "Continuous Gaussian copula; map Spearman rS to latent r=2 sin(pi*rS/6); transfer community-pooled rural ranks within each sex with common dependence. Not raw Pearson, adjusted slope or residual correlation."
+    },
+    {
+      "id": "A_marginal_family",
+      "description": "Positive lognormal margins with all finite moments; source marginal moments transfer across age span; no clipping, tail calibration or conditional-SD interpretation."
+    },
+    {
+      "id": "A_sex_ratio",
+      "description": "Transport Greiner rural geometric-mean F/M ratios; common within-sex log variance equates arithmetic/geometric sex ratios; combine with distinct Agongo pooled arithmetic moments."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Fixed scenario parameters; no calibrated posterior or transport uncertainty. Source CI is estimator uncertainty, not residual variation or precision weighting."
+    },
+    {
+      "id": "A_operator",
+      "description": "Unreported source weighting, SD convention, tie/missingness rules and quantile definitions remain unresolved; model/ddof=1/linear conventions do not certify published methods."
+    },
+    {
+      "id": "A_adjustment",
+      "description": "Source unadjusted rank and marginal components do not identify age/sex-adjusted OLS or identical-design lipid residual Pearson correlation; requested effects are induced by the whole model."
+    },
+    {
+      "id": "A_scale",
+      "description": "Do not replace rank by Pearson, geometric by arithmetic or unresolved log coefficients by raw coefficients. Model derivations assume stated families; mmol/L delivery and request factor38.67 define analysis units only."
+    }
+  ],
+  "parameter_provenance": {
+    "output": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_sex_mapping",
+        "A_demography",
+        "A_age_dependence",
+        "A_copula",
+        "A_marginal_family",
+        "A_sex_ratio",
+        "A_uncertainty",
+        "A_operator",
+        "A_adjustment",
+        "A_scale"
+      ],
+      "derivation": "Task output contract and identifier formatting, no evidence-dependent effect."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_sex_mapping",
+        "A_demography",
+        "A_age_dependence",
+        "A_copula",
+        "A_marginal_family",
+        "A_sex_ratio",
+        "A_uncertainty",
+        "A_operator",
+        "A_adjustment",
+        "A_scale"
+      ],
+      "derivation": "Assumption-only balanced hypothetical sex composition, not source or target sex frequency."
+    },
+    "age": {
+      "evidence_ids": [
+        "malawi_rural_men__age__q1",
+        "malawi_rural_men__age__median",
+        "malawi_rural_men__age__q3",
+        "malawi_rural_women__age__q1",
+        "malawi_rural_women__age__median",
+        "malawi_rural_women__age__q3"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_sex_mapping",
+        "A_demography",
+        "A_age_dependence",
+        "A_copula",
+        "A_marginal_family",
+        "A_sex_ratio",
+        "A_uncertainty",
+        "A_operator",
+        "A_adjustment",
+        "A_scale"
+      ],
+      "derivation": "Interior knots average rural male/female source Q1, median and Q3; this is not the quantile of a mixture. Endpoints18/90 and interpolation assumed."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "agongo_men_bmi_mean",
+        "agongo_men_bmi_sd",
+        "agongo_women_bmi_mean",
+        "agongo_women_bmi_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_sex_mapping",
+        "A_demography",
+        "A_age_dependence",
+        "A_copula",
+        "A_marginal_family",
+        "A_sex_ratio",
+        "A_uncertainty",
+        "A_operator",
+        "A_adjustment",
+        "A_scale"
+      ],
+      "derivation": "Direct arithmetic sex-specific mean/SD components; generator computes v=log1p((sd/mean)^2), mu=log(mean)-v/2."
+    },
+    "lipids": {
+      "evidence_ids": [
+        "agongo_pooled_total_cholesterol_mean",
+        "agongo_pooled_total_cholesterol_sd",
+        "malawi_rural_men__total_cholesterol__geometric_mean",
+        "malawi_rural_women__total_cholesterol__geometric_mean",
+        "agongo_pooled_hdl_cholesterol_mean",
+        "agongo_pooled_hdl_cholesterol_sd",
+        "malawi_rural_men__hdl_cholesterol__geometric_mean",
+        "malawi_rural_women__hdl_cholesterol__geometric_mean"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_sex_mapping",
+        "A_demography",
+        "A_age_dependence",
+        "A_copula",
+        "A_marginal_family",
+        "A_sex_ratio",
+        "A_uncertainty",
+        "A_operator",
+        "A_adjustment",
+        "A_scale"
+      ],
+      "derivation": "F/M ratios divide selected source geometric means. Generator subtracts between-sex variance from source pooled variance, then chooses common log variance to preserve chosen pooled mean/SD."
+    },
+    "copula": {
+      "evidence_ids": [
+        "obirikorang_rural_bmi_tc",
+        "obirikorang_rural_bmi_hdl",
+        "obirikorang_rural_tc_hdl"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_weighting",
+        "A_sex_mapping",
+        "A_demography",
+        "A_age_dependence",
+        "A_copula",
+        "A_marginal_family",
+        "A_sex_ratio",
+        "A_uncertainty",
+        "A_operator",
+        "A_adjustment",
+        "A_scale"
+      ],
+      "derivation": "Rural unadjusted source Spearman triplet maps to latent Gaussian correlations by 2 sin(pi*rS/6). Age latent entries are assumed, not source estimates."
+    }
+  }
+}

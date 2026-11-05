@@ -1,45 +1,30 @@
 # Evidence-guided virtual biomedical data
 
-**Current working paper [v0.13.1](manuscript/DRAFT_v0_13_1.md), 4 November 2026.**
+**Current manuscript: [v0.14](manuscript/DRAFT_v0_14.md), 5 November 2026.**
 
-[Reading PDF](manuscript/conference_draft_v13_1_2026-11-04/paper.pdf) · [Overleaf-ready ZIP](manuscript/conference_draft_v13_1_2026-11-04/overleaf_v13_1.zip) · [Figure package](manuscript/paper_figures_v13_2026-11-04/README.md) · [Experiment-gap checklist](manuscript/KEY_EXPERIMENT_GAPS_v13_1_2026-11-04.md)
+**Evidence-Guided Agents for Analyzable Virtual Biomedical Cohorts**
 
-The paper evaluates whether a complete virtual cohort can support a researcher’s intended analysis. An Agent uses qualified biomedical evidence, a population description and any available observations to choose a joint law. Numerical tools sample it. We run the intended analysis on the final table and compare the resulting estimates with an appropriate reference.
+[Reading PDF](manuscript/conference_draft_v14_2026-11-05/paper.pdf) · [Overleaf-ready ZIP](manuscript/conference_draft_v14_2026-11-05/overleaf_v14.zip) · [Figures](manuscript/paper_figures_v14_2026-11-05/README.md) · [Draft checklist](manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md)
 
-## Integrated scientific story
+A scientific Agent turns published biomedical evidence, a population description, optional observations and intended analyses into a joint generating model and virtual data. Whole-cohort generation without individual construction records is central. The Agent chooses substantive structure and numerical evidence use; deterministic tools sample, inspect and analyze the result. Different research requests can receive different models.
 
-The [story/figure plan](reports/manuscript_integration_v13_2026-11-04/STORY_AND_FIGURE_PLAN.md) distinguishes three contributions: implemented evidence-to-cohort construction; inspectable scientific modeling and explicit assumptions; analysis-centered evaluation across different information settings.
+## Completed scientific story
 
-| Experiment | Distinct scale | Supported use and boundary |
-|---|---|---|
-| External-evidence main study | 20 Agent + 4 statistical constructions; 72 final tables | Additional relationships lower five of six mean coefficient discrepancies; CHNS BMI worsens. Exposed references. |
-| CHNS target-summary reconstruction | 6 Agents; 18 distinct final tables | The final tables were analyzed for agreement with the supplied regressions and correlations. |
-| HRS published-model reconstruction | 2 constructions; 6 valid longitudinal tables | Data support source-model follow-up analysis; source coefficients supplied, no HRS individual data. Weak branch/spread limitations remain. |
-| Earlier reviewed open search | 5 reviewed studies; 1 constructor; 3 final tables | Useful selected relations and explicit dependence sensitivity; conditional/distributional differences remain. |
-| New unified open-retrieval workflow | 4 constructors; 2 requests; 12 final tables | 12 unique studies, 16 paper uses; all six primary directions retained, mixed magnitudes/ranks/dispersion. Developmental repetition, not fresh clinical confirmation. |
+The paper combines an external-evidence information contrast, supplied-summary reconstruction, a published longitudinal model, repeated open retrieval, and a new glycemic/lipid cross-task study. These settings have different inputs and references and retain separate denominators. The contribution is an inspectable evidence-to-data workflow and demonstrated analysis-specific uses, not a new statistical family or universal superiority claim.
 
-The [complete new batch](reports/core_workflow_replication_2026-11-04/RESULTS.md) records 366 independently reproduced aggregate endpoints, four initial trials and twelve final 3,000-row tables. Its information and author roles differ from the earlier main study, so the new batch is not treated as another comparable arm or a controlled improvement over it. Seeds, generated rows, authors and clinical references are different units.
+The [new cross-task experiment](reports/evidence_use_cross_task_2026-11-05/RESULTS.md) contains six fresh Agent constructions, two requests and 18 final tables of 3,000 fictional rows. All 54 primary point directions agreed with the corresponding sample estimates, but effect magnitudes, residual dependence and dispersion differed. The TC slope reference interval crosses zero. All 513 aggregate outputs were independently recomputed; 324 matched cached references and 189 were generated-only diagnostics. These references were already exposed in development.
 
-## Method and implementation
+All six authors retained their initial laws. The 132 source checks were unavailable under their declared definitions, so numerical source-replay or feedback-driven improvement is not established. The data support transparent, assumption-dependent relationship exploration and analysis-workflow inspection; quantitative replacement of a measured target cohort remains unsupported. All six constructions and unfavorable results remain visible.
 
-1. Define scientific use, population and allowed information.
-2. Preserve source population, measurement, analysis operator, estimate, uncertainty and provenance.
-3. Let the Agent choose a generator and declare missing joint/transport assumptions.
-4. Execute versioned candidates and supply qualified feedback; record revision or retention.
-5. Run scientific analyses and interpret usefulness according to the information supplied.
+## Read, inspect and reproduce
 
-Different requests may receive different generators. Principal experiments use Agent-authored programs. Historical direct-table and enrichment experiments remain separate; these studies do not establish universal request coverage or clinical-measurement replacement.
+- [Manuscript history and reviews](manuscript/README.md)
+- [Story and figure roles](reports/manuscript_integration_v14_2026-11-05/STORY_AND_FIGURE_PLAN.md)
+- [New Figure 6: scientific analyses](manuscript/paper_figures_v14_2026-11-05/fig6-cross-task.svg) and [Figure 7: dispersion](manuscript/paper_figures_v14_2026-11-05/fig7-dispersion.svg)
+- [Evidence-use implementation](cohort_harness/evidence_use_v1.py) and [design](docs/EVIDENCE_USE_V1.md)
+- [Portable aggregate plotting](manuscript/paper_figures_v14_2026-11-05/render_cross_task_aggregates.py): both new PNGs were reproduced pixel-for-pixel without participant or generated-row access.
+- [Exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md) and [public release scope](reports/manuscript_integration_v14_2026-11-05/PUBLIC_SCOPE.md)
 
-Implementation: [generation skill](skills/evidence-cohort-generation/SKILL.md), [execution adapter](docs/EXECUTION_ADAPTER.md), [source replay](docs/SOURCE_REPLAY.md), and [worked implementation trace](reports/paper_figure_revision_v12_2026-11-04/IMPLEMENTATION_TRACE.md). Approximate source comparison does not certify source-population replay, extraction or transport.
+The 16-page generic reading copy contains seven main figures, one supplementary figure, three main tables, four supplementary tables and 28 references. Scientific author review, venue/length selection and author declarations remain. The ZIP is a local LaTeX package, not an uploaded Overleaf project or a submission.
 
-## Manuscript, review and reproduction
-
-- [Manuscript navigation](manuscript/README.md), [archived v0.13 content review](reports/manuscript_integration_v13_2026-11-04/INDEPENDENT_DRAFT_REVIEW.md), and [archived v0.13 PDF review](reports/manuscript_integration_v13_2026-11-04/FINAL_PDF_REVIEW.md).
-- [New Figure 5](manuscript/paper_figures_v13_2026-11-04/fig5-open-retrieval.svg) and [中文读图说明](manuscript/paper_figures_v13_2026-11-04/FIG5_READING_GUIDE_ZH.md). Three-seed ranges are not confidence intervals; reference intervals are not acceptance margins.
-- [Earlier six-endpoint interpretation](reports/paper_figure_revision_v12_2026-11-04/FIG23_READING_GUIDE_ZH.md), [aggregate reproduction entry](docs/REPRODUCING_MANUSCRIPT_v07.md), and [exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md).
-
-The manuscript integrates completed evidence without new generation or clinical fitting. Historical Figures 1–4 are unchanged; former Figure 5 is Figure S1. Old protocols, empirical results and adverse findings are preserved. The generic reading PDF is not an official submission template. Authorship/declarations and venue-specific production remain.
-
-Patient-level real/generated data, third-party full articles/codebooks and credentials remain local. Clinical reruns require lawful access. The [v0.13 public scope](reports/manuscript_integration_v13_2026-11-04/PUBLIC_SCOPE.md) describes that release; aggregate-only plotting is not regeneration of clinical records.
-
-Earlier navigation and additional historical links remain in the [previous README](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/baeaf8cf11be00a6f79df5971ad3279a8c6f5aa3/biomedical_research/virtual_cohort_system/README.md). [Current focus](docs/CURRENT_RESEARCH_FOCUS.md) and the focused gap checklist supersede old pending-work statements.
+Patient-level real/generated tables, third-party originals/codebooks and credentials remain local. Public plotting is portable; the historical construction controllers retain documented local layout/runtime/source-access requirements. This release did not rerun a generator, read participant rows, refit a clinical reference or retune an exposed target. [Current focus](docs/CURRENT_RESEARCH_FOCUS.md).

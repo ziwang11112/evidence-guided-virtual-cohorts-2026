@@ -1,0 +1,316 @@
+{
+  "parameters": {
+    "row_count": 3000,
+    "female_probability": 0.5,
+    "age_probabilities": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "age_knots": {
+      "M": [
+        18,
+        24,
+        33,
+        46,
+        85
+      ],
+      "F": [
+        18,
+        25,
+        34,
+        48,
+        85
+      ]
+    },
+    "margins": {
+      "bmi": {
+        "M": {
+          "geometric_mean": 21.5,
+          "log_sd": 0.15008518742354868
+        },
+        "F": {
+          "geometric_mean": 23.2,
+          "log_sd": 0.17153121087276144
+        }
+      },
+      "total_cholesterol": {
+        "M": {
+          "geometric_mean": 3.6,
+          "log_sd": 0.27929359630610007
+        },
+        "F": {
+          "geometric_mean": 3.9,
+          "log_sd": 0.27929359630610007
+        }
+      },
+      "hdl_cholesterol": {
+        "M": {
+          "geometric_mean": 1.05,
+          "log_sd": 0.32459284597450133
+        },
+        "F": {
+          "geometric_mean": 1.1,
+          "log_sd": 0.32459284597450133
+        }
+      }
+    },
+    "latent_correlation": [
+      [
+        1,
+        0.12,
+        0.25,
+        0.05
+      ],
+      [
+        0.12,
+        1,
+        0.22155024842155735,
+        -0.10467191248588766
+      ],
+      [
+        0.25,
+        0.22155024842155735,
+        1,
+        0.11094596004995781
+      ],
+      [
+        0.05,
+        -0.10467191248588766,
+        0.11094596004995781,
+        1
+      ]
+    ],
+    "latent_order": [
+      "age",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "output_columns": [
+      "id",
+      "age",
+      "sex",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "id_prefix": "L02-"
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "External rural Malawi/Ghana evidence informs an adult scenario; unknown target age/sex/BMI/site/lifestyle composition is not identified. External strata are not target lifestyle classes or known mixture fractions."
+    },
+    {
+      "id": "A_measurement",
+      "description": "BMI constructs and numerical lipid units are transported despite different fasting, specimen and laboratory protocols versus target venous EDTA immediate CardioChek Plus; no calibrated assay bridge is available. A38.67 unit conversion is not assay equivalence."
+    },
+    {
+      "id": "A_selection",
+      "description": "Source age and health/complete-case restrictions differ; target excludes none of pregnancy, HIV, diabetes or fasting status by inference. Effects of this selection difference are absorbed into an unverified transport assumption."
+    },
+    {
+      "id": "A_conditioning",
+      "description": "Pooled source rural Spearman dependence is applied within each sex; pooled Agongo lipid CVs are applied within each sex. Source conditioning does not identify the requested age/sex/BMI-conditioned law."
+    },
+    {
+      "id": "A_adjustment",
+      "description": "Unadjusted rank/marginal evidence is only a component of adjusted raw-scale analyses. The full model supplies the adjustment relationships; no unadjusted statistic is relabelled as an adjusted slope or residual correlation."
+    },
+    {
+      "id": "A_scale",
+      "description": "Geometric scales, arithmetic mean/SD ratios and Spearman ranks play distinct roles. Gaussian-copula and lognormal identities are model-based derivations, not changes to source definitions. Target OLS uses raw lipids and BMI, conversion38.67 and per5 BMI reporting."
+    },
+    {
+      "id": "A_source_semantics",
+      "description": "All source weighting remains not_reported. Unknown quantile, tie, missing-pair and SD-denominator details stay unresolved. Modeling assumptions never authorize a substitute source operator; unsupported geometric/log operators remain unavailable."
+    },
+    {
+      "id": "A_copula",
+      "description": "Within each sex the latent age/BMI/TC/HDL vector is multivariate Gaussian with the declared unit variances and matrix. Rural Spearman entries map by2*sin(pi*r_s/6) under a continuous Gaussian copula. Homogeneous sex dependence and pooled-to-within-sex transfer are assumptions, not reported source facts."
+    },
+    {
+      "id": "A_cv_transfer",
+      "description": "Lognormal marginal log SD=sqrt(log(1+(SD/mean)^2)); transfer Agongo sex-specific BMI CVs and pooled lipid CVs from ages40-60 to each adult stratum. No source arithmetic mean is imposed and no marginal SD becomes a conditional residual SD."
+    },
+    {
+      "id": "A_scale_transfer",
+      "description": "Use Greiner Malawi rural sex-specific BMI/TC/HDL geometric means as the scenario geometric scales, with no precision weights or target matching. These values combined with separately transferred CVs do not reconstruct any source cohort."
+    },
+    {
+      "id": "A_age_law",
+      "description": "Use sex-specific source age quartile locations as knots of a continuous piecewise-linear inverse CDF at0,.25,.5,.75,1, with endpoints18 and85. The85 boundary is a modeled tail, not target eligibility; interpolation and tail shape are unreported assumptions."
+    },
+    {
+      "id": "A_age_dependence",
+      "description": "Latent age correlations with BMI/TC/HDL are respectively.12/.25/.05. They are constructor-selected modest dependencies, not estimated source slopes or source correlations."
+    },
+    {
+      "id": "A_sex_mapping",
+      "description": "Source women/men summaries are assigned to target literal F/M respectively although that biological legend is not independently verified in admitted target metadata."
+    },
+    {
+      "id": "A_sex_balance",
+      "description": "P(F)=.50 independently of the latent vector is a balanced synthetic composition, not a reported source or target fraction."
+    },
+    {
+      "id": "A_moments",
+      "description": "Bounded age/sex and a finite mixture of exponentials of Gaussian vectors give finite joint positive polynomial moments. Positive-definite latent covariance supplies nondegenerate predictors and lipid residual variation; no exponential of lognormal BMI is used."
+    },
+    {
+      "id": "A_no_filter",
+      "description": "All rows are generated directly without clipping/rejection. Positive lognormal margins permit rare TC<HDL; this disclosed separate-assay model limitation is not silently repaired and does not introduce a target exclusion."
+    },
+    {
+      "id": "A_overlap_uncertainty",
+      "description": "Within-study summaries are dependent; no participant-level overlap audit is asserted. Seeds vary individuals only; structure, selection, transport and parameter uncertainty are uncalibrated and fixed."
+    },
+    {
+      "id": "A_output_design",
+      "description": "Produce the task-requested3000 independent rows with unique deterministic string IDs and required column order. No observed individual inputs exist. Row count is a prospective design quantity, not target n."
+    }
+  ],
+  "parameter_provenance": {
+    "row_count": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_output_design"
+      ],
+      "derivation": "Task output design; not empirical calibration."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_conditioning",
+        "A_adjustment",
+        "A_scale",
+        "A_source_semantics",
+        "A_sex_mapping",
+        "A_sex_balance"
+      ],
+      "derivation": "Constructor-selected balanced probability0.5."
+    },
+    "age_probabilities": {
+      "evidence_ids": [
+        "malawi_rural_men__age__q1",
+        "malawi_rural_men__age__median",
+        "malawi_rural_men__age__q3",
+        "malawi_rural_women__age__q1",
+        "malawi_rural_women__age__median",
+        "malawi_rural_women__age__q3"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_conditioning",
+        "A_adjustment",
+        "A_scale",
+        "A_source_semantics",
+        "A_sex_mapping",
+        "A_age_law"
+      ],
+      "derivation": "Greiner reported rural quartiles become interior inverse-CDF knots under explicit interpolation and18/85 endpoint assumptions; source convention stays unknown."
+    },
+    "age_knots": {
+      "evidence_ids": [
+        "malawi_rural_men__age__q1",
+        "malawi_rural_men__age__median",
+        "malawi_rural_men__age__q3",
+        "malawi_rural_women__age__q1",
+        "malawi_rural_women__age__median",
+        "malawi_rural_women__age__q3"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_conditioning",
+        "A_adjustment",
+        "A_scale",
+        "A_source_semantics",
+        "A_sex_mapping",
+        "A_age_law"
+      ],
+      "derivation": "Greiner reported rural quartiles become interior inverse-CDF knots under explicit interpolation and18/85 endpoint assumptions; source convention stays unknown."
+    },
+    "margins": {
+      "evidence_ids": [
+        "malawi_rural_men__bmi__geometric_mean",
+        "malawi_rural_men__total_cholesterol__geometric_mean",
+        "malawi_rural_men__hdl_cholesterol__geometric_mean",
+        "malawi_rural_women__bmi__geometric_mean",
+        "malawi_rural_women__total_cholesterol__geometric_mean",
+        "malawi_rural_women__hdl_cholesterol__geometric_mean",
+        "agongo_men_bmi_mean_sd",
+        "agongo_women_bmi_mean_sd",
+        "agongo_pooled_hdl_cholesterol_mean_sd",
+        "agongo_pooled_total_cholesterol_mean_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_conditioning",
+        "A_adjustment",
+        "A_scale",
+        "A_source_semantics",
+        "A_sex_mapping",
+        "A_scale_transfer",
+        "A_cv_transfer",
+        "A_moments",
+        "A_no_filter"
+      ],
+      "derivation": "Geometric means taken as scenario scales. Four log SDs computed as sqrt(log(1+(SD/mean)^2)) from arithmetic Agongo summary pairs; see approved aggregate recheck. No uncertainty or residual-SD conversion."
+    },
+    "latent_correlation": {
+      "evidence_ids": [
+        "obirikorang_rural_bmi_tc",
+        "obirikorang_rural_bmi_hdl",
+        "obirikorang_rural_tc_hdl"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_measurement",
+        "A_selection",
+        "A_conditioning",
+        "A_adjustment",
+        "A_scale",
+        "A_source_semantics",
+        "A_sex_mapping",
+        "A_copula",
+        "A_age_dependence",
+        "A_moments"
+      ],
+      "derivation": "Rural rank entries transformed by2*sin(pi*r_s/6); age row.12/.25/.05 assumed; unit diagonal by latent standardization. Values preserve approved proposal."
+    },
+    "latent_order": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_copula",
+        "A_output_design"
+      ],
+      "derivation": "Semantic matrix order, consumed by generator indexes."
+    },
+    "output_columns": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_output_design"
+      ],
+      "derivation": "Task output design; not empirical calibration."
+    },
+    "id_prefix": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_output_design"
+      ],
+      "derivation": "Task output design; not empirical calibration."
+    }
+  }
+}

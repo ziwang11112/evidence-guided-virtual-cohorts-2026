@@ -1,0 +1,243 @@
+{
+  "parameters": {
+    "design": {
+      "rows_per_cell": 375,
+      "cells": [
+        {
+          "female": 0,
+          "age_min": 25,
+          "age_max": 39
+        },
+        {
+          "female": 0,
+          "age_min": 40,
+          "age_max": 54
+        },
+        {
+          "female": 0,
+          "age_min": 55,
+          "age_max": 69
+        },
+        {
+          "female": 0,
+          "age_min": 70,
+          "age_max": 79
+        },
+        {
+          "female": 1,
+          "age_min": 25,
+          "age_max": 39
+        },
+        {
+          "female": 1,
+          "age_min": 40,
+          "age_max": 54
+        },
+        {
+          "female": 1,
+          "age_min": 55,
+          "age_max": 69
+        },
+        {
+          "female": 1,
+          "age_min": 70,
+          "age_max": 79
+        }
+      ],
+      "row_id_prefix": "H01_",
+      "row_id_digits": 4,
+      "output_columns": [
+        "row_id",
+        "age",
+        "female",
+        "bmi",
+        "glucose",
+        "hba1c"
+      ]
+    },
+    "bmi": {
+      "lower": 12.0,
+      "upper": 65.0,
+      "mean": 28.01,
+      "sd": 5.0
+    },
+    "glucose": {
+      "intercept": 94.0,
+      "age_slope": 0.18,
+      "female_slope": -4.4496,
+      "bmi_slope": 0.432,
+      "age_center": 50.0,
+      "female_center": 0.5,
+      "bmi_center": 28.01,
+      "kernel_sd": 10.0,
+      "lower": 0.0,
+      "upper": 126.0
+    },
+    "hba1c": {
+      "intercept": 5.45,
+      "age_slope": 0.01,
+      "female_slope": 0.08324901935483871,
+      "bmi_slope": 0.006650580645161291,
+      "glucose_slope": 0.013540322580645161,
+      "age_center": 50.0,
+      "female_center": 0.5,
+      "bmi_center": 28.01,
+      "glucose_center": 94.0,
+      "residual_sd": 0.35,
+      "residual_shape": 9.0
+    },
+    "implementation": {
+      "max_glucose_redraw_rounds": 1000
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_DESIGN",
+      "description": "Exactly375 per specified age-sex cell; uniform integer age within each cell. This is an equal-cell analytical design, not national representativeness."
+    },
+    {
+      "id": "A_POP",
+      "description": "Transfer selected US/Finnish/Iranian associations to the task Mexican selected population without target identification; Hoorn/Taiwan only context."
+    },
+    {
+      "id": "A_MEASURE",
+      "description": "HbA1c assay differences and fasting plasma/serum glucose are not proven equivalent; target serum scale is assumed suitable for approximate relationship transfer."
+    },
+    {
+      "id": "A_SELECT",
+      "description": "Source diabetes/medication/HbA1c/fasting/age/complete-case restrictions differ from task; their relation is not identified and is assumed ignorable for chosen coefficients."
+    },
+    {
+      "id": "A_WEIGHT",
+      "description": "Source survey weighting/cluster sampling is not reproduced; constant-coefficient structure is assumed stable under equal-age-sex-cell analysis. No source-weighted feedback operator is claimed."
+    },
+    {
+      "id": "A_ADJUST",
+      "description": "Binary Finnish age and fasting-duration adjustment differ from target continuous age and absent fasting duration. Transport of those coefficients is assumed; Hoorn additional adjustment is not silently removed."
+    },
+    {
+      "id": "A_FIN_UNIT",
+      "description": "Finnish supplement S1/S2 response units are NOT printed. Main Table1 glucose5-ish mmol/L/HbA1c5-ish percent and S1/S2 intercepts4.2966/5.1281 motivate inferred mmol/L and percentage-point response units. Preserve unlabelled originals; conversion18.0mg/dL per mmol/L is an explicit assumed scale mapping."
+    },
+    {
+      "id": "A_SCALE",
+      "description": "Target terms use age10,bmi5,glucose10; raw yearly/BMI-unit coefficients convert by10 or5. These are percentage-point changes, not relative percentages. No per-unit source operator is relabelled as per-ten."
+    },
+    {
+      "id": "A_CONDITIONAL",
+      "description": "Kerman r*SD(H)/SD(G) is a marginal slope, adopted as the conditional glucose coefficient by assumption. No reported adjusted coefficient or matched target correlation is claimed."
+    },
+    {
+      "id": "A_CROSS",
+      "description": "Finnish reduced BMI/sex coefficients and glucose kernel plus assumed conditional glucose coefficient are combined by algebra into direct terms. This identifies a hypothetical law, not a causal direct effect or recovered target relation."
+    },
+    {
+      "id": "A_BMI",
+      "description": "Bounded-beta BMI support12-65, mean28.01, SD5, independent of age/sex; shape derived from moments. Bounds/dispersion/independence are assumptions; Pani mean is only a location anchor."
+    },
+    {
+      "id": "A_G_KERNEL",
+      "description": "Glucose kernel location94, age slope.18/year, SD10 and truncation0<G<126 are chosen. Resample only G at fixed A/F/B; truncation shifts final source-like projections."
+    },
+    {
+      "id": "A_H_LOCATION",
+      "description": "HbA1c intercept5.45 at declared centers is an author-chosen location near source middle-age means, not a fitted target statistic."
+    },
+    {
+      "id": "A_RESIDUAL",
+      "description": "Independent centered Gamma(shape9) HbA1c residual with conditional SD.35. All integer moments finite; no residual SD is inferred from source marginal SD or SE; upper HbA1c tail remains unbounded."
+    },
+    {
+      "id": "A_STRUCTURE",
+      "description": "No age-sex/BMI interactions, latent postload glycemia, medication/anemia mixture or measurement-error structure is identified; omission is an unassessed assumption."
+    },
+    {
+      "id": "A_MISSING",
+      "description": "Unknown source analysis missingness, weights and unsupported estimators remain not_computable, without substitution by an assumed unweighted complete-case calculation."
+    },
+    {
+      "id": "A_IMPLEMENTATION",
+      "description": "Rejection guard1000 rounds is an implementation failure guard, never a clipping rule; no sampling at import or local author execution."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_DESIGN"
+      ],
+      "derivation": "Task-mandated cell design and author uniform within-cell integer age; output schema/IDs are mechanical."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "E_PANI_BMI"
+      ],
+      "assumption_ids": [
+        "A_BMI",
+        "A_POP",
+        "A_MEASURE",
+        "A_SELECT",
+        "A_WEIGHT",
+        "A_MISSING"
+      ],
+      "derivation": "Mean28.01 is a location anchor. Other moments/support are assumptions. c=(mean-low)*(high-mean)/sd^2-1; alpha=c*(mean-low)/(high-low); beta=c-alpha."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "E_FIN_G_BMI",
+        "E_FIN_G_SEX"
+      ],
+      "assumption_ids": [
+        "A_POP",
+        "A_MEASURE",
+        "A_SELECT",
+        "A_WEIGHT",
+        "A_ADJUST",
+        "A_FIN_UNIT",
+        "A_SCALE",
+        "A_CONDITIONAL",
+        "A_CROSS",
+        "A_STRUCTURE",
+        "A_MISSING",
+        "A_G_KERNEL"
+      ],
+      "derivation": "S1 unlabelled .0240*18=.432; men-minus-women .2472*18 reversed=-4.4496 after A_FIN_UNIT inference. Remaining location, age slope, SD, bounds and centers are declared choices; truncation changes actual projections."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "E_PANI_AGE",
+        "E_PANI_H50",
+        "E_FIN_BMI",
+        "E_FIN_SEX",
+        "E_FIN_G_BMI",
+        "E_FIN_G_SEX",
+        "E_KERMAN_R",
+        "E_KERMAN_H_SD",
+        "E_KERMAN_G_SD"
+      ],
+      "assumption_ids": [
+        "A_POP",
+        "A_MEASURE",
+        "A_SELECT",
+        "A_WEIGHT",
+        "A_ADJUST",
+        "A_FIN_UNIT",
+        "A_SCALE",
+        "A_CONDITIONAL",
+        "A_CROSS",
+        "A_STRUCTURE",
+        "A_MISSING",
+        "A_H_LOCATION",
+        "A_RESIDUAL"
+      ],
+      "derivation": "Age=.010/year from Pani NHANES. gamma=.23*.73/12.4=.013540322580645161 is marginal scale assumed conditional. BMI=.0125-gamma*.432=.006650580645161291; female=.023-gamma*(-4.4496)=.08324901935483871. Finnish scales inferred via A_FIN_UNIT. Residual scale=.35/sqrt(9), mean=9*scale. H intercept5.45 assumed; no target calibration."
+    },
+    "implementation": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_IMPLEMENTATION"
+      ],
+      "derivation": "Fail after1000 rejection rounds; never conditionally repair or clip an invalid output."
+    }
+  }
+}

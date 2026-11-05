@@ -1,0 +1,202 @@
+{
+  "parameters": {
+    "design": {
+      "age_bands": [
+        [
+          25,
+          39
+        ],
+        [
+          40,
+          54
+        ],
+        [
+          55,
+          69
+        ],
+        [
+          70,
+          79
+        ]
+      ],
+      "rows_per_cell": 375
+    },
+    "bmi": {
+      "mean": 28.01,
+      "sd": 3.8,
+      "lower": 10.0,
+      "upper": 65.0
+    },
+    "glucose": {
+      "mean": 91.2,
+      "sd": 12.4,
+      "age_slope": 0.2,
+      "bmi_slope": 0.432,
+      "female_slope": -4.4496,
+      "upper": 126.0
+    },
+    "hba1c": {
+      "reference_age_range": [
+        50,
+        54
+      ],
+      "reference_mean": 5.4,
+      "reference_upper_quantile": 6.0,
+      "normal_quantile_z": 1.959963984540054,
+      "age_slope": 0.01,
+      "bmi_total_slope": 0.0125,
+      "female_total_slope": 0.023,
+      "marginal_glucose_correlation": 0.23,
+      "upper": 100.0
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "US NHANES, Finnish Health2011 and Iranian Kerman components are transported into the Mexico equal-cell analytical design; country, ethnicity, calendar and survey-design differences remain unresolved."
+    },
+    {
+      "id": "A_selection",
+      "description": "Source prior-diagnosis, medication, HbA1c selection and fasting-duration restrictions may differ from the task. Finnish HbA1c>=6.5/medication exclusions and Kerman known-diabetes inclusion are not imposed on generated rows. No target anemia/medication exclusion is invented."
+    },
+    {
+      "id": "A_measurement",
+      "description": "HbA1c assay percentages and plasma/serum glucose components are treated as sufficiently commensurable for this working law. Compartment/assay equivalence is unverified; reported source contexts remain intact."
+    },
+    {
+      "id": "A_design",
+      "description": "Exactly375 rows per sex-age cell; integer ages uniform within25-39,40-54,55-69,70-79. Fixed equal-cell design is not a national survey or source-population replay."
+    },
+    {
+      "id": "A_BMI",
+      "description": "Combine NHANES BMI mean28.01 with Kerman marginal SD3.8; scaled-beta support10-65 kg/m^2 and independence from age/sex are assumptions, not target eligibility or measured null relationships."
+    },
+    {
+      "id": "A_age_coding",
+      "description": "Finnish binary-age-adjusted slopes transfer to continuous-age adjustment; common main effects extend25-79 without interactions despite contextual heterogeneity."
+    },
+    {
+      "id": "A_g_age",
+      "description": "Approximately8mg/dL source age contrast divided by an assumed40-year span yields the working0.20mg/dL/year glucose-age slope. The source did not report that per-year coefficient."
+    },
+    {
+      "id": "A_fasting_adjustment",
+      "description": "S1 displayed block lists age+sex+BMI, whereas article Methods says glucose analyses also adjust fasting duration. The coefficient is used despite this unresolved adjustment difference; no fasting covariate or matching operator is invented."
+    },
+    {
+      "id": "A_corr",
+      "description": "Transfer Kerman marginal Pearson r0.23 to the full equal-cell distribution. It is never relabelled partial correlation; its change under altered covariates/selection is unmeasured."
+    },
+    {
+      "id": "A_dispersion",
+      "description": "NHANES50-54 mean5.40 and97.5th percentile6.0 define approximate marginal SD(6-5.4)/1.959963984540054 by a normal-shape assumption. This is not SE-to-SD conversion. Subtract model explained variation for constant conditional H variance."
+    },
+    {
+      "id": "A_reference",
+      "description": "Reference ages50-54 uniform and sex balanced with proposed BMI/glucose law approximate unreported source joint covariates; no simulated source table or valid source replay is claimed."
+    },
+    {
+      "id": "A_joint",
+      "description": "Heterogeneous source components are assumed jointly compatible in one linear-conditional-mean law. Scalar algebra checks mathematical compatibility only; decomposition is statistical, not causal mediation."
+    },
+    {
+      "id": "A_units",
+      "description": "Finnish S1/S2 outcomes are inferred as mmol/L and HbA1c percent from article context; raw supplement coefficients retain unit not_reported. Rounded18.0 converts mmol/L to mg/dL and sex contrasts reverse male-minus-female to female. Source per-year/per-BMI coefficients rescale by10/5 for requested terms. These are declared derivations, not source labels."
+    },
+    {
+      "id": "A_shape",
+      "description": "Scaled-beta BMI, conditional beta glucose on(0,126), and conditional beta HbA1c on(0,100) are working laws. All moments finite; no HbA1c6.5 exclusion. Independent draws conditional on covariates except fixed stratum quotas. Floating-point endpoint guards are numerical only."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Parameters are fixed conditional on source transports. Individual residual variation and Monte Carlo seeds do not represent calibrated source/model/transport uncertainty. No confidence score or p-value weight is used."
+    }
+  ],
+  "parameter_provenance": {
+    "design": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_design"
+      ],
+      "derivation": "Task-mandated equal sex-age quotas; uniform within-band age assumed. Population age moments calculated from inclusive integer bands, never from a realized draw."
+    },
+    "bmi": {
+      "evidence_ids": [
+        "E_b_mean",
+        "E_k_b_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_selection",
+        "A_measurement",
+        "A_BMI",
+        "A_shape",
+        "A_uncertainty"
+      ],
+      "derivation": "Mean28.01 from NHANES; individual marginal SD3.8 from Kerman. Bounds10/65 assumed. Beta mean fraction p=(28.01-10)/55; concentration(28.01-10)*(65-28.01)/3.8^2-1. No SE substitution."
+    },
+    "glucose": {
+      "evidence_ids": [
+        "E_k_g_mean",
+        "E_k_g_sd",
+        "E_b_g",
+        "E_f_g",
+        "E_g_age",
+        "E_k_b_sd"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_selection",
+        "A_measurement",
+        "A_design",
+        "A_BMI",
+        "A_age_coding",
+        "A_g_age",
+        "A_fasting_adjustment",
+        "A_corr",
+        "A_dispersion",
+        "A_reference",
+        "A_joint",
+        "A_units",
+        "A_shape",
+        "A_uncertainty"
+      ],
+      "derivation": "Mean91.2 and marginal SD12.4 transferred from Kerman. Raw Finnish0.0240 and0.2472 have absent units; infer mmol/L under A_units, multiply18.0, reverse male contrast =>0.432 and-4.4496. Age0.20=approximately8/assumed40. Upper126 from task. Concentration partitions marginal variance into covariate mean variance and beta residual variance, using reviewed algebra."
+    },
+    "hba1c": {
+      "evidence_ids": [
+        "E_age",
+        "E_b_mean",
+        "E_h_ref_mean",
+        "E_h_ref_q",
+        "E_b_h",
+        "E_f_h",
+        "E_b_g",
+        "E_f_g",
+        "E_g_age",
+        "E_k_b_sd",
+        "E_k_g_mean",
+        "E_k_g_sd",
+        "E_k_r"
+      ],
+      "assumption_ids": [
+        "A_population",
+        "A_selection",
+        "A_measurement",
+        "A_design",
+        "A_BMI",
+        "A_age_coding",
+        "A_g_age",
+        "A_fasting_adjustment",
+        "A_corr",
+        "A_dispersion",
+        "A_reference",
+        "A_joint",
+        "A_units",
+        "A_shape",
+        "A_uncertainty"
+      ],
+      "derivation": "Reference age50-54 mean5.40 and upperquantile6.0; normal z(.975) supplies approximate within-band marginal SD, not SE. Raw Finnish BMI0.0125 and male-0.0230 outcome units inferred as percent; reverse sex to+0.0230 total female slope. Age0.010 from NHANES adjusted coefficient. Marginal r0.23 from Kerman stays marginal. Solve signed moment equation with proposed G/B/age moments and reference H variance for conditional glucose coefficient c and residual variance. Reviewed c=0.0028039450477448575, residual variance0.09002838407739247; conditional BMI=.0125-c*.432; female=.023-c*(-4.4496). Physical percentage upper100 is assumed support. Generator derives these from specification, not realized rows."
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "note": "Retained deterministic algebra only: no individual rows, random draws, generator implementation/import/execution or target estimates read.",
+  "p_female": 0.5,
+  "order": [
+    "bmi",
+    "total_cholesterol",
+    "hdl_cholesterol"
+  ],
+  "inputs": {
+    "bmi": {
+      "mean": 21.63,
+      "sd": 3.61,
+      "ratio": 1.0790697674418603
+    },
+    "total_cholesterol": {
+      "mean": 3.23,
+      "sd": 0.92,
+      "ratio": 1.0833333333333333
+    },
+    "hdl_cholesterol": {
+      "mean": 1.14,
+      "sd": 0.38,
+      "ratio": 1.0476190476190477
+    }
+  },
+  "params": {
+    "bmi": {
+      "log_sex_shift": 0.07609934353864704,
+      "log_variance": 0.026028658021502924,
+      "log_sd": 0.16133399524434683,
+      "log_intercept_male": 3.0222935250282554,
+      "mean_male": 20.80738255033557,
+      "mean_female": 22.452617449664427
+    },
+    "total_cholesterol": {
+      "log_sex_shift": 0.08004270767353636,
+      "log_variance": 0.07640619157389765,
+      "log_sd": 0.27641669915889244,
+      "log_intercept_male": 1.0934570469273612,
+      "mean_male": 3.1008000000000004,
+      "mean_female": 3.3592000000000004
+    },
+    "hdl_cholesterol": {
+      "log_sex_shift": 0.04652001563489291,
+      "log_variance": 0.10481982897258037,
+      "log_sd": 0.3237589056266721,
+      "log_intercept_male": 0.05508785050991979,
+      "mean_male": 1.1134883720930233,
+      "mean_female": 1.1665116279069767
+    }
+  },
+  "spearman_assumed_within_sex": [
+    [
+      1,
+      0.212,
+      -0.1
+    ],
+    [
+      0.212,
+      1,
+      0.106
+    ],
+    [
+      -0.1,
+      0.106,
+      1
+    ]
+  ],
+  "latent_gaussian_correlation": [
+    [
+      1,
+      0.22155024842155735,
+      -0.10467191248588766
+    ],
+    [
+      0.22155024842155735,
+      1,
+      0.11094596004995781
+    ],
+    [
+      -0.10467191248588766,
+      0.11094596004995781,
+      1
+    ]
+  ],
+  "determinant": 0.9225045789083934,
+  "within_sex_covariance_averaged": [
+    [
+      12.355400531507541,
+      0.6947504331116918,
+      -0.13456632822175352
+    ],
+    [
+      0.6947504331116918,
+      0.8297073599999982,
+      0.03677616779706508
+    ],
+    [
+      -0.13456632822175352,
+      0.03677616779706508,
+      0.14369713358572156
+    ]
+  ],
+  "model_implied_ols": {
+    "tc_bmi_mmol_L_per_kg_m2": 0.05623050676018206,
+    "hdl_bmi_mmol_L_per_kg_m2": -0.010891296310353966,
+    "tc_per5_mg_dL": 10.872168482081202,
+    "hdl_per5_mg_dL": -2.1058321416069394,
+    "residual_tc_hdl_pearson": 0.1322319603499423,
+    "tc_residual_sd": 0.8891800667324204,
+    "hdl_residual_sd": 0.37713595934578037
+  },
+  "formulas": {
+    "marginal_log_variance": "v_j=ln((1+sd_j^2/mean_j^2)*((1-p)+p*r_j)^2/((1-p)+p*r_j^2))",
+    "male_log_location": "a_j=ln(mean_j)-ln((1-p)+p*r_j)-v_j/2",
+    "female_log_shift": "d_j=ln(r_j)",
+    "normal_copula": "R_ij=2*sin(pi*S_ij/6), R_ii=1; applies only under declared continuous Gaussian copula",
+    "conditional_moment": "M_jf=exp(a_j+d_j*f+v_j/2)",
+    "conditional_covariance": "C_ij(f)=M_if*M_jf*expm1(R_ij*sqrt(v_i*v_j))",
+    "sex_averaged_covariance": "Cbar=(1-p)*C(0)+p*C(1)",
+    "ols_beta": "beta_j=Cbar_Bj/Cbar_BB",
+    "residual_covariance": "Cbar_TH-Cbar_BT*Cbar_BH/Cbar_BB",
+    "residual_variance": "Cbar_jj-Cbar_Bj^2/Cbar_BB",
+    "requested_effect": "5*38.67*beta_j"
+  },
+  "calculation_method": "Deterministic JavaScript Math.log/exp/expm1/sin/sqrt applied only to source aggregate constants. No randomness, individual rows, generator or candidate imported/executed.",
+  "checks": {
+    "latent_principal_minors": [
+      0.9509154874243462,
+      0.9890437907365467,
+      0.9876909939485932
+    ],
+    "positive_log_variances": true,
+    "positive_determinant": true,
+    "finite_moments_argument": "Finite mixture of lognormal vectors with finite Gaussian covariance has every polynomial moment finite; bounded age and binary sex do too.",
+    "scope": "Algebraic feasibility and model implications only; no generated-data or target validity check."
+  }
+}
