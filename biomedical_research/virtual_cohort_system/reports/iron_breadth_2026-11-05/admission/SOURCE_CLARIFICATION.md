@@ -1,0 +1,2 @@
+# Pre-author clarification
+The Table I heading covers Hb and labels the statistic geometric; text and Table II call Hb a mean. Treat the location 129.9 g/L as ambiguous contextual information, not an exactly defined geometric-mean constraint. Ferritin Table III geometric means remain explicit. This note takes precedence over the Hb Table I wording in the shared packet. All investigators receive the same correction before scientific construction. No target data or candidate was used.
