@@ -1,14 +1,10 @@
 # Current focus — from published evidence to analyzable biomedical cohorts
 
-Updated 6 November 2026. [Manuscript v0.19](../manuscript/DRAFT_v0_19.md) · [Reading PDF](../manuscript/conference_draft_v19_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v19_2026-11-06/overleaf_v19.zip).
+Updated 6 November 2026. [Manuscript v0.20](../manuscript/DRAFT_v0_20.md) · [Reading PDF](../manuscript/conference_draft_v20_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v20_2026-11-06/overleaf_v20.zip).
 
-The paper asks when a scientific agent can turn published evidence into analyzable virtual records, including when no target individual measurements are available. Its unit of evaluation is the scientific analysis on the delivered table. Real and simulated participant records are not distributed.
+The [method overview](../manuscript/paper_figures_v20_2026-11-06/fig1-agent-method.drawio.svg) follows a researcher who needs paired measurements through the published evidence, the agent's modeling decisions and the virtual table delivered to the researcher. Researchers can run multiple prespecified analyses on that table and compare them with measurements available under a separate evaluation protocol.
 
-Table 1 separates the published evidence, investigator decisions, agent-authored sampling law and numerical worker. The [iron figure](../manuscript/paper_figures_v19_2026-11-06/fig3-iron-utility.png) compares the exact implications of the two agent choices with the sealed finite deliveries. A [post hoc physical-consistency check](../manuscript/Q5_LIPID_ORDER_POST_HOC_v19.md) reports the ordering of HDL and total cholesterol in the existing lipid tables.
-
-## From research request to evidence of use
-
-The [evidence contrast](../reports/main_study_freeze_2026-11-03/RESULTS.md) asks what supplying relationships changes in glycemia. The [iron study](../reports/iron_breadth_2026-11-05/RESULTS.md) then uses the same continuous records for joint burden, a threshold odds ratio and a rank correlation. The [cross-task results](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md) distinguish a reproducible point direction from quantitatively accurate conditional lipid dependence. The [HRS matched reconstruction](../reports/hrs_public_example_2026-11-03/RESULTS.md) is included in the supplement because the longitudinal analysis coefficients there were supplied inputs.
+Figure 2 starts with [iron status](../reports/iron_breadth_2026-11-05/RESULTS.md). Source constraints and agent assumptions produce two different target laws. Three analyses of the same continuous columns show where their predictions diverge. Figure 3 evaluates how [additional evidence](../reports/main_study_freeze_2026-11-03/RESULTS.md) changes target regression estimates. The [cross-task results](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md) distinguish agreement in sign from agreement in conditional dependence. Supplement S11 explains the case-specific derivation behind a glycemia generator.
 
 ## Prospective evidence
 
