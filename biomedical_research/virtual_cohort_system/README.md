@@ -25,6 +25,6 @@ The 18-page generic reading copy has four main figures, four supplementary figur
 - [Completed cross-task study](reports/evidence_use_cross_task_2026-11-05/RESULTS.md) and [evidence-use implementation](cohort_harness/evidence_use_v1.py)
 - [Claim-specific experiment gaps](manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) and [exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md)
 
-The user has selected **KDD preparation**. The [published-benchmark decision](docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) prioritizes the original LLMSynthor results in their own setting and details the materials needed for a numerical comparison. The previously [reviewed biomedical adaptation](reports/kdd_neighbor_design_2026-11-05/README.md) is an optional transfer study whose execution is deferred.
+The user has selected **KDD preparation**. The [comparator decision](docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) places the published HRS longitudinal model comparison first, followed by the biomedical external-evidence cases. LLMSynthor is a methodological neighbor. Its original-domain benchmark and our previously [reviewed adaptation](reports/kdd_neighbor_design_2026-11-05/README.md) are outside the current experimental schedule.
 
 Scientific author review and venue-specific formatting/declarations remain. The ZIP is a local LuaLaTeX package, not an online Overleaf project or a submission. Patient-level real/generated data, third-party originals and credentials remain local. [Current focus](docs/CURRENT_RESEARCH_FOCUS.md).

@@ -12,7 +12,7 @@ Scientific author review, final venue length/format, authorship, affiliations, f
 
 ## Preserved history
 
-The [KDD comparator decision](../docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) prioritizes a matched published benchmark if its original evaluation materials can be verified. The [20-episode biomedical adaptation](../reports/kdd_neighbor_design_2026-11-05/README.md) remains available as an optional transfer study.
+The [KDD comparator decision](../docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) prioritizes the completed, matched HRS longitudinal reconstruction and the existing biomedical external-evidence analyses. LLMSynthor is cited for its aggregate-guided generation method.
 
 - [v0.14](DRAFT_v0_14.md) and [reading copy](conference_draft_v14_2026-11-05/paper.pdf)
 - [v0.13.1](DRAFT_v0_13_1.md), [v0.13](DRAFT_v0_13.md), [v0.12](DRAFT_v0_12.md)
