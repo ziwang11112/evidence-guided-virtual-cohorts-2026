@@ -1,12 +1,12 @@
 # Manuscript
 
-**Current edition [v0.21](DRAFT_v0_21.md), 6 November 2026.**
+**Expanded methods draft [v0.22](DRAFT_v0_22.md), 6 November 2026.**
 
-[Reading PDF](conference_draft_v21_2026-11-06/paper.pdf) · [Overleaf ZIP](conference_draft_v21_2026-11-06/overleaf_v21.zip) · [System overview](paper_figures_v21_2026-11-06/fig1-system-architecture.drawio.svg)
+[Reading PDF](methods_draft_v22_2026-11-06/paper.pdf) · [Overleaf ZIP](methods_draft_v22_2026-11-06/overleaf_v22.zip) · [System overview](paper_figures_v22_2026-11-06/fig1-agent-loop.drawio.svg)
 
 | Main figure | What to look for |
 | --- | --- |
-| 1. System architecture | The host manages inputs and budgets. The scientific agent authors a model and sampling program. An isolated worker executes it and reports permitted diagnostics. The evaluator receives final tables and the measured reference after sealing. |
+| 1. Scientific agent in action | The agent writes a generator, receives allowable feedback on a trial, then keeps or revises its model. Frozen virtual tables and a separate measured reference go to evaluation. |
 | 2. One scientific request | See how an iron-status study becomes a virtual table containing paired measurements. |
 | 3. Uses of the same iron-status records | The two threshold measures and the continuous rank correlation respond differently to each model's assumptions. |
 | 4. External relationship evidence | Across the CHNS and ENSANUT cases five of six designated coefficient discrepancies decreased with richer evidence. |
@@ -17,6 +17,8 @@ Supplement S11 gives the projection equations for a single CHNS glycemia constru
 Domain review, confirmed author details and study-specific declarations are pending. [Claim-specific gaps](KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) · [KDD comparator rationale](../docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md).
 
 ## Preserved history
+
+- [v0.21](DRAFT_v0_21.md), [conference reading copy](conference_draft_v21_2026-11-06/paper.pdf) and [previous system architecture](paper_figures_v21_2026-11-06/fig1-system-architecture.drawio.svg).
 
 - [v0.20](DRAFT_v0_20.md), [reading copy](conference_draft_v20_2026-11-06/paper.pdf) and [source-to-records example](paper_figures_v20_2026-11-06/fig1-agent-method.drawio.svg).
 
