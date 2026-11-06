@@ -1,10 +1,10 @@
 # Current focus — from published evidence to analyzable biomedical cohorts
 
-Updated 6 November 2026. [Manuscript v0.20](../manuscript/DRAFT_v0_20.md) · [Reading PDF](../manuscript/conference_draft_v20_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v20_2026-11-06/overleaf_v20.zip).
+Updated 6 November 2026. [Manuscript v0.21](../manuscript/DRAFT_v0_21.md) · [Reading PDF](../manuscript/conference_draft_v21_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v21_2026-11-06/overleaf_v21.zip).
 
-The [method overview](../manuscript/paper_figures_v20_2026-11-06/fig1-agent-method.drawio.svg) follows a researcher who needs paired measurements through the published evidence, the agent's modeling decisions and the virtual table delivered to the researcher. Researchers can run multiple prespecified analyses on that table and compare them with measurements available under a separate evaluation protocol.
+Figure 1 shows how the [system runs](../manuscript/paper_figures_v21_2026-11-06/fig1-system-architecture.drawio.svg). The host dispatches the scientific task and verifies the artifacts. The scientific author supplies the numerical uses, assumptions and program. The worker samples the tables. Source checks can inform an author's retain or revise decision when the protocol supports the specified statistic. A separate evaluator computes final scientific comparisons after the seal.
 
-Figure 2 starts with [iron status](../reports/iron_breadth_2026-11-05/RESULTS.md). Source constraints and agent assumptions produce two different target laws. Three analyses of the same continuous columns show where their predictions diverge. Figure 3 evaluates how [additional evidence](../reports/main_study_freeze_2026-11-03/RESULTS.md) changes target regression estimates. The [cross-task results](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md) distinguish agreement in sign from agreement in conditional dependence. Supplement S11 explains the case-specific derivation behind a glycemia generator.
+Figure 2 follows a single [iron-status request](../manuscript/paper_figures_v20_2026-11-06/fig1-agent-method.drawio.svg). Figure 3 traces its decisions to [three scientific analyses](../reports/iron_breadth_2026-11-05/RESULTS.md). Figures 4 and 5 examine the [relationship-evidence contrast](../reports/main_study_freeze_2026-11-03/RESULTS.md) and the [cross-task results](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md). The regression equations in Supplement S11 belong to the CHNS2009 E1 A01 construction.
 
 ## Prospective evidence
 
