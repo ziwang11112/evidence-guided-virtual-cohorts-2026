@@ -1,5 +1,8 @@
 # Dataset exposure: cross-project admission entry point
 
+## Iron status, NHANES August 2021–August 2023 — 5 November 2026
+The [iron-status pilot](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/tree/main/biomedical_research/virtual_cohort_system/reports/iron_breadth_2026-11-05) disclosed Hb–ferritin threshold odds, co-occurrence and continuous rank association in nonpregnant women aged 20–44 after both generators and six delivery tables were sealed. Mark these endpoints as revealed developmental results. NHANES was already a project-exposed family. Do not tune these generators against those estimates or count this as a newly independent study family.
+
 ## Latest scope clarification — existing-data method experiments
 
 2 November 2026. The user challenged repeated acquisition despite existing datasets. [The new reuse amendment](../reports/existing_data_benchmark_2026-11-02/REUSE_AMENDMENT.md) permits a separately specified reused-CHNS benchmark comparison while retaining all historical exposure. Here, "closed" preserves old experiments and forbids relabelling exposed data as fresh confirmation; it does not make acquired datasets permanently unusable for explicitly authorized development or new fixed benchmark comparisons. No historical result or primary gate changes. Fresh constructors may receive source/task evidence but not known target numerical results. No new generation is released by this registry note.

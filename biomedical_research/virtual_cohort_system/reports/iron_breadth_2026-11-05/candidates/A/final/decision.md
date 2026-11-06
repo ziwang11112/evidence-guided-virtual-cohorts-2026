@@ -1,0 +1,11 @@
+# Source-feedback decision
+
+**Decision: revise the upper ferritin component only.**
+
+**Initial artifacts.** SHA-256 of generator.py is `4c4e9c4257c7d989b5bb9a96d7e6819164bde9e7640e8baea1f8ce2b4623ce1c`. SHA-256 of model.md is `7f4e62b5a8e6818d5c838ca16b0c063bb706b2a82a7d9eddf6b8b51f1c6d7243`.
+
+**Feedback received.** The coordinator supplied a verified execution-backed S1 replay of the initial generator, context zhu_source, size 100,000, seed 4101. In the order joint low, low Hb only, low ferritin only, and neither, the counts were 10,237, 5,072, 19,870, and 64,821. The joint prevalence was therefore .10237, and the reported crude OR was 6.5843. Across ascending Hb bands, ferritin geometric means were [1.2836, 5.9542, 22.2813] µg/L and low-ferritin fractions were [.94856, .59563, .23462]. Corresponding source anchors are 173/1,671 ≈ .10353, OR ≈ 6.65, band geometric means [1.3, 5.9, 22.3] and fractions [.943, .600, .234] after rounding. In the specified source construction the expected cells per person and conditional mean log ferritin are fixed by those tables. I attributed these small discrepancies to Monte Carlo variation and kept the fitted quantities.
+
+**Structural correction.** The accompanying static audit identified infinite ferritin variance above the threshold. For the original X ~ Gamma(1.6, scale .53125), E[exp(2X)] diverges. I replaced X as the ferritin log excess with .85 × sqrt(X)/E[sqrt(X)]. It still averages .85, is monotone in X, and grows slowly enough for exp(k × log excess) to be integrable against the exponentially decaying gamma tail for every finite positive k. The threshold classification and all ranks are preserved under this transformation. Consequently, it preserves the three requested analyses under the same latent draws, including Spearman correlation, while preventing extreme ferritin values from dominating dispersion calculations through an infinite population variance. The new upper-component dispersion remains a modeling choice without source calibration.
+
+The author performed no generator execution. These replay statistics apply to the initial artifact. The final candidate uses the same Hb distributions, depletion probabilities, source evidence and population transport. No target feedback or other investigator's information entered the decision.
