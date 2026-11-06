@@ -1,8 +1,8 @@
 # Manuscript
 
-**Expanded methods draft [v0.22](DRAFT_v0_22.md), 6 November 2026.**
+**Expanded methods draft [v0.23](DRAFT_v0_23.md), 6 November 2026.**
 
-[Reading PDF](methods_draft_v22_2026-11-06/paper.pdf) · [Overleaf ZIP](methods_draft_v22_2026-11-06/overleaf_v22.zip) · [System overview](paper_figures_v22_2026-11-06/fig1-agent-loop.drawio.svg)
+[Reading PDF](methods_draft_v23_2026-11-06/paper.pdf) · [Overleaf ZIP](methods_draft_v23_2026-11-06/overleaf_v23.zip) · [System overview](paper_figures_v23_2026-11-06/fig1-agent-loop.drawio.svg)
 
 | Main figure | What to look for |
 | --- | --- |
@@ -17,6 +17,8 @@ Supplement S11 gives the projection equations for a single CHNS glycemia constru
 Domain review, confirmed author details and study-specific declarations are pending. [Claim-specific gaps](KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) · [KDD comparator rationale](../docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md).
 
 ## Preserved history
+
+- [v0.22](DRAFT_v0_22.md), [expanded methods PDF](methods_draft_v22_2026-11-06/paper.pdf) and [previous Figure 1](paper_figures_v22_2026-11-06/fig1-agent-loop.drawio.svg).
 
 - [v0.21](DRAFT_v0_21.md), [conference reading copy](conference_draft_v21_2026-11-06/paper.pdf) and [previous system architecture](paper_figures_v21_2026-11-06/fig1-system-architecture.drawio.svg).
 

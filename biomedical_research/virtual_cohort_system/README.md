@@ -4,11 +4,11 @@
 
 The scientific agent turns published evidence and a study request into a probability model and sampling program. The host coordinates the evidence and review budget, a numerical worker generates the records, and a separate evaluator compares the requested analyses with a measured reference.
 
-**Expanded methods draft v0.22, 6 November 2026.** [Read the paper (PDF)](manuscript/methods_draft_v22_2026-11-06/paper.pdf) · [Read the manuscript and supplement](manuscript/DRAFT_v0_22.md) · [Open the Overleaf project](manuscript/methods_draft_v22_2026-11-06/overleaf_v22.zip).
+**Expanded methods draft v0.23, 6 November 2026.** [Read the paper (PDF)](manuscript/methods_draft_v23_2026-11-06/paper.pdf) · [Read the manuscript and supplement](manuscript/DRAFT_v0_23.md) · [Open the Overleaf project](manuscript/methods_draft_v23_2026-11-06/overleaf_v23.zip).
 
 | What would you like to inspect? | Where to look |
 | --- | --- |
-| How does the system run? | Figure 1 maps the [agent action and feedback loop](manuscript/paper_figures_v22_2026-11-06/fig1-agent-loop.drawio.svg), showing the author, executable program, source checks, retain-or-revise choice and sealed tables. The Methods follow an actual source-only revision and a retained law. [Editable architecture](manuscript/paper_figures_v22_2026-11-06/fig1-agent-loop.drawio) · [Implementation references](manuscript/paper_figures_v22_2026-11-06/README.md). |
+| How does the system run? | Figure 1 maps the [agent action and feedback loop](manuscript/paper_figures_v23_2026-11-06/fig1-agent-loop.drawio.svg), showing the author, executable program, source checks, retain-or-revise choice and sealed tables. The Methods follow an actual source-only revision and a retained law. [Editable architecture](manuscript/paper_figures_v23_2026-11-06/fig1-agent-loop.drawio) · [Implementation references](manuscript/paper_figures_v23_2026-11-06/README.md). |
 | What does a researcher receive? | Figure 2 illustrates an [iron-status request](manuscript/paper_figures_v20_2026-11-06/fig1-agent-method.drawio.svg). A synthetic participant has a row containing both hemoglobin and ferritin. Several analyses use these same pairs. |
 | What do modeling choices change? | Figure 3 compares the two models' predictions and the measured estimates in the [sealed iron study](reports/iron_breadth_2026-11-05/RESULTS.md). |
 | When do additional published associations help? | Figure 4 compares six adjusted regressions in the [glycemia evidence contrast](reports/main_study_freeze_2026-11-03/RESULTS.md). Supplement S11 describes the regression calculation chosen by one constructor. |
