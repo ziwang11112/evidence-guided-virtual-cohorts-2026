@@ -1,21 +1,17 @@
-# Current focus — evidence-guided virtual biomedical data
+# Current focus — from published evidence to analyzable biomedical cohorts
 
-Updated 5 November 2026. **The completed experiments are organized into [manuscript v0.15](../manuscript/DRAFT_v0_15.md).**
+Updated 5 November 2026. [Manuscript v0.16](../manuscript/DRAFT_v0_16.md) · [Reading PDF](../manuscript/conference_draft_v16_2026-11-05/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v16_2026-11-05/overleaf_v16.zip).
 
-The core is an Agent converting study-qualified published evidence, target-population descriptions, optional observations and intended analyses into executable joint laws and useful virtual data. Whole-cohort generation without individual inputs remains central. Ordinary Agents and task-specific laws are valid implementations.
+The paper asks when a scientific agent can turn study-specific statistics into an entire virtual table on which a researcher can run the requested analysis. Matching a supplied model is evaluated separately from constructing a joint law from external studies. Real and simulated participant records are not distributed.
 
-This editorial unit reorganized the paper into a scientific argument, redrew four result displays from frozen aggregates, retained complete numerical tables and obtained independent content/PDF review. It did not generate new tables, access patient rows, refit clinical references or modify frozen experiments.
+## Which comparison comes first?
 
-The existing cross-task study produced six laws and 18 tables. Primary directions agreed with cached sample points while magnitudes, spread and residual dependence remained mixed. The TC sensitivity interval crosses zero. All six laws were retained and numerical source-check feedback was unavailable. These are developmental, previously exposed references; directions alone do not establish quantitative transport.
+The [HRS reconstruction](../reports/hrs_public_example_2026-11-03/RESULTS.md) provides a published biomedical generator, shared exports and a native longitudinal analysis. The [new main Figure 2](../manuscript/paper_figures_v16_2026-11-05/fig2-hrs-comparison.svg) shows both interactions, all valid draws and their model-conditional intervals. The stronger negative interaction was stable. For the weaker interaction, the point signs differed between the two constructions and most intervals crossed zero.
 
-## Current selected direction: KDD comparison design
+The [two external-evidence requests](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md) ask what is possible when the source joint model is not given. The tables supported the requested regressions, with analysis-specific quantitative agreement. Residual lipid dependence was weaker than in the sample reference. The [relational-evidence contrast](../reports/main_study_freeze_2026-11-03/RESULTS.md) explains a practical lever: adding relational information reduced discrepancy in five of six comparisons.
 
-The user selected KDD preparation on 5 November. The [reviewed transfer protocol](../reports/kdd_neighbor_design_2026-11-05/PROTOCOL.md) describes a possible biomedical adaptation of LLMSynthor for a two-request, 20-episode comparison. Its results are pending and its priority is clarified below.
+## Decision and next step
 
-The [comparison priority note](KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) places the existing HRS published-generator reconstruction first. Present the stronger and weaker longitudinal interactions together, then use the glycemic and lipid cases to assess generation from less complete external evidence. LLMSynthor belongs in the methodological discussion. Its original-domain benchmark and the 20-episode biomedical adaptation are outside the current experimental schedule.
+The [KDD comparison decision](KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) separates a scientific biomedical comparator from methodological neighbors G-Sim and LLMSynthor. The [optional adaptation protocol](../reports/kdd_neighbor_design_2026-11-05/PROTOCOL.md) is not scheduled. A published model refit or another published paper's headline score is not evidence of transport to a new cohort.
 
-[The earlier venue audit](../reports/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md) remains a dated fit assessment; the selected direction now reflects the user's KDD priority. The comparison will assess final-data scientific use, not assume an accuracy win, a feedback benefit or a novel Agent label. Previously exposed references remain developmental. Existing empirical claims and manuscript v0.15 are unchanged.
-
-[Reading PDF](../manuscript/conference_draft_v15_2026-11-05/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v15_2026-11-05/overleaf_v15.zip) · [Editorial decisions](../reports/manuscript_refinement_v15_2026-11-05/EDITORIAL_DECISIONS_ZH.md) · [Exposure registry](DATASET_EXPOSURE_REGISTRY.md).
-
-Public synchronization is recorded separately in this unit's PUBLIC_SYNC_RECEIPT.json after remote verification. Patient-level data, third-party originals and credentials remain local. Do not revive closed experimental plans or retune exposed references from old documents.
+Review the figures, definitions, declarations and claim strength against the intended KDD track. If the paper asserts transport to a new population, it needs an untouched reference selected before outcomes are known. The present draft evaluates reconstruction and analysis-specific usefulness on the documented references. [Exposure registry](DATASET_EXPOSURE_REGISTRY.md) · [Claim-specific gaps](../manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md).
