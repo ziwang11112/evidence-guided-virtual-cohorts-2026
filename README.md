@@ -1,19 +1,18 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.18](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_18.md), 6 November 2026.**
+## From Published Evidence to Analyzable Biomedical Cohorts with Scientific Agents
 
-**From Published Evidence to Analyzable Biomedical Cohorts with Scientific Agents**
+Can researchers run useful biomedical analyses when the required individual records are unavailable? A scientific agent interprets statistics from published studies, chooses a joint model for the requested population, and writes a generator that produces complete records. The experiments compare analyses of these records with measured sample estimates.
 
-[Reading PDF](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v18_2026-11-06/paper.pdf) · [Overleaf-ready ZIP](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v18_2026-11-06/overleaf_v18.zip) · [Iron-status figure](biomedical_research/virtual_cohort_system/manuscript/paper_figures_v18_2026-11-06/fig3-iron-utility.png)
+**Read the [review guide](REVIEW_GUIDE.md), [paper (PDF)](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v18_2026-11-06/paper.pdf) or [paper (plain text)](biomedical_research/virtual_cohort_system/manuscript/DRAFT_v0_18.md).** The current manuscript is v0.18, dated 6 November 2026. Its main text occupies seven pages. The supplementary results and reproducibility records follow.
 
-Researchers may need to analyze paired biomarkers when no individual records are available. The agent qualifies the published measurements and relationships, writes a joint probability model, and identifies the assumptions under which complete records can be generated. The resulting tables can be analyzed with ordinary statistical software.
+| Scientific question | Where to look |
+| --- | --- |
+| How does a statistic in a paper become a numerical dependency in an agent-authored generator? | Figure 1 and the [worked derivation](biomedical_research/virtual_cohort_system/manuscript/SUPPLEMENT_SOURCE_AND_ASSUMPTIONS_v05.md) |
+| Which adjusted regressions improve when relationship evidence is added? | Figure 2 and the [CHNS / ENSANUT results](biomedical_research/virtual_cohort_system/reports/main_study_freeze_2026-11-03/RESULTS.md) |
+| What happens when researchers use one virtual iron-status cohort for three different analyses? | Figure 3 and the [iron-status evidence, models and results](biomedical_research/virtual_cohort_system/reports/iron_breadth_2026-11-05/RESULTS.md) |
+| Which results carry across biomarkers or hold when exact target results are withheld until after generation? | Figure 4 and the [glycemia / lipids results](biomedical_research/virtual_cohort_system/reports/evidence_use_cross_task_2026-11-05/RESULTS.md), then Figure S5 and the [earlier prospective wave](reports/scaleup_2026-11-01/production_release/RESULTS.md) |
 
-## Which scientific analyses can those rows support?
+The [review guide](REVIEW_GUIDE.md) distinguishes source reconstruction, developmental evaluation and the earlier prospective tests. It links the source materials, scientific generator code, aggregate endpoints, and what a reader can reproduce from this repository. Real and generated participant records remain local.
 
-1. **What changes when more is known?** In [CHNS and ENSANUT](biomedical_research/virtual_cohort_system/reports/main_study_freeze_2026-11-03/RESULTS.md), adding external relationship evidence reduced mean absolute discrepancy for five of six designated regression coefficients. The CHNS BMI effect became less accurate.
-2. **What can be learned from one table?** In the [iron study](biomedical_research/virtual_cohort_system/reports/iron_breadth_2026-11-05/RESULTS.md), two generators each matched a published source odds ratio. Both understated the NHANES target association. One came closer on the co-occurrence of low values; the other on continuous rank correlation.
-3. **Does that pattern travel?** In the [glycemia and lipids study](biomedical_research/virtual_cohort_system/reports/evidence_use_cross_task_2026-11-05/RESULTS.md), point directions agreed across the six analyses; adjusted lipid dependence was too weak. In the [earlier prospective wave](reports/scaleup_2026-11-01/production_release/RESULTS.md), neither case passed its prespecified overall rule.
-
-The [HRS longitudinal comparison](biomedical_research/virtual_cohort_system/reports/hrs_public_example_2026-11-03/RESULTS.md) and [supplied-summary experiment](biomedical_research/virtual_cohort_system/reports/information_revision_ablation_2026-11-03/RESULTS.md) establish what can be reconstructed when more information is given. [Manuscript and figure guide](biomedical_research/virtual_cohort_system/manuscript/README.md) · [Agent implementation](biomedical_research/virtual_cohort_system/cohort_harness/evidence_use_v1.py).
-
-[Current focus](biomedical_research/virtual_cohort_system/docs/CURRENT_RESEARCH_FOCUS.md) · [Claim-specific experiment gaps](biomedical_research/virtual_cohort_system/manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) · [Exposure registry](biomedical_research/virtual_cohort_system/docs/DATASET_EXPOSURE_REGISTRY.md). Real and simulated individual records remain local. The LaTeX package is a review draft, not a conference submission.
+[Overleaf project](biomedical_research/virtual_cohort_system/manuscript/conference_draft_v18_2026-11-06/overleaf_v18.zip) · [Manuscript versions and figures](biomedical_research/virtual_cohort_system/manuscript/README.md) · [Project index](biomedical_research/virtual_cohort_system/README.md) · [Dataset exposure registry](biomedical_research/virtual_cohort_system/docs/DATASET_EXPOSURE_REGISTRY.md)
