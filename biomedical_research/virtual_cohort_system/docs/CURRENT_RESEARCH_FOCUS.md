@@ -1,8 +1,10 @@
 # Current focus — from published evidence to analyzable biomedical cohorts
 
-Updated 6 November 2026. [Manuscript v0.18](../manuscript/DRAFT_v0_18.md) · [Reading PDF](../manuscript/conference_draft_v18_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v18_2026-11-06/overleaf_v18.zip).
+Updated 6 November 2026. [Manuscript v0.19](../manuscript/DRAFT_v0_19.md) · [Reading PDF](../manuscript/conference_draft_v19_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v19_2026-11-06/overleaf_v19.zip).
 
 The paper asks when a scientific agent can turn published evidence into analyzable virtual records, including when no target individual measurements are available. Its unit of evaluation is the scientific analysis on the delivered table. Real and simulated participant records are not distributed.
+
+Table 1 separates the published evidence, investigator decisions, agent-authored sampling law and numerical worker. The [iron figure](../manuscript/paper_figures_v19_2026-11-06/fig3-iron-utility.png) compares the exact implications of the two agent choices with the sealed finite deliveries. A [post hoc physical-consistency check](../manuscript/Q5_LIPID_ORDER_POST_HOC_v19.md) reports the ordering of HDL and total cholesterol in the existing lipid tables.
 
 ## From research request to evidence of use
 
