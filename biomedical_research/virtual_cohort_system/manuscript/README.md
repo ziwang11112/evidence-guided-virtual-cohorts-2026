@@ -12,6 +12,8 @@ Scientific author review, final venue length/format, authorship, affiliations, f
 
 ## Preserved history
 
+**Selected next step:** [KDD nearest-method comparison design](../reports/kdd_neighbor_design_2026-11-05/README.md), EVC versus LLMSynthor-E on two existing requests. Twenty native episodes are planned, with implementation/fidelity gates before execution. No new results have been inserted into v0.15.
+
 - [v0.14](DRAFT_v0_14.md) and [reading copy](conference_draft_v14_2026-11-05/paper.pdf)
 - [v0.13.1](DRAFT_v0_13_1.md), [v0.13](DRAFT_v0_13.md), [v0.12](DRAFT_v0_12.md)
 - [Historical findings](SUPPLEMENT_HISTORICAL_RESULTS_v05.md)

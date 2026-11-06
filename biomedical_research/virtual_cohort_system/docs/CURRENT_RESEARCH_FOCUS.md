@@ -8,9 +8,13 @@ This editorial unit reorganized the paper into a scientific argument, redrew fou
 
 The existing cross-task study produced six laws and 18 tables. Primary directions agreed with cached sample points while magnitudes, spread and residual dependence remained mixed. The TC sensitivity interval crosses zero. All six laws were retained and numerical source-check feedback was unavailable. These are developmental, previously exposed references; directions alone do not establish quantitative transport.
 
-## Next decision
+## Current selected direction: KDD comparison design
 
-Proceed with scientific author review and venue selection. [The official-source venue audit](../reports/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md) prioritizes MLHC, a future AAMAS cycle and a separate PLOS Digital Health journal route; KDD options are conditional. Future conference dates/page rules are not assumed from earlier years. Existing claims can be drafted now. A stronger transport, component, uncertainty or efficiency claim requires its own evidence, not an automatic expansion of this study.
+The user selected KDD preparation on 5 November. The immediate deliverable is the [nearest-method comparison protocol](../reports/kdd_neighbor_design_2026-11-05/PROTOCOL.md), with a [Chinese decision note](../reports/kdd_neighbor_design_2026-11-05/DECISION_ZH.md). It compares new EVC constructions with a paper-based LLMSynthor reimplementation plus a declared evidence-to-macro adapter. Two existing requests, two workflows and five fresh native episodes per workflow/request give 20 scheduled final tables. No new comparative performance result is available.
+
+Next implement and independently review the faithful LLMSynthor core, input adaptation and actual dispatch route on invented native fixtures. An execution release remains pending; the old six-author/three-seed controller cannot simply be reused as twenty native episodes. No new clinical dataset is needed. G-Sim is a relevant secondary option, not an automatically scheduled third arm. The completed CHNS statistical-summary comparison is retained.
+
+[The earlier venue audit](../reports/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md) remains a dated fit assessment; the selected direction now reflects the user's KDD priority. The comparison will assess final-data scientific use, not assume an accuracy win, a feedback benefit or a novel Agent label. Previously exposed references remain developmental. Existing empirical claims and manuscript v0.15 are unchanged.
 
 [Reading PDF](../manuscript/conference_draft_v15_2026-11-05/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v15_2026-11-05/overleaf_v15.zip) · [Editorial decisions](../reports/manuscript_refinement_v15_2026-11-05/EDITORIAL_DECISIONS_ZH.md) · [Exposure registry](DATASET_EXPOSURE_REGISTRY.md).
 
