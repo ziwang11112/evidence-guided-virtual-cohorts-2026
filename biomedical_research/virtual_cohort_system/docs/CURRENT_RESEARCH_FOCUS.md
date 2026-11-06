@@ -1,14 +1,12 @@
 # Current focus — from published evidence to analyzable biomedical cohorts
 
-Updated 5 November 2026. [Manuscript v0.17](../manuscript/DRAFT_v0_17.md) · [Reading PDF](../manuscript/conference_draft_v17_2026-11-05/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v17_2026-11-05/overleaf_v17.zip).
+Updated 6 November 2026. [Manuscript v0.18](../manuscript/DRAFT_v0_18.md) · [Reading PDF](../manuscript/conference_draft_v18_2026-11-06/paper.pdf) · [LaTeX ZIP](../manuscript/conference_draft_v18_2026-11-06/overleaf_v18.zip).
 
-The paper asks when a scientific agent can turn study-specific statistics into an entire virtual table on which a researcher can run the requested analysis. Matching a supplied model is evaluated separately from constructing a joint law from external studies. Real and simulated participant records are not distributed.
+The paper asks when a scientific agent can turn published evidence into analyzable virtual records, including when no target individual measurements are available. Its unit of evaluation is the scientific analysis on the delivered table. Real and simulated participant records are not distributed.
 
-## Which comparison comes first?
+## From research request to evidence of use
 
-The [HRS reconstruction](../reports/hrs_public_example_2026-11-03/RESULTS.md) provides a published biomedical generator, shared exports and a native longitudinal analysis. The [new main Figure 2](../manuscript/paper_figures_v16_2026-11-05/fig2-hrs-comparison.svg) shows both interactions, all valid draws and their model-conditional intervals. The stronger negative interaction was stable. For the weaker interaction, the point signs differed between the two constructions and most intervals crossed zero.
-
-The [two external-evidence requests](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md) ask what is possible when the source joint model is not given. The tables supported the requested regressions, with analysis-specific quantitative agreement. Residual lipid dependence was weaker than in the sample reference. The [relational-evidence contrast](../reports/main_study_freeze_2026-11-03/RESULTS.md) explains a practical lever: adding relational information reduced discrepancy in five of six comparisons.
+The [evidence contrast](../reports/main_study_freeze_2026-11-03/RESULTS.md) asks what supplying relationships changes in glycemia. The [iron study](../reports/iron_breadth_2026-11-05/RESULTS.md) then uses the same continuous records for joint burden, a threshold odds ratio and a rank correlation. The [cross-task results](../reports/evidence_use_cross_task_2026-11-05/RESULTS.md) distinguish a reproducible point direction from quantitatively accurate conditional lipid dependence. The [HRS matched reconstruction](../reports/hrs_public_example_2026-11-03/RESULTS.md) is included in the supplement because the longitudinal analysis coefficients there were supplied inputs.
 
 ## Prospective evidence
 

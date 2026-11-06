@@ -1,23 +1,19 @@
 # Evidence-guided virtual biomedical data
 
-**Current manuscript: [v0.17](manuscript/DRAFT_v0_17.md), 5 November 2026.**
+**Current manuscript: [v0.18](manuscript/DRAFT_v0_18.md), 6 November 2026.**
 
 **From Published Evidence to Analyzable Biomedical Cohorts with Scientific Agents**
 
-[Reading PDF](manuscript/conference_draft_v17_2026-11-05/paper.pdf) · [Overleaf-ready ZIP](manuscript/conference_draft_v17_2026-11-05/overleaf_v17.zip) · [HRS comparison figure](manuscript/paper_figures_v16_2026-11-05/fig2-hrs-comparison.svg)
+[Reading PDF](manuscript/conference_draft_v18_2026-11-06/paper.pdf) · [Overleaf-ready ZIP](manuscript/conference_draft_v18_2026-11-06/overleaf_v18.zip) · [Iron-status figure](manuscript/paper_figures_v18_2026-11-06/fig3-iron-utility.png)
 
-A scientific agent uses published evidence, a population description, optional observations and intended analyses to specify a joint model and generate virtual data. The main studies ask the agent to generate an entire population without individual construction records. Its model can change with the requested scientific use.
+Researchers may need to analyze paired biomarkers when no individual records are available. The agent qualifies the published measurements and relationships, writes a joint probability model, and identifies the assumptions under which complete records can be generated. The resulting tables can be analyzed with ordinary statistical software.
 
-## What do the generated data support?
+## Which scientific analyses can those rows support?
 
-1. **Start with a model both methods know.** In the [HRS longitudinal comparison](reports/hrs_public_example_2026-11-03/RESULTS.md), both laws preserved the negative interaction below 6.5% HbA1c. Above that knot the agent and reconstructed published law gave opposite point signs; five of six intervals included zero. This is reconstruction from supplied model information.
-2. **Then use external studies that leave parts of the model open.** In [glycemic and lipid requests](reports/evidence_use_cross_task_2026-11-05/RESULTS.md), all six requested quantities agreed in point direction with sample references across 18 tables. An adjusted glycemic effect was reproduced closely by one construction. Residual lipid correlations were systematically weaker (construction means 0.108–0.141; sample reference 0.512).
-3. **Test what the relational evidence contributes.** In the [CHNS and ENSANUT information comparison](reports/main_study_freeze_2026-11-03/RESULTS.md), richer evidence reduced mean absolute discrepancy in five of six designated regressions; CHNS BMI became less accurate. The separate [supplied-summary experiment](reports/information_revision_ablation_2026-11-03/RESULTS.md) evaluates reconstruction of available target summaries.
+1. **What changes when more is known?** In [CHNS and ENSANUT](reports/main_study_freeze_2026-11-03/RESULTS.md), adding external relationship evidence reduced mean absolute discrepancy for five of six designated regression coefficients. The CHNS BMI effect became less accurate.
+2. **What can be learned from one table?** In the [iron study](reports/iron_breadth_2026-11-05/RESULTS.md), two generators each matched a published source odds ratio. Both understated the NHANES target association. One came closer on the co-occurrence of low values; the other on continuous rank correlation.
+3. **Does that pattern travel?** In the [glycemia and lipids study](reports/evidence_use_cross_task_2026-11-05/RESULTS.md), point directions agreed across the six analyses; adjusted lipid dependence was too weak. In the [earlier prospective wave](../../reports/scaleup_2026-11-01/production_release/RESULTS.md), neither case passed its prespecified overall rule.
 
-4. **Examine a prediction fixed before disclosure.** In the earlier [prospective evaluation](../../reports/scaleup_2026-11-01/production_release/RESULTS.md), all 15 HAALSI agent draws reproduced the positive glucose associations with BMI and age, and eight recovered the sex difference in BMI slopes. Three of five constructions met the primary criterion, below the four required. All three zero-effect predictions also fell inside the margin. The later Turkana request reused the same measured sample.
-
-## Reading and reproducing the work
-
-The manuscript contains four main figures and five supplementary figures. [Figure S5](manuscript/paper_figures_v17_2026-11-05/figS5-prospective-wave.svg) and Table S7 include the six prospectively fixed analyses. The [admission review](reports/manuscript_v17_2026-11-05/FRESH_TARGET_REVIEW.md) records which targets were withheld at the time of each experiment. The [agent method](manuscript/DRAFT_v0_17.md#3-agent-controlled-evidence-to-cohort-construction), [implementation](cohort_harness/evidence_use_v1.py), [comparator rationale](docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md) and [draft history](manuscript/README.md) provide entry points.
+The [HRS longitudinal comparison](reports/hrs_public_example_2026-11-03/RESULTS.md) and [supplied-summary experiment](reports/information_revision_ablation_2026-11-03/RESULTS.md) establish what can be reconstructed when more information is given. [Manuscript and figure guide](manuscript/README.md) · [Agent implementation](cohort_harness/evidence_use_v1.py).
 
 [Current focus](docs/CURRENT_RESEARCH_FOCUS.md) · [Claim-specific experiment gaps](manuscript/KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) · [Exposure registry](docs/DATASET_EXPOSURE_REGISTRY.md). Real and simulated individual records remain local. The LaTeX package is a review draft, not a conference submission.
