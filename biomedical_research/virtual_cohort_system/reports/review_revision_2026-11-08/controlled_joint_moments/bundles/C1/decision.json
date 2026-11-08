@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "source_check_ids_used": [
+    "mean_Z",
+    "sd_Z",
+    "mean_X1",
+    "sd_X1",
+    "mean_X2",
+    "sd_X2",
+    "mean_Y",
+    "sd_Y",
+    "r_Z_X1",
+    "r_Z_X2",
+    "r_X1_X2",
+    "report_A_Z",
+    "report_A_X1",
+    "report_B_Z",
+    "report_B_X2"
+  ],
+  "scientific_rationale": "The two adjusted OLS reports identify the three predictor-outcome covariances through their respective normal equations. Their shared Z-outcome covariance agrees. Combining these covariances with the reported predictor covariance identifies the full OLS projection. The outcome variance then determines its residual variance. A Gaussian joint law realizes all these mutually consistent moments.",
+  "adopted_joint_probability_law": "P=(Z,X1,X2) is multivariate normal with the mean and covariance in model_spec.json. Independently, epsilon is normal with mean zero and variance 0.6775. Y=0.25*Z+0.65*X1-0.4*X2+epsilon. Rows are independent.",
+  "derived_parameters": {
+    "predictor_covariance": [
+      [
+        1.0,
+        0.3,
+        0.15
+      ],
+      [
+        0.3,
+        1.0,
+        0.75
+      ],
+      [
+        0.15,
+        0.75,
+        1.0
+      ]
+    ],
+    "predictor_outcome_covariances": [
+      0.385,
+      0.42499999999999993,
+      0.125
+    ],
+    "full_ols_intercept": 0.0,
+    "full_ols_coefficients_order_Z_X1_X2": [
+      0.25,
+      0.65,
+      -0.4
+    ],
+    "full_ols_explained_variance": 0.32249999999999995,
+    "full_ols_population_residual_variance": 0.6775,
+    "full_ols_population_residual_sd": 0.8231038816577164,
+    "joint_covariance_order_Z_X1_X2_Y": [
+      [
+        1.0,
+        0.3,
+        0.15,
+        0.385
+      ],
+      [
+        0.3,
+        1.0,
+        0.75,
+        0.42499999999999993
+      ],
+      [
+        0.15,
+        0.75,
+        1.0,
+        0.125
+      ],
+      [
+        0.385,
+        0.42499999999999993,
+        0.125,
+        1.0
+      ]
+    ],
+    "parameter_provenance": {
+      "predictor_means_and_covariance": [
+        "mean_Z",
+        "mean_X1",
+        "mean_X2",
+        "sd_Z",
+        "sd_X1",
+        "sd_X2",
+        "r_Z_X1",
+        "r_Z_X2",
+        "r_X1_X2"
+      ],
+      "predictor_outcome_covariances_and_full_slopes": [
+        "report_A_Z",
+        "report_A_X1",
+        "report_B_Z",
+        "report_B_X2",
+        "sd_Z",
+        "sd_X1",
+        "sd_X2",
+        "r_Z_X1",
+        "r_Z_X2",
+        "r_X1_X2"
+      ],
+      "intercept": [
+        "mean_Z",
+        "mean_X1",
+        "mean_X2",
+        "mean_Y"
+      ],
+      "residual_variance": [
+        "sd_Y",
+        "report_A_Z",
+        "report_A_X1",
+        "report_B_Z",
+        "report_B_X2",
+        "sd_Z",
+        "sd_X1",
+        "sd_X2",
+        "r_Z_X1",
+        "r_Z_X2",
+        "r_X1_X2"
+      ]
+    }
+  },
+  "assumptions": [
+    "Joint Gaussian shape is a modeling choice; reported means, covariances and OLS coefficients do not identify higher moments or the distribution family.",
+    "Gaussian predictors and an independent Gaussian residual imply a linear conditional mean and constant conditional variance; these properties exceed what the supplied second moments alone establish.",
+    "Rows are independent identically distributed draws, with no selection, missingness or measurement censoring.",
+    "The generator expresses an associational joint law. The order used to simulate variables has no causal interpretation."
+  ],
+  "deterministic_consistency_calculations": {
+    "definition": "For each reported adjustment set S, Cov(P_S,Y)=Cov(P_S,P_S)*b_S. Full coefficients solve R*beta=c. Explained variance is beta^T*R*beta; residual variance is Var(Y)-explained variance.",
+    "report_A_covariances_order_ZY_X1Y": [
+      0.385,
+      0.42499999999999993
+    ],
+    "report_B_covariances_order_ZY_X2Y": [
+      0.385,
+      0.125
+    ],
+    "shared_ZY_absolute_discrepancy": 0.0,
+    "report_A_adjustment_set": [
+      "Z",
+      "X1"
+    ],
+    "report_B_adjustment_set": [
+      "Z",
+      "X2"
+    ],
+    "all_models_include_intercept": true,
+    "report_A_implied_residual_variance": 0.7465109890109891,
+    "report_B_implied_residual_variance": 0.8471483375959079,
+    "explained_plus_residual_variance": 1.0,
+    "target_outcome_variance": 1.0,
+    "predictor_covariance_eigenvalues": [
+      0.23391256866242163,
+      0.8984484869882504,
+      1.8676389443493275
+    ],
+    "joint_covariance_eigenvalues": [
+      0.18680031421170323,
+      0.6269403348621346,
+      1.075985047021888,
+      2.1102743039042746
+    ],
+    "predictor_covariance_determinant": 0.3925000000000001,
+    "joint_covariance_determinant": 0.2659187500000002,
+    "numerical_precision": "The input decimal representations are reconciled within absolute tolerance 1e-12. Clean parameter decimals are used in the specification.",
+    "unresolved_incompatibilities": []
+  },
+  "actual_checks": {
+    "source_moment_comparisons": [
+      {
+        "source_check_id": "mean_Z",
+        "supplied": 0.0,
+        "implied": 0.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_Z",
+        "supplied": 1.0,
+        "implied": 1.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "mean_X1",
+        "supplied": 0.0,
+        "implied": 0.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_X1",
+        "supplied": 1.0,
+        "implied": 1.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "mean_X2",
+        "supplied": 0.0,
+        "implied": 0.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_X2",
+        "supplied": 1.0,
+        "implied": 1.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "mean_Y",
+        "supplied": 0.0,
+        "implied": 0.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_Y",
+        "supplied": 1.0,
+        "implied": 1.0,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "r_Z_X1",
+        "supplied": 0.3,
+        "implied": 0.3,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "r_Z_X2",
+        "supplied": 0.15,
+        "implied": 0.15,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "r_X1_X2",
+        "supplied": 0.75,
+        "implied": 0.75,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_A_Z",
+        "supplied": 0.282967032967033,
+        "implied": 0.282967032967033,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_A_X1",
+        "supplied": 0.34010989010989,
+        "implied": 0.34010989010989,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_B_Z",
+        "supplied": 0.37468030690537085,
+        "implied": 0.37468030690537085,
+        "absolute_error": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_B_X2",
+        "supplied": 0.06879795396419437,
+        "implied": 0.06879795396419437,
+        "absolute_error": 0.0,
+        "passed": true
+      }
+    ],
+    "absolute_tolerance": 1e-12,
+    "predictor_and_joint_cholesky": "Both succeeded in deterministic algebra; covariance matrices are positive definite.",
+    "syntax": "generator.py parsed with ast.parse and compiled in memory without executing it.",
+    "specification": "Specification serialized with nonfinite JSON numbers prohibited and reparsed successfully.",
+    "sampling": "No generator invocation, random draws, sample tables, feedback rounds or final-output inspection performed."
+  },
+  "population_applicability": "Only the exact artificial standardized population P0 described by SOURCE.json. All variables are dimensionless. The adopted source analyses use the entire population, include intercepts, and retain exactly their supplied adjustment sets. Finite generated cohorts will fluctuate around these population summaries.",
+  "unassessed_uses": [
+    "Real patients or clinical transport",
+    "Causal effects or interventions",
+    "Non-Gaussian tails and extreme-event probabilities",
+    "Nonlinear or heteroskedastic conditional relationships",
+    "Subgroup, selected-population or missing-data analyses",
+    "Sampling uncertainty of the source reports, which are stipulated as exact population moments"
+  ]
+}

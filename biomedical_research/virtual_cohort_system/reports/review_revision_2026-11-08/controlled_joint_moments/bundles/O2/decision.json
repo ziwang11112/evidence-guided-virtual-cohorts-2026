@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "source_check_ids_used": [
+    "mean_Z",
+    "sd_Z",
+    "mean_X1",
+    "sd_X1",
+    "mean_X2",
+    "sd_X2",
+    "mean_Y",
+    "sd_Y",
+    "r_Z_X1",
+    "r_Z_X2",
+    "r_X1_X2",
+    "report_A_Z",
+    "report_A_X1",
+    "report_B_Z",
+    "report_B_X2"
+  ],
+  "scientific_rationale": "All reports describe the same artificial population. OLS normal equations convert each reported adjusted coefficient vector into predictor-outcome covariances using its own adjustment set. Their shared Z-Y covariance agrees, and together they identify the entire covariance matrix. A Gaussian construction realizes those moments without additional unidentified mixture or nonlinear parameters. The joint X2 coefficient is negative even though its coefficient adjusted only for Z is positive; both follow from the supplied covariance structure.",
+  "reported_parameters": {
+    "means": {
+      "Z": 0.0,
+      "X1": 0.0,
+      "X2": 0.0,
+      "Y": 0.0
+    },
+    "standard_deviations": {
+      "Z": 1.0,
+      "X1": 1.0,
+      "X2": 1.0,
+      "Y": 1.0
+    },
+    "predictor_correlations": {
+      "Z_X1": 0.3,
+      "Z_X2": 0.15,
+      "X1_X2": 0.75
+    }
+  },
+  "derived_parameters": {
+    "derivation": "For each report S, Cov(S,Y)=Cov(S,S) beta_S. Combine the two overlapping results into c=Cov([Z,X1,X2],Y); then beta_joint=solve(Sigma_predictors,c), intercept=mean_Y-means_predictors dot beta_joint, and residual_variance=Var(Y)-c dot beta_joint.",
+    "covariances_from_A": {
+      "Z_Y": 0.385,
+      "X1_Y": 0.425
+    },
+    "covariances_from_B": {
+      "Z_Y": 0.385,
+      "X2_Y": 0.125
+    },
+    "joint_ols_adjustment_set": [
+      "Z",
+      "X1",
+      "X2"
+    ],
+    "joint_ols_includes_intercept": true,
+    "joint_ols_intercept": 0.0,
+    "joint_ols_coefficients": {
+      "Z": 0.25,
+      "X1": 0.65,
+      "X2": -0.4
+    },
+    "joint_ols_residual_variance": 0.6775,
+    "joint_ols_residual_standard_deviation": 0.8231038816577164,
+    "residual_definition": "Population square root of E[(Y-intercept-Z*beta_Z-X1*beta_X1-X2*beta_X2)^2]. Finite-sample residual SD estimators will fluctuate and can use their requested degrees-of-freedom convention."
+  },
+  "assumptions": [
+    "Rows are independent identically distributed draws from P0.",
+    "The joint distribution is multivariate Gaussian. Population moments and OLS coefficients do not uniquely establish Gaussianity.",
+    "The selected representation uses a linear conditional outcome mean and an independent, homoskedastic Gaussian residual. These conditional and tail properties are assumptions, whereas the joint OLS projection and its population residual variance are identified by the reported moments.",
+    "No missingness, selection, subgroups, truncation or measurement transformations are introduced."
+  ],
+  "population_applicability": "Only the complete artificial standardized population P0, with dimensionless variables and the supplied intercept-including adjustment sets. Source values are exact population summaries rather than uncertain estimates. Generated sample estimates need not equal population summaries exactly.",
+  "unassessed_uses": [
+    "Clinical inference or transport to actual patients or another population",
+    "Causal effects, interventions, mediation or temporal interpretation",
+    "Empirical distribution tails, nonlinear conditional patterns or latent subgroups",
+    "Dependence across rows, measurement error, missingness or selection mechanisms"
+  ],
+  "actual_checks": [
+    {
+      "check": "Deterministic normal-equation reconciliation of reports A and B",
+      "result": "Both imply Cov(Z,Y)=0.385; the floating-point discrepancy was 0.0. A implies Cov(X1,Y)=0.42499999999999993 and B implies Cov(X2,Y)=0.125. Decimal 0.425 is retained in the mathematical specification."
+    },
+    {
+      "check": "Positive definiteness of predictor and full four-variable covariance matrices",
+      "result": "Predictor minimum eigenvalue was 0.23391256866242163; full covariance minimum eigenvalue was 0.18680031421170323. Both were strictly positive."
+    },
+    {
+      "check": "Deterministic joint OLS and residual variance calculation",
+      "result": "Solving the normal equations yielded coefficients [0.25000000000000006,0.6499999999999997,-0.3999999999999997] and residual variance 0.6775000000000001; stored decimal parameters retain their algebraic values."
+    },
+    {
+      "check": "Reconstruction with the original adjustment sets",
+      "result": "Reconstructed A coefficients were [0.282967032967033,0.34010989010989] for [Z,X1], and B coefficients were [0.37468030690537085,0.06879795396419437] for [Z,X2], matching the supplied values in the deterministic calculation."
+    },
+    {
+      "check": "Static Python AST and JSON validation plus analytic reconstruction from the stored specification",
+      "result": {
+        "generate_signature": "generate(n,rng,spec)",
+        "output_column_order": [
+          "Z",
+          "X1",
+          "X2",
+          "Y"
+        ],
+        "source_checks_reconstructed": 15,
+        "maximum_absolute_population_statistic_error": 0.0,
+        "full_covariance_cholesky": "passed",
+        "generator_execution": false
+      }
+    }
+  ],
+  "execution_limits": "No generator execution, random draws, trial tables, external sources, evaluator feedback or final outputs were used."
+}

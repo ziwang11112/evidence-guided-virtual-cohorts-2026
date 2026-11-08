@@ -1,8 +1,10 @@
 # Manuscript
 
-**Expanded methods draft [v0.24](DRAFT_v0_24.md), 6 November 2026.**
+**Expanded methods draft [v0.25](DRAFT_v0_25.md), 8 November 2026.**
 
-[Reading PDF](methods_draft_v24_2026-11-06/paper.pdf) · [Overleaf ZIP](methods_draft_v24_2026-11-06/overleaf_v24.zip) · [System overview](paper_figures_v24_2026-11-06/fig1-agent-loop.drawio.svg)
+[Reading PDF](methods_draft_v25_2026-11-08/paper.pdf) · [Overleaf ZIP](methods_draft_v25_2026-11-08/overleaf_v25.zip) · [System overview](paper_figures_v24_2026-11-06/fig1-agent-loop.drawio.svg)
+
+v0.25 completes both statistical comparator columns in Table S1, reports the H03 dispersion mismatch beside coefficient fidelity, explains the iron complete-case estimand and adds verified KMGen/population-synthesis references. Supplement S13 records a [bounded artificial test](../reports/review_revision_2026-11-08/controlled_joint_moments/RESULTS.md): ordinary and extra-consistency instructions produced the same law, with no demonstrated component improvement.
 
 | Main figure | What to look for |
 | --- | --- |
@@ -17,6 +19,8 @@ Supplement S11 gives the projection equations for a single CHNS glycemia constru
 Domain review, confirmed author details and study-specific declarations are pending. [Claim-specific gaps](KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) · [KDD comparator rationale](../docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md).
 
 ## Preserved history
+
+- [v0.24](DRAFT_v0_24.md), [expanded methods PDF](methods_draft_v24_2026-11-06/paper.pdf) and [retained Figure 1](paper_figures_v24_2026-11-06/fig1-agent-loop.drawio.svg).
 
 - [v0.23](DRAFT_v0_23.md), [expanded methods PDF](methods_draft_v23_2026-11-06/paper.pdf) and [previous Figure 1](paper_figures_v23_2026-11-06/fig1-agent-loop.drawio.svg).
 

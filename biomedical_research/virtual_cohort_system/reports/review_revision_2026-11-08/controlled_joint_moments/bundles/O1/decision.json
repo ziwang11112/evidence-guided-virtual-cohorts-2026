@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "decision": "Construct a joint Gaussian distribution matching all supplied population moments; the requested joint OLS is identified by these moments.",
+  "source_check_ids_used": [
+    "mean_Z",
+    "sd_Z",
+    "mean_X1",
+    "sd_X1",
+    "mean_X2",
+    "sd_X2",
+    "mean_Y",
+    "sd_Y",
+    "r_Z_X1",
+    "r_Z_X2",
+    "r_X1_X2",
+    "report_A_Z",
+    "report_A_X1",
+    "report_B_Z",
+    "report_B_X2"
+  ],
+  "scientific_rationale": "The two adjusted regressions constrain covariances through their separate population normal equations. Report A identifies Cov(Z,Y) and Cov(X1,Y), and report B identifies Cov(Z,Y) and Cov(X2,Y). Their overlapping Cov(Z,Y) agrees. Together with the predictor correlations and marginal variances, this determines the full covariance matrix and the joint OLS projection. Positive definiteness permits a Gaussian completion. Gaussianity is a distributional assumption; the joint OLS coefficients and residual variance require only the identified first two moments.",
+  "reported_analysis_definitions": {
+    "A": {
+      "outcome": "Y",
+      "predictors": [
+        "Z",
+        "X1"
+      ],
+      "include_intercept": true,
+      "selection": [],
+      "missing_policy": "error"
+    },
+    "B": {
+      "outcome": "Y",
+      "predictors": [
+        "Z",
+        "X2"
+      ],
+      "include_intercept": true,
+      "selection": [],
+      "missing_policy": "error"
+    },
+    "M": "Population means and standard deviations; all four measurements are numeric and dimensionless.",
+    "C": "Unselected population Pearson correlations among Z, X1, X2.",
+    "requested_joint": {
+      "outcome": "Y",
+      "predictors": [
+        "Z",
+        "X1",
+        "X2"
+      ],
+      "include_intercept": true,
+      "residual_sd_definition": "sqrt(E[(Y - intercept - beta_Z*Z - beta_X1*X1 - beta_X2*X2)^2]) in the population"
+    }
+  },
+  "derived_parameters": {
+    "predictor_means": {
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_check_ids": [
+        "mean_Z",
+        "mean_X1",
+        "mean_X2"
+      ]
+    },
+    "predictor_covariance": {
+      "value": [
+        [
+          1.0,
+          0.3,
+          0.15
+        ],
+        [
+          0.3,
+          1.0,
+          0.75
+        ],
+        [
+          0.15,
+          0.75,
+          1.0
+        ]
+      ],
+      "derivation": "Cov(V_i,V_j)=r_ij*SD(V_i)*SD(V_j); diagonal entries are squared SDs.",
+      "source_check_ids": [
+        "sd_Z",
+        "sd_X1",
+        "sd_X2",
+        "r_Z_X1",
+        "r_Z_X2",
+        "r_X1_X2"
+      ]
+    },
+    "outcome_cross_covariances": {
+      "predictor_order": [
+        "Z",
+        "X1",
+        "X2"
+      ],
+      "value": [
+        0.385,
+        0.42499999999999993,
+        0.125
+      ],
+      "derivation": "For each reported adjustment set S, Cov(S,Y)=Cov(S,S)*reported_OLS_slopes; retain each set separately.",
+      "source_check_ids": [
+        "report_A_Z",
+        "report_A_X1",
+        "report_B_Z",
+        "report_B_X2",
+        "sd_Z",
+        "sd_X1",
+        "sd_X2",
+        "r_Z_X1",
+        "r_Z_X2"
+      ]
+    },
+    "joint_OLS": {
+      "predictor_order": [
+        "Z",
+        "X1",
+        "X2"
+      ],
+      "coefficients": [
+        0.25000000000000006,
+        0.6499999999999997,
+        -0.3999999999999997
+      ],
+      "intercept": 0.0,
+      "derivation": "beta=solve(predictor_covariance,outcome_cross_covariances); intercept=mean_Y-predictor_means dot beta.",
+      "source_check_ids": [
+        "mean_Z",
+        "sd_Z",
+        "mean_X1",
+        "sd_X1",
+        "mean_X2",
+        "sd_X2",
+        "mean_Y",
+        "sd_Y",
+        "r_Z_X1",
+        "r_Z_X2",
+        "r_X1_X2",
+        "report_A_Z",
+        "report_A_X1",
+        "report_B_Z",
+        "report_B_X2"
+      ]
+    },
+    "joint_residual": {
+      "variance": 0.6775000000000001,
+      "standard_deviation": 0.8231038816577164,
+      "derivation": "Var(Y)-Cov(predictors,Y) dot beta; SD is its positive square root.",
+      "source_check_ids": [
+        "sd_Y",
+        "sd_Z",
+        "sd_X1",
+        "sd_X2",
+        "r_Z_X1",
+        "r_Z_X2",
+        "r_X1_X2",
+        "report_A_Z",
+        "report_A_X1",
+        "report_B_Z",
+        "report_B_X2"
+      ]
+    },
+    "full_covariance": {
+      "column_order": [
+        "Z",
+        "X1",
+        "X2",
+        "Y"
+      ],
+      "value": [
+        [
+          1.0,
+          0.3,
+          0.15,
+          0.385
+        ],
+        [
+          0.3,
+          1.0,
+          0.75,
+          0.42499999999999993
+        ],
+        [
+          0.15,
+          0.75,
+          1.0,
+          0.125
+        ],
+        [
+          0.385,
+          0.42499999999999993,
+          0.125,
+          1.0
+        ]
+      ]
+    }
+  },
+  "assumptions": [
+    "Rows are independent and identically distributed draws from artificial population P0.",
+    "Predictors follow a multivariate Gaussian distribution with the identified means and covariance.",
+    "Conditional Y is linear with a Gaussian residual independent of the predictors and constant residual variance. These Gaussian/conditional distribution features are not established by the reports.",
+    "The cohort is complete with no missing measurements, selection, truncation, mixtures, clustering or transport adjustments.",
+    "All scientific parameters are fixed; exact source population summaries do not supply parameter-estimation uncertainty. Finite generated cohorts have ordinary Monte Carlo variability and are not post-standardized."
+  ],
+  "population_applicability": "Only the same unselected artificial standardized dimensionless population P0 described by all reports. This is an implementation mechanism test and conveys no patient-level or clinical inference.",
+  "unassessed_uses": [
+    "Causal effects or intervention predictions; regression coefficients are associational.",
+    "Tail probabilities, extremes, subgroup behavior, nonlinear effects, interactions, heteroscedasticity and higher moments beyond the Gaussian completion assumption.",
+    "Other populations, clinical validity, longitudinal structure, missingness or selection mechanisms.",
+    "Empirical finite-sample agreement, coverage, or downstream numerical performance; generation and sample-table evaluation were intentionally not performed."
+  ],
+  "actual_checks": {
+    "method": "Deterministic population algebra and Python AST/compile checks only; no generator execution, random draws, trial tables, external information or final outputs.",
+    "floating_point_tolerance": 1e-12,
+    "overlapping_cov_Z_Y": {
+      "from_A": 0.385,
+      "from_B": 0.385,
+      "absolute_difference": 0.0,
+      "passed": true
+    },
+    "predictor_positive_definiteness": {
+      "eigenvalues": [
+        0.23391256866242163,
+        0.8984484869882504,
+        1.8676389443493275
+      ],
+      "cholesky_success": true
+    },
+    "full_covariance_positive_definiteness": {
+      "eigenvalues": [
+        0.18680031421170323,
+        0.6269403348621346,
+        1.075985047021888,
+        2.1102743039042746
+      ],
+      "cholesky_success": true
+    },
+    "joint_normal_equations": {
+      "max_absolute_difference": 1.1102230246251565e-16,
+      "passed": true
+    },
+    "residual_variance_positive": {
+      "value": 0.6775000000000001,
+      "passed": true
+    },
+    "all_source_analyses": [
+      {
+        "source_check_id": "mean_Z",
+        "population_value_from_model": 0.0,
+        "source_value": 0.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_Z",
+        "population_value_from_model": 1.0,
+        "source_value": 1.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "mean_X1",
+        "population_value_from_model": 0.0,
+        "source_value": 0.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_X1",
+        "population_value_from_model": 1.0,
+        "source_value": 1.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "mean_X2",
+        "population_value_from_model": 0.0,
+        "source_value": 0.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_X2",
+        "population_value_from_model": 1.0,
+        "source_value": 1.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "mean_Y",
+        "population_value_from_model": 0.0,
+        "source_value": 0.0,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "sd_Y",
+        "population_value_from_model": 0.9999999999999999,
+        "source_value": 1.0,
+        "absolute_difference": 1.1102230246251565e-16,
+        "passed": true
+      },
+      {
+        "source_check_id": "r_Z_X1",
+        "population_value_from_model": 0.3,
+        "source_value": 0.3,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "r_Z_X2",
+        "population_value_from_model": 0.15,
+        "source_value": 0.15,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "r_X1_X2",
+        "population_value_from_model": 0.75,
+        "source_value": 0.75,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_A_Z",
+        "population_value_from_model": 0.28296703296703296,
+        "source_value": 0.282967032967033,
+        "absolute_difference": 5.551115123125783e-17,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_A_X1",
+        "population_value_from_model": 0.3401098901098901,
+        "source_value": 0.34010989010989,
+        "absolute_difference": 1.1102230246251565e-16,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_B_Z",
+        "population_value_from_model": 0.37468030690537085,
+        "source_value": 0.37468030690537085,
+        "absolute_difference": 0.0,
+        "passed": true
+      },
+      {
+        "source_check_id": "report_B_X2",
+        "population_value_from_model": 0.06879795396419448,
+        "source_value": 0.06879795396419437,
+        "absolute_difference": 1.1102230246251565e-16,
+        "passed": true
+      }
+    ],
+    "generator_static_validation": {
+      "ast_parse": "passed",
+      "compile_without_execution": "passed",
+      "imports": [
+        "numpy",
+        "pandas"
+      ],
+      "generate_signature": [
+        "n",
+        "rng",
+        "spec"
+      ],
+      "output_order": [
+        "Z",
+        "X1",
+        "X2",
+        "Y"
+      ],
+      "file_network_subprocess_access": "none",
+      "rng_reseeding": "none",
+      "generator_executed": false
+    }
+  }
+}

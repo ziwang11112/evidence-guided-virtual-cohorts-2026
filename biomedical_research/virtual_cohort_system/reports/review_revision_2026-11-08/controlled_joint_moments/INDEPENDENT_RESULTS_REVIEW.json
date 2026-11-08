@@ -1,0 +1,805 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-08T19:23:06.248347+00:00",
+  "decision": "PASS_NUMERICAL_RECOMPUTATION_WITH_REPLICATION_QUALIFICATION",
+  "reviewer": "claude_seed_audit",
+  "independent_numerical_implementation": true,
+  "independent_personnel_review": false,
+  "reviewer_role_disclosure": "This auditor previously authored runner.py/evaluate.py; recalculation imports neither and uses a different numerical formulation.",
+  "method": "Stdlib CSV + centered cross-products + normal equations. Residual variance computed from covariance decomposition with n-k-1 correction, independently of evaluator lstsq/SSE.",
+  "no_sampling_no_generator_import_no_patient_data": true,
+  "frozen_files_changed": false,
+  "binding_checks": {
+    "batch_files": 27,
+    "design_files": 12,
+    "engines": 8,
+    "receipt_files": 180,
+    "correct_seed_staging": [
+      {
+        "author": "O1",
+        "seed": 8101,
+        "staged_seed": 8101
+      },
+      {
+        "author": "O1",
+        "seed": 8102,
+        "staged_seed": 8102
+      },
+      {
+        "author": "O1",
+        "seed": 8103,
+        "staged_seed": 8103
+      },
+      {
+        "author": "O2",
+        "seed": 8101,
+        "staged_seed": 8101
+      },
+      {
+        "author": "O2",
+        "seed": 8102,
+        "staged_seed": 8102
+      },
+      {
+        "author": "O2",
+        "seed": 8103,
+        "staged_seed": 8103
+      },
+      {
+        "author": "C1",
+        "seed": 8101,
+        "staged_seed": 8101
+      },
+      {
+        "author": "C1",
+        "seed": 8102,
+        "staged_seed": 8102
+      },
+      {
+        "author": "C1",
+        "seed": 8103,
+        "staged_seed": 8103
+      },
+      {
+        "author": "C2",
+        "seed": 8101,
+        "staged_seed": 8101
+      },
+      {
+        "author": "C2",
+        "seed": 8102,
+        "staged_seed": 8102
+      },
+      {
+        "author": "C2",
+        "seed": 8103,
+        "staged_seed": 8103
+      }
+    ]
+  },
+  "comparison": {
+    "numeric_comparisons": 4294,
+    "atol": 1e-10,
+    "rtol": 1e-10,
+    "maximum_absolute_differences_by_group": {
+      "source_law": 3.3306690738754696e-16,
+      "table_covariance": 1.7763568394002505e-15,
+      "marginal": 6.661338147750939e-16,
+      "regression": 7.771561172376096e-16,
+      "regression_error": 7.771561172376096e-16,
+      "source_checks": 6.661338147750939e-16,
+      "correlation": 3.3306690738754696e-16,
+      "csv_metrics": 7.771561172376096e-16,
+      "constructor_aggregates": 7.771561172376096e-16,
+      "arm_aggregates": 4.891920202254596e-16
+    },
+    "failures": [],
+    "source_checks_recomputed": 180,
+    "csv_metric_rows_recomputed": 528,
+    "construction_aggregate_rows": 372,
+    "arm_aggregate_rows": 186
+  },
+  "scientific_law": {
+    "source_suffices_for_joint_projection_and_residual_variance": true,
+    "source_reconstructed_covariance": [
+      [
+        1.0,
+        0.3,
+        0.15,
+        0.385
+      ],
+      [
+        0.3,
+        1.0,
+        0.75,
+        0.42499999999999993
+      ],
+      [
+        0.15,
+        0.75,
+        1.0,
+        0.125
+      ],
+      [
+        0.385,
+        0.42499999999999993,
+        0.125,
+        1.0
+      ]
+    ],
+    "joint_beta": [
+      0.25000000000000006,
+      0.6499999999999997,
+      -0.3999999999999997
+    ],
+    "residual_variance": 0.6775,
+    "four_programs_same_gaussian_law_up_to_floating_point": true,
+    "maximum_source_law_difference": 3.3306690738754696e-16,
+    "authors": [
+      {
+        "author": "O1",
+        "code_sha256": "edf05c88eaff0913b1debd156e17031d542a15be0611d84877868d4c243c2bf7",
+        "source_check_ids_used": [
+          "mean_X1",
+          "mean_X2",
+          "mean_Y",
+          "mean_Z",
+          "r_X1_X2",
+          "r_Z_X1",
+          "r_Z_X2",
+          "report_A_X1",
+          "report_A_Z",
+          "report_B_X2",
+          "report_B_Z",
+          "sd_X1",
+          "sd_X2",
+          "sd_Y",
+          "sd_Z"
+        ],
+        "joint_beta": [
+          0.25000000000000006,
+          0.6499999999999997,
+          -0.3999999999999997
+        ],
+        "residual_variance": 0.6775,
+        "full_covariance": [
+          [
+            1.0,
+            0.3,
+            0.15,
+            0.385
+          ],
+          [
+            0.3,
+            1.0,
+            0.75,
+            0.425
+          ],
+          [
+            0.15,
+            0.75,
+            1.0,
+            0.1250000000000001
+          ],
+          [
+            0.385,
+            0.425,
+            0.1250000000000001,
+            0.9999999999999998
+          ]
+        ],
+        "sampling_layout": "one_n_by_4_array",
+        "rng_calls_static": [
+          "rng.standard_normal(size=(int(n), len(columns)))"
+        ],
+        "decision_describes_source_normal_equation_derivation": true
+      },
+      {
+        "author": "O2",
+        "code_sha256": "b9826900a0a20e363f281e7384c49b4d163ff4b452ae4dcf011fa1113cc233b6",
+        "source_check_ids_used": [
+          "mean_X1",
+          "mean_X2",
+          "mean_Y",
+          "mean_Z",
+          "r_X1_X2",
+          "r_Z_X1",
+          "r_Z_X2",
+          "report_A_X1",
+          "report_A_Z",
+          "report_B_X2",
+          "report_B_Z",
+          "sd_X1",
+          "sd_X2",
+          "sd_Y",
+          "sd_Z"
+        ],
+        "joint_beta": [
+          0.25,
+          0.65,
+          -0.4
+        ],
+        "residual_variance": 0.6775,
+        "full_covariance": [
+          [
+            1.0,
+            0.3,
+            0.15,
+            0.385
+          ],
+          [
+            0.3,
+            1.0,
+            0.75,
+            0.42499999999999993
+          ],
+          [
+            0.15,
+            0.75,
+            1.0,
+            0.125
+          ],
+          [
+            0.385,
+            0.42499999999999993,
+            0.125,
+            1.0
+          ]
+        ],
+        "sampling_layout": "n_by_3_then_n_array",
+        "rng_calls_static": [
+          "rng.standard_normal(n)",
+          "rng.standard_normal((n, len(predictors)))"
+        ],
+        "decision_describes_source_normal_equation_derivation": true
+      },
+      {
+        "author": "C1",
+        "code_sha256": "1a8026dca167f0a35a8fffb767a7e1d9df8f6d28b42c3958e38a9dea1e1b8447",
+        "source_check_ids_used": [
+          "mean_X1",
+          "mean_X2",
+          "mean_Y",
+          "mean_Z",
+          "r_X1_X2",
+          "r_Z_X1",
+          "r_Z_X2",
+          "report_A_X1",
+          "report_A_Z",
+          "report_B_X2",
+          "report_B_Z",
+          "sd_X1",
+          "sd_X2",
+          "sd_Y",
+          "sd_Z"
+        ],
+        "joint_beta": [
+          0.25,
+          0.65,
+          -0.4
+        ],
+        "residual_variance": 0.6775,
+        "full_covariance": [
+          [
+            1.0,
+            0.3,
+            0.15,
+            0.385
+          ],
+          [
+            0.3,
+            1.0,
+            0.75,
+            0.42499999999999993
+          ],
+          [
+            0.15,
+            0.75,
+            1.0,
+            0.125
+          ],
+          [
+            0.385,
+            0.42499999999999993,
+            0.125,
+            1.0
+          ]
+        ],
+        "sampling_layout": "n_by_3_then_n_array",
+        "rng_calls_static": [
+          "rng.standard_normal(n)",
+          "rng.standard_normal((n, dimension))"
+        ],
+        "decision_describes_source_normal_equation_derivation": true
+      },
+      {
+        "author": "C2",
+        "code_sha256": "2669bcbf8edb327e57911731756e40a714a6f06f5a47918266cb27ddd8327347",
+        "source_check_ids_used": [
+          "mean_X1",
+          "mean_X2",
+          "mean_Y",
+          "mean_Z",
+          "r_X1_X2",
+          "r_Z_X1",
+          "r_Z_X2",
+          "report_A_X1",
+          "report_A_Z",
+          "report_B_X2",
+          "report_B_Z",
+          "sd_X1",
+          "sd_X2",
+          "sd_Y",
+          "sd_Z"
+        ],
+        "joint_beta": [
+          0.25000000000000006,
+          0.6499999999999997,
+          -0.3999999999999997
+        ],
+        "residual_variance": 0.6775000000000001,
+        "full_covariance": [
+          [
+            1.0,
+            0.3,
+            0.15,
+            0.385
+          ],
+          [
+            0.3,
+            1.0,
+            0.75,
+            0.425
+          ],
+          [
+            0.15,
+            0.75,
+            1.0,
+            0.1250000000000001
+          ],
+          [
+            0.385,
+            0.425,
+            0.1250000000000001,
+            1.0
+          ]
+        ],
+        "sampling_layout": "one_n_by_4_array",
+        "rng_calls_static": [
+          "rng.standard_normal(size=(n, dimension + 1))"
+        ],
+        "decision_describes_source_normal_equation_derivation": true
+      }
+    ]
+  },
+  "replication": {
+    "authored_programs": 4,
+    "scientific_laws_up_to_roundoff": 1,
+    "sampling_layouts": 2,
+    "nominal_delivery_slots": 12,
+    "distinct_csv_tables": 6,
+    "rows_per_table": 10000,
+    "identical_output_groups": [
+      {
+        "sha256": "0a505b62b9ed4401fd09900dd618fcfc16bf1929b734a0037fda165d1dc93f50",
+        "slots": [
+          {
+            "author": "O2",
+            "seed": 8101
+          },
+          {
+            "author": "C1",
+            "seed": 8101
+          }
+        ]
+      },
+      {
+        "sha256": "1c441c80c1214e658614675f1fe449461143cea4bd499a1ee1cba51e75abf115",
+        "slots": [
+          {
+            "author": "O2",
+            "seed": 8102
+          },
+          {
+            "author": "C1",
+            "seed": 8102
+          }
+        ]
+      },
+      {
+        "sha256": "2f4bb4322c32387eb770261f7f2b9d73af16994c9e5b7d02b3511b9ba113f936",
+        "slots": [
+          {
+            "author": "O1",
+            "seed": 8102
+          },
+          {
+            "author": "C2",
+            "seed": 8102
+          }
+        ]
+      },
+      {
+        "sha256": "33887df5f4a78d77bc309fa27f994fce8ef18f28916acc0f4679ac27d26218e1",
+        "slots": [
+          {
+            "author": "O2",
+            "seed": 8103
+          },
+          {
+            "author": "C1",
+            "seed": 8103
+          }
+        ]
+      },
+      {
+        "sha256": "3c193758fec9cd140d0ee42ec1756d17c0fc740443f0f12321fd24d48a394b0f",
+        "slots": [
+          {
+            "author": "O1",
+            "seed": 8101
+          },
+          {
+            "author": "C2",
+            "seed": 8101
+          }
+        ]
+      },
+      {
+        "sha256": "ea52c912919dafe2d1ad76e7519416a9d4f180b17dea80c79f61fa87271543ec",
+        "slots": [
+          {
+            "author": "O1",
+            "seed": 8103
+          },
+          {
+            "author": "C2",
+            "seed": 8103
+          }
+        ]
+      }
+    ],
+    "explanation": "O1/C2 consume one n-by-4 Gaussian draw; O2/C1 consume n-by-3 predictors then n residual draws. Same seeds and same paired parameters/layouts yield paired identical bytes. No resampling was needed to establish this.",
+    "interpretation": "Do not call twelve independent cohorts, four distinct laws, or an independently replicated arm performance difference. Six distinct tables are deterministic seeded deliveries; their stochastic independence is not separately demonstrated."
+  },
+  "primary_by_construction": {
+    "C1": {
+      "coefficient_X1": {
+        "mean": 0.011565023248334824,
+        "min": 0.004945877409459509,
+        "max": 0.015150827900424768
+      },
+      "coefficient_X2": {
+        "mean": 0.014677135039867098,
+        "min": 0.0022682603639028187,
+        "max": 0.02781930981375713
+      },
+      "coefficient_Z": {
+        "mean": 0.009336729998647033,
+        "min": 0.0028039526352137967,
+        "max": 0.018287853655688663
+      },
+      "residual_sd": {
+        "mean": 0.007855649725066806,
+        "min": 0.0036061202840723394,
+        "max": 0.010790267769831595
+      }
+    },
+    "C2": {
+      "coefficient_X1": {
+        "mean": 0.008916331556379683,
+        "min": 0.002886533592624585,
+        "max": 0.012536850780711428
+      },
+      "coefficient_X2": {
+        "mean": 0.012062452926500064,
+        "min": 0.009146610361193797,
+        "max": 0.016270786765186396
+      },
+      "coefficient_Z": {
+        "mean": 0.015540975352291061,
+        "min": 0.013220415722662027,
+        "max": 0.016715216923165188
+      },
+      "residual_sd": {
+        "mean": 0.004402864957181196,
+        "min": 0.0013827707856354737,
+        "max": 0.00809787798678203
+      }
+    },
+    "O1": {
+      "coefficient_X1": {
+        "mean": 0.008916331556379683,
+        "min": 0.002886533592624585,
+        "max": 0.012536850780711428
+      },
+      "coefficient_X2": {
+        "mean": 0.012062452926500064,
+        "min": 0.009146610361193797,
+        "max": 0.016270786765186396
+      },
+      "coefficient_Z": {
+        "mean": 0.015540975352291061,
+        "min": 0.013220415722662027,
+        "max": 0.016715216923165188
+      },
+      "residual_sd": {
+        "mean": 0.004402864957181196,
+        "min": 0.0013827707856354737,
+        "max": 0.00809787798678203
+      }
+    },
+    "O2": {
+      "coefficient_X1": {
+        "mean": 0.011565023248334824,
+        "min": 0.004945877409459509,
+        "max": 0.015150827900424768
+      },
+      "coefficient_X2": {
+        "mean": 0.014677135039867098,
+        "min": 0.0022682603639028187,
+        "max": 0.02781930981375713
+      },
+      "coefficient_Z": {
+        "mean": 0.009336729998647033,
+        "min": 0.0028039526352137967,
+        "max": 0.018287853655688663
+      },
+      "residual_sd": {
+        "mean": 0.007855649725066806,
+        "min": 0.0036061202840723394,
+        "max": 0.010790267769831595
+      }
+    }
+  },
+  "primary_by_arm": {
+    "C": {
+      "coefficient_X1": 0.010240677402357254,
+      "coefficient_X2": 0.013369793983183581,
+      "coefficient_Z": 0.012438852675469047,
+      "residual_sd": 0.006129257341124001
+    },
+    "O": {
+      "coefficient_X1": 0.010240677402357254,
+      "coefficient_X2": 0.013369793983183581,
+      "coefficient_Z": 0.012438852675469047,
+      "residual_sd": 0.006129257341124001
+    }
+  },
+  "C_minus_O_primary_arm_means": {
+    "coefficient_X1": 0.0,
+    "coefficient_X2": 0.0,
+    "coefficient_Z": 0.0,
+    "residual_sd": 0.0
+  },
+  "table_recomputations": [
+    {
+      "author": "O1",
+      "seed": 8101,
+      "csv_sha256": "3c193758fec9cd140d0ee42ec1756d17c0fc740443f0f12321fd24d48a394b0f",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": -0.006449509824624203,
+          "Z": 0.266687293411046,
+          "X1": 0.6386743897041967,
+          "X2": -0.3892300383468797
+        },
+        "residual_sd": 0.8297963372343817,
+        "signed_residual_log_ratio": 0.00809787798678203,
+        "mean_absolute_standardized_beta_error": 0.012927621786656332
+      }
+    },
+    {
+      "author": "O1",
+      "seed": 8102,
+      "csv_sha256": "2f4bb4322c32387eb770261f7f2b9d73af16994c9e5b7d02b3511b9ba113f936",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": -0.007002458329806262,
+          "Z": 0.2632204157226621,
+          "X1": 0.6528865335926243,
+          "X2": -0.3908533896388059
+        },
+        "residual_sd": 0.8242428329316116,
+        "signed_residual_log_ratio": 0.0013827707856354737,
+        "mean_absolute_standardized_beta_error": 0.008417853225493469
+      }
+    },
+    {
+      "author": "O1",
+      "seed": 8103,
+      "csv_sha256": "ea52c912919dafe2d1ad76e7519416a9d4f180b17dea80c79f61fa87271543ec",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": 0.004266441144095214,
+          "Z": 0.23328478307683487,
+          "X1": 0.6625368507807111,
+          "X2": -0.4162707867651861
+        },
+        "residual_sd": 0.8261780952534651,
+        "signed_residual_log_ratio": 0.0037279460991260843,
+        "mean_absolute_standardized_beta_error": 0.015174284823021003
+      }
+    },
+    {
+      "author": "O2",
+      "seed": 8101,
+      "csv_sha256": "0a505b62b9ed4401fd09900dd618fcfc16bf1929b734a0037fda165d1dc93f50",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": 0.0009083791215531447,
+          "Z": 0.24719604736478626,
+          "X1": 0.6645983644351199,
+          "X2": -0.41394383494194104
+        },
+        "residual_sd": 0.815590062827981,
+        "signed_residual_log_ratio": -0.009170561121296484,
+        "mean_absolute_standardized_beta_error": 0.010448717337425112
+      }
+    },
+    {
+      "author": "O2",
+      "seed": 8102,
+      "csv_sha256": "1c441c80c1214e658614675f1fe449461143cea4bd499a1ee1cba51e75abf115",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": -0.005328225707094297,
+          "Z": 0.2317121463443114,
+          "X1": 0.6651508279004245,
+          "X2": -0.4278193098137568
+        },
+        "residual_sd": 0.8201410154908477,
+        "signed_residual_log_ratio": -0.0036061202840723394,
+        "mean_absolute_standardized_beta_error": 0.02041933045662352
+      }
+    },
+    {
+      "author": "O2",
+      "seed": 8103,
+      "csv_sha256": "33887df5f4a78d77bc309fa27f994fce8ef18f28916acc0f4679ac27d26218e1",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": 0.0033193427715913267,
+          "Z": 0.24308161629496142,
+          "X1": 0.6549458774094592,
+          "X2": -0.4022682603639025
+        },
+        "residual_sd": 0.8142701154330928,
+        "signed_residual_log_ratio": -0.010790267769831595,
+        "mean_absolute_standardized_beta_error": 0.004710840492800322
+      }
+    },
+    {
+      "author": "C1",
+      "seed": 8101,
+      "csv_sha256": "0a505b62b9ed4401fd09900dd618fcfc16bf1929b734a0037fda165d1dc93f50",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": 0.0009083791215531447,
+          "Z": 0.24719604736478626,
+          "X1": 0.6645983644351199,
+          "X2": -0.41394383494194104
+        },
+        "residual_sd": 0.815590062827981,
+        "signed_residual_log_ratio": -0.009170561121296484,
+        "mean_absolute_standardized_beta_error": 0.010448717337425112
+      }
+    },
+    {
+      "author": "C1",
+      "seed": 8102,
+      "csv_sha256": "1c441c80c1214e658614675f1fe449461143cea4bd499a1ee1cba51e75abf115",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": -0.005328225707094297,
+          "Z": 0.2317121463443114,
+          "X1": 0.6651508279004245,
+          "X2": -0.4278193098137568
+        },
+        "residual_sd": 0.8201410154908477,
+        "signed_residual_log_ratio": -0.0036061202840723394,
+        "mean_absolute_standardized_beta_error": 0.02041933045662352
+      }
+    },
+    {
+      "author": "C1",
+      "seed": 8103,
+      "csv_sha256": "33887df5f4a78d77bc309fa27f994fce8ef18f28916acc0f4679ac27d26218e1",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": 0.0033193427715913267,
+          "Z": 0.24308161629496142,
+          "X1": 0.6549458774094592,
+          "X2": -0.4022682603639025
+        },
+        "residual_sd": 0.8142701154330928,
+        "signed_residual_log_ratio": -0.010790267769831595,
+        "mean_absolute_standardized_beta_error": 0.004710840492800322
+      }
+    },
+    {
+      "author": "C2",
+      "seed": 8101,
+      "csv_sha256": "3c193758fec9cd140d0ee42ec1756d17c0fc740443f0f12321fd24d48a394b0f",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": -0.006449509824624203,
+          "Z": 0.266687293411046,
+          "X1": 0.6386743897041967,
+          "X2": -0.3892300383468797
+        },
+        "residual_sd": 0.8297963372343817,
+        "signed_residual_log_ratio": 0.00809787798678203,
+        "mean_absolute_standardized_beta_error": 0.012927621786656332
+      }
+    },
+    {
+      "author": "C2",
+      "seed": 8102,
+      "csv_sha256": "2f4bb4322c32387eb770261f7f2b9d73af16994c9e5b7d02b3511b9ba113f936",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": -0.007002458329806262,
+          "Z": 0.2632204157226621,
+          "X1": 0.6528865335926243,
+          "X2": -0.3908533896388059
+        },
+        "residual_sd": 0.8242428329316116,
+        "signed_residual_log_ratio": 0.0013827707856354737,
+        "mean_absolute_standardized_beta_error": 0.008417853225493469
+      }
+    },
+    {
+      "author": "C2",
+      "seed": 8103,
+      "csv_sha256": "ea52c912919dafe2d1ad76e7519416a9d4f180b17dea80c79f61fa87271543ec",
+      "rows": 10000,
+      "unique_rows": 10000,
+      "joint": {
+        "coefficients": {
+          "intercept": 0.004266441144095214,
+          "Z": 0.23328478307683487,
+          "X1": 0.6625368507807111,
+          "X2": -0.4162707867651861
+        },
+        "residual_sd": 0.8261780952534651,
+        "signed_residual_log_ratio": 0.0037279460991260843,
+        "mean_absolute_standardized_beta_error": 0.015174284823021003
+      }
+    }
+  ],
+  "information_boundary": {
+    "approved_inputs": "Each author had the same SOURCE.json and own request; no truth staged into any generator.",
+    "supported_statement": "All four specifications and written derivations solve the requested joint moments from the supplied source summaries; this solution is algebraically available without target values.",
+    "limits": "The filesystem/tool access of author Agents was not OS-isolated. Static artifacts and declarations alone cannot prove absence of every unlogged read; independent agent dispatch/tool history is a separate provenance check."
+  },
+  "conclusion": "No added reconciliation-instruction gain in this fixture: the ordinary arm already reconstructs the same correct joint Gaussian law. Both arm averages are equal because each contains the same two sampling layouts. Retain this as a bounded necessity result; it neither proves universal component uselessness nor broad biomedical efficacy.",
+  "input_hashes": {
+    "RESULTS.json": "e3063ac508a1d90e149fdfded00029fdfd9eab192c1e14f2cba6ad658ac89281",
+    "RESULTS.csv": "8f1aedd9ee6ccd7d401b0cbfde3824714d7ffaa3f70e3160d180462eff1bcdd2",
+    "BATCH_LOCK.json": "5eb1bcb2794fafa68bb36757f23637e7a378fd4a2b168cff1cfee180774631f5",
+    "independent_recompute.py": "0a872b73defe6c7e5818f5a21739f68fb9c0387fc9dcec783a8ddf74c6ebc8ce"
+  }
+}

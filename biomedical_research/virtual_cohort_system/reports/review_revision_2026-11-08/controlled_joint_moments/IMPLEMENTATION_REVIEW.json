@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "kind": "independent_controlled_joint_moments_implementation_review",
+  "created_utc": "2026-11-08T19:18:04.873019+00:00",
+  "reviewer": "pro_results_audit",
+  "decision": "PASS_TO_BATCH_FREEZE_AND_BOUNDED_EXECUTION",
+  "blocking_findings": [],
+  "scope": "Static inspection plus fixed eight-row linear-algebra fixtures for trusted evaluator functions only. No candidate code import, authored generator execution, random sampling, clinical data or custodian truth file read.",
+  "bound_inputs": {
+    "runner.py": "15817c95ba77e606a341745ed6b20e8f93d64599cb8334496fd9cec5f159f1ae",
+    "evaluate.py": "84392c17b4060b09a49fe53158b20e9ce82e13d7ca172ede50f5b0359112a87c",
+    "EVALUATION_SPEC.json": "225cf19fa1f4edba58774bc1e17236ecf9a0ec3dab96c4a61bdece342c61cd62",
+    "PROTOCOL.json": "2a57a7badc2792f49f2b2649c67ac39f3de4777388ebfde050f343bab22ab522",
+    "SOURCE.json": "d14eaf4e7d035c817b5c8c75aeb59d3c41e33b3b8d3f4bda594ddb967d406bf5",
+    "DESIGN_REVIEW.json": "3c13c5645ff8eb14d25ce8b15f8e30cb0abd40ecaa66665a11c5ac2b1eee4ca2",
+    "DESIGN_LOCK.json": "cf4dbc1dc7e589cd7e2b3d649612d5b36779708ae63cd19a7f4993f30fc326d2"
+  },
+  "checks": {
+    "files_stable_after_author_handoff": true,
+    "python_syntax": true,
+    "design_commitments_and_independent_design_review_verified_without_truth_read": true,
+    "batch_lock_required_files": 27,
+    "planned_authors": [
+      "O1",
+      "O2",
+      "C1",
+      "C2"
+    ],
+    "planned_seeds": [
+      8101,
+      8102,
+      8103
+    ],
+    "max_attempt_slots_including_failed_and_interrupted": 12,
+    "preseal_sampling_attempt_directories_seen": 0,
+    "exclusive_slot_creation_and_cli_run_lock": true,
+    "no_retry_same_author_seed": true,
+    "wsl_bubblewrap_only_for_authored_code": true,
+    "network_unshared_and_stage_read_only": true,
+    "staged_files_exclude_truth_evaluator_and_previous_project_outputs": true,
+    "worker_limits_and_csv_integrity_checks_bound": true,
+    "truth_open_only_after_all_12_slots_attempted_and_no_run_lock": true,
+    "source_semantic_signature_units_and_adjustment_sets_checked": true,
+    "source_operators_count": 15,
+    "sample_sd_ddof": 1,
+    "joint_regression_intercept_and_predictors": [
+      "intercept",
+      "Z",
+      "X1",
+      "X2"
+    ],
+    "residual_sd_definition": "sqrt(SSE / (n - rank(design)))",
+    "rank_deficiency_rejected_and_source_not_computable_retained": true,
+    "arm_averages_require_both_constructors_all_three_metric_seeds": true,
+    "failure_records_retained": true,
+    "no_source_feedback_to_constructors_or_revision_rounds": true,
+    "no_efficacy_p_value_or_clinical_pass_gate": true
+  },
+  "deterministic_fixtures": {
+    "rows": 8,
+    "rng_calls": 0,
+    "expected_joint_coefficients": [
+      1,
+      2,
+      -3,
+      0.5
+    ],
+    "returned_joint_coefficients": {
+      "intercept": 0.9999999999999998,
+      "Z": 1.9999999999999996,
+      "X1": -2.9999999999999987,
+      "X2": 0.5
+    },
+    "residual_denominator": 4,
+    "residual_sd": 2.8284271247461903,
+    "expected_residual_sd": "sqrt(8)",
+    "source_sd_Z": 1.0690449676496976,
+    "expected_source_sd_Z": "sqrt(8/7)",
+    "all_15_source_operators_computable": true,
+    "rank_deficient_fixture_rejected": true,
+    "rank_deficient_source_regression_marked_not_computable": true,
+    "independent_moment_fixture_projection_and_residual_SD_correct": true,
+    "complete_arm_equal_weight_mean": 2.0,
+    "incomplete_arm_average_withheld": true
+  },
+  "release_requirements": [
+    "Root must freeze all four completed author bundles and engine hashes in BATCH_LOCK.json before any sampling; runner verifies the entire batch on each attempt.",
+    "Use the CLI entrypoint so RUNNING.lock serializes generation. A stale lock after interruption requires inspection, not a retry of an already consumed slot.",
+    "Do not give source diagnostics or truth results to constructors; no revisions or extra attempts are in this protocol."
+  ],
+  "limitations": [
+    "Author information separation is procedural, not filesystem isolation; source files and request contents are equal/bound as stated.",
+    "This review does not test sandbox runtime availability or execute candidate programs; runtime failures consume their planned slots.",
+    "The artificial source moments identify the requested linear projections, not the full joint probability law or clinical utility.",
+    "Two constructors per arm permit descriptive comparison only."
+  ]
+}

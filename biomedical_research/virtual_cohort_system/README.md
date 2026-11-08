@@ -4,7 +4,9 @@
 
 The scientific agent turns published evidence and a study request into a probability model and sampling program. The host coordinates the evidence and review budget, a numerical worker generates the records, and a separate evaluator compares the requested analyses with a measured reference.
 
-**Expanded methods draft v0.24, 6 November 2026.** [Read the paper (PDF)](manuscript/methods_draft_v24_2026-11-06/paper.pdf) · [Read the manuscript and supplement](manuscript/DRAFT_v0_24.md) · [Open the Overleaf project](manuscript/methods_draft_v24_2026-11-06/overleaf_v24.zip).
+**Expanded methods draft v0.25, 8 November 2026.** [Read the paper (PDF)](manuscript/methods_draft_v25_2026-11-08/paper.pdf) · [Read the manuscript and supplement](manuscript/DRAFT_v0_25.md) · [Open the Overleaf project](manuscript/methods_draft_v25_2026-11-08/overleaf_v25.zip).
+
+This revision completes the statistical comparator results, makes dispersion and complete-case limitations explicit, and adds verified related work. A separate [controlled diagnostic](reports/review_revision_2026-11-08/controlled_joint_moments/RESULTS.md) found that ordinary agents already recovered the joint law from compatible summaries; an additional consistency instruction showed no gain. Its twelve artificial deliveries are six unique tables, not new biomedical cohorts.
 
 | What would you like to inspect? | Where to look |
 | --- | --- |
