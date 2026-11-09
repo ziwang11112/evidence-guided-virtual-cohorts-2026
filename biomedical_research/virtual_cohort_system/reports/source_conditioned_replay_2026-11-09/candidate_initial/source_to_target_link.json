@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "construction": "Shared conditional mean and positive component stochastic law with population-specific covariate sampling",
+  "shared_parameters": [
+    "groups.*.reported_bmi_tc/groups.*.bmi_sd",
+    "groups.*.reported_bmi_hdl/groups.*.bmi_sd",
+    "nuisance_definitions.*.effects_tc",
+    "nuisance_definitions.*.effects_hdl",
+    "conditional_means",
+    "individual_variation"
+  ],
+  "source_evidence_paths": [
+    "Soares2019 XML Table3 all8",
+    "Soares2019 supplementary Tables1/2 BMI sourceSD",
+    "Soares2019 Table1 source nuisance and age context",
+    "Soares2019 Table2 approximate levels"
+  ],
+  "population_specific": {
+    "source": "Each single sex/site source context age and BMI beta with descriptive moment anchors; complete assumed nuisance law and sample-standardized BMI; fixed quotas; n8000.",
+    "target": "Equal sex and donor-regime mixture; age18+62Beta(2,4); donor BMI/nuisance law; n3000. Donor labels are statistical background, not claims of Malawian target ethnicity/residence."
+  },
+  "measurement": {
+    "interpretation": "coherent fasting assay-scale concentration surrogate",
+    "observation_map": "HDL=mH*(1+cH*UH); nonHDL=mN*(1+cN*UN); TC=HDL+nonHDL",
+    "independent_assay_error": "not modeled or inferred",
+    "source_target_mapping": "identity units and corresponding concentration measurands under explicit assumption"
+  },
+  "constraints_transferred": "All8 source coefficients affect the shared rawBMI conditional means. Target coefficients emerge after mixing/omitting nuisances; they are not inserted.",
+  "free_assumptions": [
+    "A_source_selection",
+    "A_source_scale",
+    "A_source_design",
+    "A_source_estimator",
+    "A_source_joint",
+    "A_support",
+    "A_nuisance_effects",
+    "A_level_mapping",
+    "A_measurement",
+    "A_transport",
+    "A_target_law",
+    "A_dispersion",
+    "A_related_source",
+    "A_scale_sensitivity"
+  ],
+  "not_identified": [
+    "Exact sourceSD convention",
+    "Original selected joint law",
+    "Target demographics/lifestyle/selection",
+    "Individual residual dispersion/coupling",
+    "Measurement equivalence",
+    "Target requested-use projections"
+  ],
+  "finite_moments": "Beta supports are finite; all nuisance effects finite; conditional means bounded; errors bounded sqrt6 and CV.25; no clipping/rejection/deletion.",
+  "same_program_spec_required": true,
+  "related_source": "Soares2020 not independent; no Liu covariance transfer."
+}
