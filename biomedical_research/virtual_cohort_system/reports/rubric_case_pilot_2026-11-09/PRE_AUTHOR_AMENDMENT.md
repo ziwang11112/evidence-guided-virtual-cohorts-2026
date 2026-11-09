@@ -1,0 +1,1 @@
+Pre-author amendment after independent design review: make application of supplied guidance explicit; keep the supplied rubric fixed when the reusable skill is present. No author has been dispatched and no clinical output exists. Original 99-file commitment retained as DESIGN_LOCK.v0.json. Shared wording amended identically in all six requests and prepare.py.

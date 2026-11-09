@@ -1,0 +1,108 @@
+{
+  "schema_version": "LC_developmental_law_v1",
+  "task_id": "rubric-construction-pilot-2026-11-09-LC",
+  "status": "single_construction_no_generator_execution_no_target_calibration",
+  "contract": {
+    "n_rows": 3000,
+    "observed": null,
+    "identifier_prefix": "LC-",
+    "ordered_columns": ["id", "age", "sex", "bmi", "total_cholesterol", "hdl_cholesterol"],
+    "units": {"age": "year", "sex": "literal F/M", "bmi": "kg/m^2", "total_cholesterol": "mmol/L", "hdl_cholesterol": "mmol/L"},
+    "population": "Adults aged at least 18 with recorded F/M in the selected Turkana 2018-2019 study-protocol context; actual demographic and lifestyle mixture unknown"
+  },
+  "parameters": {
+    "sex": {
+      "probability_F": 0.5,
+      "basis": ["A_COMPOSITION", "A_SEX_MAPPING"]
+    },
+    "age": {
+      "minimum_years": 18,
+      "gamma_shape": 2.0,
+      "gamma_scale_years": 10.0,
+      "basis": ["input/population_metadata.json#/eligibility", "A_AGE"]
+    },
+    "bmi": {
+      "M": {"arithmetic_mean": 20.87, "individual_sd": 3.15},
+      "F": {"arithmetic_mean": 22.28, "individual_sd": 3.85},
+      "basis": ["agongo_2018_navrongo:agongo_men_bmi_mean_sd", "agongo_2018_navrongo:agongo_women_bmi_mean_sd", "A_MOMENT_TRANSFER", "A_SHAPE", "A_AGE_BMI"]
+    },
+    "lipids": {
+      "total_cholesterol": {
+        "arithmetic_mean_mmol_L": 3.23,
+        "individual_sd_mmol_L": 0.92,
+        "assumed_log_age_coefficient_per_year": 0.003,
+        "sex_geometric_mean_anchors": {"M": 3.6, "F": 3.9},
+        "basis": ["agongo_2018_navrongo:agongo_pooled_total_cholesterol_mean_sd", "greiner_2021:malawi_rural_men__total_cholesterol__geometric_mean", "greiner_2021:malawi_rural_women__total_cholesterol__geometric_mean", "A_MOMENT_TRANSFER", "A_AGE_EFFECTS", "A_SEX_RATIO", "A_SHAPE"]
+      },
+      "hdl_cholesterol": {
+        "arithmetic_mean_mmol_L": 1.14,
+        "individual_sd_mmol_L": 0.38,
+        "assumed_log_age_coefficient_per_year": 0.0005,
+        "sex_geometric_mean_anchors": {"M": 1.05, "F": 1.1},
+        "basis": ["agongo_2018_navrongo:agongo_pooled_hdl_cholesterol_mean_sd", "greiner_2021:malawi_rural_men__hdl_cholesterol__geometric_mean", "greiner_2021:malawi_rural_women__hdl_cholesterol__geometric_mean", "A_MOMENT_TRANSFER", "A_AGE_EFFECTS", "A_SEX_RATIO", "A_SHAPE"]
+      }
+    },
+    "copula": {
+      "latent_order": ["bmi", "total_cholesterol", "hdl_cholesterol"],
+      "assumed_conditional_spearman": {"bmi_tc": 0.212, "bmi_hdl": -0.1, "tc_hdl": 0.106},
+      "normal_correlation_map": "rho_normal = 2*sin(pi*rho_spearman/6)",
+      "basis": ["obirikorang_2015_ashanti:obirikorang_rural_bmi_tc", "obirikorang_2015_ashanti:obirikorang_rural_bmi_hdl", "obirikorang_2015_ashanti:obirikorang_rural_tc_hdl", "A_DEPENDENCE"]
+    }
+  },
+  "law": {
+    "independent_primitives": "Across rows, independent draws of F~Bernoulli(p), G~Gamma(shape=k, scale=theta), and Z~MVN(0,R). F, G, and the vector Z are mutually independent. R is built from the three declared conditional rank parameters.",
+    "age": "A=18+G; A_c=A-(18+k*theta). No finite upper-age bound, rounding, rejection, or outlier filter.",
+    "bmi": "For sex s, vB_s=log(1+(sdB_s/mB_s)^2); B=exp(log(mB_s)-vB_s/2+sqrt(vB_s)*Z_B). Thus source-inspired arithmetic means and SDs hold within modeled sex, and age-BMI independence conditional on sex is explicit.",
+    "lipid_sex_term": "For lipid j, delta_j=log(GM_F_j/GM_M_j). This preserves the numerical sex ratio of the selected Greiner geometric means under the declared common age and residual-shape assumptions, not their absolute levels.",
+    "mgfs": "LA(t)=-k*theta*t-k*log(1-theta*t), for t<1/theta; LF(t)=log(1-p+p*exp(t)). These are log moment-generating functions of A_c and F.",
+    "lipid_variance_decomposition": "v_j=log(1+(sd_j/m_j)^2)-[LA(2*b_j)-2*LA(b_j)]-[LF(2*delta_j)-2*LF(delta_j)]. Values are positive under the submitted parameters. The normal term includes BMI-linked plus remaining individual variation; it is not equated to a reported residual SD.",
+    "lipids": "mu_j=log(m_j)-LA(b_j)-LF(delta_j)-v_j/2; L_j=exp(mu_j+b_j*A_c+delta_j*F+sqrt(v_j)*Z_j). This ensures whole-law arithmetic mean m_j and SD sd_j by moment algebra. Conditional on age and sex the positive variables follow a Gaussian copula with lognormal margins.",
+    "no_deterministic_lipid_identity": "TC and HDL are separately generated directly measured values. No TC>=HDL restriction, non-HDL subtraction constraint, or post-generation reconciliation is imposed.",
+    "schema_support": "A>=18, B>0 and each lipid>0 almost surely. Continuous variation remains in all three latent variables because R is positive definite. Unique deterministic string IDs are not participant identifiers.",
+    "tails": "BMI and conditional lipids are lognormal, unbounded above with finite moments; age is shifted gamma with exponential tail. Lipid unconditional second moments exist because 2*b_j*theta<1. Lipid positive moments exist for order q<1/(b_j*theta), namely q<33.333333... for TC and q<200 for HDL; larger moments do not exist under this unbounded gamma-age/exponential-lipid law. No clinical extreme-value calibration, censoring model, or arbitrary physiological cap is claimed.",
+    "measurement": "Generate measured concentrations as one observational distribution; measurement error is included implicitly in its individual spread. There is no identified separate biological/assay-error decomposition or validated bridge from fasting serum laboratory methods to immediate venous-EDTA CardioChek Plus measurement.",
+    "uncertainty": "Parameters are fixed construction assumptions, not posterior draws. Repeated seeds vary fictional individuals only. Estimation uncertainty, shape uncertainty, and population/measurement transport uncertainty are not quantified."
+  },
+  "assumptions": [
+    {"id": "A_COMPOSITION", "claim": "p(F)=0.5, no modeled site/lifestyle strata, independent rows and equal analysis weights are a developmental composition scenario. They do not describe a known target mixture or sampling design."},
+    {"id": "A_SEX_MAPPING", "claim": "Source women/men map to recorded F/M for numerical transport; target biological label legend is not independently established."},
+    {"id": "A_AGE", "claim": "Shifted Gamma(2,10 years) represents a broad adult age distribution with mean 38 and no upper limit. Greiner rural median/IQR values are qualitative context only; their quantile conventions are unknown and this distribution was not fitted to them."},
+    {"id": "A_AGE_BMI", "claim": "Age and BMI are independent conditional on sex. This is a deliberate simplifying assumption for missing joint covariate evidence, not a reported null relationship. Age is also independent of recorded sex."},
+    {"id": "A_MOMENT_TRANSFER", "claim": "Adopt Agongo sex-specific BMI arithmetic moments and pooled lipid arithmetic moments as whole-law adult scenario anchors. Age 40-60 Ghana, selection, ethnicity, assay and fasting differences prevent interpreting this as Turkana moment estimation or as reconstruction of Agongo's full source population."},
+    {"id": "A_SHAPE", "claim": "Use lognormal BMI and age/sex-conditional lognormal lipids. Means and SDs identify their chosen normal log parameters only under this assumed family; the source does not establish the family or its tail shape."},
+    {"id": "A_AGE_EFFECTS", "claim": "TC log-age slope 0.003/year and HDL 0.0005/year are modest monotone age trends chosen as assumptions; neither is a published estimate. Nonlinear raw-scale effects mean the OLS age slope is a projection, not this log coefficient."},
+    {"id": "A_SEX_RATIO", "claim": "Use rural Malawi sex-specific geometric-mean ratios as conditional multiplicative sex effects with equal age distributions and common lipid log variance. Marginal sex contrasts can reflect age, BMI, health selection and other factors; this conditional interpretation and Ghana/Malawi combination are unverified transfer assumptions."},
+    {"id": "A_DEPENDENCE", "claim": "Use the rural Ashanti marginal unadjusted Spearman numbers as an explicit assumed within-age/sex Gaussian-copula rank scenario. Their transfer from marginal to conditional relations and from Ghana to the target is unverified. The Gaussian transform is a model-dependent mathematical identity, not conversion of a reported Spearman estimate into adjusted Pearson residual correlation. Urban values are an unexecuted alternative, not an averaged independent replication."},
+    {"id": "A_MEASUREMENT", "claim": "Treat admitted mmol/L concentration scales as usable scenario anchors without claiming assay equivalence. Unknown fasting, health selection, CardioChek error, and target exclusions are not invented or reconstructed."}
+  ],
+  "analysis_definitions": {
+    "eligibility": "All generated rows must meet the task; no extra exclusions. Both models and residual correlation use the same full row set.",
+    "lipids_mmol_L_to_mg_dL": 38.67,
+    "design": ["1", "(age-50)/10", "I(sex==F)", "(bmi-25)/5"],
+    "estimator": "Unweighted OLS with M reference. BMI5 coefficient is the requested mg/dL per 5 kg/m^2 contrast.",
+    "goals": [
+      {"id": "K02-HDL-BMI", "response": "hdl_cholesterol*38.67", "quantity": "OLS coefficient of bmi5"},
+      {"id": "K02-TC-BMI", "response": "total_cholesterol*38.67", "quantity": "OLS coefficient of bmi5"},
+      {"id": "K02-LIPID-RESIDUAL", "quantity": "Pearson correlation of the two full-model residual vectors from the same rows/design"}
+    ],
+    "diagnostics": {
+      "age_bmi_tc_hdl": "Arithmetic mean, sample SD with ddof=1, q10/q50/q90 using NumPy linear quantiles; lipids converted to mg/dL first. The quantile convention is an explicit synthetic diagnostic convention, not an assertion of any source convention.",
+      "conditional_rms": "sqrt(mean(residual**2)), denominator n, for each full OLS model in mg/dL; distinguish this from sqrt(SSE/(n-4)).",
+      "additional": "F fraction; duplicate/missing/nonfinite/invalid row counts; exact ordered columns; full-design rank; BMI residual variance after intercept/age/F; within-sex counts and support; min/max and tail inspection; residual nonzero variances; TC-HDL scatter and absence of a deterministic identity.",
+      "execution_status": "No generated-row diagnostics or finite-table analyses performed; root owns isolated execution. The retained exact calculations concern the probability law only."
+    }
+  },
+  "law_level_computation": {
+    "artifact": "DECISION.md#retained-deterministic-algebra",
+    "scope": "Deterministic moment/OLS projection calculations; not source-population replay, simulation, or target validation",
+    "latent_R_leading_principal_minors": [1.0, 0.9509154874243462, 0.9225045789083934],
+    "normal_log_variances_TC_HDL": [0.07449221407655696, 0.10476932455975474],
+    "BMI_variance_after_age_sex": 12.3725,
+    "K02-HDL-BMI_mg_dL_per5": -2.0977372705136053,
+    "K02-TC-BMI_mg_dL_per5": 10.707124390512655,
+    "K02-LIPID-RESIDUAL": 0.1320653055105349,
+    "conditional_RMS_TC_HDL_mg_dL": [33.97258096780359, 14.580955668790224],
+    "target_status": "unresolved for all three goals"
+  },
+  "permitted_use": "Fictional developmental tests of the requested analyses and transparent model-assumption exploration. No patient recovery, causal interpretation, clinical prediction, validated target inference, power calculation, assay equivalence, measurement savings, or publication-ready evidence claim."
+}

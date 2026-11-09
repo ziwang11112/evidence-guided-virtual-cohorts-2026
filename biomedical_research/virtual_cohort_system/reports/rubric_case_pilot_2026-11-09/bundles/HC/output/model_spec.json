@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "task_id": "rubric-construction-pilot-2026-11-09-HC",
+  "model_name": "Selected-population beta joint law with explicit transported associations",
+  "mode": "whole_cohort",
+  "design": {
+    "n_rows": 3000,
+    "rows_per_cell": 375,
+    "female_values": [0, 1],
+    "age_bands_inclusive": [[25, 39], [40, 54], [55, 69], [70, 79]],
+    "column_order": ["row_id", "age", "female", "bmi", "glucose", "hba1c"],
+    "identifier_prefix": "HC-fictional-",
+    "sampling": "Each cell has fixed count; ages are independent discrete-uniform integers within the cell. Remaining draws are independent across people given covariates. Cells appear in female-then-age-band order; order is not a covariate.",
+    "weighting": "Equal-cell WLS gives each cell mass 1/8. With 375 rows per cell each row weight is 1/3000; coefficients equal unweighted OLS. This is not national-survey estimation.",
+    "source_links": ["TASK", "A_DESIGN"]
+  },
+  "population": {
+    "description": "Mexico analytical-use adults aged 25-79 with no reported previous doctor diagnosis of diabetes/high blood sugar, recorded 8-12-hour fast, positive fasting serum glucose below 126 mg/dL, available HbA1c and valid standing anthropometry with internally consistent measurement documentation; uniformly exclude explicit not-weighed or alternative-standing-route documentation that contradicts usable standing measurements without asserting which field is correct. Pregnancy/lactation excluded when documented by questionnaire routing in women aged 25-49. No verified medication or anemia exclusion.",
+    "selection_assumption": "The modeled law is conditional on eligibility already having been satisfied. Diagnosis, fasting duration, pregnancy/lactation, medication, anemia and anthropometry documentation are not generated columns, cannot be verified per fictional row, and are not recovered from people. No HbA1c-based diabetes exclusion is imposed.",
+    "measurement": "BMI in kg/m^2, glucose in serum mg/dL, HbA1c in percent. Values represent recorded measurements including unresolved biological and measurement variation, not noiseless latent physiology.",
+    "source_links": ["TASK", "A_SELECTION", "A_TRANSPORT"]
+  },
+  "centers": {"age": 50.0, "female": 0.5, "bmi": 28.01, "glucose": 94.0},
+  "unit_conversion": {
+    "glucose_mg_dl_per_mmol_l": 18.0,
+    "basis": "Conventional rounded glucose molecular-mass unit conversion; a conversion convention, not an estimated association."
+  },
+  "parameters": {
+    "bmi": {
+      "mean": 28.01,
+      "sd": 5.5,
+      "lower": 14.0,
+      "upper": 55.0,
+      "law": "BMI=lower+(upper-lower)*Beta(alpha,beta), independent of age and female. For p=(mean-lower)/(upper-lower), k=(mean-lower)*(upper-mean)/sd^2-1, alpha=p*k and beta=(1-p)*k.",
+      "source_links": {"mean": ["S_US_BMI", "A_TRANSPORT"], "sd": ["A_DISPERSION"], "support_and_shape": ["A_SUPPORT"], "conditional_independence": ["S_US_BMI", "A_JOINT"]}
+    },
+    "glucose": {
+      "mean_at_centers": 94.0,
+      "source_young_minus_old_mmol_l": -0.1985,
+      "assumed_age_group_midpoint_gap_years": 17.5,
+      "source_bmi_slope_mmol_l": 0.024,
+      "source_male_minus_female_mmol_l": 0.2472,
+      "conditional_sd": 10.0,
+      "lower": 45.0,
+      "upper_exclusive": 126.0,
+      "law": "gA=-(-0.1985)*18/17.5=0.2041714285714286 mg/dL/year; gB=0.024*18=0.432 mg/dL per kg/m^2; gF=-0.2472*18=-4.4496 mg/dL. mG=94+gA*(age-50)+gB*(BMI-28.01)+gF*(female-0.5). Draw scaled Beta on (45,126) parameterized by conditional mean mG and conditional SD 10 via the same moment formula as BMI. Thus E(G|A,F,B)=mG and Var(G|A,F,B)=100 in the mathematical law. This is a selected-population density, not a normal draw clamped at 126. np.nextafter protects the strict upper bound against floating-point endpoint rounding only.",
+      "source_links": {"age_bmi_sex_source_numbers": ["S_FIN_G"], "age_midpoint_conversion": ["A_LINEAR_AGE"], "mean_and_sd": ["A_DISPERSION", "S_KERMAN_DESCRIPTIVE"], "support_and_shape": ["TASK", "A_SUPPORT"], "serum_transfer_and_adjustment": ["A_TRANSPORT", "A_SELECTION"]}
+    },
+    "hba1c": {
+      "mean_at_centers": 5.45,
+      "conditional_age_slope": 0.01,
+      "reduced_bmi_slope": 0.0125,
+      "reduced_female_contrast": 0.023,
+      "conditional_glucose_slope": 0.01,
+      "conditional_residual_sd": 0.32,
+      "symmetric_residual_beta_shape": 4.0,
+      "law": "hB=0.0125-0.01*gB=0.00818 percentage points per kg/m^2; hF=0.023-0.01*gF=0.067496 percentage points. mH=5.45+0.01*(age-50)+hB*(BMI-28.01)+hF*(female-0.5)+0.01*(glucose-94). Draw H=mH+0.32*sqrt(2*4+1)*(2*V-1), V~Beta(4,4), independent of all previous draws. Residual mean is zero, variance is 0.1024 percentage-points squared, and support is (-0.96,0.96). No outcome clipping, rounding, eligibility rejection or sample recentering is used.",
+      "source_links": {"conditional_age_slope": ["S_US_AGE", "A_TRANSPORT"], "reduced_bmi_and_female": ["S_FIN_H", "A_TRANSPORT"], "conditional_glucose_slope": ["A_JOINT", "S_KERMAN_RELATION"], "mean_residual_sd_shape": ["A_DISPERSION", "A_SUPPORT", "S_US_TABLE1"], "derived_conditional_bmi_and_female": ["A_JOINT", "S_FIN_G", "S_FIN_H"]}
+    }
+  },
+  "joint_law": {
+    "factorization": "Fixed equal-cell design times P(age|cell) P(BMI) P(glucose|age,female,BMI) P(HbA1c|age,female,BMI,glucose). Independent innovations do not imply independent biomarkers: glucose and HbA1c share age, BMI and female associations, with an additional conditional glucose-HbA1c association.",
+    "causal_status": "A statistical factorization for synthetic data, not a causal graph. The Q2-Q3 difference is omitted-variable algebra under this law; it does not estimate biological mediation.",
+    "missing_relations": "No supplied source identifies the full Mexico joint law or a transportable glucose-adjusted BMI coefficient. A conditional glucose slope of 0.01 is an explicit scenario. Constant effects, BMI independence of age/female, homoscedasticity, residual independence and all tail shapes are assumptions, not inferred null findings.",
+    "uncertainty": "Parameters are fixed source point choices or declared assumptions. Seeds vary individuals only; they do not represent source-estimate uncertainty, population-transfer uncertainty or model probabilities. No source SE is used as individual SD, no uncertainty intervals are fabricated, and no seed is selected for its results."
+  },
+  "analysis_definitions": [
+    {"id": "Q1_age10", "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10", "term": "age10", "unit": "percentage points per 10 years", "model_population_coefficient": 0.1},
+    {"id": "Q2_bmi5", "formula": "hba1c ~ 1 + age10 + female + bmi5", "term": "bmi5", "unit": "percentage points per 5 kg/m^2", "model_population_coefficient": 0.0625},
+    {"id": "Q3_bmi5", "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10", "term": "bmi5", "unit": "percentage points per 5 kg/m^2", "model_population_coefficient": 0.0409}
+  ],
+  "transformations": {"age10": "(age-50)/10", "bmi5": "(bmi-25)/5", "glucose10": "(glucose-100)/10"},
+  "support_and_tail_justification": {
+    "bmi": "Bounded beta gives a right-skewed BMI distribution with finite moments and nonzero conditional variation. Bounds 14 and 55 are developmental support assumptions, not empirical minima/maxima or eligibility rules; extreme wasting and extreme obesity beyond these values are unmodeled.",
+    "glucose": "A conditional beta includes variability close to 126 while satisfying eligibility without a point mass from clipping. The lower bound 45 is assumed, not an additional task eligibility restriction. Exact density and boundary-tail probabilities are unvalidated. With current covariate support the conditional mean ranges 80.6185942857143-113.80545142857143; shape parameters are positive. Boundary behavior must be inspected in isolated draws.",
+    "hba1c": "Bounded symmetric beta innovations maintain a linear conditional mean with finite positive measurements. The full mathematical support lies inside 3.6016502-7.2745262 percent. Values above 6.5 are permitted. The law does not represent all possible anemia, medication, assay or diabetes-discordant tails; it must not support clinical-tail prevalence claims.",
+    "finite_precision": "The tiny glucose upper-endpoint safeguard may differ from the ideal continuous moments by floating-point precision; it is not a clinical truncation procedure."
+  },
+  "check_artifacts": {"deterministic_algebra": "DECISION.md#retained-deterministic-algebra", "source_use_and_goal_assessments": "SOURCE_USE.json", "finite_cohort_execution": null},
+  "permitted_use": "Developmental inspection and demonstration of the three specified equal-cell regressions under an explicit evidence-informed scenario. No representative Mexico estimates, causal inference, diagnostic decisions, clinical power guarantees or claims of empirical/clinical validation."
+}

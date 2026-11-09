@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "construction_id": "HA_initial_evidence_conditional_law",
+  "task_id": "rubric-construction-pilot-2026-11-09-HA",
+  "mode": "whole_cohort",
+  "design": {
+    "n_rows": 3000,
+    "rows_per_cell": 375,
+    "female_values": [0, 1],
+    "age_bands_inclusive": [[25, 39], [40, 54], [55, 69], [70, 79]],
+    "ordered_columns": ["row_id", "age", "female", "bmi", "glucose", "hba1c"],
+    "row_id_prefix": "HA"
+  },
+  "parameters": {
+    "reference_age": 50.0,
+    "reference_female": 0.5,
+    "reference_bmi": 28.01,
+    "reference_glucose": 95.5,
+    "bmi": {
+      "mean_before_truncation": 28.01,
+      "cv_before_truncation": 0.20,
+      "lower_inclusive": 14.0,
+      "upper_exclusive": 60.0
+    },
+    "glucose": {
+      "reference_location": 95.5,
+      "age_per_year": 0.20417142857142857,
+      "male_minus_female": 4.4496,
+      "bmi_per_unit": 0.432,
+      "sd_before_truncation": 10.5,
+      "lower_inclusive": 50.0,
+      "upper_exclusive": 126.0
+    },
+    "hba1c": {
+      "reference_location": 5.40,
+      "age_per_year": 0.010,
+      "female_minus_male": -0.04,
+      "bmi_per_unit_conditional": 0.00665058064516129,
+      "glucose_per_mgdl": 0.01354032258064516,
+      "residual_sd_before_truncation": 0.32,
+      "residual_df": 7.0,
+      "lower_inclusive": 3.0,
+      "upper_exclusive": 12.0
+    }
+  },
+  "joint_law": {
+    "factorization": "Design(age,female) * p(bmi) * p(glucose | age,female,bmi, 50 <= glucose < 126) * p(hba1c | age,female,bmi,glucose, 3 <= hba1c < 12). This defines an already selected analytical population, not a model for inclusion from the general population.",
+    "age": "Independently draw integer age uniformly over each inclusive age band for 375 rows per sex and band. Cell allocation is fixed; age frequencies within bands are random. Uniformity is assumption A1, not a census age law.",
+    "bmi": "Draw a lognormal independently of age and female. log_variance = log(1 + cv^2), log_mean = log(mean_before_truncation) - log_variance/2. Condition on lower_inclusive <= BMI < upper_exclusive by rejection. The specified mean and CV refer to the untruncated lognormal, not to its truncated marginal.",
+    "glucose": "Let mu_G = reference_location + age_per_year*(age-reference_age) + male_minus_female*(reference_female-female) + bmi_per_unit*(bmi-reference_bmi). Draw N(mu_G, sd_before_truncation^2) conditioned on [50,126). Redraw glucose alone upon rejection. mu_G is a pre-truncation location, not the selected conditional mean.",
+    "hba1c": "Let mu_H = reference_location + age_per_year*(age-reference_age) + female_minus_male*female + bmi_per_unit_conditional*(bmi-reference_bmi) + glucose_per_mgdl*(glucose-reference_glucose). Draw mu_H + residual_sd_before_truncation*sqrt((residual_df-2)/residual_df)*T_residual_df conditioned on [3,12). Redraw HbA1c alone upon rejection. mu_H is a pre-truncation location. HbA1c >= 6.5 is permitted.",
+    "innovation_dependence": "BMI, glucose and HbA1c innovations are independent across people and conditional stages, except for the explicitly included predictors. This is A7, not an inference of absent biological pathways. No latent disease class or diagnostic labels are generated.",
+    "implementation": "One numpy.random.default_rng(seed), synchronous generate(None,specification,seed), rejection without winsorization or boundary masses, unique ordinal string identifiers and random final row permutation. The generator imports only numpy and pandas; all executable work occurs inside functions. Fixed parameters are never fitted to the realized draw."
+  },
+  "parameter_provenance": {
+    "design": ["TASK", "A1"],
+    "reference_age": ["TASK transformations; centering only"],
+    "reference_female": ["TASK equal female=0/1 design; centering only"],
+    "reference_bmi_and_bmi_mean": ["E1_BMI", "A2"],
+    "bmi_cv_and_support": ["A2", "A8"],
+    "glucose_reference_and_reference_glucose": ["A3"],
+    "glucose_age": ["E3_G", "A4: 0.1985 mmol/L * 18 / 17.5 years"],
+    "glucose_sex": ["E3_G", "A4: 0.2472 mmol/L * 18"],
+    "glucose_bmi": ["E3_G", "A4: 0.0240 mmol/L per kg/m^2 * 18"],
+    "glucose_sd_and_lower_support": ["E4_MOMENTS as context only", "A3", "A8"],
+    "glucose_upper_support": ["TASK glucose <126"],
+    "hba1c_reference": ["E1_H_DIST as level context", "A5"],
+    "hba1c_age": ["E1_AGE", "A5"],
+    "hba1c_sex": ["E2_SEX as context only", "E3_H as conflicting context", "A5"],
+    "hba1c_glucose": ["E4_MOMENTS: 0.23*0.73/12.4", "A6"],
+    "hba1c_bmi_conditional": ["E3_H", "E3_G", "E4_MOMENTS", "A6: 0.0125 - (0.23*0.73/12.4)*(0.0240*18)"],
+    "hba1c_residual_sd": ["E1_H_DIST and E2_DIST as context only", "A8"],
+    "hba1c_residual_df_and_support": ["A8"]
+  },
+  "assumptions": [
+    {"id": "A1", "statement": "The requested eight cells are equally weighted by design, and integer ages are uniform within each cell. No national weighting is attempted."},
+    {"id": "A2", "statement": "Transfer the NHANES 2001-2004 selected-population BMI mean 28.01 kg/m^2 as the pre-truncation lognormal mean to this Mexico design. Set CV=0.20 explicitly, without converting a reported SE into an SD. Assume BMI independent of age and sex: Pani reports no age-bin BMI differences, but no such Mexican independence or sex equivalence is established."},
+    {"id": "A3", "statement": "Choose pre-truncation glucose location 95.5 mg/dL at age 50, BMI 28.01 and balanced sex, and residual SD 10.5 mg/dL. These are transport assumptions, informed loosely by selected nondiabetic source glucose levels and the Iranian marginal SD 12.4; they are not extracted target estimates or a fit to NHANES IFG prevalence. No fasting-duration variable or assay error component is separately generated."},
+    {"id": "A4", "statement": "Transfer the general Finnish population serum-glucose BMI and sex slopes from supplementary S1. Use 18 mg/dL per mmol/L as an explicitly rounded unit conversion. Approximate its 30-44 versus 45-64 age contrast with a continuous slope using band midpoints 37 and 54.5, then extrapolate to 25-79. Source glucose analyses were fasting-time adjusted; fasting range 4-17 h and HbA1c-based exclusion differ from the target. Selected-source slopes are used as pre-truncation location coefficients, so the final conditional slopes are not asserted identical."},
+    {"id": "A5", "statement": "Transfer the NHANES HbA1c age slope adjusted for sex, BMI and fasting plasma glucose (0.010 pp/year) to the selected target's serum measurement. Choose location 5.40% for a man aged 50 with BMI 28.01 and glucose 95.5. Set female-minus-male=-0.04 pp as a small assumed conditional sex contrast. Taiwanese unadjusted contrasts and Finnish adjusted contrasts differ; none directly estimates this target coefficient. Use common linear age effects without age-by-sex interaction because the comparable adjusted interaction magnitude is unavailable. This does not claim the interaction is zero in nature."},
+    {"id": "A6", "statement": "Derive a crude Iranian glucose-HbA1c slope from the reported Pearson r and SDs, b_HG=0.23*0.73/12.4=0.01354032258064516 pp per mg/dL. Treat it as a conditional coefficient only by explicit assumption. Under an untruncated additive law, decompose the Finnish age/sex-adjusted BMI-HbA1c slope 0.0125 pp per kg/m^2 into glucose-associated and remaining components: b_HB=0.0125-b_HG*0.432=0.00665058064516129. This is a cross-population joint-law assumption, not an identified mediation analysis, causal effect, or source-reported Q3 result. Rejection conditioning modifies the exact Q2 projection."},
+    {"id": "A7", "statement": "No further confounding or residual correlation is encoded after the specified predictors. Residuals absorb individual variation from unmeasured glycaemia, erythrocyte and measurement factors without estimating their separate effects. Medication and anemia status are neither generated nor asserted absent."},
+    {"id": "A8", "statement": "BMI [14,60), glucose [50,126), and HbA1c [3,12) are modeling supports; only the glucose upper boundary is an explicit task eligibility threshold. Bounds prevent implausible extreme measurements while retaining marked obesity and HbA1c/glucose discordance. They omit possible rare true extremes and are not claimed to follow from the anthropometry documentation rule. Right-skewed BMI and Student t HbA1c errors (df=7, untruncated conditional SD=0.32 pp) allow moderate upper/lower tails. The SD is an assumption informed by published HbA1c dispersions/quantiles, not a residual SD reported by those sources. HbA1c has no 6.5% exclusion."},
+    {"id": "A9", "statement": "Population membership conditions beyond the six output variables are part of the scenario definition. Prior diagnosis, fasting duration, pregnancy/lactation questionnaire routing and consistent standing-measurement documentation cannot be independently verified from generated columns. The law is conditional on those restrictions; it does not claim to reproduce their selection mechanism or prevalence."}
+  ],
+  "requested_analyses": [
+    {"id": "Q1_age10", "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10", "term": "age10", "unit": "percentage points per 10 years", "source_link": "E1_AGE", "assumptions": ["A5", "A7", "A8", "A9"], "interpretation": "Computable synthetic adjusted association. Pre-HbA1c-truncation conditional location coefficient is 0.10 pp/10 years by construction; no sampled estimate has been computed. Source-supported direction/magnitude remains transport dependent."},
+    {"id": "Q2_bmi5", "formula": "hba1c ~ 1 + age10 + female + bmi5", "term": "bmi5", "unit": "percentage points per 5 kg/m^2", "source_link": "E3_H", "assumptions": ["A2", "A4", "A6", "A7", "A8", "A9"], "interpretation": "Computable synthetic BMI association without fasting-glucose adjustment. The cross-source untruncated linear decomposition gives 0.0625 pp/5 kg/m^2; this is neither a target statistic nor a guaranteed coefficient after conditional truncations. Finnish adjustment used a binary age group, unlike the requested continuous age."},
+    {"id": "Q3_bmi5", "formula": "hba1c ~ 1 + age10 + female + bmi5 + glucose10", "term": "bmi5", "unit": "percentage points per 5 kg/m^2", "source_link": "E3_H plus E3_G plus E4_MOMENTS; no source reports the required coefficient", "assumptions": ["A4", "A6", "A7", "A8", "A9"], "interpretation": "Computable but especially assumption dependent. Pre-HbA1c-truncation conditional location coefficient is 0.03325290322580645 pp/5 kg/m^2; no source validates this decomposition and no simulated estimate has been computed."}
+  ],
+  "analysis_conventions": {
+    "age10": "(age-50)/10",
+    "bmi5": "(bmi-25)/5",
+    "glucose10": "(glucose-100)/10",
+    "estimator": "Equal-age-sex-cell WLS with 1/8 mass per cell. With exactly 375 rows in each cell, all row weights equal 1/3000, and its point estimates equal ordinary least squares. No survey variance or national estimand is implied.",
+    "diagnostics": "All requested marginals, quantiles, joint/conditional diagnostics, invalid/duplicate rows and uncomputable results are deferred to the root's isolated draws. No new target clinical analysis is added."
+  },
+  "uncertainty_and_scope": {
+    "within_draw": "Individual stochastic residual variation and within-band age sampling only.",
+    "not_quantified": "Source estimation, transport, residual-dependence, support, selection and model-form uncertainty. Fixed seeds do not sample these uncertainties.",
+    "permitted_use": "Developmental inspection and testing of the three specified analytical pipelines under this declared joint law.",
+    "not_established": "Mexican population validity, source reproduction, actual patient predictions, causal interpretation, diagnostic decisions, clinical validation, national representativeness or publication readiness."
+  }
+}

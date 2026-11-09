@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "rubric-construction-pilot-2026-11-09-LB",
+  "mode": "whole_cohort",
+  "n_rows": 3000,
+  "columns": ["id", "age", "sex", "bmi", "total_cholesterol", "hdl_cholesterol"],
+  "identifier_prefix": "LB-",
+  "population": "Fictional adult F/M selected-sample scenario for the specified Turkana protocol; its actual composition is unknown",
+  "units": {"age": "year", "bmi": "kg/m^2", "total_cholesterol": "mmol/L", "hdl_cholesterol": "mmol/L"},
+  "composition": {
+    "female_probability": 0.5,
+    "sex_law": "Independent Bernoulli draw per person; sex is independent of the four latent standard normals",
+    "source_links": ["A_COMPOSITION"],
+    "site_lifestyle_law": "No site/lifestyle variable or target mixture is inferred; the single external-source scenario does not represent a target stratum"
+  },
+  "age": {
+    "minimum": 18,
+    "median_excess": 16,
+    "softplus_shape": 0.7,
+    "law": "age = minimum + median_excess/log(2) * log(1+exp(Z_age/softplus_shape)), evaluated with logaddexp",
+    "support": "[18,infinity) in floating-point representation; (18,infinity) mathematically; no upper age boundary or rejection",
+    "source_links": ["A_AGE", "greiner_2021:malawi_rural_women__age__median", "greiner_2021:malawi_rural_women__age__q1", "greiner_2021:malawi_rural_women__age__q3"],
+    "interpretation": "Illustrative continuous adult-age distribution with source-informed median; source quartiles are descriptive context, not exact calibration. Identical age law by sex is assumed."
+  },
+  "bmi": {
+    "F": {"arithmetic_mean": 22.28, "sd": 3.85, "source_links": ["agongo_2018_navrongo:agongo_women_bmi_mean_sd", "A_MARGINAL_TRANSFER"]},
+    "M": {"arithmetic_mean": 20.87, "sd": 3.15, "source_links": ["agongo_2018_navrongo:agongo_men_bmi_mean_sd", "A_MARGINAL_TRANSFER"]},
+    "law": "For each sex s, v_s=log(1+(sd_s/mean_s)^2); BMI=exp(log(mean_s)-v_s/2+sqrt(v_s)*Z_BMI)",
+    "support": "Strictly positive, unbounded lognormal with all moments finite; no truncation, clipping, rounding or outlier exclusions"
+  },
+  "lipids": {
+    "total_cholesterol": {
+      "pooled_arithmetic_mean": 3.23,
+      "pooled_sd": 0.92,
+      "female_male_geometric_mean_ratio": 1.0833333333333333,
+      "source_links": ["agongo_2018_navrongo:agongo_pooled_total_cholesterol_mean_sd", "greiner_2021:malawi_rural_men__total_cholesterol__geometric_mean", "greiner_2021:malawi_rural_women__total_cholesterol__geometric_mean", "A_MARGINAL_TRANSFER", "A_SEX_RATIO"]
+    },
+    "hdl_cholesterol": {
+      "pooled_arithmetic_mean": 1.14,
+      "pooled_sd": 0.38,
+      "female_male_geometric_mean_ratio": 1.0476190476190477,
+      "source_links": ["agongo_2018_navrongo:agongo_pooled_hdl_cholesterol_mean_sd", "greiner_2021:malawi_rural_men__hdl_cholesterol__geometric_mean", "greiner_2021:malawi_rural_women__hdl_cholesterol__geometric_mean", "A_MARGINAL_TRANSFER", "A_SEX_RATIO"]
+    },
+    "law": "For mean m, SD s, sex ratio r, and F probability p: h1=1-p+p*r; h2=1-p+p*r^2; v=log((1+(s/m)^2)*h1^2/h2); mu=log(m/h1)-v/2. Lipid=exp(mu+log(r)*I(F)+sqrt(v)*Z_lipid). This preserves pooled population arithmetic mean and SD under the stated scenario, without forcing sample moments.",
+    "support": "Both measured lipids are positive unbounded lognormal mixtures with finite moments. TC and HDL each retain independent latent residual variation; TC>=HDL is not imposed. Possible measured TC<HDL rows are retained and counted.",
+    "measurement_model": "Outcome laws refer to delivered measurements. No separate latent biological level, fasting flag, assay error or calibration bridge is identifiable; transporting external measured moments to the target CardioChek assay is an explicit assumption A_ASSAY."
+  },
+  "dependence": {
+    "latent_order": ["age", "bmi", "total_cholesterol", "hdl_cholesterol"],
+    "source_spearman": {"bmi_total_cholesterol": 0.212, "bmi_hdl_cholesterol": -0.1, "total_cholesterol_hdl_cholesterol": 0.106},
+    "assumed_age_latent_correlations": {"bmi": 0.15, "total_cholesterol": 0.2, "hdl_cholesterol": 0.05},
+    "law": "Draw Z~N4(0,R) independently by person. R has unit diagonal, specified age entries, and each three-source Spearman entry rho_s mapped to 2*sin(pi*rho_s/6). Obtain Z by multiplying independent standard normal rows by lower-Cholesky(R).T.",
+    "source_links": ["obirikorang_2015_ashanti:obirikorang_rural_bmi_tc", "obirikorang_2015_ashanti:obirikorang_rural_bmi_hdl", "obirikorang_2015_ashanti:obirikorang_rural_tc_hdl", "A_COPULA_TRANSFER", "A_AGE_DEPENDENCE"],
+    "interpretation": "The rank-to-Gaussian identity is mathematical under a continuous Gaussian copula. Applying unadjusted rural source rank associations within target sex groups and combining them with assumed age correlations is a transport assumption, not a reported adjusted correlation. No requested raw-scale OLS slope or residual Pearson value is prescribed."
+  },
+  "analysis": {
+    "goal_ids": ["K02-HDL-BMI", "K02-TC-BMI", "K02-LIPID-RESIDUAL"],
+    "lipids_mmol_L_to_mg_dL": 38.67,
+    "age_center": 50,
+    "age_scale": 10,
+    "bmi_center": 25,
+    "bmi_scale": 5,
+    "bmi_contrast": 5,
+    "design": "Unweighted OLS with [1,(age-50)/10,I(sex==F),(bmi-25)/5], M reference; identical eligible rows and design for both outcomes",
+    "coefficient_quantity": "Each BMI coefficient multiplied by bmi_contrast/bmi_scale, in mg/dL per 5 kg/m^2",
+    "residual_quantity": "Pearson correlation of centered residuals from the two full models; no rank transformation",
+    "quantile_method": "linear",
+    "sample_sd_ddof": 1,
+    "conditional_rms": "sqrt(sum(residual^2)/n), mg/dL, not a degrees-of-freedom-adjusted residual SD",
+    "runtime_record": "generator.py computes all requested analyses and diagnostics once during isolated generate and attaches them in DataFrame.attrs['developmental_assessment']; this metadata may need separate retention by the controller because ordinary CSV serialization drops attrs",
+    "invalid_policy": "Count invalid/duplicate rows explicitly; analysis uses the one common finite-complete, age>=18, F/M, positive BMI/lipid eligible set. No further exclusions. Generated rows are not rejected or replaced. Rank failure or zero residual variance produces None plus a stated noncomputable reason.",
+    "additional_inspection": "Design rank and condition number, BMI variation after age/sex projection, F/M counts and variable ranges/SDs, min/q01/q99/max, TC<HDL count, both residual RMS values"
+  },
+  "assumptions": [
+    {"id": "A_COMPOSITION", "statement": "p(F)=0.5 is an explicit balanced descriptive scenario, not an estimate of target or source sex composition. Rows are iid without supplied cluster identifiers or sampling weights; sex independence from latent age is assumed."},
+    {"id": "A_AGE", "statement": "Age law is a softplus transform of a normal with median34, informed by Malawi rural women age median34 and IQR25-48 under source selection. Shape0.7, continuous ages, cross-sex equality, and extension to the whole eligible target are assumptions. No source quartile convention or target age distribution is known."},
+    {"id": "A_MARGINAL_TRANSFER", "statement": "Agongo sex-specific BMI and pooled lipid arithmetic moments are transported from selected Ghanaian adults aged40-60 to all adult ages without aging-specific changes to marginal moments. Lognormal distributional shape and iid within-sex measurements are assumptions; original sample SDs are treated as approximate population dispersions, not exact known parameters."},
+    {"id": "A_SEX_RATIO", "statement": "Malawi rural F/M geometric-mean ratios, TC3.9/3.6 and HDL1.10/1.05, are reused as proportional sex differences while preserving Agongo pooled arithmetic moments under pF0.5. This combination across sources is a model assumption. No geometric mean is relabelled as arithmetic and no non-HDL geometric means are subtracted."},
+    {"id": "A_COPULA_TRANSFER", "statement": "A Gaussian copula is assumed. Three unadjusted Ashanti rural Spearman correlations define within-sex latent dependence in the fictional cohort; this does not reconstruct Ashanti community covariates, weighting, selection or the pooled source rank statistics. Rural is an external evidence scenario label, not a target lifestyle assignment."},
+    {"id": "A_AGE_DEPENDENCE", "statement": "Latent age correlations0.15 with BMI,0.20 with TC and0.05 with HDL are explicitly chosen weak relations, not estimates. No covariate-independent zero relationship is inferred from silence. Their effect on raw-scale adjusted regressions depends on the full nonlinear law."},
+    {"id": "A_ASSAY", "statement": "No calibrated bridge from fasting central-laboratory serum assays to immediate CardioChek Plus venous-EDTA measurements with unestablished fasting is available. Identity transfer of distributional features is provisional; factor38.67 changes numerical units only."},
+    {"id": "A_TAILS", "statement": "Lognormal BMI/lipid tails preserve positivity and right skew; source tails are unknown. The softplus-normal age has a Gaussian-like upper tail and no invented maximum. No endpoint mass, clinical upper bounds or target outlier exclusion is added. Extreme observations and measured TC<HDL pairs remain model possibilities and require descriptive inspection."}
+  ],
+  "uncertainty": "Individual variation is generated conditional on fixed chosen parameters. Source estimation, structural and transport uncertainty are unresolved, not estimated by three seeds. CIs are retained as estimation uncertainty and never used as individual SDs or precision weights.",
+  "interpretation": "Developmental descriptive simulation and estimator demonstration only. No clinical, causal, national-representativeness, source-reconstruction, target-validity or publication-readiness claim.",
+  "execution_status_at_submission": "Not imported, executed or sampled on host; no simulation output or seed-selected results available"
+}

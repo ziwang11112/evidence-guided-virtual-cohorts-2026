@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "rubric_case_pilot_implementation_review_v1",
+  "created_utc": "2026-11-09T08:15:24.036735+00:00",
+  "reviewer": "independent source-only clinical_task_rubrics agent",
+  "decision": "BLOCK",
+  "bound_inputs": {
+    "runner.py": "f54118b7e5a09b63feb3af7592206f688af53df32fd9a6d349c4204db4d3f9e1",
+    "evaluate.py": "82fa05d219d3d2e9a8f224b83ea92ccd62d46b66b9e245c9415ae2e385ac4ce4",
+    "PROTOCOL.json": "c920227047a26d763d166c2ab5cc5ee346790a236a0aca83793858bae10a5b14"
+  },
+  "engine_sha256": {
+    "cohort_harness/__init__.py": "403f30f780b1b018edec1cafa6a6a3c882464a15e60fd4bdb76310a2fe5c7c73",
+    "cohort_harness/__main__.py": "ae8bc7724f5105169fb7a86e130ccf6193bb6c43a0222e5eb22e1d993e950873",
+    "cohort_harness/_worker.py": "273e4a81a59262bc9bd9635c0c70017c4f9a0b54ed2d884fcd22c8172c5d4b0e",
+    "cohort_harness/analysis_evidence.py": "bacfbaa0047c47c6dcd6a0a859d969bdce8268e24020ad33e095dd37ff440d38",
+    "cohort_harness/calibration.py": "04ce113fb334243613cc77255e37cc0c57f947098971fd0fac6b89ede1897a85",
+    "cohort_harness/calibration_budget.py": "1f1417d31980e20caef80b860ad2c84f01d2d8d602e8cef3aac15e18106b53a4",
+    "cohort_harness/conditional_feedback_v1.py": "02241f61966f9e4bcca688226097ec0695cd2ae934e6769c549929b8622dc010",
+    "cohort_harness/contracts.py": "1587f974472a515182293972acd7470a01e423c912abd780280529c543560390",
+    "cohort_harness/demo.py": "ad6dd720e8318f6db18fd385d027822445866a66cf6154e538e01f6e0942abde",
+    "cohort_harness/evidence_actions_v1.py": "713219848e0499af685aa715d07e356a921aa9a9190586dd6b188ebade72dd42",
+    "cohort_harness/evidence_use_v1.py": "1282fcd5a57c96c4dce5b66f9c5c0ffe009f033efc69dfba89b8e11a4781d528",
+    "cohort_harness/execution.py": "194a471f61e119dae9f8069dc976e070988545eb2e2ccbff84305cc84ddb238d",
+    "cohort_harness/lifecycle.py": "01688ffce3972053bab631c19e1f7a7bb941c53af1a5a658dfff0ecad401fee4",
+    "cohort_harness/literature.py": "b471ba48990f55505319387aa457e632905a11aae2c9045eaa8d9e43c20da313",
+    "cohort_harness/request_intake.py": "4154559cd958d0c61664a2b8fbec95dd9e4388d79b8e71c9cd6478cf15efbc1d",
+    "cohort_harness/scientific_loop.py": "48e538c4f83175c8bfdc0b7fd1d9d81994f3c47eddff56271f55af585cea171a",
+    "cohort_harness/self_consistency.py": "60f8f8c398104df3c017e96f5d6c659953e6f634a6caa17c5de8711f646e97f7",
+    "cohort_harness/semantic_feedback_v1.py": "9599e57e1e77f43fd34c249c420e1ef37da755abc13530a6f1a25a215b3393b7",
+    "cohort_harness/source_checks.py": "bb6e906674d0218e6a71722e2d441df3d603ae8c059291a51617daaf350df853",
+    "cohort_harness/source_context.py": "044b984750f667bddc4a07b89390be978ff1f2d2e1f2b36c74e00dddd594203d",
+    "cohort_harness/source_portfolio.py": "75b6ae334ff2b72af6051668ade8b108dc6e0c1e2ad867b47654a6ea3598bdda",
+    "cohort_harness/source_replay.py": "e99ed68459b5466fc22fb8513d7732513c15523139582639b61951826758b92f",
+    "cohort_harness/source_replay_v2.py": "7c6a26356a16a1b5234ee27040454be4355b3a4de812d961c6017ae957cb0ada",
+    "cohort_harness/whole_cohort_feedback.py": "9fa53322c642307160ac5e588fcabf64f2e8c84e1c67eb02eacdfde3d2ca3605",
+    "glycemia_estimator": "1799c017b60f8fd3a9af409a524d3ebd9e54c81016e52da760aeafaefe03289d",
+    "glycemia_provider": "1a5a3cd6126211dc2e24f2d1c7fa58e4afdbc980e29c6fdccb6b637c7cf4e551",
+    "lipid_estimator": "c74917537fd7f6401f8705fcf0bb0ccbd5a51ea185a2dde94b3c7a165730cef6",
+    "lipid_provider": "845b25c590a1c2fae6a568b00595055a6daf90d40518d9cb6e74196314df77d9"
+  },
+  "blocking_findings": [
+    {
+      "id": "IR-01",
+      "severity": "blocking",
+      "title": "Pre-generator infrastructure failure continues scheduled draws",
+      "location": "runner.py:253-306; runner.py:310-326; test_runner.py:98-110,153-162",
+      "finding": "run_one converts runtime inspection/launch failures into ordinary failed receipts. run_author continues its list comprehension, marks the operation completed, and removes RUNNING.lock. Existing tests explicitly accept three or eighteen consumed slots when the runtime is unavailable and no generator starts. This contradicts EVALUATION_SPEC.md requiring a blocking infrastructure defect to stop the batch.",
+      "required_fix": "Preserve the first consumed slot and its failure receipt, then halt with an audit lock when generator entry is false or cannot be established. Do not execute remaining scheduled seeds. Distinguish confirmed author-code or output-schema failures, which remain counted outcomes and may continue. Add focused nonclinical classification tests; no clinical rerun or new draw is authorized."
+    },
+    {
+      "id": "IR-02",
+      "severity": "blocking",
+      "title": "Post-launch integrity failures are absorbed as ordinary model failures",
+      "location": "runner.py:292-306; runner.py:329-370",
+      "finding": "Staged-input or output-inventory integrity failures enter the same catch-all failure path. The finally block hashes the then-current files, and verify_execution applies staged-input/launch checks only to success receipts. A failed receipt can therefore retain an integrity violation without forcing the batch to halt, even when generator entry was confirmed.",
+      "required_fix": "Classify audit/hash/inventory/commitment failures as batch-halting conditions regardless of generator_started. Retain the original attempt and audit lock; do not silently recast an integrity failure as an ordinary author-law failure. Add a focused mock check of a post-launch integrity failure."
+    }
+  ],
+  "scope": "Trusted execution and aggregate evaluation implementation; not scientific approval of any unseen authored law.",
+  "reviewed_documents": {
+    "EVALUATION_SPEC.md": "837764b6f588c1526bc69c0b80b76d723de4298fea52130737a2cc779e89f758",
+    "ENDPOINT_CONTRACT.json": "73a055b3e0902631bfa0275f9ac9ecd6a7d13471d010b1329a5ffafa52aeea00",
+    "test_runner.py": "1176142befb27fd4408139a447cd0a43ae5ca1f6bf916c11ef73137b08c381a1",
+    "test_evaluate.py": "4f82b94a8cc45599af795f16e9deb4b6bb0602b907f15c30bea76d729726be04"
+  },
+  "confirmed_checks": [
+    "All six four-artifact submissions and immutable author-input inventories must validate before sealing or sampling; author programs receive AST-only host validation.",
+    "The fixed worker imports author code only inside WSL/bubblewrap with read-only staged inputs, constrained writable output files, no shared network, explicit seed and resource limits.",
+    "Create-only scheduled slots, receipts, batch commitments and closure gate prohibit silent overwrite/retry and block reference loading until every scheduled slot is closed.",
+    "H provider uses exact 375-per-cell verification, equal-cell WLS, prescribed centered/scaled predictors, all three coefficients, the declared adjustment diagnostics, population SD and fixed weighted quantiles.",
+    "L provider converts both lipids from mmol/L by 38.67, uses the same complete adult F/M rows and centered/scaled OLS design, and reports both BMI contrasts and Pearson residual correlation with sample SD, linear quantiles and conditional RMS diagnostics.",
+    "Evaluation requires exact endpoint/unit coverage, retains all scheduled failures/unavailable endpoints with denominators, and keeps per-construction seed means/ranges separate from inference.",
+    "Supplied reference interval meanings, kinds, bounds and standard errors are preserved; unavailable diagnostic/interval values remain unavailable. Generated-only providers do not implement inferential precision, so none is invented.",
+    "Source information is not staged for execution or used as a target reference; external aggregate comparison remains explicitly developmental and carries no overall quality score."
+  ],
+  "verification": {
+    "method": "Static implementation/dependency and focused test-source review; safe runner imports used only for review bindings and hashes.",
+    "reported_prior_test_results": {
+      "runner": "10 passed, supplied by parent",
+      "evaluator": "7 passed, supplied by parent"
+    },
+    "tests_rerun": false,
+    "generator_or_sampling_calls": 0,
+    "authored_models_read": false,
+    "generated_clinical_rows_read": false,
+    "numerical_real_reference_payloads_read": false,
+    "old_candidate_outcomes_read": false,
+    "frozen_inputs_or_implementation_changed": false
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": "cross_task_lipid_metadata_admission_v1",
+  "status": "constructor_safe_draft_for_root_review_not_frozen_task",
+  "context_id": "target_turkana_adults",
+  "country": "Kenya",
+  "named_context": "Turkana 2018-2019 study-protocol target",
+  "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+  "geographic_metadata": "Reviewed study methods describe Turkana and Laikipia contexts; the pooled composition is not supplied.",
+  "eligibility": {
+    "minimum_age_inclusive": 18,
+    "age_boundary_origin": "investigator-selected prospective use case",
+    "age_maximum": null,
+    "recognized_sex_categories": [
+      "F",
+      "M"
+    ],
+    "common_finite_complete_variables": [
+      "age",
+      "sex",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "strictly_positive": [
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "additional_exclusions": [],
+    "no_inferred_exclusions": [
+      "pregnancy",
+      "HIV",
+      "diabetes",
+      "fasting",
+      "lifestyle",
+      "outliers",
+      "TC>=HDL"
+    ]
+  },
+  "measurements": {
+    "age": {
+      "definition": "Self-reported interview age",
+      "unit": "year",
+      "locator": "Target supplement p.3 methods"
+    },
+    "sex": {
+      "definition": "Recorded categorical interview field with recognized literal F/M values",
+      "distribution_supplied": false,
+      "recognized_codes": [
+        "F",
+        "M"
+      ],
+      "biological_label_legend": "not independently verified in admitted metadata"
+    },
+    "bmi": {
+      "definition": "Body mass index derived from measured weight and height",
+      "unit": "kg/m^2",
+      "locator": "Target supplement p.5 anthropometry methods"
+    },
+    "lipids": {
+      "analytes": [
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "directly_measured": true,
+      "specimen": "Venous blood collected into EDTA",
+      "collection_volume_approximate_mL": 8,
+      "test_volume_uL": 40,
+      "instrument": "CardioChek Plus",
+      "timing": "Measured immediately following manufacturer instructions",
+      "repository_unit": "mg/dL",
+      "generation_representation_unit": "mmol/L",
+      "fasting_status": "not established in admitted metadata",
+      "locator": "Target supplement pp.5-6 lipid methods; repository units metadata"
+    }
+  },
+  "composition": {
+    "age_distribution": "unspecified",
+    "sex_proportions": "unspecified",
+    "BMI_distribution": "unspecified",
+    "lifestyle_mixture": "unspecified",
+    "site_mixture": "unspecified",
+    "joint_covariate_distribution": "unspecified",
+    "individual_covariates_supplied": false,
+    "raw_target_used_to_infer_composition": false
+  },
+  "inference_scope": {
+    "purpose": "Descriptive analysis of the declared study-protocol adult selected sample",
+    "national_representativeness_claimed": false,
+    "sampling_weights": "not supplied",
+    "cluster_identifiers": "not supplied",
+    "causal_effect_claimed": false
+  },
+  "reference_boundary": "The measured reference and any eligibility counts, moments, fitted effects or outcome summaries are evaluator-only. This file contains request metadata alone.",
+  "provenance_note": "Curated from admitted methods-only review and accepted prospective eligibility definition. Coordinator source documents are not constructor inputs because they may contain exposure or evaluation information.",
+  "output_schema": {
+    "ordered_columns": [
+      "id",
+      "age",
+      "sex",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "units": {
+      "age": "year",
+      "sex": "literal F/M",
+      "bmi": "kg/m^2",
+      "total_cholesterol": "mmol/L",
+      "hdl_cholesterol": "mmol/L"
+    },
+    "id": "unique nonmissing string",
+    "all_values_required": true
+  },
+  "analyses": [
+    {
+      "id": "K02-HDL-BMI",
+      "formula": "hdl_cholesterol ~ 1 + age + I(sex==F) + bmi",
+      "estimator": "unweighted OLS",
+      "quantity": "5 times BMI coefficient",
+      "analysis_unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-TC-BMI",
+      "formula": "total_cholesterol ~ 1 + age + I(sex==F) + bmi",
+      "estimator": "unweighted OLS",
+      "quantity": "5 times BMI coefficient",
+      "analysis_unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "estimator": "Pearson correlation of TC and HDL residuals from the two above models fitted on the same eligible rows",
+      "analysis_unit": "1",
+      "covariates": [
+        "intercept",
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ]
+    }
+  ],
+  "unit_mapping": {
+    "lipids_mmol_L_to_mg_dL_factor": 38.67,
+    "other_fields": "identity",
+    "scope": "numerical units only; does not establish assay equivalence"
+  },
+  "scientific_responsibility": "Joint law, parameters, age/sex/BMI composition and transfer choices are unassigned. Choose using admitted evidence and explicitly named assumptions. Unreported relations need not be zero and do not themselves block this task.",
+  "row_count": "Root to freeze prospectively; no measured target count supplied."
+}

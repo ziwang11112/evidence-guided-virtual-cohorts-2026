@@ -1,0 +1,756 @@
+{
+  "schema_version": "LC_source_use_v1",
+  "boundary": "Only REQUEST.md, task.json, request.json, registry.json, admitted sources and input metadata, supplied common skill/interface, TASK_RUBRIC.md and analysis-guided-cohort skill/references, and own four outputs were read. No external retrieval, excluded target material, other bundles, project history, sampled rows, or host generator execution.",
+  "guidance": {
+    "base_skill": "../../common/base_skill/SKILL.md and references/harness-interface.md applied subject to REQUEST.md replacement submission contract; old validate/freeze/source-replay CLIs unavailable/not called.",
+    "task_rubric": "TASK_RUBRIC.md retained unchanged; no replacement rubric, success thresholds, or overall score.",
+    "analysis_guided_cohort": "../../skills/analysis-guided-cohort/SKILL.md and references/rubric.md and references/procedures.md read. Source-definition, conditional-variation and joint-dependence procedures applied through retained law algebra. No longitudinal procedure needed for one-row-per-person cross-sectional scope. Empirical analysis procedure cannot run in constructor context."
+  },
+  "sources": [
+    {
+      "source_id": "agongo_2018_navrongo",
+      "path": "sources/curated/AGONGO_2018_CURATOR_EXTRACTION.json",
+      "doi": "10.1371/journal.pone.0206326",
+      "source_population": {
+        "country": "Ghana",
+        "cohort": "AWI-Gen Navrongo/NHDSS",
+        "year": 2015,
+        "age_range_years": [
+          40,
+          60
+        ],
+        "selection": "At least 10 years resident; pregnant women excluded; complete all investigated variables.",
+        "reported_total_n": 1839,
+        "reported_sex_counts_tables": {
+          "men": 846,
+          "women": 993
+        },
+        "count_issue": "Methods prints 864 men, conflicting with abstract/tables 846. Preserve discrepancy; no denominator-derived uncertainty calculation."
+      },
+      "measurement": {
+        "bmi": "measured weight/height squared, kg/m^2",
+        "lipids": "Overnight fasting serum; direct Randox RX Daytona+ measurement; mmol/L",
+        "target_assay_equivalence": "unverified"
+      },
+      "operator_context": {
+        "mean": "Arithmetic mean; published plus/minus is stated SD.",
+        "sd": "Published sample SD, denominator convention not specified; ddof=1 numerical check requires convention assumption.",
+        "source_weighting": "not explicitly reported",
+        "target_transport": "Age restriction, ethnicity, exclusions, fasting and central laboratory differ; no direct target constraint."
+      },
+      "selected_statistics": [
+        {
+          "id": "agongo_men_bmi_mean_sd",
+          "context": "men",
+          "variable": "bmi",
+          "mean": 20.87,
+          "sd": 3.15,
+          "unit": "kg/m^2",
+          "adjustment": [],
+          "uncertainty_of_estimates": {
+            "kind": "not_reported"
+          },
+          "locator": "Table 1; mean and SD; correction does not alter these rows"
+        },
+        {
+          "id": "agongo_women_bmi_mean_sd",
+          "context": "women",
+          "variable": "bmi",
+          "mean": 22.28,
+          "sd": 3.85,
+          "unit": "kg/m^2",
+          "adjustment": [],
+          "uncertainty_of_estimates": {
+            "kind": "not_reported"
+          },
+          "locator": "Table 1; mean and SD; correction does not alter these rows"
+        },
+        {
+          "id": "agongo_pooled_hdl_cholesterol_mean_sd",
+          "context": "pooled",
+          "variable": "hdl_cholesterol",
+          "mean": 1.14,
+          "sd": 0.38,
+          "unit": "mmol/L",
+          "adjustment": [],
+          "uncertainty_of_estimates": {
+            "kind": "not_reported"
+          },
+          "locator": "Results, Mean lipid levels stratified by sex and age category, opening paragraph"
+        },
+        {
+          "id": "agongo_pooled_total_cholesterol_mean_sd",
+          "context": "pooled",
+          "variable": "total_cholesterol",
+          "mean": 3.23,
+          "sd": 0.92,
+          "unit": "mmol/L",
+          "adjustment": [],
+          "uncertainty_of_estimates": {
+            "kind": "not_reported"
+          },
+          "locator": "Results, Mean lipid levels stratified by sex and age category, opening paragraph"
+        }
+      ],
+      "numerical_use": "Sex-specific BMI arithmetic means/individual SDs set lognormal margins; pooled lipid arithmetic means/individual SDs set whole-law moments after explicitly accounting for age and sex variation. No SD is taken from a confidence interval. Reported SD denominators are not established; using them as population-law scale anchors is a method-of-moments approximation, not certainty about population parameters.",
+      "declined_marginal_statistics": [
+        {
+          "id": "agongo_men_age_mean_sd",
+          "reason": "Age 40-60 restriction does not supply the adult target age law; pooled BMI is not an extra constraint after choosing sex margins and an assumed 50/50 mixture."
+        },
+        {
+          "id": "agongo_women_age_mean_sd",
+          "reason": "Age 40-60 restriction does not supply the adult target age law; pooled BMI is not an extra constraint after choosing sex margins and an assumed 50/50 mixture."
+        },
+        {
+          "id": "agongo_pooled_age_mean_sd",
+          "reason": "Age 40-60 restriction does not supply the adult target age law; pooled BMI is not an extra constraint after choosing sex margins and an assumed 50/50 mixture."
+        },
+        {
+          "id": "agongo_pooled_bmi_mean_sd",
+          "reason": "Age 40-60 restriction does not supply the adult target age law; pooled BMI is not an extra constraint after choosing sex margins and an assumed 50/50 mixture."
+        }
+      ],
+      "declined_regression_context": {
+        "response_transform": "log(lipid), base not specified in inspected text",
+        "predictor": "raw BMI in kg/m^2",
+        "kind": "univariate_linear_regression_coefficient",
+        "adjustment": [],
+        "intercept": "not explicitly stated",
+        "weighting": "not explicitly stated",
+        "row_specific_n": "not supplied",
+        "unit": "log(lipid)/kg/m^2; log base unresolved",
+        "uncertainty": "reported 95% CI; not individual dispersion",
+        "disposition": "context_only; do not treat as raw mmol/L slope, target age/sex adjusted slope, or log-scale computable operator without explicit base/intercept assumptions"
+      },
+      "declined_regressions": [
+        {
+          "id": "agongo_men_loghdl_bmi_univ",
+          "sex": "men",
+          "outcome": "hdl_cholesterol",
+          "estimate": -0.007,
+          "ci95": [
+            -0.015,
+            0.001
+          ],
+          "locator": "Table 4, Men, BMI, Univariate models"
+        },
+        {
+          "id": "agongo_women_logtc_bmi_univ",
+          "sex": "women",
+          "outcome": "total_cholesterol",
+          "estimate": 0.013,
+          "ci95": [
+            0.006,
+            0.02
+          ],
+          "locator": "Table 5, Women, BMI, Univariate models"
+        },
+        {
+          "id": "agongo_men_logtc_bmi_univ",
+          "sex": "men",
+          "outcome": "total_cholesterol",
+          "estimate": 0.013,
+          "ci95": [
+            0.006,
+            0.02
+          ],
+          "locator": "Table 5, Men, BMI, Univariate models"
+        }
+      ],
+      "regression_reason": "Unknown log base, univariate conditioning, and unreported intercept/weights preclude substituting these estimates for requested adjusted raw-scale slopes. No numerical regression use.",
+      "overlap": "These summaries and regressions use the same source dataset. Navrongo and Ashanti are distinct named populations/years; no participant-level non-overlap audit.",
+      "transport_assumptions": [
+        "A_MOMENT_TRANSFER",
+        "A_SHAPE",
+        "A_SEX_MAPPING",
+        "A_MEASUREMENT"
+      ]
+    },
+    {
+      "source_id": "greiner_2021",
+      "path": "sources/curated/GREINER_2021_CURATOR_EXTRACTION.json",
+      "doi": "10.1136/bmjgh-2021-005222",
+      "source_selection": {
+        "id": "greiner_analysis_selection",
+        "minimum_age_in_years": 18,
+        "exclude_reported_pregnancy": true,
+        "exclude_hiv_positive": true,
+        "exclude_diabetes": true,
+        "require_sex_observed": true,
+        "require_complete_lipid_data": true,
+        "diabetes_case_definition": "not_resolved_in_this_primary-maintext_packet",
+        "missing_covariate_rule_for_table1": "not_separately_reported_per_row",
+        "table1_row_n_equals_group_n": "not_assumed",
+        "sex_stratified": true,
+        "malawi_site_stratified": true,
+        "not_a_turkana_target_filter": "The target does not expose the same health/selection flags. These are source-context requirements, not executable target exclusions."
+      },
+      "measurement": {
+        "malawi_lipids": {
+          "method": "enzymatic laboratory assays",
+          "instrument": "Beckman Coulter Chemistry Analyser",
+          "fasting": "Fasting sought; random blood accepted after second unsuccessful fasting visit.",
+          "specimen_matrix": "not resolved in inspected maintext",
+          "source_unit": "mmol/L",
+          "locator": "Methods / Data collection / MEIRU Urban/Rural NCD Survey, Malawi"
+        },
+        "uganda_lipids": {
+          "method": "enzymatic colourimetric laboratory assays",
+          "instrument": "Cobas Integra 400",
+          "fasting": "Main Data collection describes a fasted sample; duration and participant-level adherence not established here.",
+          "specimen_matrix": "not resolved in inspected maintext",
+          "source_unit": "mmol/L",
+          "locator": "Methods / Data collection / Masaka General Population Cohort, Uganda"
+        },
+        "target_transfer": {
+          "validated_assay_bridge": false,
+          "automatic_mmol_to_mg_conversion": false,
+          "note": "Turkana CardioChek Plus venous-EDTA protocol and unknown fasting status are not certified equivalent; unit conversion alone does not remove these differences."
+        }
+      },
+      "selected_contexts": [
+        {
+          "id": "malawi_rural_men",
+          "country": "Malawi",
+          "cohort": "MEIRU",
+          "site_stratum": "rural",
+          "sex": "male",
+          "selection_rules_ref": "greiner_analysis_selection",
+          "measurement_ref": "malawi_lipids",
+          "reported_table_1_group_n": 4534,
+          "reported_table_2_group_n": 4534,
+          "source_context_reconstructed": false,
+          "context_kind": "external_source_stratum_not_target_lifestyle_category",
+          "eligible_n_is_not_synthetic_row_count": true
+        },
+        {
+          "id": "malawi_rural_women",
+          "country": "Malawi",
+          "cohort": "MEIRU",
+          "site_stratum": "rural",
+          "sex": "female",
+          "selection_rules_ref": "greiner_analysis_selection",
+          "measurement_ref": "malawi_lipids",
+          "reported_table_1_group_n": 5894,
+          "reported_table_2_group_n": 5893,
+          "source_context_reconstructed": false,
+          "context_kind": "external_source_stratum_not_target_lifestyle_category",
+          "eligible_n_is_not_synthetic_row_count": true
+        }
+      ],
+      "operator": {
+        "formula": "exp(mean(log(x)))",
+        "domain": "finite x>0",
+        "weighting": "equal-weight operational interpretation; reported weighting unknown"
+      },
+      "selected_statistics": [
+        {
+          "id": "malawi_rural_men__total_cholesterol__geometric_mean",
+          "context": "malawi_rural_men",
+          "variable": "total_cholesterol",
+          "kind": "geometric_mean",
+          "estimate": 3.6,
+          "unit": "mmol/L",
+          "operator": {
+            "definition_ref": "geometric_mean_positive",
+            "column": "total_cholesterol"
+          },
+          "reported_group_n": 4534,
+          "row_specific_n": null,
+          "adjustment": [],
+          "uncertainty": {
+            "kind": "confidence_interval",
+            "level": 0.95,
+            "lower": 3.6,
+            "upper": 3.7,
+            "role": "estimation_uncertainty",
+            "status": "reported_rounded",
+            "issue_ids": []
+          },
+          "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_men",
+          "source_url": "https://gh.bmj.com/content/6/5/e005222#T2",
+          "issue_ids": []
+        },
+        {
+          "id": "malawi_rural_men__hdl_cholesterol__geometric_mean",
+          "context": "malawi_rural_men",
+          "variable": "hdl_cholesterol",
+          "kind": "geometric_mean",
+          "estimate": 1.05,
+          "unit": "mmol/L",
+          "operator": {
+            "definition_ref": "geometric_mean_positive",
+            "column": "hdl_cholesterol"
+          },
+          "reported_group_n": 4534,
+          "row_specific_n": null,
+          "adjustment": [],
+          "uncertainty": {
+            "kind": "confidence_interval",
+            "level": 0.95,
+            "lower": 1.04,
+            "upper": 1.06,
+            "role": "estimation_uncertainty",
+            "status": "reported_rounded",
+            "issue_ids": []
+          },
+          "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_men",
+          "source_url": "https://gh.bmj.com/content/6/5/e005222#T2",
+          "issue_ids": []
+        },
+        {
+          "id": "malawi_rural_women__total_cholesterol__geometric_mean",
+          "context": "malawi_rural_women",
+          "variable": "total_cholesterol",
+          "kind": "geometric_mean",
+          "estimate": 3.9,
+          "unit": "mmol/L",
+          "operator": {
+            "definition_ref": "geometric_mean_positive",
+            "column": "total_cholesterol"
+          },
+          "reported_group_n": 5893,
+          "row_specific_n": null,
+          "adjustment": [],
+          "uncertainty": {
+            "kind": "confidence_interval",
+            "level": 0.95,
+            "lower": 3.9,
+            "upper": 3.9,
+            "role": "estimation_uncertainty",
+            "status": "reported_rounded",
+            "issue_ids": []
+          },
+          "locator": "Table 2; Total cholesterol, star-marked geometric mean; malawi_rural_women",
+          "source_url": "https://gh.bmj.com/content/6/5/e005222#T2",
+          "issue_ids": [
+            "table_denominator_disagreement",
+            "rounded_or_collapsed_ci"
+          ]
+        },
+        {
+          "id": "malawi_rural_women__hdl_cholesterol__geometric_mean",
+          "context": "malawi_rural_women",
+          "variable": "hdl_cholesterol",
+          "kind": "geometric_mean",
+          "estimate": 1.1,
+          "unit": "mmol/L",
+          "operator": {
+            "definition_ref": "geometric_mean_positive",
+            "column": "hdl_cholesterol"
+          },
+          "reported_group_n": 5893,
+          "row_specific_n": null,
+          "adjustment": [],
+          "uncertainty": {
+            "kind": "confidence_interval",
+            "level": 0.95,
+            "lower": 1.09,
+            "upper": 1.11,
+            "role": "estimation_uncertainty",
+            "status": "reported_rounded",
+            "issue_ids": []
+          },
+          "locator": "Table 2; HDL cholesterol, star-marked geometric mean; malawi_rural_women",
+          "source_url": "https://gh.bmj.com/content/6/5/e005222#T2",
+          "issue_ids": [
+            "table_denominator_disagreement"
+          ]
+        }
+      ],
+      "numerical_use": "Only female/male geometric-mean ratios: TC=3.9/3.6 and HDL=1.1/1.05. Log ratios enter the conditional sex term under A_SEX_RATIO. Absolute Greiner lipid levels, CIs, and counts do not set target means, variance, or mixture. Source geometric means are never relabelled arithmetic means.",
+      "declined_statistic_ids": [
+        "malawi_rural_men__bmi__geometric_mean",
+        "malawi_rural_men__non_hdl_cholesterol__geometric_mean",
+        "malawi_rural_men__age__q1",
+        "malawi_rural_men__age__median",
+        "malawi_rural_men__age__q3",
+        "malawi_rural_men__hdl_cholesterol__low_prevalence",
+        "malawi_urban_men__bmi__geometric_mean",
+        "malawi_urban_men__total_cholesterol__geometric_mean",
+        "malawi_urban_men__hdl_cholesterol__geometric_mean",
+        "malawi_urban_men__non_hdl_cholesterol__geometric_mean",
+        "malawi_urban_men__age__q1",
+        "malawi_urban_men__age__median",
+        "malawi_urban_men__age__q3",
+        "malawi_urban_men__hdl_cholesterol__low_prevalence",
+        "uganda_men__bmi__geometric_mean",
+        "uganda_men__total_cholesterol__geometric_mean",
+        "uganda_men__hdl_cholesterol__geometric_mean",
+        "uganda_men__non_hdl_cholesterol__geometric_mean",
+        "uganda_men__age__q1",
+        "uganda_men__age__median",
+        "uganda_men__age__q3",
+        "uganda_men__hdl_cholesterol__low_prevalence",
+        "malawi_rural_women__bmi__geometric_mean",
+        "malawi_rural_women__non_hdl_cholesterol__geometric_mean",
+        "malawi_rural_women__age__q1",
+        "malawi_rural_women__age__median",
+        "malawi_rural_women__age__q3",
+        "malawi_rural_women__hdl_cholesterol__low_prevalence",
+        "malawi_urban_women__bmi__geometric_mean",
+        "malawi_urban_women__total_cholesterol__geometric_mean",
+        "malawi_urban_women__hdl_cholesterol__geometric_mean",
+        "malawi_urban_women__non_hdl_cholesterol__geometric_mean",
+        "malawi_urban_women__age__q1",
+        "malawi_urban_women__age__median",
+        "malawi_urban_women__age__q3",
+        "malawi_urban_women__hdl_cholesterol__low_prevalence",
+        "uganda_women__bmi__geometric_mean",
+        "uganda_women__total_cholesterol__geometric_mean",
+        "uganda_women__hdl_cholesterol__geometric_mean",
+        "uganda_women__non_hdl_cholesterol__geometric_mean",
+        "uganda_women__age__q1",
+        "uganda_women__age__median",
+        "uganda_women__age__q3",
+        "uganda_women__hdl_cholesterol__low_prevalence"
+      ],
+      "declined_statistic_reasons": {
+        "bmi_geometric_means": "Choose Agongo arithmetic mean/SD evidence to identify a declared BMI shape; avoid treating geometric means as arithmetic moments.",
+        "absolute_lipid_geometric_means": "Not simultaneously imposed with the selected Agongo pooled arithmetic anchors.",
+        "non_hdl_geometric_means": "Not a requested field; geometric mean(TC-HDL) cannot be calculated by subtracting geometric means; no deterministic total-lipid construction.",
+        "age_quantiles": "Qualitative context for a broad adult age scenario only. Quantile convention not supplied; no numerical fit.",
+        "low_hdl_prevalence": "Not imposed alongside cross-source moment anchors; a rounded threshold proportion and GM would identify spread only under further shape/selection assumptions.",
+        "other_sites": "Do not invent target site/lifestyle mixing weights or treat sites as target lifestyle categories."
+      },
+      "declined_regression_ids": [
+        "greiner_table3_context_01",
+        "greiner_table3_context_02",
+        "greiner_table3_context_03",
+        "greiner_table3_context_04",
+        "greiner_table3_context_05",
+        "greiner_table3_context_06",
+        "greiner_table3_context_07",
+        "greiner_table3_context_08",
+        "greiner_table3_context_09",
+        "greiner_table3_context_10",
+        "greiner_table3_context_11",
+        "greiner_table3_context_12"
+      ],
+      "regression_reason": "Context only; scale unresolved, age+smoking/alcohol differs from available fields.",
+      "unresolved_source_issues": [
+        {
+          "id": "table_denominator_disagreement",
+          "severity": "preserve_unresolved",
+          "details": "Table 1 and Table 2 subgroup counts differ: Uganda men 2177 vs 2179; Uganda women 2424 vs 2429; Malawi rural women 5894 vs 5893; Malawi urban women 7192 vs 7190. EXTEND women also differs 4641 vs 4183 outside this candidate. Table 1 subgroup n does not prove each variable-specific n.",
+          "resolution": "Preserve table-specific counts and scope; do not harmonize, infer missingness causes or inverse-variance weights."
+        },
+        {
+          "id": "malawi_urban_women_hdl_ci",
+          "severity": "ci_quarantined",
+          "details": "Table 2 reports HDL geometric mean 1.15 with 95% CI 1.15 to 1.26; printed values retained.",
+          "resolution": "Point estimate remains a candidate; interval not used for weighting, SD conversion or an acceptance band."
+        },
+        {
+          "id": "rounded_or_collapsed_ci",
+          "severity": "interpretation_limit",
+          "details": "Several printed CI endpoints coincide after rounding.",
+          "resolution": "No zero-variance interpretation, CI-width-derived SD, exact equality tolerance or precision weight is authorized."
+        },
+        {
+          "id": "source_quantile_convention_unreported",
+          "severity": "context_only",
+          "resolution": "Age median/Q1/Q3 retained as reported distributional context, not executable calibration."
+        },
+        {
+          "id": "regression_scale_unresolved",
+          "severity": "context_only",
+          "resolution": "All Table 3 coefficients stay outside numerical candidates; no raw/log conversion, orientation reversal or insertion into a joint generator."
+        },
+        {
+          "id": "adjustment_covariates_not_in_core_target",
+          "severity": "context_only",
+          "resolution": "Do not drop smoking/alcohol to imitate the reported adjusted operators."
+        },
+        {
+          "id": "source_weighting_not_explicit",
+          "severity": "assumption_required",
+          "resolution": "Equal-weight mathematical recipes are explicit operational choices, not a claim of verified source weighting."
+        },
+        {
+          "id": "source_selection_and_measurement_transfer",
+          "severity": "assumption_required",
+          "resolution": "External source strata are not interchangeable with Turkana lifestyle categories. Source health exclusions and assays cannot be recreated from target fields by assertion."
+        }
+      ],
+      "overlap": "Repeated sex/site summaries and regression rows from the same source study are dependent constraints. Named populations differ from the Ghana sources, but participant-level non-overlap is not audited. No inverse-variance synthesis or independent-confirmation count.",
+      "transport_assumptions": [
+        "A_SEX_RATIO",
+        "A_SEX_MAPPING",
+        "A_MEASUREMENT"
+      ]
+    },
+    {
+      "source_id": "obirikorang_2015_ashanti",
+      "path": "sources/curated/OBIRIKORANG_2015_CURATOR_EXTRACTION.json",
+      "doi": "10.1371/journal.pone.0129494",
+      "locator": "Methods: Study Population, Biochemical Assays, Statistical methods; Table 7 (lower-left rural, upper-right urban)",
+      "source_population": {
+        "country": "Ghana",
+        "year": 2013,
+        "urban": "Kumasi",
+        "rural": "Jachie-Pramso",
+        "reported_group_n": {
+          "urban": 312,
+          "rural": 360
+        },
+        "selection": "Household recruitment; excluded prior hypertension, diabetes, coronary heart disease/treatment, pregnancy/lactation, physical or mental disability.",
+        "age_range": "not established in inspected methods",
+        "pair_specific_n": "not reported in Table 7"
+      },
+      "measurement": {
+        "bmi": "measured weight/height squared, kg/m^2",
+        "lipids": "12-14 hour fasting venous serum; enzymatic Selectra Pro S assays; mmol/L",
+        "target_assay_equivalence": "unverified"
+      },
+      "operator": {
+        "kind": "spearman_correlation",
+        "unit": "1",
+        "adjustment": [],
+        "source_wording": "Spearman rank correlation by community",
+        "weighting": "not explicitly reported",
+        "tie_method": "not explicitly reported",
+        "missing_pair_policy": "not explicitly reported"
+      },
+      "selected_statistics": [
+        {
+          "id": "obirikorang_rural_bmi_tc",
+          "context": "rural",
+          "x": "bmi",
+          "y": "total_cholesterol",
+          "estimate": 0.212,
+          "uncertainty": {
+            "kind": "not_reported"
+          },
+          "reported_significance": "p<0.05"
+        },
+        {
+          "id": "obirikorang_rural_bmi_hdl",
+          "context": "rural",
+          "x": "bmi",
+          "y": "hdl_cholesterol",
+          "estimate": -0.1,
+          "uncertainty": {
+            "kind": "not_reported"
+          },
+          "reported_significance": "no star"
+        },
+        {
+          "id": "obirikorang_rural_tc_hdl",
+          "context": "rural",
+          "x": "total_cholesterol",
+          "y": "hdl_cholesterol",
+          "estimate": 0.106,
+          "uncertainty": {
+            "kind": "not_reported"
+          },
+          "reported_significance": "no star"
+        }
+      ],
+      "numerical_use": "Three rural marginal unadjusted Spearman numbers define a declared conditional age/sex Gaussian-copula scenario, with latent normal correlation 2*sin(pi*r_s/6). This family-based mathematical construction is explicitly a conditioning and transport assumption. It does not claim that the source statistic was adjusted or Pearson.",
+      "declined_statistics": [
+        {
+          "id": "obirikorang_urban_bmi_tc",
+          "context": "urban",
+          "x": "bmi",
+          "y": "total_cholesterol",
+          "estimate": 0.293,
+          "uncertainty": {
+            "kind": "not_reported"
+          },
+          "reported_significance": "p<0.05"
+        },
+        {
+          "id": "obirikorang_urban_bmi_hdl",
+          "context": "urban",
+          "x": "bmi",
+          "y": "hdl_cholesterol",
+          "estimate": -0.04,
+          "uncertainty": {
+            "kind": "not_reported"
+          },
+          "reported_significance": "no star"
+        },
+        {
+          "id": "obirikorang_urban_tc_hdl",
+          "context": "urban",
+          "x": "total_cholesterol",
+          "y": "hdl_cholesterol",
+          "estimate": 0.171,
+          "uncertainty": {
+            "kind": "not_reported"
+          },
+          "reported_significance": "no star"
+        }
+      ],
+      "declined_reason": "Urban community values are a concrete alternative dependence scenario, not pooled with rural constraints because target mixture is unspecified. No sensitivity draw or calculation performed. Rural was selected as one internally coherent triple, without claiming target equivalence.",
+      "overlap": "Same paper/community measurements are dependent constraints, not six independent studies. Different named geography from Greiner and Turkana; participant-level non-overlap not audited.",
+      "transport_assumptions": [
+        "A_DEPENDENCE",
+        "A_MEASUREMENT"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A_COMPOSITION",
+      "claim": "p(F)=0.5, no modeled site/lifestyle strata, independent rows and equal analysis weights are a developmental composition scenario. They do not describe a known target mixture or sampling design."
+    },
+    {
+      "id": "A_SEX_MAPPING",
+      "claim": "Source women/men map to recorded F/M for numerical transport; target biological label legend is not independently established."
+    },
+    {
+      "id": "A_AGE",
+      "claim": "Shifted Gamma(2,10 years) represents a broad adult age distribution with mean 38 and no upper limit. Greiner rural median/IQR values are qualitative context only; their quantile conventions are unknown and this distribution was not fitted to them."
+    },
+    {
+      "id": "A_AGE_BMI",
+      "claim": "Age and BMI are independent conditional on sex. This is a deliberate simplifying assumption for missing joint covariate evidence, not a reported null relationship. Age is also independent of recorded sex."
+    },
+    {
+      "id": "A_MOMENT_TRANSFER",
+      "claim": "Adopt Agongo sex-specific BMI arithmetic moments and pooled lipid arithmetic moments as whole-law adult scenario anchors. Age 40-60 Ghana, selection, ethnicity, assay and fasting differences prevent interpreting this as Turkana moment estimation or as reconstruction of Agongo's full source population."
+    },
+    {
+      "id": "A_SHAPE",
+      "claim": "Use lognormal BMI and age/sex-conditional lognormal lipids. Means and SDs identify their chosen normal log parameters only under this assumed family; the source does not establish the family or its tail shape."
+    },
+    {
+      "id": "A_AGE_EFFECTS",
+      "claim": "TC log-age slope 0.003/year and HDL 0.0005/year are modest monotone age trends chosen as assumptions; neither is a published estimate. Nonlinear raw-scale effects mean the OLS age slope is a projection, not this log coefficient."
+    },
+    {
+      "id": "A_SEX_RATIO",
+      "claim": "Use rural Malawi sex-specific geometric-mean ratios as conditional multiplicative sex effects with equal age distributions and common lipid log variance. Marginal sex contrasts can reflect age, BMI, health selection and other factors; this conditional interpretation and Ghana/Malawi combination are unverified transfer assumptions."
+    },
+    {
+      "id": "A_DEPENDENCE",
+      "claim": "Use the rural Ashanti marginal unadjusted Spearman numbers as an explicit assumed within-age/sex Gaussian-copula rank scenario. Their transfer from marginal to conditional relations and from Ghana to the target is unverified. The Gaussian transform is a model-dependent mathematical identity, not conversion of a reported Spearman estimate into adjusted Pearson residual correlation. Urban values are an unexecuted alternative, not an averaged independent replication."
+    },
+    {
+      "id": "A_MEASUREMENT",
+      "claim": "Treat admitted mmol/L concentration scales as usable scenario anchors without claiming assay equivalence. Unknown fasting, health selection, CardioChek error, and target exclusions are not invented or reconstructed."
+    }
+  ],
+  "assessment_records": [
+    {
+      "id": "TASK-INVARIANTS",
+      "analysis": "Exact ABI/schema, 3000 rows, complete finite positive measurements and age>=18",
+      "basis": "task.json; request.json; input/population_metadata.json; TASK_RUBRIC.md",
+      "reference_role": "task invariant",
+      "check": "Static syntax/schema review plus positive-support law; empirical row validation requires isolated output.",
+      "comparison": "Exact task invariants only, no clinical pass bands.",
+      "finding": {
+        "artifact": "generator.py; model_spec.json#/law",
+        "result": "Definition returns requested ordered columns and unique deterministic string IDs by construction; support positive almost surely. No finite table exists in constructor context."
+      },
+      "assessment": "unresolved",
+      "next_action": "Root executes sealed bytes and checks exact shape, types, finite values, missingness, categories and duplicate IDs."
+    },
+    {
+      "id": "K02-HDL-BMI",
+      "analysis": "Unweighted OLS HDL*38.67 ~ 1 + age10 + I(F) + bmi5; coefficient bmi5",
+      "basis": "Selected Agongo HDL and BMI moments, assumed joint law using rural rank scenario, age/sex terms; no compatible published adjusted raw-scale coefficient.",
+      "reference_role": "no numerical reference",
+      "check": "Deterministic population moment projection computed; finite-draw OLS/design rank/BMI residual variance/HDL diagnostics pending isolated output.",
+      "comparison": "Describe the law implication; do not compare it to log-scale source coefficients or treat it as target truth.",
+      "finding": {
+        "artifact": "DECISION.md#retained-deterministic-algebra",
+        "result": {
+          "population_contrast_mg_dL_per5": -2.0977372705136053,
+          "BMI_variance_after_age_sex": 12.3725,
+          "HDL_projection_residual_RMS_mg_dL": 14.580955668790224,
+          "scope": "computed declared-law implication only"
+        }
+      },
+      "assessment": "unresolved",
+      "next_action": "Root runs exact requested model and diagnostic set. Any target interpretation remains assumption-dependent; age/BMI and dependence evidence would be needed to reduce uncertainty."
+    },
+    {
+      "id": "K02-TC-BMI",
+      "analysis": "Unweighted OLS TC*38.67 ~ 1 + age10 + I(F) + bmi5; coefficient bmi5",
+      "basis": "Selected Agongo TC and BMI moments, assumed joint law using rural rank scenario, age/sex terms; no compatible published adjusted raw-scale coefficient.",
+      "reference_role": "no numerical reference",
+      "check": "Deterministic population moment projection computed; finite-draw OLS/design rank/BMI residual variance/TC diagnostics pending isolated output.",
+      "comparison": "Describe the law implication; no target calibration or imported log-slope target.",
+      "finding": {
+        "artifact": "DECISION.md#retained-deterministic-algebra",
+        "result": {
+          "population_contrast_mg_dL_per5": 10.707124390512655,
+          "BMI_variance_after_age_sex": 12.3725,
+          "TC_projection_residual_RMS_mg_dL": 33.97258096780359,
+          "scope": "computed declared-law implication only"
+        }
+      },
+      "assessment": "unresolved",
+      "next_action": "Root runs exact requested model and diagnostic set; do not use these developmental coefficients as empirical target effects."
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "analysis": "Pearson correlation of same-row TC/HDL full-model OLS residuals",
+      "basis": "A_DEPENDENCE and cross-source marginal anchors; source Table 7 is unadjusted Spearman rather than this estimand.",
+      "reference_role": "no numerical reference",
+      "check": "Positive-definite copula and analytic projection covariance computed; finite-row Pearson residual correlation pending.",
+      "comparison": "Descriptive law implication only; 0.106 source Spearman is not the requested reference value.",
+      "finding": {
+        "artifact": "DECISION.md#retained-deterministic-algebra",
+        "result": {
+          "population_residual_correlation": 0.1320653055105349,
+          "TC_residual_variance_mmol2": 0.77180704882519,
+          "HDL_residual_variance_mmol2": 0.1421751303074618,
+          "R_determinant": 0.9225045789083934
+        }
+      },
+      "assessment": "unresolved",
+      "next_action": "Root checks identical rows/design and nonzero residual variances before the exact Pearson calculation. A conditional target covariance remains unmeasured; urban-source sensitivity is merely proposed, not performed."
+    },
+    {
+      "id": "SOURCE-MOMENT-IDENTITIES",
+      "analysis": "Declared-law selected arithmetic means and SDs",
+      "basis": "Agongo selected reported arithmetic moments; moment-generating-function derivation under own law",
+      "reference_role": "source reconstruction",
+      "check": "Exact probability-law algebra, not full source population replay.",
+      "comparison": "Descriptive equality of deliberately imposed moments; no invented tolerance or independent validation.",
+      "finding": {
+        "artifact": "DECISION.md#retained-deterministic-algebra",
+        "result": "Calculated means TC=3.2299999999999995, HDL=1.14 and SDs TC=0.92, HDL=0.38000000000000006 mmol/L. BMI pooled law mean=21.575, SD=3.587412; no claim to match Agongo pooled BMI 21.63/3.61 under a changed sex mixture."
+      },
+      "assessment": "demonstrated-for-stated-scope",
+      "next_action": "Retain for law bookkeeping; actual source replay needs compatible source contexts and is unavailable. Population transport remains unresolved."
+    }
+  ],
+  "checks": [
+    {
+      "id": "DETERMINISTIC-ALGEBRA",
+      "status": "completed",
+      "artifact": "DECISION.md#retained-deterministic-algebra",
+      "actual_tool": "functions.exec -> exec_command -> inline python standard-library math/json",
+      "scope": "No sampling, source-statistic estimator, import or execution of generator.py. Computes moment constraints, copula admissibility, all three population projection quantities, conditional RMS and age-tail probabilities."
+    },
+    {
+      "id": "STATIC-SUBMISSION",
+      "status": "completed",
+      "artifact": "DECISION.md#static-submission-checks",
+      "actual_tool": "functions.exec -> exec_command -> inline standard-library Python ast/hashlib/json/pathlib; exit 0",
+      "results": {
+        "output_artifacts": "Exactly the four requested names",
+        "json": "Both JSON objects parsed strictly; no duplicate keys or nonfinite constants",
+        "python": "AST parses; generate synchronous with exactly observed/specification/seed positional arguments, no defaults/varargs; only math,numpy,pandas imports; no import-time calls",
+        "contract": "3000 rows and exact column order agree with task declaration",
+        "analysis_coverage": "All three goal IDs present; all assessment records contain required rubric fields",
+        "source_integrity": "Three of three admitted source SHA-256 hashes match registry"
+      },
+      "limits": "Static checks do not execute the generator or establish returned schema, numerical reproducibility, finite-row diagnostics, empirical analysis results, or scientific target support."
+    }
+  ],
+  "unavailable_checks": [
+    "No isolated generated table available in constructor context: no finite-row OLS/residual correlation or empirical diagnostics including quantiles/design rank/actual tails.",
+    "No source-feedback collector or literature adapter supplied. Source population replay and numerical output-informed revision unavailable.",
+    "No observed target covariates, target moments, assay bridge, demographic composition or target adjusted associations admitted.",
+    "No independent reviewer, clinical validation, seed optimization, sensitivity draw, uncertainty calibration or power validation performed."
+  ],
+  "stopping_reason": "Four-file single-construction contract; no target feedback or extra construction iteration authorized. Ordinary pre-submission checking only.",
+  "token_telemetry": "not exposed; no token count or cost inferred"
+}

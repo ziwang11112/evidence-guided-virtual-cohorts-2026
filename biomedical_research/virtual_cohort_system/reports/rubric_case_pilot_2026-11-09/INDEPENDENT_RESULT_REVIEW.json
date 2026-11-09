@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "kind": "rubric_case_pilot_independent_aggregate_result_review_v1",
+  "created_utc": "2026-11-09T08:37:40.655238+00:00",
+  "reviewer": "independent clinical_task_rubrics agent",
+  "decision": "PASS_AGGREGATE_REPORTING",
+  "bound_files": {
+    "EVALUATION.json": "23b973fb4fb60ca7f1f86b4e75f17d63d00d40cb51d3f9225c7aef54cd28d390",
+    "EVALUATION.md": "28412902b7d51777d86654226b5a394c45049fde35186af1bf09f79eb3ef2195",
+    "EVALUATION_COMPLETED.json": "177110c79d974af3bd0c65d6475d385d0fbc1754556405fc19deb5c9ed1e41fb",
+    "BATCH_CLOSURE.json": "07c4949a09df1c0b45003a952899a4a8901c8560f2794eca92f818d729f5c9b0",
+    "independent_recompute.py": "4c3da84467d19f89e9d6c57c727fbf55c8bab3ce24e4cb4fd96cbd71893b6ac8",
+    "RECOMPUTATION.json": "6c5765a430231675e9dd3c049912f08ed8f356a461e49b8b11be29b82f6a082f"
+  },
+  "blocking_findings": [],
+  "implementation_review_preserved_sha256": "9d0f7cffeb89c6c7ada1635a3c174a040a931deee385711fe23780d8c4a64cd4",
+  "scope": "Numerical aggregate correctness, coverage, immutable provenance and reporting interpretation. Source-use/process validity is separately reviewed; no causal skill-superiority inference.",
+  "counts": {
+    "authors": 6,
+    "case_specific_primary_endpoints": 6,
+    "seeds_per_construction": 3,
+    "scheduled_slots": 18,
+    "successful_executions": 18,
+    "complete_slots": 18,
+    "rows_per_slot": 3000,
+    "primary_scalar_values": 54,
+    "diagnostic_scalar_values": 459,
+    "total_generated_scalar_values": 513,
+    "construction_summary_rows": 171,
+    "reference_comparable_scalar_values": 324,
+    "unavailable_reference_comparisons": 189,
+    "failed_slots": 0,
+    "unavailable_generated_slots": 0
+  },
+  "diagnostic_coverage": {
+    "ENSANUT2018": {
+      "analyses_per_draw": 3,
+      "diagnostics_per_draw": 28,
+      "draws": 9
+    },
+    "Turkana": {
+      "analyses_per_draw": 3,
+      "diagnostics_per_draw": 23,
+      "draws": 9
+    }
+  },
+  "independent_recomputation": {
+    "script_reviewed": "independent_recompute.py",
+    "results_reviewed": "RECOMPUTATION.json",
+    "checks": 513,
+    "passed": 513,
+    "max_absolute_difference": 7.815970093361102e-14,
+    "method": "Inspected independent NumPy OLS/residual, moment and quantile formulas. Uniform H weights are justified by independently asserted eight-cell counts of 375; L uses 38.67 conversion, same design and Pearson residual correlation. Verified exact coverage of all 513 comparison keys and numerical tolerances against EVALUATION.json.",
+    "comparison_tolerance": "1e-9 times max(1, absolute reported scalar), used only for floating-point arithmetic verification; not a clinical agreement or superiority threshold.",
+    "rerun_by_reviewer": false
+  },
+  "reviewer_checks": [
+    "Verified every execution receipt hash against closure and report, every receipt-file hash, all 18 generated-CSV hashes, fixed seed/author identities, 3000 rows per receipt, success, confirmed generator entry and no failure class.",
+    "Verified batch-lock hash, preserved implementation-review binding, current reviewed controller/protocol hashes, seal-before-attempt and all-executions-complete-before-evaluation timestamps. EVALUATION_STARTED binds the same closure hash as the final report.",
+    "Checked exact ordered endpoint IDs/units against ENDPOINT_CONTRACT.json for all slots; all six primary analyses and every H/L diagnostic are retained.",
+    "Independently recalculated every signed/absolute discrepancy, sign classification, availability count, per-construction mean/range, mean deviation and sign count from report scalar values.",
+    "Verified reference entries are identical across all arms/seeds for the same endpoint. Only the two existing lipid sample-SD diagnostics are reference-comparable; the remaining 21 lipid diagnostics remain unavailable, producing 189 unavailable comparisons.",
+    "Verified supplied uncertainty stays attached to its own endpoint and all generated inferential intervals/SEs remain unavailable as declared by the generated-only providers.",
+    "Verified EVALUATION.md exactly matches the renderer applied to the bound EVALUATION.json and the completion-record hashes match both published files."
+  ],
+  "reference_uncertainty_interpretation": {
+    "glycemia": "Supplied endpoint-specific empirical cluster-resampling stability bands from 399 attempts; no national confidence-coverage or equivalence-margin interpretation. H standard errors are not supplied.",
+    "lipid_slopes": "Supplied HC3 normal assumption-conditional sensitivity intervals with nominal level 0.95 and their reported standard errors; not design-based confidence intervals.",
+    "lipid_total_cholesterol_caution": "The supplied TC-BMI interval includes zero, so agreement with the point-estimate sign is only descriptive.",
+    "lipid_residual_correlation": "No supplied interval or standard error; no interval was inferred.",
+    "generated_seeds": "Three draws from one fixed authored law per arm/case; seed ranges are not confidence intervals or independent-author replication."
+  },
+  "primary_results": [
+    {
+      "case": "ENSANUT2018",
+      "id": "Q1_age10",
+      "unit": "%/10years",
+      "reference": {
+        "unit": "%/10years",
+        "value": 0.07513235976455014,
+        "status": "computed",
+        "scope": "Previously exposed ENSANUT aggregate; identical published estimator definition",
+        "uncertainty": {
+          "interval": {
+            "status": "available",
+            "lower": 0.06712403846043223,
+            "upper": 0.08218524233916669,
+            "reason": null,
+            "equivalence_margin": false,
+            "direction": "positive",
+            "meaning": "399-attempt empirical cluster-resampling stability band; not national confidence interval or acceptance margin"
+          },
+          "standard_error": {
+            "status": "unavailable",
+            "value": null,
+            "reported_field": null,
+            "reason": "Not supplied for this endpoint in the pinned aggregate"
+          },
+          "interpretation": "Supplied estimator uncertainty only; no interval is inferred for another quantity"
+        }
+      },
+      "constructions": [
+        {
+          "author_id": "HA",
+          "arm": "A",
+          "available_seed_mean": 0.101450530662787,
+          "available_seed_range": [
+            0.09853660416524856,
+            0.1056493579571635
+          ],
+          "mean_signed_difference": 0.02631817089823686,
+          "mean_absolute_difference": 0.02631817089823686,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "HB",
+          "arm": "B",
+          "available_seed_mean": 0.09809368127826143,
+          "available_seed_range": [
+            0.09342213016664752,
+            0.10375517002117014
+          ],
+          "mean_signed_difference": 0.02296132151371129,
+          "mean_absolute_difference": 0.02296132151371129,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "HC",
+          "arm": "C",
+          "available_seed_mean": 0.09594407048058791,
+          "available_seed_range": [
+            0.09092563380127246,
+            0.09892765268299283
+          ],
+          "mean_signed_difference": 0.02081171071603777,
+          "mean_absolute_difference": 0.02081171071603777,
+          "direction_agreement_count": 3
+        }
+      ]
+    },
+    {
+      "case": "ENSANUT2018",
+      "id": "Q2_bmi5",
+      "unit": "%/5kg/m^2",
+      "reference": {
+        "unit": "%/5kg/m^2",
+        "value": 0.08364283892711358,
+        "status": "computed",
+        "scope": "Previously exposed ENSANUT aggregate; identical published estimator definition",
+        "uncertainty": {
+          "interval": {
+            "status": "available",
+            "lower": 0.07037325983526749,
+            "upper": 0.09521350127811261,
+            "reason": null,
+            "equivalence_margin": false,
+            "direction": "positive",
+            "meaning": "399-attempt empirical cluster-resampling stability band; not national confidence interval or acceptance margin"
+          },
+          "standard_error": {
+            "status": "unavailable",
+            "value": null,
+            "reported_field": null,
+            "reason": "Not supplied for this endpoint in the pinned aggregate"
+          },
+          "interpretation": "Supplied estimator uncertainty only; no interval is inferred for another quantity"
+        }
+      },
+      "constructions": [
+        {
+          "author_id": "HA",
+          "arm": "A",
+          "available_seed_mean": 0.056201381483604075,
+          "available_seed_range": [
+            0.051900906016518214,
+            0.06443174741948618
+          ],
+          "mean_signed_difference": -0.0274414574435095,
+          "mean_absolute_difference": 0.0274414574435095,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "HB",
+          "arm": "B",
+          "available_seed_mean": 0.061631245715837765,
+          "available_seed_range": [
+            0.060758267867018045,
+            0.062439590079295414
+          ],
+          "mean_signed_difference": -0.022011593211275816,
+          "mean_absolute_difference": 0.022011593211275816,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "HC",
+          "arm": "C",
+          "available_seed_mean": 0.060449967631577416,
+          "available_seed_range": [
+            0.054208190350490036,
+            0.06686319180345875
+          ],
+          "mean_signed_difference": -0.023192871295536162,
+          "mean_absolute_difference": 0.023192871295536162,
+          "direction_agreement_count": 3
+        }
+      ]
+    },
+    {
+      "case": "ENSANUT2018",
+      "id": "Q3_bmi5",
+      "unit": "%/5kg/m^2",
+      "reference": {
+        "unit": "%/5kg/m^2",
+        "value": 0.05663753525952589,
+        "status": "computed",
+        "scope": "Previously exposed ENSANUT aggregate; identical published estimator definition",
+        "uncertainty": {
+          "interval": {
+            "status": "available",
+            "lower": 0.043900521557340054,
+            "upper": 0.06800596410272369,
+            "reason": null,
+            "equivalence_margin": false,
+            "direction": "positive",
+            "meaning": "399-attempt empirical cluster-resampling stability band; not national confidence interval or acceptance margin"
+          },
+          "standard_error": {
+            "status": "unavailable",
+            "value": null,
+            "reported_field": null,
+            "reason": "Not supplied for this endpoint in the pinned aggregate"
+          },
+          "interpretation": "Supplied estimator uncertainty only; no interval is inferred for another quantity"
+        }
+      },
+      "constructions": [
+        {
+          "author_id": "HA",
+          "arm": "A",
+          "available_seed_mean": 0.02923550511062467,
+          "available_seed_range": [
+            0.02193908101237256,
+            0.03624090886947766
+          ],
+          "mean_signed_difference": -0.02740203014890122,
+          "mean_absolute_difference": 0.02740203014890122,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "HB",
+          "arm": "B",
+          "available_seed_mean": 0.04490497669773424,
+          "available_seed_range": [
+            0.041683360645909245,
+            0.04829651278455728
+          ],
+          "mean_signed_difference": -0.01173255856179165,
+          "mean_absolute_difference": 0.01173255856179165,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "HC",
+          "arm": "C",
+          "available_seed_mean": 0.035721268023041,
+          "available_seed_range": [
+            0.02889870604378881,
+            0.04219442325426627
+          ],
+          "mean_signed_difference": -0.020916267236484886,
+          "mean_absolute_difference": 0.020916267236484886,
+          "direction_agreement_count": 3
+        }
+      ]
+    },
+    {
+      "case": "Turkana",
+      "id": "K02-HDL-BMI",
+      "unit": "mg/dL per 5 kg/m^2",
+      "reference": {
+        "unit": "mg/dL per 5 kg/m^2",
+        "value": -4.623003581925082,
+        "status": "computed",
+        "scope": "Previously exposed selected sample; identical K02 estimator",
+        "uncertainty": {
+          "interval": {
+            "status": "available",
+            "lower": -8.391954206168002,
+            "upper": -0.8540529576821623,
+            "reason": null,
+            "equivalence_margin": false,
+            "kind": "HC3_normal_assumption_conditional_sensitivity_not_design_CI",
+            "nominal_level": 0.95,
+            "normal_multiplier": 1.959963984540054
+          },
+          "standard_error": {
+            "status": "available",
+            "value": 1.9229693269733126,
+            "reported_field": "interval.standard_error",
+            "reason": null
+          },
+          "interpretation": "Supplied estimator uncertainty only; no interval is inferred for another quantity"
+        }
+      },
+      "constructions": [
+        {
+          "author_id": "LA",
+          "arm": "A",
+          "available_seed_mean": -2.4313112198661346,
+          "available_seed_range": [
+            -2.608283716647644,
+            -2.102318275368427
+          ],
+          "mean_signed_difference": 2.1916923620589475,
+          "mean_absolute_difference": 2.1916923620589475,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "LB",
+          "arm": "B",
+          "available_seed_mean": -2.1666394092208163,
+          "available_seed_range": [
+            -2.7966499513380993,
+            -1.8012757461496012
+          ],
+          "mean_signed_difference": 2.4563641727042658,
+          "mean_absolute_difference": 2.4563641727042658,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "LC",
+          "arm": "C",
+          "available_seed_mean": -2.195685034479648,
+          "available_seed_range": [
+            -2.3182265183952895,
+            -2.1096529977555454
+          ],
+          "mean_signed_difference": 2.427318547445434,
+          "mean_absolute_difference": 2.427318547445434,
+          "direction_agreement_count": 3
+        }
+      ]
+    },
+    {
+      "case": "Turkana",
+      "id": "K02-TC-BMI",
+      "unit": "mg/dL per 5 kg/m^2",
+      "reference": {
+        "unit": "mg/dL per 5 kg/m^2",
+        "value": 5.683107656300831,
+        "status": "computed",
+        "scope": "Previously exposed selected sample; identical K02 estimator",
+        "uncertainty": {
+          "interval": {
+            "status": "available",
+            "lower": -3.7535019772183693,
+            "upper": 15.11971728982003,
+            "reason": null,
+            "equivalence_margin": false,
+            "kind": "HC3_normal_assumption_conditional_sensitivity_not_design_CI",
+            "nominal_level": 0.95,
+            "normal_multiplier": 1.959963984540054
+          },
+          "standard_error": {
+            "status": "available",
+            "value": 4.8146852227663235,
+            "reported_field": "interval.standard_error",
+            "reason": null
+          },
+          "interpretation": "Supplied estimator uncertainty only; no interval is inferred for another quantity"
+        }
+      },
+      "constructions": [
+        {
+          "author_id": "LA",
+          "arm": "A",
+          "available_seed_mean": 11.215944600211568,
+          "available_seed_range": [
+            10.300153701803755,
+            11.964616410171134
+          ],
+          "mean_signed_difference": 5.532836943910737,
+          "mean_absolute_difference": 5.532836943910737,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "LB",
+          "arm": "B",
+          "available_seed_mean": 9.7648964865915,
+          "available_seed_range": [
+            9.268478622912934,
+            10.52578468207615
+          ],
+          "mean_signed_difference": 4.081788830290669,
+          "mean_absolute_difference": 4.081788830290669,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "LC",
+          "arm": "C",
+          "available_seed_mean": 10.702841134748676,
+          "available_seed_range": [
+            10.203531509179623,
+            11.567210906272535
+          ],
+          "mean_signed_difference": 5.0197334784478445,
+          "mean_absolute_difference": 5.0197334784478445,
+          "direction_agreement_count": 3
+        }
+      ]
+    },
+    {
+      "case": "Turkana",
+      "id": "K02-LIPID-RESIDUAL",
+      "unit": "1",
+      "reference": {
+        "unit": "1",
+        "value": 0.5120696931296308,
+        "status": "computed",
+        "scope": "Previously exposed selected sample; identical K02 estimator",
+        "uncertainty": {
+          "interval": {
+            "status": "unavailable",
+            "lower": null,
+            "upper": null,
+            "reason": "residual_interval_not_implemented",
+            "equivalence_margin": false,
+            "kind": "HC3_normal_assumption_conditional_sensitivity_not_design_CI"
+          },
+          "standard_error": {
+            "status": "unavailable",
+            "value": null,
+            "reported_field": null,
+            "reason": "Not supplied for this endpoint in the pinned aggregate"
+          },
+          "interpretation": "Supplied estimator uncertainty only; no interval is inferred for another quantity"
+        }
+      },
+      "constructions": [
+        {
+          "author_id": "LA",
+          "arm": "A",
+          "available_seed_mean": 0.125103032621293,
+          "available_seed_range": [
+            0.11357274219068257,
+            0.142669348877321
+          ],
+          "mean_signed_difference": -0.3869666605083378,
+          "mean_absolute_difference": 0.3869666605083378,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "LB",
+          "arm": "B",
+          "available_seed_mean": 0.13549130807281856,
+          "available_seed_range": [
+            0.12800851304091804,
+            0.1423486445482985
+          ],
+          "mean_signed_difference": -0.37657838505681224,
+          "mean_absolute_difference": 0.37657838505681224,
+          "direction_agreement_count": 3
+        },
+        {
+          "author_id": "LC",
+          "arm": "C",
+          "available_seed_mean": 0.13594791498340586,
+          "available_seed_range": [
+            0.11992694892074167,
+            0.15082919994627697
+          ],
+          "mean_signed_difference": -0.37612177814622494,
+          "mean_absolute_difference": 0.37612177814622494,
+          "direction_agreement_count": 3
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Previously exposed clinical aggregate references are reused; this remains developmental agreement, not fresh clinical confirmation.",
+    "One author per arm/case confounds instruction condition with author and modeling choices; three seeds do not remove that confounding.",
+    "No causal improvement or general skill superiority is established; no overall quality score, clinical acceptance margin or winning-seed selection is justified.",
+    "Arithmetic correctness does not validate source transport, measurement equivalence, unsupported assumptions, population recovery or individual-row recovery.",
+    "No real patient files, original numerical-reference files or authored models were opened for this result review. Existing generated files were hashed; their scalars were independently recomputed by the inspected script. No regeneration or clinical-reference refit occurred.",
+    "The reviewer became exposed to aggregate reference values only during this postclosure reporting review."
+  ]
+}

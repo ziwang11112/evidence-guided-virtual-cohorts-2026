@@ -1,0 +1,89 @@
+{
+  "construction_id": "LA_initial_external_evidence_conditional_copula",
+  "n_rows": 3000,
+  "ordered_columns": ["id", "age", "sex", "bmi", "total_cholesterol", "hdl_cholesterol"],
+  "identifier_prefix": "LA-",
+  "mode": "whole_cohort",
+  "units": {"age": "year", "sex": "F/M", "bmi": "kg/m^2", "total_cholesterol": "mmol/L", "hdl_cholesterol": "mmol/L"},
+  "parameters": {
+    "sex": {"probability_F": 0.5},
+    "age": {
+      "quantile_probabilities": [0, 0.25, 0.5, 0.75, 1],
+      "quantile_values_M": [18, 24, 33, 46, 90],
+      "quantile_values_F": [18, 25, 34, 48, 90],
+      "effect_center_years": 50,
+      "effect_scale_years": 10
+    },
+    "bmi": {
+      "M": {"mean": 20.87, "sd": 3.15},
+      "F": {"mean": 22.28, "sd": 3.85},
+      "log_change_per_age_scale": 0.03
+    },
+    "total_cholesterol": {
+      "reference_mean": 3.23,
+      "reference_sd": 0.92,
+      "male_reference_geometric_mean": 3.6,
+      "female_reference_geometric_mean": 3.9,
+      "sex_effect_center": 0.5,
+      "log_change_per_age_scale": 0.025
+    },
+    "hdl_cholesterol": {
+      "reference_mean": 1.14,
+      "reference_sd": 0.38,
+      "male_reference_geometric_mean": 1.05,
+      "female_reference_geometric_mean": 1.1,
+      "sex_effect_center": 0.5,
+      "log_change_per_age_scale": 0.0
+    },
+    "dependence": {
+      "reference_spearman": [0.212, -0.1, 0.106],
+      "latent_cap_sd": 6.0
+    }
+  },
+  "complete_law": {
+    "row_independence": "Rows are independent draws conditional on this fixed specification. There are no clusters, sampling weights, missing values or latent lifestyle categories.",
+    "sex": "Draw F indicator S~Bernoulli(probability_F). Interpret F/M as the source female/male strata by explicit mapping assumption A01.",
+    "age": "Independently of biomarker innovations draw U~Uniform[0,1); given S, linearly interpolate the specified inverse-CDF knots. Thus each of four age intervals has probability 0.25, with uniform density within that interval. Continuous years approximate interview age; no integer rounding. A=(age-50)/10.",
+    "copula": "In order (BMI, TC, HDL), convert the reference Spearman entries ordered (BMI-TC, BMI-HDL, TC-HDL) by r=2*sin(pi*r_s/6). Set unit diagonal and symmetric off-diagonals, Cholesky factor R=L*L^T. Draw independent standard-normal E and form Z=L*E; clamp each component to [-6,6]. Z is independent of S and U before conditional mean shifts.",
+    "moment_conversion": "For each supplied arithmetic mean m and SD d, v=log(1+(d/m)^2), mu=log(m)-v/2, sigma=sqrt(v). These are marginal parameters before age/sex shifts and the very rare cap. SD is individual dispersion, never a CI-derived SD.",
+    "bmi": "log(BMI)=mu_B,S + sigma_B,S*Z_B + 0.03*A.",
+    "total_cholesterol": "log(TC)=mu_TC + sigma_TC*Z_TC + 0.025*A + (S-0.5)*log(3.9/3.6).",
+    "hdl_cholesterol": "log(HDL)=mu_HDL + sigma_HDL*Z_HDL + 0*A + (S-0.5)*log(1.1/1.05).",
+    "measurements": "Exponentiate the three biomarker log values. They represent observed measurements including unspecified biological and assay variation. No separately identified assay-error variance, fasting effect, health flag or correction is applied. TC and HDL are modeled as two direct measurements; TC<HDL is possible and is not filtered.",
+    "identifiers": "Concatenate identifier_prefix with one-based six-digit row index; identifiers are unique within each draw, not asserted to identify the same person across seeds.",
+    "outputs": "Return exactly the ordered columns and row count. No parameter estimation, regression fitting, row selection, resampling to achieve statistics or output-dependent modification occurs."
+  },
+  "parameter_provenance": [
+    {"paths": ["parameters.sex", "identifier_prefix"], "refs": ["A01"], "status": "assumption and output convention"},
+    {"paths": ["parameters.age.quantile_values_M", "parameters.age.quantile_values_F"], "refs": ["greiner_2021:Table 1 rural Malawi age quartiles", "A02"], "status": "reported inner knots; assumed endpoints and interpolation; transferred population"},
+    {"paths": ["parameters.bmi.M", "parameters.bmi.F"], "refs": ["agongo_2018_navrongo:Table 1 BMI mean/SD", "A03"], "status": "reported arithmetic moments reinterpreted as age-50 reference moments"},
+    {"paths": ["parameters.total_cholesterol.reference_mean", "parameters.total_cholesterol.reference_sd", "parameters.hdl_cholesterol.reference_mean", "parameters.hdl_cholesterol.reference_sd"], "refs": ["agongo_2018_navrongo:Results mean lipid levels opening paragraph", "A03"], "status": "reported pooled arithmetic moments reinterpreted as centered reference moments"},
+    {"paths": ["parameters.total_cholesterol.male_reference_geometric_mean", "parameters.total_cholesterol.female_reference_geometric_mean", "parameters.hdl_cholesterol.male_reference_geometric_mean", "parameters.hdl_cholesterol.female_reference_geometric_mean", "parameters.total_cholesterol.sex_effect_center", "parameters.hdl_cholesterol.sex_effect_center"], "refs": ["greiner_2021:Table 2 rural Malawi sex-specific geometric means", "A04"], "status": "reported unadjusted ratios assumed to be conditional sex contrasts; center is an assumption"},
+    {"paths": ["parameters.age.effect_center_years", "parameters.age.effect_scale_years", "parameters.bmi.log_change_per_age_scale", "parameters.total_cholesterol.log_change_per_age_scale", "parameters.hdl_cholesterol.log_change_per_age_scale"], "refs": ["A05"], "status": "explicit assumed conditional age effects and parameterization"},
+    {"paths": ["parameters.dependence.reference_spearman"], "refs": ["obirikorang_2015_ashanti:Table 7 rural lower-left", "A06"], "status": "reported unadjusted Spearman coefficients mapped to Gaussian copula parameters under a strong conditional transport assumption"},
+    {"paths": ["parameters.dependence.latent_cap_sd"], "refs": ["A07"], "status": "assumed numerical tail guard"}
+  ],
+  "assumptions": {
+    "A01": "Unknown target sex mixture is represented by equal probability, not by source denominators. F/M are mapped to female/male source labels without an independently verified target biological legend. Target sampling, clustering and lifestyle mixture are not reconstructed.",
+    "A02": "Rural Malawi demographic quartiles are a working adult age template, not target age estimates or Turkana lifestyle labels. Reported quantile convention is unknown; population inverse-CDF interpretation, piecewise uniform intervals, support 18-90, continuous measurement and sex-specific transport are assumptions. Age 90 is a model support limit, not a new eligibility exclusion. The long upper interval is an unsupported tail approximation.",
+    "A03": "Lognormal reference shape is assumed from positive measurements and reported dispersion, not established by source goodness-of-fit. Source age-restricted BMI moments and pooled lipid moments do not identify conditional moments. Treating them as reference conditional distributions at age 50, with a centered lipid sex effect, is an approximation. Resulting target marginals need not reproduce source marginals. Source SDs include between-person and unmodeled covariate variation; their reuse as conditional spreads may overstate residual variation.",
+    "A04": "The rural Malawi unadjusted female/male geometric-mean ratio is transferred as a constant conditional multiplicative sex difference after age/BMI structure. No adjusted sex effect is reported or recovered. Numeric ratios are used without pooling estimates or inverse-variance weighting.",
+    "A05": "Choose log-BMI +0.03 and log-TC +0.025 per decade and log-HDL 0 per decade at fixed sex and latent innovation. These weak, constant age relations are explicit unsupported working assumptions; zero HDL age trend is not evidence of no relation. No menopause change, curvature or explicit age/sex interaction is identified. Center age 50 is a convention close to Navrongo's reported ages; decade scaling is algebraic.",
+    "A06": "Select rural Ashanti as the dependence template because it offers all three pairwise rank associations in one community. Gaussian-copula conversion assumes continuous jointly Gaussian latent ranks. Further assuming these unadjusted community associations apply to innovations conditional on age and sex is not identified by the study. Applying them to other source margins and to the target is a population-transfer assumption. No Spearman value is declared to be an OLS slope, Pearson coefficient or adjusted residual correlation.",
+    "A07": "Clamp latent normal components at six SDs to provide finite bounds and avoid arbitrary numerical extremes. Nominal Gaussian tail probability is 1.973175400848959e-9 per component; capped lognormals only approximately retain the uncapped arithmetic-moment and rank identities. Real tail shapes are unassessed. Positive measured TC and HDL can cross because no verified assay-error joint law or ordering rule is supplied; this is a limitation, not a claim of negative true non-HDL cholesterol.",
+    "A08": "Transfer Ghana/Malawi distributions to a Kenyan Turkana/Laikipia protocol context despite age, ethnicity, calendar time, health exclusions, fasting and assay differences. No validation bridge is available for immediate CardioChek Plus EDTA measurement versus source laboratory serum/plasma protocols. Source pregnancy/HIV/diabetes exclusions are not imposed on the target. Parameters are fixed scenario choices, not draws from an epistemic posterior. Repeated seeds express individual sampling variation only."
+  },
+  "analyses": [
+    {"id": "K02-HDL-BMI", "operator": "Unweighted OLS HDL*38.67 on intercept, (age-50)/10, I(sex=F), (BMI-25)/5; report BMI5 coefficient in mg/dL per 5 kg/m^2.", "status": "Assumption-dependent descriptive model implication; no directly matched published adjusted coefficient.", "refs": ["A03", "A04", "A05", "A06", "A08"]},
+    {"id": "K02-TC-BMI", "operator": "Unweighted OLS TC*38.67 on the identical design and rows; report BMI5 coefficient in mg/dL per 5 kg/m^2.", "status": "Assumption-dependent descriptive model implication; no directly matched published adjusted coefficient.", "refs": ["A03", "A04", "A05", "A06", "A08"]},
+    {"id": "K02-LIPID-RESIDUAL", "operator": "Pearson correlation of residuals of those TC and HDL OLS fits on the same 3000 complete rows; scale-free.", "status": "Assumption-dependent implied joint behavior. The latent conditional correlation is not this raw-measurement residual correlation.", "refs": ["A06", "A07", "A08"]}
+  ],
+  "support": {
+    "age": "18 through 90, with probability-zero endpoint interpretation under the continuous law",
+    "sex": ["F", "M"],
+    "biomarkers": "Strictly positive finite bounded exponentials because age, sex and capped innovations are bounded; no missingness or post-hoc clipping of observed lipids.",
+    "unassessed": "Extreme-tail frequencies, age/BMI/sex transport, all three target analysis values, clinical validity and target assay comparability"
+  },
+  "evaluation_unit_conversion": {"factor": 38.67, "source": "request.json and input/population_metadata.json", "scope": "mmol/L to mg/dL for analysis only, not an assay bridge; generator already emits mmol/L"},
+  "execution_status": "Not executed or sampled by the construction author; isolated worker execution is assigned to root."
+}

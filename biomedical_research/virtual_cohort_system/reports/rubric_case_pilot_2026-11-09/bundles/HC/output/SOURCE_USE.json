@@ -1,0 +1,122 @@
+{
+  "task_id": "rubric-construction-pilot-2026-11-09-HC",
+  "boundary": "Only HC task/request/registry, admitted HC sources, supplied base skill and linked interface, unchanged TASK_RUBRIC.md, supplied analysis-guided-cohort skill and its two references, and these output files. No external literature, target outputs, other bundles, old author models, host sampling or generator execution.",
+  "selected_sources": [
+    {
+      "source_id": "PMC2551641",
+      "artifact": "sources/gateway/fac9d24329896a04d65a0f5858c64238365c01bc0b9616e64ee5bc00271c64f6.xml",
+      "companion_read": "sources/gateway/77b5f7f6715e9a07e28eab219ed09f29f266e59d803003ba4b0240bedc5ace64.txt",
+      "population": "FOS: 2473 predominantly white adults >=25, prior antidiabetic treatment or FPG >=126 excluded; NHANES 2001-2004: 3270 adults >=25, self-reported diagnosed diabetes or FPG >=126 excluded, A1c available. NHANES lacks OGTT. These are not the Mexico equal-cell design.",
+      "measurement": "DCCT-standardized HPLC HbA1c percent; hexokinase plasma fasting glucose mg/dL. Plasma-to-serum measurement transport is unresolved.",
+      "weighting": "NHANES analyses incorporate complex design and sampling weights; FOS is a community cohort. Their estimators are not the task's equal-cell WLS.",
+      "uses": [
+        {"id": "S_US_AGE", "locator": "Results, paragraph beginning There was no difference in BMI; Statistical analysis / NHANES", "reported": "NHANES age coefficient 0.010 HbA1c percentage points/year adjusting for sex, BMI and FPG; P<0.001. FOS adjusted coefficient 0.012 with fasting and 2-hour glucose; P<0.001. CI/SE for these coefficients unavailable in the inspected report.", "use": "Choose the NHANES 0.010/year as the model conditional age slope, or 0.100 per decade. Transport and constant-slope extension across 25-79 are assumptions. FOS is context only; do not average the estimates as if independent precise replications."},
+        {"id": "S_US_BMI", "locator": "Results opening paragraph and paragraph beginning There was no difference in BMI", "reported": "NHANES BMI mean 28.01 kg/m^2; accompanying 0.14 is not used as individual dispersion. Text reports no BMI difference across age categories. FOS mean BMI 27.15.", "use": "Use 28.01 as a transferred BMI mean. Age-invariant and sex-invariant BMI distributions are explicit simplifications; absence of a reported age difference does not establish independence. BMI SD 5.5 is assumed, not derived from 0.14."},
+        {"id": "S_US_TABLE1", "locator": "Table 1, NHANES columns; Statistical analysis / NHANES", "reported": {"estimator": "survey-weighted age-bin mean with SE and weighted 97.5th percentile", "rows": [{"age": "<40", "n": 1037, "mean": 5.2, "SE": 0.01, "q97_5": 5.7}, {"age": "50-54", "n": 261, "mean": 5.4, "SE": 0.02, "q97_5": 6.0}, {"age": ">=70", "n": 641, "mean": 5.51, "SE": 0.02, "q97_5": 6.2}]}, "use": "Broad context for HbA1c location and moderate dispersion. Model reference location 5.45 and residual SD 0.32 are author assumptions, not fitted values or SDs recovered from the SEs/quantiles. These source-bin means and quantiles are not claimed reproduced. Table 1 selected over differing rounded abstract/prose tail summaries."}
+      ]
+    },
+    {
+      "source_id": "PMC6458679",
+      "artifact": "sources/gateway/e36df343e42bf6e96a6c392fd5f3409a0eaa612a6f4797c1e626ba7917d327fb.xml",
+      "supplement_selected": "sources/supplement/480cb548ca6a9b5bb9810cb6e9d136c620b3d58e31e469e82ac631ca7d8b283f.txt",
+      "duplicate_extractions_seen": ["sources/gateway/7d7d2097fee484d2aa288bf98550aa3435f4feb2aa9b3fa9675cc1680a35109f.txt", "sources/supplement/894ba816d1198a3b49156ed1870b76040f193f54d5636eafc367a6891b24773d.txt", "sources/supplement/296a94b025f72c1e11ee2eccb76e8be207b6f6b56b7831395919d82144ff0359.json"],
+      "population": "Selected general Finnish population Health 2011 subset n=653, ages 30-64; Maamu Russian/Somali/Kurdish groups are comparative context. Excludes diabetes identified from registers, medication, self-report, HbA1c >=6.5%, or fasting glucose >=7.0 mmol/L; complete variables and fast 4-17 hours. These restrictions differ materially from HC.",
+      "measurement": "BMI kg/m^2 from standardized standing height/weight; immunoturbidimetric HbA1c percent; Finnish general-population glucose measured in serum mmol/L, Maamu glucose in fluoride-citrate plasma.",
+      "weighting_and_adjustment": "Stratified sampling, finite population correction and inverse-probability nonresponse/sampling weights. Age is 30-44 versus 45-64. Supplement S1/S2 list age + sex + BMI. Methods additionally state glucose analyses adjusted for fasting time; the displayed S1 block lacks a fasting-time coefficient, so its exact source replay remains unavailable. Main Table 1 means/CIs are predictive margins, not raw individual moments.",
+      "uses": [
+        {"id": "S_FIN_G", "locator": "Selected supplement PAGE 1, Table S1, General population, Age + sex + BMI block; main Statistical analysis", "reported": {"intercept_mmol_l": 4.2966, "young_minus_old_mmol_l": -0.1985, "male_minus_female_mmol_l": 0.2472, "bmi_slope_mmol_l_per_kg_m2": 0.024, "p_values_for_three_terms": "each <0.0001", "coefficient_SE_or_CI": null}, "use": "Transfer BMI slope as 0.024*18=0.432 mg/dL per kg/m^2 and female-minus-male contrast as -0.2472*18=-4.4496 mg/dL. Convert binary age contrast to a linear 0.2041714285714286 mg/dL/year only under assumed 17.5-year midpoint gap. Do not use the uncentered intercept as the HC glucose mean. No zero uncertainty or causal interpretation is assigned."},
+        {"id": "S_FIN_H", "locator": "Selected supplement PAGE 2, Table S2, General population, Age + sex + BMI block; main Statistical analysis", "reported": {"intercept_percent": 5.1281, "young_minus_old_percentage_points": -0.112, "male_minus_female_percentage_points": -0.023, "bmi_slope_percentage_points_per_kg_m2": 0.0125, "p_values": {"age": "<0.0001", "sex": "0.2884", "bmi": "<0.0001"}, "coefficient_SE_or_CI": null}, "use": "Use age/sex-adjusted BMI slope 0.0125 and female-minus-male contrast +0.023 for the reduced conditional mean E(H|age,female,BMI). No fasting-glucose adjustment was reported for this slope. The model glucose-adjusted BMI slope is derived only after imposing A_JOINT. Do not interpret P=0.2884 as a demonstrated zero or claim source sex precision. Binary age effect/intercept are declined for direct transport because HC uses continuous age and a broader age range."},
+        {"id": "S_FIN_R2", "locator": "Main Table 3, General population, Age + sex and Age + sex + BMI rows", "reported": {"HbA1c_R2_age_sex": 0.066, "HbA1c_R2_age_sex_BMI": 0.1164, "glucose_R2_age_sex": 0.1174, "glucose_R2_age_sex_BMI": 0.1642}, "use": "Not imposed on the HC law and not used to recover residual SD: R2 is specific to source covariate distributions, selection and weighting. Main Table 1 predictive-margin CIs likewise are not converted into individual SDs."}
+      ]
+    },
+    {
+      "source_id": "PMC3075530",
+      "artifact": "sources/gateway/b4f5cd47d62879840dc389a99c671814bf9890f9f8b01260e8c7a910dd92e9a6.xml",
+      "companion_read": "sources/gateway/09f088c0700c20587dd303915658f04df429f7a2d8e1546ce5eb04e8b1c4faa4.txt",
+      "population": "Kerman, Iran proportional-cluster household study ages 18-75; total n=604. FBS<=126 subgroup n=525 includes 30 reporting diabetes, unlike HC's diagnosis exclusion. One fasting glucose measurement; a precise fasting-duration distribution is not available in the inspected methods.",
+      "measurement": "FBS mg/dL by enzyme method, HbA1c percent using Biosystem kit. Analysis reports Pearson correlation; no survey weighting correction is described for it.",
+      "uses": [
+        {"id": "S_KERMAN_DESCRIPTIVE", "locator": "Table 1, numeric variables, non-diabetics FBS<=126", "reported": {"age_mean_SD": [43.8, 14.6], "BMI_mean_SD": [24.5, 3.8], "FBS_mean_SD": [91.2, 12.4], "HbA1c_mean_SD": [5.61, 0.73]}, "use": "True reported individual SD context only. HC glucose mean 94 and conditional SD 10 are deliberate selected-population assumptions, not an attempted exact reconstruction. HbA1c SD 0.73 is marginal and is not substituted as a residual SD. BMI mean/SD declined for direct transport in favor of the larger diagnosis-excluded NHANES mean and explicit shape/dispersion assumptions."},
+        {"id": "S_KERMAN_RELATION", "locator": "Results Pearson-correlation paragraph and Table 2", "reported": {"Pearson_r_FBS_le126": 0.23, "n": 525, "reported_crude_H_on_G_beta": 0.13, "reported_crude_G_on_H_beta": 0.38, "reported_adjusted_H_on_G_beta": 0.09, "reported_adjusted_G_on_H_beta": 0.27, "adjustment": "sex, BMI, age", "coefficient_or_correlation_CI": null}, "use": "Retain evidence of imperfect positive association, but decline reported Table 2 raw slopes because the units/scaling are inconsistent with Table 1 SDs and reported r under ordinary raw OLS. Deterministic r*SD(H)/SD(G)=0.013540322580645161, reverse=3.9068493150684938; these differ from 0.13 and 0.38. Do not silently correct the publication or treat the derived marginal slope as an adjusted slope. Choose conditional H-on-G slope 0.01 explicitly as A_JOINT. Own-law marginal r=0.4127835441198015 is not a source replay or a match to 0.23; population/selection/design differences and unknown dependence prevent attribution of that discrepancy."}
+      ]
+    },
+    {
+      "source_id": "PMC8038122",
+      "artifact": "sources/gateway/2cab890bef351b5439c3b9c104f4a648aec089d3a49b1b4d36cf2af57e0a4168.txt",
+      "locator": "2.2 Study Participants; 3.1 Characteristics; Discussion limitations",
+      "population": "Taiwan Biobank, 4748 adults aged 30-70 without previous diabetes diagnosis; not all fasting; latent diabetes and HbA1c >=6.5 remain possible. A female-count discrepancy exists between methods and results.",
+      "reported": {"HbA1c_mean": 5.69, "individual_SD": 0.61, "range": [4.3, 12.7]},
+      "use": "Qualitative evidence that no previous diagnosis does not justify imposing HbA1c<6.5. No numerical parameter adopted because fasting and age selection do not match HC and full BMI/glucose adjustment is absent. Its much higher reported extreme HbA1c is outside this developmental model's support; extreme-tail fidelity is expressly unresolved. Its discussion of PMC2551641 is secondary citation, not independent replication."
+    }
+  ],
+  "overlap_and_versions": "XML/text/JSON extractions of one paper are one evidence item. Finnish Tables S1/S2 and R2 share participants; their estimates are statistically dependent. FOS and NHANES are distinct cohorts within one publication. No participant overlap is established among the US, Finland, Kerman and Taiwan studies, but absence of documented overlap is not proof of independence. Selected table extraction and XML report take precedence over differing rounded narrative summaries; no effect estimates were precision-pooled.",
+  "assumptions": [
+    {"id": "TASK", "statement": "The task fixes variables, units, 3000 rows, eight cells of 375 and all three analysis IDs. It supplies no desired coefficient/sign or target statistics."},
+    {"id": "A_DESIGN", "statement": "Uniform age within each prescribed band, independently sampled; equal sex and band masses. No national population age/sex distribution is implied."},
+    {"id": "A_SELECTION", "statement": "The law is conditional on the complete stated eligibility context. Unrepresented diagnosis, fasting-duration and documentation features are assumed satisfied, with pregnancy/lactation handling as specified. Medication/anemia are not assumed absent; their specific effects and selection probabilities are unidentified."},
+    {"id": "A_TRANSPORT", "statement": "Selected US and Finnish source point associations are transferred to Mexico with no validated population, assay, serum/plasma or fasting-duration correction. Finland's HbA1c restriction, diabetes medication exclusion, age adjustment and source weights are not silently adopted as HC restrictions. Transfer is a scenario, not source reproduction."},
+    {"id": "A_LINEAR_AGE", "statement": "Finnish 30-44 and 45-64 bins are replaced by their arithmetic midpoints 37 and 54.5, giving 17.5 years. The binary glucose contrast divided by this gap is extended linearly to ages 25-79. Actual source mean ages and transport of this linear shape are unknown."},
+    {"id": "A_JOINT", "statement": "BMI is independent of age/female; glucose has linear conditional mean; HbA1c conditional glucose slope is 0.01 percentage points per mg/dL; effects are constant and innovations independent. The derived direct BMI slope is 0.0125-0.01*0.432=0.00818. Thus changing the unidentified conditional glucose slope changes Q3 and the Q2/Q3 difference even if the reduced BMI slope remains 0.0125. No conditional slope was recovered from source marginal r."},
+    {"id": "A_DISPERSION", "statement": "BMI SD 5.5, glucose conditional SD 10, HbA1c conditional residual SD 0.32, glucose center 94 and HbA1c center 5.45 are explicit author choices in the context of observed source scales. No SE-to-SD or predictive-margin-CI-to-SD conversion was used. The own-law marginal HbA1c SD is larger than 0.32 because covariates explain variation."},
+    {"id": "A_SUPPORT", "statement": "Scaled beta BMI support (14,55), glucose support (45,126) and symmetric Beta(4,4) HbA1c residuals are chosen finite-support shapes, not empirically established bounds or clinical rules. They ensure positive finite outputs and avoid artificial mass at an eligibility clamp. Extreme tails, heteroscedasticity and subgroup-tail differences remain unmodeled."}
+  ],
+  "guidance_application": {
+    "unchanged_rubric": "TASK_RUBRIC.md applied without replacing criteria or inventing thresholds.",
+    "procedures_used": ["source definition and replay: identified mismatched estimators and missing source covariates/weights", "conditional variation: separated SE, marginal SD and residual SD; computed total variance and partial variance under the law", "joint and conditional relationships: explicit conditional law and omitted-variable algebra for Q2/Q3", "hypothesis-dependent generation: fixed one transparent scenario for unidentified H-on-G dependence", "output-level checks: specified but unavailable to author under execution contract"],
+    "not_applicable": "Longitudinal procedures: task is cross-sectional. Base-skill old validate/freeze/source-check CLIs and source replay are superseded or unavailable under REQUEST.md; none were invoked. No rubric derivation was performed because the rubric is supplied. No independent review, literature retrieval, additional scenario run or revision cycle was available."
+  },
+  "actual_checks": [
+    {"id": "ALGEBRA", "status": "computed", "artifact": "DECISION.md#retained-deterministic-algebra", "scope": "Deterministic scalar own-law moments, support endpoints, beta shapes, partial variances and three population regression coefficients. No generator import, no sampled row, no source replay."},
+    {"id": "STATIC", "status": "computed", "artifact": "DECISION.md#static-self-check", "scope": "JSON parse, Python AST parse and signature/import/static top-level checks, design count, parameter-reference integrity and output-file inventory. Not a runtime or cohort validation."}
+  ],
+  "goal_assessments": [
+    {
+      "id": "Q1_age10",
+      "analysis": "Equal-cell WLS hba1c ~ 1 + age10 + female + bmi5 + glucose10; term age10, percentage points per 10 years",
+      "basis": ["TASK", "S_US_AGE", "A_JOINT", "A_TRANSPORT"],
+      "reference_role": "no numerical reference",
+      "check": "Computed exact population coefficient from the declared linear conditional mean and partial age variance; finite draw still requires WLS, design rank, covariate dependence and residuals by all eight cells.",
+      "comparison": "Descriptive own-law calculation only, with no clinical tolerance or desired target sign. Adopted source coefficient is an input, not independent validation.",
+      "finding": {"artifact": "DECISION.md#retained-deterministic-algebra", "model_population_coefficient": 0.1, "linear_partial_age_variance_years_squared": 242.9755595213817, "HbA1c_conditional_variance_percentage_points_squared": 0.1024, "finite_draw_result": null},
+      "assessment": "unresolved",
+      "scope_demonstrated": "Positive population residual variation and the own-law coefficient are demonstrated-for-stated-scope by deterministic algebra. Actual generated-data analyses and population transfer are not demonstrated.",
+      "next_action": "Root's isolated execution should run the required WLS and rank/conditional-variation/cell diagnostics. Retain transfer qualification regardless of numerical success."
+    },
+    {
+      "id": "Q2_bmi5",
+      "analysis": "Equal-cell WLS hba1c ~ 1 + age10 + female + bmi5; term bmi5, percentage points per 5 kg/m^2",
+      "basis": ["TASK", "S_FIN_H", "A_JOINT", "A_DISPERSION", "A_TRANSPORT"],
+      "reference_role": "no numerical reference",
+      "check": "Computed E(H|A,F,B) by integrating the glucose conditional mean, and BMI conditional variance. Actual WLS and BMI-HbA1c joint/conditional diagnostics require isolated rows.",
+      "comparison": "No claim of exact Finnish source reconstruction: source has binary age, complex weights and HbA1c exclusion. No acceptance tolerance invented.",
+      "finding": {"artifact": "DECISION.md#retained-deterministic-algebra", "model_population_coefficient": 0.0625, "BMI_variance_conditional_on_age_female": 30.25, "finite_draw_result": null},
+      "assessment": "unresolved",
+      "scope_demonstrated": "The reduced own-law slope equals 5*(0.00818+0.01*0.432). This is algebraic coherence, not evidence that this is the Mexico coefficient.",
+      "next_action": "Run specified WLS, BMI conditional support/quantiles and joint diagnostics in isolated execution; use only as the declared transport scenario."
+    },
+    {
+      "id": "Q3_bmi5",
+      "analysis": "Equal-cell WLS hba1c ~ 1 + age10 + female + bmi5 + glucose10; term bmi5, percentage points per 5 kg/m^2",
+      "basis": ["TASK", "S_FIN_G", "S_FIN_H", "A_JOINT", "A_DISPERSION", "A_TRANSPORT"],
+      "reference_role": "no numerical reference",
+      "check": "Computed own-law adjusted coefficient and linear partial BMI variance after age/female/glucose. Need finite draw rank, collinearity, residual scale and requested Q2/Q3 difference.",
+      "comparison": "Q3 has no directly adopted source coefficient. Its difference from Q2 is a consequence of the chosen glucose association, without prescribing a desired result.",
+      "finding": {"artifact": "DECISION.md#retained-deterministic-algebra", "model_population_coefficient": 0.0409, "linear_partial_BMI_variance": 28.633529592435735, "model_population_Q2_minus_Q3": 0.0216, "finite_draw_result": null},
+      "assessment": "unresolved",
+      "scope_demonstrated": "Noncollapsed own-law BMI variation and arithmetic Q2/Q3 relation are demonstrated-for-stated-scope. The conditional glucose assumption controls their scientific interpretation.",
+      "next_action": "Run required adjusted WLS and diagnostics in isolated execution. Do not call Q2-Q3 a mediation effect; if later evidence becomes available, examine the unidentified H-on-G relation prospectively."
+    }
+  ],
+  "task_invariant_assessment": {
+    "reference_role": "task invariant",
+    "assessment": "unresolved",
+    "finding": "Static design declares 375*2*4=3000 rows and exact ordered columns; algebra establishes finite bounded measurement support. No delivered cohort was executed, so actual schema, invalid rows, duplicate identifiers/profiles and cell counts are pending.",
+    "next_action": "Root should verify exact schema, units, finite/nonmissing values, integer age, binary female, unique string row_id, all eight counts and strict glucose eligibility on each isolated draw."
+  },
+  "unavailable_checks": {
+    "artifact": null,
+    "list": ["All three finite-cohort WLS fits and their sampling uncertainty", "All provider-defined marginal/quantile/joint/conditional diagnostics", "Finite-draw rank, collinearity and residual variation by cell", "Invalid/duplicate rows and distinction between duplicate IDs and repeated covariate profiles", "Near-126 glucose tail counts/density and source-bin quantiles", "Source-context replay requiring joint covariates, sample design weights and faithful adjustment", "Clinical or Mexico population validation"],
+    "reason": "Author may not sample or import/execute generator on host; root handles isolated execution. No source-feedback collector or literature adapter is available. Original participant covariates and design weights are not supplied."
+  },
+  "permitted_claims": "A complete explicit evidence-informed developmental construction and algebraically coherent scenario for Q1-Q3. Numerical cohort validity and empirical analytical utility remain unassessed; no pooled quality score, clinical validation, causal effect, representative prevalence, clinical power or measured-person reconstruction claim."
+}
