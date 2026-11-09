@@ -1,0 +1,46 @@
+{
+  "fixture_kind": "fictional_planning_only_not_patient_data",
+  "request": {
+    "mode": "whole_cohort",
+    "population": "A hypothetical common adult measurement population",
+    "variables": ["A", "B", "C"],
+    "units": "All three variables are already standardized",
+    "analyses": [
+      {"id": "U1", "description": "Pearson association between A and B"},
+      {"id": "U2", "description": "Pearson correlation of A and B after separately linearly residualizing each on C with intercepts"}
+    ],
+    "output_now": "Give the rubric, analysis-use assessments and a justified construction decision under each information condition. Compute relevant implications if useful. Do not generate participant tables."
+  },
+  "source": {
+    "id": "F1",
+    "locator": "Fictional summary table 1",
+    "population_and_measurement": "Exactly the task population and measurement",
+    "semantics": "Exact hypothetical population moments, no weights, missingness or selection",
+    "mean": {"A": 0, "B": 0, "C": 0},
+    "variance": {"A": 1, "B": 1, "C": 1},
+    "pearson_correlation": {"A,B": 0.3},
+    "other_joint_statistics": "not_reported"
+  },
+  "proposed_candidate": {
+    "law": "Multivariate Gaussian",
+    "order": ["A", "B", "C"],
+    "mean": [0, 0, 0],
+    "covariance": [[1, 0.3, 0], [0.3, 1, 0], [0, 0, 1]],
+    "model_assumptions": ["C is independent of A and B in this chosen law"],
+    "draft_use_claim": "This law supports both requested associations as source-reconstructed relationships."
+  },
+  "information_conditions": [
+    {"id": "P1", "available": ["F1"], "supplement": null},
+    {
+      "id": "P2",
+      "available": ["F1", "F2"],
+      "supplement": {"id": "F2", "locator": "Fictional supplement table 2", "population_and_measurement": "Exactly the task population and measurement", "semantics": "Exact hypothetical univariate marginal properties", "marginal_laws": {"A": "standard normal", "B": "standard normal", "C": "standard normal"}}
+    },
+    {
+      "id": "P3",
+      "available": ["F1", "F3"],
+      "supplement": {"id": "F3", "locator": "Fictional supplement table 3", "population_and_measurement": "Exactly the task population and measurement", "semantics": "Exact hypothetical population Pearson correlations, no weights or selection", "pearson_correlation": {"A,C": 0.6, "B,C": 0.6}}
+    }
+  ],
+  "resources": "No web retrieval, external data, other project results or cohort execution. You may read the specified experimental skill and compute deterministic quantities."
+}
