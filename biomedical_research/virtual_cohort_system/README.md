@@ -8,6 +8,8 @@ The scientific agent turns published evidence and a study request into a probabi
 
 This revision completes the statistical comparator results, makes dispersion and complete-case limitations explicit, and adds verified related work. A separate [controlled diagnostic](reports/review_revision_2026-11-08/controlled_joint_moments/RESULTS.md) found that ordinary agents already recovered the joint law from compatible summaries; an additional consistency instruction showed no gain. Its twelve artificial deliveries are six unique tables, not new biomedical cohorts.
 
+**Existing-case diagnosis, 8 November.** The [scientific-use report](reports/analysis_use_diagnosis_2026-11-08/READOUT.md) and [24-analysis map](reports/analysis_use_diagnosis_2026-11-08/USE_MAP.csv) distinguish usable reconstructions and partial external agreement from unvalidated uses. Independent mathematical checks separate historical software defects from current evidence and modeling gaps. Using all eight available age profiles does not provide a simple dispersion repair. This unit generated no new clinical tables; it guides specific evidence needs rather than retuning disclosed targets.
+
 | What would you like to inspect? | Where to look |
 | --- | --- |
 | How does the system run? | Figure 1 maps the [agent action and feedback loop](manuscript/paper_figures_v24_2026-11-06/fig1-agent-loop.drawio.svg), showing the author, executable program, source checks, retain-or-revise choice and sealed tables. The Methods follow an actual source-only revision and a retained law. [Editable architecture](manuscript/paper_figures_v24_2026-11-06/fig1-agent-loop.drawio) · [Implementation references](manuscript/paper_figures_v24_2026-11-06/README.md). |

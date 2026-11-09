@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-09T05:37:58.590853+00:00",
+  "reviewer": "pro_results_audit",
+  "status": "PASS_SCIENTIFIC_CONTENT_AND_BOUNDARY",
+  "review_scope": "Independent source/moment review of H03 variance budget, age-profile sensitivity and consolidated READOUT. This reviewer did not author glycemia audit or age-profile calculation; reviewer did author the earlier iron/lipid audit, so its claims are not a new independent audit of that own work.",
+  "execution": {
+    "candidate_imports": 0,
+    "candidate_executions": 0,
+    "sampling_calls": 0,
+    "generated_tables": 0,
+    "clinical_or_generated_individual_rows_read": 0,
+    "new_clinical_fits": 0,
+    "old_frozen_edits": 0,
+    "write_scope": "this FINAL_USE_REVIEW.json only"
+  },
+  "independent_source_checks": {
+    "original_table": "Pani Table 1, NHANES nondiabetic columns, PMC2551641",
+    "original_vs_admitted_vs_sensitivity_values_checked": 16,
+    "SE_labels_and_values_checked": 8,
+    "individual_SD_from_mean_SE_used": false,
+    "exact_profile_weights": [
+      "1/4",
+      "1/12",
+      "1/12",
+      "1/12",
+      "1/12",
+      "1/12",
+      "1/12",
+      "1/4"
+    ],
+    "weights_meaning": "Task equal age-band quotas plus inherited uniform integer years; no source counts or survey weights were substituted.",
+    "age_ge70_boundary": "The >=70 source bin includes >79; applying its moments to 70–79 is unverified within-bin transport. This limitation is explicit in both final sensitivity and READOUT."
+  },
+  "independent_arithmetic": {
+    "method": "Separate inline reviewer calculation: XML parsing and Fraction weights; normal-quantile mixture variance; direct signed H03 covariance equation solved by 70-step bisection rather than the author quadratic. Did not import either audit calculator or any candidate.",
+    "numerical_checks_passed": 16,
+    "maximum_observed_absolute_difference": 4.336808689942018e-19,
+    "numeric_equality_tolerance": 1e-12,
+    "full_profile": {
+      "mean": 5.381666666666667,
+      "within_age_variance": 0.09303757157949186,
+      "between_age_variance": 0.015230555555555525,
+      "total_variance": 0.10826812713504738,
+      "total_SD": 0.3290412240662975
+    },
+    "H03_retained_population_law": {
+      "mean": 5.419801479392905,
+      "variance": 0.12363388804371393,
+      "SD": 0.3516161089081584,
+      "conditional_variance": 0.09002838407739247,
+      "conditional_SD": 0.30004730306635397,
+      "signed_glucose_coefficient": 0.002803945047744858,
+      "glucose_correlation": 0.23
+    },
+    "H03_variance_components": {
+      "age": 0.030153252604942997,
+      "bmi": 0.0022562500000000004,
+      "female": 0.00013225,
+      "glucose_innovation": 0.0010637513613784547,
+      "conditional_hba1c_innovation": 0.09002838407739247
+    },
+    "full_profile_minus_H03_SD": -0.02257488484186093,
+    "existing_H03_three_draw_means_from_aggregate_CSV": {
+      "SD": 0.352293701115927,
+      "residual_RMS": 0.30057458002926474
+    },
+    "distinction": "0.351616 is the fixed law SD, whereas 0.352294 averages three realized-table SDs. 0.300047 is conditional law SD, whereas 0.300575 averages fitted residual RMS. These pairs are not competing population-truth estimates."
+  },
+  "interpretation_checks": [
+    {
+      "claim": "Full age-profile variance could repair H03 clinical underdispersion",
+      "verdict": "Not supported; final documents correctly reject this inference. The explicit normal-profile calculation has lower total SD than the existing H03 law."
+    },
+    {
+      "claim": "Eight mean/upper-quantile pairs identify within-age SD or heteroscedastic residual variance",
+      "verdict": "False without shape and predictor-composition assumptions. Final documents explicitly retain this boundary."
+    },
+    {
+      "claim": "Source age-bin variance can be combined with extra BMI/sex/glucose variance",
+      "verdict": "Not without decomposition. The profile calculation correctly treats source age-bin spread as marginal over those predictors and adds only between-age mean variance."
+    },
+    {
+      "claim": "H03 residual and marginal variance are accidentally confused",
+      "verdict": "No such accounting defect found. The code subtracts explained reference-band variation, and the separate signed-covariance calculation reproduces all five variance components."
+    },
+    {
+      "claim": "Arbitrary source weights or a source profile establish target improvement",
+      "verdict": "Not supported. Equal task bands and uniform years are stated assumptions, not source survey replay. Clinical target accuracy is neither calculated nor certified by this source-only sensitivity."
+    },
+    {
+      "claim": "More random seeds alter the retained population law",
+      "verdict": "False; final READOUT correctly says they do not. Seeds quantify conditional generation variability, not source/transport uncertainty."
+    }
+  ],
+  "readout_review": {
+    "verdict": "PASS after the minor constructor-mean range clarification.",
+    "CHNS": "Supplied-summary reconstruction is kept separate from new-population validity and statistical-method superiority; three R authors and statistical comparator are represented.",
+    "HRS": "Existing coefficient aggregates confirm Agent lower interaction negative in 3/3; upper point sign Agent positive 3/3 versus corrected native positive 0/3. Fixed model coefficients retain source sign. Distribution diagnosis and finite-draw uncertainty are not asserted as exhaustive causal proof.",
+    "glycemia": "All H01/H02/H03 aggregate seed effects for age, BMI before/after glucose adjustment and their attenuation are positive. Displayed constructor ranges and H03 dispersion/residual RMS match the frozen ALL_ENDPOINTS.csv. Closest endpoint is not presented as whole-dataset validation.",
+    "iron": "Readout now explicitly labels survey-weighted reference OR; A prevalence/B rank are kept as separate model-specific agreements. No universal winner is declared.",
+    "lipids": "The 0.108–0.141 interval is now labeled constructor means; not all-seed bounds. Adjusted residual relationship remains unsupported and TC reference interval crosses zero.",
+    "HAALSI": "Checked all-five-author aggregate directions: 15/15 for each main effect and 8/15 for interaction. Original 3/5 versus required4/5 stop and zero-effect weakness are retained.",
+    "proposed_experiments": "Two prospective source requirements are conditional on evidence availability. No new sampling, current-target calibration, additional agent architecture, or revision-benefit claim is authorized by the findings.",
+    "no_new_claims": "No new clinical cohort, superiority claim, reliability threshold or target-independent confirmation is introduced."
+  },
+  "static_code_review": {
+    "imports": "Standard-library only: hashlib/json/math/fractions/pathlib/statistics/xml.etree.ElementTree.",
+    "reads": "Original XML, admitted evidence, task/spec; generator.py bytes only for provenance identity.",
+    "writes": "Only age sensitivity JSON in this new diagnostic unit.",
+    "portability": "Relative workspace discovery now replaces the machine-specific BUNDLE root. The archive layout is still required; source files are not promised to be public."
+  },
+  "public_release": {
+    "scientific_content_ready": true,
+    "participant_records_or_credentials_found_in_reviewed_content": false,
+    "local_path_metadata": "Current audit JSONs contain machine-absolute provenance strings. Root plans explicit sanitized public derivatives using local_archive logical references; review binds the current local files and does not silently certify a later derivative hash.",
+    "export_rule": "Publish only original code, documentation, aggregate metadata and this review; exclude clinical/generated row tables, third-party full source files and local archives. Root should retain derivative-to-local-input hash mapping when sanitizing metadata."
+  },
+  "required_scientific_changes": [],
+  "resolved_editorial_issue": "Lipid range clarified as constructor means; HRS cross-implementation signs and survey-weighted iron reference clarified before this review was sealed.",
+  "limitations_of_review": "H03 and age-profile arithmetic independently recomputed; other READOUT claims checked against existing aggregate reports, not new raw-data fits or all original analyses. No review can infer true clinical transport or use-specific acceptance from these checks alone.",
+  "provenance": [
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/GLYCEMIA_AUDIT.json",
+      "sha256": "baee36ee18991a91b4b0e0fa04c8b91b46a563b0860de23d03c1f0aa75937cc5"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/AGE_PROFILE_SENSITIVITY.json",
+      "sha256": "2dc4cfbca3cf931635833d3146a295228119277cfe794d984d9e938b89caa1ef"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/source_only_age_profile.py",
+      "sha256": "4189bf8916e31eb215d355dea9fa31391ec20efccc69154a25752c0d3d350b77"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/READOUT.md",
+      "sha256": "a08a3bc0d0397c836c843dcef6032aec963c89d23d5a42905cccad84b2e70bb4"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/RECONSTRUCTION_PROSPECTIVE_AUDIT.json",
+      "sha256": "ea006d30beba98871f696278698b22c1d706021a5aa9ec3e835dd5505e89eb0c"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/HRS_DETERMINISTIC_AUDIT.json",
+      "sha256": "ed743b5874b7b9a0492f4ab05c85899ab4ba63d95f5ef8654da27516b2278526"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/INDEPENDENT_CHECK.json",
+      "sha256": "2caff03164daf4a07140c08ce134cf9175138984fe676e1b49a7e4909a52fcf9"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/IRON_LIPID_AUDIT.json",
+      "sha256": "8f3b920ecdb909f31a5a7e05d6743c1296f079118c5d55d3a3d2c3e6daea2ed1"
+    },
+    {
+      "path": "work/analysis_use_diagnosis_2026-11-08/PROTOCOL.md",
+      "sha256": "4840956f8402cde6e4f36945372d436efd8b2d9725045b9c330d1389681a9f63"
+    },
+    {
+      "path": "local_archive/evcUseH03/candidates/initial/evidence.json",
+      "sha256": "9c74dc06cc5989ebb14781bad79b0aeddec46ae93b111fde40830d24090bfa17"
+    },
+    {
+      "path": "local_archive/evcUseH03/candidates/initial/model_spec.json",
+      "sha256": "62c13bf85d9744733bf394a6bed86fb4bed6216ed876880266bd8b9412fdefcd"
+    },
+    {
+      "path": "local_archive/evcUseH03/candidates/initial/generator.py",
+      "sha256": "ff1f021f072780a961271295990d1a9cab0773b285935334483365b8bfc24580"
+    },
+    {
+      "path": "local_archive/evcUseH03/sources/gateway/fac9d24329896a04d65a0f5858c64238365c01bc0b9616e64ee5bc00271c64f6.xml",
+      "sha256": "fac9d24329896a04d65a0f5858c64238365c01bc0b9616e64ee5bc00271c64f6"
+    },
+    {
+      "path": "work/evidence_use_cross_task_2026-11-05/evaluation/ALL_ENDPOINTS.csv",
+      "sha256": "291fef830587dc20e0e2f0c06ec4e72a38f8758b9068d9fd0a71331815280bde"
+    }
+  ]
+}

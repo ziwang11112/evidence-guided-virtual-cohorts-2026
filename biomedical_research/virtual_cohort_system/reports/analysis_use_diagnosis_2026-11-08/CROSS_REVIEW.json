@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-09T05:36:52.148936+00:00",
+  "reviewer": "claude_seed_audit",
+  "independence_boundary": "Independent cross-review of iron/lipid and HRS calculations. Reviewer authored GLYCEMIA_AUDIT and is not independent of that work; glycemia findings are not independently certified here.",
+  "status": "Mathematical checks agree; final READOUT resolves identified range/implementation/weighting/age-profile wording; one nonblocking interpretation qualification retained",
+  "checks": {
+    "L03_lognormal_adjusted_projection": {
+      "independent_result": {
+        "HDL_BMI_per5_mg_dL": -2.1058321416069394,
+        "TC_BMI_per5_mg_dL": 10.872168482081197,
+        "residual_Pearson": 0.13223196034994228
+      },
+      "max_absolute_difference": 0.0,
+      "pooled_means": [
+        21.630000000000006,
+        3.23,
+        1.1400000000000001
+      ],
+      "pooled_SDs": [
+        3.609999999999994,
+        0.9199999999999986,
+        0.37999999999999895
+      ],
+      "P_HDL_gt_TC_by_sex": {
+        "M": 0.004870461382811496,
+        "F": 0.0038113127450806923
+      },
+      "P_HDL_gt_TC": 0.004340887063946094,
+      "derivation": "Within-sex lognormal Cov(Xi,Xj)=mi*mj*(exp(Sigmaij)-1). Residualize saturated binary sex, then BMI via Schur complement. Age is independent of biomarkers conditional on sex. Pooled total covariance would give wrong adjusted projections."
+    },
+    "iron_count_and_transfer": {
+      "source_n": 1671,
+      "source_OR": 6.653136662519993,
+      "source_joint_probability": 0.10353081986834231,
+      "A_reweighting_OR": 6.6531366625199935,
+      "A_reweighting_joint_probability": 0.07673541805278332,
+      "A_target_OR": 4.645565629246259,
+      "A_target_joint_probability": 0.06734776178403894,
+      "B_target_OR": 6.653136662519993,
+      "B_target_joint_probability": 0.10353081986834231,
+      "max_absolute_difference": 1.7763568394002505e-15,
+      "reference_complete_n": 979,
+      "reference_eligible_n": 1065,
+      "unweighted_missing_fraction": 0.08075117370892015,
+      "weighted_missing_fraction": 0.024724504886071474
+    },
+    "HRS_truncated_Gamma_and_fixed_effects": {
+      "Gamma_truncated_moment_factor_checks": [
+        {
+          "power": 0,
+          "raw_moment_used_in_integrator": 1,
+          "independent_gamma_ratio_factor": 1.0,
+          "absolute_difference": 0.0
+        },
+        {
+          "power": 1,
+          "raw_moment_used_in_integrator": 6.0,
+          "independent_gamma_ratio_factor": 5.999999999999978,
+          "absolute_difference": 2.220446049250313e-14
+        },
+        {
+          "power": 2,
+          "raw_moment_used_in_integrator": 36.93534552,
+          "independent_gamma_ratio_factor": 36.93534552000005,
+          "absolute_difference": 4.973799150320701e-14
+        }
+      ],
+      "all_96_standardized_deviations_max_difference": 0.0,
+      "source_upper_coefficient": 0.012867,
+      "upper_source_inclusion_count": 5,
+      "upper_zero_inclusion_count": 5,
+      "agent_upper_positive_count": 3,
+      "native_upper_positive_count": 0,
+      "n_synthetic_subjects": 11509,
+      "n_visits": 4,
+      "valid_fit_tables": 6,
+      "quadrature_convergence_not_rerun": 8.215650382226158e-15,
+      "static_assessment": "Integration follows actual continuous uniform ages, normal CSES, categorical education and Gamma(shape=1/phi,scale=phi*mu). Truncated moment identity Q(shape+j,k/theta) multiplies the proper jth raw moment. Both programs have zero-conditional-mean subject and visit errors; random-effect covariance rounding cannot reverse population fixed coefficients. This does not prove the observed sign split is solely sampling noise or validate target biology."
+    },
+    "retained_counts": {
+      "Turkana_reference_n": 397,
+      "HAALSI_reference_n": 4394,
+      "HRS_valid_tables": 6,
+      "HRS_invalid_historical_native_tables": 3,
+      "Q5_lipid_final_tables": 9,
+      "Q5_lipid_order_violations": 69,
+      "Q5_lipid_total_generated_rows": 27000
+    },
+    "source_only_age_profile_scalar_crosscheck": {
+      "mean": 5.381666666666667,
+      "sd": 0.32904122406629743,
+      "assumptions": "Normal within source age bins; requested equal broad-age-band mixture and uniform years; oldest >=70 source transferred to70–79. No clinical refit."
+    }
+  },
+  "findings": [
+    {
+      "severity": "wording",
+      "artifact": "READOUT.md",
+      "issue": "Lipid 0.108–0.141 describes constructor means, not all seeded estimates.",
+      "needed_wording": "Q5 constructor-mean residual correlations are 0.108–0.141 (all seeded estimates 0.105–0.155), versus reference 0.512.",
+      "resolution": "Resolved in final READOUT inspected by cross-reviewer"
+    },
+    {
+      "severity": "scope",
+      "artifact": "READOUT.md",
+      "issue": "Upper-branch point-sign instability must be scoped across implementations; all Agent upper points are positive.",
+      "needed_wording": "Across implementations, Agent 3/3 upper points are positive and native 0/3 are positive; five of six intervals include zero and five include the supplied coefficient. Sampling is plausible, not assigned a verified probability or established as the exclusive cause.",
+      "resolution": "Resolved in final READOUT inspected by cross-reviewer"
+    },
+    {
+      "severity": "scope",
+      "artifact": "READOUT.md",
+      "issue": "Iron reference uses survey weights, whereas source counts and model probabilities are unweighted.",
+      "needed_wording": "Both source-context laws imply crude OR 6.653; the US survey-weighted reference OR is 17.79 among 979 complete records from 1,065 eligible women. Population/selection transfer remains unverified.",
+      "resolution": "Resolved in final READOUT inspected by cross-reviewer"
+    },
+    {
+      "severity": "pending_update",
+      "artifact": "READOUT.md",
+      "issue": "First priority asks whether age-specific evidence is available; glycemia audit has established it is present.",
+      "needed_wording": "Eight age-bin Pani mean/upper-quantile pairs are already authorized. Source-only sensitivity must test their implications without assuming that including them expands dispersion or repairs ENSANUT. A mean and one quantile do not identify residual variance without shape/predictor assumptions.",
+      "resolution": "Resolved in final READOUT inspected by cross-reviewer"
+    },
+    {
+      "severity": "interpretation",
+      "artifact": "IRON_LIPID_AUDIT.json LIPID_SUPPORT",
+      "issue": "Measured-value labeling does not validate rare HDL>TC cases; no assay-error model was calibrated.",
+      "needed_wording": "The frozen law permits occasional HDL>TC. This is disclosed mathematical support, not demonstrated realistic assay noise; it limits latent-composition and derived non-HDL uses.",
+      "resolution": "Interpretive qualification retained as advisory; audit already explicitly discloses no calibrated measurement-error model"
+    }
+  ],
+  "no_new_scientific_failure_found": true,
+  "limits": [
+    "No full cohort quadrature rerun; inspected mathematical identity and computed Gamma-ratio moment factors independently.",
+    "No patient/generated rows read; empirical results reviewed from retained aggregates.",
+    "L01/L02 algebra not independently recomputed in this cross-review; L03 exact projection/log-ratio support and iron count transforms recomputed.",
+    "No new thresholds, clinical fitting, sampling, candidate execution or edits to other files.",
+    "A first attempt to use scipy for an additional one-dimensional integral stopped at missing import; no files written or generation performed. No dependency installed; the bounded audit instead uses explicit Gamma moment algebra."
+  ],
+  "provenance": [
+    {
+      "path": "project/work/analysis_use_diagnosis_2026-11-08/IRON_LIPID_AUDIT.json",
+      "sha256": "8f3b920ecdb909f31a5a7e05d6743c1296f079118c5d55d3a3d2c3e6daea2ed1"
+    },
+    {
+      "path": "project/work/analysis_use_diagnosis_2026-11-08/hrs_deterministic_audit.py",
+      "sha256": "6dd01f3fec03b4bb71811046b06404635f0b562cfd6a80a409ac6a5479f1187e"
+    },
+    {
+      "path": "project/work/analysis_use_diagnosis_2026-11-08/HRS_DETERMINISTIC_AUDIT.json",
+      "sha256": "ed743b5874b7b9a0492f4ab05c85899ab4ba63d95f5ef8654da27516b2278526"
+    },
+    {
+      "path": "project/work/analysis_use_diagnosis_2026-11-08/READOUT.md",
+      "sha256": "a08a3bc0d0397c836c843dcef6032aec963c89d23d5a42905cccad84b2e70bb4"
+    },
+    {
+      "path": "local_archive/evcUseL03/candidates/initial/model_spec.json",
+      "sha256": "022fd066f20f4dad46b75740b782e73f8c232084d3e4b4272ebf6912c09dfff6"
+    },
+    {
+      "path": "local_archive/evcUseL03/candidates/initial/generator.py",
+      "sha256": "3343c4d7789e3d4822874e9169c4c1b262ab66b2c8e2e922d00244ae22f3c369"
+    },
+    {
+      "path": "project/work/hrs_public_example_2026-11-03/bundle/candidates/agent/model_spec.json",
+      "sha256": "522fdd8efb2773b4af75e7dbd7839bab2c13701175479f55fbc9dd11380ad1e6"
+    },
+    {
+      "path": "project/work/hrs_public_example_2026-11-03/bundle/candidates/agent/generator.py",
+      "sha256": "b5035321f7bf076261004f14a9cd4452bbb9797a8dbc94d3973331920dd175c4"
+    },
+    {
+      "path": "project/work/hrs_public_example_2026-11-03/recovery_v1/native_candidate/generator.py",
+      "sha256": "68a901ff3cbec008d4a5d18fa4322852fe4c883bf87ac742fbc6ce5bcc558765"
+    },
+    {
+      "path": "project/work/iron_breadth_2026-11-05/candidates/A/final/generator.py",
+      "sha256": "320cc7868b684315c39fd7a6c72aa5e3b50eb2158330a35343bb3507f841ebc6"
+    },
+    {
+      "path": "project/work/iron_breadth_2026-11-05/candidates/B/final/generator.py",
+      "sha256": "9ad315b8edd523bf6f4d5ef9b722f2814fa84ca4cfac111074e407f3ae9cce0f"
+    },
+    {
+      "path": "project/work/iron_breadth_2026-11-05/admission/SOURCE_PACKET.md",
+      "sha256": "a11a41e7cd5c73d5098207c53b07e8f8443a86768c71757433491b9106fed8a5"
+    },
+    {
+      "path": "project/work/iron_breadth_2026-11-05/evaluation/TARGET.json",
+      "sha256": "78a4832efdcfe0df112ed3683d1060127efd1b2f741f34b631444081857fd4e1"
+    },
+    {
+      "path": "project/work/hrs_public_example_2026-11-03/summary/fixed_effects_all_seeds.csv",
+      "sha256": "c565718f80a1e8c63152c61fe8c44824e6e8457b8c6627a1c991b7c5e802323e"
+    },
+    {
+      "path": "project/work/scaleup_2026-11-01/production_release/RESULTS.md",
+      "sha256": "4102a2b931b1c6e7eb7927ff1739abcebd182d0ed067d810a8cb6bfd12be4210"
+    }
+  ]
+}
