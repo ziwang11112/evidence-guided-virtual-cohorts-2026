@@ -1,0 +1,118 @@
+{
+  "schema_version": "adaptive_implementation_review_v1",
+  "date": "2026-11-09",
+  "reviewer": "/root/rubric_reuse_audit",
+  "decision": "PASS_TO_HOST_SESSION_CREATION_AND_DISPATCH",
+  "scope": "Independent prospective source/code review of the adaptive controller and generated-only analysis path. Operational readiness, not scientific validity.",
+  "blocking_findings": [],
+  "bound_root": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/biomedical_research/virtual_cohort_system",
+  "bound_files": {
+    "cohort_harness/adaptive_session_v1.py": "e5cc9ebe8801856b43c77bd1ca102d2aa97ec83d0b26042ca7fce480ff805f71",
+    "tests/test_adaptive_session_v1.py": "8298c784989df15de0ee0a85bb5a7f3c2267c118b149f986bd530601c251671b",
+    "docs/ADAPTIVE_SESSION_V1.md": "84ddfd6225b37ee0b34f285c5bdb8c22fd949aed45c3b3dcd18f7ed16bb42ebc",
+    "work/adaptive_case_loop_2026-11-09/SESSION_CONFIG.json": "a720743f956350ae6b2d34af3011b1074693ada17552d93c0e174b04c505cb4d",
+    "work/adaptive_case_loop_2026-11-09/generated_analysis.py": "536e66b1213da4f6c3988f7bdc0f9c3776d79de3e44d8df77ef17aabf1cf212f",
+    "work/adaptive_case_loop_2026-11-09/test_generated_analysis.py": "0e56fa192a9c625c998f5016820fddf737d07f850ade8d171de5e9d7eb3bb1d3",
+    "work/evidence_use_cross_task_2026-11-05/lipid_provider.py": "845b25c590a1c2fae6a568b00595055a6daf90d40518d9cb6e74196314df77d9",
+    "work/scaleup_2026-11-01/analysis/k02_analysis.py": "c74917537fd7f6401f8705fcf0bb0ccbd5a51ea185a2dde94b3c7a165730cef6"
+  },
+  "configuration": {
+    "actions": 48,
+    "candidates": 3,
+    "executions": 9,
+    "feedbacks": 9,
+    "analyses": 9,
+    "seeds": [
+      9401,
+      9402,
+      9403
+    ],
+    "rows_per_output": 3000,
+    "source_queries": 6,
+    "source_downloads": 3
+  },
+  "resolved_findings": [
+    {
+      "id": "IR01",
+      "issue": "Completion originally checked only selected final candidate.",
+      "resolution": "Completed finish checks every submitted stage's scheduled seed attempts and success-dependent semantic feedback/analysis. Explicit abandonment retains stage_disposition and is not completion.",
+      "locations": [
+        "_reserve_checks",
+        "_disposition",
+        "_invoke"
+      ],
+      "status": "resolved_by_code_review_and_focused_test"
+    },
+    {
+      "id": "IR02",
+      "issue": "Legacy verifier left trusted worker/launch integrity checks success-only.",
+      "resolution": "Controller _verify_execution binds candidate to accepted submission/freeze; scheduled seed/configured limits; full staged request; exact primary input names; allowed input/output inventory; worker hash against session engine commitment; exact launch argv/runtime/worker metadata. These checks apply to failed attempts. Returned and verified recorded receipts must agree. Integrity failure halts and overrides candidate-failure classification.",
+      "locations": [
+        "_verify_execution",
+        "_invoke",
+        "dispatch"
+      ],
+      "status": "resolved_by_code_review_and_focused_tests"
+    },
+    {
+      "id": "IR03",
+      "issue": "Scientific metadata, skills and setup instructions were initially outside session commitments.",
+      "resolution": "_inputs snapshots task/request, optional observed file, AUTHOR_TASK.md, SETUP_NOTES.md, adapters.json and all input/ and skills/ files. _load and post-action checks compare bytes and inventory. Candidates remain author-editable until freeze; gateway and source registry use separate controlled history.",
+      "locations": [
+        "_inputs",
+        "create_session",
+        "_load",
+        "dispatch"
+      ],
+      "status": "resolved_by_code_review_and_focused_tests"
+    }
+  ],
+  "checked_properties": [
+    "Fresh session cannot adopt preexisting frozen candidates or execution/semantic-feedback history.",
+    "Append-only source registry and fixed gateway state remain compatible with retrieval after a candidate freeze; arbitrary out-of-action changes are detected.",
+    "Submission uses strict semantic_feedback_v1 preflight with frozen sidecar; no legacy fallback.",
+    "Host-approved analysis adapter and both transitive estimator files match configured hashes.",
+    "Generated analysis accepts only a verified run's generated table plus task/request; inspected estimator receives role='generated' and performs no file access.",
+    "Fixed seeds, candidate/seed no-retry and stage lineage are enforced. Failed or unknown-entry executions preserve attempt history.",
+    "An entry-confirmed candidate failure may remain actionable only after integrity checks. Pre-entry/unknown-entry infrastructure failures halt before later seed dispatch.",
+    "Immutable metadata, skills, instruction bytes and added static-context inventory are checked before and after actions.",
+    "All requested lipid estimands and 23 diagnostics are implemented in the inspected generated-only path; same-row/design, unit and contrast scaling are preserved.",
+    "Scientific structure, parameters, evidence choice, retrieval timing and retain/revise/stop remain author choices; no target values or fixed model family enter controller.",
+    "Finished selection is separated from evaluator-only target comparison; this reviewer opened no target payload or generated clinical table."
+  ],
+  "validation_evidence": {
+    "owner_record": "CONTROLLER_QA.json",
+    "focused_tests": {
+      "passed": 30,
+      "failed": 0,
+      "command": "python -m pytest tests/test_adaptive_session_v1.py -q --basetemp work/adaptive_controller_tests_20261109_d",
+      "provenance": "Implementation owner's retained result, reviewed alongside test source. Not rerun by independent reviewer."
+    },
+    "related_regression": {
+      "passed": 107,
+      "failed": 0,
+      "scope": "Owner-reported controller/request-intake/semantic-feedback/literature regression before the final additive static-context patch; final patch covered by 30 focused tests."
+    },
+    "test_boundary": "Invented data, intercepted HTTP and mocked program backend. No clinical generator or live source retrieval executed by this reviewer.",
+    "generated_estimator_check": "Reviewed test uses artificial orthogonal residuals to check both five-BMI contrasts and residual correlation, plus 23 diagnostics; root reports it passed. No target reference is used.",
+    "runtime_note": "Root reports separate existing-runtime availability inspection. This review does not claim an independent live sandbox execution or new isolation proof."
+  },
+  "remaining_limits": [
+    "Hashes and procedural allowlists are not OS isolation of the author or signatures against a malicious host rewriting commitments.",
+    "Source semantic agreement is not source extraction, applicability, source-population reconstruction or target validation. Unknown weighting/transforms/definitions remain unavailable.",
+    "Initial curated lipid weighting remains unestablished; zero computable source checks is legitimate until actual evidence resolves a definition.",
+    "One adaptive author and three seed realizations per stage do not establish a treatment effect, general efficacy, clinical uncertainty or new clinical confirmation.",
+    "Budget exhaustion/interruption/explicit abandonment is a retained incomplete terminal disposition, not proof of a successfully evaluated final output.",
+    "Any post-review implementation/configuration change requires renewed binding/review before continued execution."
+  ],
+  "reviewer_actions": {
+    "clinical_rows_read": false,
+    "target_reference_payloads_read": false,
+    "old_candidate_or_outcome_files_read": false,
+    "new_literature_retrieved": false,
+    "generators_executed": false,
+    "implementation_edited": false,
+    "tests_rerun": false
+  },
+  "permitted_next_step": "Root may create the reviewed session and dispatch author-chosen literature/construction/execution/feedback/analysis actions within the frozen protocol. Newly used source interpretations remain subject to focused independent source review."
+}

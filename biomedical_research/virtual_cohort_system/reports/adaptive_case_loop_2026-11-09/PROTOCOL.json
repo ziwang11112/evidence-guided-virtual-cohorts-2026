@@ -1,0 +1,178 @@
+{
+  "unit": "adaptive_case_loop_2026-11-09",
+  "status": "prospective_protocol",
+  "case": "existing lipid selected-adult context",
+  "bundle": "D:\\AIR-014_ECRC_Paper_Clean_2026-08-16\\evcAdaptiveL01",
+  "reason_selected": "Conditional joint evidence and source/target population mismatch make it useful for testing adaptive evidence-directed actions; no selection for a favorable outcome.",
+  "purpose": "Operationally connect retrieval, Agent-authored generation, generated-data analysis, semantic feedback and voluntary revision; evaluate final data usefulness.",
+  "author_count": 1,
+  "fresh_context": true,
+  "author_independence": "procedural allowlist, not OS isolation",
+  "candidate_cap": 3,
+  "rows_per_output": 3000,
+  "seeds": [
+    9401,
+    9402,
+    9403
+  ],
+  "execution_cap": 9,
+  "max_actions": 48,
+  "source_queries": 6,
+  "source_downloads": 3,
+  "source_budget_note": "Fetch metadata consumes the existing query allowance; failed/blocked attempts are retained.",
+  "runtime_limits": {
+    "timeout_seconds": 45,
+    "memory_mb": 1536,
+    "output_bytes": 20000000,
+    "log_bytes": 50000
+  },
+  "agent_freedom": [
+    "search timing and query",
+    "evidence selection",
+    "model and parameter choices",
+    "program or direct rows",
+    "optional skills",
+    "new diagnostics",
+    "retain, revise, or stop"
+  ],
+  "required_analyses": [
+    {
+      "id": "K02-HDL-BMI",
+      "formula": "hdl_cholesterol ~ 1 + age + I(sex==F) + bmi",
+      "estimator": "unweighted OLS",
+      "quantity": "5 times BMI coefficient",
+      "analysis_unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-TC-BMI",
+      "formula": "total_cholesterol ~ 1 + age + I(sex==F) + bmi",
+      "estimator": "unweighted OLS",
+      "quantity": "5 times BMI coefficient",
+      "analysis_unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "estimator": "Pearson correlation of TC and HDL residuals from the two above models fitted on the same eligible rows",
+      "analysis_unit": "1",
+      "covariates": [
+        "intercept",
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ]
+    }
+  ],
+  "required_diagnostics": [
+    {
+      "id": "age.mean",
+      "unit": "year"
+    },
+    {
+      "id": "age.sd_sample",
+      "unit": "year"
+    },
+    {
+      "id": "age.q10",
+      "unit": "year"
+    },
+    {
+      "id": "age.q50",
+      "unit": "year"
+    },
+    {
+      "id": "age.q90",
+      "unit": "year"
+    },
+    {
+      "id": "bmi.mean",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.sd_sample",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.q10",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.q50",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.q90",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "total_cholesterol.mean",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.sd_sample",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.q10",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.q50",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.q90",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.mean",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.sd_sample",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.q10",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.q50",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.q90",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.conditional_rms",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.conditional_rms",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "sex.F_fraction",
+      "unit": "1"
+    }
+  ],
+  "stage_protocol": "Freeze each submitted candidate. Run all three predetermined seeds and retain all output/feedback. Revisions may use only admitted evidence and generated-only checks. No retry of a candidate/seed pair. No forced revision.",
+  "feedback_entrypoint": "cohort_harness.semantic_feedback_v1",
+  "source_feedback_interpretation": "Whole target-context output contrasted with declared source statistics; raw descriptive transfer discrepancy only, not source-population replay. Unsupported or unknown definitions remain not_computable.",
+  "scientific_review": "Audit selected evidence locators, units, estimands and source applicability. Root does not supply scientific parameters or desired relation signs.",
+  "evaluation": "After author finishes and final selection is sealed, apply the same requested analyses to all candidates/seeds and compare with existing frozen aggregate reference, including unfavorable analyses. Independently recompute.",
+  "claims": [
+    "developmental existing-case exercise",
+    "not new clinical confirmation",
+    "seed spread is Monte Carlo variation, not a clinical CI",
+    "one adaptive author cannot establish general causal efficacy",
+    "direct rows repeated under seeds are the same table, not independent draws"
+  ],
+  "stop": [
+    "Agent retains/stops",
+    "budget exhausted",
+    "integrity or infrastructure failure requires review",
+    "no new case or target calibration in this unit"
+  ],
+  "privacy": "Individual generated/real rows and full third-party source artifacts stay local; reviewed original code/docs/aggregates only may be public."
+}

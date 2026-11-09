@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "purpose": "Generate a whole virtual adult cohort from external published evidence and target-population methods metadata, to support the three requested scientific analyses. No individual input or target-result calibration is supplied.",
+  "analyses": [
+    "{\"analysis_unit\": \"mg/dL per 5 kg/m^2\", \"estimator\": \"unweighted OLS\", \"formula\": \"hdl_cholesterol ~ 1 + age + I(sex==F) + bmi\", \"id\": \"K02-HDL-BMI\", \"quantity\": \"5 times BMI coefficient\"}",
+    "{\"analysis_unit\": \"mg/dL per 5 kg/m^2\", \"estimator\": \"unweighted OLS\", \"formula\": \"total_cholesterol ~ 1 + age + I(sex==F) + bmi\", \"id\": \"K02-TC-BMI\", \"quantity\": \"5 times BMI coefficient\"}",
+    "{\"analysis_unit\": \"1\", \"covariates\": [\"intercept\", \"age\", \"I(sex==F)\", \"bmi\"], \"estimator\": \"Pearson correlation of TC and HDL residuals from the two above models fitted on the same eligible rows\", \"id\": \"K02-LIPID-RESIDUAL\"}"
+  ],
+  "task": {
+    "schema_version": 1,
+    "task_id": "adaptive-lipid-development-2026-11-09",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "1",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "1",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 5e-324
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 5e-324
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 5e-324
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "CHNS",
+        "China Health and Nutrition Survey",
+        "ENSANUT",
+        "Encuesta Nacional de Salud y Nutricion",
+        "Turkana target study",
+        "Lea et al. 2020 Turkana",
+        "10.1126/sciadv.abb1430",
+        "10.5061/dryad.2z34tmpjk"
+      ],
+      "allowed_tools": [
+        "literature.search",
+        "literature.fetch",
+        "admitted_source_read",
+        "contract_validation",
+        "controller_source_feedback",
+        "retained_analytic_calculation",
+        "isolated_generation",
+        "generated_analysis",
+        "semantic_feedback_v1"
+      ]
+    },
+    "budget": {
+      "source_queries": 6,
+      "source_downloads": 3,
+      "revisions": 2
+    }
+  }
+}
