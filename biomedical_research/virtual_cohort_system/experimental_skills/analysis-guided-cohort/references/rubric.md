@@ -14,6 +14,8 @@ A rubric specifies what the output needs to do and how it will be assessed. A sk
 
 These are a menu, not five mandatory scores. Split a criterion when its analyses require different evidence. Do not reward unrelated analyses, agent counts, verbose reasoning or model complexity. A clinical threshold is a task input requiring justification, not a universal property of a rubric.
 
+Keep the requested scientific uses stable while allowing the Agent to develop diagnostic checks during work. A check may identify a need for new evidence, a different generator or an additional auxiliary variable; it should not prescribe that solution in advance. Retain the history of added or changed checks and all earlier unfavorable findings. An experiment may fix a rubric to isolate an intervention, but that restriction applies to that experiment only.
+
 ## Criterion record
 
 Record the following in the task's requested format, or a concise table if no schema is supplied:

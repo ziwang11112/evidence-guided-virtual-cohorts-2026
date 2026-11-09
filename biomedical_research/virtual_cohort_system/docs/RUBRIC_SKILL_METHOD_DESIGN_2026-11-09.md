@@ -2,6 +2,8 @@
 
 Date: 9 November 2026. Experimental design, not an adopted frozen method or a demonstrated performance improvement.
 
+Update after the first pilot: the [two-case experiment is complete](../reports/rubric_case_pilot_2026-11-09/RESULTS.md). It used a shared minimal construction interface and did not instrument or enforce token matching; its actual protocol/results supersede the original allowances and not-yet-launched status below. The remaining sections retain the pre-pilot design. The user's subsequent direction is captured in [Agent autonomy](AGENT_AUTONOMY_DESIGN_2026-11-09.md): fixed sources, fixed rubrics and zero revisions are experiment conditions, not general system restrictions.
+
 ## Why this change fits the project
 
 The user asks for virtual biomedical data that support a research need. A task-specific rubric can turn that need into explicit scientific criteria before construction. Procedural skills can help the author select the relevant calculation, evidence search or revision. This keeps the method centered on the generated data and its analytical use.
