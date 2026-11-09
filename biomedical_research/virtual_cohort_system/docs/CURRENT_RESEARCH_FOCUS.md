@@ -1,8 +1,12 @@
 # Current focus — from published evidence to analyzable biomedical cohorts
 
-Updated 8 November 2026. [Manuscript v0.25](../manuscript/DRAFT_v0_25.md) · [Reading PDF](../manuscript/methods_draft_v25_2026-11-08/paper.pdf) · [LaTeX ZIP](../manuscript/methods_draft_v25_2026-11-08/overleaf_v25.zip).
+Updated 9 November 2026. [Manuscript v0.25](../manuscript/DRAFT_v0_25.md) · [Reading PDF](../manuscript/methods_draft_v25_2026-11-08/paper.pdf) · [LaTeX ZIP](../manuscript/methods_draft_v25_2026-11-08/overleaf_v25.zip).
 
 The core remains evidence-guided virtual biomedical data for scientific analyses, including complete generation without individual inputs. The revised manuscript includes full statistical comparator results, dispersion limits and the complete-case reference definition. It does not claim a benefit from adding agent layers or from feedback itself.
+
+**Conditional-evidence update, 9 November.** The [completed source audit](../reports/conditional_evidence_2026-11-09/RESULTS.md) recovered continuous per-BMI-SD association evidence from the MEIRU family and joint partial correlations from a separate adult Rhineland study. An independent reviewer checked the strongest originals. These are useful source-specific operators, not exact target coefficients; standardization, adjustment, overlap and transfer remain explicit. The [reviewed follow-on specification](../reports/conditional_evidence_2026-11-09/FOLLOW_ON_SPEC.md) permits one bounded assumption-dependent source-replay construction with an explicit source-to-target link. No cohort was generated in this audit and no old target was read. This is the current next unit, replacing a general search or another component-repair run.
+
+**Development update, 9 November.** A [bounded scientific-use/coherence experiment](../reports/analysis_use_rubric_v2_2026-11-09/RESULTS.md) connected generic execution-bound checks to an Agent-selected revision. Across baseline and revision (three fixed seeds each), 16 component violations became zero, at the cost of 16 artificial equality-boundary values. All 156 endpoint calculations and saved-row transformations were independently verified. All three requested analyses still have partial source support. This establishes an inspectable repair capability under the declared underlying-concentration use; it adds no new clinical cohort, conditional evidence, or overall-accuracy claim. Retain this quality-control result and prioritize the original conditional/joint-evidence question rather than treating constraint satisfaction as scientific validation.
 
 ## Completed mechanism check
 
@@ -16,7 +20,7 @@ Figure 2 follows a single [iron-status request](../manuscript/paper_figures_v20_
 
 ## Prospective evidence
 
-The earlier HAALSI evaluation froze the target analyses before disclosure. Across five agent constructions and three draws per construction, both glucose main effects agreed with the sample in point direction, while eight of 15 draws agreed on the interaction. Three of five constructions passed the primary criterion. Four were required, and the margin also admitted three zero effects. In Turkana, none of five passed. The existing [frozen record](../../../reports/scaleup_2026-11-01/production_release/RESULTS.md) supports this limited conclusion for the earlier workflow. The November 5 interface reused the same Turkana measurements.
+The earlier HAALSI evaluation froze the target analyses before disclosure. Across five agent constructions and three draws per construction, both glucose main effects agreed with the sample in point direction, while eight of 15 draws agreed on the interaction. Three of five constructions passed the primary criterion. Four were required, and the margin also admitted three zero effects. In Turkana, none of five passed. The existing [frozen record](../reports/scaleup_2026-11-01/production_release/RESULTS.md) supports this limited conclusion for the earlier workflow. The November 5 interface reused the same Turkana measurements.
 
 ## Decision and next step
 
