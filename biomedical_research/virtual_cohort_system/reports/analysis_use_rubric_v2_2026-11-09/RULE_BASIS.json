@@ -1,0 +1,86 @@
+{
+  "schema": "analysis_use_rule_basis_v1",
+  "review_date": "2026-11-09",
+  "review_status": "complete_source_and_design_review",
+  "scope": "Official-source basis and prospective repair-experiment design; no target statistics, new cohort, clinical threshold, or source-body redistribution.",
+  "component_definition_url": "https://www.cdc.gov/nchs/hus/sources-definitions/cholesterol.htm",
+  "source_qualifications": [
+    "Component identity applies to underlying paired concentrations, not automatically to error-contaminated independently reported measurements.",
+    "Distinct analytical reactions do not establish independent errors or a joint error distribution.",
+    "The PTS insert does not identify the historical assay or supply cohort-specific assay-error parameters.",
+    "Analytical measuring ranges are not biological validity limits."
+  ],
+  "rule": {
+    "id": "cholesterol_component_consistency",
+    "expression": "HDL_C <= total_cholesterol",
+    "basis": "Inferred component constraint from total-cholesterol composition and non-HDL = total minus HDL definitions.",
+    "required_scope": ["Same biological material and time", "Comparable concentration measurands", "Declared common units or explicit conversion", "Declared latent/coherent or observed measurement interpretation"],
+    "latent_coherent_application": "Hard nonnegative-component consistency check.",
+    "observed_application": "Observed violation diagnostic; explicitly supported observation model required for an assay-error explanation. Check latent consistency separately when latent quantities exist.",
+    "unknown_interpretation_application": "Diagnostic requiring interpretation; no automatic rejection or exemption.",
+    "measurement_equation": "TC_obs - HDL_obs = nonHDL_latent + error_TC - error_HDL",
+    "measurement_inference_limit": "Distinct analytical reactions and documented imprecision support possible measurement discrepancies, not independent errors, a joint error distribution, or proof that generated violations are assay noise.",
+    "report": ["Usable pair count", "Missing/unusable pair count and reason", "Violation count and fraction", "Positive HDL-minus-TC excess magnitude in declared units", "Numerical or rounding tolerance and justification", "Measurement interpretation and pairing scope"],
+    "not_implied": ["Desired correlation or regression coefficient", "Universal clipping or deletion", "Generic normal ranges", "Manufacturer analytical range as biological bound", "Target-derived tolerance", "Marginal source SD as validated joint assay-error model"]
+  },
+  "sources": [
+    {
+      "id": "CDC_NCHS_cholesterol_definition",
+      "publisher": "CDC National Center for Health Statistics",
+      "title": "Cholesterol",
+      "url": "https://www.cdc.gov/nchs/hus/sources-definitions/cholesterol.htm",
+      "document_date": "2024-07-30",
+      "accessed": "2026-11-09",
+      "locator": "Definition of serum total cholesterol",
+      "supported_claim": "Serum total cholesterol includes cholesterol in HDL, LDL and VLDL.",
+      "not_supported": "No target population joint distribution or desired association is established."
+    },
+    {
+      "id": "NHLBI_nonHDL_definition",
+      "publisher": "National Heart, Lung, and Blood Institute, NIH",
+      "title": "Blood Cholesterol—Diagnosis",
+      "url": "https://www.nhlbi.nih.gov/health/blood-cholesterol/diagnosis",
+      "document_date": "2024-04-18",
+      "accessed": "2026-11-09",
+      "locator": "Lipid panel description, non-HDL cholesterol",
+      "supported_claim": "Non-HDL cholesterol is total cholesterol minus HDL cholesterol.",
+      "not_supported": "The definition does not establish zero-error recorded assays or authorize automatic correction of all measured violations."
+    },
+    {
+      "id": "PTS_professional_lipid_panel_insert",
+      "publisher": "PTS Diagnostics",
+      "title": "PTS Panels Lipid Panel Test Strips, professional package insert",
+      "url": "https://ptsdiagnostics.com/wp-content/uploads/2021/07/PS-002676-E-Pkg-Insert-Lipid-Panel-HX-Pro-English-Rev_1.pdf",
+      "document_revision": "PS-002676 E Rev. 1 02/19",
+      "accessed": "2026-11-09",
+      "locator": "Pages 1–2: intended use, principles of the test, limitations, performance characteristics",
+      "supported_claim": "TC and HDL use distinct analytical reactions; imprecision, interference and rounding are documented.",
+      "not_supported": "Independent analytical errors, the cohort's joint measurement-error law, historical strip identification, or biological validity limits."
+    }
+  ],
+  "baseline": {
+    "closed_bundle": "D:/AIR-014_ECRC_Paper_Clean_2026-08-16/evcAdaptiveL02",
+    "candidate": "initial",
+    "generator_sha256": "622cb18b6225832ae754812ae80477a5783958603da1e8e2470202a046a655ef",
+    "model_spec_sha256": "e469f7075314cce63ac9a3b1fb3d961c2770f96d9680e844bab43ad2abd36fa7",
+    "hashes_rechecked": "2026-11-09",
+    "handling": "Copy unchanged into new experimental unit; do not edit closed bundle."
+  },
+  "experiment_assessment": {
+    "suitable_for": "Bounded development test of source-grounded rule use and transparent revision tradeoffs.",
+    "declared_new_unit_interpretation": "Underlying same-specimen lipid concentration scenarios; no explicit assay-error model. Raw component counts remain reported even if the author disputes applicability.",
+    "planned_seeds": [9601, 9602, 9603],
+    "planned_reference_access": "No real-target comparison in this unit.",
+    "author_inputs": ["Unchanged baseline code and specification", "Approved baseline source evidence", "Generic coherence/use-gap feedback"],
+    "excluded_author_inputs": ["Target statistics", "Prior reference-comparison reports and plots", "Desired coefficient signs or magnitudes", "Residual-correlation improvement instruction"],
+    "freeze_before_evaluation": ["Measurement interpretation", "Rule and tolerance", "Analysis panel", "Preset seed set and cohort size", "Revision and stop budget"],
+    "revision_budget_recommendation": "One bounded revision opportunity; retain or abstain is valid.",
+    "evaluation": "Compare unchanged baseline and revision on all prescribed analyses and coherence diagnostics; retain outputs and expose distributional tradeoffs.",
+    "seed_limit": "Common seeds do not imply matched people or latent draws if random-number consumption changes, nor clinical uncertainty or general efficacy.",
+    "interpretation_change": "An explicit use-claim change is required; silent observed-to-latent relabelling cannot count as repair under the original claim.",
+    "prior_reference_limit": "No target comparison is planned. In general, a post-closure comparison against previously exposed aggregate references would remain a development comparison, not new independent validation.",
+    "permitted_claim": "A source-grounded rule informed a bounded revision; report its measured component-coherence and analysis tradeoffs under the declared interpretation.",
+    "excluded_claims": ["Recovered target covariance", "Desired scientific correlation", "Universal cleaning validity", "Clinical equivalence", "Overall gain from coherence counts alone", "General or causal effectiveness of agent feedback"]
+  },
+  "changes": "Only this RULE_BASIS.md/json pair was created for this review; no closed bundle, old work product, engine, or lock was modified."
+}

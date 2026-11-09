@@ -1,0 +1,157 @@
+{
+  "unit": "analysis_use_rubric_v2_2026-11-09",
+  "purpose": "Controlled development of scientific-use evidence coverage and cross-variable coherence: underlying same-specimen lipid concentration scenarios, with no explicit assay-error model. Keep all requested analyses; no target-effect calibration or clinical-accuracy evaluation in this unit.",
+  "seeds": [
+    9601,
+    9602,
+    9603
+  ],
+  "rows_per_output": 3000,
+  "candidate_cap": 2,
+  "execution_cap": 6,
+  "analysis_adapters": [
+    "generated",
+    "analysis_use"
+  ],
+  "baseline_science": {
+    "generator.py": "622cb18b6225832ae754812ae80477a5783958603da1e8e2470202a046a655ef",
+    "model_spec.json": "e469f7075314cce63ac9a3b1fb3d961c2770f96d9680e844bab43ad2abd36fa7",
+    "evidence.json": "86531931309abadbdea1ce4fc97c08186ab190cad5b696bfadc24947dbd60b06",
+    "decision.md": "6d3f24e6118b32d111097cc5772581ac0c673cb08529e44fe8beb7addeceeeca",
+    "checks.json": "e03724e3336c0213ddf24294c160873583956ce68921a883c7eb79ebdac261f1",
+    "deterministic_math.json": "41484daed3708ab88fb9e8e54354153f88f3d5609098d8b8aa5bbb17aa431560",
+    "whole_cohort_feedback.json": "c2c34bfbe9a2908168c782f819d3e5431c5abd6d56b54599ef8843ea3a12a722",
+    "source_semantics_v1.json": "eb6a06f643bed15cb65881532cf0077b9ad8a353efa54cbf994642ea986040bf",
+    "descriptive_feedback_v1.json": "0b6c9503b6c2744914f8d9d4784122fa6586754ce66e58ead501d009ff1592b9"
+  },
+  "baseline_candidate": "candidates/baseline",
+  "primary_check": "Declared component consistency: raw violating count, complete/missing denominator, magnitude, applicability; retain every output.",
+  "required_analyses": [
+    {
+      "id": "K02-HDL-BMI",
+      "formula": "hdl_cholesterol ~ 1 + age + I(sex==F) + bmi",
+      "estimator": "unweighted OLS",
+      "quantity": "5 times BMI coefficient",
+      "analysis_unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-TC-BMI",
+      "formula": "total_cholesterol ~ 1 + age + I(sex==F) + bmi",
+      "estimator": "unweighted OLS",
+      "quantity": "5 times BMI coefficient",
+      "analysis_unit": "mg/dL per 5 kg/m^2"
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "estimator": "Pearson correlation of TC and HDL residuals from the two above models fitted on the same eligible rows",
+      "analysis_unit": "1",
+      "covariates": [
+        "intercept",
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ]
+    }
+  ],
+  "required_diagnostics": [
+    {
+      "id": "age.mean",
+      "unit": "year"
+    },
+    {
+      "id": "age.sd_sample",
+      "unit": "year"
+    },
+    {
+      "id": "age.q10",
+      "unit": "year"
+    },
+    {
+      "id": "age.q50",
+      "unit": "year"
+    },
+    {
+      "id": "age.q90",
+      "unit": "year"
+    },
+    {
+      "id": "bmi.mean",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.sd_sample",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.q10",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.q50",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "bmi.q90",
+      "unit": "kg/m^2"
+    },
+    {
+      "id": "total_cholesterol.mean",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.sd_sample",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.q10",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.q50",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.q90",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.mean",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.sd_sample",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.q10",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.q50",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.q90",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "total_cholesterol.conditional_rms",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "hdl_cholesterol.conditional_rms",
+      "unit": "mg/dL"
+    },
+    {
+      "id": "sex.F_fraction",
+      "unit": "1"
+    }
+  ],
+  "collateral_changes": "All three scientific analyses and 23 diagnostics, plus all source feedback. Descriptive changes only; no equivalence margin or target-accuracy claim.",
+  "author_freedom": "Choose whether/how to revise scientific construction, retrieve more evidence, or retain/stop. No repair algorithm, coefficient, desired association sign or clinical reference supplied.",
+  "source_review": "Audit source extraction, rule applicability and evidence-use declarations; no coordinator-selected scientific parameters.",
+  "interpretation_change": "Underlying same-specimen concentrations govern this new exercise. Copied historical measured-assay metadata are provenance, not the new product definition. Source measured moments to underlying-law transfer is assumed; this does not diagnose all prior observed-value violations as biological impossibilities.",
+  "stopping_rule": "At most baseline plus one optional revised candidate, all three fixed seeds per submitted stage. No target comparison, no extra case or iteration in this unit.",
+  "interpretation": "Controlled development repair, not a new clinical validation, broad agent advantage or benefit of a rubric versus an adequate ordinary instruction.",
+  "privacy": "Individual tables and full sources stay local. Original code/docs and aggregates may be published."
+}

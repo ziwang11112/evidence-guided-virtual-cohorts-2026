@@ -1,5 +1,7 @@
 # Evidence-guided virtual biomedical data
 
+**Scientific-use development, 9 November 2026.** An Agent evaluated a baseline and an optional component-coherence repair using execution-bound feedback. The [complete before/after report](reports/analysis_use_rubric_v2_2026-11-09/RESULTS.md) retains all scientific analyses, source gaps, setup failures and independent audits. This is a controlled development check, not new clinical validation or an overall quality claim.
+
 ## From Published Evidence to Analyzable Biomedical Cohorts with Scientific Agents
 
 The scientific agent turns published evidence and a study request into a probability model and sampling program. The host coordinates the evidence and review budget, a numerical worker generates the records, and a separate evaluator compares the requested analyses with a measured reference.
