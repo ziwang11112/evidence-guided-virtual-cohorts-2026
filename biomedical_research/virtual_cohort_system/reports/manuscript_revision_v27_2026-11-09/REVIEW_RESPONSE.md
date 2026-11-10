@@ -1,0 +1,18 @@
+# Response to the independent v0.26 review
+
+This is an editorial response, not a new scientific validation. The source manuscript, numerical tables, figure assets, clinical references and frozen generators remain unchanged.
+
+| Review issue | v0.27 change | What remains unresolved |
+|---|---|---|
+| Execution, point agreement and scientific usefulness were conflated | Section 3.5 defines the three levels; Table 5 maps all main study groups to observed properties and unvalidated uses. Abstract and Discussion name partial agreement. | No new decision-specific tolerance or calibrated applicability rule has been established. |
+| Synthetic intervals can omit evidence/model/transfer uncertainty | Section 3.5 explicitly states the limits of tests, intervals and power from generated rows. The H03 dispersion paragraph connects reduced variation with inferential use. | No new uncertainty-propagation method or coverage experiment. |
+| Required review stages were compressed in the system description | Table 1 identifies actors and stages. Q4/Q5 pre-freeze review, Q1 readiness review and the separate iron process are distinguished; retention refers to the first reviewed frozen law. | These studies do not isolate the benefit of review, and do not establish one wholly autonomous current runtime. |
+| Central Agent model metadata and reproduction levels were underspecified | Limitations names Q1/Q4; S17/Table S10 records actual budgets and metadata gaps. The separate guide explains aggregate display, frozen-model replay and author-session reconstruction. | Missing historical model identities/conversations remain missing. The documented iron replay recipe was not executed in this revision and is not a verified portable installation. |
+| Lead reference eligibility and weighting were too compressed | Main text identifies ENSANUT selection and equal-cell weighting. S16/Table S9 covers CHNS, ENSANUT, iron, HAALSI, Turkana and HRS with the required design distinctions. | No new population inference or clinical refit; old selected-sample estimands stay unchanged. |
+| Real-real distance geometry could be mistaken for equivalence | S6 explains complementary-sample versus symmetric generated distance, with an explicitly illustrative identity. | The context analysis remains descriptive and tied to the earlier single law, not Q4. |
+| Closest work overlaps more than the compressed descriptions implied | Introduction specifies implemented authoring and empirical analysis contributions. LLMSynthor dependencies/downstream use and KMGen clinical priors/sampler are acknowledged under existing citations. | No priority, universal superiority, new statistical-family or general algorithmic-novelty claim. |
+| Stronger sealed evidence differs from developmental agreement | Abstract distinguishes the iron OR discrepancy from the earlier gate failures. Reference/use tables preserve exposure conditions and the different roles of reconstruction. | Reliable new-target inference is still unestablished. A new claim would require its own evidence. |
+
+All prior quantitative table rows and eleven figure PDFs are checked against v0.26. Four added tables document method/use/reference conditions; they do not add a success rate or alter an acceptance criterion. The review's post hoc median/deletion calculation remains in the review archive and is not introduced as a new manuscript endpoint. A minor sentence-antecedent correction from the independent v0.27 reader was applied before final typesetting.
+
+Next decisions concern biomedical interpretation of the intended uses and the strength of the submission claim. More clinical cases, Agent components, retrieval budgets or model training are not automatically scheduled by this response.
