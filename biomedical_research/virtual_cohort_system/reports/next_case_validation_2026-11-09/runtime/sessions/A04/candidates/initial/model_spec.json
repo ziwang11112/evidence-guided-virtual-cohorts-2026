@@ -1,0 +1,209 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "coordinates": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0
+    },
+    "age": {
+      "minimum": 20.0,
+      "maximum": 79.0,
+      "alpha": 2.25,
+      "beta": 2.75
+    },
+    "female_probability": 0.53,
+    "bmi": {
+      "mean_intercept": 26.5,
+      "age_linear": 0.6,
+      "age_quadratic": -0.18,
+      "female": 0.8,
+      "cv": 0.18,
+      "minimum": 6.802721088435374,
+      "maximum": 138.88888888888889
+    },
+    "sbp_location": {
+      "intercept": 121.0,
+      "age_linear": 6.5,
+      "age_quadratic": 0.7,
+      "female": -5.0,
+      "age_female": 1.0
+    },
+    "dbp_location": {
+      "intercept": 77.0,
+      "age_linear": 1.0,
+      "age_quadratic": -0.65,
+      "female": -3.0,
+      "age_female": 0.3
+    },
+    "bmi_sbp_per_unit": 0.7754,
+    "bmi_dbp_per_unit": 0.5967,
+    "residual": {
+      "sbp_base_sd": 13.0,
+      "sbp_age_threshold": 40.0,
+      "sbp_age_increment": 0.07,
+      "dbp_base_sd": 9.5,
+      "dbp_age_threshold": 60.0,
+      "dbp_age_increment": -0.02,
+      "correlation": 0.55
+    },
+    "bp_support": {
+      "sbp_min": 60.0,
+      "sbp_max": 290.0,
+      "dbp_min": 30.0,
+      "dbp_max": 200.0,
+      "minimum_pulse_pressure": 0.0
+    },
+    "max_rounds": 500
+  },
+  "assumptions": [
+    {
+      "id": "A_distribution",
+      "description": "All generated rows are equal-weight draws intended to stand for the selected labweight-weighted analytical distribution. No target demographic summaries are known. Age beta(2.25,2.75) rescaled to20-79, female probability0.53 independent of age, and conditional lognormal BMI are explicit construction assumptions, not national estimates."
+    },
+    {
+      "id": "A_bmi",
+      "description": "Conditional arithmetic BMI mean is26.5+0.6*x-0.18*x^2+0.8*female, x=(age-50)/10, with coefficient of variation0.18. Dependence and right skew are assumed. BMI support projects the supplied valid weight/height rectangle:30/2.10^2 to200/1.20^2; no height/weight joint law is claimed."
+    },
+    {
+      "id": "A_slope_transport",
+      "description": "Borrow the INTERSALT BMI coefficients as pre-selection conditional BP terms, unchanged across age20-79 and sex. This assumes omissions of urinary sodium/potassium/alcohol, country/era, selection, treatment, weight design and measurement differences do not require a numerical slope correction. It is an unverified transport assumption, not equality of the source and target estimands."
+    },
+    {
+      "id": "A_bp_surface",
+      "description": "SBP conditional location121+6.5*x+0.7*x^2+(-5+1*x)*female; DBP77+1*x-0.65*x^2+(-3+0.3*x)*female, before BMI and noise. All numbers are assumed; nonlinear age shapes permit age divergence qualitatively compatible with the Beijing description but are not estimated age/sex effects."
+    },
+    {
+      "id": "A_residual",
+      "description": "Conditional Gaussian SBP residual SD13+0.07*max(age-40,0); DBP SD9.5-0.02*max(age-60,0); conditional residual correlation0.55. All are assumed, without deriving adjusted residual covariance from Beijing raw covariance. Joint rejection and nonlinear regression misspecification can alter the requested residual correlation."
+    },
+    {
+      "id": "A_selection",
+      "description": "Use rejection sampling, never clipping: BMI redraws conditional on fixed age/sex until within projected dictionary support; BP pairs redraw conditional on fixed age/sex/BMI until SBP60-290, DBP30-200 and SBP>DBP. Bounds represent task dictionary selection and positive pulse pressure is a separate assumed feasibility requirement. This conditional selection model is not a measured missingness, pregnancy or labweight mechanism."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Model released baseline BP directly. Target three automated G-TECH MA100 readings two minutes apart after >=5-minute seated rest, usually left arm, with unverified final averaging; INTERSALT two random-zero readings and Beijing two Omron readings differ. All device, visit, averaging and anthropometry transfer effects are absorbed in assumed locations/scales without an estimated correction. Laboratory timing does not change BP baseline time."
+    },
+    {
+      "id": "A_treatment",
+      "description": "Observed BP is modeled for a mixture retaining diabetes, hypertension and treatment, with no latent untreated counterfactual or treatment exclusion. Pregnancy exclusion and laboratory complete-case selection are represented only by the assumed output distribution; no target selection probabilities are known."
+    },
+    {
+      "id": "A_feedback",
+      "description": "Older Beijing source moments are descriptive anchors only. Generated ages65-79 do not reconstruct Beijing source sampling, disease exclusions or unknown upper age coverage. Mean/SD/raw-correlation differences are not fit objectives or clinical tolerances. Strict comparison is unavailable where full conventions/selection or adjusted source variables cannot be represented. Equal weighting, sample SD denominator n-1 and identity units are diagnostic conventions."
+    },
+    {
+      "id": "A_uncertainty",
+      "description": "Parameters are fixed construction choices. Within-row variation and three fixed-seed Monte Carlo draws do not quantify source, model, or transport uncertainty. Source coefficients, means, SDs and SEs retain separate roles."
+    },
+    {
+      "id": "A_mechanics",
+      "description": "3000 rows, row_id1..3000, a seeded NumPy default_rng, and finite500-round conditional rejection limits are computational choices. Exhaustion raises an error and does not clip or fabricate accepted rows. All scientific settings are in this specification."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_mechanics"
+      ],
+      "derivation": "Task-defined size/analysis centering and assumed finite implementation limit. Coordinates are mechanical, not empirical statistics."
+    },
+    "coordinates": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_mechanics"
+      ],
+      "derivation": "Task-defined size/analysis centering and assumed finite implementation limit. Coordinates are mechanical, not empirical statistics."
+    },
+    "max_rounds": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_mechanics"
+      ],
+      "derivation": "Task-defined size/analysis centering and assumed finite implementation limit. Coordinates are mechanical, not empirical statistics."
+    },
+    "age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_distribution"
+      ],
+      "derivation": "Assumed demographic distribution; no target demographic data used. Age endpoints are task requirements."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_distribution"
+      ],
+      "derivation": "Assumed demographic distribution; no target demographic data used. Age endpoints are task requirements."
+    },
+    "bmi": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_distribution",
+        "A_bmi",
+        "A_selection"
+      ],
+      "derivation": "Assumed conditional arithmetic mean/CV. Lognormal log-SD=sqrt(log(1+CV^2)), log-location=log(mean)-log-SD^2/2. Support endpoints derived from supplied eligibility ranges."
+    },
+    "sbp_location": {
+      "evidence_ids": [
+        "E_OLD_sbp_mean",
+        "E_OLD_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement",
+        "A_treatment"
+      ],
+      "derivation": "Assumed conditional location coefficients; not inferred from marginal elderly means. Beijing motivates inspecting age divergence but does not estimate this surface."
+    },
+    "dbp_location": {
+      "evidence_ids": [
+        "E_OLD_sbp_mean",
+        "E_OLD_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement",
+        "A_treatment"
+      ],
+      "derivation": "Assumed conditional location coefficients; not inferred from marginal elderly means. Beijing motivates inspecting age divergence but does not estimate this surface."
+    },
+    "bmi_sbp_per_unit": {
+      "evidence_ids": [
+        "E_BMI_sbp"
+      ],
+      "assumption_ids": [
+        "A_slope_transport"
+      ],
+      "derivation": "Reported source coefficient0.7754 per kg/m^2 used under explicit conditional transport assumption; multiplied by bmi-25. Per5 source algebra is3.877, SE0.1795, not a target certainty interval."
+    },
+    "bmi_dbp_per_unit": {
+      "evidence_ids": [
+        "E_BMI_dbp"
+      ],
+      "assumption_ids": [
+        "A_slope_transport"
+      ],
+      "derivation": "Reported source coefficient0.5967 per kg/m^2 used under explicit conditional transport assumption; multiplied by bmi-25. Per5 source algebra is2.9835, SE0.1285, not a target certainty interval."
+    },
+    "residual": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement",
+        "A_uncertainty"
+      ],
+      "derivation": "Assumed conditional scales and correlation. No raw SD or correlation is relabelled adjusted. Marginal moments will differ through covariate and nonlinear effects."
+    },
+    "bp_support": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_selection"
+      ],
+      "derivation": "SBP/DBP numerical intervals from task dictionary; positive pulse pressure assumed. Conditional rejection changes the nominal Gaussian law and its slopes."
+    }
+  }
+}

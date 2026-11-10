@@ -1,0 +1,257 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_limits": [
+      20.0,
+      79.0
+    ],
+    "age_beta": [
+      1.35,
+      1.75
+    ],
+    "age_center": 50.0,
+    "age_scale": 10.0,
+    "bmi_center": 25.0,
+    "female_logit": [
+      0.16,
+      0.06
+    ],
+    "bmi_log_median": [
+      3.2771447329921766,
+      0.02,
+      -0.012,
+      0.025
+    ],
+    "bmi_log_sd": 0.18,
+    "bmi_limits": [
+      12.0,
+      65.0
+    ],
+    "sbp_location": [
+      126.0,
+      5.5,
+      1.0,
+      -4.0
+    ],
+    "dbp_location": [
+      79.0,
+      1.8,
+      -0.7,
+      -2.5
+    ],
+    "bmi_slopes_per1": [
+      0.7754,
+      0.5967
+    ],
+    "sbp_residual_scale": [
+      13.0,
+      0.08
+    ],
+    "dbp_residual_sd": 10.5,
+    "conditional_residual_rho": 0.55,
+    "sbp_limits": [
+      60.0,
+      290.0
+    ],
+    "dbp_limits": [
+      30.0,
+      200.0
+    ],
+    "require_sbp_above_dbp": true,
+    "max_rejection_rounds": 128
+  },
+  "assumptions": [
+    {
+      "id": "A_task",
+      "description": "Task-derived mechanics:3000equal-weight complete rows represent the named labweight-weighted analytical distribution, age20-79, female0/1, unique integer labels. These are not observed patients or national-population estimates."
+    },
+    {
+      "id": "A_demography",
+      "description": "ASSUMED target covariate law: age is20+59*Beta(1.35,1.75); female probability logistic(0.16+0.06*(age-50)/10). No target demographic values supplied or inferred. Dependence is explicitly weakly age-varying, not inferred independence."
+    },
+    {
+      "id": "A_bmi",
+      "description": "ASSUMED conditional BMI: lognormal with log median log(26.5)+0.02*a-0.012*a^2+0.025*female, a=(age-50)/10, log SD0.18; rejection outside12-65kg/m2. All BMI location, spread, age and sex dependencies are assumptions, not recovered target statistics."
+    },
+    {
+      "id": "A_bp_surface",
+      "description": "ASSUMED joint conditional BP location: SBP126+5.5*a+1.0*a^2-4*female+0.7754*(BMI-25); DBP79+1.8*a-0.7*a^2-2.5*female+0.5967*(BMI-25). Nonlinear age patterns permit later-life divergence; numeric age/sex/intercept parameters are not source-adjusted effects. Source age-group contrasts are descriptive context only."
+    },
+    {
+      "id": "A_bmi_transport",
+      "description": "Reported INTERSALT per-kg/m2 slopes are used as conditional BMI coefficients, assuming transport from1980s multi-country ages20-59, richer sodium/potassium/alcohol adjustment and inverse-variance pooling to this2013 selected Brazilian age20-79 analytical distribution. No age/BMI interaction is assumed. Treatment and omitted-variable differences can invalidate this. The requested linear age-adjusted regression need not equal these conditional coefficients because age is nonlinear and joint rejection can shift moments."
+    },
+    {
+      "id": "A_joint",
+      "description": "ASSUMED conditional Gaussian BP disturbances: SD_SBP=13+0.08*(age-20), SD_DBP=10.5mmHg, conditional rho=0.55. Rho is an explicitly assumed residual parameter, not the derived Beijing raw r. Beijing raw moments offer broad context only; conditional dependence is unidentified. Heteroscedasticity and nonlinear-age residuals imply the requested OLS residual r need not equal0.55."
+    },
+    {
+      "id": "A_selection",
+      "description": "ASSUMED joint support: BMI12-65; BP proposals are rejected jointly until60<=SBP<=290,30<=DBP<=200 and SBP>DBP. BP validity bounds represent analytical selection; positive PP is an additional feasibility assumption. Conditional redraw keeps covariates fixed, assuming their law already represents the selected population. No clipping or boundary mass; this changes the pre-selection Gaussian law and can alter slopes. Weight/height are not output and their separate selection effects are absorbed into the assumed BMI law; the BMI interval is compatible with at least one valid height/weight pair but not a reconstruction of their distribution."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Source-to-target transport assumes measured BMI and final seated BP have comparable units, but does not assert device equivalence. Target uses three G-TECH MA100 readings two minutes apart after>=5min rest, usually leftarm; released final averaging rule is unknown. INTERSALT averages two random-zero readings, Beijing two Omron readings; no separately estimated measurement correction is available. Residual scales integrate biological and protocol variation. BP/anthropometry remain baseline, not later lab-visit outcomes."
+    },
+    {
+      "id": "A_clinical_selection",
+      "description": "Target excludes reported pregnancy only and includes treatment, diabetes and hypertension. Those features are marginalized rather than explicitly generated. Source selection and treatment prevalence differ; pregnancy exclusion, lab participation and labweight effects are unknown transport assumptions. No causal or individual-recovery claim."
+    },
+    {
+      "id": "A_feedback",
+      "description": "Equal-weight arithmetic means, sample SD(ddof1), and Pearson correlations on generated age>=65 rows are diagnostic comparisons only. Beijing source age>=65 extends beyond target age79; source weighting/SD conventions and missingness details remain unverified. SD-derived r assumes paired observations and common variance convention. No strict source replay or target validation is claimed."
+    },
+    {
+      "id": "A_limits",
+      "description": "Independent generator residual draws and fixed seeds describe conditional Monte Carlo variability only. Model/evidence/transport uncertainty is not quantified by repeated draws.128 rejection rounds is a finite computational safeguard; failure raises an error and never inserts clipped/fallback values."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "TASK-DERIVED mechanical size, eligibility range or stated analysis-centering convention; no empirical target estimate."
+    },
+    "age_limits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "TASK-DERIVED mechanical size, eligibility range or stated analysis-centering convention; no empirical target estimate."
+    },
+    "age_beta": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_demography"
+      ],
+      "derivation": "ASSUMED ASSUMED target covariate law: age is20+59*Beta(1.35,1.75); female probability logistic(0.16+0.06*(age-50)/10). No target demographic values supplied or inferred. Dependence is explicitly weakly age-varying, not inferred independence."
+    },
+    "age_center": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "TASK-DERIVED mechanical size, eligibility range or stated analysis-centering convention; no empirical target estimate."
+    },
+    "age_scale": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "TASK-DERIVED mechanical size, eligibility range or stated analysis-centering convention; no empirical target estimate."
+    },
+    "bmi_center": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_task"
+      ],
+      "derivation": "TASK-DERIVED mechanical size, eligibility range or stated analysis-centering convention; no empirical target estimate."
+    },
+    "female_logit": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_demography"
+      ],
+      "derivation": "ASSUMED ASSUMED target covariate law: age is20+59*Beta(1.35,1.75); female probability logistic(0.16+0.06*(age-50)/10). No target demographic values supplied or inferred. Dependence is explicitly weakly age-varying, not inferred independence."
+    },
+    "bmi_log_median": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED ASSUMED conditional BMI: lognormal with log median log(26.5)+0.02*a-0.012*a^2+0.025*female, a=(age-50)/10, log SD0.18; rejection outside12-65kg/m2. All BMI location, spread, age and sex dependencies are assumptions, not recovered target statistics."
+    },
+    "bmi_log_sd": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED ASSUMED conditional BMI: lognormal with log median log(26.5)+0.02*a-0.012*a^2+0.025*female, a=(age-50)/10, log SD0.18; rejection outside12-65kg/m2. All BMI location, spread, age and sex dependencies are assumptions, not recovered target statistics."
+    },
+    "bmi_limits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED ASSUMED conditional BMI: lognormal with log median log(26.5)+0.02*a-0.012*a^2+0.025*female, a=(age-50)/10, log SD0.18; rejection outside12-65kg/m2. All BMI location, spread, age and sex dependencies are assumptions, not recovered target statistics."
+    },
+    "sbp_location": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bp_surface"
+      ],
+      "derivation": "ASSUMED ASSUMED joint conditional BP location: SBP126+5.5*a+1.0*a^2-4*female+0.7754*(BMI-25); DBP79+1.8*a-0.7*a^2-2.5*female+0.5967*(BMI-25). Nonlinear age patterns permit later-life divergence; numeric age/sex/intercept parameters are not source-adjusted effects. Source age-group contrasts are descriptive context only."
+    },
+    "dbp_location": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bp_surface"
+      ],
+      "derivation": "ASSUMED ASSUMED joint conditional BP location: SBP126+5.5*a+1.0*a^2-4*female+0.7754*(BMI-25); DBP79+1.8*a-0.7*a^2-2.5*female+0.5967*(BMI-25). Nonlinear age patterns permit later-life divergence; numeric age/sex/intercept parameters are not source-adjusted effects. Source age-group contrasts are descriptive context only."
+    },
+    "bmi_slopes_per1": {
+      "evidence_ids": [
+        "intersalt_bmi_sbp",
+        "intersalt_bmi_dbp"
+      ],
+      "assumption_ids": [
+        "A_bmi_transport"
+      ],
+      "derivation": "REPORTED source coefficients copied in original per1kg/m2 units; their use as target conditional slopes is ASSUMED. Per5 association units are DERIVED by multiplying by5:3.877 and2.9835mmHg; source SEs0.1795 and0.1285 after scaling are not generator residual SDs or transport uncertainty."
+    },
+    "sbp_residual_scale": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_joint"
+      ],
+      "derivation": "ASSUMED ASSUMED conditional Gaussian BP disturbances: SD_SBP=13+0.08*(age-20), SD_DBP=10.5mmHg, conditional rho=0.55. Rho is an explicitly assumed residual parameter, not the derived Beijing raw r. Beijing raw moments offer broad context only; conditional dependence is unidentified. Heteroscedasticity and nonlinear-age residuals imply the requested OLS residual r need not equal0.55."
+    },
+    "dbp_residual_sd": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_joint"
+      ],
+      "derivation": "ASSUMED ASSUMED conditional Gaussian BP disturbances: SD_SBP=13+0.08*(age-20), SD_DBP=10.5mmHg, conditional rho=0.55. Rho is an explicitly assumed residual parameter, not the derived Beijing raw r. Beijing raw moments offer broad context only; conditional dependence is unidentified. Heteroscedasticity and nonlinear-age residuals imply the requested OLS residual r need not equal0.55."
+    },
+    "conditional_residual_rho": {
+      "evidence_ids": [
+        "beijing_all_raw_r",
+        "beijing_65plus_raw_r"
+      ],
+      "assumption_ids": [
+        "A_joint"
+      ],
+      "derivation": "ASSUMED0.55 conditional dependence, not algebraically identified from the raw source correlations. Raw SD-derived correlations are contextual only; no covariance subtraction is justified without the unavailable source joint covariates."
+    },
+    "sbp_limits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_selection"
+      ],
+      "derivation": "ASSUMED ASSUMED joint support: BMI12-65; BP proposals are rejected jointly until60<=SBP<=290,30<=DBP<=200 and SBP>DBP. BP validity bounds represent analytical selection; positive PP is an additional feasibility assumption. Conditional redraw keeps covariates fixed, assuming their law already represents the selected population. No clipping or boundary mass; this changes the pre-selection Gaussian law and can alter slopes. Weight/height are not output and their separate selection effects are absorbed into the assumed BMI law; the BMI interval is compatible with at least one valid height/weight pair but not a reconstruction of their distribution."
+    },
+    "dbp_limits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_selection"
+      ],
+      "derivation": "ASSUMED ASSUMED joint support: BMI12-65; BP proposals are rejected jointly until60<=SBP<=290,30<=DBP<=200 and SBP>DBP. BP validity bounds represent analytical selection; positive PP is an additional feasibility assumption. Conditional redraw keeps covariates fixed, assuming their law already represents the selected population. No clipping or boundary mass; this changes the pre-selection Gaussian law and can alter slopes. Weight/height are not output and their separate selection effects are absorbed into the assumed BMI law; the BMI interval is compatible with at least one valid height/weight pair but not a reconstruction of their distribution."
+    },
+    "require_sbp_above_dbp": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_selection"
+      ],
+      "derivation": "ASSUMED ASSUMED joint support: BMI12-65; BP proposals are rejected jointly until60<=SBP<=290,30<=DBP<=200 and SBP>DBP. BP validity bounds represent analytical selection; positive PP is an additional feasibility assumption. Conditional redraw keeps covariates fixed, assuming their law already represents the selected population. No clipping or boundary mass; this changes the pre-selection Gaussian law and can alter slopes. Weight/height are not output and their separate selection effects are absorbed into the assumed BMI law; the BMI interval is compatible with at least one valid height/weight pair but not a reconstruction of their distribution."
+    },
+    "max_rejection_rounds": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_limits"
+      ],
+      "derivation": "ASSUMED Independent generator residual draws and fixed seeds describe conditional Monte Carlo variability only. Model/evidence/transport uncertainty is not quantified by repeated draws.128 rejection rounds is a finite computational safeguard; failure raises an error and never inserts clipped/fallback values."
+    }
+  }
+}

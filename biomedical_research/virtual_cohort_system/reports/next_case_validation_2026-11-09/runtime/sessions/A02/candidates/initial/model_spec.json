@@ -1,0 +1,181 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age": {
+      "minimum": 20,
+      "width": 60,
+      "beta_alpha": 1.4,
+      "beta_beta": 1.8
+    },
+    "female": {
+      "intercept": 0.53,
+      "age_slope": 0.001,
+      "age_center": 45
+    },
+    "bmi": {
+      "shift": 14.0,
+      "mean_intercept": 26.0,
+      "age_rise": 0.07,
+      "age_peak": 60.0,
+      "age_center": 45.0,
+      "age_fall": -0.08,
+      "female_shift": 0.8,
+      "log_sd": 0.34
+    },
+    "bp_surface": {
+      "age_center": 50.0,
+      "bmi_center": 25.0,
+      "age_knot": 55.0,
+      "sbp_intercept": 125.0,
+      "dbp_intercept": 78.5,
+      "sbp_age": 0.55,
+      "dbp_age": 0.22,
+      "sbp_age_hinge": 0.15,
+      "dbp_age_hinge": -0.5,
+      "sbp_female": -5.0,
+      "dbp_female": -2.0,
+      "sbp_female_age": 0.08
+    },
+    "bmi_slopes": {
+      "sbp": 0.7754,
+      "dbp": 0.5967
+    },
+    "residual": {
+      "df": 8.0,
+      "sbp_sd": 14.5,
+      "dbp_sd": 9.5,
+      "sbp_sd_age_slope": 0.1,
+      "sbp_sd_age_knot": 50.0,
+      "rho": 0.65
+    },
+    "eligibility": {
+      "sbp_min": 60.0,
+      "sbp_max": 290.0,
+      "dbp_min": 30.0,
+      "dbp_max": 200.0,
+      "bmi_min": 6.802721088435374,
+      "bmi_max": 138.88888888888889,
+      "positive_pulse_pressure": true
+    },
+    "implementation": {
+      "batch_size": 6000,
+      "max_batches": 20
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A_demographics",
+      "description": "Assumed target analytical law: completed age=floor(20+60*Beta(1.4,1.8)); female probability0.53+0.001*(age-45). No target empirical demographics support these numbers. Rows are equal-weight draws from the hypothesized labweight-weighted selected distribution; no claim of national representation."
+    },
+    {
+      "id": "A_bmi",
+      "description": "Assumed BMI conditional mean=26+0.07*(min(age,60)-45)-0.08*max(age-60,0)+0.8*female. BMI=14+lognormal with logSD0.34, centered to that mean. These age/sex dependencies, skew and scale are assumptions, not recovered source moments."
+    },
+    {
+      "id": "A_bp_surface",
+      "description": "Assumed mean SBP=125+0.55*(age-50)+0.15*max(age-55,0)+female*(-5+0.08*(age-50))+0.7754*(BMI-25). Assumed mean DBP=78.5+0.22*(age-50)-0.50*max(age-55,0)-2*female+0.5967*(BMI-25). Beijing age contrasts motivate allowing different late-age trends but do not numerically identify these coefficients. Treatment/disease are marginalized into this descriptive law, never excluded."
+    },
+    {
+      "id": "A_slope_transport",
+      "description": "The two reported INTERSALT BMI coefficients are provisionally used as additive conditional slopes in the wider target age range. This assumes source adjustment beyond age/sex does not change the intended transported BMI relationship, and stable associations across country/era/selection/device/treatment. It is not causal identification. Nonlinear age patterns, selection rejection and random variation can make the requested linear-regression projection differ."
+    },
+    {
+      "id": "A_residual",
+      "description": "Assumed standardized bivariate Student-t residuals with8 degrees of freedom and common mixing draw; SBP scale=14.5+0.10*max(age-50,0), DBP scale9.5, correlation0.65. Before feasibility conditioning these are conditional SDs/correlation, not source-reported quantities. Choosing a positively correlated finite-variance law recognizes shared BP variability without relabelling Beijing raw correlation as residual correlation. Tail shape, heteroskedasticity, correlation and scales are uncalibrated assumptions."
+    },
+    {
+      "id": "A_selection",
+      "description": "The covariate distribution is specified directly for the analytical complete-case population. Rejection retains BP within source-dictionary SBP60-290 and DBP30-200, with assumed physiological ordering SBP>DBP. BMI is required only to lie within the existential range30/(2.1^2) through200/(1.2^2) implied by the weight/height dictionary. No clipping occurs. Without generated height, weight, pregnancy or response processes, this does not reconstruct their joint selection; their marginal impact is assumed absorbed into the selected law."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Transport source measurements to final baseline PNS BP through an identity-unit, zero additional mean-shift assumption. Source two-reading manual INTERSALT and automated Beijing protocols differ from target three automated G-TECH readings after seated rest and unknown final aggregation. Differences in noise, device, repeated visits and timing remain inside assumed residual law. Source coefficients/SDs cannot quantify that transport uncertainty."
+    },
+    {
+      "id": "A_descriptive",
+      "description": "Descriptive checks calculate equal-weight mean, ddof1 SD and Pearson correlation among generated ages>=65 (therefore65-79). Beijing Table1 group has no verified upper age bound and different age/sex/BMI mixture, treatment, geography, disease and blood-sample selection. Unreported weighting, SD denominator and paired-data conventions are explicit calculation assumptions. These are approximate target-context contrasts, never source replay, a loss function, significance tests or target validation."
+    },
+    {
+      "id": "A_montecarlo",
+      "description": "Fixed scientific parameters are held across requested seeds271,409,557. Their variation concerns finite simulated samples only and does not represent evidence or transport uncertainty. Output row labels1..3000 are mechanical identifiers. Batch rejection is bounded to20 batches of6000 proposals; failure raises rather than fills or clips."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_montecarlo"
+      ],
+      "derivation": "Required task size, mechanical setting."
+    },
+    "age": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_demographics"
+      ],
+      "derivation": "All constants assumed except task lower age20; width60 and floor implement completed ages20-79."
+    },
+    "female": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_demographics"
+      ],
+      "derivation": "All probability-law constants assumed; range over permitted age is0.505 to0.564."
+    },
+    "bmi": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi",
+        "A_selection"
+      ],
+      "derivation": "All conditional distribution constants assumed; lognormal location is derived as log(mean-shift)-log_sd^2/2."
+    },
+    "bp_surface": {
+      "evidence_ids": [
+        "E_BJ_age_pattern"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "All numerical constants assumed. Age-group descriptive evidence motivates a hinge without being used as an adjusted slope estimate."
+    },
+    "bmi_slopes": {
+      "evidence_ids": [
+        "E_IS_sbp_bmi",
+        "E_IS_dbp_bmi"
+      ],
+      "assumption_ids": [
+        "A_slope_transport"
+      ],
+      "derivation": "Reported coefficients copied per1kg/m^2; task effects per5 are algebraically3.8770 and2.9835 before changes induced by linear projection and eligibility."
+    },
+    "residual": {
+      "evidence_ids": [
+        "E_BJ_sbp_sd65",
+        "E_BJ_dbp_sd65",
+        "E_BJ_pp_sd65",
+        "E_BJ_raw_r65"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "All numerical residual-law constants assumed. Reported marginal SDs and derived raw correlation provide scale context only; no subtraction of an unidentified explained variance and no raw-to-residual relabelling."
+    },
+    "eligibility": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_selection"
+      ],
+      "derivation": "BP boundaries from visible source-dictionary task; BMI bounds derived algebraically from task weight and height extrema; positive pulse pressure is an additional disclosed assumption."
+    },
+    "implementation": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_montecarlo"
+      ],
+      "derivation": "Mechanical finite work bound and proposal batch count, not biomedical evidence."
+    }
+  }
+}

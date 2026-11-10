@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "study_id": "pns_bp_joint_2026_11_09",
+  "author_ids": ["A01", "A02", "A03", "A04", "A05"],
+  "task": {
+    "schema_version": 1,
+    "task_id": "pns_bp_joint_2026_11_09",
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {"name":"row_id","kind":"integer","unit":"","role":"identifier","nullable":false},
+      {"name":"age","kind":"number","unit":"years at baseline","role":"generated","nullable":false,"minimum":20,"maximum":79},
+      {"name":"female","kind":"category","unit":"recorded sex: 0 male, 1 female","role":"generated","nullable":false,"categories":[0,1]},
+      {"name":"bmi","kind":"number","unit":"kg/m^2","role":"generated","nullable":false},
+      {"name":"sbp","kind":"number","unit":"mmHg","role":"generated","nullable":false},
+      {"name":"dbp","kind":"number","unit":"mmHg","role":"generated","nullable":false}
+    ],
+    "information_policy": {
+      "mode":"published_evidence",
+      "excluded_cohorts":["PNS","Pesquisa Nacional de Saude","National Health Survey Brazil"],
+      "allowed_tools":["literature.search","literature.fetch","literature.list-supplements","literature.fetch-supplement","web.fetch"]
+    },
+    "budget":{"source_queries":12,"source_downloads":10,"revisions":1}
+  },
+  "analyses":["bmi_sbp","bmi_dbp","residual_correlation"],
+  "purpose":"Construct one joint cohort supporting SBP and DBP associations with BMI plus residual SBP–DBP dependence. Both regressions use [1,(age-50)/10,female,(bmi-25)/5]. Generated rows have equal weights; report BMI coefficients in mmHg per 5 kg/m^2 and Pearson correlation of paired centered regression residuals. Return all prespecified diagnostics. These are association projections, not intervention effects. No target value or desired direction is supplied.",
+  "session_limits":{"actions":100,"candidates":2,"executions":6,"feedbacks":6,"analyses":6},
+  "seeds":[271,409,557],
+  "execution_limits":{"timeout_seconds":60,"memory_mb":1536,"output_bytes":20000000,"log_bytes":50000},
+  "runtime":{"backend":"wsl_bubblewrap","distribution":"Ubuntu-24.04","venv_root":"/home/zwang/.cache/evidence-cohort-runtime/m2/venv","bwrap":"/home/zwang/.cache/evidence-cohort-runtime/m2/bubblewrap/usr/bin/bwrap"},
+  "retrieval_limits":{"source_bytes":52428800,"external_searches_share_query_budget":true},
+  "web_evidence":{"response_bytes":8388608,"extracted_bytes":8388608,"total_bytes":52428800,"http_requests":32,"timeout_seconds":30,"max_redirects":5,"pdf_pages":300},
+  "source_replay_limits":{"executions":6,"max_rows_per_evaluation":10000},
+  "analysis_adapter":{"filename":"analysis_tools.py","function":"analyze","sha256":"665b6c4ab045abc0868912060a70c7959517003b9bb941ab181076282d493792"}
+}

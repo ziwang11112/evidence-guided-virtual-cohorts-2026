@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+  "measurement": {
+    "mode": "identity",
+    "description": "Same labels and mmHg assumed across different devices and reading averages; no device offset estimated. Descriptive comparisons only; target selection is not source selection."
+  },
+  "assumption_ids": [
+    "A_feedback",
+    "A_measurement"
+  ],
+  "checks": [
+    {
+      "id": "check_bmi_sbp",
+      "evidence_id": "E_bmi_sbp",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "INTERSALT inverse-variance pooled within-centre coefficient adjusted for sodium, potassium and alcohol cannot be represented with the task variables; age/sex-only OLS is not substituted."
+    },
+    {
+      "id": "check_bmi_dbp",
+      "evidence_id": "E_bmi_dbp",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "INTERSALT inverse-variance pooled within-centre coefficient adjusted for sodium, potassium and alcohol cannot be represented with the task variables; age/sex-only OLS is not substituted."
+    },
+    {
+      "id": "check_old_sbp_mean",
+      "evidence_id": "E_old_sbp_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "mmHg",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 65
+          }
+        ],
+        "missing_policy": "error",
+        "column": "sbp"
+      },
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "Only a target-context age65-79 descriptive contrast with source age>=65; source population, age ceiling, measurement, treatment and selection are not replayed."
+    },
+    {
+      "id": "check_old_sbp_sd",
+      "evidence_id": "E_old_sbp_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "mmHg",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 65
+          }
+        ],
+        "missing_policy": "error",
+        "column": "sbp"
+      },
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "Only a target-context age65-79 descriptive contrast with source age>=65; source population, age ceiling, measurement, treatment and selection are not replayed."
+    },
+    {
+      "id": "check_old_dbp_mean",
+      "evidence_id": "E_old_dbp_mean",
+      "status": "approximate",
+      "operator": {
+        "kind": "mean",
+        "unit": "mmHg",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 65
+          }
+        ],
+        "missing_policy": "error",
+        "column": "dbp"
+      },
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "Only a target-context age65-79 descriptive contrast with source age>=65; source population, age ceiling, measurement, treatment and selection are not replayed."
+    },
+    {
+      "id": "check_old_dbp_sd",
+      "evidence_id": "E_old_dbp_sd",
+      "status": "approximate",
+      "operator": {
+        "kind": "sd",
+        "unit": "mmHg",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 65
+          }
+        ],
+        "missing_policy": "error",
+        "column": "dbp"
+      },
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "Only a target-context age65-79 descriptive contrast with source age>=65; source population, age ceiling, measurement, treatment and selection are not replayed."
+    },
+    {
+      "id": "check_old_pp_sd",
+      "evidence_id": "E_old_pp_sd",
+      "status": "not_computable",
+      "operator": null,
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "Pulse pressure is a derived quantity not available to the declared operator; do not substitute SBP or DBP SD."
+    },
+    {
+      "id": "check_old_raw_r",
+      "evidence_id": "E_old_raw_r",
+      "status": "approximate",
+      "operator": {
+        "kind": "correlation",
+        "unit": "1",
+        "selection": [
+          {
+            "column": "age",
+            "op": "ge",
+            "value": 65
+          }
+        ],
+        "missing_policy": "error",
+        "x": "sbp",
+        "y": "dbp"
+      },
+      "assumption_ids": [
+        "A_feedback"
+      ],
+      "reason": "Only a target-context age65-79 descriptive contrast with source age>=65; source population, age ceiling, measurement, treatment and selection are not replayed."
+    }
+  ]
+}

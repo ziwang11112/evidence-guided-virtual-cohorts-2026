@@ -1,0 +1,199 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_distribution": {
+      "low": 20.0,
+      "width": 59.0,
+      "alpha": 1.45,
+      "beta": 1.8
+    },
+    "female_probability": {
+      "at50": 0.53,
+      "per_year": 0.001
+    },
+    "bmi_distribution": {
+      "shift": 14.0,
+      "mean_at50_male": 26.0,
+      "per_year": 0.04,
+      "female_difference": 0.6,
+      "late_knot": 55.0,
+      "late_quadratic": -0.002,
+      "sd": 4.5,
+      "upper": 138.88888888888889
+    },
+    "sbp_location": {
+      "intercept": 125.0,
+      "age_center": 50.0,
+      "age_linear": 0.38,
+      "hinge_knot": 50.0,
+      "hinge_slope": 0.32,
+      "female_at50": -5.0,
+      "female_age_slope": 0.1,
+      "bmi_center": 25.0
+    },
+    "dbp_location": {
+      "intercept": 80.0,
+      "age_center": 50.0,
+      "age_linear": 0.25,
+      "hinge_knot": 55.0,
+      "hinge_slope": -0.43,
+      "female": -3.0,
+      "bmi_center": 25.0
+    },
+    "bmi_sbp_slope": 0.7754,
+    "bmi_dbp_slope": 0.5967,
+    "residual_distribution": {
+      "df": 8.0,
+      "rho": 0.5,
+      "sbp_sd_base": 13.0,
+      "sbp_sd_knot": 40.0,
+      "sbp_sd_slope": 0.15,
+      "dbp_sd_base": 9.0,
+      "dbp_sd_knot": 50.0,
+      "dbp_sd_slope": 0.025
+    },
+    "selection": {
+      "sbp_min": 60.0,
+      "sbp_max": 290.0,
+      "dbp_min": 30.0,
+      "dbp_max": 200.0,
+      "positive_pulse_pressure": true
+    },
+    "max_rejection_rounds": 10000
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "Assumed selected analytical covariate law: age=20+59*Beta(1.45,1.8); female probability=.53+.001*(age-50). These are not PNS estimates or a claim of national representativeness. Equal-weight generated rows approximate the requested weighted complete-case distribution."
+    },
+    {
+      "id": "A_bmi",
+      "description": "Assumed BMI=14+Gamma with conditional mean 26+.04*(age-50)+.6*female-.002*max(age-55,0)^2 and conditional SD4.5. This introduces age/sex dependence and right skew. The upper support is 200/(1.2^2), guaranteeing some weight/height pair within dictionary domains, but actual weight/height selection and pregnancy are not mechanistically reconstructed."
+    },
+    {
+      "id": "A_bp_surface",
+      "description": "Assumed marginal-over-treatment conditional locations: SBP=125+.38*(age-50)+.32*max(age-50,0)+[-5+.10*(age-50)]*female+.7754*(BMI-25); DBP=80+.25*(age-50)-.43*max(age-55,0)-3*female+.5967*(BMI-25). Nonlinear age shapes and numeric sex contrasts are construction assumptions, not coefficients extracted from group means."
+    },
+    {
+      "id": "A_slope_transfer",
+      "description": "The two reported INTERSALT BMI coefficients are used unchanged as conditional location slopes per kg/m^2. This assumes transferable association despite country/era/age and richer covariate adjustment, inverse-variance pooling and target labweight selection. The final requested linear OLS coefficient may differ because of nonlinear age terms and conditioning; neither parameter is causal."
+    },
+    {
+      "id": "A_joint",
+      "description": "Assumed bivariate Student t residual with df8, unit-variance scaling, conditional Pearson correlation .50 and SD_S=13+.15*max(age-40,0), SD_D=9+.025*max(age-50,0). The .50 residual correlation is not derived from or relabelled from Beijing raw .545; both residual scales and tail law are assumptions. Common chi-square mixing creates tail dependence."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Target uses G-TECH MA100, three seated readings two minutes apart after >=5 minutes rest, with unverified released final averaging. INTERSALT uses two random-zero readings and Beijing two Omron readings. Net instrument, averaging, visit, selection and treatment differences are absorbed in the assumed surface and residual distribution; no separately estimated correction or untreated latent BP is claimed."
+    },
+    {
+      "id": "A_selection",
+      "description": "BP is generated conditional on each covariate row by rejection within SBP60-290, DBP30-200 and SBP>DBP. The first two bounds represent target analytical eligibility; positive pulse pressure is an additional physiology assumption. This is truncation by resampling, never clipping. It alters conditional moments and dependence near boundaries. BMI upper-bound rejection also truncates the assumed gamma law. No exclusion by hypertension, diabetes or therapy is added."
+    },
+    {
+      "id": "A_feedback",
+      "description": "Beijing age>=65 target-row contrasts are approximate and differ in country, age support, sampling, treatment and BP protocol. Equal weights, complete-pair operators and sample SD ddof1 are explicit generated-data conventions. Source weighting and SD denominator are not fully reported. Strict unavailable checks stay unavailable; descriptive agreement is not source replay or target validation."
+    },
+    {
+      "id": "A_numerics",
+      "description": "Exactly3000 rows, unique sequential IDs1..3000, NumPy default_rng(seed), full floating precision; maximum10000 rejection rounds then failure. These are task/computation settings, not biomedical evidence."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_numerics"
+      ],
+      "derivation": "Task-required count, mechanical setting."
+    },
+    "age_distribution": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population"
+      ],
+      "derivation": "Assumed scaled-beta population law; not estimated from the target or sources."
+    },
+    "female_probability": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population"
+      ],
+      "derivation": "Assumed probability, ranging .50 to .559 over age20-79."
+    },
+    "bmi_distribution": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi",
+        "A_selection"
+      ],
+      "derivation": "Assumed shifted gamma. Gamma shape=(conditional_mean-shift)^2/sd^2 and scale=sd^2/(conditional_mean-shift). Upper bound derives only from target dictionary200kg/1.2m squared."
+    },
+    "sbp_location": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "All numeric location and age/sex parameters assumed. Older source group moments motivate allowing SBP and DBP age shapes to differ, without equating raw group contrasts to adjusted coefficients."
+    },
+    "dbp_location": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "All numeric location and age/sex parameters assumed. Older source group moments motivate allowing SBP and DBP age shapes to differ, without equating raw group contrasts to adjusted coefficients."
+    },
+    "bmi_sbp_slope": {
+      "evidence_ids": [
+        "E_bmi_sbp"
+      ],
+      "assumption_ids": [
+        "A_slope_transfer"
+      ],
+      "derivation": "Reported source numeric coefficient per kg/m^2, used as a target conditional location coefficient under an explicit transport assumption. Five-unit source rescaling is multiplication by5."
+    },
+    "bmi_dbp_slope": {
+      "evidence_ids": [
+        "E_bmi_dbp"
+      ],
+      "assumption_ids": [
+        "A_slope_transfer"
+      ],
+      "derivation": "Reported source numeric coefficient per kg/m^2, used as a target conditional location coefficient under an explicit transport assumption. Five-unit source rescaling is multiplication by5."
+    },
+    "residual_distribution": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_joint",
+        "A_measurement"
+      ],
+      "derivation": "Entire residual law assumed. Raw older source moments supply context only; residual SD/correlation are not recoverable from them. Unit variance follows multiplying normal vectors by sqrt((df-2)/ChiSquare(df))."
+    },
+    "selection": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_selection"
+      ],
+      "derivation": "Domain limits from task eligibility plus assumed positive pulse pressure; rejection rather than clipping."
+    },
+    "max_rejection_rounds": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_numerics"
+      ],
+      "derivation": "Finite computation limit; fail visibly if exceeded."
+    }
+  }
+}

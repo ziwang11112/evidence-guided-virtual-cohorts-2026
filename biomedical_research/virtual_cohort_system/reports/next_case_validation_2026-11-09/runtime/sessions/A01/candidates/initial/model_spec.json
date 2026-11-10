@@ -1,0 +1,437 @@
+{
+  "parameters": {
+    "n_rows": 3000,
+    "age_decade_starts": [
+      20,
+      30,
+      40,
+      50,
+      60,
+      70
+    ],
+    "age_decade_probabilities": [
+      0.25,
+      0.23,
+      0.2,
+      0.16,
+      0.1,
+      0.06
+    ],
+    "age_decade_width": 10,
+    "female_probabilities": [
+      0.51,
+      0.52,
+      0.53,
+      0.54,
+      0.55,
+      0.56
+    ],
+    "bmi_floor": 12.0,
+    "bmi_mean_at40_male": 25.0,
+    "bmi_age_center": 40.0,
+    "bmi_age_slope": 0.035,
+    "bmi_decline_knot": 60.0,
+    "bmi_postknot_slope_change": -0.06,
+    "bmi_female_difference": 0.5,
+    "bmi_conditional_sd": 4.5,
+    "bmi_maximum": 138.88888888888889,
+    "bp_age_center": 50.0,
+    "bp_bmi_center": 25.0,
+    "sbp_intercept": 126.0,
+    "sbp_age_slope": 0.65,
+    "sbp_female_difference_at50": -5.0,
+    "sbp_female_age_interaction": 0.05,
+    "sbp_bmi_slope": 0.7754,
+    "dbp_intercept": 79.0,
+    "dbp_age_knot": 55.0,
+    "dbp_age_slope_before": 0.25,
+    "dbp_age_slope_after": -0.15,
+    "dbp_female_difference": -3.0,
+    "dbp_bmi_slope": 0.5967,
+    "residual_age_center": 20.0,
+    "sbp_residual_sd_at20": 14.0,
+    "sbp_residual_sd_age_slope": 0.12,
+    "dbp_residual_sd_at20": 9.5,
+    "dbp_residual_sd_age_slope": 0.025,
+    "residual_correlation": 0.5,
+    "sbp_limits": [
+      60.0,
+      290.0
+    ],
+    "dbp_limits": [
+      30.0,
+      200.0
+    ],
+    "max_rejection_passes": 100
+  },
+  "assumptions": [
+    {
+      "id": "A_population",
+      "description": "Equal-weight virtual rows are posited draws from the requested labweight-weighted selected complete-case distribution. Target age/sex/BMI frequencies and their dependence are unidentified. Declining decade frequencies and modest female excess are author assumptions; they are not PNS estimates."
+    },
+    {
+      "id": "A_bmi",
+      "description": "BMI is a right-skewed shifted gamma conditional on age/sex, with modest rise through middle age then decline. All numerical distribution settings are assumed; no source BMI marginal is relabelled as a target estimate."
+    },
+    {
+      "id": "A_bp_surface",
+      "description": "The BP mean surfaces are assumed: rising SBP, DBP rising until55 then declining, lower female conditional means with an age-varying SBP contrast. Beijing older-group means motivate the scale only and do not identify adjusted age/sex functions or target intercepts."
+    },
+    {
+      "id": "A_bmi_transport",
+      "description": "INTERSALT pooled BMI coefficients are used as the conditional slopes per1 BMI unit. This explicitly assumes their richer adjustment, centre pooling, treatment composition, age20-59 range, device, era and country differences can be transported to all target ages. It does not identify a causal effect; task OLS slopes can also differ due to nonlinear age/sex terms and truncation."
+    },
+    {
+      "id": "A_residual",
+      "description": "A heteroscedastic bivariate Gaussian conditional residual is assumed. SBP SD rises with age and DBP SD rises slightly; rho=0.50 is an assumed residual correlation. It is not the Beijing raw r=0.5451 relabelled: age/sex/BMI covariance explained by the mean surface remains unidentified. Beijing marginal SDs/raw covariance only motivate orders of magnitude."
+    },
+    {
+      "id": "A_measurement",
+      "description": "Residual variation combines biological variation, unmodelled treatment/selection and measurement error. No separate treatment mixture is identified. INTERSALT uses two random-zero readings, Beijing two Omron readings, target three G-TECH MA100 readings with unknown released final algorithm. Zero additional device/averaging offset is assumed, not measured. Baseline interview BP/BMI are modeled; later lab-visit timing is not substituted."
+    },
+    {
+      "id": "A_feasibility",
+      "description": "BMI is rejected only if it exceeds the envelope 200/(1.2^2); its shifted-gamma lower endpoint12 is assumed and inside dictionary feasibility. BP residual pairs are redrawn conditional on fixed covariates until SBP60-290, DBP30-200 and SBP>DBP. This is an explicit conditional truncation assumption for eligible physiological records, not automatic clipping; it can change moments/slopes. Weight and height themselves are not reconstructed."
+    },
+    {
+      "id": "A_feedback",
+      "description": "The age>=65 generated target stratum is a descriptive contrast with Beijing age>=65, not source replay. Source age ceiling, weighting, SD denominator and complete selection are unresolved. Equal weights, sample SD ddof1 and Pearson raw r are explicit diagnostic conventions. No source discrepancy is a fit target or validation tolerance."
+    },
+    {
+      "id": "A_execution",
+      "description": "Exactly3000 rows and schema order are task mechanics. Row IDs are sequential labels. NumPy seeded sampling supplies repeated Monte Carlo draws conditional on one fixed scientific scenario. At most100 rejection passes ensure bounded completion or an explicit error; no fallback/clipping. Source SEs do not resample parameters and seeds do not quantify scientific uncertainty."
+    }
+  ],
+  "parameter_provenance": {
+    "n_rows": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_execution"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "age_decade_starts": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "age_decade_probabilities": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "age_decade_width": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "female_probabilities": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_population"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_floor": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_mean_at40_male": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_age_center": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_age_slope": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_decline_knot": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_postknot_slope_change": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_female_difference": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_conditional_sd": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_bmi"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bmi_maximum": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_feasibility"
+      ],
+      "derivation": "Task eligibility values with ASSUMED conditional truncation. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bp_age_center": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "bp_bmi_center": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_intercept": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_age_slope": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_female_difference_at50": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_female_age_interaction": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_bmi_slope": {
+      "evidence_ids": [
+        "E_bmi_sbp"
+      ],
+      "assumption_ids": [
+        "A_bmi_transport"
+      ],
+      "derivation": "REPORTED numeric coefficient with ASSUMED transport. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_intercept": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_age_knot": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_age_slope_before": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_age_slope_after": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_female_difference": {
+      "evidence_ids": [
+        "E_old_sbp_mean",
+        "E_old_dbp_mean"
+      ],
+      "assumption_ids": [
+        "A_bp_surface",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_bmi_slope": {
+      "evidence_ids": [
+        "E_bmi_dbp"
+      ],
+      "assumption_ids": [
+        "A_bmi_transport"
+      ],
+      "derivation": "REPORTED numeric coefficient with ASSUMED transport. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "residual_age_center": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_residual_sd_at20": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_residual_sd_age_slope": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_residual_sd_at20": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_residual_sd_age_slope": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "residual_correlation": {
+      "evidence_ids": [
+        "E_old_sbp_sd",
+        "E_old_dbp_sd",
+        "E_old_raw_r"
+      ],
+      "assumption_ids": [
+        "A_residual",
+        "A_measurement"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "sbp_limits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_feasibility"
+      ],
+      "derivation": "Task eligibility values with ASSUMED conditional truncation. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "dbp_limits": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_feasibility"
+      ],
+      "derivation": "Task eligibility values with ASSUMED conditional truncation. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    },
+    "max_rejection_passes": {
+      "evidence_ids": [],
+      "assumption_ids": [
+        "A_execution"
+      ],
+      "derivation": "ASSUMED. See declared scientific assumptions; this parameter is not an inferred target estimate."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+Initial scientific decision, author A01
+
+Use a conditional gamma BMI and heteroscedastic bivariate-normal BP construction. Transport the two INTERSALT BMI coefficients as an explicit conditional association assumption. Target demographics, age and sex surfaces, residual scales/correlation and selection behavior are not identified by admitted evidence; the specification marks these as assumptions. The generator contains no individual source or target records.
+
+Positive SBP-DBP ordering and dictionary-admissible BP are imposed by rejection conditional on covariates; this may change conditional moments slightly. No values are clipped. Female and age dependence of BMI, nonlinear DBP age trend and age-varying female SBP difference mean the requested linear regressions are projections of the generated joint law, not hard-coded output coefficients. The broad assumed residual law does not distinguish treatment, biological and measurement effects.
+
+The two source families are INTERSALT and Beijing BLSA2009. Original TableII and methods scans and the Beijing original text were examined. No additional retrieval was used. INTERMAP is not used as independent quantitative evidence. The raw old-age covariance algebra is retained as raw; the residual correlation0.50 is separately assumed. Source SEs are not target uncertainty.
+
+Strict source checks deliberately retain unavailable weighting/definitions and unsupported richer-adjustment coefficients. Descriptive BP means/SDs/raw correlation for generated ages65-79 are approximate contrasts with Beijing ages>=65. They do not recreate source disease exclusions, full age range, treatment distribution, covariates or measurement. No discrepancy is a calibrated target loss. Optional source replay is not scientifically supported with the source joint age/sex/BMI distribution and treatment/selection laws missing, so no source-replay plan is submitted.
+
+The original protocol permits pregnancy unknown/inapplicable and treatment; no hidden exclusions for those conditions are introduced. Unobserved eligibility processes are absorbed into the assumed selected analytical distribution. Target baseline timing is preserved conceptually. The latent weight/height pair is not reconstructed, so BMI feasibility is only an envelope check.
+
+Current status: artifacts prepared for non-executing preflight and independent review. No generator execution or generated-data check has occurred. A subsequent decision will consider all three fixed seeds, strict/descriptive feedback and generated-only analyses. Retain or revise based on concrete scientific/implementation findings; do not select favorable seeds. Repeated seeds quantify simulation variation only, not evidence, transport or model uncertainty.
