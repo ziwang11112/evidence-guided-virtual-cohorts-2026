@@ -1,24 +1,27 @@
 # Manuscript
 
-**Expanded methods draft [v0.25](DRAFT_v0_25.md), 8 November 2026.**
+**Analysis-focused methods draft [v0.26](DRAFT_v0_26.md), 9 November 2026.**
 
-[Reading PDF](methods_draft_v25_2026-11-08/paper.pdf) · [Overleaf ZIP](methods_draft_v25_2026-11-08/overleaf_v25.zip) · [System overview](paper_figures_v24_2026-11-06/fig1-agent-loop.drawio.svg)
+[Reading PDF](methods_draft_v26_2026-11-09/paper.pdf) · [Overleaf ZIP](methods_draft_v26_2026-11-09/overleaf_v26.zip) · [Editable manuscript](DRAFT_v0_26.md)
 
-v0.25 completes both statistical comparator columns in Table S1, reports the H03 dispersion mismatch beside coefficient fidelity, explains the iron complete-case estimand and adds verified KMGen/population-synthesis references. Supplement S13 records a [bounded artificial test](../reports/review_revision_2026-11-08/controlled_joint_moments/RESULTS.md): ordinary and extra-consistency instructions produced the same law, with no demonstrated component improvement.
+The paper now leads with complete-cohort analytical utility, followed by the value of relationship evidence and additional biomedical uses. Its core question is whether scientific Agents can turn incomplete published evidence and a research request into data supporting the intended analyses. Full unfavorable outcomes, comparator asymmetries and reference exposure remain visible.
 
-| Main figure | What to look for |
-| --- | --- |
-| 1. Scientific agent in action | The agent writes a generator, receives allowable feedback on a trial, then keeps or revises its model. Frozen virtual tables and a separate measured reference go to evaluation. |
-| 2. One scientific request | See how an iron-status study becomes a virtual table containing paired measurements. |
-| 3. Uses of the same iron-status records | The two threshold measures and the continuous rank correlation respond differently to each model's assumptions. |
-| 4. External relationship evidence | Across the CHNS and ENSANUT cases five of six designated coefficient discrepancies decreased with richer evidence. |
-| 5. Glycemia and lipids | The point directions agree across the six analyses. The modeled residual lipid correlation is weaker than the measured sample estimate. |
+| Main figure | What it establishes |
+|---|---|
+| 1. Scientific Agent workflow | The author chooses a model; tools execute and inspect it; the final data go to analysis. |
+| 2. One concrete construction | Iron evidence becomes paired hemoglobin/ferritin records with explicit assumptions. |
+| 3. Complete-cohort analytical utility | All six requested glycemia analyses from four authors and twelve tables, including magnitude mismatches. |
+| 4. Relationship evidence | Five of six information contrasts improve; all statistical comparator results remain. |
+| 5. Iron-status analyses | Threshold and continuous uses differ on the same records. |
+| 6. Glycemia and lipids | Complete cross-task results and unresolved joint relationships. |
 
-Supplement S11 gives the projection equations for a single CHNS glycemia constructor. S10 provides the iron threshold calculations. Figure S5 and Table S7 preserve the earlier prospective stop. Figure S6 shows the HRS longitudinal comparison. The [lipid diagnostic](Q5_LIPID_ORDER_POST_HOC_v19.md) examines joint biological consistency.
+The [claim-to-figure map](../reports/manuscript_focus_v26_2026-11-09/CLAIM_FIGURE_MAP.md) and [method coverage](../reports/manuscript_focus_v26_2026-11-09/METHOD_COVERAGE.md) distinguish the common procedure from the controllers actually tested. Historical synthetic-training utility is in S14; later adaptive/source-context capabilities are in S15. These do not retroactively become tests of one newest release.
 
-Domain review, confirmed author details and study-specific declarations are pending. [Claim-specific gaps](KEY_EXPERIMENT_GAPS_v14_2026-11-05.md) · [KDD comparator rationale](../docs/KDD_LLMSYNTHOR_COMPARISON_PRIORITY.md).
+The PDF has no imposed page limit: 14 main pages plus references and supplementary results, 35 total. Author details, biomedical applicability review and submission-specific requirements remain pending. This integration does not generate or retune clinical data.
 
 ## Preserved history
+
+- [v0.25](DRAFT_v0_25.md), [reading PDF](methods_draft_v25_2026-11-08/paper.pdf) and [Overleaf ZIP](methods_draft_v25_2026-11-08/overleaf_v25.zip).
 
 - [v0.24](DRAFT_v0_24.md), [expanded methods PDF](methods_draft_v24_2026-11-06/paper.pdf) and [retained Figure 1](paper_figures_v24_2026-11-06/fig1-agent-loop.drawio.svg).
 
