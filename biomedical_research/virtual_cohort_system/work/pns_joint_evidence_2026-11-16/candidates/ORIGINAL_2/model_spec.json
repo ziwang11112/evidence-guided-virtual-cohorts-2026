@@ -1,0 +1,161 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_joint_evidence_followup_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_name": "bounded_conditional_bivariate_t_cohort",
+    "interpretation": "A fixed hypothetical joint law transported to the declared weighted complete-case analytical population. Equal-weight generated rows approximate this law, not a recovered PNS dataset or an identified national distribution.",
+    "design": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0
+    },
+    "age": {
+      "edges": [
+        20.0,
+        35.0,
+        50.0,
+        65.0,
+        79.0
+      ],
+      "probabilities": [
+        0.32,
+        0.29,
+        0.25,
+        0.14
+      ],
+      "within_bin": "continuous_uniform"
+    },
+    "female_probability": 0.54,
+    "bmi": {
+      "distribution": "conditionally_truncated_lognormal",
+      "untruncated_arithmetic_mean": {
+        "intercept": 27.0,
+        "female": 0.6,
+        "age_a": 0.35,
+        "age_a_squared": -0.18
+      },
+      "untruncated_coefficient_of_variation": 0.18,
+      "bounds": [
+        14.0,
+        60.0
+      ]
+    },
+    "bp": {
+      "untruncated_location": {
+        "sbp": {
+          "intercept": 126.0,
+          "age_a": 5.5,
+          "female": -4.0,
+          "bmi_b": 3.877,
+          "age_a_squared": 0.0
+        },
+        "dbp": {
+          "intercept": 79.0,
+          "age_a": 1.2,
+          "female": -2.0,
+          "bmi_b": 2.9835,
+          "age_a_squared": -0.65
+        }
+      },
+      "errors": {
+        "distribution": "centered_bivariate_student_t",
+        "degrees_of_freedom": 7.0,
+        "untruncated_marginal_sd": [
+          16.0,
+          10.0
+        ],
+        "untruncated_correlation": 0.5,
+        "construction": "For independent standard normals z1,z2 and q distributed chi-square(7), use sqrt(5/q) times [16*z1, 10*(0.5*z1+sqrt(0.75)*z2)]."
+      },
+      "conditional_acceptance_bounds": {
+        "sbp": [
+          75.0,
+          260.0
+        ],
+        "dbp": [
+          40.0,
+          150.0
+        ],
+        "pulse_pressure": [
+          15.0,
+          150.0
+        ]
+      },
+      "rejection_rule": "Keep age, sex and BMI fixed; independently redraw the paired BP errors until both BP values and their difference satisfy the bounds. This defines a conditional distribution, not cohort-wide exclusion."
+    },
+    "parameter_uncertainty": "All parameters are fixed scenario choices. Source coefficient SEs are not treated as transport uncertainty or as person-level variation."
+  }
+}

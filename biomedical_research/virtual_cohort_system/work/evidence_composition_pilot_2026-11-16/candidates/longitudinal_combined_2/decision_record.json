@@ -1,0 +1,146 @@
+{
+  "structure": "For person i and visit t, (X_it,Y_it) = measurement_mean + S_i + E_it. The stable vector S_i has the between-person covariance, and each mean-zero deviation vector E_it has the within-person covariance. The three vectors are mutually independent, and persons are independent. Gaussian shapes complete the generator but are unnecessary for identifying the requested Pearson correlations.",
+  "parameter_provenance": [
+    {
+      "parameter": "measurement_mean",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Reported measurement means; visit deviations have zero means."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact stable-component marginal variances."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact visit-deviation marginal variances."
+    },
+    {
+      "parameter": "stable_component_correlation",
+      "value": 0.8,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Pearson correlation of stable X and Y components."
+    },
+    {
+      "parameter": "same_visit_correlation",
+      "value": 0.52,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Pearson correlation of X and Y at the same visit."
+    },
+    {
+      "parameter": "between_covariance",
+      "value": [
+        [
+          4.0,
+          3.2
+        ],
+        [
+          3.2,
+          4.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "Stable cross-covariance is 0.8*sqrt(4*4)=3.2."
+    },
+    {
+      "parameter": "within_covariance",
+      "value": [
+        [
+          1.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          1.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "B",
+        "C"
+      ],
+      "basis": "Each measurement has variance 4+1=5. Same-visit cross-covariance is 0.52*5=2.6, so deviation cross-covariance is 2.6-3.2=-0.6."
+    },
+    {
+      "parameter": "independence",
+      "value": "Stable and deviation vectors are independent; deviations at different visits and different persons are independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated controlled-task measurement assumptions."
+    },
+    {
+      "parameter": "distribution",
+      "value": "Multivariate Gaussian stable components and visit deviations",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen distributional shape for executable sampling; not required by the records or by the correlation derivations."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "identified",
+      "value": -0.6,
+      "basis": "Stable components cancel in changes. Independent visits give change variances 2 and change cross-covariance 2*(-0.6)=-1.2; correlation is -1.2/sqrt(2*2)=-0.6."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "identified",
+      "value": 0.52,
+      "basis": "Directly reported in B and reproduced by 2.6/sqrt(5*5)=0.52."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "identified",
+      "value": 0.64,
+      "basis": "Only stable components contribute to Cov(X_visit1,Y_visit2), giving covariance 3.2 and correlation 3.2/sqrt(5*5)=0.64."
+    }
+  ],
+  "limitations": [
+    "This is an artificial mathematical population, not a clinical model or biomedical validation.",
+    "Gaussian distributional shape is an assumption; higher-order features are not determined by the records.",
+    "The supplied variance decomposition implies measurement variance 5 despite the standardized-units label; the generator does not impose unit marginal variance.",
+    "Finite random samples will not exactly match the population moments. No sample-dependent calibration, selection, or seed search is used."
+  ],
+  "checks_actually_performed": [
+    "Algebraically reconciled stable cross-covariance 3.2, deviation cross-covariance -0.6, and same-visit cross-covariance 2.6.",
+    "Analytically checked positive definiteness: between-covariance eigenvalues are 0.8 and 7.2; within-covariance eigenvalues are 0.4 and 1.6.",
+    "Derived all three requested correlations using covariance addition, independence, and cancellation of stable components in changes.",
+    "Generator code has not been executed; no empirical sample checks are claimed."
+  ]
+}

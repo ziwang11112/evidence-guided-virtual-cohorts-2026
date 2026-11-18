@@ -1,0 +1,44 @@
+{
+  "notes": "DELIVERABLE: complete fictional equal-weight adult cohort, exactly 3,000 rows and row_id, age, female, bmi, sbp, dbp. Use generate(None, model_spec, seed) to reproduce a cohort; generate does not read files or network. The additional analyze_cohort helper reports two OLS BMI slopes in mmHg per 5 kg/m^2 and the Pearson correlation of SBP/DBP residuals. Primary analysis uses intercept+linear age+recorded female+BMI/5; nonlinear_age=True is a recommended sensitivity because age curves are not linear. OLS intervals reflect fictional-sampling variability, not uncertainty about transport or the true survey.\nEVIDENCE: (1) Freire et al., Analysis of the interrelationships between factors influencing blood pressure in adults, Rev Saude Publica 2020;54:147, doi:10.11606/s1518-8787.2020054002123, PMC7726937, Table 1 and Methods/Results. Montes Claros community study, data collected 2012-2013, n=808 ages>=18: age 44.2(SD17.8), female52.7%, BMI26.2(SD5.6), SBP129.5(SD21.3), DBP76.1(SD12.0). These are descriptive, cluster-adjusted local summaries, not this task's target. Digital Omron HEM-7200, three measurements at five-minute intervals; summaries average all three. Includes treatment; 17.7% reported medical control. Authors used some mean imputation. These summaries motivate broad demographic and pressure/adiposity scales, not exact moment constraints. (2) Gnatiuc et al., Adiposity and Blood Pressure in 110000 Mexican Adults, Hypertension 2017;69:608-614, doi:10.1161/HYPERTENSIONAHA.116.08791, PMC5344187 version1, full abstract, Methods and Results retrieved. Mexico City adults35-89, n111911, no known chronic disease and no BP-lowering treatment: BMI SD4.5 overall; each approximately1SD higher BMI associated with about3mmHg SBP and2mmHg DBP after age/sex and additional covariate adjustment. Dividing these APPROXIMATE prose estimates by4.5 and multiplying by5 gives chosen structural working slopes3.33 and2.22, not precise extracted figure estimates. Associations weaker in older ages. The generator simplifies to constant BMI slopes and transports this restricted, more-adjusted association to the unrestricted requested population: strong and unverifiable assumption, not causal inference. (3) de Souza et al. 2023 doi:10.3389/fcvm.2023.1286726, PMC10752922, initial full-text segment/abstract retrieved: ELSA-Brasil ABPM n812; used only as contextual evidence that ambulatory and interview BP are different measurements, not to supply numeric parameters.\nASSUMPTIONS: Age bands, within-band uniform integer ages, age-dependent female probabilities, BMI conditional age curves/sex differences/gamma family, BP age/sex curves and residual family/SDs are analyst-chosen smooth working distributions anchored only broadly by the above external summaries. The six age weights and sex probabilities are NOT extracted PNS weights. The latent pressure correlation0.65, reading correlation0.50, and error SDs5/3.5mmHg have no directly applicable empirical estimate in the retrieved papers; these are explicitly assumed covariance/measurement parameters. A shared centered gamma plus independent normal residuals produces skew and correlation; residual SD rises with age. No exact target residual correlation is asserted. Suggested sensitivity: latent correlation0.45-0.80, BMI slopes varied by at least+/-30%, alternative age mix and BP aggregation.\nMEASUREMENT: Three simulated baseline interview readings share visit-level person effects and have independent-across-reading correlated measurement errors plus assumed order offsets. Default final BP=average of readings2&3; spec also supports last or mean3. This is a simulation convention, NOT an assertion about the released final PNS aggregation. BP remains a baseline interview snapshot, not a laboratory-visit, ambulatory, untreated, or long-term usual BP. No cuff calibration, digit preference, measurement timing between baseline and labs, or within-person longitudinal change is learned. Rounding BMI0.01, BP0.1. BMI14-65, SBP75-260, DBP35-155 and pulse pressure>=15 are synthetic plausibility guards implemented by rejection, not recovered dictionary limits; guards can slightly alter slopes/correlations. Actual dictionary-admissible weight/height cannot be reconstructed from BMI alone.\nPOPULATION TRANSFER: The generated equal-weight rows are a working surrogate for the specified peso_lab-weighted complete-case analytical distribution, NOT claimed nationally representative or recovered individuals. No excluded-study measurements or results used. We do not know joint selection into labs, positive finite peso_lab, complete cases, admissible anthropometry/BP, or pregnancy status from allowed external evidence. We assume this selection and exclusion of reported pregnancy are absorbed in the working age/sex/BMI/BP distribution; unknown/inapplicable pregnancy is not additionally excluded. No HbA1c, treatment, or hypertension restriction: BP distributions marginalize over an unspecified mixture of treated/untreated and comorbid adults, while Mexican slopes are an uncertain transport anchor. There are no synthetic latent diagnosis or pregnancy columns and no post-generation clinical restriction. This artifact is appropriate for simulation/analysis practice and model sensitivity, not estimating real PNS results or evidence about actual participants.",
+  "provenance": {
+    "excluded_target_results_used": false,
+    "retrieved_sources": [
+      {
+        "doi": "10.11606/s1518-8787.2020054002123",
+        "pmcid": "PMC7726937",
+        "role": "local Brazilian demographic, BMI and BP scale anchor; digital home protocol",
+        "used_sections": [
+          "full cursor0",
+          "table-wrap_001",
+          "sec_006",
+          "sec_007"
+        ]
+      },
+      {
+        "doi": "10.1161/HYPERTENSIONAHA.116.08791",
+        "pmcid": "PMC5344187",
+        "role": "approximate BMI slopes converted from reported per-SD summaries; manual home protocol",
+        "used_sections": [
+          "full cursor0",
+          "sec_005"
+        ],
+        "version": 1
+      },
+      {
+        "doi": "10.3389/fcvm.2023.1286726",
+        "pmcid": "PMC10752922",
+        "role": "context only; ambulatory results not numerically transported",
+        "used_sections": [
+          "full cursor0"
+        ]
+      }
+    ],
+    "unidentified_components": [
+      "target laboratory-weighted age/sex/BMI distribution",
+      "joint complete-case and pregnancy-selection effects",
+      "target released BP aggregation",
+      "age/sex/BMI-adjusted pressure residual covariance",
+      "effect of unrestricted treatment/comorbidity on transported BMI slopes"
+    ]
+  }
+}

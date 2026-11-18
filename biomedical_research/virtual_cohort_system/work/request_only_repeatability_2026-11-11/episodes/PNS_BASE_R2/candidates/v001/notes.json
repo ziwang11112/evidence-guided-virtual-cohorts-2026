@@ -1,0 +1,40 @@
+{
+  "notes": "DELIVERABLE: A seeded stochastic whole-cohort generator returning exactly 3,000 equal-weight fictional rows with row_id, age, female, bmi, sbp, dbp. Reproduce with generate(None, model_spec, seed); the same submitted spec must be supplied unchanged. The isolated execution materializes the cohort. No individual-level source measurements or excluded target results are used, and no sample coefficients/correlations are forced. Analysis estimates and conventional conditional 95% intervals are printed and attached to DataFrame.attrs; these intervals do NOT include source or transport uncertainty.\n\nTARGET AND TRANSPORT: This is a plausible fictional proxy for the contract's peso_lab-weighted complete-case analytical distribution, NOT an estimate identified from those weights and NOT asserted nationally representative. Actual laboratory participation, complete-case selection, positive finite survey weights and dictionary-admissible height/weight cannot be reconstructed from the external evidence. Equal-weight draws presume that those selection processes, pregnancy exclusions and unknown/inapplicable pregnancy have no additional effect beyond the chosen joint distribution. No treatment, hypertension or HbA1c restriction is imposed; medications and comorbidity are absorbed into marginal pressure variation rather than recovered as latent individual diagnoses. Age is integer years 20-79; female maps recorded sex to 0 male/1 female, not gender identity. BMI support 14-60 is an analyst's plausibility bound, not a claimed dictionary limit; pressure and pulse-pressure supports are also analyst-selected.\n\nEVIDENCE USED: (1) Bezerra et al., Difference in adult food group intake by sex and age groups comparing Brazil and United States nationwide surveys, Nutr J 2014;13:74, DOI 10.1186/1475-2891-13-74, PMC4118205, Table 1 and sample methods. Brazil HBS-IFI/POF 2008-2009 reports female percentages 51.2/52.8/55.6 and BMI means 24.8/26.4/26.3 for ages 20-39/40-59/60+, with ages 29.1/48.5/69.7 and raw counts 13175/8893/4322. Sex probabilities borrow these summaries. Age-band masses .50/.35/.15 are approximate modeling choices inspired by raw sample counts, not survey-weighted population proportions. Within-band beta shapes, restriction to 79 and an elderly age center around 68 are assumptions. Smooth BMI-age means interpolate these summaries with an assumed +0.3 kg/m2 time/selection transfer; they do not exactly reproduce the published age-band averages.\n(2) Baena et al., Neck and waist circumference values according to sex, age, and body-mass index: ELSA-Brasil, Braz J Med Biol Res 2020, DOI 10.1590/1414-431x20209815, PMC7433850, Table 1 and Study variables. Baseline 2008-2010 civil servants age35-74: men/women BMI 27.0+/-4.3 and27.1+/-5.1; SBP125.6+/-16.8 and117.7+/-16.9; DBP78.9+/-10.8 and74.0+/-10.2; mean age about52. These motivate sex-specific BMI spreads and mean BP reference points at age52/BMI27, but marginal published BP means are treated as conditional reference values only by explicit approximation. ELSA employed seated rest >=5min and the mean of the last two of three readings. The civil-servant selection and transport outside35-74 remain major uncertainties.\n(3) The INTERSALT study: relations of body mass index to blood pressure, 1989, PMID2810326, full retrieved abstract:10079 adults20-59 in52 centers; adjusted for age, alcohol, smoking, sodium and potassium; 10kg body-weight difference associated with3.0mmHg SBP and2.2mmHg DBP. Adler et al. 2015, DOI10.1186/s12889-015-2023-8, PMC4514940 Background, reports INTERSALT BMI-SBP coefficients0.91 men and0.72 women. These are borrowed for SBP. DBP coefficients are an explicit approximation multiplying by2.2/3.0, NOT a reported sex-specific BMI-DBP coefficient. Neither source establishes the requested age/sex-only association in the target population. The generator assumes omitted-source covariate effects can be marginalized this way and extrapolates age20-59 slopes to79. Adler Table3 and abstract show nonlinear and treatment-/period-dependent associations in Germany; used as a warning against universal coefficient transport, not as a target calibration.\n\nMEASUREMENT MODEL: BP is baseline/interview-time pressure, not a later laboratory-visit measure or ambulatory/usual pressure. Central simulation assumes a rested average of TWO later readings by analogy with ELSA; the actual released PNS final-reading aggregation is UNKNOWN and this assumption does not resolve it. Persistent subject/visit residuals follow a standardized bivariate t7 with age-increasing SBP spread; reading-level bivariate Gaussian errors have SD5/4mmHg, correlation0.5 and independence between readings, then are averaged. These SDs, tail shape, reading independence and correlation are assumptions, not extracted measurements. Setting number_of_averaged_readings to1 or3 in a separately revised spec is a measurement sensitivity scenario. Pressures rounded0.1mmHg and BMI0.01kg/m2 are synthetic numerical precision, not claims about release precision. Joint rejection of implausible pressure pairs avoids clipping but slightly perturbs model associations and residual covariance.\n\nUNIDENTIFIED DEPENDENCE: latent residual correlation0.65 is a transparent scientific working assumption, NOT a retrieved estimate and NOT inferred from marginal SDs or the target. Measurement error and physiological truncation change the analyzed residual correlation. Sensitivity analyses should vary it (e.g.0.45/0.65/0.80), along with BP reference levels, age effects and BMI coefficients, in separately versioned model specs. This generator is one scenario, not a posterior reconstruction; fixed spec choices do not propagate evidence uncertainty.\n\nANALYSES: Primary generated-data OLS models are SBP or DBP ~ intercept + age + female + BMI/5. Slopes printed in mmHg per5kg/m2. Pearson correlation uses residuals from those SAME models, including BMI. A second analysis adds age hinges at52 and55 and age*female because the generative age effects are nonlinear. Sex-specific BMI slopes remain heterogeneous, so the common adjusted slope is a pooled projection, not exactly the arithmetic mean of the two inputs. Conventional CIs quantify synthetic sampling variation only. Use flexible-age sensitivity estimates when interpreting age adjustment. No causal interpretation or claim to recover real people is warranted.",
+  "provenance": {
+    "excluded_target_data_used": false,
+    "source_fit_claim": "Evidence-informed working scenario, not calibrated to excluded cohort or validated against individual observations.",
+    "sources": [
+      {
+        "doi": "10.1186/1475-2891-13-74",
+        "id": "PMC4118205",
+        "retrieved_sections": [
+          "table-wrap_001",
+          "sec_008"
+        ]
+      },
+      {
+        "doi": "10.1590/1414-431x20209815",
+        "id": "PMC7433850",
+        "retrieved_sections": [
+          "table-wrap_001",
+          "sec_005"
+        ]
+      },
+      {
+        "id": "PMID2810326",
+        "retrieved_sections": [
+          "abstract via hit_0009_005"
+        ]
+      },
+      {
+        "doi": "10.1186/s12889-015-2023-8",
+        "id": "PMC4514940",
+        "retrieved_sections": [
+          "full first10000characters",
+          "table-wrap_003"
+        ]
+      }
+    ],
+    "unused_source": "PMC3855219 was inspected but not used for numeric calibration because of medication exclusion and an internally inconsistent reported age exclusion."
+  }
+}

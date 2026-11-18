@@ -1,0 +1,137 @@
+{
+  "structure": "Additive bivariate Gaussian random-intercept model: each measurement vector is a zero-mean stable person component plus an independent zero-mean visit deviation. The chosen within-visit deviation covariance completes one admissible scenario; the between-person covariance follows from the reported same-visit correlation.",
+  "parameter_provenance": [
+    {
+      "parameter": "measurement_means",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Reported population measurement means."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Reported variances of the stable components."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Reported visit-deviation variances."
+    },
+    {
+      "parameter": "independence_structure",
+      "value": "Independent persons; stable component independent of visit deviations; deviation vectors independent across visits.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated controlled-task measurement assumptions."
+    },
+    {
+      "parameter": "same_visit_correlation",
+      "value": 0.52,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Exact same-visit Pearson correlation."
+    },
+    {
+      "parameter": "measurement_variances",
+      "value": [
+        5.0,
+        5.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Independent stable and deviation components give variance 4 + 1 = 5 for each measurement."
+    },
+    {
+      "parameter": "same_visit_covariance",
+      "value": 2.6,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Covariance equals 0.52 times sqrt(5 times 5)."
+    },
+    {
+      "parameter": "visit_deviation_covariance[0,1]",
+      "value": 0.2,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Admissible scenario choice, not determined by the records; with unit deviation variances it is also the deviation correlation."
+    },
+    {
+      "parameter": "between_person_covariance[0,1]",
+      "value": 2.4,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Conditional on the chosen deviation covariance, stable covariance must be 2.6 - 0.2 = 2.4."
+    },
+    {
+      "parameter": "distribution",
+      "value": "Gaussian stable components and identically distributed Gaussian visit-deviation vectors",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient sampling family; Gaussian shape is not required for the second-moment identification results."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": 0.2,
+      "basis": "Stable components cancel in changes. Each change has variance 2, and change covariance is twice the deviation covariance, giving correlation 0.2. The records do not identify that deviation covariance."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "identified",
+      "value": 0.52,
+      "basis": "Directly reported by B. The model preserves it at each visit: (2.4 + 0.2)/5 = 0.52."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "scenario",
+      "value": 0.48,
+      "basis": "Independent visit deviations leave cross-visit covariance equal to stable covariance. Under the chosen decomposition, Corr(X_visit1,Y_visit2) = 2.4/5 = 0.48; the decomposition is not identified."
+    }
+  ],
+  "limitations": [
+    "This is an artificial population scenario, not biomedical validation.",
+    "Writing w for the deviation covariance, the records impose stable covariance 2.6 - w. Positive-semidefinite component covariance matrices allow every w in [-1,1]. Thus change correlation can range from -1 to 1, while cross-visit correlation ranges from 0.32 to 0.72; the two satisfy cross_visit_correlation = 0.52 - 0.2 times change_correlation.",
+    "Despite the standardized-unit labels, record C implies measurement variance 5, not 1. Measurements are not rescaled.",
+    "Finite random samples will not exactly reproduce population moments. No sample rescaling, correlation adjustment, selection, or rejection is used.",
+    "The generator has not been executed here; no Monte Carlo validation is claimed."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified positive definiteness: the stable covariance matrix has eigenvalues 6.4 and 1.6; the deviation covariance matrix has eigenvalues 1.2 and 0.8.",
+    "Analytically verified measurement variances of 5, same-visit covariance of 2.6, change variances of 2, change covariance of 0.4, and cross-visit covariance of 2.4.",
+    "Inspected the source for the required single generate function, seeded random sampling, one wide row per person, unique integer identifiers, and exact output column order."
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "notes": "DELIVERABLE AND USE: This is a complete fictional equal-weight cohort, not recovered PNS records or an estimate of its unknown laboratory-weighted empirical distribution. generate(None, model_spec, seed) returns exactly 3000 rows and six contract columns, without missingness. Use the same seed for exact reproducibility; e.g. seed 202613. Units: age baseline completed years, female 0=recorded male/1=recorded female (recoding task sex 1/2), BMI kg/m^2, SBP/DBP mmHg. No actual weight, height, pregnancy, laboratory weight, HbA1c, medication or hypertension variables are generated; inclusion is assumed to have occurred before these conditional draws. In particular the eligible population excludes reported pregnancy, retains unknown/inapplicable pregnancy and imposes no diabetes/treatment/BP-status restriction. Eligibility and positive finite peso_lab cannot be verified from these six synthetic variables. No national representativeness claim. Equal weights model an assumed distribution after eligibility and laboratory weighting, not the actual unobserved weighting/complete-case selection process.\n\nEVIDENCE AND PARAMETER ORIGINS (all full-text evidence retrieved; none is the excluded target cohort):\n1. Silva et al., 'Is high body fat estimated by body mass index and waist circumference a predictor of hypertension in adults? A population-based study', Nutr J 2012;11:112, DOI 10.1186/1475-2891-11-112, PMC3545980, Table 1 and Methods. EpiFloripa Adults, urban Florianopolis household survey Sep 2009-Jan 2010, ages 20-59, n=1720; pregnancy/recent postpartum and several measurement-ineligible conditions excluded; descriptive analyses accounted for sampling design and weights. Within-sex ages 20-39 were 57.7% male, 53.9% female; mean ages 37.4 and 38.5; measured BMI means 25.9 male and 25.4 female. These directly anchor conditional under60 band probabilities and BMI means near age38. Published BMI confidence intervals are survey mean CIs, NOT individual SDs, and were not converted into SDs. Uniform completed age within broad bins is an assumption. Older fractions .16 male/.20 female and overall female probability .53 are explicit transport assumptions, not published target statistics. BMI age slopes .08 male/.095 female, late flattening, shifted lognormal shape and conditional SDs 4.3/5.0 are assumptions; they yield a combined SD near the independent ELSA 4.6 and allow female dispersion/upper tails. BMI bounds 14-65 are synthetic plausibility limits, not claimed release dictionary rules.\n2. 'Relations of digital vascular function, cardiovascular risk factors, and arterial stiffness: the Brazilian Longitudinal Study of Adult Health (ELSA-Brasil) cohort study', JAHA 2014, DOI 10.1161/JAHA.114.001279, PMC4338719, Table 1 and Study Protocol. Minas Gerais PAT subset n=1535 of occupational cohort ages35-74, mean age52 SD9, 44% women, BMI26.8 SD4.6; SBP122 SD17 and DBP78 SD11 mmHg; 28% treated for hypertension and 16% diabetes. PAT availability/exclusion and employed/retired civil servants limit transfer. BP automatically measured three times seated after 5min rest, left arm, Omron765CP; average of second and third. Mean levels are reference anchors centered analytically at an approximate N(52,9^2) reference age distribution; reference age marginal is an approximation, not replay. Residual SD14.5/10 mmHg are approximate variance-budget choices allowing explained variance from age/sex/BMI, not reported regression residual SDs. BP age coefficients (.35 linear SBP with .40 age50 hinge and .01 age60-square; .18 linear DBP with -.012 age50-square) and sex differences -8/-4 are assumed plausible cross-sectional trajectories, not extracted coefficients. They allow increasing systolic pressure and late-life DBP flattening/decline. They are not causal longitudinal changes. EpiFloripa Table1 BP means were much higher (male139.8/88.7, female127.5/81.9) despite younger ages; the difference is unresolved and is NOT silently averaged into ELSA levels. We deliberately use EpiFloripa for demographics/BMI and the ELSA measured-protocol subset for BP levels.\n3. Linderman et al., 'Association of Body Mass Index With Blood Pressure Among 1.7 Million Chinese Adults', JAMA Netw Open 2018;1:e181271, DOI 10.1001/jamanetworkopen.2018.1271, PMC6324286, Statistical Analysis and Results/Association Between BMI and BP Overall. Convenience screening of 1,727,411 adults35-80 across31 Chinese provinces, 2014-2017, with all treatment statuses. Adjusted BMI coefficients were SBP1.15 (95%CI1.13-1.17) and DBP.75 (.74-.76) mmHg per kg/m^2, i.e. 5.75 and3.75 per5. Adjustment included sex, continuous age, income, occupation, ethnicity, marital status, residence classification, province, education, smoking, stroke history and antihypertensive treatment; these are NOT age/sex-only estimates. Treated subgroups had weaker associations. Two seated right-arm electronic Omron readings after5min rest, optional third for >10mmHg systolic difference, last-two average. The generator transfers these adjusted associations as coefficients in a model conditioned only on age/sex/BMI: a strong explicit estimand and China-to-Brazil transport approximation, also extrapolating below35 and outside BMI18.5-30 where source linearity was clearest. Unmeasured treatment/case mix is marginalized implicitly; no fictitious patient-level treatments or counterfactual untreated BPs are created. No causal interpretation.\n4. 'Facets of Negative Affectivity and Blood Pressure in Middle-Aged Men', Health Psychol Res 2013;1:e14, DOI 10.4081/hpr.2013.e14, PMC4768573, Participants/Medical variables and Table2 ABOVE-diagonal unadjusted Pearson matrix. Finnish Helsinki population screening substudy, final n710 men45-56, excludes BP medication users and specified psychosocial/smoking missingness; single seated right-arm mercury measurement after at least30min rest. Correlations: age-BMI .01, age-SBP .15, age-DBP -.01, BMI-SBP .29, BMI-DBP .34, SBP-DBP .69. The Schur complement for controls [age,BMI] gives residual rho about .6673. This is algebra from rounded pairwise Pearson correlations (n varies675-710), not an explicitly reported common-complete-case partial correlation. Sex is constant in this source. We assume this residual dependence applies to both sexes, ages20-79, treated and untreated Brazilians and an averaged digital interview endpoint. This is the least identified component. A single mercury reading and last-two digital average need not have identical residual covariance; no falsely precise averaging correction is made.\n\nJOINT MODEL AND ANALYSIS: iid sex/age strata -> shifted lognormal BMI conditional on age/sex -> paired Gaussian SBP/DBP residuals with derived rho and assumed residual SDs around nonlinear age/sex/BMI means. Gaussian paired error, constant residual covariance, no BMI interactions, no explicit unobserved common causes or medication mixture are assumptions. Pairwise rejection redraws hold covariates fixed if SBP outside70-280, DBP outside35-170 or pulse pressure<5; these are permissive physiology checks, not source selection or target dictionary claims; they slightly change conditional slopes/correlation. No exact sample coefficient/correlation matching, residual orthogonalization or post-hoc ranking. No missing data imposed on the requested complete-case population. Values are continuous pressures rather than invented terminal-digit/reading aggregation artifacts. Baseline interview BP timing is retained; no lab-visit BP is implied. Unknown final released aggregation is approximated as one averaged seated interview endpoint, with error absorbed into the residual law. Untested aggregation scenarios remain a limitation.\n\nPRIMARY ANALYSES: analyze_cohort(data, False) fits SBP and DBP on intercept, linear age, recorded sex and BMI/5 and returns both mmHg-per5 slopes plus Pearson r of paired residuals. This is a specified linear age/sex-adjusted estimand. Because true means include nonlinear age terms and BMI relates to age, its realized slopes need not be exactly5.75/3.75 and r need not equal the Gaussian rho. analyze_cohort(data, True) additionally adjusts for the generating age hinges/squares as a sensitivity analysis. The OLS SEs are ordinary iid model-based SEs, not survey SEs or evidence/transport uncertainty. All parameter choices are fixed between seeds; sampling variation does not capture population-transfer/model uncertainty. Useful sensitivity changes in model_spec include residual_dependence.override_rho, BMI slopes, old-age fractions, reference means and residual SD; such scenarios must not be described as target-derived confidence limits. No excluded study measurements/results were used.",
+  "provenance": {
+    "additional_evidence_reviewed_not_fitted": [
+      {
+        "doi": "10.1093/eurheartj/suaa022",
+        "pmcid": "PMC7455292",
+        "reason": "Brazil opportunistic mainly clinic/hospital screening; older/high-treatment case mix, not used for calibration"
+      },
+      {
+        "doi": "10.1186/s13098-015-0082-8",
+        "pmcid": "PMC4595065",
+        "reason": "Baependi family cohort Table1 SBP/DBP/PP SDs permit pooled marginal r about .36, but no full SBP/DBP-control matrix, inconsistent BMI SD29.1 in high-PWV group, and no basis for equating marginal correlation to requested adjusted residual correlation. Demonstrates unresolved between-study dependence heterogeneity; not pooled with Helsinki."
+      },
+      {
+        "pmcid": "PMC6275465",
+        "reason": "Chinese healthy-adult partial BMI correlations reviewed; not used"
+      },
+      {
+        "pmcid": "PMC3480389",
+        "reason": "Allostatic load factor model reviewed; not used"
+      }
+    ],
+    "excluded_target_data_used": false,
+    "origin_labels": [
+      "reported external summaries",
+      "algebra under linear-projection and reference-distribution assumptions",
+      "explicit unsupported transport/shape/measurement assumptions"
+    ],
+    "retrieved_sources": [
+      {
+        "doi": "10.1186/1475-2891-11-112",
+        "locators": [
+          "Table 1",
+          "Population and sample",
+          "Outcome",
+          "Statistical analysis"
+        ],
+        "pmcid": "PMC3545980",
+        "role": "Brazilian under60 age proportions and BMI mean anchors"
+      },
+      {
+        "doi": "10.1161/JAHA.114.001279",
+        "locators": [
+          "Table 1",
+          "Study Sample",
+          "Study Protocol"
+        ],
+        "pmcid": "PMC4338719",
+        "role": "Selected external Brazilian BP level and variability anchors, measurement protocol"
+      },
+      {
+        "doi": "10.1001/jamanetworkopen.2018.1271",
+        "locators": [
+          "Statistical Analysis",
+          "Association Between BMI and BP Overall and in Population Subgroups"
+        ],
+        "pmcid": "PMC6324286",
+        "role": "Multivariable-adjusted continuous BMI slopes, transported not equivalent to requested estimand"
+      },
+      {
+        "doi": "10.4081/hpr.2013.e14",
+        "locators": [
+          "Table 2 above diagonal",
+          "Participants",
+          "Medical variables"
+        ],
+        "pmcid": "PMC4768573",
+        "role": "Algebraic partial-correlation anchor with major measurement/sex/treatment transport assumptions"
+      }
+    ]
+  }
+}

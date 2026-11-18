@@ -1,0 +1,109 @@
+{
+  "status": "complete",
+  "reviewer": "root; no second human or model code review claimed",
+  "reviewed": [
+    {
+      "id": "BASE_3",
+      "law": "Gaussian copula with truncated-normal Hb and truncated-lognormal ferritin",
+      "scientific_choices": "Agent assumed Hb N(13.2,1.1^2) truncated [5,18], ferritin lognormal(log30,.95) truncated [1,1500], latent rho=.35.",
+      "joint_evidence_use": "None supplied; rho explicitly ASSUMED.",
+      "moments": "Both margins bounded; all polynomial moments finite.",
+      "code_match": "Inverse truncated-CDF transformations agree with model specification; monotone margins preserve copula ranks. No forced counts or realized moment adjustment.",
+      "support_caveats": "Rare values beyond fixed supports excluded. Inverse-CDF endpoints may hit machine limits for extreme latent draws; no observed-run claim yet.",
+      "review_scope": "Complete program, model_spec and decision_record read by root before target aggregate parsing.",
+      "defect_found": false
+    },
+    {
+      "id": "JOINT_1",
+      "law": "Gaussian copula fitted to threshold table, bounded logistic-normal Hb, monotone piecewise affine-normal log ferritin",
+      "scientific_choices": "Agent transports four cells and GM17.4, assumes Hb support[4,20] and median13.3, ferritin upper log slope.7; derives lower slope and latent rho.",
+      "joint_evidence_use": "Solves bivariate normal threshold probability by Plackett identity quadrature and bisection; no source OR supplied by host.",
+      "moments": "Hb bounded. Each log-ferritin branch affine in normal score; every positive polynomial moment finite.",
+      "code_match": "Cell-to-margin algebra, Hb threshold map, ferritin truncated-expectation GM identity, and copula calibration formula match declaration. Numerical bracket checked by program.",
+      "support_caveats": "Continuous rank relation depends on Gaussian copula; source table alone does not identify it. Density kink at ferritin15, source-to-target transport assumed.",
+      "review_scope": "Complete program, model_spec and decision_record read by root before target aggregate parsing.",
+      "defect_found": false
+    },
+    {
+      "id": "SUMMARY_2",
+      "law": "Gaussian copula, truncated-normal Hb and ordinary lognormal ferritin",
+      "scientific_choices": "Transport source marginal prevalences and ferritin GM; assume Hb parent SD1.2/support[4,20] and latent rho.35. Solve Hb location and ferritin logscale from source anchors.",
+      "joint_evidence_use": "No joint evidence; dependence explicitly assumed. Source marginals alone cannot identify OR.",
+      "moments": "Hb bounded; lognormal ferritin has all positive polynomial moments finite.",
+      "code_match": "Bisection solves population truncated-normal threshold probability; ferritin log SD = log(15/17.4)/Phi_inverse(504/1671). No realized-sample matching.",
+      "support_caveats": "Derived lognormal log SD~.286 is narrow because of the chosen family, not a measured source SD; author explicitly notes lost heterogeneity. Float endpoint guard is numerical, not target adjustment.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    },
+    {
+      "id": "SUMMARY_1",
+      "law": "Gaussian copula, truncated-normal Hb and two-piece half-normal log-ferritin marginal",
+      "scientific_choices": "Transports marginal counts and GM; assumes Hb SD1.1/support[5,18.5], ferritin lower log scale1 and latent rho.35. Derives Hb location and upper log-half-normal scale.",
+      "joint_evidence_use": "No joint evidence supplied; copula explicitly assumed.",
+      "moments": "Hb bounded; half-normal log tails have finite positive polynomial ferritin moments. Numerical quantile guard further bounds extreme implemented tails.",
+      "code_match": "Branch weights, half-normal CDF inversions and GM expectation agree with the specification. Scientific family differs from SUMMARY_2 even though its rho and marginal threshold probabilities match.",
+      "support_caveats": "Density may jump at ferritin15; variation within threshold cells is chosen, not source measured.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    },
+    {
+      "id": "BASE_2",
+      "law": "Two-component Gaussian Hb/log-ferritin mixture conditioned within component on bounded Hb",
+      "scientific_choices": "Hb13.2/SD1.1; ferritinmedian35/logSD.9; within-componentrho.35; latent-stateprob.12 with Hb-.4 and ferritin*2.5; Hb support[4,19], all Agent assumptions.",
+      "joint_evidence_use": "No quantitative source payload; assumptions distinguish conditional copula scale from aggregate association.",
+      "moments": "Hb bounded. Finite mixture of lognormal-type distributions conditional on positive-probability events has finite positive polynomial ferritin moments.",
+      "code_match": "Retains mixture state during individual redraw, correctly preserving stipulated state probability. This is individual truncation, not cohort rejection or fixed moment fitting.",
+      "support_caveats": "Unobserved state is not measured CRP or validated inflammation. Unlimited rejection loop theoretically possible but acceptance near one for these parameters; worker timeout contains it.",
+      "provenance_note": "The source-suitability assessment is tagged REPORTED although it is the Agent's assessment of supplied evidence, not a quoted source conclusion.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    },
+    {
+      "id": "JOINT_2",
+      "law": "Gaussian copula fitted to threshold table; truncated-normal Hb and bounded two-piece truncated-lognormal ferritin",
+      "scientific_choices": "Agent chose Hb SD1.1/support[3,20], ferritin support[.1,5000] and lower logscale1; transported source counts/GM then solved upper scale, Hb location and Gaussian latent rho.",
+      "joint_evidence_use": "Derived copula rho from the four joint source counts by bivariate normal quadrature. Conditional shape remains assumed.",
+      "moments": "Both margins bounded; all polynomial moments finite.",
+      "code_match": "Truncated half-normal mean-log-gap formula and increasing root direction correct; inverse CDF construction preserves transported threshold probabilities. No empirical moment forcing.",
+      "support_caveats": "Ferritin support and within-category shape not identified. Mixed provenance tags correctly admit DERIVED quantities conditional on ASSUMED family, though not a normalized three-label schema.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    },
+    {
+      "id": "JOINT_3",
+      "law": "Gaussian copula fitted to joint source counts; bounded truncated-normal Hb and two-piece truncated-normal log ferritin",
+      "scientific_choices": "Agent chooses Hb SD1/support[3,20], ferritin support[.2,2000]/lowerlogSD1, then derives other marginal parameters and copula rho.",
+      "joint_evidence_use": "Solves conditional-normal integral for source joint threshold probability, using Simpson quadrature over[-10,Hb normal cutoff]. All scientific structures chosen by Agent.",
+      "moments": "Both margins bounded; finite polynomial moments.",
+      "code_match": "Hb and log-ferritin root equations match declared sources and distributions; conditional-normal integration is an alternative implementation to JOINT_1/2 Plackett quadrature. Correctly distinguishes population OR from expectation of sample OR.",
+      "support_caveats": "Threshold fit does not identify Spearman without Gaussian copula assumption. Quadrature and machine endpoints are numerical approximations, not source uncertainty.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    },
+    {
+      "id": "BASE_1",
+      "law": "Bounded latent-iron nonlinear model with independent inflammation-like and other Hb-lowering indicators",
+      "scientific_choices": "Agent chose truncated lognormal S median35/logSD.85/support[.5,400], I~Bernoulli(.1), O~Bernoulli(.06); ferritin=S*3^I; Hb location13.4-2.4/(1+(S/12)^2)-.5I-1.6O, truncated conditional SD.8/support[5.5,18.5].",
+      "joint_evidence_use": "No numeric evidence supplied; all population-law choices explicitly assumed. Saturating relation and mixture dependences chosen by Agent, not host.",
+      "moments": "Hb bounded and ferritin in[.5,1200]; all polynomial moments finite.",
+      "code_match": "Conditional row-level rejection retains the latent variables; no table-level moment fitting. Code implements declared nonlinear law and column order.",
+      "support_caveats": "Latent variables are scenario proxies, not diagnoses; mixture frequencies and physiological response unvalidated. Extreme ranges deliberately excluded.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    },
+    {
+      "id": "SUMMARY_3",
+      "law": "Gaussian copula with logistic-normal Hb and bounded two-piece half-normal log-distance ferritin",
+      "scientific_choices": "Agent assumes rho.4, Hb logistic scale.27/support[3,20], ferritin lower logscale1/support[.2,2000]; derives Hb location and upper ferritin scale from source margins.",
+      "joint_evidence_use": "No joint source statistics; rho.4 is explicitly assumed. Same analysis request as others.",
+      "moments": "Both margins bounded; finite positive polynomial moments.",
+      "code_match": "Truncated half-normal mean formula, cutoff branches, survival-based upper inverse CDF and logistic threshold calibration match the declared law. No realized moment forcing.",
+      "support_caveats": "Threshold density shape and copula are assumptions; concentration bounds remove extreme tails. This author uses rho.4 while SUMMARY_1/2 use.35.",
+      "review_scope": "Complete program/model/decision read before target parse.",
+      "defect_found": false
+    }
+  ],
+  "conclusion": "All nine complete programs, model specifications and decision records read. No mathematical infinite-moment law or specimen/unit reversal found. This is not a proof of biomedical transport or general software correctness.",
+  "target_aggregate_parsed_during_program_review": false
+}
+

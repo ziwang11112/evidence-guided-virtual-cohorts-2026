@@ -1,0 +1,126 @@
+{
+  "structure": "Independent people follow Z=G0, X=0.6Z+0.8G1, and Y=0.6Z+0.8(0.25G1+sqrt(1-0.25^2)G2), with independent standard normal G0,G1,G2. The residual correlation is an explicitly chosen scenario.",
+  "parameter_provenance": [
+    {
+      "parameter": "population_means_X_Y_Z",
+      "value": [
+        0,
+        0,
+        0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means."
+    },
+    {
+      "parameter": "population_variances_X_Y_Z",
+      "value": [
+        1,
+        1,
+        1
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances."
+    },
+    {
+      "parameter": "correlations_XZ_YZ",
+      "value": [
+        0.6,
+        0.6
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Exact marginal Pearson correlations in the common population."
+    },
+    {
+      "parameter": "z_loading_x_and_y",
+      "value": [
+        0.6,
+        0.6
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Each population OLS slope is correlation times outcome SD divided by Z SD; all SDs equal one."
+    },
+    {
+      "parameter": "linear_residual_variances_X_Y",
+      "value": [
+        0.64,
+        0.64
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Each residual variance is 1-0.6^2."
+    },
+    {
+      "parameter": "residual_correlation",
+      "value": 0.25,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen completion of the unreported X-Y relationship; not implied by adjustment for Z."
+    },
+    {
+      "parameter": "latent_distribution",
+      "value": "Independent standard normal G0,G1,G2",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient distributional completion satisfying the supplied moments."
+    },
+    {
+      "parameter": "scenario_marginal_xy",
+      "value": 0.52,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Conditional on the assumed residual correlation: 0.6*0.6+0.64*0.25=0.52."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": 0.25,
+      "basis": "Pearson correlation of separate intercept-and-Z OLS residuals equals (rXY-0.36)/0.64. The records do not determine rXY; this model chooses residual correlation 0.25."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "scenario",
+      "value": 0.52,
+      "basis": "The chosen residual covariance is 0.64*0.25=0.16, so Cov(X,Y)=0.36+0.16=0.52. Both variables have unit variance."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "identified",
+      "value": 0.6,
+      "basis": "For population OLS with an intercept, the slope is Cov(X,Z)/Var(Z)=0.6/1, using B and C only."
+    }
+  ],
+  "limitations": [
+    "The supplied records permit marginal X-Y correlations throughout [-0.28,1], corresponding to residual correlations throughout [-1,1]; neither requested correlation is point identified.",
+    "Gaussian shape and the selected residual dependence are modeling assumptions, not reported evidence. Gaussianity is not needed to identify the X-on-Z slope.",
+    "Standardization holds at the population level. Random finite samples are not recentered, rescaled, selected, or otherwise forced to match population moments.",
+    "This artificial mathematical model provides no clinical validation or causal interpretation."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified zero population means, unit variances, and correlations Corr(X,Z)=Corr(Y,Z)=0.6.",
+    "Analytically verified the scenario partial correlation: (0.52-0.36)/0.64=0.25.",
+    "Analytically checked positive definiteness: the scenario correlation matrix has leading principal minors 1, 0.7296, and 0.384.",
+    "Analytically obtained the admissible marginal-correlation interval from (rXY-0.36)^2<=0.64^2.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

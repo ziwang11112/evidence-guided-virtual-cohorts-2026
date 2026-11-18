@@ -1,0 +1,256 @@
+{
+  "structure": "A covariate-generating law followed by two linear conditional BP means and a non-Gaussian, homoscedastic paired error law. Bounded demographic/BMI support and an ordered-pressure-compatible beta-plus-gamma error construction ensure positive DBP and SBP greater than DBP without clipping or rejection. The requested population projection coefficients and residual correlation are analytically specified, not fitted to generated rows. Source definitions remain distinct; none identifies the target joint law.",
+  "parameter_provenance": [
+    {
+      "parameter": "Age and recorded sex distribution",
+      "value": {
+        "age": "20+59*Beta(1.8,2.2)",
+        "female_probability": 0.53,
+        "age_sex_dependence": "Independent"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Age limits follow the task. The continuous age shape, sex proportion and independence are post-eligibility population assumptions, not estimates of the PNS analytical distribution."
+    },
+    {
+      "parameter": "Conditional BMI distribution",
+      "value": {
+        "support": [
+          15.0,
+          60.0
+        ],
+        "mean": "26.5+0.35*((age-50)/10)+1.3*female",
+        "sd": 5.0,
+        "scaled_beta_concentration": "(mean-15)*(60-mean)/25-1"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Provides moderate right skew, age/sex dependence and bounded physiological support. These bounds are modeling choices, not dictionary limits. They omit some potentially eligible extreme BMI values."
+    },
+    {
+      "parameter": "INTERSALT source BMI associations",
+      "value": {
+        "sbp_per_kg_m2": 0.7754,
+        "sbp_SE_per_kg_m2": 0.0359,
+        "dbp_per_kg_m2": 0.5967,
+        "dbp_SE_per_kg_m2": 0.0257
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "source_suitability": "Partial association evidence",
+      "rationale": "Within-centre inverse-variance pooled associations, ages 20–59, adjusted for age, sex, urinary sodium/potassium and alcohol. Treatment was not excluded. This is not the requested weighted, age/sex-only projection. Illustrative averaged subgroup SDs are unsuitable as pooled residual SDs."
+    },
+    {
+      "parameter": "Unit conversion of INTERSALT source slopes",
+      "value": {
+        "sbp_per5": 3.877,
+        "dbp_per5": 2.9835,
+        "sbp_source_SE_per5": 0.1795,
+        "dbp_source_SE_per5": 0.1285
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Multiply each source coefficient and its SE by five. These remain source-population estimates and source sampling errors, not target estimates or transport uncertainty."
+    },
+    {
+      "parameter": "Transported conditional BMI coefficients",
+      "value": {
+        "sbp_per5": 3.877,
+        "dbp_per5": 2.9835,
+        "interactions": "None"
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Numerically retain the converted source slopes as working target-law coefficients. This assumes that different adjustment sets, within-centre pooling, population selection, age extension to 79 and measurement differences do not change these coefficients. No empirical equivalence is asserted."
+    },
+    {
+      "parameter": "Other conditional BP mean coefficients",
+      "value": {
+        "sbp": {
+          "intercept_at_age50_male_bmi25": 126.0,
+          "age_per_decade": 5.5,
+          "female_difference": -4.0
+        },
+        "dbp": {
+          "intercept_at_age50_male_bmi25": 78.0,
+          "age_per_decade": 1.0,
+          "female_difference": -2.0
+        }
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Parsimonious linear working means, with increasing pulse pressure across age. No source in the packet identifies these target parameters. There are no nonlinear age terms, treatment terms or interactions."
+    },
+    {
+      "parameter": "Beijing joint evidence",
+      "value": {
+        "source_raw_correlations": {
+          "overall": 0.5344427684775355,
+          "under65": 0.6030316602292216,
+          "65plus": 0.5451263744946805
+        }
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_BEIJING"
+      ],
+      "source_suitability": "Transformed descriptive comparator only",
+      "rationale": "Within each source group, Cov(S,D)=(Var(S)+Var(D)-Var(PP))/2. These are raw correlations from selected older Beijing participants, not age/sex/BMI residual correlations. Rounded-SD envelopes are not sampling intervals. No Beijing moments are joined to another study's moments."
+    },
+    {
+      "parameter": "Burkina Faso joint evidence",
+      "value": {
+        "source_partial_correlation_given_age_BMI": 0.7879773460321717,
+        "source_residual_covariance_mmHg2": [
+          [
+            309.04135165152917,
+            149.9619744133457
+          ],
+          [
+            149.9619744133457,
+            117.19747124374422
+          ]
+        ]
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "BF_AGE_BMI_JOINT"
+      ],
+      "source_suitability": "Partial joint constraint and scale comparator",
+      "rationale": "Supplied same-source Schur-complement derivation from rounded correlations and SDs. Adjustment is linear age and BMI, not sex. Older, rural, relationship-selected, pregnancy- and medication-excluded participants differ materially from the task. Neither 0.788 nor raw r=0.78 is imposed on the target model."
+    },
+    {
+      "parameter": "Ghana joint evidence",
+      "value": {
+        "source_raw_correlation": 0.76,
+        "source_individual_residual_correlation": 0.73,
+        "source_household_random_effect_correlation": 0.81,
+        "source_individual_variances_sbp_dbp": [
+          224.49,
+          101.75
+        ],
+        "source_household_variances_sbp_dbp": [
+          38.91,
+          16.37
+        ]
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "GHANA_MULTILEVEL_JOINT"
+      ],
+      "source_suitability": "Partial multilevel comparator, unsuitable for direct OLS substitution",
+      "rationale": "Women aged 15–49 with categorical age, binary obesity, additional covariates and paired household random effects. Individual, household and raw correlations are distinct quantities from the same analysis. They are not pooled or assigned as the task residual correlation. The individual-level table label 'Child' and household-count discrepancy remain source inconsistencies."
+    },
+    {
+      "parameter": "Chosen target-law conditional residual covariance",
+      "value": {
+        "sbp_sd": 17.0,
+        "dbp_sd": 11.0,
+        "correlation": 0.7,
+        "covariance_mmHg2": [
+          [
+            289.0,
+            130.9
+          ],
+          [
+            130.9,
+            121.0
+          ]
+        ],
+        "heteroscedasticity": "None"
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "BF_AGE_BMI_JOINT",
+        "GHANA_MULTILEVEL_JOINT",
+        "S_BEIJING"
+      ],
+      "rationale": "17 and 11 mmHg are working residual scales broadly contextualized by the joint studies. Correlation 0.70 is an explicit round working assumption informed by persistent positive source dependence, not an average, estimated attenuation, or transported source correlation. Additional sex adjustment is not assumed to change correlation in a particular direction."
+    },
+    {
+      "parameter": "Non-Gaussian error construction",
+      "value": {
+        "dbp_error": "-22+66*Beta(7/3,14/3)",
+        "sbp_loading_on_dbp_error": "130.9/121",
+        "independent_gamma_shape": 2.0,
+        "independent_gamma_variance": 147.39,
+        "independent_gamma_scale": "sqrt(147.39/2)",
+        "independent_gamma_centering": "Subtract 2*sqrt(147.39/2)"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Distributional forms and bounds are analyst choices. The beta error has mean zero and variance 121. The independent centered gamma has variance 147.39, so the resulting SBP variance is 289 and covariance is 130.9. Centering subtracts a population constant, not a realized sample mean."
+    },
+    {
+      "parameter": "INTERMAP evidence use",
+      "value": "Measurement-context information only; no numerical BP/BMI calibration or independent replication weight",
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERMAP_methods"
+      ],
+      "source_suitability": "Partial methods evidence; unsuitable for numerical parameter identification",
+      "rationale": "Eight readings over four visits differ from both INTERSALT and the task's unknown final-reading aggregation. Original BP/BMI moments and coefficients were not admitted; secondary INTERSALT review tables are not independent evidence."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "bmi_sbp",
+      "population_value_under_model": 3.877,
+      "unit": "mmHg per 5 kg/m^2",
+      "support_basis": "The conditional SBP mean uses exactly the requested design, and errors have conditional mean zero. Its population OLS BMI coefficient therefore equals the assumed transported coefficient. INTERSALT supplies the numerical source association, not identification of the target projection.",
+      "key_unresolved_assumptions": [
+        "The source's additional electrolyte/alcohol adjustment and within-centre pooling do not change the age/sex-only target coefficient.",
+        "The BMI association is linear and common across sex, ages 20–79 and treatment status.",
+        "Population selection and BP measurement differences do not alter the transported coefficient."
+      ]
+    },
+    {
+      "id": "bmi_dbp",
+      "population_value_under_model": 2.9835,
+      "unit": "mmHg per 5 kg/m^2",
+      "support_basis": "The conditional DBP mean uses exactly the requested design with mean-zero errors. Its population OLS BMI coefficient equals the assumed transported INTERSALT-derived value, without claiming matching adjustment sets.",
+      "key_unresolved_assumptions": [
+        "The differently adjusted source coefficient is transferable to this weighted analytical population.",
+        "Linear age and BMI terms adequately describe DBP across the full age range, including treated and older adults.",
+        "Target complete-case selection, adiposity distribution and measurement protocol do not change the coefficient."
+      ]
+    },
+    {
+      "id": "residual_correlation",
+      "population_value_under_model": 0.7,
+      "unit": "1",
+      "support_basis": "Mean-zero errors independent of the full design have covariance 130.9 and SDs 17 and 11, giving population residual Pearson correlation 0.70. Joint studies support considering substantial positive dependence, but none identifies this value for the requested regression residuals.",
+      "key_unresolved_assumptions": [
+        "The assumed covariance is constant across age, sex, BMI and treatment.",
+        "Burkina Faso age/BMI partial dependence and Ghana multilevel dependence are informative context despite different covariate spans and populations.",
+        "Target shared measurement error and final-reading aggregation are compatible with the chosen covariance.",
+        "The beta-plus-gamma tail law adequately represents clinically relevant paired BP variation."
+      ]
+    }
+  ],
+  "limitations": [
+    "The target demographic, adiposity and joint BP distributions are not identified by the packet. This is one transparent hypothetical cohort, not an estimate or validation of the PNS release and not a claim of national representativeness.",
+    "All source facts and supplied derivations were accepted from the evidence packet; original articles were not independently reauthenticated in this call.",
+    "No target sampling or transport intervals are available. Source coefficient SEs and rounded-moment envelopes are not transport intervals.",
+    "Finite-sample OLS coefficients and residual Pearson correlation will fluctuate around the model's population quantities. Generating 3000 people adds Monte Carlo rows, not biomedical evidence.",
+    "The task's baseline BP timing and unknown released final-reading aggregation remain unresolved. Source devices, resting periods and averaging protocols are not treated as interchangeable.",
+    "Medication, hypertension, HbA1c and pregnancy-status mechanisms are not explicitly modeled. The law is assigned to the already eligible, treatment-unrestricted population and does not imply that all retained women had known nonpregnant status.",
+    "Linear conditional means omit older-age DBP decline, interactions, multimodality and treatment-specific effects. Residual covariance is homoscedastic.",
+    "BMI and DBP have imposed bounded supports. SBP has an unbounded positive exponential tail through the gamma component; all polynomial moments are finite. These choices are not empirical tail estimates.",
+    "The specified law implies DBP approximately between 45.03 and 145.78 mmHg, SBP above approximately 56.78 mmHg, and pulse pressure above approximately 11.74 mmHg. These are construction bounds, not diagnostic cutoffs or dictionary-derived exclusions."
+  ],
+  "checks_actually_performed": [
+    "Static inspection of the generator: it reads n_rows from spec, uses only numpy and pandas, uses the supplied seed, emits the six requested columns in order, and creates unique integer row_id values.",
+    "Analytical check: the conditional BMI mean ranges from 25.45 to 28.815, making its beta shapes positive throughout the specified age/sex domain.",
+    "Analytical check: the DBP beta error has mean zero and variance 121; the independent centered gamma has variance 147.39. The resulting residual covariance is [[289,130.9],[130.9,121]], which is positive definite and has correlation 0.70.",
+    "Analytical support check: the minimum pulse-pressure expression is 30.713-1.8-sqrt(294.78), approximately 11.74 mmHg, so SBP exceeds DBP without post-hoc repair.",
+    "Specification review: draws are independent across people; no realized-moment recentering, sample weighting, seed selection, table selection, clipping or rejection is used.",
+    "No code execution, simulated data inspection, empirical regression, empirical correlation calculation or original-source reauthentication was performed."
+  ]
+}

@@ -1,0 +1,105 @@
+You are independently constructing a data generator for a controlled mathematical evidence-composition exercise. All supplied records are artificial, exact population constraints, not real clinical studies. Use only the supplied records. You choose the scientific model and any missing relationships. No reference target table or other authors are provided. Your goal is usable data for the requested analyses and honest identification/assumption labels.
+
+Return a SINGLE JSON object with exactly model_spec, generator_py, decision_record. No markdown.
+model_spec: an object of your freely chosen model parameters. The runner will pass {"task": task_contract, "model": model_spec} to generate.
+generator_py: Python source defining exactly generate(observed, spec, seed), returning a pandas DataFrame. observed is None; n=spec["task"]["n_rows"]. Use numpy/pandas/standard library only. No filesystem reads/writes, processes, network, imports of project code, or installation. Use seed for randomness. Each row is a different independent person. Longitudinal tables are WIDE: one row/person containing both visits. Return EXACT columns in the task contract, in order, unique integer person_id. Negative values are legitimate standardized measurements. Generate random samples; do not rescale/correlate the realized sample to exactly force finite-sample moments, choose favorable seeds, sort or reject persons to improve scores. Parameters/model may be mathematically derived from evidence; no specific distribution is mandated. All quantities/analyses are Pearson and OLS as specified, never rank replacements.
+decision_record: object with structure (short description), parameter_provenance (array of parameter/value, kind REPORTED/DERIVED/ASSUMED, record ids and concise basis), requested_estimands (array of EXACT three name keys below; each includes status identified/scenario/undetermined, value numeric or null, basis concise explanation), limitations (array), checks_actually_performed (array; do not claim execution that you have not performed). 'identified' means logically determined by supplied records and stipulated task assumptions, independently of additional distributional assumptions. A chosen point value for a relationship not so determined is 'scenario'. If you cannot supply a value use 'undetermined'. A non-Gaussian shape assumption does not by itself make an otherwise identified second-moment functional unidentified. Brief derivations are welcome; no private reasoning transcript needed.
+
+Task and records:
+{
+  "request": "Generate two visits per person for standardized quantitative biomarkers X and Y. Primary analysis: Pearson correlation of within-person changes X_visit2-X_visit1 and Y_visit2-Y_visit1. Secondary analyses: same-visit X-Y correlation and correlation of X_visit1 with Y_visit2. Choose your generator. Report which requested functionals are identified by the records and which need assumptions; completing an honest point scenario is allowed.",
+  "evidence_records": [
+    {
+      "record_id": "C",
+      "status": "artificial mathematical record, not a clinical publication",
+      "population": "one common hypothetical repeated-measure population",
+      "measurement_model": "Each visit measurement is a stable person-specific component plus a mean-zero visit deviation. Component and deviation are independent. Different visits have independent deviations. Persons are independent. These are stipulated controlled-task assumptions, not biological claims.",
+      "means": [
+        0,
+        0
+      ],
+      "between_person_variances": [
+        4,
+        4
+      ],
+      "within_person_variances": [
+        1,
+        1
+      ],
+      "uncertainty": "Exact population moments for this exercise. No finite-study precision is claimed."
+    },
+    {
+      "record_id": "A",
+      "status": "artificial mathematical record, not a clinical publication",
+      "population": "same hypothetical population",
+      "operator": "Pearson correlation between stable person-specific X and Y components",
+      "value": 0.8
+    },
+    {
+      "record_id": "B",
+      "status": "artificial mathematical record, not a clinical publication",
+      "population": "same hypothetical population",
+      "operator": "Pearson correlation of X and Y measured at the same visit",
+      "value": 0.52
+    }
+  ],
+  "boundary": "This is an artificial evidence-composition task, not biomedical validation. Use these records only. No internet retrieval is needed for this controlled diagnostic. Scientific model and missing relationships are your choices; do not present assumptions as measured facts."
+}
+Task contract:
+{
+  "schema_version": 1,
+  "task_id": "composition_longitudinal",
+  "mode": "whole_cohort",
+  "population": "Hypothetical population stipulated by the supplied mathematical records; not a clinical cohort",
+  "row_id": "person_id",
+  "n_rows": 3000,
+  "columns": [
+    {
+      "name": "person_id",
+      "kind": "integer",
+      "unit": "",
+      "role": "identifier",
+      "nullable": false
+    },
+    {
+      "name": "X_visit1",
+      "kind": "number",
+      "unit": "standardized arbitrary units",
+      "role": "generated",
+      "nullable": false
+    },
+    {
+      "name": "Y_visit1",
+      "kind": "number",
+      "unit": "standardized arbitrary units",
+      "role": "generated",
+      "nullable": false
+    },
+    {
+      "name": "X_visit2",
+      "kind": "number",
+      "unit": "standardized arbitrary units",
+      "role": "generated",
+      "nullable": false
+    },
+    {
+      "name": "Y_visit2",
+      "kind": "number",
+      "unit": "standardized arbitrary units",
+      "role": "generated",
+      "nullable": false
+    }
+  ],
+  "information_policy": {
+    "mode": "published_evidence",
+    "excluded_cohorts": [],
+    "allowed_tools": []
+  },
+  "budget": {
+    "source_queries": 0,
+    "source_downloads": 0,
+    "revisions": 0
+  }
+}
+Required estimand names, in primary/secondary order:
+["change_correlation", "same_visit_correlation", "cross_visit_correlation"]

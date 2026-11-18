@@ -1,0 +1,159 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "version": 1,
+    "interpretation": "Assumed distribution after the task's eligibility, complete-case and laboratory-weight selection. Equal-weight synthetic rows represent this distribution under explicit transport assumptions, not an estimated nationally representative population.",
+    "design_scaling": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0
+    },
+    "age": {
+      "bands_inclusive": [
+        [
+          20,
+          39
+        ],
+        [
+          40,
+          59
+        ],
+        [
+          60,
+          79
+        ]
+      ],
+      "probabilities": [
+        0.4,
+        0.37,
+        0.23
+      ],
+      "within_band": "discrete_uniform"
+    },
+    "female": {
+      "probability": 0.53,
+      "independent_of_age": true
+    },
+    "bmi": {
+      "law": "Lognormal conditional on age and female, restricted to bounds by rejection at fixed covariates.",
+      "median_expression": "median_intercept + median_age*A + median_age2*A*A + median_female*female, where A=(age-50)/10",
+      "median_intercept": 26.5,
+      "median_age": 0.35,
+      "median_age2": -0.2,
+      "median_female": 0.6,
+      "log_sd_male": 0.18,
+      "log_sd_female": 0.22,
+      "bounds": [
+        14.0,
+        65.0
+      ]
+    },
+    "bp": {
+      "law": "Joint Gaussian innovations around the specified mean surfaces, conditioned on the BP support at fixed age, female and BMI. Parameters describe the untruncated Gaussian kernel, not necessarily the final conditional moments.",
+      "mean_expression": "intercept + age*A + age2*A*A + female*female_indicator + bmi*B, where A=(age-50)/10 and B=(bmi-25)/5",
+      "sbp": {
+        "intercept": 124.0,
+        "age": 5.0,
+        "age2": 0.4,
+        "female": -4.0,
+        "bmi": 3.877,
+        "sd": 16.0
+      },
+      "dbp": {
+        "intercept": 78.0,
+        "age": 0.75,
+        "age2": -0.55,
+        "female": -2.0,
+        "bmi": 2.9835,
+        "sd": 10.0
+      },
+      "innovation_correlation": 0.55,
+      "support": {
+        "sbp": [
+          70.0,
+          260.0
+        ],
+        "dbp": [
+          35.0,
+          150.0
+        ],
+        "minimum_pulse_pressure": 10.0
+      }
+    },
+    "sampling": "Independent virtual people with fixed population parameters. Rejections redraw only the variable block being conditioned, never previously accepted covariates. No sample-wide calibration or realized-moment enforcement."
+  }
+}

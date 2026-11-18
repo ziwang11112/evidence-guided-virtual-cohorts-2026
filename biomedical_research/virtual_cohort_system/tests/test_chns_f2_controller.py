@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 
-MODULE = Path(__file__).resolve().parents[1] / "reports/chns_admission_2026-11-01/f2/controller/chns_f2_controller.py"
+MODULE = Path(__file__).resolve().parents[1] / "work/chns_admission_2026-11-01/f2/controller/chns_f2_controller.py"
 spec = importlib.util.spec_from_file_location("chns_f2_controller", MODULE)
 controller = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(controller)

@@ -1,0 +1,152 @@
+{
+  "structure": "ZHU2010 is usable as partial marginal evidence, not as a representative target cohort or a source of dependence estimates. Its two cutoff counts and ferritin geometric mean constrain the model after explicit, unverified transport. Hb has a bounded truncated-normal marginal. Ferritin has a continuous two-piece log-scale marginal, allowing a broad low-ferritin tail without forcing the narrow spread implied by a single lognormal fitted only to the supplied geometric mean and cutoff probability. An assumed Gaussian copula supplies otherwise unidentified dependence. Each row is an independent virtual person; source evidence is not multiplied by the generated cohort size.",
+  "parameter_provenance": [
+    {
+      "parameter": "Source Hb-low probability",
+      "value": "258/1671",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW"
+      ],
+      "rationale": "Reported count and denominator at the matching strict cutoff Hb <12 g/dL. Conversion from 120 g/L is division by 10."
+    },
+    {
+      "parameter": "Source ferritin-low probability",
+      "value": "504/1671",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "Reported count and denominator at the matching strict raw ferritin cutoff <15 ug/L."
+    },
+    {
+      "parameter": "Source ferritin geometric mean",
+      "value": 17.4,
+      "unit": "ug/L",
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_GM"
+      ],
+      "rationale": "Uses the admitted ferritin units. No SD, SE or interval width is inferred."
+    },
+    {
+      "parameter": "Target marginal constraints",
+      "value": {
+        "P(Hb<12)": "258/1671",
+        "P(raw ferritin<15)": "504/1671",
+        "exp(E(log raw ferritin))": 17.4
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "Source estimates are transported unchanged as population-law parameters. This is not an identified estimate for the NHANES complete-measurement, phlebotomy-weighted domain."
+    },
+    {
+      "parameter": "Hb marginal shape, scale and support",
+      "value": {
+        "family": "Truncated normal",
+        "parent_sd_g_dl": 1.1,
+        "support_g_dl": [
+          5.0,
+          18.5
+        ]
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A central adult Hb distribution with bounded positive support. These are modeling choices, not estimates from the omitted Hb location or ambiguous concentration intervals."
+    },
+    {
+      "parameter": "Hb parent location",
+      "value": "mu solves [Phi((12-mu)/1.1)-Phi((5-mu)/1.1)]/[Phi((18.5-mu)/1.1)-Phi((5-mu)/1.1)] = 258/1671",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW"
+      ],
+      "rationale": "Population-level location calibration conditional on the assumed shape and support; implemented by deterministic bisection, not realized-sample recentering."
+    },
+    {
+      "parameter": "Ferritin lower-side log scale",
+      "value": 1.0,
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "For low ferritin, log(F/15) is minus a half-normal with this scale. It allows substantial variation below the cutoff; the supplied evidence does not identify that variation."
+    },
+    {
+      "parameter": "Ferritin upper-side log scale",
+      "value": "(log(17.4/15)/sqrt(2/pi) + (504/1671)*1.0)/(1-504/1671)",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_GM",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "For a standard half-normal, E|Z|=sqrt(2/pi). Thus E(log F)=log(15)+sqrt(2/pi)*[(1-p)*s_upper-p*s_lower]=log(17.4). This scale is conditional on the assumed two-piece family and transported constraints."
+    },
+    {
+      "parameter": "Unadjusted Gaussian-copula latent correlation",
+      "value": 0.35,
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "An illustrative modest positive association between iron stores and Hb. Neither its magnitude nor the Gaussian dependence family is identified by the supplied marginal evidence. This is not a raw Pearson correlation, residual correlation, adjusted association or multilevel coefficient."
+    },
+    {
+      "parameter": "Numerical inverse-normal endpoint guard",
+      "value": 1e-15,
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Quantile probabilities are restricted to [1e-15,1-1e-15] to prevent floating-point infinities. This changes only extreme machine-level tails and is not sample-moment calibration."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "Both marginal cutoff probabilities are evidence-anchored after assumed transport, but their joint allocation is not. In the ideal continuous model let J=Phi_2(Phi_inverse(258/1671),Phi_inverse(504/1671);0.35). The population crude odds ratio is J*(1-p_h-p_f+J)/[(p_h-J)*(p_f-J)]. Generated-table analysis must use the requested cells and return not estimable if any cell is zero.",
+      "key_unresolved_assumptions": [
+        "Unchanged transport of both cutoff prevalences to the target domain.",
+        "Assumed latent correlation 0.35 and Gaussian-copula threshold dependence.",
+        "No source joint table or target weighting information identifies this crude odds ratio."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "In the ideal continuous model the joint prevalence is J=Phi_2(Phi_inverse(258/1671),Phi_inverse(504/1671);0.35). This is an assumption-dependent model quantity, not a reported source joint prevalence. Without dependence assumptions, the transported marginal constraints permit J anywhere from 0 to 258/1671.",
+      "key_unresolved_assumptions": [
+        "The source marginal probabilities apply to the target complete-measurement domain.",
+        "The chosen copula adequately represents lower-tail co-occurrence.",
+        "Unmodeled inflammation, menstrual loss, contraception and other anemia causes may alter the joint allocation."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "No continuous rank coefficient is supplied. For the ideal continuous Gaussian-copula law, population Spearman correlation is (6/pi)*asin(0.35/2), because both marginal quantile maps are increasing. Thus its numerical value is imposed by the dependence assumption rather than learned from the source marginal summaries.",
+      "key_unresolved_assumptions": [
+        "The Gaussian copula and latent correlation 0.35 represent the target's unadjusted rank dependence.",
+        "Raw ferritin affected by inflammation may have a different or nonmonotone relationship with Hb.",
+        "The continuous, unrounded measurement model omits assay rounding and resulting ties."
+      ]
+    }
+  ],
+  "limitations": [
+    "Source women were rural Chinese, parous, 2–4 years postpartum, using IUD contraception and subject to health exclusions. Target age, geography, parity, contraception, disease mix and selection differ; no transfer function is identified.",
+    "Positive phlebotomy weights and complete measurements define the target domain, but no target weights or selection model are supplied. Equal-weight generated rows represent that domain only under the stated transport assumptions.",
+    "Tables I and IV concern the same women and are not independent evidence. No joint statistics were supplied, and none were inferred from omitted fields.",
+    "The source Hb location and ambiguous concentration intervals were not used. The ferritin unit interpretation follows the admitted evidence rather than inconsistent printed units.",
+    "Dependence is deliberately nonzero but wholly assumed. Different admissible copulas or correlations can materially change all three requested analyses while preserving the supplied marginal summaries.",
+    "Ferritin has positive support and finite moments of every positive order because each log-side is half-normal. Its ideal upper tail is unbounded; there is no disease-specific high-ferritin component. The piecewise density can jump at 15 ug/L, an artificial feature not established biologically.",
+    "Hb is restricted to 5–18.5 g/dL. This excludes rare extreme measurements that could occur in the target; their frequency is unknown. Its assumed dispersion is not identified by the cutoff count.",
+    "There is no CRP restriction or inflammation adjustment. Inflammation-associated ferritin elevations and non-iron anemia are represented only implicitly by the joint distribution.",
+    "Finite generated samples fluctuate around the model law. They do not quantify evidence uncertainty, transport uncertainty or uncertainty about the assumed shapes and dependence."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified that the ferritin branch probabilities give P(F<15)=504/1671 and that the derived upper log scale gives E(log F)=log(17.4) in the ideal continuous law.",
+    "Analytically verified that the Hb location equation targets the transported strict-cutoff probability within the selected truncated-normal family.",
+    "Checked the mathematical construction for positive ferritin, bounded positive Hb, finite relevant moments, and a valid latent correlation.",
+    "Statically reviewed the generator for seed-controlled independent rows, ordered output columns, unique integer identifiers, and absence of sample-wide moment forcing.",
+    "No code execution, generated-data inspection or empirical moment checks were performed; no execution tools were available."
+  ]
+}

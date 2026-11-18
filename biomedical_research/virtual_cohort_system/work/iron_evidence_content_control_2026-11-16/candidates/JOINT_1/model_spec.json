@@ -1,0 +1,89 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "schema_version": 1,
+    "law": "Independent draws from a Gaussian copula with bounded logistic-normal hemoglobin and a monotone piecewise log-normal-score ferritin marginal.",
+    "transport": {
+      "threshold_probabilities": "Assume the source four-cell probabilities apply to the target domain.",
+      "ferritin_geometric_mean": "Assume the source geometric mean of 17.4 ug/L applies to the target domain.",
+      "representation": "Equal-weight rows represent the phlebotomy-weighted complete-measurement target domain only under these transport assumptions; source counts are not survey weights."
+    },
+    "source_counts": {
+      "n": 1671,
+      "both_low": 173,
+      "only_hb_low": 85,
+      "only_ferritin_low": 331,
+      "neither_low": 1082
+    },
+    "hemoglobin": {
+      "threshold": 12.0,
+      "lower_bound": 4.0,
+      "upper_bound": 20.0,
+      "median": 13.3,
+      "mapping": "Hb=L+(U-L)*expit(a+b*Z_H), a=log((median-L)/(U-median)), b=(log((threshold-L)/(U-threshold))-a)/Phi_inverse(p_H)."
+    },
+    "ferritin": {
+      "threshold": 15.0,
+      "geometric_mean": 17.4,
+      "upper_log_slope": 0.7,
+      "mapping": "log(F)=log(threshold)+s_side*(Z_F-k), where k=Phi_inverse(p_F), s_side=s_low below k and s_high otherwise.",
+      "lower_log_slope_rule": "s_low=(log(GM/threshold)-s_high*B)/A, A=-phi(k)-k*p_F, B=phi(k)-k*(1-p_F)."
+    },
+    "copula": {
+      "family": "Gaussian",
+      "rho_calibration": "Choose rho so Phi_2(Phi_inverse(p_H),Phi_inverse(p_F);rho)=173/1671.",
+      "rho_search_interval": [
+        0.0,
+        0.99
+      ],
+      "quadrature_nodes": 96,
+      "bisection_steps": 80
+    }
+  }
+}

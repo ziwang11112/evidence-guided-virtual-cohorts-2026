@@ -1,0 +1,176 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_family": "Fixed-parameter association model with bounded covariates and additive diastolic-pressure and pulse-pressure innovations",
+    "projection_design": {
+      "age_center": 50,
+      "age_scale": 10,
+      "bmi_center": 25,
+      "bmi_scale": 5
+    },
+    "covariates": {
+      "female_probability": 0.55,
+      "age_support": [
+        20,
+        79
+      ],
+      "age_beta_shapes_by_female": [
+        [
+          2,
+          2
+        ],
+        [
+          2.2,
+          2
+        ]
+      ],
+      "bmi": {
+        "location": 16,
+        "scaled_age_shift": 1,
+        "female_shift": 1,
+        "beta_span": 44,
+        "beta_shapes": [
+          2,
+          7
+        ]
+      },
+      "dependence": "Draw female first, age conditional on female, and BMI conditional on age and female. The BMI beta innovation is independent of female and the age innovation."
+    },
+    "source_calibration": {
+      "intersalt_bmi_coefficient_per_kg_m2": {
+        "sbp": 0.7754,
+        "dbp": 0.5967
+      },
+      "intersalt_coefficient_se_per_kg_m2": {
+        "sbp": 0.0359,
+        "dbp": 0.0257
+      }
+    },
+    "bp_conditional_mean": {
+      "non_bmi_basis": [
+        "intercept",
+        "scaled_age",
+        "female"
+      ],
+      "sbp_non_bmi_coefficients": [
+        125,
+        5,
+        -3
+      ],
+      "dbp_non_bmi_coefficients": [
+        80,
+        1,
+        -1
+      ],
+      "bmi_coefficient_rule": "Multiply each reported INTERSALT per-kg/m2 coefficient by projection_design.bmi_scale.",
+      "bmi_bridge": "Assume no net change in the BMI partial coefficient when dropping urinary sodium, urinary potassium and alcohol from adjustment, replacing inverse-variance pooling of within-centre coefficients by the declared weighted target population, extending the age range, or transferring measurement methods. Impose linear conditional means with no interactions."
+    },
+    "innovations": {
+      "order": [
+        "dbp",
+        "pulse_pressure"
+      ],
+      "distribution": "Independently centered and variance-standardized beta variables",
+      "beta_shapes": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "individual_sd_mmHg": [
+        9,
+        12
+      ],
+      "dependence": "The two innovations are independent of each other and of all covariates. SBP equals DBP plus pulse pressure, so SBP and DBP innovations are not independent.",
+      "combination": "DBP = mean_DBP + error_DBP; pulse pressure = mean_SBP - mean_DBP + error_PP; SBP = DBP + pulse pressure."
+    },
+    "population_transfer": {
+      "selection": "Model the eligible peso_lab-weighted complete-case distribution directly. Eligibility, pregnancy handling and positive laboratory weights are assumed absorbed into this law; do not simulate a national population or a separate selection mechanism.",
+      "equal_weight_representation": "Rows are independent equal-weight draws from the completed analytical-population law.",
+      "treatment_and_hba1c": "No treatment, hypertension or HbA1c exclusion. Unrecorded treatment and disease mixtures are absorbed into the single conditional BP law.",
+      "measurement": "Treat generated variables as released baseline age, recorded sex, BMI and final interview BP. Assume no additional numerical measurement conversion; baseline timing and unknown final-reading aggregation remain unresolved.",
+      "support": "Use the declared age interval, the specified conditional bounded BMI distribution and bounded BP innovations, without rejection or clipping. No original weight-height records or additional dictionary limits are available."
+    },
+    "uncertainty": {
+      "policy": "One fixed-parameter completion, not a posterior predictive mixture.",
+      "source_standard_errors": "Retained as source coefficient-estimation uncertainty only; not used as individual dispersion or transfer uncertainty.",
+      "parameter_sampling": "None. Seeds change individual draws, not scientific parameters.",
+      "transfer_uncertainty": "Unquantified; all transport and unidentified-distribution settings are explicit assumptions."
+    }
+  }
+}

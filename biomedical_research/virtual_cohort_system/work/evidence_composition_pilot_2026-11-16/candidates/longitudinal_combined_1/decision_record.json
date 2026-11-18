@@ -1,0 +1,146 @@
+{
+  "structure": "Independent persons follow a bivariate random-intercept model: each visit equals a stable component vector plus an independent visit-deviation vector. Gaussian distributions complete the generator, but all three requested Pearson correlations are identified by the supplied second moments and independence assumptions.",
+  "parameter_provenance": [
+    {
+      "parameter": "component_mean",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Measurement means are zero and visit deviations have zero means, so stable-component means are zero."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact stable-component variances."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact visit-deviation variances."
+    },
+    {
+      "parameter": "between_person_correlation",
+      "value": 0.8,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Pearson correlation of stable X and Y components."
+    },
+    {
+      "parameter": "same_visit_correlation",
+      "value": 0.52,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Pearson correlation of measurements at the same visit."
+    },
+    {
+      "parameter": "component_covariance",
+      "value": [
+        [
+          4.0,
+          3.2
+        ],
+        [
+          3.2,
+          4.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "A"
+      ],
+      "basis": "Stable X-Y covariance is 0.8*sqrt(4*4)=3.2."
+    },
+    {
+      "parameter": "deviation_covariance",
+      "value": [
+        [
+          1.0,
+          -0.6
+        ],
+        [
+          -0.6,
+          1.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "A",
+        "B"
+      ],
+      "basis": "Each measurement has variance 5. Same-visit covariance is 0.52*5=2.6. Subtracting stable covariance 3.2 gives deviation covariance -0.6."
+    },
+    {
+      "parameter": "independence",
+      "value": "Stable component vector and different visits' deviation vectors are mutually independent; persons are independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Uses the stipulated component/deviation and between-visit independence at the bivariate-vector level."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient distributional completion; Gaussian shape is not required to identify the requested correlations."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "identified",
+      "value": -0.6,
+      "basis": "Stable components cancel in changes. Independent visits give change variances 2 and change covariance 2*(-0.6)=-1.2; correlation is -1.2/2=-0.6."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "identified",
+      "value": 0.52,
+      "basis": "Directly supplied by B and reproduced at both visits: (3.2-0.6)/5=0.52."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "identified",
+      "value": 0.64,
+      "basis": "Cov(X_visit1,Y_visit2) equals stable-component covariance 3.2 because different visits' deviations are independent and independent of components. Correlation is 3.2/5=0.64."
+    }
+  ],
+  "limitations": [
+    "This is an artificial mathematical population, not a clinically validated model.",
+    "Gaussian shape is assumed; higher-order distributional features are not supplied by the records.",
+    "The records imply measurement variances of 5 despite the standardized-unit terminology; measurements are not rescaled to unit variance.",
+    "Population constraints hold in the generator's distribution. Random finite samples will not reproduce them exactly."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified positive definiteness: component covariance eigenvalues are 0.8 and 7.2; deviation covariance eigenvalues are 0.4 and 1.6.",
+    "Analytically verified measurement variances 5, same-visit covariance 2.6, cross-visit covariance 3.2, and change covariance -1.2.",
+    "Inspected the source for the required wide column order, unique integer identifiers, seeded randomness, and absence of sample-moment adjustment.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

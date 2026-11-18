@@ -1,0 +1,52 @@
+{
+  "notes": "FICTIONAL DATA, not recovered participants and not a fitted PNS model. All rows are complete equal-weight simulated adults, ages 20-79; female=0/1 maps recorded male/female. No restriction by hypertension, medication, diabetes or HbA1c. Pregnancy exclusion and positive laboratory-weight/complete-case selection are assumed already represented by the transported distribution, not reconstructed as unobserved variables. The release's dictionary bounds for weight/height and its pregnancy-unknown mechanism are not identified by these external studies. No survey weights or cluster design are recovered; equal weights represent a hypothetical transported analytical distribution, not national representativeness.\n\nEVIDENCE: (1) Ribeiro et al., Nutrients 2018;10:701, DOI 10.3390/nu10060701, PMC6024610, Methods 2 and 2.2 and Table 2. Baseline ELSA-Brasil 2008-2010, employed/retired civil servants age 35-74 in six cities; analysis n=12,892 after exclusions for prior cardiovascular disease, bariatric surgery, implausible energy intake and missing/unvalidated pulse-wave velocity. Pregnant/recently pregnant people were excluded in ELSA. This is not a random sample of the requested population. Table 2 means/SDs in four dairy-intake groups are entered verbatim for age (years), BMI (kg/m2), SBP, DBP, pulse-pressure SDs (mmHg), sample sizes and female percentages. Table's final sex counts/percentages are inconsistent; percentages, not those counts, are used. BP was seated after 5 minutes' rest with Omron HEM705CPINT: three readings 1 minute apart, mean of last two. Antihypertensive users were retained (25.6-28.4% across groups).\n(2) Linderman et al., JAMA Network Open 2018;1:e181271, DOI 10.1001/jamanetworkopen.2018.1271, PMC6324286, Methods/Statistical Analysis and Results/Association between BMI and BP Overall. China-PEACE, 2014-2017, n=1,727,411, adults 35-80 from convenience-selected sites across 31 provinces; mixed treatment status. Reported adjusted SBP BMI slope 1.15 (95% CI 1.13-1.17) and DBP 0.75 (0.74-0.76) mmHg per kg/m2 are used as conditional coefficients: 5.75 and 3.75 mmHg per 5 kg/m2. These are NOT age/sex-only source estimates: adjustment also included income, occupation, ethnicity, marital status, urban/rural registration, province, education, smoking, stroke history and antihypertensive treatment. Transporting these coefficients to a Brazilian age/sex-adjusted model while omitting other covariates is a strong, explicit assumption. Associations were weaker among treated people; no causal weight-loss effect is claimed. Source BP: seated after 5 minutes rest, two electronic right-arm readings 1 minute apart, third if SBP difference >10 mmHg, mean of last two.\n(3) Association between excess weight and beverage portion size consumed in Brazil, Rev Saude Publica 2018;52:21, DOI 10.11606/S1518-8787.2018052000082, PMC5825129, Methods and Results. National Dietary Survey/POF 2008-09, two-day food records, adults >=20, n=24,527 after excluding pregnant and nursing women and younger participants; weighted/design-aware reported mean age 43.2 and female fraction 50.9%. These anchor demographics only, not BP slopes. Source has no upper age cap and excludes nursing mothers, unlike the task. Applying the same age mean and sex fraction after truncation at 79 and to a lab-weighted complete-case population is an unvalidated transport assumption. No evidence from an excluded cohort is used for numerical choices.\n\nDERIVED UNDER ASSUMPTIONS: ELSA marginal moments are pooled with group-n weights and between-group variance/covariance. Within-group Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2; add covariance of group SBP and DBP means. This is an algebraic identity, not a published residual correlation. Small discrepancies in printed PP means are avoided by using S-D means; PP SDs remain reported. n/(n-1) corrections and summary rounding uncertainty are ignored. A normal reference-age distribution with these pooled age mean/variance, recorded sex independent of age, and linear conditional BMI mean is assumed for covariance decomposition. Given chosen age/sex/BMI coefficients, the explained covariance B Cov(X) B' is subtracted from the pooled pressure covariance; DBP quadratic variance 2*q^2*Var(age)^2 is also subtracted. The resulting positive-definite matrix drives joint aggregate-pressure residuals. This yields an ASSUMPTION-DEPENDENT conditional correlation, never a source-reported age/sex/BMI residual correlation. Lognormal BMI conditional CV is algebraically solved to reproduce pooled reference BMI variance under the same assumptions.\n\nUNSUPPORTED STRUCTURE: adult age PMF on integer 20-79 is maximum-entropy subject to the transported mean (truncated exponential). Sex probability is logistic with age log-odds gradient 0.008/year and intercept solved for overall fraction .509. BMI conditional mean changes +0.08 kg/m2/year and +0.4 kg/m2 for female, referenced to ELSA means; lognormal conditional CV is constant. SBP age coefficient +0.50 mmHg/year and female coefficient -7 mmHg; DBP +0.06 mmHg/year at reference age, centered quadratic -0.006 mmHg/year^2, female coefficient -4 mmHg. These age/sex functions, linear homogeneous BMI slopes, Gaussian homoscedastic BP errors, and their transport to ages outside ELSA's 35-74 range are modeling assumptions, not extracted estimates. The DBP quadratic allows a late-midlife plateau/decline; it is not fitted to any study. Treatment and other risk factors are marginalized implicitly; their dependence is not identified. No finite-sample forcing of slopes or correlations is used.\n\nMEASUREMENT: generated SBP/DBP are a resting interview aggregate proxy, not an untreated physiologic pressure. ELSA-like mean of last two readings is the primary assumption, represented at half-mmHg resolution; between-person aggregate covariance already includes source measurement variability. No extra independent reading error is added by default. measurement_extra_cov is an optional PSD sensitivity increment, not an estimated measurement-error covariance. Baseline timing and the unknown released final interview aggregation cannot be resolved from these sources; alternative single readings, timing, rest, device and cuff effects could materially change both slopes and residual correlation. Pairwise redraw only for DBP<=0 or SBP<=DBP; no separate clipping or sorting of pressures.\n\nREQUESTED ANALYSIS: use OLS with intercept, age in years, female and bmi/5, separately for sbp and dbp; Pearson correlation of the two OLS residual vectors uses exactly that same design matrix. Report the two BMI coefficients in mmHg per 5 kg/m2. DBP's unmodeled age-squared term remains in residuals of a linear-age analysis; adding age^2 or a spline is a useful sensitivity analysis and can change residual correlation. Slopes in finite draws need not equal 5.75/3.75. Regression CIs quantify fictional sampling variation only, not source uncertainty or population transfer uncertainty. Retain all rows. Reproduction: call generate(None, model_spec, chosen_integer_seed); the returned DataFrame contains the actual 3,000 fictional records and can be exported by the recipient.",
+  "provenance": {
+    "limitations": [
+      "No PNS lab-weighted demographic or pressure calibration was used.",
+      "ELSA subgroup table and China PEACE are different populations, not independent estimates of the same distribution to average.",
+      "No individual-level or target study measurements were available."
+    ],
+    "used_sources": [
+      {
+        "doi": "10.3390/nu10060701",
+        "locators": [
+          "sec_002",
+          "sec_004",
+          "table-wrap_002"
+        ],
+        "origin_label": "reported marginal summaries plus algebra under explicit reference-distribution assumptions",
+        "pmcid": "PMC6024610",
+        "uses": [
+          "reference BMI and BP moments",
+          "marginal SBP-DBP covariance derived from pulse-pressure SD",
+          "measurement protocol"
+        ]
+      },
+      {
+        "doi": "10.1001/jamanetworkopen.2018.1271",
+        "locators": [
+          "full characters 10000-30000, Methods/Statistical Analysis and Results/Association Between BMI and BP Overall"
+        ],
+        "origin_label": "reported multi-adjusted association transported across populations and adjustment sets",
+        "pmcid": "PMC6324286",
+        "uses": [
+          "BMI-SBP conditional slope",
+          "BMI-DBP conditional slope"
+        ]
+      },
+      {
+        "doi": "10.11606/s1518-8787.2018052000082",
+        "locators": [
+          "sec_010",
+          "sec_011 opening paragraph"
+        ],
+        "origin_label": "reported design-weighted demographics transported to the requested age and selection boundaries",
+        "pmcid": "PMC5825129",
+        "uses": [
+          "mean adult age",
+          "recorded female fraction"
+        ]
+      }
+    ]
+  }
+}

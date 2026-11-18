@@ -1,0 +1,132 @@
+{
+  "structure": "Independent people follow a joint Gaussian scenario. With independent standard-normal Z, U, V, set X = 0.6 Z + 0.8 U and Y = 0.6 Z + 0.8(0.25 U + sqrt(0.9375) V). The residual correlation of 0.25 is a chosen completion, not reported evidence.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means."
+    },
+    {
+      "parameter": "variances",
+      "value": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual-level population variances."
+    },
+    {
+      "parameter": "corr_xz",
+      "value": 0.6,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Marginal Pearson correlation with measured Z."
+    },
+    {
+      "parameter": "corr_yz",
+      "value": 0.6,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Marginal Pearson correlation with measured Z."
+    },
+    {
+      "parameter": "population_OLS_slopes_on_Z",
+      "value": {
+        "X": 0.6,
+        "Y": 0.6
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Each slope equals its correlation with Z times its standard deviation divided by the standard deviation of Z."
+    },
+    {
+      "parameter": "population_OLS_residual_variances",
+      "value": {
+        "X": 0.64,
+        "Y": 0.64
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Each residual variance is 1 - 0.6^2."
+    },
+    {
+      "parameter": "residual_correlation",
+      "value": 0.25,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Unreported association between the two population OLS residuals; selected as a valid point scenario."
+    },
+    {
+      "parameter": "innovation_distribution",
+      "value": "independent standard normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient distributional completion satisfying the specified moments; independent draws across people."
+    },
+    {
+      "parameter": "scenario_marginal_xy",
+      "value": 0.52,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Conditional on the assumed residual correlation: 0.6*0.6 + 0.64*0.25 = 0.52. Not identified from the records alone."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": 0.25,
+      "basis": "The Pearson correlation after separate population OLS adjustment for an intercept and Z is (rho_XY - 0.36)/0.64. The records leave rho_XY unspecified; this scenario sets the residual correlation to 0.25."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "scenario",
+      "value": 0.52,
+      "basis": "The assumed residual covariance is 0.64*0.25 = 0.16, giving Cov(X,Y) = 0.36 + 0.16 = 0.52. Unit variances make this the Pearson correlation."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "identified",
+      "value": 0.6,
+      "basis": "Population OLS with an intercept gives Cov(X,Z)/Var(Z) = 0.6 from B and C, independently of the missing X-Y relationship or distributional shape."
+    }
+  ],
+  "limitations": [
+    "The records alone permit marginal X-Y correlations throughout [-0.28, 1] and partial correlations throughout [-1, 1]; neither requested correlation is point identified.",
+    "Gaussian shape and the selected residual association are modeling assumptions, not additional evidence.",
+    "Standardization describes population moments. Realized sample means, variances, correlations, and slopes fluctuate; no empirical recentering, rescaling, selection, or moment matching is performed.",
+    "These artificial population constraints and association parameters carry no clinical validation or causal interpretation."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified zero means, unit variances, and both stipulated correlations with Z under the construction.",
+    "Analytically verified marginal correlation 0.52 and adjusted correlation (0.52 - 0.36)/0.64 = 0.25.",
+    "Analytically checked positive definiteness: the correlation matrix has leading principal minors 1, 0.7296, and 0.384.",
+    "Derived the admissible marginal-correlation interval from |rho_XY - 0.36| <= 0.64.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "structure": "Independent persons follow a linear Gaussian scenario: Z, U and V are independent standard normals; X = 0.6Z + 0.8U; Y = 0.6Z + 0.8(0.25U + sqrt(1 - 0.25^2)V). This satisfies the supplied population moments and chooses an otherwise unspecified correlation between the population OLS residuals.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "All three population means are exactly zero."
+    },
+    {
+      "parameter": "population_variances",
+      "value": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "All three individual population variances are exactly one; z_sd is therefore one."
+    },
+    {
+      "parameter": "correlations_with_z",
+      "value": {
+        "X": 0.6,
+        "Y": 0.6
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Exact marginal Pearson correlations in the same population."
+    },
+    {
+      "parameter": "x_z_slope_and_y_z_slope",
+      "value": {
+        "X": 0.6,
+        "Y": 0.6
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "The intercept-adjusted population slope is correlation times outcome SD divided by Z SD; all SDs equal one."
+    },
+    {
+      "parameter": "x_residual_sd_and_y_residual_sd",
+      "value": {
+        "X": 0.8,
+        "Y": 0.8
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Each population OLS residual variance is 1 - 0.6^2 = 0.64."
+    },
+    {
+      "parameter": "residual_correlation",
+      "value": 0.25,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "A freely chosen point scenario; neither record specifies the X-Y covariance."
+    },
+    {
+      "parameter": "innovation_distribution",
+      "value": "independent_standard_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "A convenient joint distribution implementing the required moments and chosen residual correlation."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": 0.25,
+      "basis": "For population OLS residuals, partial correlation = (r_XY - 0.6*0.6)/sqrt((1 - 0.6^2)(1 - 0.6^2)) = (r_XY - 0.36)/0.64. The records leave r_XY unspecified; the generator chooses residual correlation 0.25."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "scenario",
+      "value": 0.52,
+      "basis": "The selected residual correlation gives Cov(X,Y) = 0.36 + 0.8*0.8*0.25 = 0.52. Both variances equal one, so this is also the marginal Pearson correlation."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "identified",
+      "value": 0.6,
+      "basis": "With an intercept, the population OLS slope is Cov(X,Z)/Var(Z) = 0.6. This follows from B and C without Gaussianity or any assumption about the X-Y relationship."
+    }
+  ],
+  "limitations": [
+    "The records permit marginal X-Y correlations throughout [-0.28, 1] and OLS residual correlations throughout [-1, 1]; the two chosen scenario values are not identified.",
+    "Gaussianity is an implementation assumption, not evidence. It is unnecessary for the second-moment identities or the identified X-on-Z slope.",
+    "Reported constraints hold at the model-population level. Random finite samples will not have exactly zero means, unit variances or the target correlations, and the generator does not force them.",
+    "This is an artificial mathematical population, not a clinically validated or causal model."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked zero population means and variances Var(X) = Var(Y) = 0.36 + 0.64 = 1, with Var(Z) = 1.",
+    "Analytically checked Cov(X,Z) = Cov(Y,Z) = 0.6 and Cov(X,Y) = 0.52.",
+    "Analytically checked positive definiteness: the residual covariance matrix has diagonal 0.64 and off-diagonal 0.16, giving determinant 0.384; the full covariance matrix also has determinant 0.384.",
+    "Analytically checked that residual correlation is 0.16/0.64 = 0.25.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

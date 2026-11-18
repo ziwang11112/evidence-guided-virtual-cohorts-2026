@@ -1,0 +1,360 @@
+{
+  "structure": "This is one fixed, bounded, raw-scale association scenario, not a reconstruction of Turkana outcomes. Age and recorded sex are sampled independently. BMI depends on both, with its innovation variance calibrated to a transported marginal SD. Each lipid has a linear conditional mean given age, recorded sex and BMI. Independent bounded innovations include one factor shared by the two lipid residuals. Residual scales are calculated to preserve the transported marginal lipid SDs after accounting for covariate variation. All innovations have mean zero and variance one. Consequently the conditional means also determine the requested population OLS projections. Bounded rather than Gaussian errors permit strictly positive BMI and lipid values without clipping, rejection, or exclusions that would change those projections. The specified support gives positive lower bounds for BMI and both lipids. These are population moment settings, not exact finite-sample constraints.",
+  "parameter_provenance": [
+    {
+      "paths": [
+        "$.law"
+      ],
+      "meaning_statistical_operator": "Joint factorization, distribution families, innovation standardization, lipid vector ordering, omitted interactions, observation model and selection rule.",
+      "conditioning_set": "BMI conditional on age and recorded sex; lipids conditional on age, recorded sex and BMI; lipid residual innovations independent of all covariates.",
+      "scale": "Raw observed scales; additive conditional means and bounded residuals.",
+      "unit": "Age year; BMI kg/m^2; lipids mmol/L.",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "source_id": "population_metadata",
+          "evidence_path": "population_metadata.eligibility",
+          "original_locator": "Supplied population metadata eligibility declaration"
+        },
+        {
+          "source_id": "population_metadata",
+          "evidence_path": "population_metadata.measurements",
+          "original_locator": "Target supplement p.3 interview methods, p.5 anthropometry methods, pp.5-6 lipid methods; repository units metadata"
+        }
+      ],
+      "derivation": "Uniform(-sqrt(3),sqrt(3)) has zero mean and unit variance. Independent innovations and centered predictors permit explicit population moment calibration. The shared-factor construction supplies a joint residual law rather than separately generated outcomes.",
+      "unverified_assumptions": [
+        "The selected target sample is represented by iid equal-weight individuals without additional clustering.",
+        "Uniform tails and additive linear conditional means are scenario choices, not reported source distributions.",
+        "There are no interactions, nonlinear conditional-mean terms, extra measurement-error components, or missing values.",
+        "No pregnancy, HIV, diabetes, fasting, outlier, lifestyle, or TC-versus-HDL filter is imposed.",
+        "Source serum laboratory results are used as numerical anchors for target immediately measured venous-EDTA CardioChek Plus values without an additional assay or fasting correction. Equivalence is not established."
+      ]
+    },
+    {
+      "paths": [
+        "$.sex.probability_F",
+        "$.sex.codes"
+      ],
+      "meaning_statistical_operator": "Bernoulli probability of recorded F and literal output codes.",
+      "conditioning_set": "Unconditional; independent of age before BMI generation.",
+      "scale": "Probability and categorical coding.",
+      "unit": "1; literal F/M.",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "source_id": "population_metadata",
+          "evidence_path": "population_metadata.measurements.sex",
+          "original_locator": "Supplied recorded interview-sex metadata; biological label legend not independently verified"
+        },
+        {
+          "source_id": "population_metadata",
+          "evidence_path": "population_metadata.composition",
+          "original_locator": "Supplied composition metadata: sex proportions and joint covariate distribution unspecified"
+        }
+      ],
+      "derivation": "A balanced recorded-sex composition is selected because target proportions are unidentified.",
+      "unverified_assumptions": [
+        "The probability 0.5 is not inferred from target data or transported source counts.",
+        "Mapping the source women-versus-men BMI contrast to recorded F-versus-M is an explicit coding-transfer assumption, not an authenticated biological interpretation."
+      ]
+    },
+    {
+      "paths": [
+        "$.age.support_year"
+      ],
+      "meaning_statistical_operator": "Endpoints of a continuous uniform age distribution.",
+      "conditioning_set": "Independent of recorded sex.",
+      "scale": "Raw interview-age representation.",
+      "unit": "year",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source_id": "population_metadata",
+          "evidence_path": "population_metadata.eligibility.minimum_age_inclusive",
+          "original_locator": "Investigator-selected prospective eligibility boundary"
+        },
+        {
+          "source_id": "population_metadata",
+          "evidence_path": "population_metadata.composition.age_distribution",
+          "original_locator": "Supplied composition metadata: age distribution unspecified"
+        }
+      ],
+      "derivation": "The lower endpoint 18 follows task eligibility. The upper endpoint 90 and uniform density are assumed. The implied mean is 54 and variance is (90-18)^2/12.",
+      "unverified_assumptions": [
+        "Zero probability above 90 is a support assumption, not a source-reported eligibility exclusion.",
+        "Continuous modeled age omits interview rounding and reporting error.",
+        "The restricted 40-60-year Agongo age summaries are deliberately not used to infer the full adult age distribution."
+      ]
+    },
+    {
+      "paths": [
+        "$.bmi.mean",
+        "$.bmi.marginal_sd"
+      ],
+      "meaning_statistical_operator": "Target-scenario marginal arithmetic mean and individual SD of BMI.",
+      "conditioning_set": "Unconditional across the assumed age and recorded-sex composition.",
+      "scale": "Raw arithmetic moments.",
+      "unit": "kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].marginal_statistics[id=agongo_pooled_bmi_mean_sd]",
+          "original_locator": "Table 1; pooled BMI mean 21.63 and SD 3.61; correction does not alter these rows"
+        }
+      ],
+      "derivation": "The reported rounded sample moments are adopted as population calibration parameters. With Va=Var(age), Vf=pF(1-pF), the BMI innovation variance is 3.61^2-age_slope^2*Va-F_minus_M^2*Vf.",
+      "unverified_assumptions": [
+        "Transport from rural Ghana adults aged 40-60, resident at least ten years, excluding pregnancy and requiring complete investigated variables, to the declared selected Turkana adult context is assumed.",
+        "Published sample SD is treated as a population SD parameter; its denominator convention and estimation uncertainty are not reconstructed.",
+        "This moment calibration does not claim equality of source and target distributions."
+      ]
+    },
+    {
+      "paths": [
+        "$.bmi.age_slope"
+      ],
+      "meaning_statistical_operator": "Conditional BMI mean increment per additional year, holding recorded sex fixed.",
+      "conditioning_set": [
+        "recorded sex"
+      ],
+      "scale": "Additive raw-scale conditional mean.",
+      "unit": "(kg/m^2)/year",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "A small positive age-BMI dependence is supplied to complete the unidentified target covariate law.",
+      "unverified_assumptions": [
+        "The value 0.04 and constant linear age relationship are not source estimates."
+      ]
+    },
+    {
+      "paths": [
+        "$.bmi.F_minus_M"
+      ],
+      "meaning_statistical_operator": "Conditional F-minus-M BMI mean contrast at common age.",
+      "conditioning_set": [
+        "age"
+      ],
+      "scale": "Additive raw-scale contrast.",
+      "unit": "kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].marginal_statistics[id=agongo_women_bmi_mean_sd]",
+          "original_locator": "Table 1; women BMI mean 22.28"
+        },
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].marginal_statistics[id=agongo_men_bmi_mean_sd]",
+          "original_locator": "Table 1; men BMI mean 20.87"
+        }
+      ],
+      "derivation": "The source unadjusted difference 22.28-20.87=1.41 is adopted as a conditional model contrast. Centering sex at its assumed probability preserves the pooled BMI mean.",
+      "unverified_assumptions": [
+        "An unadjusted source difference is treated as an age-conditional target contrast by assumption.",
+        "Source sex-specific absolute means and SDs are not simultaneously imposed.",
+        "Recorded F/M is mapped to the source women/men labels for this contrast."
+      ]
+    },
+    {
+      "paths": [
+        "$.lipids.marginal_mean",
+        "$.lipids.marginal_sd"
+      ],
+      "meaning_statistical_operator": "Marginal arithmetic means and individual SDs, ordered TC then HDL.",
+      "conditioning_set": "Unconditional across the assumed generated covariate law.",
+      "scale": "Raw arithmetic moments.",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].marginal_statistics[id=agongo_pooled_total_cholesterol_mean_sd]",
+          "original_locator": "Results, Mean lipid levels stratified by sex and age category, opening paragraph; TC mean 3.23, SD 0.92"
+        },
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].marginal_statistics[id=agongo_pooled_hdl_cholesterol_mean_sd]",
+          "original_locator": "Results, Mean lipid levels stratified by sex and age category, opening paragraph; HDL mean 1.14, SD 0.38"
+        }
+      ],
+      "derivation": "Reported rounded source sample moments become fixed target-scenario population anchors. Centered covariates preserve the means; residual variance subtraction preserves the specified marginal variances.",
+      "unverified_assumptions": [
+        "The same external population, selection, age-range, fasting and assay transport assumptions described for BMI are required.",
+        "Source overnight-fasting serum Randox RX Daytona+ measurements are not authenticated as equivalent to target CardioChek Plus venous-EDTA measurements with unknown fasting status.",
+        "Uncertainty of these source moment estimates is not reported and is not invented.",
+        "These summaries and the source regressions come from one dataset and are not independent evidence replications."
+      ]
+    },
+    {
+      "paths": [
+        "$.lipids.reference_log_bmi",
+        "$.lipids.raw_bmi_bridge"
+      ],
+      "meaning_statistical_operator": "Reference log-lipid BMI coefficients, ordered TC then HDL, and a local first-order bridge defining raw-scale conditional BMI slopes.",
+      "conditioning_set": "Source coefficients are unadjusted and sex-specific. Generated raw slopes condition on age and recorded sex and are common across both recorded-sex groups.",
+      "scale": "Source log base unresolved; natural log is assumed solely for the bridge. Generated slopes are raw mmol/L per kg/m^2.",
+      "unit": "Source log(lipid)/(kg/m^2); generated (mmol/L)/(kg/m^2).",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].reported_regressions[id=agongo_men_logtc_bmi_univ]",
+          "original_locator": "Table 5, Men, BMI, Univariate models; estimate 0.013, reported 95% CI [0.006,0.020]"
+        },
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].reported_regressions[id=agongo_women_logtc_bmi_univ]",
+          "original_locator": "Table 5, Women, BMI, Univariate models; estimate 0.013, reported 95% CI [0.006,0.020]"
+        },
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].reported_regressions[id=agongo_men_loghdl_bmi_univ]",
+          "original_locator": "Table 4, Men, BMI, Univariate models; estimate -0.007, reported 95% CI [-0.015,0.001]"
+        },
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].regression_context",
+          "original_locator": "Supplied regression-context extraction: log base, intercept and weighting not established"
+        }
+      ],
+      "derivation": "For motivation only, an exponential conditional mean has derivative beta times its local mean. Multiplying the adopted lipid means by the reference coefficients gives TC 3.23*0.013=0.04199 and HDL 1.14*(-0.007)=-0.00798 mmol/L per kg/m^2. The construction then assumes these are constant raw conditional slopes over its entire support. It does not claim to reproduce the source log-regression operators.",
+      "unverified_assumptions": [
+        "The natural-log interpretation is not resolved by the supplied extraction.",
+        "Applying a local derivative at a pooled arithmetic mean is a modeling bridge, not an exact conversion of the reported regression.",
+        "Source unadjusted coefficients are assumed to inform the target age/sex-conditional relationship despite different adjustment, selection and composition.",
+        "The men's HDL coefficient is extended to recorded F as well as M.",
+        "The duplicated TC estimate across sexes is not pooled as independent evidence.",
+        "Reported confidence intervals are estimation uncertainty, not individual dispersion. They are not converted into residual SDs or propagated; the HDL interval permits either sign."
+      ]
+    },
+    {
+      "paths": [
+        "$.lipids.age_slope",
+        "$.lipids.F_minus_M"
+      ],
+      "meaning_statistical_operator": "TC/HDL conditional age increments [0.006,0.001] and F-minus-M contrasts [0.15,0.05], in lipid_order.",
+      "conditioning_set": "Age slopes hold BMI and recorded sex fixed; sex contrasts hold age and BMI fixed.",
+      "scale": "Additive raw-scale conditional means.",
+      "unit": "Age vector (mmol/L)/year; sex vector mmol/L.",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "These nonzero dependencies complete relationships not identified by the admitted evidence. They enter the marginal variance calculation jointly with the age-BMI and sex-BMI dependencies.",
+      "unverified_assumptions": [
+        "Magnitudes and positive signs are scenario assumptions, not inferred target effects.",
+        "Slopes and contrasts do not vary with other predictors."
+      ]
+    },
+    {
+      "paths": [
+        "$.lipids.shared_factor_loading"
+      ],
+      "meaning_statistical_operator": "TC and HDL loadings on a unit-variance common residual innovation.",
+      "conditioning_set": [
+        "age",
+        "recorded sex",
+        "bmi"
+      ],
+      "scale": "Standardized additive residual scale.",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "For lipid j, standardized residual Zj=lj*U0+sqrt(1-lj^2)*Uj with independent unit-variance innovations. Thus each residual variance is one before scaling and their covariance is lTC*lHDL. Distinct loadings 0.5 and 0.3 imply residual correlation 0.15.",
+      "unverified_assumptions": [
+        "This shared residual dependence is explicitly chosen; absence of an identified target residual correlation is not treated as independence.",
+        "The factor has no asserted physiological or causal interpretation.",
+        "No supplied Spearman or unresolved regression statistic is substituted for this conditional Pearson relationship."
+      ]
+    },
+    {
+      "paths": [
+        "$.lipids.residual_scale_rule"
+      ],
+      "meaning_statistical_operator": "Residual variances that complete the stated marginal lipid variances.",
+      "conditioning_set": [
+        "age",
+        "recorded sex",
+        "bmi"
+      ],
+      "scale": "Raw-scale conditional variance, constant across covariates.",
+      "unit": "(mmol/L)^2",
+      "classification": "derived",
+      "source_pointers": [
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].marginal_statistics",
+          "original_locator": "Table 1 BMI moments and Results opening paragraph lipid moments"
+        }
+      ],
+      "derivation": "Let Vb be BMI variance, Va age variance, Vf sex-indicator variance, Cba=bmi.age_slope*Va, and Cbf=bmi.F_minus_M*Vf. For each lipid with conditional coefficients b,a,f, Var(conditional mean)=b^2*Vb+a^2*Va+f^2*Vf+2*b*a*Cba+2*b*f*Cbf. Residual variance equals the specified marginal SD squared minus this quantity.",
+      "unverified_assumptions": [
+        "Variance subtraction relies on the stated independent age/sex sampling, independent innovations and absence of interactions.",
+        "Marginal SDs are not conditional SDs; the program explicitly distinguishes them."
+      ]
+    },
+    {
+      "paths": [
+        "$.uncertainty"
+      ],
+      "meaning_statistical_operator": "Treatment of source-estimation uncertainty, transport uncertainty and individual sampling variation.",
+      "conditioning_set": "The entire generated population law is conditional on the fixed specification.",
+      "scale": "Fixed-parameter scenario rather than posterior predictive distribution.",
+      "unit": "Not applicable.",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].regression_context.uncertainty",
+          "original_locator": "Reported regression 95% confidence intervals; not individual dispersion"
+        },
+        {
+          "source_id": "agongo_2018_navrongo",
+          "evidence_path": "sources[0].population.count_issue",
+          "original_locator": "Methods versus abstract/Table 1 male-count discrepancy, 864 versus 846"
+        }
+      ],
+      "derivation": "Individual variation is sampled, while parameters remain fixed. No denominator-derived uncertainty, inverse-variance pooling, CI-to-SD conversion, or random transport offset is introduced.",
+      "unverified_assumptions": [
+        "This single scenario does not quantify uncertainty in the scientific assumptions.",
+        "A new seed changes individuals, not the assumed population parameters."
+      ]
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "K02-HDL-BMI",
+      "model_implied_population_value": -1.542933,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "All generated rows are eligible. Conditional on the complete design, the HDL residual has zero mean and is independent of the covariates. The design has full population rank because BMI has a nonzero independent innovation and both recorded-sex groups have positive probability. Therefore the population raw BMI projection coefficient is the conditional-mean slope 1.14*(-0.007)=-0.00798 mmol/L per kg/m^2. The requested population contrast is 5*38.67*(-0.00798)=-1.542933. The conversion factor is the requested numerical unit mapping, not an assay bridge."
+    },
+    {
+      "analysis_id": "K02-TC-BMI",
+      "model_implied_population_value": 8.1187665,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "The same zero-conditional-mean residual and full-rank argument gives population raw BMI projection coefficient 3.23*0.013=0.04199 mmol/L per kg/m^2. Thus the requested contrast is 5*38.67*0.04199=8.1187665. These are projections of the assumed joint law, not converted source conditional estimates or causal effects."
+    },
+    {
+      "analysis_id": "K02-LIPID-RESIDUAL",
+      "model_implied_population_value": 0.15,
+      "unit": "1",
+      "derivation": "The population age/sex/BMI projections remove the full specified conditional means. Remaining residuals are their positive scales times [0.5*U0+sqrt(1-0.5^2)*UTC] and [0.3*U0+sqrt(1-0.3^2)*UHDL]. Their covariance divided by their SD product is 0.5*0.3=0.15. Common positive unit conversion leaves this correlation unchanged. Finite-sample fitted residual correlations need not equal this population value."
+    }
+  ],
+  "limitations": [
+    "No Turkana 2018-2019 target outcomes or individual covariates are used. The construction is a transparent selected-sample scenario, not an identified estimate of the actual target joint distribution or a nationally representative cohort.",
+    "The global linear raw-scale BMI slopes depend strongly on an explicitly assumed local bridge from unadjusted, sex-specific, unresolved-base log regressions. The final law need not reproduce those source log coefficients.",
+    "Transporting Ghana age-restricted marginal moments to a broad adult Turkana context, while assigning new covariate dependencies, is a substantive unsupported extrapolation. Source compatibility alone would not validate that extrapolation.",
+    "Bounded uniform innovations deliberately omit long tails. Age has no mass above 90, and the induced BMI support is approximately 13.52-29.74 kg/m^2. This limits applicability to elderly and high-BMI tail associations even though the task imposes no such upper eligibility limits.",
+    "Source health exclusions are not recreated as target filters. Their possible effects on transported moments and associations remain unresolved.",
+    "Target fasting status, assay comparability, interview-age error, anthropometric measurement error, site mixture and lifestyle mixture are unidentified. No independent numerical correction for them is available in the evidence.",
+    "Greiner geometric means, threshold prevalences, age quantiles and unresolved-scale regressions are deliberately not fitted. Their subgroup selections, table-specific denominators, adjustment covariates and unresolved transformation scales do not supply the requested raw conditional operators without further bridges.",
+    "Obirikorang Table 7 unadjusted community Spearman correlations are deliberately not used as raw Pearson correlations or age/sex/BMI-adjusted residual correlations. No rank-to-Pearson bridge is asserted.",
+    "All reused source summaries are handled as dependent descriptions of their respective cohorts, not independent precision contributions. Agongo count discrepancies are left unresolved and are not used for uncertainty calculations.",
+    "The supplied curator artifacts are historical extraction provenance. No original article reauthentication, retrieval, execution, simulation inspection or software validation has been performed.",
+    "Reported source confidence intervals and unreported uncertainty in marginal moments are not propagated. Exact estimands here are conditional on the chosen fixed scenario and do not express confidence about the actual Turkana population.",
+    "Delivered values represent the declared recorded measurements in mmol/L. The requested factor 38.67 only changes numerical units and does not establish measurement equivalence."
+  ],
+  "checks_actually_performed": []
+}

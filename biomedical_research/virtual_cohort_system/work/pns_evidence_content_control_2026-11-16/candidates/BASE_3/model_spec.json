@@ -1,0 +1,157 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_id": "published_anchor_conditional_t_v1",
+    "population_interpretation": "An assumption-based scenario for the declared peso_lab-weighted eligible complete-case distribution, represented by independent equal-weight rows. This is not an empirically calibrated estimate of that distribution or a nationally representative cohort.",
+    "age": {
+      "bin_edges": [
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80
+      ],
+      "bin_probabilities": [
+        0.22,
+        0.23,
+        0.21,
+        0.17,
+        0.11,
+        0.06
+      ],
+      "within_bin_distribution": "Discrete uniform integer years, lower edge inclusive and upper edge exclusive"
+    },
+    "female": {
+      "probability_at_age50": 0.55,
+      "log_odds_per_age_decade": 0.1
+    },
+    "bmi": {
+      "family": "Conditionally truncated lognormal",
+      "median_intercept": 26.0,
+      "median_age_linear_per_decade": 0.45,
+      "median_age_quadratic_per_decade_squared": -0.15,
+      "median_female_increment": 0.8,
+      "log_sd": 0.19,
+      "lower": 14.0,
+      "upper": 60.0
+    },
+    "bp_location": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0,
+      "hinge_age": 60.0,
+      "sbp": {
+        "intercept": 126.0,
+        "age_per_decade": 4.5,
+        "female": -4.0,
+        "bmi_per5": 3.877,
+        "age_hinge_per_decade": 0.0
+      },
+      "dbp": {
+        "intercept": 79.0,
+        "age_per_decade": 1.7,
+        "female": -2.5,
+        "bmi_per5": 2.9835,
+        "age_hinge_per_decade": -3.0
+      }
+    },
+    "bp_error": {
+      "family": "Covariance-standardized bivariate Student t",
+      "df": 8.0,
+      "sbp_sd": 15.0,
+      "dbp_sd": 9.0,
+      "correlation": 0.55
+    },
+    "bp_support": {
+      "sbp": [
+        75.0,
+        260.0
+      ],
+      "dbp": [
+        40.0,
+        150.0
+      ],
+      "pulse_pressure": [
+        15.0,
+        150.0
+      ]
+    },
+    "conditioning": "Draw age and sex first. At fixed age and sex, redraw only BMI until its bounds hold. At fixed age, sex and BMI, redraw the paired BP errors until both pressures and pulse pressure satisfy their bounds. These are conditional population laws, not cohort-wide filtering or moment matching."
+  }
+}

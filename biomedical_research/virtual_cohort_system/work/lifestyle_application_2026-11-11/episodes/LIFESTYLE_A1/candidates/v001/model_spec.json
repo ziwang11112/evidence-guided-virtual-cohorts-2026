@@ -1,0 +1,176 @@
+{
+  "age_bounds": [
+    [
+      18,
+      31
+    ],
+    [
+      31,
+      41
+    ],
+    [
+      41,
+      51
+    ],
+    [
+      51,
+      61
+    ],
+    [
+      61,
+      71
+    ],
+    [
+      71,
+      90
+    ]
+  ],
+  "age_origin": "Continuous uniform inside interpreted integer-age bands, except oldest triangular. Strictly above 18. Assign age 70 to the penultimate band, resolving the printed gap explicitly. Maximum age 90 and oldest mode 75 are assumptions. Ages are not recovered observations.",
+  "analysis_origin": "analyze_generated uses pooled available-case mean and sample SD (all complete here); additive OLS with age and sex, 2-df Gaussian ML LRT for lifestyle-by-sex, and separate age-adjusted fits within each sex using the same pooled outcome scale. Returns all 9 additive and 18 sex-specific contrasts regardless of LRT p. Positive skew/group variance differences mean Gaussian likelihood is a working analysis model. No p-value selection, significance constraint, exact source replay, or post-generation tuning.",
+  "conditional_law": "Group arithmetic conditional means are linear in age centered at group expectation and female indicator centered at group proportion. Lognormal multiplicative noise has conditional expectation 1. Its group-specific variance is derived algebraically to reproduce each specified marginal group SD after integrating demographic covariate variation, not fitted to a realized cohort. Bounds on age ensure positive conditional means. All moments finite. Source summary uncertainty is not an extra individual-level SD.",
+  "demography_origin": "Supplied published Table 1 counts sum to 1360, not stated cohort n=1226. Fixed largest-remainder allocation of all 36 cells to 1226 preserves displayed proportions approximately; ties use printed cell order. Neither Table 2 outcome-subset sex ratios nor participant records substitute for Table 1. A zero source age-sex cell is retained, not an extra category.",
+  "joint_origin": "Assumed correlations of Gaussian log-multipliers, ordered BMI, HDL, non-HDL; not reported Pearson correlations. Positive BMI/non-HDL and weak inverse BMI/HDL dependence are plausible but not identified by source aggregates. TC inherits dependence because TC=HDL+non-HDL.",
+  "latent_gaussian_correlation": [
+    [
+      1,
+      -0.12,
+      0.28
+    ],
+    [
+      -0.12,
+      1,
+      0.1
+    ],
+    [
+      0.28,
+      0.1,
+      1
+    ]
+  ],
+  "lifestyles": [
+    "pastoralist",
+    "rural_nonpastoralist",
+    "urban_nonpastoralist"
+  ],
+  "measurement_origin": "Complete virtual BMI/TC/HDL measurements for all 1226 are a task choice. Original Table 2: BMI n=1198; TC/HDL n=406. Source units kg/m2 and mg/dL, venous EDTA/CardioChek Plus. No fasting equivalence, assay-limit censoring, clinical diagnosis, participant recovery, or 1226 new clinical observations claimed. TC exceeds HDL by construction; this imposes coherent positive non-HDL and excludes HDL>TC assay artifacts explicitly, rather than clipping values.",
+  "model_name": "Lea2020_aggregate_anchored_positive_joint_cohort_v1",
+  "n": 1226,
+  "oldest_triangular": [
+    71,
+    75,
+    90
+  ],
+  "print_generated_diagnostics": true,
+  "published_age_sex_counts": [
+    [
+      16,
+      23,
+      69,
+      160,
+      69,
+      39
+    ],
+    [
+      36,
+      38,
+      68,
+      115,
+      66,
+      41
+    ],
+    [
+      40,
+      40,
+      67,
+      87,
+      41,
+      19
+    ],
+    [
+      15,
+      9,
+      61,
+      65,
+      29,
+      17
+    ],
+    [
+      1,
+      0,
+      27,
+      26,
+      22,
+      12
+    ],
+    [
+      1,
+      1,
+      15,
+      8,
+      11,
+      6
+    ]
+  ],
+  "traits": {
+    "bmi": {
+      "age_slope": 0.015,
+      "female_interaction": [
+        0,
+        0.1,
+        0.2
+      ],
+      "female_main_effect": 0.6,
+      "group_marginal_means": [
+        19.99,
+        20.22283676104399,
+        21.927031
+      ],
+      "group_marginal_sds": [
+        2.14,
+        2.4,
+        3.3
+      ],
+      "origin": "Pastoralist mean/SD 19.99/2.14 kg/m2 from Lea Results. Urban mean=19.99*1.0969; rural mean=urban/1.0843 from reported 9.69% and 8.43% average BMI differences, interpreted approximately as marginal ratios rather than standardized regression coefficients. Other SDs, age slope, sex effect, and small interactions are assumptions; lack of detected sex interaction is not treated as exact equality."
+    },
+    "hdl": {
+      "age_slope": 0.02,
+      "female_interaction": [
+        0,
+        0.3,
+        -0.4
+      ],
+      "female_main_effect": 4,
+      "group_marginal_means": [
+        72.69,
+        73.09,
+        72.19
+      ],
+      "group_marginal_sds": [
+        14.72,
+        14.72,
+        14.72
+      ],
+      "origin": "Pastoralist mean/SD 72.69/14.72 mg/dL from Lea Results; transport SD to other lifestyles is an assumption. Small nonzero lifestyle offsets +0.4/-0.5 mg/dL reflect uncertainty around no detected difference, not source coefficient estimates. Covariate slopes and interactions are assumptions. Omuse2020 supplies qualitative support for modest sex and little age variation, not these numerical slopes."
+    },
+    "nonhdl": {
+      "age_slope": 0.4,
+      "female_interaction": [
+        0,
+        0.5,
+        1
+      ],
+      "female_main_effect": -3,
+      "group_marginal_means": [
+        75.89,
+        77.89,
+        91.39
+      ],
+      "group_marginal_sds": [
+        24,
+        25,
+        32
+      ],
+      "origin": "Positive non-HDL component is a physiological modeling device, not a measured extra column. Baseline mean=published pastoralist LDL mean 60.89 mg/dL plus assumed 15 mg/dL other cholesterol. Offsets +2/+15.5 mg/dL, all SDs and all slopes are assumptions; together with HDL they imply TC means 148.58/150.98/163.58 mg/dL (urban TC +15, rural +2.4), consistent qualitatively with Lea's urban increase and undetected rural difference. Omuse2020 qualitatively supports age-related TC/non-HDL variation, not transport of reference intervals or an estimated Turkana regression."
+    }
+  }
+}

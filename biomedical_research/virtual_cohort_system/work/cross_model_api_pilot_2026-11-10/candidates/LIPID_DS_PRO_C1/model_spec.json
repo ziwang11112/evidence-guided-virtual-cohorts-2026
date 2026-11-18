@@ -1,0 +1,128 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "outcome_unit_conversion_factor_mg_dl_per_mmol_l": 38.67,
+    "joint_law": {
+      "type": "independent_exogenous_covariates_plus_conditional_linear_residual_outcomes",
+      "covariates": {
+        "sex": {
+          "type": "bernoulli",
+          "p_female": 0.5,
+          "categories": [
+            "F",
+            "M"
+          ]
+        },
+        "age": {
+          "type": "uniform",
+          "lower": 18,
+          "upper": 75,
+          "unit": "year"
+        },
+        "bmi": {
+          "type": "uniform",
+          "lower": 14,
+          "upper": 32,
+          "unit": "kg/m^2"
+        }
+      },
+      "outcome_linear_models": {
+        "total_cholesterol": {
+          "intercept": 1.85,
+          "age_coef": 0.008,
+          "sex_female_coef": 0.15,
+          "bmi_coef": 0.04,
+          "residual_sd": 0.75,
+          "unit": "mmol/L"
+        },
+        "hdl_cholesterol": {
+          "intercept": 1.1,
+          "age_coef": 0.003,
+          "sex_female_coef": 0.08,
+          "bmi_coef": -0.005,
+          "residual_sd": 0.3,
+          "unit": "mmol/L"
+        }
+      },
+      "residual_dependency": {
+        "type": "two_independent_rademachers_plus_common_rademacher",
+        "pearson_correlation": 0.14,
+        "factor_values": [
+          -1.0,
+          1.0
+        ]
+      }
+    }
+  }
+}

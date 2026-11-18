@@ -1,0 +1,119 @@
+{
+  "structure": "A bounded continuous joint law uses an iron-associated ferritin component S, an independent inflammation-like indicator I, and an independent other Hb-lowering indicator O. Raw ferritin equals S times an inflammation-like multiplier. Hb has a saturating iron-depletion penalty, additional component shifts, and conditional normal variation. These latent labels are modeling devices, not diagnoses or measured covariates. All numerical population parameters are explicit scenario assumptions because the admitted evidence contains no marginal or joint estimates. Equal-weight generated rows represent the target domain only under the stated whole-law transport assumption.",
+  "parameter_provenance": [
+    {
+      "parameter": "Low-Hb and low-ferritin thresholds",
+      "value": "Hb <12 g/dL and raw ferritin <15 ug/L",
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "The supplied source thresholds match the requested analyses. Hb <120 g/L converts to <12 g/dL by division by 10. Ferritin units follow the admitted explicit table labels."
+    },
+    {
+      "parameter": "Source suitability",
+      "value": "Partial for definitions and measurement context; unsuitable for numerical calibration",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "No marginal statistics, joint statistics or continuous rank coefficient are provided. The same 1671 women underlie the cited tables, so they are not independent evidence sets. No raw, adjusted, multilevel or residual correlation is available to import or equate."
+    },
+    {
+      "parameter": "Iron-associated ferritin component S",
+      "value": "log(S) ~ Normal(log(35), 0.85^2), conditioned on 0.5 <= S <= 400 ug/L",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A positive, right-skewed scenario with substantial variation across the clinical threshold. The value 35 is the median of the untruncated parent law, not an asserted target or source median. Truncation bounds the upper tail and excludes zero."
+    },
+    {
+      "parameter": "Inflammation-like component",
+      "value": "I ~ Bernoulli(0.10); ferritin multiplier 3; Hb shift -0.5 g/dL",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Allows a subgroup with increased raw ferritin and reduced Hb, rather than treating raw ferritin as a pure iron-store marker. There is no CRP restriction or generated CRP measurement. Neither prevalence nor effect size is estimated from the source."
+    },
+    {
+      "parameter": "Other Hb-lowering component",
+      "value": "O ~ Bernoulli(0.06); Hb shift -1.6 g/dL",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Permits anemia-like Hb variation unrelated to the iron-associated component. It is not an estimate of any specific disease prevalence."
+    },
+    {
+      "parameter": "Conditional Hb law",
+      "value": "mu = 13.4 - 2.4/(1+(S/12)^2) - 0.5*I - 1.6*O g/dL; Hb ~ Normal(mu,0.8^2) conditioned on [5.5,18.5] g/dL",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "The iron-related penalty approaches 2.4 g/dL at very low S, equals 1.2 g/dL at S=12, and tends toward zero at high S. This is a smooth scenario relationship, not a fitted biological response curve. The conditional normal location need not equal its truncated mean."
+    },
+    {
+      "parameter": "Dependence and covariance scale",
+      "value": "S, I and O mutually independent; Hb residual independent before conditional truncation",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Within component strata, increasing S raises both ferritin and the Hb location. I creates an opposing association by raising ferritin while lowering Hb; O adds Hb variation. Thus crude Pearson, rank and threshold associations arise from the full nonlinear mixture and are not imposed as a common correlation."
+    },
+    {
+      "parameter": "Observable support and moments",
+      "value": "0.5 <= ferritin <= 1200 ug/L; 5.5 <= Hb <= 18.5 g/dL; all observable moments finite",
+      "status": "DERIVED",
+      "source_ids": [],
+      "rationale": "Ferritin support follows from S in [0.5,400] and multipliers 1 or 3. Hb support is imposed through conditional rejection sampling. Both outputs are bounded continuous variables, with no boundary clipping masses."
+    },
+    {
+      "parameter": "Target-domain transport",
+      "value": "Equal-weight independent rows follow the entire assumed joint law within the specified eligible complete-measurement domain",
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "This is a chosen target scenario, not transport of a numerical source estimate. Source geography, assay, parity, postpartum timing, contraception and health exclusions differ. No weighting, missingness or selection transfer function is supplied."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "Model-implied crude threshold association using a=both low, b=Hb low only, c=ferritin low only and d=neither on the generated rows, with OR=(a*d)/(b*c). Report not estimable if any cell is zero, without continuity correction. Source evidence supports the thresholds but supplies no numerical OR.",
+      "key_unresolved_assumptions": [
+        "The assumed depletion response, component frequencies and Hb variation determine threshold association.",
+        "Inflammation-related ferritin elevation and other Hb-lowering processes are not calibrated.",
+        "The whole joint law must represent the target domain without covariate adjustment."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "Model-implied fraction a/n with both Hb <12 g/dL and raw ferritin <15 ug/L on exactly the same generated rows. Neither a source nor target joint prevalence is supplied.",
+      "key_unresolved_assumptions": [
+        "The assumed lower ferritin tail and conditional Hb distribution determine the joint event.",
+        "The target domain's selection and phlebotomy weighting are represented only through the whole-law transport assumption.",
+        "Extreme-tail truncation is appropriate for this illustrative population."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "Model-implied rank correlation of continuous Hb and raw ferritin on the same rows, using average ranks for any ties and reporting not estimable for constant ranks. No continuous source rank coefficient is available.",
+      "key_unresolved_assumptions": [
+        "The nonlinear iron relationship and opposing inflammation-like pathway adequately describe rank dependence.",
+        "Latent independence and the chosen within-person conditional variation are appropriate.",
+        "Measurement rounding and assay error beyond the modeled variation do not materially change ranks."
+      ]
+    }
+  ],
+  "limitations": [
+    "The supplied evidence identifies no numerical target distribution or association. Generated analyses are conditional scenario results, not empirically identified target estimates.",
+    "The iron-associated component is a ferritin-scale modeling proxy, not a measured iron-store quantity; the latent components do not support causal interpretations.",
+    "The source's restricted rural postpartum IUD population cannot establish relationships for the broader target domain. Its numerical sample size is not used to strengthen assumed parameters.",
+    "Fixed component shifts and multipliers simplify heterogeneous inflammation, blood loss, nutrient deficiencies, comorbidity and assay effects.",
+    "Hard support bounds exclude very severe anemia, extreme erythrocytosis and extreme hyperferritinemia. Their absence in the target domain is not established.",
+    "Age, parity, treatment, menstrual patterns, race/ethnicity, selection into complete measurement and survey design are not modeled separately.",
+    "Generating 5000 people reduces Monte Carlo variation within this assumed law; it supplies no additional evidence about the law or its transport uncertainty."
+  ],
+  "checks_actually_performed": [
+    "Static review only; no code execution, simulated results or empirical numerical checks were performed.",
+    "Checked algebraically that the specified latent supports yield positive bounded ferritin and that conditional Hb truncation yields positive bounded Hb.",
+    "Reviewed the generator for seeded randomness, independent-person draws, conditional rejection rather than sample-wide moment matching, and exact output column order.",
+    "Reviewed provenance to ensure no omitted source statistics, unavailable correlation coefficients or target outcome summaries were used.",
+    "Verified that the decision record contains exactly the three requested estimand IDs and preserves their crude, same-row definitions."
+  ]
+}

@@ -1,4 +1,16 @@
-# Evidence-guided virtual biomedical data
+# Evidence-guided virtual biomedical cohorts
+
+**From Fragmented Evidence to Analyzable Biomedical Cohorts with Scientific Agents**. KDD working manuscript v0.34, 18 November 2026.
+
+A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
+
+[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v34_2026-11-18/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v34_2026-11-18/overleaf_v34.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Numerical checks](biomedical_research/virtual_cohort_system/work/manuscript_integration_v34_2026-11-18/QA.json)
+
+The index covers original-paper extraction, matched-size real and virtual analyses, controlled evidence comparisons, cross-model experiments and failures. It also identifies which artifacts are needed to recompute the public tables and figures.
+
+[Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
+
+## Earlier releases
 
 **New paired blood-pressure validation, 9 November 2026.** Five fresh authors generated fifteen complete 3,000-row cohorts without target individual inputs, then all were sealed before comparison with 8,352 eligible PNS records. BMI–SBP effects were 3.081–4.276 versus 3.524 mmHg per5kg/m²; BMI–DBP effects were higher than the reference (2.886–3.691 versus2.260), and residual BP correlations lower (0.466–0.646 versus0.717). All outcomes and dispersion diagnostics remain visible. Independent selection and numerical recomputation passed; no post-reveal regeneration occurred. This is a new prespecified task in an already used PNS family, not a new cohort. All authors retained their initial construction; no feedback-benefit claim is added. [All results](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/RESULTS.md) · [Figure](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/figures/pns_bp_analysis_utility.png) · [Independent recomputation](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/INDEPENDENT_RESULTS_REVIEW.md) · [Manuscript insert](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/MANUSCRIPT_INSERT.md). The existing v0.27 PDF is preserved; the new result is prepared as a separate insert.
 

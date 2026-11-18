@@ -1,0 +1,134 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "covariate_distributions": {
+      "age": {
+        "family": "uniform",
+        "unit": "years",
+        "lower": 20,
+        "upper": 79,
+        "conditioning": "none"
+      },
+      "female": {
+        "family": "bernoulli",
+        "unit": "recorded sex 0 male, 1 female",
+        "p": 0.52,
+        "categories": [
+          0,
+          1
+        ],
+        "conditioning": "independent of age and bmi"
+      },
+      "bmi": {
+        "family": "lognormal",
+        "unit": "kg/m^2",
+        "mean": 27.0,
+        "sd": 5.5,
+        "conditioning": "independent of age and female"
+      },
+      "dependence_structure": "age, female, and bmi are mutually independent before outcome generation"
+    },
+    "outcome_model": {
+      "design_center": {
+        "age_years": 50,
+        "bmi_kgm2": 25
+      },
+      "design_scale_age_years": 10,
+      "design_scale_bmi_kgm2": 5,
+      "linear_predictors": {
+        "sbp": {
+          "unit": "mmHg",
+          "intercept_at_center": 125.0,
+          "age_per_10y": 5.0,
+          "female_difference": -2.5,
+          "bmi_per_5kgm2": 3.877
+        },
+        "dbp": {
+          "unit": "mmHg",
+          "intercept_at_center": 77.0,
+          "age_per_10y": 1.8,
+          "female_difference": -2.0,
+          "bmi_per_5kgm2": 2.9835
+        }
+      },
+      "residual": {
+        "distribution": "bivariate_normal",
+        "sigma_sbp_mmHg": 15.0,
+        "sigma_dbp_mmHg": 9.0,
+        "correlation": 0.5,
+        "conditioning": "constant across covariates"
+      }
+    }
+  }
+}

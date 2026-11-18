@@ -1,0 +1,125 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "simulation_engine": "sex_stratified_structural_equations",
+    "sex": {
+      "p_female": 0.54
+    },
+    "age": {
+      "distribution": "shifted_gamma_by_sex",
+      "minimum": 18,
+      "male": {
+        "shape": 3.0,
+        "scale": 6.7
+      },
+      "female": {
+        "shape": 3.5,
+        "scale": 7.2
+      }
+    },
+    "bmi": {
+      "distribution": "lognormal_by_sex",
+      "age_logbmi_correlation_conditional_sex": 0.0,
+      "male": {
+        "geometric_mean_kg_m2": 21.6,
+        "log_sd": 0.17
+      },
+      "female": {
+        "geometric_mean_kg_m2": 23.0,
+        "log_sd": 0.19
+      }
+    },
+    "lipids_mmol_L": {
+      "conditional_mean_model": "linear_in_age_sexF_bmi_raw_scale_mmol_L",
+      "tc": {
+        "intercept_male": 2.269,
+        "beta_female": 0.1,
+        "beta_age_per_year": 0.008,
+        "beta_bmi_per_kgm2": 0.04
+      },
+      "hdl": {
+        "intercept_male": 1.351,
+        "beta_female": 0.1,
+        "beta_age_per_year": -0.002,
+        "beta_bmi_per_kgm2": -0.008
+      },
+      "residual_sd_tc_mmol_L": 0.85,
+      "residual_sd_hdl_mmol_L": 0.32,
+      "residual_correlation_tc_hdl": 0.12,
+      "error_distribution": "bivariate_normal",
+      "positivity_floor_for_post_check": 0.05,
+      "max_attempts_per_row": 1000
+    }
+  }
+}

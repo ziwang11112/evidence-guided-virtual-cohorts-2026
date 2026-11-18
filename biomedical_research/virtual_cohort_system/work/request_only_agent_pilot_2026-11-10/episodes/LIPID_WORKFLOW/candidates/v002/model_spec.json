@@ -1,0 +1,235 @@
+{
+  "model": {
+    "model": {
+      "bmi": {
+        "age_slope": 0.04,
+        "baseline_mean_F": 25.5,
+        "baseline_mean_M": 21.8,
+        "conditional_sd_F": 4.8,
+        "conditional_sd_M": 3.4,
+        "transition_shift_F": 1.0,
+        "transition_shift_M": 0.9
+      },
+      "demography": {
+        "age_group_probabilities_F": [
+          0.541,
+          0.306,
+          0.153
+        ],
+        "age_group_probabilities_M": [
+          0.66,
+          0.231,
+          0.109
+        ],
+        "age_triangles": [
+          [
+            18,
+            25,
+            40
+          ],
+          [
+            40,
+            48,
+            65
+          ],
+          [
+            65,
+            70,
+            85
+          ]
+        ],
+        "female_probability": 0.52
+      },
+      "family": "Arithmetic-mean lipid regressions, latent lifestyle mixture, positive bivariate lognormal noise",
+      "implementation": "All fixed numerical scientific parameters embedded in generator, no dependency on metadata wrapper; no scientific changes from v001",
+      "lifestyle": {
+        "rural_baseline_probability": 0.7,
+        "transition_probability": 0.3
+      },
+      "lipids": {
+        "baseline_mean_hdl_F": 1.69,
+        "baseline_mean_hdl_M": 1.67,
+        "baseline_mean_tc_F": 4.43,
+        "baseline_mean_tc_M": 3.74,
+        "conditional_sd_hdl_F": 0.38,
+        "conditional_sd_hdl_M": 0.3,
+        "conditional_sd_tc_F": 1.3,
+        "conditional_sd_tc_M": 1.0,
+        "transition_hdl_F": 0.25,
+        "transition_hdl_M": 0.24,
+        "transition_tc_F": 0.24,
+        "transition_tc_M": 0.42
+      },
+      "source_covariance": {
+        "correlation_age_bmi_tc_hdl": [
+          [
+            1,
+            0.454,
+            0.103,
+            -0.01
+          ],
+          [
+            0.454,
+            1,
+            0.215,
+            0.107
+          ],
+          [
+            0.103,
+            0.215,
+            1,
+            0.209
+          ],
+          [
+            -0.01,
+            0.107,
+            0.209,
+            1
+          ]
+        ],
+        "female_fraction": 0.8333333333333334,
+        "female_minus_male_age_bmi_tc_hdl": [
+          4.07,
+          5.14,
+          0.33,
+          0.26
+        ],
+        "sd_age_bmi_tc_hdl": [
+          7.99,
+          5.71,
+          1.03,
+          0.27
+        ]
+      }
+    },
+    "task": {
+      "columns": [
+        {
+          "kind": "string",
+          "name": "id",
+          "nullable": false
+        },
+        {
+          "kind": "number",
+          "minimum": 18,
+          "name": "age",
+          "nullable": false,
+          "unit": "year"
+        },
+        {
+          "categories": [
+            "F",
+            "M"
+          ],
+          "kind": "category",
+          "name": "sex",
+          "nullable": false
+        },
+        {
+          "kind": "number",
+          "minimum": 0,
+          "name": "bmi",
+          "nullable": false,
+          "unit": "kg/m^2"
+        },
+        {
+          "kind": "number",
+          "minimum": 0,
+          "name": "total_cholesterol",
+          "nullable": false,
+          "unit": "mmol/L"
+        },
+        {
+          "kind": "number",
+          "minimum": 0,
+          "name": "hdl_cholesterol",
+          "nullable": false,
+          "unit": "mmol/L"
+        }
+      ],
+      "mode": "whole_cohort",
+      "n_rows": 3000,
+      "row_id": "id",
+      "schema_version": 1,
+      "task_id": "request_only_lipid_whole_cohort_v1"
+    }
+  },
+  "task": {
+    "budget": {
+      "revisions": 5,
+      "source_downloads": 16,
+      "source_queries": 20
+    },
+    "columns": [
+      {
+        "kind": "string",
+        "name": "id",
+        "nullable": false,
+        "role": "identifier",
+        "unit": ""
+      },
+      {
+        "kind": "number",
+        "minimum": 18,
+        "name": "age",
+        "nullable": false,
+        "role": "generated",
+        "unit": "year"
+      },
+      {
+        "categories": [
+          "F",
+          "M"
+        ],
+        "kind": "category",
+        "name": "sex",
+        "nullable": false,
+        "role": "generated",
+        "unit": "literal F/M"
+      },
+      {
+        "kind": "number",
+        "minimum": 0,
+        "name": "bmi",
+        "nullable": false,
+        "role": "generated",
+        "unit": "kg/m^2"
+      },
+      {
+        "kind": "number",
+        "minimum": 0,
+        "name": "total_cholesterol",
+        "nullable": false,
+        "role": "generated",
+        "unit": "mmol/L"
+      },
+      {
+        "kind": "number",
+        "minimum": 0,
+        "name": "hdl_cholesterol",
+        "nullable": false,
+        "role": "generated",
+        "unit": "mmol/L"
+      }
+    ],
+    "information_policy": {
+      "allowed_tools": [
+        "literature.search",
+        "literature.fetch",
+        "execution"
+      ],
+      "excluded_cohorts": [
+        "Turkana",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "mode": "published_evidence"
+    },
+    "mode": "whole_cohort",
+    "n_rows": 3000,
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "schema_version": 1,
+    "task_id": "request_only_lipid_whole_cohort_v1"
+  }
+}

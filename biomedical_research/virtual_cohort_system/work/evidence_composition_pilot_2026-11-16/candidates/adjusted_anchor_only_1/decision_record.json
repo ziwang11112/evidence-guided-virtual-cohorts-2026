@@ -1,0 +1,94 @@
+{
+  "structure": "Independent people sampled from a trivariate Gaussian population. The supplied means, variances and marginal X-Y correlation are preserved as population parameters. Both otherwise unspecified correlations with Z are assigned 0.5 as an explicit scenario.",
+  "parameter_provenance": [
+    {
+      "parameter": "mean",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means in X, Y, Z order."
+    },
+    {
+      "parameter": "covariance diagonal",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances."
+    },
+    {
+      "parameter": "covariance(X,Y)",
+      "value": 0.5,
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "Covariance equals the reported Pearson correlation because both variances are one."
+    },
+    {
+      "parameter": "covariance(X,Z)",
+      "value": 0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Unreported relationship; chosen scenario value, also equal to correlation under unit variances."
+    },
+    {
+      "parameter": "covariance(Y,Z)",
+      "value": 0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Unreported relationship; chosen scenario value, also equal to correlation under unit variances."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient joint distribution consistent with the specified population moments; Gaussian shape is not established by the records."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": 0.3333333333333333,
+      "basis": "The Pearson correlation of the separate population OLS residuals is (rXY-rXZ*rYZ)/sqrt((1-rXZ^2)*(1-rYZ^2)). The selected correlations give (0.5-0.25)/0.75 = 1/3. Records A and C do not determine either correlation with Z."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "identified",
+      "value": 0.5,
+      "basis": "Record A directly specifies the population marginal Pearson correlation."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "scenario",
+      "value": 0.5,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z). The chosen covariance and reported unit variance give 0.5; the covariance is not supplied by the records."
+    }
+  ],
+  "limitations": [
+    "The partial correlation and X-on-Z slope are scenario values, not identified evidence-composition results.",
+    "Gaussian shape and the two correlations with Z are modeling assumptions, not measured facts.",
+    "Records constrain population moments. Random finite samples will fluctuate around them; the generator does not recenter, rescale, select or otherwise calibrate realized samples.",
+    "These are descriptive Pearson and OLS relationships in an artificial population, with no causal or clinical interpretation."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked that the selected covariance matrix has eigenvalues 2, 0.5 and 0.5, so it is positive definite.",
+    "Analytically checked that Cholesky transformation of independent standard normal innovations yields the specified population means and covariance.",
+    "Analytically evaluated the residual-correlation and OLS-slope formulas under the chosen scenario.",
+    "No Python execution or empirical simulation checks were performed."
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "structure": "Independent people are drawn from an assumed age/sex distribution, a bounded age- and sex-dependent lognormal BMI distribution, and linear conditional SBP/DBP means with covariate-independent correlated residuals. Eligibility, complete-case selection and laboratory weighting are represented implicitly by this chosen analytical-population law, not by a simulated selection or weighting procedure. INTERSALT is partially usable: its BMI coefficients are transformed to the requested units and adopted as explicit transport assumptions, despite different adjustment, pooling, ages and measurements. Beijing is partially usable for unadjusted covariance algebra and scale context, but unsuitable for identifying the requested residual correlation. BF2018 is partially usable for marginal scale context only; its univariate summaries identify neither conditional BMI coefficients nor paired residual dependence. INTERMAP is usable for measurement-method context only, not numerical calibration. No excluded target evidence is used. All rows have equal analytical weight.",
+  "parameter_provenance": [
+    {
+      "parameter": "Age distribution",
+      "value": "age = 20 + 59*Beta(2,3); E(age)=43.6 years",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A continuous adult distribution supported on the requested age interval. Its shape and mean are not reported target quantities."
+    },
+    {
+      "parameter": "Recorded sex distribution",
+      "value": {
+        "female_probability": 0.53,
+        "independent_of_age": true
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A modest female majority is chosen without claiming identification of weighted target sex composition or age-sex dependence."
+    },
+    {
+      "parameter": "Conditional BMI law",
+      "value": "log(BMI) ~ Normal(log(26) + 0.025*a - 0.005*a^2 + 0.035*female, 0.18^2), conditional on 14 <= BMI <= 55; a=(age-50)/10",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Right-skewed BMI with modest age curvature and a sex difference. Bounds are modeling choices, not recovered dictionary limits. Rejection holds age and sex fixed, so this is a normalized conditional distribution rather than selection of people. The reference value 26 is the untruncated lognormal median at age 50 in males."
+    },
+    {
+      "parameter": "INTERSALT source BMI coefficients",
+      "value": {
+        "sbp_per_kg_m2": 0.7754,
+        "sbp_SE_per_kg_m2": 0.0359,
+        "dbp_per_kg_m2": 0.5967,
+        "dbp_SE_per_kg_m2": 0.0257
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Inverse-variance pooled within-centre associations adjusted for age, sex, urinary sodium, urinary potassium and alcohol indicators, among ages 20-59. They are not the requested age/sex-only target projections."
+    },
+    {
+      "parameter": "Unit-transformed INTERSALT source coefficients",
+      "value": {
+        "sbp_per_5_kg_m2": 3.877,
+        "dbp_per_5_kg_m2": 2.9835,
+        "sbp_source_SE_per_5": 0.1795,
+        "dbp_source_SE_per_5": 0.1285
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Each reported coefficient and SE is multiplied by 5. This unit transformation does not establish target transportability."
+    },
+    {
+      "parameter": "Transported conditional BMI terms",
+      "value": {
+        "sbp": 3.877,
+        "dbp": 2.9835,
+        "unit": "mmHg per 5 kg/m^2"
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "The transformed source point estimates are deliberately adopted without an estimated transport correction. This assumes that source additional adjustment, within-centre pooling, geography, treatment mix, age extension and measurement differences do not materially change these conditional terms. Source SEs are not used as transport uncertainty."
+    },
+    {
+      "parameter": "Other conditional BP mean terms",
+      "value": {
+        "sbp_intercept": 130.0,
+        "dbp_intercept": 79.0,
+        "sbp_age_per_decade": 4.5,
+        "dbp_age_per_decade": 1.5,
+        "sbp_female_difference": -3.0,
+        "dbp_female_difference": -2.0,
+        "reference_age": 50.0,
+        "reference_bmi": 25.0
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Parsimonious linear conditional means with no interactions, treatment strata or nonlinear age effects. The intercepts refer to males at age 50 and BMI 25, not marginal population means."
+    },
+    {
+      "parameter": "Residual marginal scales",
+      "value": {
+        "sbp_sd_mmHg": 15.0,
+        "dbp_sd_mmHg": 10.0
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERSALT",
+        "S_BEIJING",
+        "BF2018"
+      ],
+      "rationale": "Chosen as plausible conditional variation in the broad scale range suggested by the supplied studies. No source marginal SD is equated to a conditional SD. INTERSALT average subgroup SDs are not treated as pooled variances."
+    },
+    {
+      "parameter": "Beijing unadjusted covariance information",
+      "value": {
+        "overall_raw_correlation": 0.5344427684775355,
+        "under65_raw_correlation": 0.6030316602292216,
+        "age65plus_raw_correlation": 0.5451263744946805
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_BEIJING"
+      ],
+      "rationale": "Derived from rounded reported individual SBP, DBP and pulse-pressure SDs using Cov(S,D)=(Var(S)+Var(D)-Var(S-D))/2. These are raw within-source correlations, not residual correlations adjusted for age, sex and BMI. Rounded-SD envelopes are neither sampling nor transport intervals."
+    },
+    {
+      "parameter": "Residual dependence",
+      "value": {
+        "correlation": 0.55,
+        "covariance_mmHg2": 82.5,
+        "covariance_matrix_mmHg2": [
+          [
+            225.0,
+            82.5
+          ],
+          [
+            82.5,
+            100.0
+          ]
+        ]
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_BEIJING"
+      ],
+      "rationale": "A moderate positive residual correlation is selected, with Beijing providing qualitative plausibility only. The value 0.55 is not a residualization or estimate from Beijing. Covariance is 15*10*0.55; this matrix is positive definite."
+    },
+    {
+      "parameter": "Residual shape and physiological constraints",
+      "value": "For independent standard-normal G in R^5, let Z=sqrt(5)*(G1,G2)/||G||. Set eS=15*Z1 and eD=10*(0.55*Z1+sqrt(1-0.55^2)*Z2).",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Uniform-sphere symmetry gives E(Z)=0 and Cov(Z)=I exactly in the population. This produces bounded, symmetric, elliptical residuals with the chosen covariance, without sample-wide moment matching. Together with bounded covariates, it guarantees finite moments and positive pulse pressure without clipping or BP-based rejection. Its light tails are a substantive modeling restriction."
+    },
+    {
+      "parameter": "BF2018 marginal context",
+      "value": {
+        "sbp_mean": 125.22,
+        "sbp_sd": 18.22,
+        "dbp_mean": 80.54,
+        "dbp_sd": 10.98,
+        "bmi_mean": 22.1,
+        "bmi_sd": 3.9
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "BF2018"
+      ],
+      "rationale": "Source summaries are retained as marginal context, not calibration constraints. The partnered, age-at-least-40, rural Burkina Faso sample excludes recent BP medication use and has a different measurement protocol. These additional moments supply no BMI-BP covariance or paired BP residual information, so they do not justify revising the selected slopes or residual correlation."
+    },
+    {
+      "parameter": "INTERMAP quantitative contribution",
+      "value": "None",
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERMAP_methods"
+      ],
+      "rationale": "Only methods and sample descriptors are admitted. Eight readings over four visits illustrate measurement differences; no unprovided original moments or coefficients are inferred, and secondary INTERSALT tables are not counted as independent evidence."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "bmi_sbp",
+      "support_basis": "Under the selected law, the conditional SBP mean is exactly linear in the requested design and the residual has zero conditional mean. Thus the population OLS BMI projection equals the transported coefficient. This is model-based support, not identification from target evidence.",
+      "model_population_value": 3.877,
+      "unit": "mmHg per 5 kg/m^2",
+      "key_unresolved_assumptions": [
+        "INTERSALT's more extensively adjusted within-centre coefficient can be transported to an age/sex-only projection in the declared population.",
+        "There are no unmodeled age nonlinearities, BMI nonlinearities, interactions or treatment-related mean shifts that change this projection.",
+        "The selected demographic and BMI law adequately represents the weighted complete-case population for the intended analysis.",
+        "Measurement and complete-case selection differences do not require a slope correction."
+      ]
+    },
+    {
+      "id": "bmi_dbp",
+      "support_basis": "The same exact linear conditional-mean construction gives the population DBP OLS BMI projection under the model. The numerical anchor is the unit-transformed INTERSALT association, adopted with explicit transport assumptions.",
+      "model_population_value": 2.9835,
+      "unit": "mmHg per 5 kg/m^2",
+      "key_unresolved_assumptions": [
+        "The INTERSALT adjustment and pooling differences do not materially alter the requested association.",
+        "A linear age term remains adequate through age 79, including any late-life DBP flattening or decline.",
+        "Treatment, metabolic health and selection can be marginalized without changing the selected linear BMI term.",
+        "The target measurement protocol does not materially change the transported association."
+      ]
+    },
+    {
+      "id": "residual_correlation",
+      "support_basis": "With the correct linear mean design and covariate-independent errors, population projection residuals equal the generated errors, whose correlation is exactly 0.55 by construction. No supplied study identifies this adjusted target correlation.",
+      "model_population_value": 0.55,
+      "unit": "1",
+      "key_unresolved_assumptions": [
+        "Residual covariance is constant across age, sex, BMI and unobserved treatment groups.",
+        "Moderate positive dependence remains appropriate after the requested adjustment; Beijing raw correlations do not establish this.",
+        "The bounded elliptical residual family adequately approximates paired BP variation and measurement error.",
+        "Unknown final-reading aggregation and baseline interview timing do not require a different residual covariance structure."
+      ]
+    }
+  ],
+  "limitations": [
+    "No target covariate moments, weighting totals, conditional BP estimates or joint residual moments are available. Representation of the declared analytical population is assumed, not empirically calibrated or nationally representative.",
+    "Selection on positive finite laboratory weight, complete cases, dictionary-admissible measurements and pregnancy status is absorbed into the assumed distribution. The generator does not reconstruct those mechanisms or the underlying weight and height variables.",
+    "BMI bounds 14-55 are intentional restrictions. More extreme admissible BMI values, and their contribution to association projections, are omitted.",
+    "Residuals are symmetric, homoscedastic and lighter-tailed than Gaussian residuals. The resulting conservative support is approximately SBP 71.43-199.85, DBP 43.58-123.61 and pulse pressure 10.75-93.35 mmHg. Severe hypertensive tails outside this support are absent.",
+    "The model has no explicit antihypertensive treatment, HbA1c, hypertension, partnership or pregnancy variable. It is not restricted to untreated or normotensive adults, but actual target treatment mixtures and their consequences are unidentified.",
+    "Baseline interview BP timing is retained conceptually; laboratory-substudy membership does not make BP contemporaneous with laboratory collection. Unknown released final-reading aggregation prevents matched measurement-error calibration.",
+    "The three estimands are association projections, not intervention effects. Their exact model-population values reflect assumptions rather than recovered target results.",
+    "Source estimates are rounded and original-source reauthentication was not performed in this call. Source sampling SEs and rounding envelopes do not quantify transfer uncertainty.",
+    "Increasing the number of generated people reduces simulation noise under this law only; it does not increase the amount of biomedical evidence or resolve uncertainty about the target population."
+  ],
+  "checks_actually_performed": [
+    "Analytic and static checks only; no code execution, generated-cohort analysis or empirical calibration was performed.",
+    "Checked unit algebra: multiplying the INTERSALT BMI coefficients by 5 gives 3.877 and 2.9835 mmHg per 5 kg/m^2.",
+    "Checked covariance algebra: uniform-sphere coordinates scaled by sqrt(5) have unit marginal variance and zero covariance; the specified linear transform gives residual variances 225 and 100 and covariance 82.5.",
+    "Checked positive definiteness analytically: 225*100 - 82.5^2 = 15693.75 > 0.",
+    "Checked support analytically using covariate endpoints and sphere radius sqrt(5): SBP is bounded by approximately 71.43 and 199.85, DBP by 43.58 and 123.61, and SBP-DBP by 10.75 and 93.35 mmHg. These are conservative bounds, not simulated extrema.",
+    "Inspected the generator for exact output column order, unique integer row_id, use of the supplied seed, independent-person sampling, and absence of filesystem, network or process operations.",
+    "Verified algebraically that zero conditional residual means and the exact requested linear mean design make the stated coefficients population OLS projections; realized sample coefficients and residual correlation are not forced to equal those values."
+  ]
+}

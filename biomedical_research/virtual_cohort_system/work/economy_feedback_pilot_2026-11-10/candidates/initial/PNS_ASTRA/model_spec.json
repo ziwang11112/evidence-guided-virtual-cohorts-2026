@@ -1,0 +1,215 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "name": "bounded_affine_latent_factor_cohort",
+    "interpretation": "One fixed, assumption-completed joint law for the declared peso_lab-weighted eligible analytical population. Equal-weight independent rows represent that law, not a claim of national representativeness.",
+    "outcome_order": [
+      "sbp",
+      "dbp"
+    ],
+    "transforms": {
+      "age_center": 50,
+      "age_divisor": 10,
+      "bmi_center": 25,
+      "bmi_divisor": 5
+    },
+    "age": {
+      "family": "mixture_of_uniform_intervals",
+      "edges_years": [
+        20,
+        40,
+        60,
+        79
+      ],
+      "stratum_probabilities": [
+        0.38,
+        0.39,
+        0.23
+      ]
+    },
+    "female": {
+      "codes": [
+        0,
+        1
+      ],
+      "probabilities_by_age_stratum": [
+        0.51,
+        0.54,
+        0.57
+      ]
+    },
+    "bmi": {
+      "mean_design": [
+        "intercept",
+        "scaled_age",
+        "female"
+      ],
+      "mean_coefficients": [
+        27,
+        0.7,
+        1
+      ],
+      "innovation_family": "rescaled_beta",
+      "innovation_beta_shapes": [
+        2,
+        2
+      ],
+      "innovation_support_kg_m2": [
+        -9,
+        9
+      ]
+    },
+    "bp": {
+      "source_bmi_slopes_mmHg_per_kg_m2": [
+        0.7754,
+        0.5967
+      ],
+      "reported_source_slope_SE_mmHg_per_kg_m2": [
+        0.0359,
+        0.0257
+      ],
+      "transport_slope_offset_mmHg_per5": [
+        0,
+        0
+      ],
+      "intercepts_mmHg": [
+        125,
+        75
+      ],
+      "age_coefficients_mmHg_per10y": [
+        6,
+        1.5
+      ],
+      "female_coefficients_mmHg": [
+        -2,
+        -1
+      ],
+      "omitted_score_mean_design": [
+        "intercept",
+        "scaled_age",
+        "female",
+        "scaled_bmi"
+      ],
+      "omitted_score_mean_coefficients": [
+        0,
+        0.15,
+        -0.1,
+        0.2
+      ],
+      "factor_names": [
+        "omitted_adjustment_score_innovation",
+        "shared_bp_innovation",
+        "sbp_specific_innovation",
+        "dbp_specific_innovation"
+      ],
+      "factor_family": "independent_uniform",
+      "factor_support": [
+        -1,
+        1
+      ],
+      "factor_loadings_mmHg": [
+        [
+          4,
+          12,
+          16,
+          0
+        ],
+        [
+          3,
+          9,
+          0,
+          12
+        ]
+      ]
+    },
+    "uncertainty": {
+      "mode": "fixed_parameter_scenario",
+      "source_SE_use": "Retained as source estimation uncertainty; not used as individual dispersion or as transport uncertainty.",
+      "source_coefficient_cross_covariance": null,
+      "transport_uncertainty_distribution": null,
+      "seed_changes": "Individual sampling only; scientific parameters remain fixed."
+    },
+    "assumptions": {
+      "row_sampling": "Independent equal-weight draws from a distribution already conditioned on all stated eligibility rules and laboratory-weight tilting.",
+      "age_and_sex": "Within each age stratum, continuous age and recorded sex are independent; their marginal dependence arises from stratum-specific sex probabilities.",
+      "bmi_innovation": "Independent of age and recorded sex.",
+      "bp_innovations": "Mutually independent and independent of age, recorded sex and BMI. Dependence between BP outcomes is induced by the loading matrix; dependence of the omitted score on covariates is explicitly nonzero.",
+      "conditional_means": "Affine, homoscedastic and without age curvature, interactions, treatment strata or centre effects.",
+      "source_adjustment_bridge": "A dimensionless scalar score is assumed sufficient for the net BP contribution of the additional INTERSALT adjustment variables. Its effects on SBP and DBP are proportional according to the first loading column.",
+      "measurement_transfer": "Transfer concerns observed-scale measured BMI and BP. No separate device, aggregation, regression-dilution or timing correction is applied.",
+      "selection_transfer": "The assumed covariate mixture and conditional BP law directly describe the eligible weighted distribution. Pregnancy, complete-case selection and positive laboratory weights are not separately generated.",
+      "support": "All continuous innovations are bounded. There is no clipping, rejection, empirical moment matching or outcome-based filtering."
+    }
+  }
+}

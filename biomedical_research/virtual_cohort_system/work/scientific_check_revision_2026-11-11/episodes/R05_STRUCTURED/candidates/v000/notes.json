@@ -1,0 +1,44 @@
+{
+  "notes": "DELIVERABLE: Python generate(observed, spec, seed) returns 3,000 complete fictional equal-weight adult records with precisely row_id, age, female (0 male/1 female), bmi, sbp and dbp. Nothing is fitted to or recovered from PNS. The target is interpreted as the specified positive-peso_lab weighted complete-case distribution after reported-pregnancy exclusion, not a nationally representative distribution; lacking any permitted target calibration information, exchangeability to that distribution is an explicit unverified transport assumption. No survey weights are synthesized because rows are equal-weight pseudo-draws; survey design effects and original complete-case selection cannot be reproduced. No exclusion is made for hypertension, treatment, diabetes or HbA1c. Pregnancy reporting is not modeled or inferred: all rows are assumed to belong to the post-eligibility analytical population, which can include unknown/inapplicable pregnancy statuses. Only requested variables are released.\n\nEVIDENCE ACTUALLY RETRIEVED: (1) Barbosa et al., May Measurement Month 2017: Brazilian results—Americas. Eur Heart J Suppl 2019;21:D25-D27. DOI 10.1093/eurheartj/suz079, PMC6479514. Full text: 7,260 volunteers, mostly hospital/clinic screening, mean age 51.6 (SD16.1), 56.4% women, BMI26.9 (SD4.6). Three seated automatic Omron readings, mean readings2/3. The Brazilian BMI mean/spread are loose anchors, not a representative population target; numerical figure values were not extracted. (2) Gnatiuc et al., Adiposity and Blood Pressure in 110,000 Mexican Adults. Hypertension 2017;69:608-614. DOI 10.1161/HYPERTENSIONAHA.116.08791, PMC5344187 version2. Read methods, results and Table1. Mean BMI28.7 (SD4.5); roughly3 mmHg SBP and2 DBP perSD BMI, implying about3.3/2.2 mmHg per5. Source analyses excluded known chronic disease and antihypertensive users, ages35-89, manual seated BP mean of3 after5min rest. Sex-age BP/BMI means at ages37,45,55,65,75 in spec come from Table1, not the excluded target. (3) Chen X et al., Adiposity and blood pressure among55,000 relatively lean rural adults in southwest of China. J Hum Hypertens 2015;29:522-529. DOI10.1038/jhh.2014.129, PMC4537884. Read methods and results: adjusted BMI slopes6.7 SBP/3.6 DBP mmHg per5; excluded2,109 antihypertensive users. BP mean of2 automated readings (third when initialSBP differed>10). Source meanSBP129.2 SD19.0, DBP77.2 SD10.2. Its erratum PMC5508804 was read and concerns licensing only. (4) Chen Z et al., Blood pressure in relation to general and central adiposity among500,000 adult Chinese men and women. Int J Epidemiol 2015;44:1305-1319. DOI10.1093/ije/dyv012, PMC4588860. Retrieved abstract/introduction/key messages: Chinese SBP association about8 per5 versus about5 per5 discussed for Western populations; associations among treated participants about one third as strong. Chinese papers overlap and are not independent replications.\n\nMODEL/ASSUMPTIONS: Age20-79 is sampled in six decade bins with probabilities .22,.22,.20,.18,.12,.06, integer-uniform within bin; sex fractions .51-.59 across age bins. These are assumed younger community-like composition, deliberately NOT the older clinic MMM distribution and NOT an estimate of PNS laboratory weights. Age-specific lognormal BMI, sex difference0.5 kg/m2, within-sex SD4.0/4.9, yields a marginal BMI near26.9 and SD near4.6. The shape/age association and BMI15-55 support are synthetic assumptions, not dictionary limits. Under35 BP/BMI reference values are extrapolation assumptions; older means use interpolated Mexican Table1 and transported BMI deviations. This introduces sex and nonlinear age associations. The mixed-treatment/chronic-disease population is represented by a marginal observed-BP model without untreated-pressure corrections; identical source-to-target mean-level transport despite source exclusions is a substantial limitation. Residual variances are loosely anchored to Mexican age-specific SDs and broadened for an unrestricted community population. No treatment-specific causal interpretation is justified.\n\nBMI EFFECT TRANSPORT: Central conditional values4.7 SBP/2.6 DBP per5 are an illustrative compromise between external populations, not meta-analysis, not measured Brazilian slopes. Every seed draws a shared pair of slopes with SD .8/.45 and correlation .6 to express uncalibrated cross-population uncertainty; these SDs are not published SEs or confidence limits. Weak15% attenuation above60 is an assumption inspired by qualitative Mexican older-age attenuation. There is no forced sample slope or forced residual correlation. Only diagnostic-cohort analyses are printed; they are not target results.\n\nJOINT BP/MEASUREMENT: Intrinsic bivariate normal person-level residual correlation is drawn uniformly .50-.75 percohort. This parameter was NOT identified in the retrieved sources; it is an explicit sensitivity assumption. Person SDs increase from roughly11/8.4 in young adults to18/9.3 in older adults. A shared visit error (SD3/2,r=.75) plus independent-within-visit correlated reading errors (SD4/3,r=.5) are assumed, not sourced estimates. First reading offset2/1 mmHg. Default final BP=mean last2 of3, motivated by Brazilian MMM but not known to be the target release's aggregation. spec.bp_aggregation supports last and mean_three alternatives without changing other code. Unknown actual final-reading aggregation, oscillometric/manual differences, cuff/observer effects and baseline interview BP timing versus later laboratory sampling remain unresolved; simulation does not make BP contemporaneous with laboratory collection. BP rounded0.1 and BMI .01. Error pairs outside synthetic supportSBP60-270,DBP30-160 or PP<=10 are redrawn conditional on covariates; this is a physiological safeguard, not a target-derived restriction.\n\nANALYSIS: analyze_cohort returns ordinary equal-weight OLS BMI coefficients per5 with intercept, linear baseline age and sex, plus Pearson correlation of the two residuals after all three predictors. It also supports cubic age plus age-sex interaction sensitivity. The requested linear-age slopes may differ from underlying conditional coefficients because age is nonlinear and BMI varies with age; report analysis adjustment choice. OLS SEs reflect only the fictional cohort's sampling variation, not source uncertainty, measurement uncertainty, survey clustering or transfer validity. Generated data are for method development/demonstration, not inference about actual PNS adults; particularly the residual correlation is assumption-dominated. Reproduce using the immutable spec and any integer seed (e.g.20250308), observed=None.",
+  "provenance": {
+    "excluded_data_used": false,
+    "reproducible_example": "df = generate(None, model_spec, 20250308); result = analyze_cohort(df); df.to_csv('fictional_cohort.csv', index=False)",
+    "sources": [
+      {
+        "doi": "10.1093/eurheartj/suz079",
+        "pmcid": "PMC6479514",
+        "use": "Brazilian BMI/sex context and mean-last-two BP protocol; opportunistic sample limitation"
+      },
+      {
+        "doi": "10.1161/HYPERTENSIONAHA.116.08791",
+        "pmcid": "PMC5344187",
+        "use": "Table1 sex-age BP/BMI means; approximate SBP/DBP slopes; measurement and source selection",
+        "version": 2
+      },
+      {
+        "doi": "10.1038/jhh.2014.129",
+        "pmcid": "PMC4537884",
+        "use": "Continuous adjusted per5 BMI slopes, BP spread and two-reading protocol; overlapping CKB sample"
+      },
+      {
+        "doi": "10.1038/jhh.2017.13",
+        "pmcid": "PMC5508804",
+        "use": "Verified correction is licensing-only"
+      },
+      {
+        "doi": "10.1093/ije/dyv012",
+        "pmcid": "PMC4588860",
+        "use": "Population variation and treatment-related attenuation context; overlapping CKB source"
+      }
+    ],
+    "uncalibrated_parameters": [
+      "age/sex composition",
+      "population transfer and source exclusion adjustment",
+      "BMI age pattern",
+      "residual correlation",
+      "measurement variance decomposition",
+      "under35 extrapolation",
+      "shared transport-parameter uncertainty"
+    ]
+  }
+}

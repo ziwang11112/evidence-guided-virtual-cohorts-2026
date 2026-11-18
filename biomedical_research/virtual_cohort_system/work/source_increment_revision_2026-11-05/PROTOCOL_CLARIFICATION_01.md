@@ -1,0 +1,8 @@
+# Pre-execution administrative clarification
+
+The original protocol and input manifest are preserved. The independent infrastructure review identified two wording/implementation details before any candidate, freeze or execution existed.
+
+1. The authoritative INPUT_MANIFEST already admitted the initial `source_semantics_v1.json` and `whole_cohort_feedback.json` plus the probe SCIENCE_REQUEST/SCIENCE_DECISION. The first two are **declarative recipes**, not computed feedback reports; the last two are source-only request and interpretation records. They are explicitly permitted in addition to the short protocol's parenthetical evidence/spec/generator/proposal list. Authors may already have read these manifest-listed files. No old numerical feedback, target result, patient or generated rows were admitted. This clarification does not remove or conceal the exposure history.
+2. The task's administrative `revisions` limit will be 2 so the existing freeze lifecycle can preserve at most two code-format/execution repairs. The scientific-law limit remains one; each repair requires independent equivalence review and can be triggered only by a concrete mechanical failure, before target comparison. Three seed slots plus at most two failed-attempt replacements imply **at most five physical generator attempts**, with no replacement of an accepted successful slot. Changed code bytes receive a new immutable mechanical candidate version in this new bundle. If scientific equivalence cannot be established, stop rather than call it a mechanical fix.
+
+Scientific inputs, endpoints, seeds and source/model freedom are unchanged. No generation or target access preceded this clarification.

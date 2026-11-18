@@ -1,0 +1,193 @@
+{
+  "structure": "Hierarchical joint law with one plug-in parameter set. (1) Sex is Bernoulli. (2) Age is 18 plus a Gamma variate truncated at 90, independent of sex. (3) BMI is lognormal given sex and age, truncated to [13, 45]. (4) HDL and non-HDL cholesterol each have a raw-scale conditional mean that is exactly linear in the requested design columns [1, (age-50)/10, female, (bmi-25)/5]. Their errors are homoscedastic, right-skewed standardized shifted-lognormal variates, independent of the covariates, coupled by a Gaussian copula. (5) Total cholesterol is HDL plus non-HDL, so TC exceeds HDL and all lipids are positive by construction. Because the conditional means are linear and the error covariance is constant, the population OLS coefficients equal the structural coefficients and the population residual correlation equals the error correlation, whatever the covariate mixture. Source confidence intervals were used only to judge the scale of reported slopes, never as individual dispersion. Parameter uncertainty is not propagated into the cohort; sensitivity ranges are given under limitations. All values are transported from Malawi, Uganda and Ghana summaries to the Turkana context by explicit assumption.",
+  "parameter_provenance": [
+    {
+      "path": "covariates.sex.p_female",
+      "meaning_operator": "Marginal probability that recorded sex is F",
+      "conditioning_set": "none",
+      "scale": "probability",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        "population_metadata.composition.sex_proportions (unspecified)",
+        "greiner_2021 contexts reported_table_1_group_n: women 5894+7192+2424, men 4534+3988+2177",
+        "agongo_2018_navrongo population.reported_sex_counts_tables (men 846, women 993)"
+      ],
+      "derivation": "Greiner female share is 15510/26209 = 0.59 and Agongo is 993/1839 = 0.54; 0.57 was chosen between them.",
+      "unverified_assumptions": "Target sex composition is not supplied; the share is transferred from other community surveys. The Agongo 846 vs 864 count discrepancy is preserved and not resolved. This value does not affect the requested estimands under the model."
+    },
+    {
+      "path": "covariates.age.{min_year,max_year,gamma_shape,gamma_scale_year}",
+      "meaning_operator": "Age = min_year + Gamma(shape, scale), truncated above at max_year; continuous years",
+      "conditioning_set": "none (assumed independent of sex)",
+      "scale": "raw",
+      "unit": "year",
+      "classification": "mixed",
+      "source_pointers": [
+        "TASK eligibility minimum_age_inclusive 18",
+        "greiner_2021 reported_statistics rows *__age__q1, *__age__median, *__age__q3 (Table 1; Age (years), median (IQR)); quartiles range 22-30 / 28-43 / 37-56 across six strata",
+        "population_metadata.composition.age_distribution (unspecified)"
+      ],
+      "derivation": "Shape 1.1 and scale 19 give approximate analytic quartiles near 25/33/47 years, mid-range of the Greiner strata. This is a hand approximation, not executed. The minimum is the task boundary. The 90-year maximum is an assumed support bound needed for the positivity guarantee.",
+      "unverified_assumptions": "The Greiner quantile convention is unreported. Target age distribution is unspecified. Age-sex independence is a deliberate simplification, since sources show inconsistent sex-age differences. Age is generated as continuous although interview age is likely integer. Agongo ages (40-60 only) were not used for shape."
+    },
+    {
+      "path": "covariates.bmi.{geometric_mean_M,geometric_mean_F,log_sd_M,log_sd_F,log_slope_per_decade,reference_age_year,min,max}",
+      "meaning_operator": "BMI lognormal: median at the reference age by sex, log-scale SD by sex, linear age trend in log BMI, truncation bounds",
+      "conditioning_set": "sex, age",
+      "scale": "log BMI for location and dispersion; raw for bounds",
+      "unit": "kg/m^2 (geometric means, bounds); log units (SD, slope per 10 years); year (reference age)",
+      "classification": "mixed",
+      "source_pointers": [
+        "greiner_2021 rows malawi_rural_men__bmi__geometric_mean 21.5, malawi_urban_men__bmi__geometric_mean 22.3, uganda_men__bmi__geometric_mean 20.7, malawi_rural_women__bmi__geometric_mean 23.2, malawi_urban_women__bmi__geometric_mean 25.0, uganda_women__bmi__geometric_mean 22.3 (Table 1; BMI geometric mean)",
+        "agongo_2018_navrongo agongo_men_bmi_mean_sd 20.87 SD 3.15; agongo_women_bmi_mean_sd 22.28 SD 3.85 (Table 1)"
+      ],
+      "derivation": "Geometric means were chosen within the Greiner and Agongo sex-specific ranges (men 21.4, women 23.2). Log SDs come from Agongo coefficients of variation (0.151 men, 0.173 women), widened to 0.16 and 0.19 for a broader age range and unspecified site and lifestyle mixture. The age slope of 0.01 log units per decade and the bounds 13-45 are assumed. Reference age 35 is near the Greiner medians.",
+      "unverified_assumptions": "Lognormal shape and tails. Transfer of BMI level and spread to Turkana. No site or lifestyle mixture components. The BMI-age relation is not identified by the supplied evidence. Greiner confidence intervals were not used as dispersion. BMI composition does not alter the requested estimands under the linear model."
+    },
+    {
+      "path": "design.{age_center_year,age_scale_year,bmi_center,bmi_scale}",
+      "meaning_operator": "Centering and scaling of the regression design columns",
+      "conditioning_set": "not applicable",
+      "scale": "raw",
+      "unit": "year; kg/m^2",
+      "classification": "reported",
+      "source_pointers": [
+        "REQUESTED_ANALYSES_JSON design_columns"
+      ],
+      "derivation": "Copied from the requested design so that the coefficient vectors are on the analysis scale.",
+      "unverified_assumptions": "None; this is reparameterization only."
+    },
+    {
+      "path": "lipids.hdl.coef",
+      "meaning_operator": "Coefficients of E[HDL | age, sex, BMI] on [1, (age-50)/10, female, (bmi-25)/5]; the structural linear mean equals the population OLS projection",
+      "conditioning_set": "age, sex, BMI",
+      "scale": "raw",
+      "unit": "mmol/L per design unit",
+      "classification": "mixed",
+      "source_pointers": [
+        "greiner_2021 rows malawi_rural_men__hdl_cholesterol__geometric_mean 1.05, malawi_urban_men__hdl_cholesterol__geometric_mean 1.10, uganda_men__hdl_cholesterol__geometric_mean 0.90, and women 1.10, 1.15, 0.99 (Table 2)",
+        "greiner_2021 reported_regressions_context_only greiner_table3_context_01..06 (DC2 Supplementary Table 3; HDL on bmi: male -0.007 to -0.006, female -0.004)",
+        "agongo_2018_navrongo agongo_men_loghdl_bmi_univ -0.007 (Table 4, Men, BMI, Univariate models); agongo_pooled_hdl_cholesterol_mean_sd 1.14"
+      ],
+      "derivation": "Intercept: n-weighted Greiner male geometric mean of about 1.04, times about 1.04 for the arithmetic mean, gives about 1.08 at BMI near 21.6. Moving to BMI 25 with the BMI slope gives 1.06. Age: 0.0 per decade, an explicit assumption because no HDL-age statistic is supplied. Female: within-stratum Greiner female-minus-male differences of 0.05, 0.05 and 0.09, plus about 0.01 for higher female BMI, give 0.07. BMI: the Greiner coefficients equal about -0.004 to -0.007 mmol/L per kg/m^2 whether read as raw or natural-log response, because mean HDL is near 1 mmol/L. Agongo men agree at -0.007 log units. The sex-mixed value is -0.0055 per kg/m^2, i.e. -0.0275 per 5 kg/m^2.",
+      "unverified_assumptions": "The Greiner regression scale is unresolved; the bridge relies on HDL being near 1 mmol/L. The Agongo log is taken as natural, an assumption supported only by an informal comparison of CI width with implied dispersion. Unadjusted or age/smoking/alcohol-adjusted source slopes are taken to approximate the age/sex-adjusted slope. A common BMI slope across sexes deliberately omits a sex-by-BMI interaction. Transfer covers assay (laboratory enzymatic vs CardioChek Plus EDTA), fasting, source health exclusions and population differences."
+    },
+    {
+      "path": "lipids.non_hdl.coef",
+      "meaning_operator": "Coefficients of E[non-HDL | age, sex, BMI] on the same design; the TC coefficients are the element-wise sum with lipids.hdl.coef",
+      "conditioning_set": "age, sex, BMI",
+      "scale": "raw",
+      "unit": "mmol/L per design unit",
+      "classification": "mixed",
+      "source_pointers": [
+        "greiner_2021 rows *__non_hdl_cholesterol__geometric_mean (men 2.5, 2.6, 2.3; women 2.7, 2.6, 2.6) and *__total_cholesterol__geometric_mean (Table 2)",
+        "agongo_2018_navrongo agongo_men_logtc_bmi_univ 0.013 and agongo_women_logtc_bmi_univ 0.013 (Table 5, BMI, Univariate models); agongo_pooled_total_cholesterol_mean_sd 3.23 SD 0.92",
+        "obirikorang_2015_ashanti obirikorang_rural_bmi_tc 0.212, obirikorang_urban_bmi_tc 0.293 (Table 7, Spearman)"
+      ],
+      "derivation": "TC BMI slope: Agongo 0.013 natural-log units per kg/m^2 times a TC mean of about 3.6-3.7 gives about 0.047 mmol/L per kg/m^2. Obirikorang Spearman 0.21-0.29 times SD ratios of about 0.9/3.6 gives about 0.05-0.07. The chosen TC slope is 0.05 per kg/m^2, i.e. 0.25 per 5 kg/m^2, so the non-HDL slope is 0.25 - (-0.0275) = 0.2775. Intercept: n-weighted Greiner male non-HDL geometric mean of about 2.50, times about 1.04, gives about 2.60 at age near 32 and BMI near 21.6. Transport to age 50 and BMI 25 gives about 2.93, rounded down to 2.90 toward the lower Agongo TC. Female: Greiner unadjusted differences average about 0.17, less about 0.11 explained by higher female BMI, giving 0.06. Age: 0.08 per decade is assumed.",
+      "unverified_assumptions": "Natural-log base for Agongo. Spearman treated as approximately Pearson for a rough bridge. Univariate within-sex slopes taken as age/sex-adjusted. The age slope is not identified by the supplied evidence. Common BMI slope across sexes. Assay, fasting and population transfer. A geometric-mean difference is not a difference of geometric means; it is used only as an approximate level guide."
+    },
+    {
+      "path": "lipids.hdl.residual_sd",
+      "meaning_operator": "SD of the HDL error given age, sex and BMI (homoscedastic)",
+      "conditioning_set": "age, sex, BMI",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        "agongo_2018_navrongo agongo_pooled_hdl_cholesterol_mean_sd SD 0.38",
+        "greiner_2021 rows *__hdl_cholesterol__low_prevalence with *__hdl_cholesterol__geometric_mean (Table 2)"
+      ],
+      "derivation": "Pairing the Greiner low-HDL prevalences with geometric means under a lognormal reading gives log-SDs of roughly 0.23-0.36 in five strata (Uganda men is an outlier and rounding-sensitive), i.e. about 0.25-0.38 mmol/L. Agongo marginal SD is 0.38. The value 0.33 was chosen.",
+      "unverified_assumptions": "Individual dispersion is taken from SD and prevalence statistics, not from confidence intervals. Marginal SD is used as a proxy for conditional SD. Constant variance. Dispersion under CardioChek measurement may differ."
+    },
+    {
+      "path": "lipids.non_hdl.residual_sd",
+      "meaning_operator": "SD of the non-HDL error given age, sex and BMI (homoscedastic)",
+      "conditioning_set": "age, sex, BMI",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "derived",
+      "source_pointers": [
+        "agongo_2018_navrongo agongo_pooled_total_cholesterol_mean_sd SD 0.92"
+      ],
+      "derivation": "Var(TC) is about 0.846. Subtracting HDL variance 0.109 and about 0.03 explained by covariates leaves a non-HDL SD of about 0.84, rounded to 0.80. The implied TC residual SD is sqrt(0.33^2 + 0.80^2) = 0.865.",
+      "unverified_assumptions": "Depends on the assumed HDL/non-HDL error correlation. Transfer of Agongo dispersion (ages 40-60, fasting serum) to the target. Constant variance."
+    },
+    {
+      "path": "lipids.hdl.lognormal_shape and lipids.non_hdl.lognormal_shape",
+      "meaning_operator": "Shape s of the standardized shifted-lognormal error (exp(s*z) - exp(s^2/2)) / sqrt((exp(s^2)-1)*exp(s^2)); sets right skew and the lower bound -1/sqrt(exp(s^2)-1)",
+      "conditioning_set": "independent of covariates",
+      "scale": "log-normal shape",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        "greiner_2021 operator_definitions.geometric_mean_positive (geometric means reported, implying right-skewed positive lipids)",
+        "TASK eligibility strictly_positive"
+      ],
+      "derivation": "Shapes 0.40 and 0.42 give moderate right skew. Over the bounded covariate support, the minimum HDL mean is 0.95 and the minimum non-HDL mean is 1.978. The lower bounds are 0.95 - 0.33*2.4007 = 0.158 and 1.978 - 0.80*2.2768 = 0.157 mmol/L. Both are above zero by algebra, not by execution.",
+      "unverified_assumptions": "Distribution and tail form are assumed; the sources give no skewness or quantiles for lipids."
+    },
+    {
+      "path": "lipids.residual_pearson_correlation_hdl_nonhdl",
+      "meaning_operator": "Pearson correlation of the HDL and non-HDL errors given covariates; the Gaussian-copula latent correlation is solved from it in code",
+      "conditioning_set": "age, sex, BMI",
+      "scale": "correlation",
+      "unit": "1",
+      "classification": "mixed",
+      "source_pointers": [
+        "greiner_2021 reported_regressions_context_only greiner_table3_context_07..12 (DC2 Supplementary Table 3; HDL on non_hdl_cholesterol 0.041-0.046)",
+        "obirikorang_2015_ashanti obirikorang_rural_tc_hdl 0.106, obirikorang_urban_tc_hdl 0.171 (Table 7, Spearman)"
+      ],
+      "derivation": "Read as raw or log-HDL per mmol/L of non-HDL, the Greiner coefficients imply rho of about 0.11-0.12 (0.045*0.80/0.33). Read as log-log, they imply about 0.045. Obirikorang TC-HDL Spearman values of 0.11-0.17 would imply rho of about -0.27 under the chosen SDs. Weighting the larger East African source at about 0.75-0.8 gives approximately 0. The value 0.0 is this deliberate compromise between conflicting evidence, not a default.",
+      "unverified_assumptions": "Greiner scale unresolved. Spearman, unadjusted and smoking/alcohol-adjusted statistics are bridged informally to an adjusted Pearson quantity. The weights are judgment. Independent CardioChek measurement errors could change the correlation in the target."
+    },
+    {
+      "path": "lipids.positivity_floor_mmol_L",
+      "meaning_operator": "Numerical safety floor applied to HDL and non-HDL",
+      "conditioning_set": "none",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        "TASK eligibility strictly_positive"
+      ],
+      "derivation": "Inactive under the specified parameters, because the analytic lower bounds are about 0.158 and 0.157 mmol/L.",
+      "unverified_assumptions": "If the specification were altered so the floor became active, the exact estimands below would no longer hold."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "K02-HDL-BMI",
+      "value": -1.063425,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "E[HDL | age, sex, BMI] is exactly linear in the requested design, with errors independent of covariates. The population OLS coefficient on (bmi-25)/5 is therefore lipids.hdl.coef[3] = -0.0275 mmol/L. Multiplying by 38.67 gives -1.063425. This is a model-implied population value, not a simulated-sample estimate; finite samples will vary around it."
+    },
+    {
+      "analysis_id": "K02-TC-BMI",
+      "value": 9.6675,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "TC = HDL + non-HDL, so the population OLS coefficient on (bmi-25)/5 is -0.0275 + 0.2775 = 0.25 mmol/L. Multiplying by 38.67 gives 9.6675."
+    },
+    {
+      "analysis_id": "K02-LIPID-RESIDUAL",
+      "value": 0.381331,
+      "unit": "1",
+      "derivation": "With linear means and a constant error covariance independent of covariates, the population residuals equal the structural errors. Corr(e_TC, e_HDL) = (sH^2 + rho*sH*sN) / (sH*sqrt(sH^2 + sN^2 + 2*rho*sH*sN)), with sH = 0.33, sN = 0.80 and rho = 0. This gives 0.33/sqrt(0.7489), approximately 0.381331. The value is unit-invariant."
+    }
+  ],
+  "limitations": [
+    "No Turkana data or target statistics were used. Lipid levels, slopes, dispersion and correlation are transported from Malawi, Uganda and Ghana summaries with different assays (laboratory enzymatic vs CardioChek Plus on venous EDTA), fasting protocols, health exclusions, age ranges and lifestyles. Unit conversion does not establish assay equivalence.",
+    "Target covariate composition (age, sex, BMI, site and lifestyle mixture) is unspecified and assumed. No mixture components for pastoralist vs urban lifestyle or Turkana vs Laikipia sites are modelled. The requested estimands are invariant to covariate composition only because exact linearity, homoscedasticity and a common BMI slope across sexes were assumed.",
+    "Source regression scales are ambiguous: Agongo log base is unspecified and Greiner response and predictor transforms are unresolved. Natural-log and raw-scale readings were adopted by assumption. Source adjustment sets (none, or age/smoking/alcohol) differ from the requested age/sex/BMI set.",
+    "Obirikorang statistics are unadjusted Spearman correlations and conflict with the Greiner-based HDL/non-HDL association. The chosen residual correlation is a judgment compromise.",
+    "Plausible sensitivity ranges from the bridges, not confidence intervals: HDL-BMI about -1.5 to -0.8 mg/dL per 5 kg/m^2; TC-BMI about 8 to 13 mg/dL per 5 kg/m^2; residual TC-HDL correlation about 0.15 to 0.46.",
+    "Parameter uncertainty is not propagated into the cohort; one plug-in law is used. Source confidence intervals were not converted to individual SDs. The quarantined Malawi urban women HDL interval and the rounded or collapsed intervals were not used.",
+    "Repeated summaries from one source cohort (Greiner strata and regressions, Agongo tables, Obirikorang pairs) are dependent evidence and were not treated as independent replications. No inverse-variance weighting was performed.",
+    "Distribution shapes (gamma age, lognormal BMI, shifted-lognormal lipid errors) and support bounds (age up to 90, BMI 13-45) are assumptions. Age is continuous rather than integer. No measurement-range censoring, heteroscedasticity, sex-specific slopes or nonlinear age or BMI effects are included.",
+    "The HDL-age coefficient (0) and the non-HDL-age coefficient (0.08 mmol/L per decade) are not identified by the supplied evidence and are explicit assumptions.",
+    "Outputs are descriptive association projections of the generated law, not causal effects. Curator extractions were not re-authenticated against the original articles."
+  ],
+  "checks_actually_performed": []
+}

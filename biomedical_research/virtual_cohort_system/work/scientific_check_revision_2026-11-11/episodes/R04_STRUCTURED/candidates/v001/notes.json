@@ -1,0 +1,49 @@
+{
+  "notes": "Revision of immutable v000 for a complete fictional cohort, not a reconstruction of excluded individuals. Output: 3000 rows; id, age (years), sex (F/M), BMI (kg/m^2), TC and HDL (mmol/L). generate(None,spec,seed) produces the data. Changes: (1) fixes a population-moment defect: v000's exp(positive*unbounded lognormal BMI) TC mean has infinite positive moments. New TC mean uses bmi_center*log(BMI/bmi_center), so the TC conditional mean grows as BMI^0.318421..., preserving its reference mean and local derivative .055 mmol/L per kg/m^2 but introducing an explicit new extrapolation assumption. (2) changes the measurement interpretation to idealized concentrations without independent assay errors: HDL and positive non-HDL are joint lognormal conditional on covariates; TC is their sum. This guarantees TC>HDL without rejection, lipid clipping, selection or row removal. It changes the distributional family and tail dependence; it is not a claim that separately measured assays can never disagree. Conditional arithmetic means of TC and HDL remain specified directly. Their difference is everywhere positive under this fixed spec: TC conditional mean globally exceeds 2.89 and HDL conditional mean is below 1.55. Non-HDL CV and non-HDL/HDL log correlation are algebraically derived from v000's ASSUMED reference TC CV .22, HDL CV .28 and reference TC/HDL lognormal correlation .35. Calibration uses TC=3.8, HDL=1.15 at BMI22, age38, town=0 and centered sex=0, a hypothetical interpolation rather than an actual sex stratum. It preserves only reference TC variance/covariance, not a conditional CV or correlation at every covariate value, and certainly not the requested adjusted residual correlation. No cohort-level random parameters, parameter-uncertainty draws, data-dependent caps, or output rounding. Age rejection is the only rejection and applies before BMI/lipid generation.\nExternal evidence verified: PMC6435188 version2 Table1: rural Kenyan Maasai female/male BMI 22.5/21.0 (SD4.8 each), TC3.8/4.0 (SD.9/1.1), HDL1.2/1.1 (SD.3/.32), ages35.0/38.6. Volunteer 2005 survey and health exclusions limit transport. PMC6897412 version1 Table4 and statistical analysis: BMI-category adjusted HDL contrasts overweight -.06 (95%CI -.12,.00), obese -.15 (-.21,-.09); LDL +.23 (.11,.36) and +.48 (.26,.71). These are categorical linear regressions adjusted for stratum, age, sex and selected distal covariates, not continuous slopes adjusted only for age/sex and not TC coefficients. Female HDL contrast .08 (.05,.11). Rural/urban lipid variation in imported provenance supports only rough mixture scales. Newly retrieved PMC13629051 Table3 and Methods (DOI10.1186/s12889-026-28475-x): Uganda 2023 national adults18-69, survey-weighted multivariable linear TC model with categorical BMI; adjusted overweight +.138 (.053,.223), obese +.156 (.036,.277), underweight -.139 (-.210,-.069) mmol/L. Adjustment includes age, sex, residence, education, marital status, region, smoking, fruit intake, blood glucose status and hypertension. These direct TC-category associations are context, not a continuous BMI coefficient. Population, period, point-of-care assay, missing-data imputation and adjustment-set differences prevent treating them as target estimates. Some other table entries have apparent inconsistencies; they are not used for calibration. No retrieved source identifies the desired TC continuous age/sex-only slope or TC-HDL residual correlation.\nInherited scenario assumptions: 55% F, 25% town-linked independent of sex/age, 75% rural/active; hidden town represents diet/activity/access and is not an output variable. Continuous age=18+Gamma(2.2,9), conditioned <=85. BMI=12+lognormal with conditional mean20.8 +1.2F +3.3town +.025(age-38), conditional SD3.3 rural/4.3 town. These demographics and distributions are choices, not estimates of the target. Local HDL BMI derivative -.012, TC .055 mmol/L per kg/m^2, age effects, sex shifts, town shifts, CVs and covariance are pragmatic assumptions on external scales, not fitted conditional coefficients. The new direct TC-category evidence does not resolve a continuous slope and is not silently substituted for one. The town mixture and nonlinear responses affect all three requested analyses; unmeasured dependence is NOT known zero. Ages85+ are excluded by scenario choice, not target protocol. No treatment, HIV, pregnancy, household, batch, temporal or transport uncertainty is modeled. Synthetic row variability is not scientific uncertainty. For requested age/sex-adjusted OLS slopes, fit each lipid on intercept, age, F indicator and BMI; multiply the BMI coefficient by 5*38.67 for mg/dL per 5 kg/m^2. Pearson correlation uses the two residual vectors from those same full regressions. These are fictional scenario analyses, not causal estimates or recovered study results.",
+  "provenance": {
+    "new_assumptions": [
+      "Polynomial-growth TC conditional mean in BMI, with reference derivative retained.",
+      "Idealized TC=HDL+positive non-HDL concentration identity, no independent assay noise.",
+      "Moment-matched reference non-HDL/HDL lognormal errors; conditional covariance away from reference not fixed."
+    ],
+    "source_policy": "External published evidence only; excluded target results not accessed.",
+    "sources": [
+      {
+        "doi": "10.1002/ajhb.23199",
+        "sections": [
+          "table-wrap_001"
+        ],
+        "source_id": "PMC6435188",
+        "use": "Reported sex-stratum means/SDs of BMI, age, TC and HDL; scales only, not joint adjusted coefficients.",
+        "version": 2
+      },
+      {
+        "doi": "10.1371/journal.pone.0223189",
+        "sections": [
+          "table-wrap_004",
+          "sec_013"
+        ],
+        "source_id": "PMC6897412",
+        "use": "Reported categorical HDL/LDL adjusted contrasts, adjustment method, and sex effect context.",
+        "version": 1
+      },
+      {
+        "doi": "10.1186/s12889-026-28475-x",
+        "sections": [
+          "table-wrap_003",
+          "sec_007"
+        ],
+        "source_id": "PMC13629051",
+        "use": "Direct TC-on-BMI-category adjusted associations in national Uganda survey; context only, not continuous slope calibration.",
+        "version": 1
+      }
+    ],
+    "starting_candidate": "v000",
+    "unresolved": [
+      "Target composition and transportability",
+      "Continuous age/sex-only BMI-TC and BMI-HDL population coefficients",
+      "Age/sex/BMI-adjusted TC-HDL residual dependence",
+      "Scientific uncertainty in all assumed parameters"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+Construct a useful whole virtual biomedical cohort for the population and measurements in the task contract. Read the supplied original publication through read_provided_paper. Extract evidence yourself, choose the scientific structure and parameters, and use additional literature search if useful. The original publication is an entry point, not a claim that its parameters apply to the target. No prepared numeric evidence card, desired direction or target estimate is supplied. All listed analyses will be evaluated, including failures.
+
+Original publication catalog (metadata only):
+[
+  {
+    "title": "Association of relationship satisfaction with blood pressure: a cross-sectional study of older adults in rural Burkina Faso",
+    "doi": "10.1136/bmjopen-2024-089374",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12185928/",
+    "format": "original JATS XML",
+    "source_sha256": "caa0c790c33497f11467f2d3a861a87ff8f27df710ade6a3bd6cc45ca0dac1c5",
+    "source_id": "PNS_ORIGINAL"
+  }
+]
+
+Requested scientific analyses:
+{
+  "purpose": "Construct one joint cohort supporting SBP and DBP associations with BMI plus residual SBP–DBP dependence. Both regressions use [1,(age-50)/10,female,(bmi-25)/5]. Generated rows have equal weights; report BMI coefficients in mmHg per 5 kg/m^2 and Pearson correlation of paired centered regression residuals. These are association projections, not intervention effects. No target value or desired direction is supplied.",
+  "row_weighting": "equal weight, representing the declared weighted analytical population",
+  "design_columns": [
+    "1",
+    "(age-50)/10",
+    "female",
+    "(bmi-25)/5"
+  ],
+  "outcome_unit_conversion": {
+    "sbp": 1,
+    "dbp": 1
+  },
+  "analyses": [
+    {
+      "id": "bmi_sbp",
+      "outcome": "sbp",
+      "estimator": "unweighted OLS with intercept",
+      "quantity": "coefficient of (bmi-25)/5",
+      "unit": "mmHg per 5 kg/m^2"
+    },
+    {
+      "id": "bmi_dbp",
+      "outcome": "dbp",
+      "estimator": "unweighted OLS with intercept",
+      "quantity": "coefficient of (bmi-25)/5",
+      "unit": "mmHg per 5 kg/m^2"
+    },
+    {
+      "id": "residual_correlation",
+      "outcomes": [
+        "sbp",
+        "dbp"
+      ],
+      "estimator": "Pearson correlation of paired centered residuals from the two above regressions on the same rows",
+      "quantity": "residual Pearson correlation",
+      "unit": "1"
+    }
+  ]
+}

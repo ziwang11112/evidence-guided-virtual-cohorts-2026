@@ -1,0 +1,180 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "interpretation": "One fixed, assumption-completed joint law for equal-weight draws representing the declared peso_lab-weighted complete-case analytical population. This is not an estimate of that population from target data.",
+    "design": {
+      "age_center_scale": [
+        50,
+        10
+      ],
+      "bmi_center_scale": [
+        25,
+        5
+      ]
+    },
+    "covariates": {
+      "age": {
+        "family": "uniform",
+        "support_years": [
+          20,
+          79
+        ]
+      },
+      "female": {
+        "family": "Bernoulli",
+        "coding": "0 male, 1 female",
+        "probabilities_at_age_endpoints": [
+          0.48,
+          0.56
+        ],
+        "probability_interpolation": "linear in age"
+      },
+      "bmi": {
+        "family": "affinely transformed beta conditional on age and female",
+        "support_kg_m2": [
+          15,
+          50
+        ],
+        "conditional_mean_coefficients": [
+          27,
+          0.6,
+          1
+        ],
+        "conditional_mean_design": [
+          "1",
+          "(age-50)/10",
+          "female"
+        ],
+        "beta_precision": 12
+      }
+    },
+    "bp": {
+      "outcome_order": [
+        "sbp",
+        "dbp"
+      ],
+      "non_bmi_design": [
+        "1",
+        "(age-50)/10",
+        "female"
+      ],
+      "non_bmi_coefficients": [
+        [
+          122,
+          5,
+          -3
+        ],
+        [
+          78,
+          1.2,
+          -2
+        ]
+      ],
+      "transported_bmi_coefficients_per_kg_m2": [
+        0.7754,
+        0.5967
+      ],
+      "residual_sd_mmHg": [
+        14,
+        9
+      ],
+      "residual_latent_family": "two independent uniforms, centered and standardized to unit variance",
+      "residual_latent_uniform_support": [
+        -1,
+        1
+      ],
+      "residual_mixing_matrix": [
+        [
+          1,
+          0
+        ],
+        [
+          0.6,
+          0.8
+        ]
+      ],
+      "conditional_structure": "Linear additive conditional means; residual latent variables independent of all covariates; constant conditional residual covariance."
+    },
+    "uncertainty": {
+      "mode": "fixed illustrative scenario",
+      "parameter_draws": false,
+      "interpretation": "Seeds change individual draws only. Source sampling uncertainty, unidentified relationships and transport uncertainty are not represented by parameter draws."
+    },
+    "selection_and_measurement": {
+      "selection": "Model the distribution conditional on the task eligibility and complete-case rules directly; do not simulate screening, laboratory weights, pregnancy, treatment or missingness.",
+      "measurement": "BMI and BP are generated as released measured variables, not latent error-free physiology. No explicit device-error or reading-aggregation model is fitted.",
+      "transport": "Assume the INTERSALT pooled BMI slopes apply to the task's age/sex-adjusted raw-scale projections, including ages 60-79, despite population, adjustment and measurement differences."
+    }
+  }
+}

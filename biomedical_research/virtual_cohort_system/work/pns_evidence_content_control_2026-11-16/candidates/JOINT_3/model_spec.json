@@ -1,0 +1,184 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "name": "Transported linear-location cohort with bounded physiological support",
+    "version": 1,
+    "interpretation": "An explicitly assumed equal-weight representation of the declared analytical population, not an identified reconstruction of that population.",
+    "covariates": {
+      "age": {
+        "law": "20 + 59 * Beta(alpha, beta)",
+        "alpha": 1.6,
+        "beta": 2.0
+      },
+      "female": {
+        "law": "Bernoulli(p), independent of age",
+        "p": 0.53
+      },
+      "bmi": {
+        "law": "lower + (upper-lower) * Beta(precision*q, precision*(1-q))",
+        "lower": 14.0,
+        "upper": 52.0,
+        "precision": 16.0,
+        "conditional_mean": {
+          "intercept": 26.5,
+          "per_age_decade_centered_50": 0.25,
+          "female_difference": 0.8
+        },
+        "q_definition": "(conditional_mean-lower)/(upper-lower)"
+      }
+    },
+    "bp": {
+      "design": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "preconstraint_location_coefficients": {
+        "sbp": [
+          128.0,
+          4.0,
+          -4.0,
+          3.877
+        ],
+        "dbp": [
+          80.0,
+          0.4,
+          -2.0,
+          2.9835
+        ]
+      },
+      "error_law": {
+        "family": "Centered bivariate Student t with covariance specified below",
+        "degrees_of_freedom": 8.0,
+        "source_id": "BF2018",
+        "anchor_predictor_order": [
+          "age",
+          "bmi"
+        ],
+        "anchor_outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "anchor_predictor_correlation": [
+          [
+            1.0,
+            -0.17
+          ],
+          [
+            -0.17,
+            1.0
+          ]
+        ],
+        "anchor_outcome_predictor_correlation": [
+          [
+            0.21,
+            0.12
+          ],
+          [
+            0.02,
+            0.16
+          ]
+        ],
+        "anchor_outcome_correlation": [
+          [
+            1.0,
+            0.78
+          ],
+          [
+            0.78,
+            1.0
+          ]
+        ],
+        "anchor_outcome_sd": [
+          18.22,
+          10.98
+        ],
+        "covariance_definition": "D @ (Ryy - Ryx @ inverse(Rxx) @ Ryx.T) @ D, where D=diag(anchor_outcome_sd)",
+        "sampling_definition": "If L L.T equals this covariance, error=(L z)*sqrt((df-2)/chi_square(df)), with independent standard-normal z and chi-square draw."
+      },
+      "conditional_support": {
+        "sbp_min": 70.0,
+        "sbp_max": 270.0,
+        "dbp_min": 40.0,
+        "dbp_max": 160.0,
+        "pulse_pressure_min": 10.0,
+        "pulse_pressure_max": 150.0
+      },
+      "support_algorithm": "Hold each person's covariates fixed and redraw paired errors until both BP values and their difference satisfy all support constraints. This defines a covariate-specific truncated conditional law, not clipping or sample-wide calibration."
+    }
+  }
+}

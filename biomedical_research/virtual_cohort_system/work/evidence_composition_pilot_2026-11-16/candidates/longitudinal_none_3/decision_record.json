@@ -1,0 +1,143 @@
+{
+  "structure": "Each independent person has a bivariate stable component B and independent bivariate deviations E1 and E2. Measurements are B+E1 and B+E2. The three latent vectors are mutually independent and Gaussian. The scenario combines positive stable X-Y association with negative within-visit deviation association.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Both biomarkers have population mean zero; deviations have mean zero."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact variances of the stable components."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact variances of visit deviations."
+    },
+    {
+      "parameter": "independence_structure",
+      "value": "Persons independent; stable component independent of deviations; deviation vectors independent between visits.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated measurement-model assumptions."
+    },
+    {
+      "parameter": "between_person_correlation",
+      "value": 0.75,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario; C supplies no cross-biomarker stable covariance."
+    },
+    {
+      "parameter": "within_visit_deviation_correlation",
+      "value": -0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario, equal at both visits; C supplies no within-visit cross-biomarker deviation covariance."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Gaussian latent vectors are a convenient sampling choice, not an evidence-derived distribution."
+    },
+    {
+      "parameter": "measurement_variances",
+      "value": [
+        5.0,
+        5.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "At either visit, independent stable and deviation variances add: 4+1=5."
+    },
+    {
+      "parameter": "change_variances",
+      "value": [
+        2.0,
+        2.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stable components cancel, and independent visit deviations give variance 1+1=2."
+    },
+    {
+      "parameter": "scenario_covariances",
+      "value": {
+        "stable_X_Y": 3.0,
+        "within_visit_deviation_X_Y": -0.5,
+        "same_visit_X_Y": 2.5,
+        "X_visit1_Y_visit2": 3.0,
+        "change_X_change_Y": -1.0
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Conditional on chosen correlations: stable covariance=4(0.75)=3; deviation covariance=-0.5; same-visit covariance=3-0.5; cross-visit covariance=3; change covariance=2(-0.5)."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": -0.5,
+      "basis": "Changes contain only deviations. With the chosen common within-visit correlation r_w, their covariance is 2r_w and each variance is 2, giving correlation r_w=-0.5. C does not determine r_w."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "scenario",
+      "value": 0.5,
+      "basis": "At either visit, correlation=(4r_b+r_w)/5=(3-0.5)/5=0.5. Neither r_b nor r_w is supplied by C; their equality across visits for deviations is also a scenario choice."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "Independent visit deviations leave only stable cross-biomarker covariance: correlation=4r_b/5=3/5=0.6. C does not determine r_b."
+    }
+  ],
+  "limitations": [
+    "None of the three requested correlations is identified by C alone. The reported variances and independence assumptions identify marginal measurement variances and change variances, but not cross-biomarker covariances.",
+    "Equal within-visit cross-biomarker covariance across visits is chosen, not reported.",
+    "The listed correlations are population scenario values. Random finite samples will fluctuate; the generator does not force empirical moments or select persons or seeds.",
+    "The supplied standardized arbitrary units do not imply unit marginal variance: the stipulated measurement variance is 5.",
+    "This is an artificial mathematical scenario, not biomedical validation."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked positive definiteness: stable covariance [[4,3],[3,4]] has eigenvalues 1 and 7; deviation covariance [[1,-0.5],[-0.5,1]] has eigenvalues 0.5 and 1.5.",
+    "Algebraically derived measurement variances, change variances, and all three population correlations using the stipulated independence structure.",
+    "Reviewed the source for the required wide column order, unique integer identifiers, independent person-level draws, seeded randomness, and absence of empirical moment adjustment.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

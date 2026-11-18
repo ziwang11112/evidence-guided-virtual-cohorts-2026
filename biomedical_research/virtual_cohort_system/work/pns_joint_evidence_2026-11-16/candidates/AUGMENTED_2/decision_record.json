@@ -1,0 +1,223 @@
+{
+  "structure": "Independent virtual adults follow a bounded hierarchical law: scaled-beta age, independent recorded sex, and a conditional beta BMI distribution whose mean increases modestly with age and female sex. Both BP conditional means are linear in exactly the requested regression design. Independent, mean-zero bounded beta variables D and U generate DBP error D and SBP error 1.152D+U. This produces homoscedastic, right-skewed paired errors with population covariance [[256,115.2],[115.2,100]] mmHg^2. Consequently, the population BMI projection coefficients and residual correlation equal the specified structural values, while realized sample estimates fluctuate. Eligibility, laboratory weighting, complete-case selection and baseline pregnancy exclusions are represented by conditioning on the declared analytical population, not by simulating selection variables. No treatment, hypertension or HbA1c filter is applied. Bounds are built into the population law; there is no clipping, outcome rejection or sample-wide moment adjustment.",
+  "parameter_provenance": [
+    {
+      "parameter": "age distribution",
+      "value": "age = 20 + 59*Beta(1.3,1.7)",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "The endpoints are mandated by the task. The shape is an unsupported demographic transport choice, yielding a broad adult distribution rather than reproducing any source age composition."
+    },
+    {
+      "parameter": "recorded sex distribution",
+      "value": "female ~ Bernoulli(0.53), independent of age",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "The analytical population's weighted sex composition and age-sex dependence are unidentified. This is a simple working distribution, not an estimate from a source or the target."
+    },
+    {
+      "parameter": "conditional BMI law",
+      "value": "Support [14,55]; mu=26.5+0.5*((age-50)/10)+1.0*female; p=(mu-14)/41; BMI=14+41*Beta(16*p,16*(1-p))",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Specifies moderate age/sex dependence, positive skew and finite variance without a target calibration. Conditional variance is (mu-14)*(55-mu)/17. Bounds are modeling regularizers, not reported limits of the analytical population."
+    },
+    {
+      "parameter": "non-BMI BP mean parameters",
+      "value": {
+        "sbp_intercept_age_female": [
+          128.0,
+          5.0,
+          -5.0
+        ],
+        "dbp_intercept_age_female": [
+          78.0,
+          1.5,
+          -3.0
+        ]
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Intercepts refer to age 50, male sex and BMI 25. Age effects are mmHg per decade. These are plausible working conditional means, not transported source means or identified target age/sex effects."
+    },
+    {
+      "parameter": "INTERSALT source BMI coefficients",
+      "value": {
+        "sbp_mmHg_per_kg_m2": 0.7754,
+        "dbp_mmHg_per_kg_m2": 0.5967,
+        "sbp_source_SE": 0.0359,
+        "dbp_source_SE": 0.0257
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Packet-reported inverse-variance pooled within-centre coefficients adjusted for age, sex, urinary sodium/potassium and alcohol indicators. Their source SEs are not target transport uncertainty."
+    },
+    {
+      "parameter": "unit-converted INTERSALT coefficients",
+      "value": {
+        "sbp_mmHg_per_5_kg_m2": 3.877,
+        "dbp_mmHg_per_5_kg_m2": 2.9835
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Multiply each reported per-kg/m^2 coefficient by five. This unit conversion alone does not change the source estimand into the requested estimand."
+    },
+    {
+      "parameter": "transported BMI association coefficients",
+      "value": {
+        "sbp_mmHg_per_5_kg_m2": 3.877,
+        "dbp_mmHg_per_5_kg_m2": 2.9835
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Numerically retain the converted source coefficients as one explicit scenario for the target age/sex-adjusted projections. This assumes away effects of the different adjustment sets, within-centre pooling, covariate distributions, measurement protocols and extension from ages 20-59 to 20-79; equivalence is not established."
+    },
+    {
+      "parameter": "conditional BP residual standard deviations",
+      "value": {
+        "sbp_mmHg": 16.0,
+        "dbp_mmHg": 10.0
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "BF_AGE_BMI_JOINT",
+        "GHANA_MULTILEVEL_JOINT"
+      ],
+      "rationale": "The source-specific adjusted variances provide qualitative scale context only. These values are not pooled estimates, are not copied marginal SDs, and do not equate Burkina Faso age/BMI residuals or Ghana individual-level errors with target OLS residuals."
+    },
+    {
+      "parameter": "conditional residual correlation",
+      "value": 0.72,
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_BEIJING",
+        "BF_AGE_BMI_JOINT",
+        "GHANA_MULTILEVEL_JOINT"
+      ],
+      "rationale": "A moderately strong positive dependence scenario, informed qualitatively by the distinct joint-source findings. It is not an average, meta-analysis, raw-to-residual conversion, or asserted equality to any reported correlation. The additional evidence does not identify the requested target residual correlation."
+    },
+    {
+      "parameter": "bounded BP error supports",
+      "value": {
+        "dbp_error": [
+          -20.0,
+          50.0
+        ],
+        "independent_sbp_innovation": [
+          -20.0,
+          60.0
+        ]
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Asymmetric compact supports permit right-skewed high-BP tails, finite moments and strictly positive pulse pressure throughout the chosen age/BMI support. They are not observed quantiles or reported physiological cutoffs."
+    },
+    {
+      "parameter": "error distributions and covariance",
+      "value": {
+        "dbp_error": "-20 + 70*Beta(18/7,45/7)",
+        "sbp_innovation": "-20 + 80*Beta(c/4,3*c/4), c=1200/123.2896-1",
+        "sbp_error": "1.152*dbp_error + sbp_innovation",
+        "innovation_variance": 123.2896,
+        "residual_covariance_order_sbp_dbp": [
+          [
+            256.0,
+            115.2
+          ],
+          [
+            115.2,
+            100.0
+          ]
+        ]
+      },
+      "status": "DERIVED",
+      "source_ids": [],
+      "rationale": "For a mean-zero beta variable on [L,H], p=-L/(H-L) and concentration=(-L*H)/variance-1. Independence of the two errors gives loading=0.72*16/10=1.152, innovation variance=16^2*(1-0.72^2), and the stated covariance. No realized sample moments are used."
+    }
+  ],
+  "source_assessments": [
+    {
+      "source_id": "S_INTERSALT",
+      "suitability": "transformed",
+      "decision": "Usable as a partial BMI-slope anchor after explicit unit conversion, not as an equivalent target regression. Treatment was retained, but the age range, adjustment set, centre pooling and BP protocol differ. Appendix SDs average age-sex subgroup SDs and are not used as pooled or residual SDs."
+    },
+    {
+      "source_id": "S_BEIJING",
+      "suitability": "partial",
+      "decision": "The pulse-pressure identity yields source raw correlations approximately 0.534 overall, 0.603 under 65 and 0.545 at 65+. These are unadjusted older-population quantities, not residual correlations. They supply context only; rounded-SD envelopes are not sampling intervals."
+    },
+    {
+      "source_id": "S_INTERMAP_methods",
+      "suitability": "unsuitable",
+      "decision": "Unsuitable for numerical BMI/BP calibration because no original coefficient or BP/BMI moments are admitted. Useful only as measurement-context evidence: eight readings across four visits are not assumed equivalent to the task measurement. Secondary INTERSALT tables are not independent evidence."
+    },
+    {
+      "source_id": "BF_AGE_BMI_JOINT",
+      "suitability": "partial",
+      "decision": "The packet's same-sample Schur-complement derivation gives a source partial correlation of approximately 0.787977 and residual covariance approximately [[309.04,149.96],[149.96,117.20]] after linear age and BMI only. These constrain a source projection but omit sex. Sex adjustment is not reconstructed from incomplete joint moments. Rural, partnered, relatively lean adults aged at least 40 with recent BP medication excluded differ materially from the target. Neither raw r=0.78 nor the partial correlation is imposed on target residuals."
+    },
+    {
+      "source_id": "GHANA_MULTILEVEL_JOINT",
+      "suitability": "partial",
+      "decision": "The reported raw r=0.76, adjusted individual r=0.73 and household r=0.81 are distinct quantities. Variances 224.49/101.75 at the individual level and 38.91/16.37 at the household level provide source-model context, not a target OLS covariance. No components or correlations are pooled here. The source covers women aged 15-49 with different covariates and an incompletely established BP protocol. Its individual-level table label 'Child' and household-count discrepancy, 3727 versus 3722, remain unresolved."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "bmi_sbp",
+      "support_basis": "The model population OLS coefficient is 3.877 mmHg per 5 kg/m^2 because the SBP conditional mean uses the requested design and errors have conditional mean zero. Its numerical anchor is the unit-converted INTERSALT coefficient, explicitly transported rather than identified for the target.",
+      "model_population_value": 3.877,
+      "key_unresolved_assumptions": [
+        "Additional INTERSALT adjustment and within-centre pooling do not materially change the desired age/sex-only association after transport.",
+        "One homogeneous linear BMI coefficient applies across ages 20-79, sex, treatment status and the analytical selection process.",
+        "The assumed age/sex/BMI law and conditional BP mean adequately approximate the weighted complete-case population."
+      ]
+    },
+    {
+      "id": "bmi_dbp",
+      "support_basis": "The model population OLS coefficient is 2.9835 mmHg per 5 kg/m^2 by the specified linear conditional mean. This is an assumed transport of the converted INTERSALT association, not a causal effect or an identified target coefficient.",
+      "model_population_value": 2.9835,
+      "key_unresolved_assumptions": [
+        "Adjustment-set, population and protocol differences permit retaining the source coefficient numerically.",
+        "Linear age adjustment is adequate despite potentially nonlinear DBP aging patterns, especially at older ages.",
+        "Treatment-related effect heterogeneity and selection do not invalidate the common conditional association."
+      ]
+    },
+    {
+      "id": "residual_correlation",
+      "support_basis": "The model population correlation after projection on the requested common design is 0.72 by the constructed residual covariance. Beijing raw moments, Burkina Faso age/BMI partial dependence and Ghana multilevel correlations support only qualitative source comparison, not identification of this value.",
+      "model_population_value": 0.72,
+      "key_unresolved_assumptions": [
+        "A single homoscedastic residual covariance adequately describes all ages, sexes, BMI values and treatment states.",
+        "Unmeasured household, treatment and measurement-error contributions can be represented by the chosen marginal person-level error law.",
+        "The target's baseline BP timing and unknown final-reading aggregation do not require a materially different paired residual law.",
+        "Differences in adjustment span, weighting and population cannot be resolved from the available source correlations."
+      ]
+    }
+  ],
+  "limitations": [
+    "No target distribution or target outcome evidence was used. The weighted demographic law, complete-case selection effects, pregnancy-status composition and peso_lab transport remain unidentified.",
+    "This is one fixed source-informed scenario, not a fitted or validated reconstruction. Matching numerical source coefficients does not establish target estimand equivalence.",
+    "The BP equations describe the treatment-unrestricted mixture implicitly; there is no explicit treatment mechanism, medication class, adherence process or treatment-specific covariance.",
+    "Linear age effects, no interactions and constant conditional covariance simplify potentially important aging, sex, adiposity and treatment heterogeneity.",
+    "Beta errors have asymmetric, compact tails and all moments exist. BMI and BP support bounds exclude more extreme values that might be dictionary-admissible in the target; their absence is an assumption, not evidence.",
+    "Baseline interview BP timing is retained conceptually. The released final-reading aggregation is unknown, and source devices, rest periods and repeated-reading protocols are not assumed equivalent.",
+    "Independent generated rows do not reproduce a household or survey design. Equal weighting represents an assumed already-weighted analytical distribution, not estimated original survey weights.",
+    "Source statistics and derivations rely on the supplied evidence packet; original sources were not reauthenticated in this call. Rounded source inputs do not provide sampling or transport intervals.",
+    "The 3000 generated people provide Monte Carlo resolution only. They do not multiply the published evidence, identify transport uncertainty or justify biomedical confidence intervals based solely on synthetic sample size."
+  ],
+  "checks_actually_performed": [
+    "Analytic parameter check: all specified beta shapes are positive. The error concentrations are 9 and 1200/123.2896-1, both positive, and conditional BMI means remain strictly inside [14,55].",
+    "Algebraic covariance check: Var(DBP error)=100, Var(SBP error)=256 and Cov=115.2, giving correlation 0.72 and covariance determinant 12328.96 > 0.",
+    "Analytic support check over the full modeled covariate and error supports: DBP lies within [43.9363,150.251], SBP within [56.4306,283.362], and pulse pressure within [12.4943,133.111] mmHg. Thus SBP exceeds DBP without clipping or rejection.",
+    "Population-projection check: conditional mean-zero errors independent of the covariates make the specified BMI coefficients the population OLS coefficients for the requested design.",
+    "Static code inspection: the generator uses the supplied seed, independent person-level draws, unique integer row_id values and the exact requested column order. It contains no sample recentering, reweighting, seed selection or output-table selection.",
+    "No code execution, generated-sample diagnostics, external lookup, original-source reauthentication or target comparison was performed."
+  ]
+}

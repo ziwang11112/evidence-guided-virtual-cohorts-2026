@@ -1,0 +1,134 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_family": "Independent-person covariate model with conditionally truncated bivariate-normal blood pressure",
+    "interpretation": "An assumed equal-weight representation of the declared weighted analytical population, not an empirically calibrated reconstruction or a nationally representative sample.",
+    "age": {
+      "distribution": "20 + 59 * Beta(alpha, beta)",
+      "alpha": 1.6,
+      "beta": 2.0
+    },
+    "female": {
+      "probability": 0.53,
+      "independent_of_age": true
+    },
+    "bmi": {
+      "distribution": "Conditionally truncated shifted lognormal",
+      "shift": 12.0,
+      "untruncated_arithmetic_mean": {
+        "intercept": 27.0,
+        "age_per_decade": 0.35,
+        "age_per_decade_squared": -0.2,
+        "female": 0.8
+      },
+      "log_sd": 0.32,
+      "lower": 14.0,
+      "upper": 65.0
+    },
+    "bp": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0,
+      "sbp_mean": {
+        "intercept": 126.0,
+        "age": 4.5,
+        "positive_age_squared": 0.0,
+        "female": -4.0,
+        "bmi": 3.877
+      },
+      "dbp_mean": {
+        "intercept": 79.0,
+        "age": 1.0,
+        "positive_age_squared": -0.65,
+        "female": -2.0,
+        "bmi": 2.9835
+      },
+      "innovation_sd_sbp": 17.0,
+      "innovation_sd_dbp": 10.0,
+      "innovation_correlation": 0.7,
+      "support": {
+        "sbp_lower": 75.0,
+        "sbp_upper": 270.0,
+        "dbp_lower": 40.0,
+        "dbp_upper": 160.0,
+        "pulse_pressure_lower": 10.0,
+        "pulse_pressure_upper": 160.0
+      },
+      "conditioning": "Redraw paired BP innovations at fixed age, sex and BMI until all support conditions hold."
+    }
+  }
+}

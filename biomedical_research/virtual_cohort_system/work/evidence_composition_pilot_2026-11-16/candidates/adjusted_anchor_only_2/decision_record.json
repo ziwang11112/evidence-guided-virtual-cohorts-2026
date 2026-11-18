@@ -1,0 +1,103 @@
+{
+  "structure": "Independent people drawn from a trivariate Gaussian population. The population moments satisfy records C and A; the two correlations involving Z are explicit scenario assumptions. No realized-sample standardization or moment matching is performed.",
+  "parameter_provenance": [
+    {
+      "parameter": "mean",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means in X, Y, Z order."
+    },
+    {
+      "parameter": "covariance diagonal",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances."
+    },
+    {
+      "parameter": "correlation_XY",
+      "value": 0.5,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Exact marginal Pearson correlation."
+    },
+    {
+      "parameter": "covariance_XY",
+      "value": 0.5,
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "Correlation times the two unit standard deviations."
+    },
+    {
+      "parameter": "covariance_XZ",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen missing relationship; also correlation_XZ because both variances are one."
+    },
+    {
+      "parameter": "covariance_YZ",
+      "value": 0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen missing relationship; also correlation_YZ because both variances are one."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient joint shape, not required for the stated Pearson and OLS population formulas."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": 0.2886751345948129,
+      "basis": "For separate population OLS adjustments including intercepts, residual correlation is (0.5 - 0.6*0.5)/sqrt((1 - 0.6^2)*(1 - 0.5^2)). Records do not determine either correlation involving Z."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "identified",
+      "value": 0.5,
+      "basis": "Directly fixed by record A, independently of Gaussian shape or the chosen Z relationships."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "The population OLS slope with intercept is Cov(X,Z)/Var(Z). Record C fixes the denominator at one but supplies no X-Z covariance."
+    }
+  ],
+  "limitations": [
+    "The adjusted correlation and X-on-Z slope are point scenarios, not consequences of the evidence alone. For example, setting both Z correlations to zero also satisfies the records but gives adjusted correlation 0.5 and slope zero.",
+    "Gaussian shape is assumed; the identified marginal correlation and the scenario's residual-correlation formula depend only on second moments.",
+    "Finite random samples will not exactly reproduce the stipulated population moments or estimands.",
+    "These artificial records support no clinical or causal interpretation."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked that the covariance matrix is symmetric with unit diagonal and required X-Y covariance 0.5.",
+    "Analytically checked positive definiteness: the leading principal minors are 1, 0.75, and 0.44.",
+    "Analytically checked residual variances 0.64 and 0.75, residual covariance 0.20, and the reported adjusted correlation.",
+    "Reviewed generator source for independent random draws, unique integer identifiers, exact output column order, and absence of sample moment forcing. No code execution was performed."
+  ]
+}

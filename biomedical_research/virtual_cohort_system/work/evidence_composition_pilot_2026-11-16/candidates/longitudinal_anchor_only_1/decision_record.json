@@ -1,0 +1,140 @@
+{
+  "structure": "For person i and visit t, (X_it,Y_it)=B_i+E_it. Stable vectors B_i are independent across persons. Deviation vectors E_it are independent across persons and visits and independent of all stable vectors. Within each vector, X and Y may be correlated. The chosen Gaussian scenario uses deviation correlation 0.3 at both visits.",
+  "parameter_provenance": [
+    {
+      "parameter": "stable_mean",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Zero measurement means and mean-zero deviations imply zero stable-component means."
+    },
+    {
+      "parameter": "stable_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact between-person variances."
+    },
+    {
+      "parameter": "stable_correlation",
+      "value": 0.8,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Exact Pearson correlation between stable X and Y components."
+    },
+    {
+      "parameter": "stable_covariance",
+      "value": 3.2,
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "A"
+      ],
+      "basis": "0.8*sqrt(4*4)=3.2."
+    },
+    {
+      "parameter": "deviation_mean",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Visit deviations are stipulated to be mean-zero."
+    },
+    {
+      "parameter": "deviation_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact within-person variances."
+    },
+    {
+      "parameter": "deviation_correlation",
+      "value": 0.3,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Unreported same-visit deviation correlation, chosen equal at both visits. Unit deviation variances make its covariance also 0.3."
+    },
+    {
+      "parameter": "independence_structure",
+      "value": "Stable and deviation vectors independent; deviation vectors independent across visits; persons independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated controlled-task measurement model."
+    },
+    {
+      "parameter": "distribution",
+      "value": "Gaussian stable and deviation vectors",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient sampling shape, not supplied evidence and not needed for second-moment identification."
+    },
+    {
+      "parameter": "measurement_variances",
+      "value": [
+        5.0,
+        5.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Each measurement variance is 4+1=5."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": 0.3,
+      "basis": "Stable components cancel in changes. If c_t is the within-visit deviation covariance, change covariance is c_1+c_2 and each change variance is 2. Thus the correlation is (c_1+c_2)/2, which is 0.3 under the chosen c_1=c_2=0.3. The records do not specify these covariances."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "scenario",
+      "value": 0.7,
+      "basis": "At visit t the correlation is (3.2+c_t)/5. Choosing c_t=0.3 gives 0.7 at both visits. The records neither identify c_t nor require it to be equal across visits."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "identified",
+      "value": 0.64,
+      "basis": "Independence removes cross-visit deviation covariance and all stable-deviation covariance. Cov(X_visit1,Y_visit2)=3.2, while both marginal variances are 5, giving 3.2/5=0.64 independently of Gaussian shape or same-visit deviation covariance."
+    }
+  ],
+  "limitations": [
+    "These are artificial population constraints, not clinical evidence or biomedical validation.",
+    "The change and same-visit point values depend on the assumed deviation correlations. The records allow change correlations from -1 to 1 and each same-visit correlation from 0.44 to 0.84.",
+    "Gaussian shape and equal deviation correlations across visits are modeling choices, not reported facts.",
+    "Standardized arbitrary units do not imply unit total variance here; the supplied components imply measurement variance 5.",
+    "Finite-sample Pearson correlations will fluctuate around population values. The generator does not recenter, rescale, select, or reject samples to force agreement."
+  ],
+  "checks_actually_performed": [
+    "Analytically derived measurement variance 5, cross-visit covariance 3.2, and the stated correlation formulas.",
+    "Analytically checked positive definiteness: the stable covariance eigenvalues are 0.8 and 7.2; the chosen deviation covariance eigenvalues are 0.7 and 1.3.",
+    "Reviewed the source for independent-person sampling, independent visit deviations, unique integer identifiers, and task-contract column ordering.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

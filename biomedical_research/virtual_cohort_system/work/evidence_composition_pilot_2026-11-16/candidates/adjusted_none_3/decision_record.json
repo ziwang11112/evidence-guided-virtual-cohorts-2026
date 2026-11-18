@@ -1,0 +1,102 @@
+{
+  "structure": "Independent people follow a jointly Gaussian associational scenario. With independent standard-normal Z, U and V, set X=0.6Z+0.8U and Y=0.8Z+0.6(-0.5U+sqrt(0.75)V). This preserves the reported population marginal moments while supplying explicitly assumed cross-variable relationships. No causal interpretation is imposed.",
+  "parameter_provenance": [
+    {
+      "parameter": "means, ordered X,Y,Z",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means stipulated by record C."
+    },
+    {
+      "parameter": "variances, ordered X,Y,Z",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances stipulated by record C."
+    },
+    {
+      "parameter": "rho_xz",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario relationship; record C supplies no cross-moments."
+    },
+    {
+      "parameter": "rho_yz",
+      "value": 0.8,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario relationship; record C supplies no cross-moments."
+    },
+    {
+      "parameter": "partial_xy_given_z",
+      "value": -0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen Pearson correlation between the two population linear-adjustment residuals."
+    },
+    {
+      "parameter": "innovation_distribution",
+      "value": "independent standard normal across innovations and people",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "A convenient joint-distribution completion, not a reported population property."
+    },
+    {
+      "parameter": "marginal_xy",
+      "value": 0.24,
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Conditional on the scenario, 0.6*0.8+sqrt((1-0.6^2)*(1-0.8^2))*(-0.5)=0.24. This is not identified by C alone."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": -0.5,
+      "basis": "Population OLS residuals are 0.8U and 0.6(-0.5U+sqrt(0.75)V), whose Pearson correlation is -0.5. C alone does not determine this correlation."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "scenario",
+      "value": 0.24,
+      "basis": "The assumed joint relationships imply covariance and correlation 0.24 because both marginal variances are one. No X-Y covariance is reported."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z)=0.6 under this scenario. C fixes Var(Z), but not Cov(X,Z)."
+    }
+  ],
+  "limitations": [
+    "None of the three requested functionals is identified by record C alone; each point value depends on assumed cross-variable relationships.",
+    "Gaussian shape is a separate assumption. Once the covariance matrix is specified, these Pearson and OLS population functionals do not require Gaussianity.",
+    "Generated finite-sample means, variances, correlations and fitted slopes fluctuate around their population targets; no realized-sample moment correction is performed.",
+    "Record C alone also permits degenerate relationships with zero OLS residual variance. The chosen positive-definite scenario avoids this.",
+    "This is an artificial evidence-composition model, not biomedical validation or a causal model."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified zero population means and unit variances: Var(X)=0.36+0.64=1 and Var(Y)=0.64+0.36*(0.25+0.75)=1.",
+    "Analytically verified correlations Corr(X,Z)=0.6, Corr(Y,Z)=0.8 and Corr(X,Y)=0.24.",
+    "Analytically verified positive definiteness through the nonsingular independent-innovation construction; the correlation-matrix determinant is (1-0.6^2)*(1-0.8^2)*(1-(-0.5)^2)=0.1728.",
+    "Analytically verified that separate population OLS adjustments for an intercept and Z give the stated residual correlation and X-on-Z slope.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

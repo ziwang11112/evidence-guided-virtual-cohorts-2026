@@ -1,0 +1,9 @@
+# Bounded evidence-gap action prototype
+
+Date: 2026-11-05, America/Chicago. User authorized continuing after the quality attribution audit.
+
+Implement a small action planner extending the existing optional analysis_evidence v1 contract. Do not modify existing frozen candidates, controllers, source packets or experiments. Two fresh-context scientific authors read requests, admitted source evidence, model specifications and cached papers for C01/C02/E01/E02. They do not receive target results, prior diagnostic results or generated tables. This is procedural instruction, not OS-enforced LLM file isolation. Root knows prior results; the replay is development and cannot be called independent scientific confirmation.
+
+Each author maps the three intended primary analyses and a relevant declared diagnostic to source evidence and assumptions, then provides typed action cards. The policy validates references, use coverage, local evidence locations and action feasibility; it does not infer scientific semantics or certify source applicability. Actions distinguish local re-extraction, targeted retrieval, operator review, scenario review and limited use. The same policy is used for all four cases, with no case-specific scientific coefficients, signs, target statistics or quality thresholds.
+
+Run source-only read-only replay plus focused adversarial tests on invented fixtures. Old source acquisition remains closed; original budget use is retained. No new retrieval, patient/generated row reads, candidate execution, generation, target fitting, training, paid API, HPC or publication. New action proposals do not grant permission, reserve real budget or claim execution. Review implementation independently and record limitations and actual next scientific action. End this unit after working prototype, replay, review and decision.

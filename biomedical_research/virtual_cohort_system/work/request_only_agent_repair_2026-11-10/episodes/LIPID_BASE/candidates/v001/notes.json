@@ -1,0 +1,31 @@
+{
+  "notes": "Entirely fictional 3,000-person cohort, not recovered records and not an estimate of the excluded study's results. Exactly id, age, sex, bmi, total_cholesterol, hdl_cholesterol are returned, all complete. Lipids are mmol/L; do not convert the data columns to mg/dL. For analysis use OLS TC ~ intercept + BMI + age + F, OLS HDL ~ intercept + BMI + age + F; convert a per-BMI lipid coefficient using 38.67*5 to mg/dL per 5 kg/m^2. Residualize each lipid on intercept, age, F and BMI, then calculate Pearson correlation. These are associations, not causal effects.\n\nEvidence actually retrieved: (1) Physical activity energy expenditure and cardiometabolic health in three rural Kenyan populations (2019), doi:10.1002/ajhb.23199, PMC6435188 version 1, Table 1. Sex/ethnic-group means: BMI 20.0-22.5 kg/m^2 (SD 2.6-4.8), TC 3.6-4.0 mmol/L (SD 0.9-1.1), HDL 0.9-1.2 mmol/L (SD 0.3-0.4); Maasai women/men: BMI 22.5/21.0, TC 3.8/4.0, HDL 1.2/1.1. This supplies approximate rural distribution scales, not target measurements. (2) Dyslipidemias and cardiovascular risk scores in urban and rural populations in north-western Tanzania and southern Uganda (2019), doi:10.1371/journal.pone.0223189, PMC6897412, Tables 2 and 4 and Statistical analysis section. Rural TC/HDL means 3.85/1.01 in Tanzania and 4.05/1.16 in Uganda; municipality means 4.72/1.39 and 4.57/1.41. Adjusted LDL differences for underweight, overweight, obese versus normal BMI were -0.25,+0.23,+0.48 mmol/L; HDL differences +0.01,-0.06,-0.15. These are category-based, more extensively adjusted associations, NOT continuous age/sex-only TC effects. They inform modest increasing non-HDL and decreasing HDL mean functions; the chosen continuous slopes are a modeling extrapolation, not extracted coefficients.\n\nExplicit assumptions: 55% recorded F, 45% M; recorded sex is a binary analysis field, not an assertion about gender. Ages 18-80 follow a scaled Beta(1.3,2.8), mean about 37.7; no evidence establishes the target age distribution. Lifestyle labels are latent scenarios, NOT measured classifications or ancestry; weights 65/25/10 for active-rural, transitioning-rural, town-like are chosen, not inferred. Age, sex and lifestyle drawn independently; sex and lifestyle affect BMI; BMI is shifted-lognormal with mild age trend. Reference means at BMI22, age40, male, active-rural are HDL1.12 and non-HDL2.65. Lipid conditional means are log-linear in age, BMI, sex and lifestyle; female relative mean is 1.0725 for each component, deliberately regularized across heterogeneous external sex differences. Within-group means and SDs are approximate external-scale calibrations, not exact reproduction of an external cohort. Lifestyle raises both lipid components as suggested by residence contrasts, with smaller effects than full unadjusted urban-rural contrasts to avoid double-counting BMI differences.\n\nResidual dependence is weakly identified: no directly applicable age/sex/BMI-adjusted TC-HDL residual correlation was retrieved. The explicit assumption is independent lognormal HDL and non-HDL innovations, conditional on modeled variables; TC=HDL+non-HDL therefore has positive component-sharing covariance. Additional dependence comes from unobserved lifestyle. This is a structural scenario, not an evidence-estimated residual correlation. Conditional log-SDs 0.265 and 0.27 are chosen to match approximate external lipid dispersion. No individual smoking, alcohol, infection, treatment or fasting states are asserted; their variation is absorbed in component noise and lifestyle. Age bounded at80 and BMI shifted above12 are assumptions; there is no clinical lipid truncation, TC/HDL exclusion, row rejection or removal. TC exceeds HDL by component construction, not eligibility filtering. Gaussian innovations are bounded at +/-8 SD solely for numerical safety. No forcing of exact sample moments, slopes or correlations; they vary by seed. Main limitations are uncertain lifestyle mixture, transferability from different East African communities and years, extrapolation of categorical LDL findings to non-HDL, and unmeasured residual covariance. Use for synthetic-method demonstrations and sensitivity analyses, not substantive inference about actual people.",
+  "provenance": {
+    "calibration_type": "Hand-specified transparent generative scenario, externally anchored; no target fitting",
+    "excluded_study_data_used": false,
+    "reproducibility": "np.random.default_rng(seed); no IO; spec passed unchanged",
+    "sources": [
+      {
+        "doi": "10.1002/ajhb.23199",
+        "pmcid": "PMC6435188",
+        "retrieved_sections": [
+          "table-wrap_001"
+        ],
+        "use": "Rural adult BMI and lipid scale anchors; no individual records",
+        "version": 1
+      },
+      {
+        "doi": "10.1371/journal.pone.0223189",
+        "pmcid": "PMC6897412",
+        "retrieved_sections": [
+          "table-wrap_002",
+          "table-wrap_004",
+          "sec_013",
+          "sec_017"
+        ],
+        "use": "Residence contrasts, categorical anthropometric associations and adjustment limitations",
+        "version": 1
+      }
+    ]
+  }
+}

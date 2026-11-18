@@ -1,0 +1,417 @@
+{
+  "structure": "Sequential joint law with fixed parameters (one cohort, no parameter draws). (1) Sex is Bernoulli with P(F)=0.56. (2) Age is 18 + 72*Beta(1, 2.75), floored to completed years (support 18-89), independent of sex. (3) BMI given sex and age is lognormal, with a sex-specific geometric mean and log-SD and a small assumed log-linear age trend, truncated to [13, 50] kg/m^2 and rounded to 2 decimals. (4) TC and HDL in mmol/L each equal a conditional mean that is exactly linear in the requested design columns ((age-50)/10, I(sex=='F'), (bmi-25)/5) plus a mean-zero additive error. The two errors are shifted lognormals (bounded below, right-skewed), independent of covariates and coupled through a bivariate normal latent. The latent correlation is solved in code so that the Pearson correlation of the errors equals the stated residual correlation. Because the conditional means are exactly linear in the analysis design and the errors are independent of covariates, the requested OLS projections and residual correlation are closed-form functions of the model parameters. Source statistics (geometric means, quartiles, log-scale or scale-unresolved univariate slopes, Spearman correlations) only informed the parameter choices through explicit, unverified bridges; they are neither model parameters nor the requested estimands. The id prefix and width are non-scientific formatting.",
+  "parameter_provenance": [
+    {
+      "path": "/design",
+      "meaning": "Centering and scaling constants (age_center, age_scale, bmi_center, bmi_scale) for the design columns in which the mean coefficients are expressed; a reparameterisation only",
+      "conditioning_set": "none",
+      "scale": "raw",
+      "unit": "year; kg/m^2",
+      "classification": "reported",
+      "source_pointers": [
+        {
+          "pointer": "REQUESTED_ANALYSES_JSON.design_columns",
+          "locator": "task-supplied design columns 1, (age-50)/10, I(sex=='F'), (bmi-25)/5"
+        }
+      ],
+      "derivation": "Copied from the task design definition.",
+      "unverified_assumptions": []
+    },
+    {
+      "path": "/covariates/sex/p_female",
+      "meaning": "Marginal probability of recorded sex F",
+      "conditioning_set": "none",
+      "scale": "probability",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].contexts[*].reported_table_1_group_n",
+          "locator": "Table 1 group n: rural Malawi 4534 M / 5894 F; urban Malawi 3988 M / 7192 F; Uganda 2177 M / 2424 F"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].population.reported_sex_counts_tables",
+          "locator": "Tables: 846 men, 993 women (Methods prints 864 men; discrepancy preserved)"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.population_metadata.composition.sex_proportions",
+          "locator": "target sex proportions unspecified"
+        }
+      ],
+      "derivation": "Source female shares are about 0.53 to 0.64 after source-specific selection. 0.56 is a rounded central assumption, not a pooled estimate.",
+      "unverified_assumptions": [
+        "Target sex mix is unspecified; source survey participation patterns are assumed to transfer.",
+        "Sex is assumed independent of age (composition and dependence assumption)."
+      ]
+    },
+    {
+      "path": "/covariates/age",
+      "meaning": "Age law: min + (max-min)*Beta(beta_a, beta_b), floored to completed years when floor_to_completed_years is true (vector: min, max, beta_a, beta_b, floor_to_completed_years)",
+      "conditioning_set": "none (assumed independent of sex)",
+      "scale": "raw",
+      "unit": "year",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "TASK_JSON.columns[age].minimum and population_metadata.eligibility.minimum_age_inclusive",
+          "locator": "min 18 (investigator-selected); age_maximum null"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_statistics.rows[*__age__q1, *__age__median, *__age__q3]",
+          "locator": "Table 1; Age (years), median (IQR); six sex-by-site strata: Q1 22-30, median 28-43, Q3 37-56"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].unresolved_issues[source_quantile_convention_unreported]",
+          "locator": "quantile convention unreported"
+        }
+      ],
+      "derivation": "min=18 is the task bound. The unweighted average of the six Greiner strata quartiles is about 24.7 / 34.0 / 46.2. For Beta(1,b) on [18,90] the quantile is 18 + 72*(1-(1-p)^(1/b)); b=2.75 gives about 25.2 / 34.0 / 46.5 before flooring. max=90 and the Beta(1,b) shape are assumptions.",
+      "unverified_assumptions": [
+        "Target age distribution is unspecified; East African source age structure after source selection is assumed to transfer.",
+        "Equal weighting of the six strata and a generic quantile convention are assumed.",
+        "Upper support bound 90 and a monotone decreasing density from age 18 are distribution/tail assumptions.",
+        "Self-reported age is assumed recorded as completed years; age heaping and reporting error are deliberately omitted.",
+        "Agongo age summaries (restricted to 40-60) were not used for age shape."
+      ]
+    },
+    {
+      "path": "/covariates/bmi/geometric_mean_at_reference_age",
+      "meaning": "Median (geometric mean before truncation) of BMI at the reference age, by sex (components F, M)",
+      "conditioning_set": "sex; age fixed at /covariates/bmi/reference_age",
+      "scale": "log-scale location expressed as a geometric mean",
+      "unit": "kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_statistics.rows[*__bmi__geometric_mean]",
+          "locator": "Table 1; BMI (kg/m2) geometric mean: men 21.5 / 22.3 / 20.7; women 23.2 / 25.0 / 22.3 (rural Malawi / urban Malawi / Uganda)"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_men_bmi_mean_sd, agongo_women_bmi_mean_sd]",
+          "locator": "Table 1; mean and SD: men 20.87 (3.15), women 22.28 (3.85)"
+        }
+      ],
+      "derivation": "Agongo arithmetic means were bridged to approximate geometric means with mean*(1-CV^2/2): about 20.6 (men) and 21.9 (women). Central values M 21.2 and F 22.9 are a judgment weighting the rural strata more than urban Malawi; they are not a formal pooled estimate.",
+      "unverified_assumptions": [
+        "Target BMI distribution and site/lifestyle mixture are unspecified; transfer from Malawi, Uganda and Ghana cohorts is assumed.",
+        "The rural-leaning weighting is an author assumption.",
+        "Measured height/weight BMI is assumed comparable across studies."
+      ]
+    },
+    {
+      "path": "/covariates/bmi/log_sd",
+      "meaning": "Between-person SD of log BMI given sex and age (components F, M); individual dispersion, not estimation uncertainty",
+      "conditioning_set": "sex, age",
+      "scale": "natural log",
+      "unit": "log(kg/m^2)",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_men_bmi_mean_sd, agongo_women_bmi_mean_sd]",
+          "locator": "Table 1; mean and SD"
+        }
+      ],
+      "derivation": "Lognormal bridge sigma = sqrt(ln(1+CV^2)) gives about 0.150 (men) and 0.172 (women) in Agongo. These were inflated to 0.16 and 0.19 by assumption, to reflect a wider age range and mixed sites. Greiner confidence intervals were not converted to SDs.",
+      "unverified_assumptions": [
+        "Lognormal BMI shape.",
+        "The inflation factor is an assumption.",
+        "Agongo's published SD is taken as individual dispersion in an age 40-60 rural sample."
+      ]
+    },
+    {
+      "path": "/covariates/bmi/log_slope_per_decade_age",
+      "meaning": "Change in mean log BMI per 10 years of age, with /covariates/bmi/reference_age as the centering age for the geometric means",
+      "conditioning_set": "sex",
+      "scale": "natural log per decade",
+      "unit": "log(kg/m^2) per 10 years; reference_age in years",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.population_metadata.composition.joint_covariate_distribution",
+          "locator": "unspecified"
+        }
+      ],
+      "derivation": "No supplied statistic identifies the age-BMI dependence. A small positive value (about 1.5 percent per decade) was chosen so the dependence is explicit rather than silently zero. Reference age 37 approximates the model mean age.",
+      "unverified_assumptions": [
+        "Sign, magnitude and linearity are author assumptions with no supplied numerical support.",
+        "The same slope is used in both sexes.",
+        "No age-by-sex BMI interaction."
+      ]
+    },
+    {
+      "path": "/covariates/bmi/min, /covariates/bmi/max, /covariates/bmi/round_decimals",
+      "meaning": "Truncation bounds of the BMI law and the recording resolution",
+      "conditioning_set": "none",
+      "scale": "raw",
+      "unit": "kg/m^2",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "pointer": "TASK_JSON.columns[bmi].minimum and eligibility.strictly_positive",
+          "locator": "BMI must be > 0"
+        }
+      ],
+      "derivation": "Bounds 13 and 50 are roughly -3 and beyond +4 log-SDs from the sex-specific medians. They give a compact covariate support, which guarantees that the conditional lipid means exceed the error shifts.",
+      "unverified_assumptions": [
+        "Support/tail assumption: no BMI outside 13-50.",
+        "Two-decimal rounding is a presentation assumption applied before the lipid means are computed."
+      ]
+    },
+    {
+      "path": "/lipids/total_cholesterol/mean_coefficients/bmi_per_5",
+      "meaning": "Change in conditional mean TC per 5 kg/m^2 of BMI, holding age and sex fixed (model parameter; equals the OLS projection coefficient under this model)",
+      "conditioning_set": "age, sex",
+      "scale": "raw",
+      "unit": "mmol/L per 5 kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].reported_regressions[agongo_men_logtc_bmi_univ, agongo_women_logtc_bmi_univ]",
+          "locator": "Table 5, Men and Women, BMI, Univariate models: 0.013 (95% CI 0.006 to 0.02) log(TC) per kg/m^2, log base unresolved"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_pooled_total_cholesterol_mean_sd, agongo_pooled_bmi_mean_sd]",
+          "locator": "Results opening paragraph (TC 3.23, SD 0.92); Table 1 (BMI SD 3.61)"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[obirikorang_2015_ashanti].statistics[obirikorang_rural_bmi_tc, obirikorang_urban_bmi_tc]",
+          "locator": "Table 7 Spearman 0.212 (rural), 0.293 (urban)"
+        }
+      ],
+      "derivation": "Bridge 1: assuming natural log, 0.013*3.23 is about 0.042 mmol/L per kg/m^2; if base 10, about 0.097. Bridge 2: treating Spearman as Pearson and multiplying by the Agongo SD ratio 0.92/3.61 gives about 0.054 to 0.075. Chosen 0.05 per kg/m^2, i.e. 0.25 per 5 kg/m^2. Rough plausible range is 0.2 to 0.5 mmol/L per 5 kg/m^2.",
+      "unverified_assumptions": [
+        "Natural-log interpretation of the Agongo coefficient.",
+        "Univariate within-sex slopes in ages 40-60 are taken as close to the age- and sex-adjusted slope.",
+        "Spearman-to-Pearson bridge with SDs borrowed from a different cohort.",
+        "Transfer from fasting laboratory serum assays to CardioChek Plus venous EDTA with unknown fasting status.",
+        "Same slope in both sexes and at all ages; linearity in BMI."
+      ]
+    },
+    {
+      "path": "/lipids/hdl_cholesterol/mean_coefficients/bmi_per_5",
+      "meaning": "Change in conditional mean HDL per 5 kg/m^2 of BMI, holding age and sex fixed",
+      "conditioning_set": "age, sex",
+      "scale": "raw",
+      "unit": "mmol/L per 5 kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].reported_regressions[agongo_men_loghdl_bmi_univ]",
+          "locator": "Table 4, Men, BMI, Univariate models: -0.007 (95% CI -0.015 to 0.001) log(HDL) per kg/m^2"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_regressions_context_only.rows[greiner_table3_context_01..06]",
+          "locator": "DC2 Supplementary Table 3: HDL on BMI, male -0.007 to -0.006, female -0.004; scale unresolved"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[obirikorang_2015_ashanti].statistics[obirikorang_rural_bmi_hdl, obirikorang_urban_bmi_hdl]",
+          "locator": "Table 7 Spearman -0.10 (rural), -0.04 (urban)"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_pooled_hdl_cholesterol_mean_sd, agongo_pooled_bmi_mean_sd]",
+          "locator": "HDL 1.14 (SD 0.38); BMI SD 3.61"
+        }
+      ],
+      "derivation": "Agongo natural-log bridge: -0.007*1.14 is about -0.008 mmol/L per kg/m^2. Greiner, if on a raw or log HDL scale with HDL near 1 mmol/L: about -0.004 to -0.007. Spearman bridge with Agongo SDs: about -0.004 to -0.011. Chosen -0.006 per kg/m^2, i.e. -0.03 per 5 kg/m^2. Rough plausible range is -0.05 to 0.0.",
+      "unverified_assumptions": [
+        "Scale assumptions for the Greiner coefficients (unresolved in source) and natural log for Agongo.",
+        "Greiner adjustments for smoking and alcohol are not reproducible in the target; those rows are used only as magnitude context.",
+        "Sex-pooled common slope; linearity.",
+        "Assay and fasting transfer to CardioChek Plus."
+      ]
+    },
+    {
+      "path": "/lipids/total_cholesterol/mean_coefficients/intercept, /lipids/total_cholesterol/mean_coefficients/female",
+      "meaning": "Conditional mean TC for a male aged 50 with BMI 25 (intercept), and the female-minus-male difference at fixed age and BMI",
+      "conditioning_set": "age, sex, bmi",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_statistics.rows[*__total_cholesterol__geometric_mean]",
+          "locator": "Table 2 geometric means: men 3.6 / 3.8 / 3.3; women 3.9 / 3.8 / 3.7"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_pooled_total_cholesterol_mean_sd]",
+          "locator": "Results opening paragraph: 3.23 (SD 0.92)"
+        }
+      ],
+      "derivation": "Intercept: the target cohort arithmetic mean was set near 3.6 mmol/L, a judgment between the Greiner geometric means (inflated by a few percent to arithmetic means) and the Agongo mean. Back-solving with model covariate means (age about 37, 56 percent F, BMI about 22.5) gives 3.75. Female: the unadjusted Greiner sex gaps average about 0.23; removing the part carried by the modelled sex difference in BMI (about 1.8 kg/m^2 times 0.05) leaves about 0.15.",
+      "unverified_assumptions": [
+        "Geometric-to-arithmetic bridge assumes approximate lognormality.",
+        "Level transfer from laboratory assays to CardioChek Plus without a validated bridge.",
+        "Sex difference transported from source cohorts with different exclusions (pregnancy, HIV, diabetes)."
+      ]
+    },
+    {
+      "path": "/lipids/hdl_cholesterol/mean_coefficients/intercept, /lipids/hdl_cholesterol/mean_coefficients/female",
+      "meaning": "Conditional mean HDL for a male aged 50 with BMI 25 (intercept), and the female-minus-male difference at fixed age and BMI",
+      "conditioning_set": "age, sex, bmi",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_statistics.rows[*__hdl_cholesterol__geometric_mean]",
+          "locator": "Table 2 geometric means: men 1.05 / 1.10 / 0.90; women 1.10 / 1.15 / 0.99 (urban women CI quarantined, point estimate only)"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_pooled_hdl_cholesterol_mean_sd]",
+          "locator": "Results opening paragraph: 1.14 (SD 0.38)"
+        }
+      ],
+      "derivation": "Intercept: the cohort arithmetic mean was targeted near 1.10 mmol/L; back-solving with model covariate means gives 1.05. Female: the unadjusted geometric-mean sex gaps average about 0.06; adding back the BMI-carried part gives about 0.07.",
+      "unverified_assumptions": [
+        "Same bridges and transfer assumptions as for TC.",
+        "No sex-by-BMI or sex-by-age interaction."
+      ]
+    },
+    {
+      "path": "/lipids/total_cholesterol/mean_coefficients/age_per_decade, /lipids/hdl_cholesterol/mean_coefficients/age_per_decade",
+      "meaning": "Change in conditional mean lipid per 10 years of age at fixed sex and BMI",
+      "conditioning_set": "sex, bmi",
+      "scale": "raw",
+      "unit": "mmol/L per 10 years",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.population_metadata.composition",
+          "locator": "no age-lipid relationship supplied for target or sources"
+        }
+      ],
+      "derivation": "The supplied evidence does not identify these. TC is set to a modest positive value, 0.06, by author judgment. HDL is set to 0.0 as a neutral placeholder because neither sign nor magnitude is supported. Neither is an inference from data. The requested BMI slopes and residual correlation do not depend on them under this linear model.",
+      "unverified_assumptions": [
+        "Entirely assumed; linear in age.",
+        "The HDL value of zero is a placeholder, not a claim of no association."
+      ]
+    },
+    {
+      "path": "/lipids/total_cholesterol/error/residual_sd, /lipids/hdl_cholesterol/error/residual_sd",
+      "meaning": "SD of the additive lipid error given age, sex and BMI (individual dispersion)",
+      "conditioning_set": "age, sex, bmi",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[agongo_2018_navrongo].marginal_statistics[agongo_pooled_total_cholesterol_mean_sd, agongo_pooled_hdl_cholesterol_mean_sd]",
+          "locator": "Results opening paragraph: TC SD 0.92; HDL SD 0.38"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_statistics.rows[*__hdl_cholesterol__low_prevalence, *__hdl_cholesterol__geometric_mean]",
+          "locator": "Table 2 low-HDL percentages with sex-specific thresholds 1.03 / 1.29 mmol/L"
+        }
+      ],
+      "derivation": "TC: target marginal SD about 0.90 (near Agongo 0.92); subtracting the modelled covariate-explained variance (about 0.065) gives about 0.86. HDL: a lognormal threshold bridge on the Greiner low-HDL prevalences gives log-SDs of about 0.23 to 0.54, and the Agongo CV is about 0.33. A marginal SD of about 0.33 on a mean of 1.10 was chosen; explained variance is negligible, so the residual SD is 0.33. No confidence interval was converted to an SD.",
+      "unverified_assumptions": [
+        "Homoscedastic errors independent of covariates.",
+        "Source dispersion (fasting laboratory assays) transfers to point-of-care measurement; extra device and non-fasting variability is not separately modelled.",
+        "The threshold bridge relies on rounded geometric means and lognormality."
+      ]
+    },
+    {
+      "path": "/lipids/total_cholesterol/error/shift, /lipids/hdl_cholesterol/error/shift",
+      "meaning": "Shape parameter c of the shifted-lognormal error e = c*(exp(sigma*z - sigma^2/2) - 1), with sigma = sqrt(ln(1 + (residual_sd/c)^2)); the error is bounded below by -c",
+      "conditioning_set": "none",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "pointer": "REQUESTED_ANALYSES_JSON.eligibility.strictly_positive",
+          "locator": "TC and HDL must be > 0"
+        }
+      ],
+      "derivation": "Chosen so that the minimum conditional mean on the covariate support exceeds c. TC: 3.75 - 0.06*3.2 - 0.25*2.4 = 2.958 > 2.6. HDL: 1.05 - 0.03*5 = 0.90 > 0.8. This guarantees positivity without truncation and gives moderate right skew (implied sigma about 0.32 for TC and 0.40 for HDL).",
+      "unverified_assumptions": [
+        "Distribution/tail assumption: right-skewed additive errors with fixed lower bound; no source shape information beyond means, SDs and geometric means.",
+        "Left-tail floors (TC above about 0.36, HDL above about 0.10 mmol/L) are artefacts of the construction."
+      ]
+    },
+    {
+      "path": "/lipids/residual_pearson_correlation",
+      "meaning": "Pearson correlation of the TC and HDL additive errors (conditional on age, sex, BMI). The code solves the latent normal correlation as ln(1 + rho*cvT*cvH)/(sigmaT*sigmaH), with cv = residual_sd/shift",
+      "conditioning_set": "age, sex, bmi",
+      "scale": "Pearson correlation of raw-scale residuals",
+      "unit": "1",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[obirikorang_2015_ashanti].statistics[obirikorang_rural_tc_hdl, obirikorang_urban_tc_hdl]",
+          "locator": "Table 7 Spearman 0.106 (rural), 0.171 (urban), unadjusted"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_regressions_context_only.rows[greiner_table3_context_07..12]",
+          "locator": "DC2 Supplementary Table 3: HDL on non-HDL cholesterol 0.041 to 0.046, scale unresolved"
+        },
+        {
+          "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].derived_variable_definition.non_hdl_cholesterol",
+          "locator": "non-HDL = TC - HDL per row"
+        }
+      ],
+      "derivation": "The sources conflict. Obirikorang's unadjusted Spearman values are 0.11 to 0.17. If the Greiner coefficient is read as raw mmol/L HDL per mmol/L non-HDL (weakly positive) and TC = HDL + non-HDL, then with HDL SD about 0.33 and an assumed non-HDL SD about 0.8 the implied TC-HDL Pearson correlation is about 0.4 to 0.47. Chosen 0.35, tilted toward the larger East African source and the part-whole argument. Adjustment for age, sex and BMI is assumed to change the correlation little. Rough plausible range is 0.1 to 0.5.",
+      "unverified_assumptions": [
+        "Raw-scale reading of the Greiner coefficient and the assumed non-HDL SD are not supplied facts.",
+        "Spearman, Pearson and residual correlations are treated as informally comparable.",
+        "Independent device errors in point-of-care TC and HDL could attenuate the correlation; not modelled.",
+        "Correlation is constant across covariates.",
+        "Rows from the same source are dependent evidence and were not treated as independent studies."
+      ]
+    },
+    {
+      "path": "/lipids/positive_floor",
+      "meaning": "Numerical safety floor applied to generated lipids",
+      "conditioning_set": "none",
+      "scale": "raw",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "pointer": "TASK_JSON.columns[total_cholesterol, hdl_cholesterol].minimum",
+          "locator": "minimum 0, strictly positive for eligibility"
+        }
+      ],
+      "derivation": "Inactive by construction under the supplied settings: generated TC exceeds about 0.36 and HDL exceeds about 0.10 mmol/L analytically. It is retained only as a guard if the settings are edited.",
+      "unverified_assumptions": [
+        "If settings were changed so the floor became active, the closed-form estimands would no longer be exact."
+      ]
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "K02-HDL-BMI",
+      "model_implied_population_value": -1.1601,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "E[HDL | age, sex, bmi] is exactly linear in the analysis design, with mean-zero error independent of covariates and a non-singular design. The population OLS BMI coefficient times 5 therefore equals /lipids/hdl_cholesterol/mean_coefficients/bmi_per_5 = -0.03 mmol/L per 5 kg/m^2. Multiplying by the supplied numerical factor 38.67 gives -1.1601. All generated rows are eligible and no lipid truncation is active. This is a model-implied value under assumed parameters, not an estimate of the Turkana quantity."
+    },
+    {
+      "analysis_id": "K02-TC-BMI",
+      "model_implied_population_value": 9.6675,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "Same argument as for HDL: the population OLS BMI coefficient times 5 equals /lipids/total_cholesterol/mean_coefficients/bmi_per_5 = 0.25 mmol/L per 5 kg/m^2, and 0.25 * 38.67 = 9.6675. This is a model-implied value under assumed parameters, not an estimate of the Turkana quantity."
+    },
+    {
+      "analysis_id": "K02-LIPID-RESIDUAL",
+      "model_implied_population_value": 0.35,
+      "unit": "1",
+      "derivation": "The population OLS residuals equal the additive errors, because the conditional means are exactly linear in the design. For shifted lognormals built on a bivariate normal latent with correlation r, the Pearson correlation is (exp(r*sigmaT*sigmaH) - 1)/(cvT*cvH). The code solves r (about 0.365) so that this equals /lipids/residual_pearson_correlation = 0.35. The correlation is unit-free, so the mg/dL conversion does not change it."
+    }
+  ],
+  "limitations": [
+    "No Turkana data, composition or outcome statistics were used. Age, sex, BMI and lipid levels are transported from Malawi, Uganda and Ghana summaries by assumption; the Turkana/Laikipia site and lifestyle mixture is unspecified and not modelled.",
+    "The three requested values are consequences of assumed parameters. The bridges behind them (unresolved log base, unresolved Greiner regression scale, Spearman-to-Pearson, univariate-to-adjusted) are unverified. Rough plausible ranges are about 8 to 19 mg/dL per 5 kg/m^2 for TC, about -2 to 0 for HDL, and about 0.1 to 0.5 for the residual correlation.",
+    "Parameter uncertainty is not propagated into the rows: one fixed-parameter cohort is generated. Source confidence intervals were treated as estimation uncertainty and never as individual dispersion.",
+    "Source lipids are mostly fasting laboratory serum assays. The target is CardioChek Plus on venous EDTA blood with fasting not established. No assay bridge, device resolution, reportable-range censoring or measurement-error component is modelled.",
+    "Source selections (exclusion of pregnancy, HIV, diabetes, prior disease; age 40-60 in Agongo) differ from the target, which applies no such exclusions. No selection correction was attempted.",
+    "Structural simplifications: linear homoscedastic conditional means, no interactions, sex independent of age, an assumed age-BMI trend, assumed age effects on lipids (the HDL age coefficient of zero is a placeholder), bounded age (18-89) and BMI (13-50) support, and a parametric shifted-lognormal error shape.",
+    "TC >= HDL is not enforced, consistent with the task's no-inferred-exclusions list; non-HDL cholesterol was not targeted.",
+    "Curator extractions were taken as supplied and not re-authenticated. Internal source discrepancies (Agongo men count, Greiner table denominators, quarantined CI) were preserved and not used for weighting.",
+    "Finite-sample OLS and correlation results from a 3000-row draw will differ from the model-implied values by sampling variability."
+  ],
+  "checks_actually_performed": [
+    "Hand algebra only, during authoring: the minimum conditional lipid means on the covariate support exceed the error shifts, so the positive floor is inactive.",
+    "Hand algebra only: Beta(1, 2.75) quartiles on [18, 90]; feasibility of the latent correlation (about 0.365, within [-1, 1]); unit conversions 0.25*38.67 and -0.03*38.67.",
+    "No code was executed, no simulation was run and no data were examined."
+  ]
+}

@@ -22,7 +22,7 @@ import statsmodels.api as sm
 
 
 PROJECT = Path(__file__).resolve().parents[1]
-F2 = PROJECT / "reports" / "chns_admission_2026-11-01" / "f2"
+F2 = PROJECT / "work" / "chns_admission_2026-11-01" / "f2"
 MODULE_PATH = F2 / "evaluation" / "chns_f2_evaluation.py"
 
 

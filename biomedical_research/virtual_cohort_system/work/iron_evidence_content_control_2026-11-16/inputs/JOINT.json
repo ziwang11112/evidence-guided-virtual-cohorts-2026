@@ -1,0 +1,145 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "requested_analyses": [
+    {
+      "id": "odds_ratio",
+      "question": "Crude odds ratio for Hb <12 g/dL among raw ferritin <15 ug/L versus ferritin >=15 ug/L; do not adjust for other variables.",
+      "operator": "For cells a=both low,b=Hb low only,c=ferritin low only,d=neither: (a*d)/(b*c). If any cell is zero, report not estimable with no continuity correction."
+    },
+    {
+      "id": "joint_prevalence",
+      "question": "What fraction has both Hb <12 g/dL and raw ferritin <15 ug/L?",
+      "operator": "a/n on exactly the same rows."
+    },
+    {
+      "id": "spearman",
+      "question": "How strongly do the continuous Hb and raw ferritin measurements rank together?",
+      "operator": "Spearman correlation with average ranks for ties on the same rows; constant ranks are not estimable."
+    }
+  ],
+  "approved_source_evidence": {
+    "context": {
+      "source_id": "ZHU2010",
+      "doi": "10.1024/0300-9831/a000014",
+      "title": "Iron, Folate, and B12 Deficiencies and their Associations with Anemia among Women of Childbearing Age in a Rural Area in Northern China",
+      "population": "Xianghe County, China, June 2004; 1671 nonpregnant/nonlactating parous women 2–4 years postpartum using IUD contraception. Chronic disease, prescription medications and recent multivitamin use excluded as specified in Methods.",
+      "n": 1671,
+      "overlap": "Tables I and IV describe the same women, not independent samples. Source study is not the NHANES target.",
+      "measurement": "Duplicate fasting venous HemoCue Hb; raw EDTA plasma ferritin by Randox immunoturbidimetry. Hb g/L divided by 10 gives g/dL. Ferritin ug/L is the admitted interpretation from the explicit Table I cutoff and Tables III/IV.",
+      "thresholds": {
+        "hb_low": "Hb <120 g/L (equivalently <12 g/dL)",
+        "ferritin_low": "raw ferritin <15 ug/L"
+      },
+      "caveats": [
+        "Source/target population, assay, parity, postpartum and contraceptive selection differ; no transfer function is identified.",
+        "Table I Hb location is inconsistently labelled mean/geometric mean; its numerical value is omitted. Ferritin header and one Methods cutoff contain unit-printing inconsistencies; admitted units follow explicit threshold/table labels.",
+        "Broad printed concentration intervals have unclear construction and are omitted; do not treat them as SD or SE.",
+        "Source sampling/weighting details do not identify target weights or target conditional relationships. Model and transport uncertainty are not sampling variation.",
+        "Only selected source fields are provided in this controlled experiment. Omitted relationships are unknown, not zero or independent. No continuous rank coefficient is supplied."
+      ]
+    },
+    "marginal_statistics": [
+      {
+        "id": "FERRITIN_GM",
+        "variable": "ferritin_ug_l",
+        "statistic": "geometric mean",
+        "value": 17.4,
+        "unit": "ug/L",
+        "n": 1671,
+        "locator": "Table I, PDF page 4",
+        "status": "REPORTED",
+        "uncertainty": "not supplied in this payload; no SD inferred"
+      },
+      {
+        "id": "HB_LOW",
+        "variable": "hb_g_dl",
+        "statistic": "count below strict cutoff",
+        "count": 258,
+        "denominator": 1671,
+        "threshold": 12,
+        "unit": "g/dL",
+        "locator": "Table I, PDF page 4",
+        "status": "REPORTED"
+      },
+      {
+        "id": "FERRITIN_LOW",
+        "variable": "ferritin_ug_l",
+        "statistic": "count below strict cutoff",
+        "count": 504,
+        "denominator": 1671,
+        "threshold": 15,
+        "unit": "ug/L",
+        "locator": "Table I, PDF page 4",
+        "status": "REPORTED"
+      }
+    ],
+    "joint_statistics": [
+      {
+        "id": "PAIRED_THRESHOLD_COUNTS",
+        "statistic": "two-way contingency counts; no covariate adjustment",
+        "cells": {
+          "both_low": 173,
+          "only_hb_low": 85,
+          "only_ferritin_low": 331,
+          "neither_low": 1082
+        },
+        "n": 1671,
+        "cutoffs": {
+          "hb_g_dl": 12,
+          "ferritin_ug_l": 15
+        },
+        "inequality": "strict less-than; equality belongs to upper group",
+        "status": "DERIVED_FROM_REPORTED_COUNTS",
+        "derivation": "Sum the eight mutually exclusive Table IV rows over folate and B12 categories, retaining ferritin category and Hb anemia columns.",
+        "locator": "Table IV, PDF page 7",
+        "uncertainty": "Exact displayed sample counts; no target or transport interval supplied."
+      }
+    ]
+  }
+}

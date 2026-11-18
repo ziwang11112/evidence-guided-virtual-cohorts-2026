@@ -1,0 +1,1466 @@
+{
+  "schema_version": 1,
+  "version": "scientific_check_revision_v1",
+  "status": "prepared_pending_independent_review",
+  "created_utc": "2026-11-11T12:56:36.564300+00:00",
+  "model": {
+    "id": "gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "service_tier": "default",
+    "input_rate": 2.0,
+    "output_rate": 10.0,
+    "cached_rate": 0.1,
+    "cache_write_rate": 2.5,
+    "long_context_threshold_input_tokens": 272000,
+    "long_context_input_multiplier": 2.0,
+    "long_context_output_multiplier": 1.5,
+    "cache_write_duration": "default_30_minutes"
+  },
+  "limits": {
+    "max_calls": 24,
+    "max_output_tokens": 16384,
+    "max_input_bytes": 750000,
+    "episode_usd_cap": 2.0,
+    "total_usd_cap": 48.0,
+    "max_actions": 24,
+    "source_queries": 8,
+    "source_downloads": 6,
+    "max_queries": 8,
+    "max_downloads": 6,
+    "max_executions": 3,
+    "max_runs": 3,
+    "max_candidates": 3,
+    "diagnostic_seed": 53001,
+    "page_chars": 10000,
+    "max_response_bytes": 16777216,
+    "timeout_seconds": 60,
+    "memory_mb": 1536,
+    "output_bytes": 20000000,
+    "log_bytes": 50000
+  },
+  "episodes": [
+    {
+      "episode_id": "R01_GENERIC",
+      "pair_id": "R01",
+      "case_id": "PNS",
+      "arm": "generic",
+      "block": 1,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R01/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R01_STRUCTURED",
+      "pair_id": "R01",
+      "case_id": "PNS",
+      "arm": "structured",
+      "block": 1,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R01/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R02_GENERIC",
+      "pair_id": "R02",
+      "case_id": "lipids",
+      "arm": "generic",
+      "block": 1,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R02/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R02_STRUCTURED",
+      "pair_id": "R02",
+      "case_id": "lipids",
+      "arm": "structured",
+      "block": 1,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R02/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R03_GENERIC",
+      "pair_id": "R03",
+      "case_id": "PNS",
+      "arm": "generic",
+      "block": 2,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R03/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R03_STRUCTURED",
+      "pair_id": "R03",
+      "case_id": "PNS",
+      "arm": "structured",
+      "block": 2,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R03/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R04_GENERIC",
+      "pair_id": "R04",
+      "case_id": "lipids",
+      "arm": "generic",
+      "block": 2,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R04/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R04_STRUCTURED",
+      "pair_id": "R04",
+      "case_id": "lipids",
+      "arm": "structured",
+      "block": 2,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R04/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R05_GENERIC",
+      "pair_id": "R05",
+      "case_id": "PNS",
+      "arm": "generic",
+      "block": 3,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R05/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R05_STRUCTURED",
+      "pair_id": "R05",
+      "case_id": "PNS",
+      "arm": "structured",
+      "block": 3,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R05/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R06_GENERIC",
+      "pair_id": "R06",
+      "case_id": "lipids",
+      "arm": "generic",
+      "block": 3,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R06/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R06_STRUCTURED",
+      "pair_id": "R06",
+      "case_id": "lipids",
+      "arm": "structured",
+      "block": 3,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R06/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R07_GENERIC",
+      "pair_id": "R07",
+      "case_id": "PNS",
+      "arm": "generic",
+      "block": 4,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R07/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R07_STRUCTURED",
+      "pair_id": "R07",
+      "case_id": "PNS",
+      "arm": "structured",
+      "block": 4,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R07/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R08_GENERIC",
+      "pair_id": "R08",
+      "case_id": "lipids",
+      "arm": "generic",
+      "block": 4,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R08/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R08_STRUCTURED",
+      "pair_id": "R08",
+      "case_id": "lipids",
+      "arm": "structured",
+      "block": 4,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R08/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R09_GENERIC",
+      "pair_id": "R09",
+      "case_id": "PNS",
+      "arm": "generic",
+      "block": 5,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R09/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R09_STRUCTURED",
+      "pair_id": "R09",
+      "case_id": "PNS",
+      "arm": "structured",
+      "block": 5,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R09/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R10_GENERIC",
+      "pair_id": "R10",
+      "case_id": "lipids",
+      "arm": "generic",
+      "block": 5,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R10/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R10_STRUCTURED",
+      "pair_id": "R10",
+      "case_id": "lipids",
+      "arm": "structured",
+      "block": 5,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R10/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R11_GENERIC",
+      "pair_id": "R11",
+      "case_id": "PNS",
+      "arm": "generic",
+      "block": 6,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R11/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R11_STRUCTURED",
+      "pair_id": "R11",
+      "case_id": "PNS",
+      "arm": "structured",
+      "block": 6,
+      "task_path": "tasks/PNS.json",
+      "request_path": "requests/PNS.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R11/package.json",
+      "requested_analysis_ids": [
+        "bmi_sbp",
+        "bmi_dbp",
+        "residual_correlation"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "bmi_sbp",
+          "variables": [
+            "bmi",
+            "sbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "bmi_dbp",
+          "variables": [
+            "bmi",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mmHg per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "residual_correlation",
+          "variables": [
+            "sbp",
+            "dbp"
+          ],
+          "adjustment": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R12_GENERIC",
+      "pair_id": "R12",
+      "case_id": "lipids",
+      "arm": "generic",
+      "block": 6,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/generic.txt",
+      "imported_package_path": "imports/R12/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    },
+    {
+      "episode_id": "R12_STRUCTURED",
+      "pair_id": "R12",
+      "case_id": "lipids",
+      "arm": "structured",
+      "block": 6,
+      "task_path": "tasks/LIPID.json",
+      "request_path": "requests/LIPID.txt",
+      "policy_path": "policies/structured.txt",
+      "imported_package_path": "imports/R12/package.json",
+      "requested_analysis_ids": [
+        "K02-TC-BMI",
+        "K02-HDL-BMI",
+        "K02-LIPID-RESIDUAL"
+      ],
+      "analysis_requirements": [
+        {
+          "analysis_id": "K02-TC-BMI",
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-HDL-BMI",
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex"
+          ],
+          "operator": "ols_slope",
+          "output_unit": "mg/dL per 5 kg/m^2"
+        },
+        {
+          "analysis_id": "K02-LIPID-RESIDUAL",
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "adjustment": [
+            "age",
+            "sex",
+            "bmi"
+          ],
+          "operator": "residual_pearson",
+          "output_unit": "dimensionless"
+        }
+      ]
+    }
+  ],
+  "common_instructions_path": "policies/common.txt",
+  "evaluation_seeds": [
+    54001,
+    54003,
+    54007
+  ],
+  "design": "All12 frozen starting laws, paired generic versus structured review; developmental correction pilot",
+  "max_concurrent_episodes": 2,
+  "max_final_tables": 72,
+  "final_rows_per_table": 3000,
+  "automatic_http_retries": 0,
+  "source_scope": "Europe PMC search and retrievable PMC open full texts and embedded tables; common source-exclusion policy; not unrestricted web",
+  "reference_role": "Previously exposed references; no target feedback to review Agents",
+  "no_new_patient_access": true,
+  "no_new_target_fits": true,
+  "no_initial_evidence": false,
+  "n_blocks": 6,
+  "block_size": 4,
+  "starting_laws": 12,
+  "review_arms": [
+    "generic",
+    "structured"
+  ],
+  "source_unit": "request_only_repeatability_2026-11-11",
+  "initial_final_tables": "Evaluator-only pinned original36tables; not imported to Agent",
+  "construction_gate": "All24 terminal before final sampling/clinical comparison; operational gate afterblock1",
+  "experiment_scope": "Revision mechanism, not a replacement of the request-only end-to-end experiment",
+  "tariff_basis": "Same-day official verification inherited without rate or model substitution",
+  "scientific_parameters_authored_by": "API review Agent only; root supplies no numeric target relationships",
+  "analysis_requirements_path": "analysis_requirements.json",
+  "task_metadata_change": "Only budget fields:8queries6downloads3revisions;scientifictaskfieldsunchanged"
+}

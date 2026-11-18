@@ -1,25 +1,66 @@
 # Manuscript
 
-**Methods draft [v0.27](DRAFT_v0_27.md), 9 November 2026.**
+## Current KDD working manuscript v0.34 — 18 November 2026
 
-[Reading PDF](methods_draft_v27_2026-11-09/paper.pdf) · [Overleaf ZIP](methods_draft_v27_2026-11-09/overleaf_v27.zip) · [Editable manuscript](DRAFT_v0_27.md) · [Build QA](methods_draft_v27_2026-11-09/BUILD_QA.json) · [Independent editorial review](../reports/manuscript_revision_v27_2026-11-09/INDEPENDENT_REVIEW.md)
+[Reading PDF](kdd_draft_v34_2026-11-18/paper.pdf) · [Editable manuscript](DRAFT_v0_34.md) · [Overleaf ZIP](kdd_draft_v34_2026-11-18/overleaf_v34.zip) · [Numerical and build audit](../work/manuscript_integration_v34_2026-11-18/QA.json).
 
-The paper leads with complete-cohort analysis results, followed by the relationship-evidence contrast and additional biomedical uses. v0.27 clarifies the host-reviewed authoring procedure, distinguishes executable analyses and point agreement from adequate inference, and documents reference definitions and reproduction limits. Full unfavorable outcomes, comparator asymmetries and reference exposure remain visible. [Response to the v0.26 review](../reports/manuscript_revision_v27_2026-11-09/REVIEW_RESPONSE.md).
+The first five pages connect original-paper interpretation and model authorship to results from the same scientific estimators. Figure 2 reports all six original-paper primary analyses. Figure 3 places all nine lifestyle contrasts on their matched real–real discrepancy scale. Table 1 retains the six primary comparisons from the earlier joint-evidence controls. The supplement begins on page 6. LLMSynthor appears in related work and the references. Existing files and results for the two experimental rounds remain in their respective frozen units.
 
-| Main figure | What it establishes |
-|---|---|
-| 1. Scientific Agent workflow | The author chooses a model; tools execute and inspect it; the final data go to analysis. |
-| 2. One concrete construction | Iron evidence becomes paired hemoglobin/ferritin records with explicit assumptions. |
-| 3. Complete-cohort analytical utility | All six requested glycemia analyses from four authors and twelve tables, including magnitude mismatches. |
-| 4. Relationship evidence | Five of six information contrasts improve; all statistical comparator results remain. |
-| 5. Iron-status analyses | Threshold and continuous uses differ on the same records. |
-| 6. Glycemia and lipids | Complete cross-task results and unresolved joint relationships. |
+## Previous reading edition: v0.33 — 17 November 2026
 
-The retained [v0.26 claim-to-figure map](../reports/manuscript_focus_v26_2026-11-09/CLAIM_FIGURE_MAP.md) and [method coverage](../reports/manuscript_focus_v26_2026-11-09/METHOD_COVERAGE.md) distinguish the common procedure from the controllers actually tested. Historical synthetic-training utility is in S14; later adaptive/source-context capabilities are in S15. v0.27 adds reference definitions in S16/Table S9 and authoring/reproduction conditions in S17/Table S10, with a separate [reproducibility guide](../reports/manuscript_revision_v27_2026-11-09/REPRODUCIBILITY_GUIDE.md). These records do not retroactively make historical studies tests of one newest release.
+[Reading PDF](methods_draft_v33_2026-11-17/paper.pdf) · [Editable text](DRAFT_v0_33.md) · [Overleaf ZIP](methods_draft_v33_2026-11-17/overleaf_v33.zip) · [Integration and audit](../work/manuscript_integration_v33_2026-11-17/RESULTS.md).
 
-The PDF has no imposed page limit: 16 main pages plus references and supplementary results, 42 total. [Editorial scope checks](../reports/manuscript_revision_v27_2026-11-09/EDITORIAL_SCOPE_QA.json) confirm preservation of all 11 figures and 11 prior table blocks; four new tables document method, use, reference and reproduction conditions. No new clinical experiment was conducted or frozen model retuned. The independent editorial and claim-scope review passed with no outstanding material correction; it is not a publication-readiness judgment. Author details, biomedical applicability review and submission-specific requirements remain pending.
+**From Fragmented Evidence to Analyzable Biomedical Cohorts with Scientific Agents.** The 19-page edition integrates both new content-control experiments with the lifestyle scientific-use example and controlled composition study. Five main figures and one supplement figure show actual Agent choices and complete scientific profiles. PNS residual-correlation discrepancy falls 78.6% and iron absolute log-OR discrepancy 46.8% versus marginal summaries; other analyses include unchanged and worse results. These are exposed developmental references, not new target confirmations.
+
+All 698 plotted records are reconciled; 919 editorial/build checks and standalone compilation pass. The 3,650 protected inputs and v0.32 are unchanged. This integration performed no new Agent calls, cohort generation or patient fits. Earlier entries below are historical snapshots; their then-current version labels do not supersede v0.33.
+
+**Current reading edition: v0.32, 16 November 2026.**
+
+[Reading PDF](methods_draft_v32_2026-11-16/paper.pdf) · [Overleaf ZIP](methods_draft_v32_2026-11-16/overleaf_v32.zip) · [Editable manuscript](DRAFT_v0_32.md) · [Build QA](methods_draft_v32_2026-11-16/BUILD_QA.json).
+
+This is an 18-page focused English draft with four main figures and six tables, including a four-page supplement. Pages 3 and 7–10 explain the system and main evidence: actual scientific analysis on generated lifestyle records; controlled combination of complementary evidence; and Agent-found blood-pressure joint evidence with both improvements and trade-offs. The paper retains ordinary-Agent effectiveness, mostly unchanged reviews, historical adverse results and the lipid search that ended before generation.
+
+The three new statistical figures use navy/blue/orange/purple and retain all nine lifestyle contrasts and all five blood-pressure relationship/dispersion outcomes. The preferred earlier overview is copied unchanged. Model-construction variation, repeated draws and measured-sample uncertainty are distinguished. [Vector figures and previews](paper_figures_v32_2026-11-16/) · [Integration record](../work/manuscript_integration_v32_2026-11-16/RESULTS.md) · [Next decision](../work/manuscript_integration_v32_2026-11-16/NEXT_DECISION.md).
+
+The standalone LuaLaTeX ZIP compiles with the same text and links as the reading PDF. All 304 graphical values and six numerical/context tables were reviewed; 785 aggregate/editorial checks passed. This update did not run experiments, read patient rows, call a paid model or synchronize GitHub. Author/declaration details, biological interpretation and submission formatting remain open. The older edition below is preserved rather than overwritten.
+
+## Expanded historical edition v0.31
+
+**Integrated methods working draft v0.31, 11 November 2026.**
+
+**Current biomedical-review packet:** [four-page brief](../deliverables/Biomedical_Use_Review_v31_2026-11-11/01_REVIEW_BRIEF.pdf), [review-friendly ZIP](../deliverables/Biomedical_Use_Review_v31_2026-11-11.zip) and [blank feedback form](../deliverables/Biomedical_Use_Review_v31_2026-11-11/02_REVIEW_FORM.md). Includes the lifestyle application, complete selected aggregates, source/assumption mappings and optional earlier cases. No human response has yet been collected; the manuscript itself remains unchanged.
+
+
+[Reading PDF](methods_draft_v31_2026-11-11/paper.pdf) · [Overleaf ZIP](methods_draft_v31_2026-11-11/overleaf_v31.zip) · [Editable manuscript](DRAFT_v0_31.md) · [Build QA](methods_draft_v31_2026-11-11/BUILD_QA.json)
+
+The central question is whether a scientific Agent can turn published evidence and a research request into useful virtual biomedical data. The first result now applies the same lifestyle analysis to real and Agent-generated records. Figure 3 shows all nine adjusted BMI/TC/HDL group contrasts in raw units; Figure S8 shows standardized effects. Two fresh authors generated six complete cohorts. Urban-minus-pastoralist BMI is 1.882 kg/m² in the real sample and 1.700-2.251 across virtual draws. Rural lipid contrasts, lower dispersion and one interaction exception remain explicit.
+
+This lifestyle study permits the original paper and its reported findings. It is source-rich reconstruction, not a new independent target. The separate request-only comparison still starts without prepared papers and includes twelve fresh constructors. Its 24 later review sessions are dependent reviews, not 24 more initial authors. S25 applies a common correlation analysis to 24 existing tables without new generation. These experiments and their different information conditions are not pooled into a success rate.
+
+The Agent chooses sources, structures, numerical assumptions and checks; the worker samples its program. The paper's main evidence supports autonomous construction, analysis-specific scientific uses and inspectable modeling choices. Neither feedback gains nor superiority over an ordinary capable Agent are required claims, and neither is demonstrated generally.
+
+The reading edition has 33 main pages and 78 total pages, 19 figures, 32 tables and 25 supplementary sections. Its complete ZIP compiled separately with matching page text and external links. New tables/figure values passed 517 root-led editorial checks against previously independently reviewed aggregates; 97 protected old files are unchanged. All rendered pages were contact-reviewed, with detailed inspection of changed pages. No new independent scientific review is claimed for this editorial revision.
+
+[Story, evidence map and remaining decisions](../work/manuscript_integration_v31_2026-11-11/STORY_AND_GAP_DECISION.md) · [Integration record](../work/manuscript_integration_v31_2026-11-11/RESULTS.md) · [Numerical/content audit](../work/manuscript_integration_v31_2026-11-11/CONTENT_AUDIT.json)
+
+[Lifestyle application report](../work/lifestyle_application_2026-11-11/report/index.html) · [Existing-table reuse report](../work/published_analysis_replay_2026-11-11/index.html) · [System/results HTML](../docs/research-report.html)
+
+The earlier [biomedical collaborator brief](../deliverables/Biomedical_Use_Review_v30_2026-11-11/01_REVIEW_BRIEF.pdf) and [aggregate-only ZIP](../deliverables/Biomedical_Use_Review_v30_2026-11-11.zip) remain available but predate the lifestyle addition. No human response has been collected. Author details, declarations, biomedical interpretation and venue formatting remain open. This is an expanded local working draft, not a submitted manuscript or an online Overleaf project.
+
+This editorial integration ran no API calls, generators, patient analyses or new data acquisition and made no public synchronization. No new paid batch or data campaign is queued.
 
 ## Preserved history
+
+- [v0.30](DRAFT_v0_30.md), [reading PDF](methods_draft_v30_2026-11-11/paper.pdf) and [Overleaf ZIP](methods_draft_v30_2026-11-11/overleaf_v30.zip). Superseded reading edition; frozen content unchanged.
+
+
+- [v0.29](DRAFT_v0_29.md), [reading PDF](methods_draft_v29_2026-11-11/paper.pdf) and [Overleaf ZIP](methods_draft_v29_2026-11-11/overleaf_v29.zip). Superseded reading edition; its frozen content is unchanged.
+
+
+- [v0.28](DRAFT_v0_28.md), [reading PDF](methods_draft_v28_2026-11-10/paper.pdf), [Overleaf ZIP](methods_draft_v28_2026-11-10/overleaf_v28.zip) and [independent content review](../work/manuscript_revision_v28_2026-11-10/INDEPENDENT_REVIEW.md).
+
+- [v0.27](DRAFT_v0_27.md), [reading PDF](methods_draft_v27_2026-11-09/paper.pdf), [Overleaf ZIP](methods_draft_v27_2026-11-09/overleaf_v27.zip) and [review response](../work/manuscript_revision_v27_2026-11-09/REVIEW_RESPONSE.md).
+
 
 - [v0.26](DRAFT_v0_26.md), [reading PDF](methods_draft_v26_2026-11-09/paper.pdf) and [Overleaf ZIP](methods_draft_v26_2026-11-09/overleaf_v26.zip).
 
@@ -42,7 +83,7 @@ The PDF has no imposed page limit: 16 main pages plus references and supplementa
 - [v0.17](DRAFT_v0_17.md) and [earlier reading copy](conference_draft_v17_2026-11-05/paper.pdf)
 
 - [v0.16](DRAFT_v0_16.md) and [earlier reading copy](conference_draft_v16_2026-11-05/paper.pdf)
-- [v0.15](DRAFT_v0_15.md), [earlier reading copy](conference_draft_v15_2026-11-05/paper.pdf), [content review](../reports/manuscript_refinement_v15_2026-11-05/INDEPENDENT_CONTENT_REVIEW.md) and [venue audit](../reports/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md)
+- [v0.15](DRAFT_v0_15.md), [earlier reading copy](conference_draft_v15_2026-11-05/paper.pdf), [content review](../work/manuscript_refinement_v15_2026-11-05/INDEPENDENT_CONTENT_REVIEW.md) and [venue audit](../work/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md)
 - [v0.14](DRAFT_v0_14.md) and [reading copy](conference_draft_v14_2026-11-05/paper.pdf)
 - [v0.13.1](DRAFT_v0_13_1.md), [v0.13](DRAFT_v0_13.md), [v0.12](DRAFT_v0_12.md)
 - [Historical findings](SUPPLEMENT_HISTORICAL_RESULTS_v05.md)

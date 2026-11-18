@@ -1,0 +1,179 @@
+{
+  "structure": "ZHU2010 is partial evidence for the target, not a target-population estimate. Its same-cutoff, unadjusted paired counts are usable for the source threshold association; Hb units are transformed from g/L to g/dL. I transport the four-cell probabilities and ferritin geometric mean explicitly. A Gaussian copula then supplies an assumed continuous dependence structure, while monotone marginal maps preserve the threshold calibration. The latent normal variables are statistical coordinates, not adjusted measurements or biological iron stores. Each virtual person is drawn independently; realized moments and cell counts are not forced.",
+  "parameter_provenance": [
+    {
+      "parameter": "Source threshold definitions",
+      "value": {
+        "hb_low": "Hb <120 g/L = Hb <12 g/dL",
+        "ferritin_low": "Raw ferritin <15 ug/L"
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "Usable after the exact Hb unit conversion. Ferritin follows the admitted units and remains raw, without inflammation adjustment."
+    },
+    {
+      "parameter": "Source marginal counts and ferritin geometric mean",
+      "value": {
+        "hb_low": "258/1671",
+        "ferritin_low": "504/1671",
+        "ferritin_geometric_mean_ug_l": 17.4
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "HB_LOW",
+        "FERRITIN_LOW",
+        "FERRITIN_GM"
+      ],
+      "rationale": "Usable source summaries. The geometric mean is not an arithmetic mean, and no SD or SE is inferred."
+    },
+    {
+      "parameter": "Source four-cell distribution",
+      "value": {
+        "both_low": 173,
+        "only_hb_low": 85,
+        "only_ferritin_low": 331,
+        "neither_low": 1082,
+        "denominator": 1671
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010",
+        "PAIRED_THRESHOLD_COUNTS"
+      ],
+      "rationale": "Supplied aggregation of Table IV over folate and B12 categories. It is crude, not covariate-adjusted. Tables I and IV concern the same women and are not independent evidence."
+    },
+    {
+      "parameter": "Transported target-domain threshold probabilities",
+      "value": {
+        "p_h": "258/1671",
+        "p_f": "504/1671",
+        "p_both": "173/1671",
+        "other_cells": "85/1671, 331/1671, 1082/1671"
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "PAIRED_THRESHOLD_COUNTS"
+      ],
+      "rationale": "Direct transport is a chosen scenario, not an identified mapping to the phlebotomy-weighted target. No additional weighting or demographic standardization is supported by the payload."
+    },
+    {
+      "parameter": "Transported ferritin geometric mean",
+      "value": "exp(E[log(F)]) = 17.4 ug/L",
+      "status": "ASSUMED",
+      "source_ids": [
+        "FERRITIN_GM",
+        "ZHU2010"
+      ],
+      "rationale": "The reported source value is retained as a target-law parameter; its target applicability is assumed."
+    },
+    {
+      "parameter": "Ferritin marginal family and upper-tail scale",
+      "value": {
+        "k": "Phi_inverse(504/1671)",
+        "log_F": "log(15)+s_low*(Z_F-k) below k; log(15)+0.7*(Z_F-k) otherwise",
+        "s_high": 0.7
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "The upper log-slope is an unreported dispersion choice allowing a right tail and substantial iron depletion without forcing a single lognormal variance from only two summaries. The threshold knot is a modeling device, not a biological discontinuity."
+    },
+    {
+      "parameter": "Ferritin lower-tail scale",
+      "value": "s_low=[log(17.4/15)-0.7*B]/A; A=-phi(k)-k*(504/1671), B=phi(k)-k*(1-504/1671)",
+      "status": "DERIVED",
+      "source_ids": [
+        "FERRITIN_GM",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "For standard normal Z, A and B are the lower and upper truncated expectations of Z-k. This expression makes E[log(F)]=log(17.4), conditional on the assumed family and upper slope."
+    },
+    {
+      "parameter": "Hemoglobin marginal support and median",
+      "value": {
+        "lower_bound_g_dl": 4.0,
+        "upper_bound_g_dl": 20.0,
+        "median_g_dl": 13.3,
+        "family": "Bounded logistic-normal"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "No source Hb location or dispersion is supplied. These are explicit plausible support and location choices, not recovered source or target summaries. The bounds exclude more extreme Hb values."
+    },
+    {
+      "parameter": "Hemoglobin mapping coefficients",
+      "value": "a=log((13.3-4)/(20-13.3)); b=[log((12-4)/(20-12))-a]/Phi_inverse(258/1671)",
+      "status": "DERIVED",
+      "source_ids": [
+        "HB_LOW"
+      ],
+      "rationale": "The monotone map has median 13.3 g/dL and P(Hb<12)=258/1671 in the population law. Its mean and SD are not independently calibrated."
+    },
+    {
+      "parameter": "Continuous copula family",
+      "value": "Bivariate standard normal latent scores with correlation rho",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "The evidence supplies no continuous rank correlation. A Gaussian copula is a parsimonious interpolation beyond the threshold table, not an observed raw, multilevel, or residual correlation."
+    },
+    {
+      "parameter": "Latent correlation calibration",
+      "value": "Unique rho in [0,0.99] satisfying Phi_2(Phi_inverse(258/1671),Phi_inverse(504/1671);rho)=173/1671",
+      "status": "DERIVED",
+      "source_ids": [
+        "PAIRED_THRESHOLD_COUNTS"
+      ],
+      "rationale": "Derived only conditional on the Gaussian-copula assumption. Numerical implementation uses 96-point Gauss-Legendre integration of the correlation derivative and 80 bisection steps; it does not use simulated cohort moments."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "The source crude paired table directly supports the source threshold odds ratio. The transported population law has OR=(173*1082)/(85*331), approximately 6.65. A generated sample's crude OR fluctuates and is not forced to this value. Any realized zero cell remains not estimable without correction.",
+      "key_unresolved_assumptions": [
+        "Transportability of the four threshold-cell probabilities despite population, selection, assay and calendar differences.",
+        "The target's broader disease and inflammation distribution does not invalidate the transported raw-ferritin association.",
+        "No adjusted odds ratio is substituted for this crude estimand."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "The supplied source paired count gives 173/1671. By explicit transport, the model population joint prevalence is the same, approximately 0.1035; a/n from the generated rows is its unforced Monte Carlo estimate.",
+      "key_unresolved_assumptions": [
+        "Source joint prevalence applies to the phlebotomy-weighted complete-measurement target domain.",
+        "No identified correction is available for parity, contraception, nonlactation, exclusions, assay differences or target measurement completeness."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "No source continuous rank coefficient is supplied. Under the assumed Gaussian copula and strictly increasing continuous marginal maps, population Spearman correlation is (6/pi)*asin(rho/2), with rho defined by the threshold calibration. Sample average-rank Spearman must be calculated on the same generated rows.",
+      "key_unresolved_assumptions": [
+        "The Gaussian copula specifies continuous dependence not identified by one threshold table.",
+        "Alternative copulas can preserve all supplied threshold probabilities and the ferritin geometric mean while producing different rank correlations.",
+        "Continuous measurements are generated without assay rounding, detection-limit censoring or an explicit measurement-error model."
+      ]
+    }
+  ],
+  "limitations": [
+    "The source is a selected rural Chinese postpartum, parous, IUD-using population with specified health and medication exclusions, not the requested United States target. No empirical transport function or target outcome summaries are available.",
+    "The source ferritin assay used EDTA plasma, whereas target assay and specimen comparability are not established here. Raw ferritin is not treated as inflammation-adjusted iron stores, and no CRP restriction is imposed.",
+    "The ferritin dispersion, marginal shape and copula are not identified by the supplied summaries. The piecewise transformation creates a density kink at 15 ug/L.",
+    "Ferritin is strictly positive and unbounded above. Each log-tail is affine in a normal variate, so all positive polynomial moments are finite; no assay ceiling or extreme inflammatory component is separately modeled.",
+    "Hemoglobin is bounded between 4 and 20 g/dL. These modeling limits exclude rare more extreme values and are not claimed empirical target limits.",
+    "Neither omitted relationships nor unreported within-category associations are presumed to have been measured as zero. The continuous dependence law is an explicit assumption.",
+    "Broad source intervals and the inconsistently labeled Hb location are unsuitable for calibration and are not used. No sampling, identification or transport uncertainty interval is invented.",
+    "The 5000 synthetic rows provide numerical resolution under a fixed law, not 5000 new observations supporting the source evidence. They do not propagate source-estimation or model uncertainty."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic consistency checked: 173+85=258, 173+331=504, and 173+85+331+1082=1671.",
+    "Analytic feasibility checked: the supplied joint probability is greater than the independence product and less than the smaller marginal probability, permitting positive Gaussian dependence.",
+    "Algebraically checked that the monotone marginal maps put Hb=12 and ferritin=15 at the calibrated normal thresholds and that the ferritin truncated-expectation formula enforces the chosen geometric mean.",
+    "Analytically checked bounded Hb support, positive ferritin support and finite positive polynomial ferritin moments.",
+    "Reviewed the code for seed-local randomness, independent row generation, unique integer identifiers, required column order and absence of sample-wide moment adjustment.",
+    "No code execution, simulated-cohort checks, numerical calibration run, seed search or target-data comparison was performed."
+  ]
+}

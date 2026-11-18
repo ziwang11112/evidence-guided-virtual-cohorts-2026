@@ -1,0 +1,149 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_id": "transported_bounded_conditional_bp_v1",
+    "interpretation": "One explicitly assumed post-selection population law, not a fitted estimate of the requested population.",
+    "design": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0
+    },
+    "age": {
+      "distribution": "scaled_beta",
+      "lower": 20.0,
+      "upper": 79.0,
+      "alpha": 2.0,
+      "beta": 2.8
+    },
+    "sex": {
+      "female_probability": 0.53,
+      "independent_of_age": true
+    },
+    "bmi": {
+      "distribution": "conditionally_truncated_lognormal",
+      "pretruncation_mean_intercept": 27.0,
+      "pretruncation_mean_age_coefficient": 0.7,
+      "pretruncation_mean_age_squared_coefficient": -0.25,
+      "pretruncation_mean_female_coefficient": 0.8,
+      "log_sd": 0.2,
+      "lower": 14.0,
+      "upper": 60.0,
+      "truncation": "Redraw BMI alone at fixed age and sex until admissible."
+    },
+    "bp": {
+      "distribution": "conditionally_truncated_bivariate_normal",
+      "coefficient_order": [
+        "intercept",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "sbp_mean_coefficients": [
+        128.0,
+        4.8,
+        -4.0,
+        3.877
+      ],
+      "dbp_mean_coefficients": [
+        80.0,
+        1.6,
+        -1.8,
+        2.9835
+      ],
+      "dbp_age_hinge_knot": 55.0,
+      "dbp_age_hinge_scale": 10.0,
+      "dbp_age_hinge_coefficient": -3.4,
+      "sbp_residual_sd_at_age_origin": 14.0,
+      "sbp_residual_sd_age_origin": 20.0,
+      "sbp_residual_sd_per_year": 0.1,
+      "dbp_residual_sd": 9.5,
+      "latent_residual_correlation": 0.55,
+      "sbp_lower": 70.0,
+      "sbp_upper": 260.0,
+      "dbp_lower": 40.0,
+      "dbp_upper": 150.0,
+      "minimum_pulse_pressure": 10.0,
+      "truncation": "Redraw the paired BP errors at fixed age, sex and BMI until both BP bounds and the pulse-pressure constraint hold."
+    },
+    "sampling": {
+      "independent_virtual_people": true,
+      "row_weights": "equal",
+      "parameter_uncertainty": "Not sampled; parameters define one transport scenario.",
+      "sample_moment_calibration": false
+    }
+  }
+}

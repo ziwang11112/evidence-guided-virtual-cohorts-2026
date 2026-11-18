@@ -1,0 +1,191 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "construction": "One fixed-parameter, observed-scale adult scenario using a Gaussian copula, positive lognormal continuous marginals and a probit-coded sex field.",
+    "latent": {
+      "family": "Joint standard-normal margins with the correlation matrix specified by all ten pairs below",
+      "order": [
+        "age",
+        "sex",
+        "bmi",
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "pearson_pairs": [
+        [
+          "age",
+          "sex",
+          0.1
+        ],
+        [
+          "age",
+          "bmi",
+          0.2
+        ],
+        [
+          "age",
+          "total_cholesterol",
+          0.15
+        ],
+        [
+          "age",
+          "hdl_cholesterol",
+          0.05
+        ],
+        [
+          "sex",
+          "bmi",
+          0.15
+        ],
+        [
+          "sex",
+          "total_cholesterol",
+          0.1
+        ],
+        [
+          "sex",
+          "hdl_cholesterol",
+          0.05
+        ]
+      ],
+      "spearman_pairs": [
+        [
+          "bmi",
+          "total_cholesterol",
+          0.212
+        ],
+        [
+          "bmi",
+          "hdl_cholesterol",
+          -0.1
+        ],
+        [
+          "total_cholesterol",
+          "hdl_cholesterol",
+          0.106
+        ]
+      ],
+      "rank_bridge": "For each continuous-pair Spearman setting s, use latent Gaussian Pearson correlation 2*sin(pi*s/6)."
+    },
+    "marginals": {
+      "age": {
+        "family": "shifted_lognormal",
+        "offset": 18,
+        "positive_mean": 22,
+        "positive_sd": 15
+      },
+      "bmi": {
+        "family": "lognormal",
+        "offset": 0,
+        "positive_mean": 21.63,
+        "positive_sd": 3.61
+      },
+      "total_cholesterol": {
+        "family": "lognormal",
+        "offset": 0,
+        "positive_mean": 3.23,
+        "positive_sd": 0.92
+      },
+      "hdl_cholesterol": {
+        "family": "lognormal",
+        "offset": 0,
+        "positive_mean": 1.14,
+        "positive_sd": 0.38
+      }
+    },
+    "sex": {
+      "upper_code": "F",
+      "lower_code": "M",
+      "upper_probability": 0.5,
+      "rule": "Use upper_code when its standard-normal latent coordinate exceeds Phi_inverse(1-upper_probability); otherwise use lower_code."
+    },
+    "sampling": {
+      "row_law": "iid",
+      "weights": "equal",
+      "missingness": "none",
+      "additional_selection": "none"
+    },
+    "measurement": {
+      "continuous_representation": "Unrounded continuous recorded-scale variables",
+      "lipid_representation_unit": "mmol/L",
+      "error_model": "No separately identified measurement-error component",
+      "transfer": "External numerical margins and selected rank relationships are borrowed without an estimated assay or selection correction."
+    },
+    "uncertainty": {
+      "mode": "Fixed scientific parameters; seed controls individual sampling only",
+      "parameter_resampling": false,
+      "use_source_confidence_intervals_as_individual_sd": false
+    }
+  }
+}

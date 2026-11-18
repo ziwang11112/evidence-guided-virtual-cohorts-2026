@@ -1,0 +1,135 @@
+{
+  "structure": "Each independent virtual person receives a Bernoulli state S and independent standard normals Z,E. Before conditioning, H=13.2+1.1*(0.35*Z+sqrt(1-0.35^2)*E)-0.4*S and log(F)=log(35)+0.9*Z+log(2.5)*S. Within each state, redraw Z,E until 4<=H<=19; retain S throughout rejection. This preserves the chosen component probability while conditioning both measurements through their dependence. S is an unobserved, nonspecific ferritin-elevating/Hb-lowering state, not a measured CRP category. All numerical population parameters are assumptions because the supplied evidence contains no numerical marginal or joint estimates. Equal-weight rows represent the requested weighted target domain only if this entire assumed law transports to that domain.",
+  "parameter_provenance": [
+    {
+      "parameter": "Source suitability",
+      "value": "ZHU2010 is partial: usable for measurement interpretation and threshold alignment, transformed for Hb units, unsuitable for numerical distribution or association calibration from the supplied extract.",
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "The selected marginal_statistics and joint_statistics are empty. The source cohort is not the target, and Tables I and IV concern the same women. Its n=1671 is descriptive metadata, not a calibration sample size or replicated evidence."
+    },
+    {
+      "parameter": "Analysis thresholds",
+      "value": {
+        "hb_low": "hb_g_dl < 12",
+        "ferritin_low": "ferritin_ug_l < 15"
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "Thresholds match the requested analyses and the admitted source definitions. Ferritin is raw, not inflammation-corrected."
+    },
+    {
+      "parameter": "Hb unit conversion",
+      "value": "Hb in g/dL = Hb in g/L / 10; 120 g/L = 12 g/dL",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "Dimensional conversion only; no omitted source Hb location or dispersion is reconstructed."
+    },
+    {
+      "parameter": "Pre-conditioning baseline locations and scales",
+      "value": {
+        "hb_location_g_dl": 13.2,
+        "hb_scale_g_dl": 1.1,
+        "baseline_ferritin_median_ug_l": 35.0,
+        "log_ferritin_sd": 0.9
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Working adult-woman concentration scales, not reported source or target estimates. The normal Hb and lognormal ferritin choices provide continuous variation and positive, right-skewed ferritin. These parameters describe the baseline component before Hb conditioning, not final marginal moments."
+    },
+    {
+      "parameter": "Within-component dependence",
+      "value": {
+        "within_component_hb_log_ferritin_rho": 0.35,
+        "pre_conditioning_covariance_hb_log_ferritin": "1.1 * 0.9 * 0.35 = 0.3465"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A moderate shared latent association is a scenario choice. The coefficient is a pre-conditioning Pearson correlation between Hb and log ferritin within components. It is not a raw-ferritin Pearson correlation, Spearman coefficient, adjusted estimate, residual correlation, or multilevel correlation."
+    },
+    {
+      "parameter": "Ferritin-elevating state",
+      "value": {
+        "probability": 0.12,
+        "hb_shift_g_dl": -0.4,
+        "ferritin_multiplier": 2.5
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Represents one possible source of high raw ferritin with lower Hb in a domain having no CRP restriction. Neither state frequency nor effects are identified by the evidence. The opposing component shifts reduce aggregate concordance relative to the within-component relationship. This does not identify inflammation, functional iron deficiency, or causal effects."
+    },
+    {
+      "parameter": "Support and tail law",
+      "value": {
+        "hb_support_g_dl": [
+          4.0,
+          19.0
+        ],
+        "ferritin_support_ug_l": "strictly positive, with no hard upper bound",
+        "conditioning": "Joint Hb/log-ferritin draws conditioned on Hb support separately within each state",
+        "rounding": "none"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Hb bounds avoid extreme Gaussian extrapolation and are modeling constraints, not target eligibility criteria. Ferritin has lognormal-type tails; all positive polynomial moments remain finite after conditioning on a positive-probability Hb interval. Conditioning slightly changes component moments and correlations. No clipping, sample recentering, or realized-moment matching is used."
+    },
+    {
+      "parameter": "Target transport",
+      "value": "The assumed mixture law is assigned directly to the phlebotomy-weighted complete-measurement target domain; virtual rows have equal weights.",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "No source-to-target transfer function, target survey weights, selection model, or target outcome summaries are supplied. Source and target quantities are not equated through an estimated relationship."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "A model-implied crude association using the specified thresholds on the same generated rows. Compute a*d/(b*c), where a is both low, b Hb low only, c ferritin low only, and d neither. If any cell is zero, report not estimable without correction. No evidence-based numerical OR is identified.",
+      "key_unresolved_assumptions": [
+        "The assumed locations, scales, latent correlation, mixture frequency, shifts, and Hb conditioning jointly determine the four cells.",
+        "The complete joint law must represent the weighted target domain.",
+        "Raw ferritin can be elevated independently of iron stores; the single latent state is only a working approximation.",
+        "This crude association is neither covariate-adjusted nor causal."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "The generated-cohort estimate is a/n using exactly the same rows and strict thresholds as the OR. It estimates the assumed law's joint lower-tail probability, not an independently identified target prevalence.",
+      "key_unresolved_assumptions": [
+        "Both marginal lower tails and their dependence are assumption-driven.",
+        "The latent state and Hb support adequately approximate clinically relevant tail behavior.",
+        "Equal-weight synthetic rows transport to the specified weighted complete-measurement domain without additional selection adjustment."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "Compute the average-rank correlation of continuous Hb and raw ferritin on the same rows; constant ranks are not estimable. Ferritin and log ferritin have identical mathematical ranks, but neither the latent Pearson coefficient nor a source association is substituted for this statistic.",
+      "key_unresolved_assumptions": [
+        "The chosen continuous joint law, including mixture effects and Hb conditioning, describes target rank dependence.",
+        "No source rank coefficient is supplied, so the association is not empirically calibrated.",
+        "Unrounded continuous simulation omits assay rounding and detection-limit ties."
+      ]
+    }
+  ],
+  "limitations": [
+    "This is a transparent sensitivity-analysis baseline, not an evidence-identified reconstruction or validated estimate of the target cohort.",
+    "The source selected parous, nonlactating women 2–4 years postpartum using IUD contraception in rural China, with specified health and medication exclusions. These restrictions, assay differences, and geography do not match the target; no quantitative correction is available.",
+    "Age, parity, contraception, race/ethnicity, inflammation, chronic disease, and complete-measurement selection are not separately modeled. Their effects could change every requested estimand.",
+    "The ferritin tail is unbounded and lognormal-type rather than disease-specific; the Hb bounds exclude rarer extremes that the target definition itself does not exclude.",
+    "No uncertainty distribution for model or transport parameters is identified. Synthetic sample variation is not evidence uncertainty, and 5000 generated people do not multiply the supplied evidence.",
+    "No survey design, measured CRP adjustment, assay-error model, or treatment process is represented."
+  ],
+  "checks_actually_performed": [
+    "Static schema review: the generator returns only row_id, hb_g_dl, ferritin_ug_l in the required order, with integer row identifiers.",
+    "Analytical support review: accepted Hb is within the declared bounds; exponentiation produces positive ferritin; the specified conditioned distributions have finite relevant moments.",
+    "Static dependence review: the shared normal factor gives the declared pre-conditioning Hb/log-ferritin correlation; mixture shifts and conditioning prevent equating it with the final raw or rank association.",
+    "Static sampling review: randomness comes from the supplied seed; independent-person rejection retains each person's component and does not match cohort summaries.",
+    "No code execution, numerical simulation, empirical moment checks, or target-data comparison was performed."
+  ]
+}

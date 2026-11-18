@@ -1,0 +1,366 @@
+{
+  "structure": "Independent covariate draws: sex Bernoulli(0.5); age Uniform(18,75) years; BMI Uniform(14,32) kg/m^2, all mutually independent. Outcomes are total cholesterol and HDL cholesterol generated as linear conditional means in age, female indicator, and BMI plus correlated residual shocks. Residual shocks use two independent Rademacher variables and one common Rademacher with loadings sqrt(1-rho) and sqrt(rho), so population Pearson correlation is exactly rho and each shock has variance equal to the specified residual_sd^2. Residual shocks are independent of covariates, so population OLS coefficients of the requested raw-scale adjusted models equal the specified linear coefficients. Bounded Rademacher support keeps lipids positive under the specified covariate support. No causal intervention effects are represented. Delivered units are mmol/L; the supplied conversion factor is used only for slope estimands in mg/dL. No pregnancy, HIV, diabetes, fasting, lifestyle, outlier, or TC>=HDL exclusions are imposed because the target task does not include those flags.",
+  "parameter_provenance": [
+    {
+      "path": "model_spec.outcome_unit_conversion_factor_mg_dl_per_mmol_l",
+      "meaning": "Lipid unit conversion factor from mmol/L to mg/dL for slopes",
+      "operator": "linear multiplication by 38.67",
+      "conditioning_set": [],
+      "scale": "linear",
+      "unit": "mg/dL per mmol/L",
+      "classification": "reported",
+      "source_pointers": [
+        {
+          "artifact": "population_metadata.json",
+          "locator": "unit_mapping.lipids_mmol_L_to_mg_dL_factor"
+        }
+      ],
+      "derivation": "Taken directly from task population metadata.",
+      "unverified_assumptions": "Numerical unit conversion only; does not establish assay equivalence to the Turkana CardioChek Plus protocol."
+    },
+    {
+      "path": "model_spec.joint_law.covariates.sex.p_female",
+      "meaning": "Marginal proportion of generated rows with recorded sex F",
+      "operator": "Bernoulli proportion",
+      "conditioning_set": [],
+      "scale": "probability",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "population_metadata.json",
+          "locator": "composition.sex_proportions unspecified"
+        }
+      ],
+      "derivation": "Set to 0.5 as a neutral choice because target sex composition is unspecified.",
+      "unverified_assumptions": "Target sex distribution is exactly balanced; sex is independent of all other covariates and missingness."
+    },
+    {
+      "path": "model_spec.joint_law.covariates.age",
+      "meaning": "Marginal age distribution for generated adults",
+      "operator": "Uniform(18,75)",
+      "conditioning_set": [],
+      "scale": "linear",
+      "unit": "year",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "population_metadata.json",
+          "locator": "composition.age_distribution unspecified; eligibility minimum_age_inclusive 18"
+        },
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "Table 1 age median/Q1/Q3 rows for external Malawi and Uganda strata"
+        },
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "Table 1 age mean 50-52 and SD 6 in Navrongo adults 40-60"
+        }
+      ],
+      "derivation": "Broad adult support chosen because target composition is unspecified; lower bound is the task eligibility bound and upper bound is an explicit distributional support assumption.",
+      "unverified_assumptions": "Uniform age shape and upper bound 75 are not target-derived; external age distributions are not Turkana."
+    },
+    {
+      "path": "model_spec.joint_law.covariates.bmi",
+      "meaning": "Marginal BMI distribution for generated adults",
+      "operator": "Uniform(14,32)",
+      "conditioning_set": [],
+      "scale": "linear",
+      "unit": "kg/m^2",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "population_metadata.json",
+          "locator": "composition.BMI_distribution unspecified; measurements.bmi measured weight/height squared"
+        },
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_pooled_bmi_mean_sd mean 21.63, SD 3.61"
+        },
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "Table 1 BMI geometric mean rows for external Malawi and Uganda strata"
+        }
+      ],
+      "derivation": "Support 14-32 gives mean 23 kg/m^2 and includes the external BMI summaries while ensuring strict positivity.",
+      "unverified_assumptions": "Uniform BMI shape, support bounds, and transfer to Turkana are assumed; target BMI composition is unspecified."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.total_cholesterol.intercept",
+      "meaning": "Conditional mean total cholesterol at age=0, male, BMI=0",
+      "operator": "OLS regression intercept in a linear conditional expectation",
+      "conditioning_set": [
+        "age=0",
+        "sex male",
+        "bmi=0"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_pooled_total_cholesterol_mean_sd mean 3.23 mmol/L"
+        }
+      ],
+      "derivation": "Chosen so predicted population mean under the assumed covariate margins approximates the Agongo reported pooled mean 3.23 mmol/L.",
+      "unverified_assumptions": "Zero covariate centering is not clinically meaningful; Agongo mean is external and not Turkana."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.total_cholesterol.age_coef",
+      "meaning": "Conditional raw-scale total cholesterol difference per one year of age",
+      "operator": "Linear regression coefficient for age",
+      "conditioning_set": [
+        "sex female indicator",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L per year",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "Table 1 age distribution rows only; no direct age-lipid coefficient supplied"
+        }
+      ],
+      "derivation": "Assumed small positive age slope 0.008 mmol/L per year to complete the requested age-adjusted model without a direct source coefficient.",
+      "unverified_assumptions": "Age-lipid shape, linearity, and transfer to Turkana are not supported by a direct supplied coefficient."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.total_cholesterol.sex_female_coef",
+      "meaning": "Conditional raw-scale total cholesterol difference for female sex versus male sex",
+      "operator": "Linear regression coefficient for I(sex==F)",
+      "conditioning_set": [
+        "age",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "Table 2 total cholesterol geometric mean rows for external male and female strata"
+        }
+      ],
+      "derivation": "External geometric mean sex differences vary; a small female increment of 0.15 mmol/L is chosen to complete the model.",
+      "unverified_assumptions": "Sex effect is linear on raw mmol/L, not adjusted for all source selection/lifestyle factors, and not Turkana-derived."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.total_cholesterol.bmi_coef",
+      "meaning": "Population conditional OLS total cholesterol coefficient for BMI after age and sex adjustment",
+      "operator": "Partial linear regression coefficient dE[TC|age,sex,bmi]/dbmi",
+      "conditioning_set": [
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L per kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_men_logtc_bmi_univ and agongo_women_logtc_bmi_univ; Table 5, BMI univariate estimate 0.013 log(lipid)/kg/m^2"
+        }
+      ],
+      "derivation": "0.013 log per kg/m^2 multiplied by Agongo pooled TC mean 3.23 mmol/L gives approximately 0.042 mmol/L per kg/m^2; rounded to 0.04 raw mmol/L per kg/m^2.",
+      "unverified_assumptions": "Source is univariate, log-scale, unadjusted, from Ghana, not Turkana; log base unresolved; raw-scale transfer at the mean is approximate."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.total_cholesterol.residual_sd",
+      "meaning": "Conditional residual standard deviation for total cholesterol",
+      "operator": "Population standard deviation of residual shock independent of covariates",
+      "conditioning_set": [
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_pooled_total_cholesterol_mean_sd SD 0.92 mmol/L"
+        }
+      ],
+      "derivation": "Set below the Agongo total SD because conditioning on covariates should reduce residual variation; bounded Rademacher support preserves positivity.",
+      "unverified_assumptions": "Residual distribution is artificial and not empirically estimated for Turkana."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.hdl_cholesterol.intercept",
+      "meaning": "Conditional mean HDL cholesterol at age=0, male, BMI=0",
+      "operator": "OLS regression intercept in a linear conditional expectation",
+      "conditioning_set": [
+        "age=0",
+        "sex male",
+        "bmi=0"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_pooled_hdl_cholesterol_mean_sd mean 1.14 mmol/L"
+        }
+      ],
+      "derivation": "Chosen so predicted population mean under the assumed covariate margins approximates the Agongo reported pooled mean 1.14 mmol/L.",
+      "unverified_assumptions": "Zero covariate centering is not clinically meaningful; Agongo mean is external and not Turkana."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.hdl_cholesterol.age_coef",
+      "meaning": "Conditional raw-scale HDL cholesterol difference per one year of age",
+      "operator": "Linear regression coefficient for age",
+      "conditioning_set": [
+        "sex female indicator",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L per year",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "Table 1 age distribution rows only; no direct age-HDL coefficient supplied"
+        }
+      ],
+      "derivation": "Assumed small positive age slope 0.003 mmol/L per year to complete the requested age-adjusted model without a direct source coefficient.",
+      "unverified_assumptions": "Age-HDL shape, linearity, and transfer to Turkana are not supported by a direct supplied coefficient."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.hdl_cholesterol.sex_female_coef",
+      "meaning": "Conditional raw-scale HDL cholesterol difference for female sex versus male sex",
+      "operator": "Linear regression coefficient for I(sex==F)",
+      "conditioning_set": [
+        "age",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "Table 2 HDL cholesterol geometric mean rows for external male and female strata"
+        }
+      ],
+      "derivation": "External geometric means suggest higher HDL in women; a small female increment of 0.08 mmol/L is chosen to complete the model.",
+      "unverified_assumptions": "Sex effect is linear on raw mmol/L, not adjusted for all source selection/lifestyle factors, and not Turkana-derived."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.hdl_cholesterol.bmi_coef",
+      "meaning": "Population conditional OLS HDL cholesterol coefficient for BMI after age and sex adjustment",
+      "operator": "Partial linear regression coefficient dE[HDL|age,sex,bmi]/dbmi",
+      "conditioning_set": [
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L per kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_men_loghdl_bmi_univ; Table 4, Men, BMI estimate -0.007 log(lipid)/kg/m^2"
+        },
+        {
+          "artifact": "GREINER_2021_CURATOR_EXTRACTION.json",
+          "locator": "DC2 Supplementary Table 3, sub-Saharan Africa male and female HDL-BMI rows -0.007 and -0.004, scale unresolved"
+        }
+      ],
+      "derivation": "Agongo -0.007 log per kg/m^2 at HDL mean 1.14 mmol/L gives about -0.008 raw mmol/L per kg/m^2; Greiner unresolved-scale values span -0.007 to -0.004. A raw-scale value of -0.005 mmol/L per kg/m^2 is selected.",
+      "unverified_assumptions": "Source scales, adjustment sets, populations, fasting, and assay equivalence differ; raw-scale transfer is an explicit assumption."
+    },
+    {
+      "path": "model_spec.joint_law.outcome_linear_models.hdl_cholesterol.residual_sd",
+      "meaning": "Conditional residual standard deviation for HDL cholesterol",
+      "operator": "Population standard deviation of residual shock independent of covariates",
+      "conditioning_set": [
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ],
+      "scale": "linear",
+      "unit": "mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "artifact": "AGONGO_2018_CURATOR_EXTRACTION.json",
+          "locator": "agongo_pooled_hdl_cholesterol_mean_sd SD 0.38 mmol/L"
+        }
+      ],
+      "derivation": "Set below the Agongo total SD because conditioning on covariates should reduce residual variation; bounded Rademacher support preserves positivity.",
+      "unverified_assumptions": "Residual distribution is artificial and not empirically estimated for Turkana."
+    },
+    {
+      "path": "model_spec.joint_law.residual_dependency.pearson_correlation",
+      "meaning": "Population Pearson correlation between total cholesterol and HDL cholesterol residuals from the two requested models",
+      "operator": "Pearson correlation coefficient of the residual shocks",
+      "conditioning_set": [
+        "age",
+        "I(sex==F)",
+        "bmi"
+      ],
+      "scale": "correlation",
+      "unit": "1",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "artifact": "OBIRIKORANG_2015_CURATOR_EXTRACTION.json",
+          "locator": "obirikorang_rural_tc_hdl estimate 0.106 and obirikorang_urban_tc_hdl estimate 0.171"
+        }
+      ],
+      "derivation": "Midpoint of the two reported Spearman correlations is 0.1385; rounded to 0.14 and used as residual Pearson correlation.",
+      "unverified_assumptions": "Spearman rank correlations are not Pearson; they are unadjusted and from Ghana, not Turkana. Using 0.14 for adjusted residual correlation is an explicit transfer assumption."
+    },
+    {
+      "path": "model_spec.joint_law.residual_dependency.factor_values",
+      "meaning": "Discrete support of the independent and common Rademacher residual factors",
+      "operator": "Rademacher support values",
+      "conditioning_set": [],
+      "scale": "linear factor score",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "Chosen so residual shocks have bounded support and exact population variance/correlation while guaranteeing positive generated lipid values.",
+      "unverified_assumptions": "This is a mathematical construction, not an empirical residual distribution."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "K02-HDL-BMI",
+      "exact_model_implied_population_value": -0.96675,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "By construction, population OLS BMI coefficient equals model_spec.joint_law.outcome_linear_models.hdl_cholesterol.bmi_coef. Therefore 5 * (-0.005 mmol/L per kg/m^2) * 38.67 mg/dL per mmol/L = -0.96675 mg/dL per 5 kg/m^2."
+    },
+    {
+      "analysis_id": "K02-TC-BMI",
+      "exact_model_implied_population_value": 7.734,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "By construction, population OLS BMI coefficient equals model_spec.joint_law.outcome_linear_models.total_cholesterol.bmi_coef. Therefore 5 * 0.04 mmol/L per kg/m^2 * 38.67 mg/dL per mmol/L = 7.734 mg/dL per 5 kg/m^2."
+    },
+    {
+      "analysis_id": "K02-LIPID-RESIDUAL",
+      "exact_model_implied_population_value": 0.14,
+      "unit": "1",
+      "derivation": "By construction, the residual shocks from the two models have Pearson correlation model_spec.joint_law.residual_dependency.pearson_correlation = 0.14, and shocks are independent of the model covariates."
+    }
+  ],
+  "limitations": [
+    "External sources are from Ghana, Malawi, and Uganda, not the Tukana target; all transfer to the Turkana study-protocol target is an explicit assumption.",
+    "Curator extractions are historical provenance and were not independently reauthenticated against original articles.",
+    "Agongo BMI-lipid coefficients are univariate and log-scale, not adjusted raw-scale coefficients; Greiner BMI-HDL regression scale is unresolved and context-only.",
+    "Obirikorang TC-HDL correlations are Spearman, unadjusted, and from Ashanti communities; they are not Pearson residual correlations.",
+    "Target age, sex, and BMI composition are unspecified; uniform covariate distributions and sex balance are explicit assumptions, not empirical Turkana composition.",
+    "Age and sex outcome coefficients are assumed because no direct adjusted source coefficient is supplied.",
+    "The residual distribution is an artificial bounded Rademacher factor model chosen for positivity and analytically tractable correlation, not an empirical lipid residual distribution.",
+    "The generated lipids are in mmol/L; conversion to mg/dL is numeric only and does not establish assay equivalence with the target CardioChek Plus venous-EDTA protocol.",
+    "The exact estimands are population model values, not estimates from a finite generated sample; a particular generated sample will vary around them.",
+    "Source statistics from the same manuscripts or same cohorts are dependent evidence and were not treated as independent studies.",
+    "No causal intervention effects are represented; the requested analyses are descriptive association projections from the specified joint law."
+  ],
+  "checks_actually_performed": []
+}

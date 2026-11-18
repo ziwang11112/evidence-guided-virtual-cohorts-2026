@@ -1,0 +1,131 @@
+{
+  "structure": "Independent people sampled from a trivariate Gaussian distribution with the exact population means and covariance implied by the records. Gaussian shape is a modeling assumption; all three requested population functionals are identified without it.",
+  "parameter_provenance": [
+    {
+      "parameter": "mean",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Population means in X, Y, Z order."
+    },
+    {
+      "parameter": "marginal_variances",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Population individual variances in X, Y, Z order."
+    },
+    {
+      "parameter": "marginal_correlations",
+      "value": {
+        "XY": 0.5,
+        "XZ": 0.6,
+        "YZ": 0.6
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "A",
+        "B"
+      ],
+      "basis": "A supplies marginal XY; B supplies marginal XZ and YZ."
+    },
+    {
+      "parameter": "covariance",
+      "value": [
+        [
+          1.0,
+          0.5,
+          0.6
+        ],
+        [
+          0.5,
+          1.0,
+          0.6
+        ],
+        [
+          0.6,
+          0.6,
+          1.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "B",
+        "C"
+      ],
+      "basis": "Covariances equal correlations because all three population variances are one."
+    },
+    {
+      "parameter": "linear_adjustment",
+      "value": {
+        "x_on_z_intercept": 0.0,
+        "y_on_z_intercept": 0.0,
+        "x_on_z_slope": 0.6,
+        "y_on_z_slope": 0.6,
+        "x_residual_variance": 0.64,
+        "y_residual_variance": 0.64,
+        "residual_covariance": 0.14,
+        "residual_correlation": 0.21875
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "B",
+        "C"
+      ],
+      "basis": "Population OLS residuals are X-0.6Z and Y-0.6Z. Each residual variance is 1-0.6^2; their covariance is 0.5-0.6*0.6."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen joint shape; the supplied moments do not determine a distribution."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "identified",
+      "value": 0.21875,
+      "basis": "Pearson correlation of separate population OLS residuals after intercept and measured-Z adjustment: (0.5-0.6*0.6)/sqrt((1-0.6^2)*(1-0.6^2)) = 0.14/0.64."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "identified",
+      "value": 0.5,
+      "basis": "Directly specified by record A."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "identified",
+      "value": 0.6,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z) = 0.6/1 using B and C."
+    }
+  ],
+  "limitations": [
+    "Gaussian shape, tails, and higher-order dependence are assumed, not identified by the records.",
+    "Population moments are exact constraints on the generating distribution; realized sample moments and fitted estimates fluctuate naturally and are not forced to equal them.",
+    "The adjusted estimand is a linear-residual Pearson correlation, not a causal effect or a generally specified conditional correlation.",
+    "These artificial records provide no biomedical validation."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked positive definiteness: the covariance matrix has leading principal minors 1, 0.75, and 0.39.",
+    "Algebraically checked residual variances of 0.64, residual covariance of 0.14, and residual correlation of 0.21875.",
+    "Inspected the source for seeded independent sampling, unique integer identifiers, requested column order, and absence of sample-moment forcing.",
+    "No code execution or finite-sample empirical checks were performed."
+  ]
+}

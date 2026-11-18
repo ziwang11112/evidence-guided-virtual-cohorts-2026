@@ -1,0 +1,152 @@
+{
+  "structure": "Joint law for the declared PNS 2013 laboratory-substudy weighted complete-case adult analytical distribution, represented by equal-weight generated rows. Covariates age, female, and bmi are sampled mutually independently: age Uniform(20,79); female Bernoulli(0.5); bmi Beta(14,60, alpha=3.443478, beta=10.956522) with mean 25 and SD 5. Conditional BP means are exactly linear in [1,(age-50)/10,female,(bmi-25)/5], with SBP intercept 125, age_z 5.0, female -3.5, bmi_z 3.877; DBP intercept 78, age_z 1.0, female -1.5, bmi_z 2.9835. BP residuals are bivariate normal with mean zero, SBP residual SD 17.986329, DBP residual SD 10.348927, and residual correlation 0.4915139, independent of covariates. Consequently, the population OLS BMI coefficients are the specified linear predictor coefficients, and the population residual Pearson correlation is the specified bivariate residual correlation.",
+  "parameter_provenance": [
+    {
+      "path": "model_spec.covariate_distribution.age",
+      "meaning": "Marginal age distribution",
+      "conditioning_set": "none",
+      "scale": "years at baseline",
+      "classification": "assumed",
+      "source_pointers": [
+        "task_schema.age_years [20,79]"
+      ],
+      "derivation": "Uniform over the declared admissible age range because the source evidence provides no target age shape.",
+      "unverified_assumptions": "Target age distribution shape, complete-case weighting transfer, and age-dependent selection."
+    },
+    {
+      "path": "model_spec.covariate_distribution.female",
+      "meaning": "Marginal recorded sex distribution, Bernoulli probability of female",
+      "conditioning_set": "none",
+      "scale": "probability; category 0 male, 1 female",
+      "classification": "assumed",
+      "source_pointers": [
+        "S_BEIJING overall: male_n 550/1257 (43.76%) considered but not transported because the source age range differs"
+      ],
+      "derivation": "Neutral probability 0.5 for an adult complete-case analytical distribution with no target sex margin.",
+      "unverified_assumptions": "Target sex composition and sex-related missingness."
+    },
+    {
+      "path": "model_spec.covariate_distribution.bmi",
+      "meaning": "Marginal BMI distribution and support",
+      "conditioning_set": "none",
+      "scale": "kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        "S_INTERSALT Appendix II p327 illustrative centre BMI means 21.6-25.0 and average subgroup SDs 2.4-4.0"
+      ],
+      "derivation": "Beta(14,60,3.443478,10.956522) derived from assumed mean 25 and SD 5 over support [14,60]; source descriptive values were directional only, and target SD was widened.",
+      "unverified_assumptions": "Target BMI mean, SD, shape, and support; dictionary-admissible bounds; positive finite laboratory-weight complete cases."
+    },
+    {
+      "path": "model_spec.covariate_distribution.independence",
+      "meaning": "Joint covariate dependency structure: age, female, and bmi are mutually independent",
+      "conditioning_set": "none",
+      "scale": "dimensionless",
+      "classification": "assumed",
+      "source_pointers": [
+        "source_evidence.unidentified: Target age/sex/BMI distribution and dependencies"
+      ],
+      "derivation": "Explicit independence imposed for identifiability; missing target dependencies are not inferred from evidence.",
+      "unverified_assumptions": "No target age-sex-BMI dependence or interactions; simplification may not match the analytical population."
+    },
+    {
+      "path": "model_spec.linear_predictor.sbp",
+      "meaning": "Conditional SBP mean and OLS coefficients for [1,(age-50)/10,female,(bmi-25)/5]",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "mmHg; age_z coefficient per 10 years; female coefficient female-male; bmi_z coefficient per 5 kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        "S_INTERSALT Table II p322: SBP BMI coefficient 0.7754 mmHg per kg/m^2, SE 0.0359"
+      ],
+      "derivation": "bmi_z = 5 * 0.7754 = 3.877 mmHg per 5 kg/m^2. Intercept 125, age_z 5.0, and female -3.5 are assumed, not source-reported target coefficients.",
+      "unverified_assumptions": "Transport of INTERSALT adjusted BMI coefficient to the PNS target unweighted OLS after dropping sodium/potassium/alcohol adjustment; linear age effect; no age/sex/BMI interactions."
+    },
+    {
+      "path": "model_spec.linear_predictor.dbp",
+      "meaning": "Conditional DBP mean and OLS coefficients for [1,(age-50)/10,female,(bmi-25)/5]",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "mmHg; age_z coefficient per 10 years; female coefficient female-male; bmi_z coefficient per 5 kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        "S_INTERSALT Table II p322: DBP BMI coefficient 0.5967 mmHg per kg/m^2, SE 0.0257"
+      ],
+      "derivation": "bmi_z = 5 * 0.5967 = 2.9835 mmHg per 5 kg/m^2. Intercept 78, age_z 1.0, and female -1.5 are assumed, not source-reported target coefficients.",
+      "unverified_assumptions": "Transport of INTERSALT adjusted BMI coefficient to the PNS target unweighted OLS after dropping sodium/potassium/alcohol adjustment; linear age effect; no age/sex/BMI interactions."
+    },
+    {
+      "path": "model_spec.residual",
+      "meaning": "Residual bivariate normal covariance of SBP and DBP after the specified linear predictors",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "SDs in mmHg; correlation dimensionless",
+      "classification": "derived",
+      "source_pointers": [
+        "S_BEIJING Table 1 overall: SBP_SD 20.35, DBP_SD 10.93",
+        "reported_moment_algebra: raw SBP-DBP correlation 0.534442768"
+      ],
+      "derivation": "Assumed target total SDs and raw SBP-DBP correlation equal S_BEIJING overall. Covariate variances are age_z 2.900833, female 0.25, bmi_z 1. Covariate contributions: SBP variance 90.614462, DBP variance 12.364606, covariance 27.383696. Then residual SBP variance = 20.35^2 - 90.614462 = 323.508038; residual DBP variance = 10.93^2 - 12.364606 = 107.100294; residual covariance = 0.534442768*20.35*10.93 - 27.383696 = 91.490004; residual correlation = 91.490004 / sqrt(323.508038*107.100294) = 0.4915139.",
+      "unverified_assumptions": "Beijing older unadjusted second moments transfer to the target; rounded source SDs are not a sampling CI; homoscedasticity; no nonlinear BP-age structure."
+    },
+    {
+      "path": "model_spec.derived_marginal_moments",
+      "meaning": "Bridge quantities documenting assumed marginal BP moments and derived residual moments",
+      "conditioning_set": "marginal BP and covariate contribution",
+      "scale": "mmHg^2 for variances/covariance; dimensionless for correlation",
+      "classification": "derived",
+      "source_pointers": [
+        "S_BEIJING overall Table 1",
+        "reported_moment_algebra",
+        "S_INTERSALT Table II p322"
+      ],
+      "derivation": "Total SBP SD 20.35, DBP SD 10.93, raw correlation 0.534442768; subtract covariate contributions from the assumed linear predictors and independent covariate variances as detailed in the residual record.",
+      "unverified_assumptions": "Same as residual record; decomposition depends on assumed age/female coefficients and covariate independence."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "bmi_sbp",
+      "estimated_quantity": "coefficient of (bmi-25)/5 in unweighted OLS with intercept",
+      "model_implied_population_value": 3.877,
+      "unit": "mmHg per 5 kg/m^2",
+      "derivation": "Under the specified joint law, SBP mean is linear in the design with bmi_z coefficient 3.877 and residuals are independent of covariates, so the population OLS coefficient on (bmi-25)/5 is exactly model_spec.linear_predictor.sbp.bmi_z."
+    },
+    {
+      "analysis_id": "bmi_dbp",
+      "estimated_quantity": "coefficient of (bmi-25)/5 in unweighted OLS with intercept",
+      "model_implied_population_value": 2.9835,
+      "unit": "mmHg per 5 kg/m^2",
+      "derivation": "Under the specified joint law, DBP mean is linear in the design with bmi_z coefficient 2.9835 and residuals are independent of covariates, so the population OLS coefficient on (bmi-25)/5 is exactly model_spec.linear_predictor.dbp.bmi_z."
+    },
+    {
+      "analysis_id": "residual_correlation",
+      "estimated_quantity": "Pearson correlation of paired centered residuals from the two above regressions on the same rows",
+      "model_implied_population_value": 0.4915139,
+      "unit": "1",
+      "derivation": "Because the conditional mean is exactly the specified linear predictor and the error vector is bivariate normal independent of covariates, population OLS residuals equal the modeled errors; their population Pearson correlation is model_spec.residual.correlation."
+    }
+  ],
+  "limitations": [
+    "The cohort is an explicit synthetic construction, not a real PNS 2013 sample; no target PNS outcomes or target joint distribution were supplied.",
+    "INTERSALT BMI coefficients were adjusted for age, sex, sodium, potassium, alcohol, and pooled within centres; transporting them to a PNS complete-case OLS adjusted only for age, female, and BMI is an untested assumption.",
+    "S_BEIJING moments are from an older Beijing population and are unadjusted second moments; using them as target marginal BP moments to derive residual correlation depends on the assumed age/female coefficients and covariate independence.",
+    "Source SEs and rounded SD envelopes are not transfer uncertainty; the finite 3,000-row generated sample will differ from the exact model-implied population values.",
+    "Age, sex, and BMI are assumed independent; age effects are linear; no treatment, hypertension restriction, or nonlinearity/interactions were modeled.",
+    "Baseline BP timing, unknown final-reading aggregation, and recorded sex coding remain measurement limitations.",
+    "BMI support [14,60], BMI SD 5, and female probability 0.5 were assumed without target data."
+  ],
+  "checks_actually_performed": []
+}

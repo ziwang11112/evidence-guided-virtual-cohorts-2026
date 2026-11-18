@@ -1,0 +1,118 @@
+{
+  "structure": "Independent people are sampled from a centered trivariate Gaussian distribution matching all supplied population moments. Gaussian shape is a modeling choice; all three requested Pearson/OLS functionals are identified without that choice.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means for X, Y and Z."
+    },
+    {
+      "parameter": "individual_variances",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact unit population variances."
+    },
+    {
+      "parameter": "marginal_correlations",
+      "value": {
+        "X_Y": 0.5,
+        "X_Z": 0.6,
+        "Y_Z": 0.6
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "A",
+        "B"
+      ],
+      "basis": "Exact marginal Pearson correlations in the same population."
+    },
+    {
+      "parameter": "covariance",
+      "value": [
+        [
+          1.0,
+          0.5,
+          0.6
+        ],
+        [
+          0.5,
+          1.0,
+          0.6
+        ],
+        [
+          0.6,
+          0.6,
+          1.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "A",
+        "B"
+      ],
+      "basis": "Covariances equal correlations because all population standard deviations equal one."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient joint shape consistent with the supplied moments; not specified by the records."
+    },
+    {
+      "parameter": "sampling",
+      "value": "independent_identically_distributed_people",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Implements the task's independent-person requirement using one common population distribution."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "identified",
+      "value": 0.21875,
+      "basis": "Population OLS residual covariance is 0.5 - 0.6*0.6 = 0.14. Each residual variance is 1 - 0.6^2 = 0.64. Their Pearson correlation is 0.14/sqrt(0.64*0.64) = 0.21875, independently of distributional shape."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "identified",
+      "value": 0.5,
+      "basis": "Directly specified by record A."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "identified",
+      "value": 0.6,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z) = 0.6/1, using records B and C."
+    }
+  ],
+  "limitations": [
+    "The records do not identify the joint distribution beyond its first and second moments; Gaussian shape is assumed.",
+    "Finite random samples will not exactly reproduce the population moments or estimands. No realized-sample calibration, sorting or rejection is used.",
+    "The adjusted estimand is correlation after linear residualization, not a causal effect or a generally distribution-free conditional correlation.",
+    "These artificial constraints and generated data provide no biomedical validation."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked covariance symmetry and positive definiteness: leading principal minors are 1, 0.75 and 0.39.",
+    "Analytically calculated both adjusted residual variances as 0.64 and their covariance as 0.14.",
+    "Analytically derived the requested population functionals from the supplied moments.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

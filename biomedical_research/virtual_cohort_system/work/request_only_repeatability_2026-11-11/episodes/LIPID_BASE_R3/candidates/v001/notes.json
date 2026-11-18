@@ -1,0 +1,43 @@
+{
+  "notes": "PURPOSE AND STATUS: A reproducible fictional scenario of 3,000 adults, not a reconstruction of any actual study sample. No excluded target measurements or results were used. generate(None, model_spec, seed) returns all six requested columns, with cholesterol in mmol/L and no missingness. The isolated diagnostic run is intended to instantiate and inspect an actual cohort, not fit to target data.\n\nRETRIEVED EVIDENCE: (1) Lee JC et al., Physical Activity Energy Expenditure and Cardiometabolic Health in Three Rural Kenyan Populations, Am J Hum Biol 2019;31:e23199, DOI 10.1002/ajhb.23199, PMID 30537282, PMC6435188 version 1, Table 1. This rural Luo/Kamba/Maasai sample (n=1084; data collected 2005) had sex/ethnic-group mean BMI 20.0-22.5, SD 2.6-4.8; TC 3.6-4.0 mmol/L, SD 0.9-1.1; HDL 0.9-1.2, SD 0.3-0.4; LDL 2.2-2.4, SD 0.7-0.9; median triglycerides 0.8-0.92, IQR 0.4-0.5. The Maasai means were BMI 22.5 F and 21.0 M, TC 3.8 F and 4.0 M, HDL 1.2 F and 1.1 M. These are approximate scale anchors, not exact margins imposed on the synthetic data. (2) Kavishe B et al., Dyslipidemias and cardiovascular risk scores in urban and rural populations in north-western Tanzania and southern Uganda, PLoS ONE 2019;14:e0223189, DOI 10.1371/journal.pone.0223189, PMID 31809516, PMC6897412. Table 4 reports adjusted LDL differences versus normal BMI of -0.25 underweight, +0.23 overweight, +0.48 obese; corresponding HDL differences +0.01, -0.06, -0.15 mmol/L. Statistical-analysis section describes age/sex/stratum adjustment plus a hierarchical framework of additional covariates; these are NOT simply age/sex-adjusted continuous BMI slopes. Its abstract also supports rural/urban heterogeneity. (3) Christensen DL et al., Cardiovascular risk factors in rural Kenyans are associated with differential age gradients, but not modified by sex or ethnicity, Ann Hum Biol 2016;43:42-49, DOI 10.3109/03014460.2015.1013987, PMID 26073640. Retrieved full abstract only: n=1139, 61% women, age 17-68; cholesterol increased with age; men had lower HDL and higher other cardiovascular risk measures. This overlaps the rural Kenyan research program and is not independent replication.\n\nEXPLICIT DEMOGRAPHIC/LIFESTYLE ASSUMPTIONS: 60% recorded F; sex is a binary recorded category, not an inferred gender identity. Age is 18 plus Gamma(shape 2.4, scale 9), truncated at 85, independent of sex and latent stratum. There are 65% high-activity low-market/rural, 25% settled/intermediate rural, 10% town/market-integrated adults; these proportions are invented scenario weights, not reported target demographics. They summarize diet/activity/market access jointly, without claiming measured activity or food intakes. Shifted lognormal BMI has nominal pre-truncation F means 21.5/23.5/26.0 and M means 20.5/22.0/24.5 at age 38, a modest age rise and later decline, and support (12,55). There is no pregnancy, medication, smoking, alcohol, HIV, or diagnosed-disease submodel; their unidentified influences are folded into stratum effects and residual variation. This is a generic community-adult scenario, not a claim that these influences are absent in the real population.\n\nLIPID MODEL AND ASSUMPTIONS: Conditional arithmetic means of HDL, LDL, and remnant cholesterol are linear in age, sex, BMI and centered stratum score. The conditional BMI slopes in mmol/L per kg/m^2 are -0.012, +0.050, +0.012 respectively. The first two are transparent approximations to the categorical East African contrasts, not published continuous estimates (rough category separations of 5-10 BMI units); the remnant slope, numerical age gradients, and direct stratum effects are assumptions. Total is the sum of the three positive components. Thus its within-stratum conditional BMI slope is +0.050 mmol/L per BMI unit (about +9.67 mg/dL per 5 BMI units); HDL's is about -2.32 mg/dL per 5 BMI units. Age/sex-only fits can differ because lifestyle affects both BMI and lipids. No requested analysis is hard-coded or fitted to a desired result.\n\nDEPENDENCE AND POSITIVITY: Mean-corrected correlated lognormal errors have conditional CV 0.26/0.31/0.55 and Gaussian log-error correlations HDL-LDL +0.15, HDL-remnant -0.15, LDL-remnant +0.20. These correlations are mechanistic working assumptions, NOT measured or literature-estimated adjusted correlations. TC and HDL share the HDL component, creating part-whole covariance; unmeasured lifestyle also contributes to residual covariance after age/sex/BMI adjustment. The third requested estimand is consequently especially assumption-sensitive and should be explored under alternative covariance models. All lipid components are strictly positive by construction. TC>HDL follows from a biochemical component-sum model; it is not an eligibility screen, row-removal rule, or rejection criterion. No rows are deleted based on cholesterol values. BMI is inverse-CDF sampled on positive support. Values are not rounded. Fixed hyperparameters define one scenario; seed variation captures finite-sample randomness, not all uncertainty in transportability or model specification.\n\nANALYSES: Fit separate OLS models of TC and HDL on intercept, age, recorded-sex indicator and BMI. Multiply each BMI coefficient by 5*38.67 to express mg/dL per 5 kg/m^2. Compute Pearson correlation of the two OLS residual vectors. These cross-sectional associations are not causal effects or estimates of the excluded cohort's actual findings.",
+  "provenance": {
+    "retrieved_sources": [
+      {
+        "doi": "10.1002/ajhb.23199",
+        "sections": [
+          "full (first page)",
+          "index",
+          "table-wrap_001",
+          "full literal search: 2016"
+        ],
+        "source_id": "PMC6435188",
+        "version": 1
+      },
+      {
+        "doi": "10.1371/journal.pone.0223189",
+        "sections": [
+          "index",
+          "table-wrap_004",
+          "sec_013"
+        ],
+        "source_id": "PMC6897412",
+        "version": 1
+      },
+      {
+        "sections": [
+          "metadata (first page)"
+        ],
+        "source_id": "hit_0006_001"
+      },
+      {
+        "doi": "10.3109/03014460.2015.1013987",
+        "sections": [
+          "abstract"
+        ],
+        "source_id": "hit_0005_001"
+      }
+    ],
+    "target_results_used": false,
+    "uncertainty": "Demographic mixture and lipid residual covariance are not identified by the retrieved evidence; all numerical modeling extrapolations are exposed in model_spec and notes."
+  }
+}

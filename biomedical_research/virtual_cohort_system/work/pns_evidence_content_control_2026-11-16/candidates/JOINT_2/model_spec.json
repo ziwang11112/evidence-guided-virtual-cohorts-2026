@@ -1,0 +1,134 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_id": "bounded_linear_joint_bp_v1",
+    "population_interpretation": "An assumed joint distribution conditional on the task's analytical eligibility criteria. Equal-weight draws represent the intended peso_lab-weighted complete-case population only under the stated transport assumptions; no target calibration is available.",
+    "age": {
+      "lower": 20.0,
+      "upper": 79.0,
+      "beta_shape_a": 1.6,
+      "beta_shape_b": 2.1
+    },
+    "female_probability": 0.53,
+    "bmi": {
+      "shift": 12.0,
+      "reference_unshifted_median": 14.0,
+      "log_age_coefficient_per_decade": 0.035,
+      "log_female_coefficient": 0.025,
+      "log_sd": 0.3,
+      "lower": 15.0,
+      "upper": 55.0,
+      "law": "Conditional shifted lognormal, truncated by rejection at fixed age and sex."
+    },
+    "design_order": [
+      "intercept",
+      "(age-50)/10",
+      "female",
+      "(bmi-25)/5"
+    ],
+    "conditional_mean_coefficients": {
+      "sbp": [
+        126.0,
+        5.0,
+        -4.0,
+        3.877
+      ],
+      "dbp": [
+        80.0,
+        1.0,
+        -2.0,
+        2.9835
+      ]
+    },
+    "residual": {
+      "reference_sbp_sd": 16.0,
+      "reference_dbp_sd": 10.0,
+      "correlation": 0.7,
+      "radial_beta_a": 1.0,
+      "radial_beta_b": 2.0,
+      "radial_squared_multiplier": 6.0,
+      "law": "Let R=sqrt(6*Beta(1,2)) and theta be independent Uniform(0,2*pi). Set Z=(R*cos(theta),R*sin(theta)), with covariance I. Apply the stated correlated BP loading and a common covariate-dependent scale g."
+    },
+    "physiological_support": {
+      "sbp_lower": 70.0,
+      "sbp_upper": 250.0,
+      "dbp_lower": 40.0,
+      "dbp_upper": 150.0,
+      "pulse_pressure_lower": 12.0,
+      "scale_rule": "g is the minimum of 1 and each conditional-mean distance to a BP or pulse-pressure boundary divided by its maximum unscaled residual excursion. This defines the conditional error law; it is not post-generation clipping."
+    }
+  }
+}

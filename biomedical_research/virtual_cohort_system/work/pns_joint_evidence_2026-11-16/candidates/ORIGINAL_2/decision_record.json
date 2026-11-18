@@ -1,0 +1,204 @@
+{
+  "structure": "Generate independent virtual adults using an assumed age distribution, age-independent recorded sex, age/sex-dependent BMI, and jointly distributed BP conditional on those covariates. INTERSALT supplies transformed slope anchors, not identified target coefficients. Beijing supplies partial information about raw BP dependence and scale, not residual correlation. Conditional rejection imposes explicit physiological support without altering the covariate distribution. The resulting OLS projections, rather than the untruncated location parameters, are the requested estimands.",
+  "parameter_provenance": [
+    {
+      "parameter": "Age distribution and female prevalence",
+      "value": {
+        "age_bin_edges": [
+          20,
+          35,
+          50,
+          65,
+          79
+        ],
+        "age_bin_probabilities": [
+          0.32,
+          0.29,
+          0.25,
+          0.14
+        ],
+        "female_probability": 0.54
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Uniform age within each bin, with sex independent of age. These are explicit demographic transport choices, not estimates of the weighted target. The outer age bounds follow the task."
+    },
+    {
+      "parameter": "Conditional BMI distribution",
+      "value": "With a=(age-50)/10, the untruncated arithmetic mean is 27+0.6*female+0.35*a-0.18*a^2 and CV is 0.18. Log variance is log(1+0.18^2); log mean is log(arithmetic mean)-log variance/2. Condition on 14<=BMI<=60.",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Allows positive skew, modest sex differences and a middle-age peak. The formula describes the lognormal before truncation; truncation slightly changes its mean and CV. No admissible source identifies the target BMI distribution."
+    },
+    {
+      "parameter": "INTERSALT source BMI coefficients",
+      "value": {
+        "sbp_per_kg_m2": 0.7754,
+        "dbp_per_kg_m2": 0.5967,
+        "sbp_source_se": 0.0359,
+        "dbp_source_se": 0.0257
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Usable as association evidence, but only partial for this task: these are inverse-variance pooled within-centre coefficients for ages 20–59 with age, sex, urinary sodium/potassium and alcohol adjustment. Treatment was not excluded. They are not the requested age/sex-only target projections."
+    },
+    {
+      "parameter": "Five-unit source slope conversion",
+      "value": {
+        "sbp_per_5": 3.877,
+        "dbp_per_5": 2.9835,
+        "sbp_source_se_per_5": 0.1795,
+        "dbp_source_se_per_5": 0.1285
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Multiply the reported coefficients and SEs by five. These are unit conversions only; no adjustment-set or population equivalence follows."
+    },
+    {
+      "parameter": "Transported BMI location slopes",
+      "value": {
+        "sbp_bmi_b": 3.877,
+        "dbp_bmi_b": 2.9835
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Use the converted source slopes as fixed untruncated conditional-location anchors across ages 20–79 and both sexes. This assumes portability despite different adjustment, centre composition, treatment patterns and extrapolation beyond age 59. It does not equate them with final generated OLS coefficients."
+    },
+    {
+      "parameter": "Other BP location terms",
+      "value": {
+        "sbp": "126+5.5*a-4*female+3.877*b",
+        "dbp": "79+1.2*a-0.65*a^2-2*female+2.9835*b",
+        "a": "(age-50)/10",
+        "b": "(BMI-25)/5"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Reference levels and sex/age associations are scenario choices. Rising SBP and a midlife DBP peak provide an age pattern without claiming identification. The omitted quadratic age term in the requested regressions can influence the DBP BMI projection and residual dependence."
+    },
+    {
+      "parameter": "Beijing raw covariance and correlations",
+      "value": {
+        "overall_covariance_mmHg2": 118.8737,
+        "overall_raw_correlation": 0.5344427684775355,
+        "under65_raw_correlation": 0.6030316602292216,
+        "65plus_raw_correlation": 0.5451263744946805
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "S_BEIJING"
+      ],
+      "rationale": "Use Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2 and divide by SD_S*SD_D. These rounded-moment calculations describe unadjusted source dependence. Without BMI and covariate cross-moments they cannot identify age/sex/BMI-adjusted dependence."
+    },
+    {
+      "parameter": "Paired BP error law",
+      "value": {
+        "student_t_df": 7,
+        "untruncated_sd_sbp": 16,
+        "untruncated_sd_dbp": 10,
+        "untruncated_error_correlation": 0.5,
+        "untruncated_error_covariance": [
+          [
+            256,
+            80
+          ],
+          [
+            80,
+            100
+          ]
+        ]
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "S_BEIJING",
+        "S_INTERSALT"
+      ],
+      "rationale": "Select moderately heavy-tailed errors with finite variance and fourth moments. The chi-square normalization makes 16 and 10 marginal SDs, not t scale parameters, before rejection. Source dispersions provide broad context only: Beijing SDs are raw in an older selected population, and INTERSALT displayed SDs average subgroups rather than pool them. Correlation 0.5 is an independent residual-dependence assumption, not a transformation or estimate of Beijing's raw correlation."
+    },
+    {
+      "parameter": "Physiological support",
+      "value": {
+        "bmi": [
+          14,
+          60
+        ],
+        "sbp": [
+          75,
+          260
+        ],
+        "dbp": [
+          40,
+          150
+        ],
+        "sbp_minus_dbp": [
+          15,
+          150
+        ]
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Broad finite bounds exclude impossible ordering and extreme implausible values while retaining hypertension and severe obesity. These are population-law restrictions, not dictionary limits or clinical exclusions from the task. Conditional rejection changes BP means, variances, correlation and possibly slopes; no clipping or sample-wide repair is used."
+    },
+    {
+      "parameter": "INTERMAP applicability",
+      "value": "Measurement-context evidence only; no quantitative coefficient or moment contribution",
+      "status": "REPORTED",
+      "source_ids": [
+        "S_INTERMAP_methods"
+      ],
+      "rationale": "Partial suitability for understanding measurement differences. Its eight-reading, four-visit average differs from the target's unknown released aggregation. The packet admits no original INTERMAP BP/BMI moments or coefficients, and secondary INTERSALT tables are not independent replication."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "bmi_sbp",
+      "support_basis": "The generated law supports equal-weight OLS on [1,a,female,b]. Its untruncated SBP location has a nominal BMI slope of 3.877 mmHg per 5 kg/m^2, anchored to converted INTERSALT evidence. Conditional physiological rejection can change the population projection; no exact generated or target coefficient is asserted.",
+      "key_unresolved_assumptions": [
+        "Transport from extra-adjusted within-centre source associations to the target's age/sex-only projection.",
+        "Extrapolation beyond age 59 and across treatment, selection and measurement settings.",
+        "Assumed covariate distribution and conditional BP truncation."
+      ]
+    },
+    {
+      "id": "bmi_dbp",
+      "support_basis": "The generated law supports the requested DBP OLS projection. The untruncated location slope is 2.9835 mmHg per 5 kg/m^2, but the regression omits the specified quadratic age term. BMI's nonlinear age association and conditional BP rejection can therefore change this projection even in an infinite generated population.",
+      "key_unresolved_assumptions": [
+        "Transport of the INTERSALT DBP slope across adjustment sets and populations.",
+        "Assumed DBP age curvature and BMI-age dependence.",
+        "Effects of treatment, complete-case selection and physiological truncation."
+      ]
+    },
+    {
+      "id": "residual_correlation",
+      "support_basis": "Paired outcomes permit Pearson correlation of centered residuals from the same two regressions. The untruncated conditional error correlation is assumed to be 0.5. Final regression-residual correlation also reflects omitted age curvature and conditional truncation and is not asserted to equal 0.5 or any Beijing raw correlation.",
+      "key_unresolved_assumptions": [
+        "No supplied source identifies the requested residual correlation.",
+        "The bivariate t family, common random scale, marginal error SDs and correlation are transported modeling choices.",
+        "Measurement aggregation, omitted predictors and population selection may change dependence."
+      ]
+    }
+  ],
+  "limitations": [
+    "The weighted complete-case target law is not identified by the supplied external sources. Demography, BMI and several BP components remain explicit assumptions.",
+    "No target observations, excluded-cohort evidence or additional joint evidence were used. Original publications were not independently reauthenticated in this construction.",
+    "Weights, pregnancy responses, height, weight, treatment and missingness are not generated. Their effects on the declared analytical distribution are represented only through transport assumptions; the code cannot reproduce the actual eligibility or weighting process.",
+    "The target retains unknown/inapplicable pregnancy and imposes no treatment, hypertension or HbA1c restriction. No additional such exclusions are modeled.",
+    "Baseline interview BP timing and unknown released final-reading aggregation remain unresolved measurement limitations. External sources used different instruments and averaging protocols.",
+    "Bounded support omits rare extreme physiology. Before truncation, t7 errors allow heavier tails than Gaussian errors; afterward all relevant moments are finite, and tails are limited by the stated bounds.",
+    "No sensitivity analysis or numerical population projection was executed. Source SEs and rounded-SD envelopes are not transport intervals, and generating 3000 people does not add empirical evidence."
+  ],
+  "checks_actually_performed": [
+    "Reviewed the supplied evidence distinctions: extra-adjusted pooled slopes, averaged subgroup SDs, raw covariance algebra and absent residual-correlation evidence.",
+    "Checked the unit conversions: 5*0.7754=3.877 and 5*0.5967=2.9835; source SEs likewise multiply by five.",
+    "Checked the overall Beijing covariance algebra: (20.35^2+10.93^2-17.2^2)/2=118.8737 mmHg^2.",
+    "Analytically checked the assumed untruncated error covariance: diagonal entries 256 and 100, covariance 80, determinant 19200>0. The sqrt((7-2)/chi-square(7)) normalization gives the stated marginal variances.",
+    "Inspected the generator construction for seed-local randomness, per-person rejection without sample-wide moment adjustment, explicit support predicates, unique integer row IDs and required column order.",
+    "No code was executed; no realized ranges, rejection rates, coefficients, correlations or simulation diagnostics are claimed."
+  ]
+}

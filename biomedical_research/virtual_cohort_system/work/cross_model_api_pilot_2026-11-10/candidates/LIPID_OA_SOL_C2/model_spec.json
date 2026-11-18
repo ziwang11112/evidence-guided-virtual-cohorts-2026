@@ -1,0 +1,214 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "joint_family": "IID Gaussian copula with shifted-lognormal continuous margins and a thresholded normal score for recorded sex",
+    "latent_order": [
+      "age_excess",
+      "sex_score",
+      "bmi",
+      "total_cholesterol",
+      "hdl_cholesterol"
+    ],
+    "latent_standardization": "Each latent score has standard-normal marginal distribution; the dependence settings specify marginal latent Pearson correlations.",
+    "recorded_sex": {
+      "probability_F": 0.5,
+      "above_threshold_code": "F",
+      "otherwise_code": "M",
+      "threshold_definition": "Phi^-1(1-probability_F)"
+    },
+    "margins": {
+      "age": {
+        "latent_name": "age_excess",
+        "offset": 18,
+        "mean_above_offset": 25,
+        "sd_above_offset": 15,
+        "unit": "year"
+      },
+      "bmi": {
+        "latent_name": "bmi",
+        "offset": 0,
+        "mean_above_offset": 21.63,
+        "sd_above_offset": 3.61,
+        "unit": "kg/m^2"
+      },
+      "total_cholesterol": {
+        "latent_name": "total_cholesterol",
+        "offset": 0,
+        "mean_above_offset": 3.23,
+        "sd_above_offset": 0.92,
+        "unit": "mmol/L"
+      },
+      "hdl_cholesterol": {
+        "latent_name": "hdl_cholesterol",
+        "offset": 0,
+        "mean_above_offset": 1.14,
+        "sd_above_offset": 0.38,
+        "unit": "mmol/L"
+      }
+    },
+    "dependence": {
+      "rank_bridge": "For a continuous Gaussian-copula pair, latent Pearson correlation = 2*sin(pi*Spearman_rho/6).",
+      "rank_links": [
+        {
+          "variables": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "spearman_rho": 0.212
+        },
+        {
+          "variables": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "spearman_rho": -0.1
+        },
+        {
+          "variables": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "spearman_rho": 0.106
+        }
+      ],
+      "latent_links": [
+        {
+          "variables": [
+            "age_excess",
+            "sex_score"
+          ],
+          "pearson_rho": 0.05
+        },
+        {
+          "variables": [
+            "age_excess",
+            "bmi"
+          ],
+          "pearson_rho": 0.2
+        },
+        {
+          "variables": [
+            "age_excess",
+            "total_cholesterol"
+          ],
+          "pearson_rho": 0.15
+        },
+        {
+          "variables": [
+            "age_excess",
+            "hdl_cholesterol"
+          ],
+          "pearson_rho": 0.05
+        },
+        {
+          "variables": [
+            "sex_score",
+            "bmi"
+          ],
+          "pearson_rho": 0.15
+        },
+        {
+          "variables": [
+            "sex_score",
+            "total_cholesterol"
+          ],
+          "pearson_rho": 0.1
+        },
+        {
+          "variables": [
+            "sex_score",
+            "hdl_cholesterol"
+          ],
+          "pearson_rho": 0.08
+        }
+      ]
+    },
+    "analysis_scaling": {
+      "lipid_mmol_L_to_mg_dL": 38.67,
+      "bmi_increment_kg_m2": 5
+    },
+    "sampling_and_uncertainty": {
+      "row_sampling": "Independent, identically distributed records; equal weights.",
+      "parameter_treatment": "One fixed, evidence-informed scenario. Parameter uncertainty is unresolved and is not propagated.",
+      "missingness": "None.",
+      "selection": "No health, fasting, lifestyle, outlier, site or TC-versus-HDL exclusion is imposed."
+    },
+    "measurement_representation": {
+      "age": "Continuous recorded-age representation without rounding, heaping or a separate reporting-error layer.",
+      "sex": "Literal recorded F/M field, not an independently authenticated biological classification.",
+      "bmi": "Continuous recorded BMI without separate height, weight or measurement-error variables.",
+      "lipids": "Continuous recorded concentrations in mmol/L without a separate assay-error or assay-calibration layer."
+    }
+  }
+}

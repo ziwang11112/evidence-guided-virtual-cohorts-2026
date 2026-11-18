@@ -1,0 +1,357 @@
+{
+  "structure": "Age follows an assumed bounded mixture; recorded sex depends on age stratum; BMI has an affine age/sex mean and an independent bounded beta innovation. Let X=[1,A,F,B], with the requested scaling. A latent omitted-adjustment score is L=Xk+U0. The BP vector is XC+loading_0*L plus a shared innovation and outcome-specific innovations. The source BMI slopes enter C only after an explicit conditional-slope transport assumption. The nonzero BMI component of E[L|X] supplies an omitted-adjustment bridge, so source slopes are not equated to the requested coefficients. Independent uniform primitive innovations induce correlated, bounded, non-Gaussian BP residuals. The law is an association construction, not a causal model. No simulated-sample calibration is used.",
+  "parameter_provenance": [
+    {
+      "paths": [
+        "$.model_spec.transforms"
+      ],
+      "meaning_operator": "Coordinate definitions A=(age-50)/10 and B=(BMI-25)/5; the centers are not population means.",
+      "conditioning_set": "None; analysis-design definitions.",
+      "scale": "Affine transformations of raw age and BMI.",
+      "unit": "A per 10 years; B per 5 kg/m^2.",
+      "classification": "reported",
+      "source_pointers": [
+        {
+          "document": "REQUESTED_ANALYSES_JSON",
+          "path": "$.design_columns",
+          "original_locator": "design_columns"
+        }
+      ],
+      "derivation": "Copied from the requested regression design.",
+      "unverified_assumptions": []
+    },
+    {
+      "paths": [
+        "$.model_spec.age.family",
+        "$.model_spec.age.edges_years",
+        "$.model_spec.age.stratum_probabilities"
+      ],
+      "meaning_operator": "A three-component age mixture with continuous uniform age inside each interval. Outer endpoints are task restrictions; internal cutpoints and mixture probabilities are modeling choices.",
+      "conditioning_set": "Declared eligible, laboratory-weighted analytical population.",
+      "scale": "Raw continuous baseline age and probability.",
+      "unit": "Years; probabilities dimensionless.",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "TASK_JSON",
+          "path": "$.columns[1]",
+          "original_locator": "age column bounds and population definition"
+        }
+      ],
+      "derivation": "The outer support is 20–79 years. Cutpoints 40 and 60 and masses 0.38, 0.39 and 0.23 are assumed, not estimated from any supplied cohort.",
+      "unverified_assumptions": [
+        "These mixture masses represent the weighted complete-case population.",
+        "Continuous rather than integer-reported age is adequate for the requested projections.",
+        "Uniform within-stratum age and bounded age tails are approximations."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.female.codes",
+        "$.model_spec.female.probabilities_by_age_stratum"
+      ],
+      "meaning_operator": "Bernoulli recorded-sex composition: probability of female is 0.51, 0.54 or 0.57 in successive age strata; codes are male=0 and female=1.",
+      "conditioning_set": "Age stratum and declared eligibility.",
+      "scale": "Conditional category probability.",
+      "unit": "Dimensionless.",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "TASK_JSON",
+          "path": "$.columns[2]",
+          "original_locator": "female column coding"
+        }
+      ],
+      "derivation": "Coding is task-specified; all sex-composition probabilities are assumed.",
+      "unverified_assumptions": [
+        "Sex is independent of exact age within a stratum, but not marginally independent of age.",
+        "This models recorded sex only and does not infer gender or pregnancy status."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bmi.mean_design",
+        "$.model_spec.bmi.mean_coefficients"
+      ],
+      "meaning_operator": "E[BMI|A,F]=27+0.7*A+1*F. The intercept is the conditional BMI mean at age 50 for recorded males, not a target marginal mean.",
+      "conditioning_set": "Baseline age, recorded sex and declared eligibility.",
+      "scale": "Raw conditional arithmetic mean.",
+      "unit": "kg/m^2; age coefficient per 10 years; female contrast in kg/m^2.",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": null,
+      "unverified_assumptions": [
+        "BMI depends on both age and recorded sex as specified.",
+        "There are no additional age curvature, age-by-sex effects or treatment-specific BMI distributions.",
+        "No supplied evidence identifies these target parameters."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bmi.innovation_family",
+        "$.model_spec.bmi.innovation_beta_shapes",
+        "$.model_spec.bmi.innovation_support_kg_m2"
+      ],
+      "meaning_operator": "Independent BMI innovation obtained by mapping Beta(2,2) to [-9,9]; its mean is zero and its variance is 81/5.",
+      "conditioning_set": "The same innovation law at every age and sex.",
+      "scale": "Additive raw-BMI dispersion, not an estimator SE.",
+      "unit": "Support in kg/m^2; variance in (kg/m^2)^2; shapes dimensionless.",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "Symmetry gives zero mean; rescaled-beta variance gives 81/5. Together with the mean model, the closure of marginal BMI support is [15.9,39.03].",
+      "unverified_assumptions": [
+        "Bounded, symmetric, homoscedastic BMI tails are adequate.",
+        "These are chosen supports, not authenticated release-dictionary limits.",
+        "BMI innovation is independent of age and recorded sex."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.outcome_order",
+        "$.model_spec.bp.source_bmi_slopes_mmHg_per_kg_m2"
+      ],
+      "meaning_operator": "Reported SBP and DBP BMI coefficients, respectively, pooled by inverse variance from within-centre coefficients. These are source statistics, not target age/sex-adjusted coefficients.",
+      "conditioning_set": "Source adjustment: age, sex, urinary sodium, urinary potassium, alcohol 1–299 ml/week indicator and alcohol >=300 ml/week indicator; within-centre estimation.",
+      "scale": "Raw BP regression slopes for measured BMI.",
+      "unit": "mmHg per kg/m^2.",
+      "classification": "reported",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0].reported_BMI_coefficients",
+          "source_id": "S_INTERSALT",
+          "original_locator": "Table II p322"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0]",
+          "source_id": "S_INTERSALT",
+          "original_locator": "Population and measurement, pp319–320"
+        }
+      ],
+      "derivation": "Multiplication by the requested BMI divisor gives conditional-slope anchors 3.877 and 2.9835 mmHg per 5 kg/m^2.",
+      "unverified_assumptions": [
+        "The packet's historical extraction is accepted without fresh original-article authentication.",
+        "Source population: 10,079 adults aged 20–59, 52 centres in 32 countries; antihypertensive treatment was not excluded.",
+        "Source measurement: mean of two seated Hawksley random-zero readings after five-minute rest; height and weight measured twice.",
+        "The generator's use of these statistics as conditional model coefficients requires the separate transport and adjustment-bridge assumptions below."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bp.reported_source_slope_SE_mmHg_per_kg_m2",
+        "$.model_spec.uncertainty"
+      ],
+      "meaning_operator": "Reported source coefficient SEs and the decision to construct a fixed-parameter scenario rather than a parameter-uncertainty mixture.",
+      "conditioning_set": "SEs concern the source pooled adjusted coefficients, not target individuals or target transport.",
+      "scale": "Sampling uncertainty of regression coefficients.",
+      "unit": "mmHg per kg/m^2; equivalent per-5 SEs are 0.1795 and 0.1285.",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0].reported_BMI_coefficients",
+          "source_id": "S_INTERSALT",
+          "original_locator": "Table II p322"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0].uncertainty_limit",
+          "source_id": "S_INTERSALT",
+          "original_locator": "Supplied evidence packet uncertainty qualification"
+        }
+      ],
+      "derivation": "SEs scale by the same BMI divisor as slopes. No coefficient draws are made because their joint sampling covariance and transport uncertainty are unidentified. Null uncertainty fields mean unspecified, not zero.",
+      "unverified_assumptions": [
+        "A point scenario is adequate for this single executable construction, but is not an uncertainty analysis.",
+        "Finite-cohort variability under different seeds does not quantify model or transport uncertainty.",
+        "The two outcome summaries from INTERSALT are dependent evidence, not independent replications."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bp.transport_slope_offset_mmHg_per5"
+      ],
+      "meaning_operator": "Additional target-minus-source change in the BMI slope conditional on age, sex and the omitted-adjustment score.",
+      "conditioning_set": "Age, recorded sex and the sufficient omitted-adjustment score.",
+      "scale": "Additive conditional-slope transfer adjustment.",
+      "unit": "mmHg per 5 kg/m^2, in SBP/DBP order.",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0].target_estimand_equivalence",
+          "source_id": "S_INTERSALT",
+          "original_locator": "Supplied evidence packet estimand-equivalence qualification"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.unidentified",
+          "original_locator": "Unidentified target relationships"
+        }
+      ],
+      "derivation": "Both offsets are deliberately fixed at zero. This is conditional-slope invariance, not evidence of target/source equivalence; the subsequent omitted-score bridge is nonzero.",
+      "unverified_assumptions": [
+        "Inverse-variance within-centre source slopes can anchor a common target conditional slope.",
+        "Conditional slopes extend unchanged to ages 60–79 and across geography, treatment composition, complete-case selection and laboratory-weight tilting.",
+        "Differences in BP device, aggregation and BMI measurement do not require an additional slope correction."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bp.intercepts_mmHg",
+        "$.model_spec.bp.age_coefficients_mmHg_per10y",
+        "$.model_spec.bp.female_coefficients_mmHg"
+      ],
+      "meaning_operator": "Conditional BP means before marginalizing the omitted score. Intercepts [125,75] refer to age 50, male, BMI 25 and score zero; age coefficients are [6,1.5]; female contrasts are [-2,-1].",
+      "conditioning_set": "Age, recorded sex, measured BMI and omitted-adjustment score.",
+      "scale": "Raw affine conditional mean; these are not source moments or target marginal means.",
+      "unit": "mmHg; age coefficients per 10 years.",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": null,
+      "unverified_assumptions": [
+        "All components are assumed because the supplied evidence does not identify target levels or conditional age/sex effects.",
+        "No age curvature, interaction, heteroscedasticity or treatment-specific response is included.",
+        "In particular, the linear DBP age specification is an extrapolation across the full eligible age range."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bp.omitted_score_mean_design",
+        "$.model_spec.bp.omitted_score_mean_coefficients",
+        "$.model_spec.assumptions.source_adjustment_bridge"
+      ],
+      "meaning_operator": "E[L|X]=0+0.15*A-0.1*F+0.2*B for a dimensionless score representing the net BP contribution of the source adjustment variables absent from the requested design.",
+      "conditioning_set": "Age, recorded sex, measured BMI and declared target eligibility.",
+      "scale": "Affine conditional mean of a latent score.",
+      "unit": "Dimensionless score; coefficients per corresponding design coordinate.",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0].adjustment",
+          "source_id": "S_INTERSALT",
+          "original_locator": "Table II p322"
+        }
+      ],
+      "derivation": "Marginalizing L adds loading_0*k to the BP design coefficients. Its BMI component adds 0.8 to SBP and 0.6 to DBP per 5 kg/m^2.",
+      "unverified_assumptions": [
+        "The numerical score relationships are not estimated from the source.",
+        "The additional source adjustment variables can be represented by one score sufficient for their conditional mean contributions to both outcomes.",
+        "Their effects on the two outcomes are proportional, and the transported source slopes can be interpreted conditional on that score.",
+        "This is one explicit nonzero adjustment bridge, not a claim that the omitted relationships are identified."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bp.factor_names",
+        "$.model_spec.bp.factor_loadings_mmHg"
+      ],
+      "meaning_operator": "Rows are SBP and DBP; columns are omitted-score innovation, shared BP innovation, SBP-specific innovation and DBP-specific innovation. Each entry is an additive raw-BP loading.",
+      "conditioning_set": "Age, recorded sex and BMI after marginalizing the score mean.",
+      "scale": "Latent-factor residual dependence and individual dispersion.",
+      "unit": "mmHg per unit innovation.",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "With innovation covariance I/3, residual covariance is LL'/3: SBP variance 416/3, DBP variance 78 and covariance 40, all in mmHg^2.",
+      "unverified_assumptions": [
+        "All loadings, including the outcome-specific zero cross-loadings, are structural assumptions.",
+        "Residual sharing is positive through two factors; the correlation is not imported from a reported unadjusted BP correlation.",
+        "Common biological, treatment and measurement variation is represented only phenomenologically, not separated into authenticated components."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bp.factor_family",
+        "$.model_spec.bp.factor_support",
+        "$.model_spec.assumptions.bp_innovations",
+        "$.model_spec.assumptions.support"
+      ],
+      "meaning_operator": "Four independent Uniform(-1,1) innovations per row, independent of the covariates, each with mean zero and variance 1/3.",
+      "conditioning_set": "The same innovation law at every age, sex and BMI.",
+      "scale": "Bounded symmetric individual variation; constant conditional covariance.",
+      "unit": "Dimensionless primitive innovations.",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "Bounded factors and bounded covariates give finite BP support without clipping or rejection. The stated loading and mean specifications keep BP positive and SBP above DBP.",
+      "unverified_assumptions": [
+        "Independence of primitive innovations and absence of residual covariate dependence are deliberate completion assumptions.",
+        "Compact tails are not estimated from any source and can underrepresent extreme eligible values.",
+        "No normal-error assumption or source SE-to-dispersion conversion is made."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.interpretation",
+        "$.model_spec.assumptions.row_sampling",
+        "$.model_spec.assumptions.age_and_sex",
+        "$.model_spec.assumptions.bmi_innovation",
+        "$.model_spec.assumptions.conditional_means",
+        "$.model_spec.assumptions.measurement_transfer",
+        "$.model_spec.assumptions.selection_transfer"
+      ],
+      "meaning_operator": "Selection, dependence and measurement conventions defining which population law the generator purports to represent.",
+      "conditioning_set": "All task eligibility conditions, including age/sex admissibility, complete cases, positive finite laboratory weight and exclusion of reported baseline pregnancy.",
+      "scale": "Population-distribution assumptions rather than estimated coefficients.",
+      "unit": "Not applicable.",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "TASK_JSON",
+          "path": "$.population",
+          "original_locator": "Population definition"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "$.source_evidence.sources[0].measurement",
+          "source_id": "S_INTERSALT",
+          "original_locator": "pp319–320"
+        }
+      ],
+      "derivation": "Eligibility and laboratory-weight tilting are absorbed into the assumed distribution rather than reproduced through individual weights or selection variables.",
+      "unverified_assumptions": [
+        "The generated equal-weight law represents the specified weighted complete-case population despite having no target covariate composition or selection data.",
+        "Unknown or inapplicable pregnancy is retained implicitly; no pregnancy prevalence is asserted.",
+        "No HbA1c, treatment or hypertension exclusion is imposed, but their unobserved mixture is not separately identified.",
+        "Unknown released final-reading aggregation and baseline BP timing remain unresolved; no separate measurement-error model is claimed.",
+        "Raw weight and height are not generated, so detailed anthropometric dictionary compatibility beyond the supplied task cannot be authenticated."
+      ]
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "bmi_sbp",
+      "model_implied_population_value": 4.677,
+      "unit": "mmHg per 5 kg/m^2",
+      "derivation": "After marginalizing the omitted score, E[SBP|X]=125+6.6*A-2.4*F+4.677*B. All remaining innovations have conditional mean zero. The design has full-rank population second moments because age varies, both sex codes have positive probability and BMI has an independent nondegenerate innovation. Thus population OLS equals this conditional mean projection, and its BMI coefficient is 5*0.7754+0+4*0.2=4.677. This is a model-derived association, not the source coefficient or a finite-sample estimate."
+    },
+    {
+      "analysis_id": "bmi_dbp",
+      "model_implied_population_value": 3.5835,
+      "unit": "mmHg per 5 kg/m^2",
+      "derivation": "After marginalizing the omitted score, E[DBP|X]=75+1.95*A-1.3*F+3.5835*B. Conditional mean-zero residuals and full-rank population design imply that the population OLS BMI coefficient is 5*0.5967+0+3*0.2=3.5835. This includes the assumed adjustment bridge and is not an unadjusted source statistic."
+    },
+    {
+      "analysis_id": "residual_correlation",
+      "model_implied_population_value": 0.38461538461538464,
+      "exact_value": "5/13",
+      "unit": "1",
+      "derivation": "Population regression residuals are eS=4*U0+12*U1+16*U2 and eD=3*U0+9*U1+12*U3. Independent centered uniforms have variance 1/3. Therefore Cov(eS,eD)=40, Var(eS)=416/3 and Var(eD)=78. Their Pearson correlation is 40/sqrt((416/3)*78)=40/104=5/13; the numeric field is its decimal approximation. This derivation concerns centered population residuals from the requested common design, not source raw BP correlations."
+    }
+  ],
+  "limitations": [
+    "This is one explicit scientific scenario, not an identified reconstruction or validated estimate of the target population. In particular, covariate composition, tails, conditional scales, omitted-score relationships and transport offsets are unsupported by target evidence.",
+    "INTERSALT supplied adjusted, inverse-variance pooled within-centre coefficients for ages 20–59. Their transfer to a differently selected weighted population aged 20–79 and to a reduced adjustment set requires strong assumptions; source coefficient precision does not resolve these assumptions.",
+    "The INTERSALT Appendix II p327 descriptive SDs average subgroup SDs and are not pooled individual SDs. Neither those SDs nor the illustrative centre means were used to set target moments.",
+    "S_BEIJING, Methods 2–2.2 and Table 1, describes selected 2009 middle-aged/older Beijing participants and mean-of-two Omron measurements. Its SBP/DBP/pulse-pressure algebra yields unadjusted raw correlations, not the requested BMI/age/sex residual correlation. None of its numeric moments was used as a target residual parameter.",
+    "The overall, under-65 and 65-plus Beijing summaries are dependent summaries of one cohort. Their rounded-SD envelopes are not sampling confidence intervals. They were not treated as independent evidence or used to quantify uncertainty.",
+    "S_INTERMAP_methods, Methods and Table 5, offers measurement context but no admitted original BP/BMI moments or BMI coefficient here. Its eight-reading protocol and secondary INTERSALT summaries were not used for calibration or independent replication.",
+    "Baseline BP timing and unknown released final-reading aggregation are retained limitations. The construction does not distinguish biological variability, treatment effects, device differences and measurement error.",
+    "Bounded innovations exclude some extreme values that may be eligible in reality. This is a tail-support assumption, not an empirical dictionary limit or a hypertension-based exclusion rule.",
+    "Independent rows do not reproduce survey clustering, original weights or design-based uncertainty. Equal weighting represents the declared laboratory-weighted analytical distribution only under the stated transport assumption.",
+    "Generated-sample OLS estimates and residual correlation will fluctuate around their population values. Their usual sampling uncertainty would omit source-estimation and transfer uncertainty.",
+    "The supplied extraction provenance is historical. No original article, release dictionary, executable output or external dataset was reauthenticated."
+  ],
+  "checks_actually_performed": []
+}

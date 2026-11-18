@@ -1,0 +1,139 @@
+{
+  "structure": "Each person's two-dimensional measurement at visit t is mean + stable component + visit deviation. Independent Gaussian draws implement this additive model. The records identify total same-visit covariance but not its allocation between stable and visit-specific components; this generator chooses one feasible allocation.",
+  "parameter_provenance": [
+    {
+      "parameter": "mean",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Reported population means; deviations have zero mean."
+    },
+    {
+      "parameter": "between-person marginal variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Diagonal entries of the stable-component covariance matrix."
+    },
+    {
+      "parameter": "within-person marginal variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Diagonal entries of each visit-deviation covariance matrix."
+    },
+    {
+      "parameter": "component, visit, and person independence",
+      "value": "Stable components independent of deviations; deviations independent across visits; persons independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated measurement-model independence, allowing X-Y dependence within each component vector."
+    },
+    {
+      "parameter": "same-visit correlation",
+      "value": 0.52,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Exact population Pearson correlation."
+    },
+    {
+      "parameter": "measurement marginal variances",
+      "value": [
+        5.0,
+        5.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Independent component variances add: 4 + 1 = 5."
+    },
+    {
+      "parameter": "same-visit covariance",
+      "value": 2.6,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "0.52 * sqrt(5 * 5) = 2.6."
+    },
+    {
+      "parameter": "within-person X-Y covariance at each visit",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen feasible scenario; not determined by the records."
+    },
+    {
+      "parameter": "between-person X-Y covariance",
+      "value": 2.0,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "Conditional on the chosen within covariance: 2.6 - 0.6 = 2.0."
+    },
+    {
+      "parameter": "component distribution shapes",
+      "value": "Gaussian",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient sampling distributions; no Gaussian shape is supplied by the records."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "Stable components cancel in changes. Independent visits give change variances 2 and change covariance 2 * 0.6 = 1.2, hence correlation 0.6. The within-person covariance is not identified."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "identified",
+      "value": 0.52,
+      "basis": "Directly reported by B. The model reproduces it at both visits: (2.0 + 0.6) / 5 = 0.52. This identification does not require Gaussian distributions."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "scenario",
+      "value": 0.4,
+      "basis": "Independent visit deviations leave only stable-component cross-covariance: Corr(X_visit1,Y_visit2) = 2.0 / 5 = 0.4. Its value depends on the unidentified covariance allocation."
+    }
+  ],
+  "limitations": [
+    "These are artificial population constraints, not clinical evidence or biomedical validation.",
+    "Writing w for within-person X-Y covariance, the records imply between-person covariance 2.6 - w. Every w in [-1,1] is feasible. Thus change correlation can range from -1 to 1, while cross-visit correlation ranges from 0.32 to 0.72.",
+    "The two unidentified functionals are linked: change_correlation + 5 * cross_visit_correlation = 2.6.",
+    "Despite the standardized-unit description, the stipulated measurement variance is 5, not 1; the generator preserves the supplied component variances.",
+    "Finite random samples will not exactly match population moments. No sample adjustment, selection, or favorable-seed search is used.",
+    "The generator has not been executed or empirically validated here."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified positive definiteness: between-component covariance eigenvalues are 2 and 6; within-component covariance eigenvalues are 0.4 and 1.6.",
+    "Analytically verified total same-visit variance 5 per biomarker and covariance 2.6, yielding correlation 0.52.",
+    "Analytically verified change variances 2, change covariance 1.2, and cross-visit covariance 2.0.",
+    "Inspected the source for the required function signature, seeded random sampling, one wide row per person, unique integer identifiers, and exact output-column order."
+  ]
+}

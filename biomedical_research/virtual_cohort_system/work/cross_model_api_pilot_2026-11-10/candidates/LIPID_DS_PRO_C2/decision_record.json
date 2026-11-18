@@ -1,0 +1,194 @@
+{
+  "structure": "The joint law is a sex-stratified structural-equation generative model. Sex is Bernoulli with P(F)=0.54. Age is shifted Gamma(loc=18 years) with sex-specific shape and scale, giving male mean 38.1 years/SD 11.6 and female mean 43.2 years/SD 13.5. BMI is lognormal by sex with male geometric mean 21.6 kg/m^2/log SD 0.17 and female geometric mean 23.0 kg/m^2/log SD 0.19; age and log BMI are assumed independent within sex. Total cholesterol and HDL cholesterol are linear on the raw mmol/L scale in age, I(sex=F), and BMI, with bivariate normal residual errors. Residual SDs are 0.85 mmol/L for TC and 0.32 mmol/L for HDL, with residual Pearson correlation 0.12. Rare non-positive lipid draws are rejected by redrawing up to 1000 times; fallback floor is 0.05 mmol/L. Rows are generated independently and equally weighted. Because residual errors are independent of the conditioning covariates, the population OLS coefficients equal the specified structural coefficients.",
+  "parameter_provenance": [
+    {
+      "path": "model_spec.sex.p_female",
+      "meaning": "Bernoulli probability that generated sex category is F",
+      "conditioning_set": "none",
+      "scale": "probability",
+      "unit": "1",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "reported_sex_counts_tables: women 993, total 1839"
+        },
+        {
+          "source": "population_metadata",
+          "locator": "sex_proportions unspecified"
+        }
+      ],
+      "derivation": "0.54 assigned as 993/1839 from Agongo reported sex counts; target sex composition is unspecified, so this is a transferred source proportion.",
+      "unverified_assumptions": "Agongo Ghanaian rural AWI-Gen age-restricted sex ratio may not match Turkana adults; source count discrepancy is preserved as unresolved."
+    },
+    {
+      "path": "model_spec.age.male.shape, model_spec.age.male.scale, model_spec.age.female.shape, model_spec.age.female.scale, model_spec.age.minimum",
+      "meaning": "Sex-specific shifted Gamma age distribution with location 18 years; male mean 38.1 years/SD 11.6; female mean 43.2 years/SD 13.5",
+      "conditioning_set": "sex category",
+      "scale": "continuous age",
+      "unit": "year",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source": "greiner_2021",
+          "locator": "Table 1 age median/Q1/Q3 for six source strata"
+        },
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Table 1 age mean/SD men 50/6, women 52/6"
+        }
+      ],
+      "derivation": "Chosen shifted Gamma shape/scale combinations span the source adult age range without claiming an exact fit; source quantile conventions are unreported, so no quantile matching was attempted.",
+      "unverified_assumptions": "Turkana age distribution is unspecified; source populations and self-reported age measurement may differ from the target protocol."
+    },
+    {
+      "path": "model_spec.bmi.male.geometric_mean_kg_m2, model_spec.bmi.male.log_sd, model_spec.bmi.female.geometric_mean_kg_m2, model_spec.bmi.female.log_sd",
+      "meaning": "Sex-specific lognormal BMI distribution; male geometric mean 21.6 kg/m^2/log SD 0.17; female geometric mean 23.0 kg/m^2/log SD 0.19",
+      "conditioning_set": "sex category",
+      "scale": "raw kg/m^2 for geometric mean; log scale for log SD",
+      "unit": "kg/m^2; log SD dimensionless",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source": "greiner_2021",
+          "locator": "Table 1 BMI geometric mean rows across six source strata"
+        },
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Table 1 BMI mean/SD men 20.87/3.15, women 22.28/3.85"
+        }
+      ],
+      "derivation": "Geometric means selected near midpoints of Greiner sex-specific source geometric means and Agongo arithmetic means; log SDs chosen for plausible adult BMI dispersion similar to Agongo SDs.",
+      "unverified_assumptions": "Turkana BMI distribution is unspecified; these are transfer assumptions. Reported confidence interval widths were not used as population dispersion."
+    },
+    {
+      "path": "model_spec.bmi.age_logbmi_correlation_conditional_sex",
+      "meaning": "Linear correlation between age and log BMI within sex",
+      "conditioning_set": "sex category",
+      "scale": "correlation",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "Set to 0.0; age and log BMI are generated independently within sex.",
+      "unverified_assumptions": "No source supplied this within-sex correlation; a non-zero age-BMI relationship may exist in Turkana adults."
+    },
+    {
+      "path": "model_spec.lipids_mmol_L.tc.intercept_male, model_spec.lipids_mmol_L.tc.beta_female, model_spec.lipids_mmol_L.tc.beta_age_per_year, model_spec.lipids_mmol_L.tc.beta_bmi_per_kgm2",
+      "meaning": "Raw-scale conditional mean total cholesterol: E[TC|age, I(sex=F), bmi] = intercept_male + beta_female*I(sex=F) + beta_age*age + beta_bmi*bmi",
+      "conditioning_set": "age, I(sex=F), bmi",
+      "scale": "raw mmol/L linear coefficients",
+      "unit": "mmol/L for intercept and sex coefficient; mmol/L per year for age; mmol/L per kg/m^2 for BMI",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Table 5 Men/Women BMI univariate models: logTC-BMI estimates 0.013"
+        },
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Results pooled TC mean 3.23 mmol/L"
+        },
+        {
+          "source": "greiner_2021",
+          "locator": "Table 2 TC geometric means by sex/site"
+        },
+        {
+          "source": "population_metadata",
+          "locator": "lipids represented in mmol/L; conversion factor 38.67 for delivered mg/dL calculations"
+        }
+      ],
+      "derivation": "BMI coefficient set to 0.040 mmol/L per kg/m^2, close to the Agongo log-linear approximation 3.23*0.013=0.042 but not an identified adjusted raw target coefficient. Sex and age coefficients are explicit target approximations. Intercept 2.269 is solved so male mean TC is approximately 3.45 mmol/L under male age/BMI means.",
+      "unverified_assumptions": "Source regressions are unadjusted, log-scale, age-restricted, and the log base is unresolved; target Turkana adjusted raw coefficients and lipid means are unavailable."
+    },
+    {
+      "path": "model_spec.lipids_mmol_L.hdl.intercept_male, model_spec.lipids_mmol_L.hdl.beta_female, model_spec.lipids_mmol_L.hdl.beta_age_per_year, model_spec.lipids_mmol_L.hdl.beta_bmi_per_kgm2",
+      "meaning": "Raw-scale conditional mean HDL cholesterol: E[HDL|age, I(sex=F), bmi] = intercept_male + beta_female*I(sex=F) + beta_age*age + beta_bmi*bmi",
+      "conditioning_set": "age, I(sex=F), bmi",
+      "scale": "raw mmol/L linear coefficients",
+      "unit": "mmol/L for intercept and sex coefficient; mmol/L per year for age; mmol/L per kg/m^2 for BMI",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Table 4 Men, BMI univariate model: logHDL-BMI estimate -0.007"
+        },
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Results pooled HDL mean 1.14 mmol/L"
+        },
+        {
+          "source": "greiner_2021",
+          "locator": "Table 2 HDL geometric means by sex/site"
+        }
+      ],
+      "derivation": "BMI coefficient set to -0.008 mmol/L per kg/m^2, close to the Agongo log-linear approximation 1.14*(-0.007)=-0.00798. Sex and age coefficients are explicit target approximations. Intercept 1.351 is solved so male mean HDL is approximately 1.10 mmol/L under male age/BMI means.",
+      "unverified_assumptions": "Source regressions are unadjusted, log-scale, male-only for the BMI HDL row, and log base unresolved; target Turkana adjusted raw coefficients and HDL means are unavailable."
+    },
+    {
+      "path": "model_spec.lipids_mmol_L.residual_sd_tc_mmol_L, model_spec.lipids_mmol_L.residual_sd_hdl_mmol_L, model_spec.lipids_mmol_L.residual_correlation_tc_hdl",
+      "meaning": "Bivariate normal residual standard deviations and Pearson correlation for TC and HDL after conditioning on age, I(sex=F), bmi",
+      "conditioning_set": "age, I(sex=F), bmi",
+      "scale": "raw mmol/L for residual SDs; dimensionless correlation",
+      "unit": "mmol/L; 1",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "source": "agongo_2018_navrongo",
+          "locator": "Results pooled TC SD 0.92 mmol/L, HDL SD 0.38 mmol/L"
+        },
+        {
+          "source": "obirikorang_2015_ashanti",
+          "locator": "Table 7 Spearman correlations TC-HDL rural 0.106, urban 0.171"
+        }
+      ],
+      "derivation": "Residual SDs chosen below published marginal SDs to account for covariate variation. Residual correlation 0.12 is chosen within the source Spearman range but interpreted as Pearson correlation after covariate adjustment.",
+      "unverified_assumptions": "Spearman is not Pearson and the source is urban/rural Ghana, not the adjusted Turkana target residual; the supplied SDs may overstate Turkana residual dispersion."
+    },
+    {
+      "path": "model_spec.lipids_mmol_L.error_distribution, model_spec.lipids_mmol_L.positivity_floor_for_post_check, model_spec.lipids_mmol_L.max_attempts_per_row",
+      "meaning": "Bivariate normal error distribution and numerical positivity enforcement for simulated raw lipid values",
+      "conditioning_set": "after covariate-based conditional means",
+      "scale": "raw mmol/L for floor; count for attempts",
+      "unit": "mmol/L; count",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "Normal errors are a parametric assumption. Rare negative draws are rejected up to 1000 attempts; fallback floor is 0.05 mmol/L.",
+      "unverified_assumptions": "True residual tails may be non-normal; flooring can slightly alter the realized finite-sample distribution."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "K02-HDL-BMI",
+      "model_implied_population_value": -1.5468,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "Population OLS coefficient for bmi is hdl.beta_bmi_per_kgm2 = -0.008 mmol/L per kg/m^2. Requested quantity = 5 * (-0.008) * 38.67 = -1.5468 mg/dL per 5 kg/m^2. Exogeneity of covariates makes the structural coefficient equal the population OLS coefficient.",
+      "availability": "derived"
+    },
+    {
+      "id": "K02-TC-BMI",
+      "model_implied_population_value": 7.734,
+      "unit": "mg/dL per 5 kg/m^2",
+      "derivation": "Population OLS coefficient for bmi is tc.beta_bmi_per_kgm2 = 0.040 mmol/L per kg/m^2. Requested quantity = 5 * 0.040 * 38.67 = 7.734 mg/dL per 5 kg/m^2. Exogeneity of covariates makes the structural coefficient equal the population OLS coefficient.",
+      "availability": "derived"
+    },
+    {
+      "id": "K02-LIPID-RESIDUAL",
+      "model_implied_population_value": 0.12,
+      "unit": "1",
+      "derivation": "The requested residual Pearson correlation equals model_spec.lipids_mmol_L.residual_correlation_tc_hdl because both OLS models condition on age, I(sex=F), and bmi and the residual errors are independent of those covariates by construction.",
+      "availability": "derived"
+    }
+  ],
+  "limitations": [
+    "No Turkana 2018-2019 target outcome data are supplied; all target marginal and association parameters are explicit transfer assumptions, not validated target statistics.",
+    "Source lipid regressions are log-scale, unadjusted, partially sex-specific, and the log base is unresolved; they are not directly usable as target adjusted raw-scale OLS coefficients.",
+    "Target assay equivalence between CardioChek Plus venous-EDTA protocol and source laboratory assays is unverified. The 38.67 conversion is unit conversion only.",
+    "Target age, sex, BMI composition and lifestyle/site mixture are unspecified; the chosen composition is a synthetic approximation informed by external African adult sources.",
+    "The zero age-log BMI within-sex correlation is an assumption, not a source-supported estimate.",
+    "The bivariate normal residual distribution, shifted Gamma age distribution, and lognormal BMI distribution are parametric assumptions.",
+    "Population estimands are model-implied structural values; finite generated sample OLS estimates will differ numerically from these population values.",
+    "Source confidence intervals were not used as individual-level dispersion. Published SDs from Agongo were used only as broad dispersion prior context.",
+    "No causal interpretation is intended; requested analyses are descriptive association projections of the specified joint law."
+  ],
+  "checks_actually_performed": []
+}

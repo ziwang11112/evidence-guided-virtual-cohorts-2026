@@ -1,0 +1,214 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "law": "Sex-stratified Gaussian copula with quantile-interpolated adult age and lognormal BMI and lipid marginals",
+    "sex": {
+      "codes": [
+        "M",
+        "F"
+      ],
+      "p_F": 0.5,
+      "source_label_mapping": {
+        "M": "men/male",
+        "F": "women/female"
+      }
+    },
+    "age": {
+      "cdf_knots": [
+        0,
+        0.25,
+        0.5,
+        0.75
+      ],
+      "quantiles_years": {
+        "M": [
+          18,
+          25,
+          37,
+          51
+        ],
+        "F": [
+          18,
+          30,
+          43,
+          56
+        ]
+      },
+      "body_rule": "Linear interpolation of the quantile function between successive knots",
+      "tail_scale_years": {
+        "M": 14,
+        "F": 13
+      },
+      "tail_rule": "Above the last knot, Q(u)=Q(p)-tail_scale*log((1-u)/(1-p)); no upper age bound"
+    },
+    "marginals": {
+      "family": "lognormal",
+      "geometric_mean_by_sex": {
+        "bmi": {
+          "M": 20.7,
+          "F": 22.3
+        },
+        "total_cholesterol": {
+          "M": 3.3,
+          "F": 3.7
+        },
+        "hdl_cholesterol": {
+          "M": 0.9,
+          "F": 0.99
+        }
+      },
+      "shape_reference_arithmetic_mean_sd": {
+        "bmi": {
+          "M": [
+            20.87,
+            3.15
+          ],
+          "F": [
+            22.28,
+            3.85
+          ]
+        },
+        "total_cholesterol": {
+          "pooled": [
+            3.23,
+            0.92
+          ]
+        },
+        "hdl_cholesterol": {
+          "pooled": [
+            1.14,
+            0.38
+          ]
+        }
+      },
+      "log_sd_rule": "sqrt(log(1+(reference_sd/reference_mean)^2)); use the pooled lipid reference for each sex"
+    },
+    "dependence": {
+      "copula": "Gaussian, common across recorded sex categories",
+      "variable_order": [
+        "age",
+        "bmi",
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "bmi_tc_hdl_spearman": [
+        [
+          1,
+          0.212,
+          -0.1
+        ],
+        [
+          0.212,
+          1,
+          0.106
+        ],
+        [
+          -0.1,
+          0.106,
+          1
+        ]
+      ],
+      "rank_bridge": "For each BMI/TC/HDL pair, latent Gaussian correlation is 2*sin(pi*Spearman/6)",
+      "age_latent_correlations": [
+        0.15,
+        0.2,
+        0.05
+      ]
+    },
+    "sampling": {
+      "row_law": "iid",
+      "row_weighting": "equal",
+      "missingness": "none",
+      "additional_exclusions": [],
+      "latent_scores_independent_of_recorded_sex": true,
+      "site_or_lifestyle_classes": "not separately generated"
+    },
+    "measurement": {
+      "interpretation": "Distributions of recorded measurements, not latent error-free physiology",
+      "age": "Continuous representation of self-reported interview age in years; no rounding or heaping",
+      "sex": "Recorded literal F/M field",
+      "bmi": "Measured-weight/height-derived BMI in kg/m^2",
+      "lipids": "Directly measured TC and HDL represented in mmol/L",
+      "additional_measurement_error": "none",
+      "source_to_target_assay_transfer": "Unvalidated identity calibration of distributional anchors",
+      "tc_ge_hdl_constraint": "not imposed"
+    },
+    "uncertainty": {
+      "parameter_treatment": "Fixed plug-in scenario",
+      "cohort_level_parameter_draws": "none",
+      "source_confidence_intervals": "Retained as estimation uncertainty in provenance; not used as individual dispersion or simulation acceptance intervals",
+      "seed_variation": "Individual sampling variation only"
+    }
+  }
+}

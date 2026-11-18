@@ -1,0 +1,412 @@
+{
+  "structure": {
+    "joint_law": "Draw recorded sex, then a correlated Gaussian vector conditional on sex. Monotone transformations produce age, BMI, TC and HDL. Sex-specific BMI moments and pooled lipid moments use Agongo numerical anchors. The rural Obirikorang rank-correlation triple supplies a dependence template, translated through a Gaussian-copula identity. Unknown age dependence and sex composition are explicitly assumed, not inferred to be absent.",
+    "why_this_structure": "It gives positive outcomes without outcome-dependent filtering, distinguishes rank dependence from raw-scale projections, and allows all continuous variables to be associated. Lognormal transformations provide a simple moment-based bridge from arithmetic source summaries. This is one transparent scenario, not an identified reconstruction of Turkana.",
+    "source_contexts": {
+      "agongo": "Navrongo, Ghana, 2015: adults aged 40-60, long-term residents, pregnancy excluded and complete investigated variables. BMI was measured; lipids were fasting serum measured directly with Randox RX Daytona+. Arithmetic means and individual SDs are used, not confidence limits.",
+      "obirikorang": "Rural Jachie-Pramso, Ashanti, Ghana, 2013: household recruitment with stated health, pregnancy/lactation and disability exclusions; age range unresolved. BMI was measured and fasting serum lipids used Selectra Pro S assays. Table 7 reports unadjusted community-specific Spearman correlations, not partial Pearson correlations."
+    },
+    "moment_projection_recipe": "Let S=I(sex='F'), W=(age-18,BMI,TC,HDL), and let m_s and d_s be the conditional arithmetic means and log SDs produced by the specification. With latent correlation R, E[W_i W_j|S=s]=m_si*m_sj*exp(d_si*d_sj*R_ij). Mix these moments using the specified sex probabilities, treating S as fixed within each stratum. For X=(1,age-18,S,BMI), form Q=E[XX']; g_T=E[X*TC]; g_H=E[X*HDL]. The intercept makes this design equivalent to the requested raw-age design. Q inverse times g gives the population OLS coefficients. Residual cross-moments are E[Y_j Y_k]-g_j' Q inverse g_k. These formulas specify the requested projections without treating copula parameters as regression coefficients."
+  },
+  "parameter_provenance": [
+    {
+      "paths": [
+        "$.model_spec.family",
+        "$.model_spec.support"
+      ],
+      "meaning_statistical_operator": "Conditional distribution family and support, including the Gaussian copula and positive lognormal tails.",
+      "conditioning_set": [
+        "sex"
+      ],
+      "scale": "Gaussian latent dependence with raw-scale observed margins",
+      "unit": "Age in years; BMI in kg/m^2; lipids in mmol/L",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/eligibility",
+          "locator": "Declared target eligibility and no-inferred-exclusions list"
+        }
+      ],
+      "derivation": "For a positive margin with arithmetic mean m and SD s, log variance is log(1+(s/m)^2) and log mean is log(m) minus half that variance. Apply to age minus its lower bound as well.",
+      "unverified_assumptions": [
+        "Neither lognormality nor Gaussian-copula tail dependence is established by the supplied summaries.",
+        "No finite age maximum is imposed; the age tail can include biologically implausible extreme values.",
+        "TC and HDL are modeled as measured results rather than enforcing an exact biochemical component identity."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.sex.female_probability",
+        "$.model_spec.sex.female_code",
+        "$.model_spec.sex.male_code"
+      ],
+      "meaning_statistical_operator": "Bernoulli mixture probability and categorical coding.",
+      "conditioning_set": [],
+      "scale": "Probability and literal categories",
+      "unit": "1 and literal F/M",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/measurements/sex",
+          "locator": "Recorded interview sex field; biological legend not independently verified"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/composition",
+          "locator": "Sex proportions unspecified"
+        }
+      ],
+      "derivation": "The codes are supplied; equal probabilities are an analyst-selected completion. Source sample counts are not used to estimate target proportions.",
+      "unverified_assumptions": [
+        "Equal F/M representation is not a target finding.",
+        "Mapping F to source women/female and M to source men/male is assumed."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.age.lower_bound"
+      ],
+      "meaning_statistical_operator": "Additive support boundary for generated adult age.",
+      "conditioning_set": [],
+      "scale": "Raw age",
+      "unit": "year",
+      "classification": "reported",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/eligibility/minimum_age_inclusive",
+          "locator": "Investigator-selected prospective eligibility boundary"
+        }
+      ],
+      "derivation": "Age equals the supplied boundary plus a positive random variable.",
+      "unverified_assumptions": [
+        "Continuous age has no atom at the inclusive eligibility boundary; integer reporting and age heaping are omitted."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.age.excess_mean_by_sex",
+        "$.model_spec.age.excess_sd_by_sex"
+      ],
+      "meaning_statistical_operator": "Conditional arithmetic means and individual SDs of age minus the adult boundary; M and F entries identify their respective strata.",
+      "conditioning_set": [
+        "sex"
+      ],
+      "scale": "Raw shifted age",
+      "unit": "year",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/composition/age_distribution",
+          "locator": "Target age distribution unspecified"
+        }
+      ],
+      "derivation": "Chosen to describe a broad adult scenario rather than transferring Agongo's restricted middle-aged age distribution.",
+      "unverified_assumptions": [
+        "The sex-specific means, equal SDs and shifted-lognormal shapes are not fitted to target information.",
+        "The sex difference in age is a completion assumption."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.bmi.arithmetic_mean_by_sex",
+        "$.model_spec.bmi.arithmetic_sd_by_sex"
+      ],
+      "meaning_statistical_operator": "Conditional arithmetic BMI means and individual SDs, M=(20.87,3.15) and F=(22.28,3.85).",
+      "conditioning_set": [
+        "sex"
+      ],
+      "scale": "Raw BMI",
+      "unit": "kg/m^2",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/0/marginal_statistics/1",
+          "id": "agongo_men_bmi_mean_sd",
+          "locator": "Table 1, men, BMI, mean and SD"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/0/marginal_statistics/3",
+          "id": "agongo_women_bmi_mean_sd",
+          "locator": "Table 1, women, BMI, mean and SD"
+        }
+      ],
+      "derivation": "Use the reported arithmetic means and SDs as fixed population-moment plug-ins; derive sex-specific lognormal parameters by moment matching.",
+      "unverified_assumptions": [
+        "Transport from selected Ghanaian adults aged 40-60 to the broader declared adult context is assumed.",
+        "Sample SDs are treated as population dispersions for construction, without a denominator correction.",
+        "Estimation uncertainty was not reported and is not reconstructed."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.lipids.order",
+        "$.model_spec.lipids.pooled_arithmetic_mean",
+        "$.model_spec.lipids.pooled_arithmetic_sd"
+      ],
+      "meaning_statistical_operator": "Unconditional arithmetic lipid means and individual SDs, ordered TC then HDL: means (3.23,1.14), SDs (0.92,0.38).",
+      "conditioning_set": [],
+      "scale": "Raw lipid concentrations",
+      "unit": "mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/0/marginal_statistics/7",
+          "id": "agongo_pooled_total_cholesterol_mean_sd",
+          "locator": "Results, Mean lipid levels stratified by sex and age category, opening paragraph"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/0/marginal_statistics/6",
+          "id": "agongo_pooled_hdl_cholesterol_mean_sd",
+          "locator": "Results, Mean lipid levels stratified by sex and age category, opening paragraph"
+        }
+      ],
+      "derivation": "These reported arithmetic summaries are fixed marginal moment anchors for the constructed sex mixture, not geometric means or conditional residual SDs.",
+      "unverified_assumptions": [
+        "Pooled moments are transferred despite different age, ethnicity, selection, sex composition, fasting and assay conditions.",
+        "Source weighting was not explicit; the model gives the anchors an equal-weight population interpretation.",
+        "No uncertainty interval for these moments is supplied."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.lipids.female_to_male_arithmetic_mean_ratio",
+        "$.model_spec.lipids.conditional_log_variance_rule"
+      ],
+      "meaning_statistical_operator": "Conditional sex mean ratios for TC and HDL and the rule separating within-sex dispersion from between-sex variation.",
+      "conditioning_set": [
+        "sex"
+      ],
+      "scale": "Arithmetic mean ratios and natural-log variances",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [],
+      "derivation": "For pooled mean m, SD s, female probability p and ratio r, let D=(1-p)+p*r. Conditional means are m/D for M and m*r/D for F. Let A=m^2*((1-p)+p*r^2)/D^2. The shared conditional log variance is log((m^2+s^2)/A). This preserves the specified pooled first and second moments.",
+      "unverified_assumptions": [
+        "The modest nonzero sex contrasts are scenario choices, not extracted target or source effects.",
+        "Equal conditional log variances across sexes are assumed.",
+        "The law does not impose equal raw variances across sexes."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.dependence.within_sex_rank_template",
+        "$.model_spec.dependence.rank_bridge"
+      ],
+      "meaning_statistical_operator": "Rank-correlation template for BMI-TC, BMI-HDL and TC-HDL, and its conversion to Gaussian latent correlations.",
+      "conditioning_set": {
+        "source": [],
+        "model": [
+          "sex"
+        ],
+        "not_conditioned_on": [
+          "age"
+        ]
+      },
+      "scale": "Source Spearman correlations; model latent Pearson correlations",
+      "unit": "1",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/2/statistics/0",
+          "id": "obirikorang_rural_bmi_tc",
+          "locator": "Table 7, lower-left rural triangle, BMI-TC"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/2/statistics/1",
+          "id": "obirikorang_rural_bmi_hdl",
+          "locator": "Table 7, lower-left rural triangle, BMI-HDL"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/2/statistics/2",
+          "id": "obirikorang_rural_tc_hdl",
+          "locator": "Table 7, lower-left rural triangle, TC-HDL"
+        }
+      ],
+      "derivation": "Apply the continuous Gaussian-copula identity R_ij=2*sin(pi*rho_S/6) to the three source numbers. This is a distributional bridge, not a rank-to-OLS unit conversion.",
+      "unverified_assumptions": [
+        "The rural triple is selected as one coherent same-community template; rural is not assigned as a Turkana lifestyle label.",
+        "Using pooled-sex source correlations within each modeled sex stratum is a strong additional invariance assumption. The model is not claimed to reproduce the source pooled-sex operator.",
+        "Source pair-specific counts, tie treatment and missing-pair policy are unresolved; continuous equal-weight rank correlations are assumed for this bridge.",
+        "The three same-cohort correlations are dependent evidence. No independent-study likelihood or significance-based weighting is used.",
+        "Unadjusted rank correlations do not identify the requested age/sex-adjusted slopes or residual Pearson correlation."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.dependence.latent_order",
+        "$.model_spec.dependence.age_latent_correlations_with_remaining",
+        "$.model_spec.dependence.sex_invariance"
+      ],
+      "meaning_statistical_operator": "Conditional latent correlations of age with BMI, TC and HDL, respectively; common latent dependence matrix across sexes.",
+      "conditioning_set": [
+        "sex"
+      ],
+      "scale": "Gaussian latent Pearson correlation",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/composition/joint_covariate_distribution",
+          "locator": "Target joint covariate distribution unspecified"
+        }
+      ],
+      "derivation": "These modest positive entries complete the latent matrix. They are not source raw-age correlations and are not regression coefficients.",
+      "unverified_assumptions": [
+        "Their magnitudes and signs are not identified by the supplied evidence.",
+        "A common matrix excludes sex-specific copula dependence and unmodeled subgroup-specific tail dependence.",
+        "Age, BMI and lipids remain dependent within sex; sex also changes their marginal distributions."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.parameter_uncertainty"
+      ],
+      "meaning_statistical_operator": "Treatment of parameter, sampling and transfer uncertainty.",
+      "conditioning_set": [
+        "fixed model specification"
+      ],
+      "scale": "Scenario-level uncertainty policy",
+      "unit": "not applicable",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/0/operator_notes",
+          "locator": "Arithmetic summary definitions, unspecified source weighting and transport limitations"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/2/statistics",
+          "locator": "Table 7 rural rank correlations; uncertainty not reported"
+        }
+      ],
+      "derivation": "Only individual variation is sampled. Source estimation uncertainty, correlated summary uncertainty and transport uncertainty are left unquantified rather than assigned invented precision.",
+      "unverified_assumptions": [
+        "Fixed anchors are convenient scenario settings, not certainty about the target.",
+        "Different seeds do not constitute sensitivity analysis over scientific assumptions."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.sampling"
+      ],
+      "meaning_statistical_operator": "Covariate composition, row dependence, selection and missingness model.",
+      "conditioning_set": [
+        "declared selected adult protocol context"
+      ],
+      "scale": "Joint sampling law",
+      "unit": "not applicable",
+      "classification": "assumed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/composition",
+          "locator": "Demographic, site, lifestyle and joint composition unspecified"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/inference_scope",
+          "locator": "Selected-sample descriptive scope; weights and cluster identifiers not supplied"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/eligibility/no_inferred_exclusions",
+          "locator": "No inferred pregnancy, HIV, diabetes, fasting, lifestyle, outlier or TC>=HDL exclusions"
+        }
+      ],
+      "derivation": "Generate complete iid rows without recreating external-source eligibility restrictions. No latent source-stratum mixture is inferred from sample counts.",
+      "unverified_assumptions": [
+        "Household, site and temporal clustering are omitted.",
+        "Unmeasured health and lifestyle composition is marginalized through the chosen law, not assumed biologically irrelevant.",
+        "The construction does not model a missing-data or enrollment mechanism and does not establish representativeness."
+      ]
+    },
+    {
+      "paths": [
+        "$.model_spec.measurement"
+      ],
+      "meaning_statistical_operator": "Interpretation of delivered measurements and their transfer from external numerical anchors.",
+      "conditioning_set": [
+        "declared target measurement protocol"
+      ],
+      "scale": "Observed recorded values",
+      "unit": "year; literal F/M; kg/m^2; mmol/L",
+      "classification": "mixed",
+      "source_pointers": [
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/measurements",
+          "locator": "Target supplement p.3 interview age; p.5 anthropometry; pp.5-6 venous-EDTA CardioChek Plus lipid methods"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/0/measurement",
+          "locator": "Agongo measurement extraction: fasting serum, Randox RX Daytona+"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/sources/2/measurement",
+          "locator": "Obirikorang Methods, Biochemical Assays: fasting serum, Selectra Pro S"
+        },
+        {
+          "document": "SOURCE_EVIDENCE_JSON",
+          "path": "/population_metadata/unit_mapping",
+          "locator": "Repository numerical unit mapping only"
+        }
+      ],
+      "derivation": "Generate directly in mmol/L. The requested conversion to mg/dL changes numerical units only. No assay calibration, fasting correction or separate measurement-error variance is estimated.",
+      "unverified_assumptions": [
+        "The external distributional anchors are usable for a target observed-value scenario despite unverified assay and specimen equivalence.",
+        "Source variability is treated as observed-value variability; it is not decomposed into biological and measurement components."
+      ]
+    }
+  ],
+  "requested_estimands": [
+    {
+      "analysis_id": "K02-HDL-BMI",
+      "exact_model_implied_population_value": null,
+      "unit": "mg/dL per 5 kg/m^2",
+      "population_operator": "Five times the BMI coefficient in the equal-weight population linear projection of HDL on intercept, age, I(sex='F') and BMI, after the requested numerical unit conversion.",
+      "derivation_or_reason": "Using the moment recipe, the value is 5*38.67*(Q inverse g_H)_BMI. This numerical population projection has not been evaluated here. It is determined by the specified law, but neither the source Spearman value nor a latent correlation is its value."
+    },
+    {
+      "analysis_id": "K02-TC-BMI",
+      "exact_model_implied_population_value": null,
+      "unit": "mg/dL per 5 kg/m^2",
+      "population_operator": "Five times the BMI coefficient in the equal-weight population linear projection of TC on intercept, age, I(sex='F') and BMI, after the requested numerical unit conversion.",
+      "derivation_or_reason": "Using the moment recipe, the value is 5*38.67*(Q inverse g_T)_BMI. This numerical population projection has not been evaluated here. It is not the transferred rank-correlation template or an external univariate coefficient."
+    },
+    {
+      "analysis_id": "K02-LIPID-RESIDUAL",
+      "exact_model_implied_population_value": null,
+      "unit": "1",
+      "population_operator": "Pearson correlation of the population TC and HDL linear-projection residuals, with the common adjustment set intercept, age, I(sex='F') and BMI.",
+      "derivation_or_reason": "Let V_jk=E[Y_j*Y_k]-g_j' Q inverse g_k, using the same mixture moments for both outcomes. The requested value is V_TH/sqrt(V_TT*V_HH). This numerical expression has not been evaluated here. Positive unit conversion does not change it. Neither the source unadjusted Spearman TC-HDL correlation nor the conditional Gaussian latent correlation equals this quantity by assumption."
+    }
+  ],
+  "limitations": [
+    "The target composition and joint relationships remain unidentified by the supplied evidence. This is one executable assumption-completed scenario, not a validated Turkana reconstruction or a causal model.",
+    "All source numerical anchors come from external Ghanaian populations with different selection and measurement contexts. No Turkana target outcome statistics were used.",
+    "The rank-to-latent bridge is mathematically specific to the assumed continuous Gaussian copula. Transferring pooled source ranks into sex-conditional target templates is an additional scientific assumption, not an adjustment justified by the source.",
+    "Agongo and Obirikorang summaries are not treated as independent estimates within their respective cohorts. No pooled precision estimate, source-count weighting or uncertainty reduction is claimed.",
+    "Agongo log-lipid regressions are deliberately omitted because log base, operator details and adjustment differ. Greiner regressions are omitted because transformations remain unresolved and some adjustment covariates are unavailable. Greiner geometric means, threshold percentages and age quantiles are not combined with the chosen arithmetic anchors.",
+    "No source confidence interval, standard error, significance marker or rounded interval is used as individual dispersion. Source estimation uncertainty and transport uncertainty are not propagated.",
+    "Normal-copula dependence, lognormal tails, continuous ages, sex contrasts and age associations are assumed. The model permits extreme age, BMI and lipid tails and does not reproduce assay censoring, integer age heaping or a separate error process.",
+    "All generated rows satisfy the intended continuous-support eligibility law; no pregnancy, HIV, diabetes, fasting or lifestyle restriction is inferred. TC below HDL is not filtered.",
+    "Only historical curator evidence is used. Original articles and extraction authenticity were not reauthenticated.",
+    "The module and its outputs have not been executed or checked. No simulated sample statistic is presented as an exact population estimand."
+  ],
+  "checks_actually_performed": []
+}

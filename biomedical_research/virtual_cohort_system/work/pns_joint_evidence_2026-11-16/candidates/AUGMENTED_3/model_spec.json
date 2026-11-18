@@ -1,0 +1,135 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_joint_evidence_followup_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "name": "transported_joint_bp_scenario_v1",
+    "interpretation": "An assumed equal-weight representation of the declared peso_lab-weighted complete-case analytical population, not a nationally representative or target-validated reconstruction.",
+    "age": {
+      "lower": 20,
+      "upper": 79,
+      "kernel_alpha": 1.4,
+      "kernel_beta": 1.8,
+      "law": "For integer k from lower through upper, P(age=k) is proportional to u_k^(kernel_alpha-1)*(1-u_k)^(kernel_beta-1), where u_k=(k-lower+0.5)/(upper-lower+1)."
+    },
+    "sex": {
+      "female_probability": 0.53,
+      "independent_of_age": true
+    },
+    "bmi": {
+      "reference_median": 26.5,
+      "log_age_per_decade": 0.015,
+      "log_female": 0.025,
+      "log_sd": 0.2,
+      "lower": 14.0,
+      "upper": 60.0,
+      "law": "Lognormal conditional on age and female, conditioned on the stated BMI bounds."
+    },
+    "bp": {
+      "reference_age": 50.0,
+      "age_scale": 10.0,
+      "reference_bmi": 25.0,
+      "bmi_scale": 5.0,
+      "hinge_age": 55.0,
+      "hinge_scale": 10.0,
+      "sbp": {
+        "intercept": 125.0,
+        "age": 5.0,
+        "female": -4.0,
+        "bmi": 3.877,
+        "age_hinge": 1.5,
+        "innovation_sd": 17.0
+      },
+      "dbp": {
+        "intercept": 79.0,
+        "age": 0.8,
+        "female": -2.0,
+        "bmi": 2.9835,
+        "age_hinge": -2.0,
+        "innovation_sd": 11.0
+      },
+      "innovation_correlation": 0.7,
+      "support": {
+        "sbp_min": 70.0,
+        "sbp_max": 260.0,
+        "dbp_min": 35.0,
+        "dbp_max": 150.0,
+        "pulse_pressure_min": 10.0,
+        "pulse_pressure_max": 160.0
+      },
+      "law": "Bivariate Gaussian innovations added to the specified means, jointly conditioned on the BP support while holding each person's covariates fixed.",
+      "estimand_warning": "The nominal BMI mean terms and Gaussian innovation correlation are not asserted to equal the requested OLS coefficients and residual correlation after the omitted age hinge and conditional support restriction."
+    }
+  }
+}

@@ -1,0 +1,631 @@
+You are an independent scientific Agent constructing a useful whole biomedical cohort from published evidence. You choose the scientific structure, parameters, distributions and transport assumptions. Use the supplied evidence, not undisclosed target results or other constructors. The purpose is scientific analysis, not recovery of individual measurements. No desired numerical answer is provided. Source-population and target-population quantities can differ. Decide whether each source is usable, partial, transformed or unsuitable; do not silently equate different adjustment sets or raw/multilevel/residual correlations. You may retain your assumptions if additional evidence is insufficient. There is no prescribed distribution or correlation to select.
+
+Return exactly one JSON object with model_spec, generator_py, decision_record. No markdown.
+model_spec is your freely designed parameter object. The runner passes {"task": task_contract, "model": model_spec} as spec.
+generator_py defines generate(observed, spec, seed), returning a pandas DataFrame. observed is None. n=spec["task"]["n_rows"]. Return exactly the columns in the task, in order; unique integer row_id. Use numpy, pandas and standard library only. No filesystem, network, processes, project imports, installation or execution claims. Randomness must use the supplied seed. Draw independent virtual people from your chosen law, rather than forcing realized moments through sample-wide recentering/reweighting, selecting seeds or selecting output tables. Physiological support and finite relevant moments matter; you choose and explain any bounds, transformations or rejection sampling as part of your population law. No silent post-hoc host repairs will occur. Do not multiply hypothetical evidence by the number of generated people.
+decision_record requires structure (string), parameter_provenance (array), requested_estimands (array), limitations (array) and checks_actually_performed (array). For material parameters give the actual value/expression, REPORTED/DERIVED/ASSUMED status, source IDs and concise derivation or rationale. Explicitly distinguish source estimates from transported choices. requested_estimands must contain exactly the three IDs in the request, each with id, support_basis and key_unresolved_assumptions (array). If useful provide an expected value, but do not invent identification or sampling intervals. Give concise scientific explanations, not private reasoning transcripts. Explain covariance/scale choices, source suitability, tail properties and any physiological constraints. You have no execution tools in this single construction call; do not claim actual runs.
+
+Task, requested analyses and evidence:
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_joint_evidence_followup_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "requested_analyses": {
+    "purpose": "Construct one joint cohort supporting SBP and DBP associations with BMI plus residual SBP–DBP dependence. Both regressions use [1,(age-50)/10,female,(bmi-25)/5]. Generated rows have equal weights; report BMI coefficients in mmHg per 5 kg/m^2 and Pearson correlation of paired centered regression residuals. These are association projections, not intervention effects. No target value or desired direction is supplied.",
+    "row_weighting": "equal weight, representing the declared weighted analytical population",
+    "design_columns": [
+      "1",
+      "(age-50)/10",
+      "female",
+      "(bmi-25)/5"
+    ],
+    "outcome_unit_conversion": {
+      "sbp": 1,
+      "dbp": 1
+    },
+    "analyses": [
+      {
+        "id": "bmi_sbp",
+        "outcome": "sbp",
+        "estimator": "unweighted OLS with intercept",
+        "quantity": "coefficient of (bmi-25)/5",
+        "unit": "mmHg per 5 kg/m^2"
+      },
+      {
+        "id": "bmi_dbp",
+        "outcome": "dbp",
+        "estimator": "unweighted OLS with intercept",
+        "quantity": "coefficient of (bmi-25)/5",
+        "unit": "mmHg per 5 kg/m^2"
+      },
+      {
+        "id": "residual_correlation",
+        "outcomes": [
+          "sbp",
+          "dbp"
+        ],
+        "estimator": "Pearson correlation of paired centered residuals from the two above regressions on the same rows",
+        "quantity": "residual Pearson correlation",
+        "unit": "1"
+      }
+    ]
+  },
+  "existing_evidence": {
+    "provenance": [
+      {
+        "extraction_artifact": "evidence_packet.json",
+        "extraction_sha256": "0d9f2df4baff869efe2d81e83b0058e6809e75af7b98c365bdf694b183ce03db",
+        "original_source_reauthentication_performed": false
+      },
+      {
+        "extraction_artifact": "REPORTED_MOMENT_ALGEBRA.json",
+        "extraction_sha256": "d62535be9208ad50963540274b9f5f84109b805092e6097ed0c7983cb10d591c",
+        "original_source_reauthentication_performed": false
+      }
+    ],
+    "source_evidence": {
+      "date": "2026-11-09",
+      "status": "minimal_source_packet_with_explicit_nonidentification",
+      "contains_target_data": false,
+      "author_model_prescribed": false,
+      "task_schema": {
+        "age_years": [
+          20,
+          79
+        ],
+        "columns": [
+          "age",
+          "female",
+          "bmi",
+          "sbp",
+          "dbp"
+        ],
+        "original_semantic_columns": [
+          "age",
+          "female",
+          "BMI",
+          "SBP",
+          "DBP"
+        ],
+        "semantic_to_task_column": {
+          "age": "age",
+          "female": "female",
+          "BMI": "bmi",
+          "SBP": "sbp",
+          "DBP": "dbp"
+        },
+        "BMI_unit": "kg/m2",
+        "BP_unit": "mmHg"
+      },
+      "sources": [
+        {
+          "id": "S_INTERSALT",
+          "original_source_label": "S1",
+          "family": "INTERSALT",
+          "citation": "Intersalt Cooperative Research Group. BMJ 1988;297:319-328",
+          "doi": "10.1136/bmj.297.6644.319",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1834069/",
+          "original_fulltext_status": "All ten original scans pp319-328 downloaded and visually read",
+          "population": {
+            "n": 10079,
+            "centres": 52,
+            "countries": 32,
+            "age_years": [
+              20,
+              59
+            ],
+            "antihypertensive_treatment_excluded": false
+          },
+          "measurement": "Mean of two seated Hawksley random-zero readings after five-minute rest; height/weight measured twice; BMI kg/m2",
+          "measurement_locator": "pp319-320",
+          "coefficient_locator": "Table II p322",
+          "adjustment": [
+            "age",
+            "sex",
+            "urinary sodium",
+            "urinary potassium",
+            "alcohol 1-299 ml/week indicator",
+            "alcohol >=300 ml/week indicator"
+          ],
+          "pooling": "inverse variance of within-centre coefficients",
+          "reported_BMI_coefficients": [
+            {
+              "outcome": "SBP",
+              "per_kg_m2": 0.7754,
+              "SE": 0.0359,
+              "unit": "mmHg per kg/m2",
+              "derived_per5": 3.877,
+              "derived_SE_per5": 0.1795
+            },
+            {
+              "outcome": "DBP",
+              "per_kg_m2": 0.5967,
+              "SE": 0.0257,
+              "unit": "mmHg per kg/m2",
+              "derived_per5": 2.9835,
+              "derived_SE_per5": 0.1285
+            }
+          ],
+          "descriptive_locator": "Appendix II p327",
+          "descriptive_definition": "Means and SDs calculated in men20-39, men40-59, women20-39, women40-59, then averaged. Displayed SDs are not pooled SDs.",
+          "illustrative_selection": "Legibility/geographic context, not target resemblance; all centres retained in source scan",
+          "illustrative_rows": [
+            {
+              "centre": "Argentina",
+              "n": 200,
+              "SBP_mean": 116.1,
+              "SBP_average_subgroup_SD": 14.3,
+              "DBP_mean": 72.8,
+              "DBP_average_subgroup_SD": 12.6,
+              "BMI_mean": 25.0,
+              "BMI_average_subgroup_SD": 3.8
+            },
+            {
+              "centre": "Japan Osaka",
+              "n": 197,
+              "SBP_mean": 116.5,
+              "SBP_average_subgroup_SD": 14.7,
+              "DBP_mean": 68.6,
+              "DBP_average_subgroup_SD": 11.5,
+              "BMI_mean": 21.6,
+              "BMI_average_subgroup_SD": 2.4
+            },
+            {
+              "centre": "UK Belfast",
+              "n": 200,
+              "SBP_mean": 120.3,
+              "SBP_average_subgroup_SD": 13.7,
+              "DBP_mean": 73.8,
+              "DBP_average_subgroup_SD": 10.7,
+              "BMI_mean": 24.8,
+              "BMI_average_subgroup_SD": 4.0
+            }
+          ],
+          "target_estimand_equivalence": false,
+          "reported_residual_correlation": null,
+          "uncertainty_limit": "Reported source coefficient SE is not transfer uncertainty"
+        },
+        {
+          "id": "S_BEIJING",
+          "original_source_label": "S2",
+          "family": "Beijing Longitudinal Study of Aging",
+          "citation": "Zhang et al. J Clin Hypertens 2022",
+          "doi": "10.1111/jch.14529",
+          "pmcid": "PMC9278591",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9278591/",
+          "population": "2009 Beijing selected middle-aged/older community participants; prior MI/stroke/severe CHF, blood-sample refusal and missingness excluded; antihypertensive use retained",
+          "exact_age_range_verified": null,
+          "measurement": "Omron HEM-4021, seated non-dominant arm, five-minute rest; average of two readings within two minutes",
+          "locator": "Methods 2-2.2 and Table1",
+          "adjustment": "Unadjusted moments",
+          "moments": [
+            {
+              "group": "overall",
+              "n": 1257,
+              "age_mean": 69.16,
+              "age_SD": 8.1,
+              "male_n": 550,
+              "male_percent": 43.76,
+              "SBP_mean": 138.93,
+              "SBP_SD": 20.35,
+              "DBP_mean": 76.68,
+              "DBP_SD": 10.93,
+              "PP_mean": 62.25,
+              "PP_SD": 17.2
+            },
+            {
+              "group": "under65",
+              "n": 466,
+              "age_mean": 60.51,
+              "age_SD": 2.95,
+              "male_n": 194,
+              "male_percent": 41.63,
+              "SBP_mean": 134.98,
+              "SBP_SD": 18.61,
+              "DBP_mean": 78.45,
+              "DBP_SD": 10.21,
+              "PP_mean": 56.53,
+              "PP_SD": 14.88
+            },
+            {
+              "group": "65plus",
+              "n": 791,
+              "age_mean": 74.26,
+              "age_SD": 5.37,
+              "male_n": 356,
+              "male_percent": 45.01,
+              "SBP_mean": 141.29,
+              "SBP_SD": 20.98,
+              "DBP_mean": 75.63,
+              "DBP_SD": 11.22,
+              "PP_mean": 65.66,
+              "PP_SD": 17.59
+            }
+          ],
+          "BP_units": "mmHg",
+          "dispersion_type": "individual SD, not SE",
+          "sampling_CI_for_moments": null,
+          "BMI_reported": false,
+          "derivation": "Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2; r=Cov/(SD_S*SD_D)",
+          "derived_raw_correlations": {
+            "overall": 0.5344427684775355,
+            "under65": 0.6030316602292216,
+            "65plus": 0.5451263744946805
+          },
+          "reported_residual_correlation": null
+        },
+        {
+          "id": "S_INTERMAP_methods",
+          "original_source_label": "S3",
+          "family": "INTERMAP",
+          "citation": "Stamler et al. J Hum Hypertens 2003;17:591-608",
+          "doi": "10.1038/sj.jhh.1001603",
+          "pmcid": "PMC6660162",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6660162/",
+          "original_fulltext_status": "Web methods/tables read; local reading receipt only, no standalone fulltext download",
+          "population": {
+            "n": 4680,
+            "age_years": [
+              40,
+              59
+            ],
+            "samples": 17,
+            "countries": [
+              "China",
+              "Japan",
+              "UK",
+              "USA"
+            ],
+            "female_n": 2321,
+            "age_mean": 49.2,
+            "age_SD": 5.5
+          },
+          "locator": "Methods and Table5",
+          "measurement": "Mean of eight seated random-zero BP readings over four visits; at least five-minute rest; height/weight at visits1/3",
+          "original_BP_BMI_moments_admitted": false,
+          "original_BMI_coefficient_admitted": false,
+          "appendix_tables_acquired": false,
+          "INTERSALT_review_tables_not_independent_evidence": true
+        }
+      ],
+      "unidentified": [
+        "Target age/sex/BMI distribution and dependencies",
+        "Conditional age/sex effects, age20-79 nonlinearities and interactions",
+        "Weighted age/sex-only BMI coefficients",
+        "Residual SBP-DBP correlation and conditional scales",
+        "Pooled variance from INTERSALT averaged subgroup SDs",
+        "Distributional tails, treatment and selection mechanisms",
+        "Transport uncertainty"
+      ],
+      "excluded_evidence": [
+        "PNS/National Health Survey target outcomes",
+        "Unverified abstract-only tables",
+        "INTERMAP secondary INTERSALT tables as independent replication"
+      ]
+    },
+    "reported_moment_algebra": {
+      "source": "PMC9278591 Table 1",
+      "status": "derived_from_rounded_reported_SD_not_target_analysis",
+      "formula": "Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2; r=Cov/(SD_S*SD_D)",
+      "rounding_envelope_is_not_sampling_CI": true,
+      "groups": [
+        {
+          "group": "overall",
+          "source_n": 1257,
+          "SBP_SD": 20.35,
+          "DBP_SD": 10.93,
+          "PP_SD": 17.2,
+          "covariance_mmHg2": 118.87370000000007,
+          "raw_correlation": 0.5344427684775355,
+          "rounded_SD_envelope": [
+            0.5337282562299197,
+            0.5351562688659468
+          ],
+          "residual_correlation": null,
+          "sampling_CI": null
+        },
+        {
+          "group": "under65",
+          "source_n": 466,
+          "SBP_SD": 18.61,
+          "DBP_SD": 10.21,
+          "PP_SD": 14.88,
+          "covariance_mmHg2": 114.58089999999997,
+          "raw_correlation": 0.6030316602292216,
+          "rounded_SD_envelope": [
+            0.6022860685532483,
+            0.6037778719173934
+          ],
+          "residual_correlation": null,
+          "sampling_CI": null
+        },
+        {
+          "group": "65plus",
+          "source_n": 791,
+          "SBP_SD": 20.98,
+          "DBP_SD": 11.22,
+          "PP_SD": 17.59,
+          "covariance_mmHg2": 128.32035000000002,
+          "raw_correlation": 0.5451263744946805,
+          "rounded_SD_envelope": [
+            0.544432681817096,
+            0.5458205768912703
+          ],
+          "residual_correlation": null,
+          "sampling_CI": null
+        }
+      ]
+    }
+  },
+  "additional_joint_evidence": {
+    "status": "partial source constraints; target transport is not identified",
+    "records": [
+      {
+        "id": "BF_AGE_BMI_JOINT",
+        "title": "Association of relationship satisfaction with blood pressure: a cross-sectional study of older adults in rural Burkina Faso.",
+        "pmcid": "PMC12185928",
+        "doi": "10.1136/bmjopen-2024-089374",
+        "exact_read_sections": [
+          "Methods, sec_010: Procedure, Blood pressure, Covariates, Statistical analyses",
+          "Results, sec_019: analytical sample exclusions",
+          "Table 1, table-wrap_001",
+          "Table 2, table-wrap_002",
+          "Table 3, table-wrap_003"
+        ],
+        "numerical_statistics": {
+          "same_sample_n": 2114,
+          "women_n": 826,
+          "men_n": 1288,
+          "reported_pearson_correlations": {
+            "SBP_DBP": 0.78,
+            "SBP_age": 0.21,
+            "DBP_age": 0.02,
+            "SBP_BMI": 0.12,
+            "DBP_BMI": 0.16,
+            "age_BMI": -0.17
+          },
+          "reported_SD": {
+            "SBP_mmHg": 18.22,
+            "DBP_mmHg": 10.98,
+            "BMI_kg_m2": 3.9
+          },
+          "derived_partial_correlation_SBP_DBP_given_linear_age_and_BMI_approximately": 0.788,
+          "derived_residual_covariance_matrix_approximately": {
+            "order": [
+              "SBP",
+              "DBP"
+            ],
+            "unit": "mmHg^2",
+            "matrix": [
+              [
+                309.04,
+                149.96
+              ],
+              [
+                149.96,
+                117.2
+              ]
+            ]
+          },
+          "uncertainty": "No CI or SE reported for the correlation matrix or derived partial correlation/covariance. Table 3 gives p<0.001 for raw SBP–DBP correlation. Inputs are rounded, so derived digits are approximate, not sampling uncertainty."
+        },
+        "derivation": {
+          "inputs": "Only Tables 2 and 3 from this same analytical sample; no external moments combined.",
+          "formula": "For X=(standardized age, standardized BMI), R_X=[[1,-0.17],[-0.17,1]], c_S=(0.21,0.12), c_D=(0.02,0.16). Residual standardized covariance is 0.78-c_S R_X^{-1} c_D'; residual standardized variances are 1-c_S R_X^{-1} c_S' and 1-c_D R_X^{-1} c_D'. Normalize their covariance to obtain the partial correlation. Multiplying by the reported SBP/DBP SDs yields the residual covariance matrix.",
+          "standardized_residual_covariance_matrix_approximately": [
+            [
+              0.93094,
+              0.7496
+            ],
+            [
+              0.7496,
+              0.97211
+            ]
+          ],
+          "execution_status": "Algebraic derivation from published rounded moments, not individual-level execution."
+        },
+        "units_transforms": "Published BP in mmHg and BMI in kg/m^2; Table 3 uses Pearson correlations of untransformed continuous variables. The derivation standardizes internally only. No log or rank transformation is used.",
+        "population_measurement_adjustment": {
+          "population": "CRSN Heidelberg Aging Study, Nouna surveillance area, Burkina Faso, May–July 2018; adults aged at least 40, mean age 51.7; largely rural. Analytical sample selected for partnership/relationship-satisfaction information, BP availability, BMI/sitting-time completeness and outlier removal.",
+          "restrictions": "Pregnant participants excluded. Participants reporting BP medication within the previous two weeks excluded (101 people). These restrictions differ materially from the task's treatment-unrestricted distribution.",
+          "BP_measurement": "Omron Series 7 portable monitor, seated left arm after at least 15 minutes rest; three measurements, with five minutes between the second and third. Outcomes are means of the last two readings.",
+          "adjustment_for_derived_statistic": "Intercept plus linear age and continuous BMI only; NOT sex. The paper's displayed regression models include additional covariates, but their coefficients are not used in this derivation.",
+          "weighting": "Main-text methods describe Pearson correlations and R linear regressions; survey weighting is not specified. The derivation assumes the reported moments describe the same common-row empirical measure."
+        },
+        "cohort_overlap": "Same 2,114 analytical participants across the relevant published tables. Distinct from PNS and the existing INTERSALT, INTERMAP and Beijing sources; no overlap with the Ghana or Uganda surveys is indicated.",
+        "evidence_type": "Derived source-population linear-projection residual relationship; partial joint constraint, not the requested fully adjusted residual correlation.",
+        "scientific_analysis_constrained": "Adds information beyond separate BMI–BP slopes: jointly constrains paired residual covariance and scales after age/BMI adjustment in this source sample. Suitable as a source-specific comparator or explicitly transported sensitivity constraint.",
+        "residual_gaps": [
+          "Sex is omitted from the derived projection. Tables 1 and 2 report sex counts and sex-specific means, but the inspected main-text tables do not provide age SD or the age–sex correlation needed to complete the age/sex/BMI correlation matrix.",
+          "Do not set the requested age/sex/BMI residual correlation equal to 0.788 or to raw r=0.78.",
+          "Older, relatively lean, partnered, treatment-excluded rural African participants differ from the target's adults aged 20–79 with treatment retained.",
+          "The source's specified average of the last two BP readings is not established as equivalent to the target release's final interview BP aggregation."
+        ]
+      },
+      {
+        "id": "GHANA_MULTILEVEL_JOINT",
+        "title": "Joint modelling of systolic and diastolic blood pressure and its associated factors among women in Ghana: Multivariate response multilevel modelling methods.",
+        "pmcid": "PMC10132648",
+        "doi": "10.1371/journal.pgph.0001613",
+        "exact_read_sections": [
+          "Materials and methods, sec_002: Data source and study population, Covariates, Statistical analysis, Model description",
+          "Results, sec_013: Factors associated with SBP and DBP in the multivariate response multilevel models, including Tables 3 and 4"
+        ],
+        "numerical_statistics": {
+          "women_n": 4744,
+          "reported_raw_SBP_DBP_correlation": 0.76,
+          "raw_correlation_p": "<0.0001",
+          "reported_adjusted_individual_level_residual_correlation": 0.73,
+          "reported_adjusted_household_level_residual_correlation": 0.81,
+          "reported_variance_components_mmHg2": {
+            "SBP_individual": 224.49,
+            "SBP_household": 38.91,
+            "DBP_individual": 101.75,
+            "DBP_household": 16.37
+          },
+          "reported_household_variance_percent": {
+            "SBP": 15,
+            "DBP": 14
+          },
+          "uncertainty": "No SE or CI is supplied in Table 4 for the variance components or the two residual correlations. These are rounded point estimates; no transport interval is reported."
+        },
+        "units_transforms": "Continuous SBP and DBP in mmHg, model variances in mmHg^2, correlations dimensionless; no BP transformation described.",
+        "population_measurement_adjustment": {
+          "population": "Primary secondary-data analysis of the 2014 Ghana Demographic and Health Survey, women aged 15–49. Main-text methods report 3,727 households; abstract/search record reports 3,722, an unresolved denominator discrepancy.",
+          "BP_measurement": "The inspected article identifies continuous SBP and DBP but refers detailed survey procedures elsewhere. Device, rest interval, number of readings and aggregation were not established from the inspected article; do not assume equivalence to either PNS or the Burkina Faso protocol.",
+          "adjustment": "Age categories 15–24, 25–34, 35–44, 45–49; obesity binary; cooking fuel; education; wealth; water source; toilet type; household size; wall type; vegetable consumption. Household random intercepts for both outcomes with cross-outcome covariance; separate individual residual covariance.",
+          "weighting_and_restrictions": "A complex household survey is described, and models use runmlwin/MLwiN. A survey-weight implementation and pregnancy/treatment restrictions are not established by the inspected methods."
+        },
+        "cohort_overlap": "Within-paper raw and adjusted statistics are from the same GDHS analysis, not independent replications. No overlap with PNS, the existing packet, the Burkina Faso study or the Uganda survey is indicated.",
+        "evidence_type": "Directly reported adjusted multilevel joint parameters, but assumption-dependent for transport to any single-level age/sex/BMI OLS quantity.",
+        "scientific_analysis_constrained": "Provides independent evidence for remaining individual-level paired SBP–DBP dependence after a measured covariate adjustment, and a decomposition of source-model residual scales into household and individual components.",
+        "residual_gaps": [
+          "Individual-level r=0.73 conditions on the household component as well as the source covariates; household r=0.81 is correlation of random effects. Neither is the Pearson correlation of the task's OLS residuals.",
+          "The table labels its individual level 'Child'; surrounding methods and results explicitly identify this as the women/individual level. Preserve this source-label inconsistency.",
+          "No men or adults over 49; some participants younger than the target minimum age. Binary obesity and categorical age are not continuous BMI and linear age.",
+          "Any marginal residual covariance obtained by adding random-effect and individual covariance components would still belong to this source model and would require its covariance assumptions; it would not supply the requested OLS correlation."
+        ]
+      }
+    ],
+    "remaining_assumptions": [
+      "Transport from these source populations to the declared peso_lab-weighted complete-case PNS laboratory-substudy analytical distribution is unvalidated. Source sampling uncertainty does not quantify transport uncertainty.",
+      "A linear-projection residual correlation is specific to the covariate span, population distribution and weighting. Additional adjustment can change correlation in either direction; no equality or monotonicity is assumed.",
+      "A single source-model residual correlation does not identify age-, sex-, BMI- or treatment-specific covariance, nonlinearities, interactions, non-Gaussian tails or conditional heteroscedasticity.",
+      "The task retains treated participants and adults aged 70–79, unlike key source restrictions. Their paired BP law is not identified by these findings.",
+      "BP device, setting, rest duration, repeated-reading aggregation and shared measurement error can change paired residual dependence. Target baseline timing and unknown released final-reading aggregation remain limitations.",
+      "All algebra uses jointly reported moments within one study only. No raw moments from the existing packet or different studies were joined to manufacture a covariance matrix.",
+      "The two proposed source studies are not a basis for pooling the different reported correlation definitions into one numerical target or confidence interval."
+    ],
+    "root_audit": "Original cached tables/methods checked separately; Uganda omitted for reporting ambiguity. No target comparison used in selection.",
+    "independent_source_derivation": {
+      "source": "BF_AGE_BMI_JOINT",
+      "order": [
+        "SBP",
+        "DBP",
+        "age",
+        "BMI"
+      ],
+      "reported_correlation_matrix": [
+        [
+          1.0,
+          0.78,
+          0.21,
+          0.12
+        ],
+        [
+          0.78,
+          1.0,
+          0.02,
+          0.16
+        ],
+        [
+          0.21,
+          0.02,
+          1.0,
+          -0.17
+        ],
+        [
+          0.12,
+          0.16,
+          -0.17,
+          1.0
+        ]
+      ],
+      "minimum_eigenvalue": 0.1970190201424733,
+      "residual_standardized_covariance": [
+        [
+          0.9309360518999074,
+          0.7496014828544949
+        ],
+        [
+          0.7496014828544949,
+          0.972105859334775
+        ]
+      ],
+      "residual_covariance_mmHg2": [
+        [
+          309.04135165152917,
+          149.9619744133457
+        ],
+        [
+          149.9619744133457,
+          117.19747124374422
+        ]
+      ],
+      "partial_pearson_given_age_bmi": 0.7879773460321717,
+      "independent_QR_max_difference": 1.1102230246251565e-16,
+      "scope": "Rounded same-source inputs; linear age and BMI only, NOT sex; neither target constraint nor uncertainty interval"
+    }
+  }
+}

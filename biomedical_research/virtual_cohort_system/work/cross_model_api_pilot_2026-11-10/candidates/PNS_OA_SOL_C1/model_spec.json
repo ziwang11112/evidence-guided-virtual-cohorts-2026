@@ -1,0 +1,160 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "population_interpretation": "A fixed, assumed law conditional on the task's eligibility and complete-case selection, representing the peso_lab-weighted analytical distribution through equal-weight independent rows. It is not a nationally representative distribution.",
+    "identifier": {
+      "start": 1
+    },
+    "design": {
+      "base_column_order": [
+        "intercept",
+        "standardized_age",
+        "female"
+      ],
+      "age_center_years": 50,
+      "age_scale_years": 10,
+      "bmi_center_kg_m2": 25,
+      "bmi_scale_kg_m2": 5
+    },
+    "covariates": {
+      "family": "Recorded sex followed by sex-specific scaled-beta age, followed by age-and-sex-dependent scaled-beta BMI",
+      "female_probability": 0.53,
+      "age_support_years": [
+        20,
+        79
+      ],
+      "age_beta_shapes_by_female": [
+        [
+          2,
+          2.8
+        ],
+        [
+          2.2,
+          2.7
+        ]
+      ],
+      "bmi_support_kg_m2": [
+        16,
+        44
+      ],
+      "bmi_conditional_mean_coefficients": [
+        26,
+        0.8,
+        0.6
+      ],
+      "bmi_beta_concentration": 18
+    },
+    "bp": {
+      "outcome_order": [
+        "sbp",
+        "dbp"
+      ],
+      "conditional_mean_family": "Additive linear conditional mean on the requested raw-scale design",
+      "base_mean_coefficients": [
+        [
+          124,
+          5,
+          -3
+        ],
+        [
+          77,
+          0.5,
+          -2
+        ]
+      ],
+      "bmi_slopes_per5": [
+        3.877,
+        2.9835
+      ],
+      "conditional_sd_mmHg": [
+        16,
+        10
+      ],
+      "residual_correlation": 0.55,
+      "innovation_family": "Two independent standardized beta innovations, independent of all covariates",
+      "innovation_beta_shapes": [
+        2,
+        5
+      ],
+      "innovation_assignment": "DBP uses the shared innovation; SBP combines that innovation and an independent SBP-specific innovation with variance-preserving loadings.",
+      "measurement_interpretation": "Outcomes represent released final interview BP directly, not latent untreated or error-free BP. Residual variation combines unexplained biological, treatment, and measurement variation.",
+      "support_rule": "Bounded covariate and beta-innovation supports induce bounded raw BP support. No rejection, clipping, rounding, log transformation, or outcome-based selection is applied."
+    },
+    "uncertainty": {
+      "mode": "Fixed-parameter illustrative scenario with individual-level Monte Carlo sampling only",
+      "source_coefficient_se_usage": "Retained in provenance, not used as individual dispersion or as a target-population uncertainty distribution",
+      "transport_uncertainty": "Unquantified; no estimated confidence or credible interval is claimed"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_id": "bounded_marginals_gaussian_copula_v1",
+    "population_law": "Independent virtual people with bounded continuous Hb and ferritin marginals joined by a Gaussian copula.",
+    "source_cells": {
+      "both_low": 173,
+      "only_hb_low": 85,
+      "only_ferritin_low": 331,
+      "neither_low": 1082
+    },
+    "transport": {
+      "threshold_cell_probabilities": "Transport the four source cell proportions unchanged.",
+      "ferritin_geometric_mean": "Transport the source geometric mean unchanged.",
+      "target_weighting": "Equal-weight draws represent the specified phlebotomy-weighted complete-measurement domain only under these transport assumptions."
+    },
+    "hb": {
+      "threshold_g_dl": 12.0,
+      "support_g_dl": [
+        3.0,
+        20.0
+      ],
+      "family": "Truncated normal",
+      "untruncated_sd_g_dl": 1.0,
+      "location": "Solve the truncated-normal probability below 12 to equal (173+85)/1671."
+    },
+    "ferritin": {
+      "threshold_ug_l": 15.0,
+      "support_ug_l": [
+        0.2,
+        2000.0
+      ],
+      "geometric_mean_ug_l": 17.4,
+      "family": "Two-piece truncated normal on natural-log ferritin, with separate conditional scales below and above log(15).",
+      "lower_log_sd": 1.0,
+      "lower_probability": "(173+331)/1671",
+      "upper_log_sd": "Solve the mixture expectation of log(ferritin) to equal log(17.4)."
+    },
+    "dependence": {
+      "family": "Gaussian copula",
+      "latent_correlation": "Solve Phi2(Phi_inverse(258/1671), Phi_inverse(504/1671); rho) = 173/1671.",
+      "interpretation": "Latent Gaussian correlation calibrated to the unadjusted source threshold table; not an observed Pearson, residual, multilevel, or Spearman coefficient."
+    },
+    "numerics": {
+      "bisection_iterations": 70,
+      "copula_simpson_intervals": 2048,
+      "copula_integration_lower_z": -10.0,
+      "copula_rho_bracket": [
+        -0.999,
+        0.999
+      ],
+      "hb_location_bracket_g_dl": [
+        8.0,
+        17.0
+      ],
+      "ferritin_upper_log_sd_bracket": [
+        0.02,
+        4.0
+      ],
+      "inverse_cdf_endpoint_guard": "Nearest representable floating-point values strictly inside (0,1)."
+    }
+  }
+}

@@ -1,0 +1,2559 @@
+{
+  "schema_version": 1,
+  "case_id": "PNS",
+  "scope": "Retrospective static scientific attribution of 14 initial attempts and 2 unchanged review branches across two completed API pilots. Core BMI-coefficient and BP residual-law map; not an exhaustive covariate-law or marginal-diagnostic audit. No new APIs, generator runs, patient analyses or source reauthentication.",
+  "denominator": {
+    "initial_attempts": 14,
+    "complete_initial_artifacts": 10,
+    "initial_generators_with_delivered_data": 9,
+    "incomplete_initial_responses": 4,
+    "complete_but_execution_failed_initial": 1,
+    "review_lineage_rows": 2,
+    "independent_review_authors_added": 0
+  },
+  "sources": {
+    "S_INTERSALT": {
+      "packet": "packets/PNS/evidence.json#/source_evidence/sources/0",
+      "locator": "BMJ 1988;297:319-328, Table II p322; measurements pp319-320",
+      "source_operator": "Inverse-variance pooling of within-centre raw BP-on-BMI coefficients",
+      "adjustment": [
+        "age",
+        "sex",
+        "urinary sodium",
+        "urinary potassium",
+        "alcohol 1-299 ml/week",
+        "alcohol >=300 ml/week"
+      ],
+      "reported_coefficients_mmHg_per_kg_m2": [
+        0.7754,
+        0.5967
+      ],
+      "reported_coefficient_SE": [
+        0.0359,
+        0.0257
+      ],
+      "population": "10079 people, ages20-59, 52centres/32countries, antihypertensive use retained",
+      "transport_status": "Not an identified PNS age/sex-only estimand. Complete PNS constructions in both rounds use these numerical anchors with explicit, differing adjustment and population-transfer assumptions.",
+      "packet_paths": [
+        "work/cross_model_api_pilot_2026-11-10/packets/PNS/evidence.json",
+        "work/economy_feedback_pilot_2026-11-10/packets/PNS/evidence.json"
+      ],
+      "original_paper_reauthenticated_for_this_map": false
+    },
+    "S_BEIJING": {
+      "packet": "packets/PNS/evidence.json#/source_evidence/sources/1",
+      "locator": "PMC9278591, Methods2-2.2 and Table1; paired BP and pulse-pressure SDs",
+      "source_operator": "Unadjusted individual marginal moments; no BMI reported",
+      "overall_SD_S_D_PP": [
+        20.35,
+        10.93,
+        17.2
+      ],
+      "65plus_SD_S_D_PP": [
+        20.98,
+        11.22,
+        17.59
+      ],
+      "covariance_identity": "Cov(S,D)=(Var(S)+Var(D)-Var(S-D))/2",
+      "raw_covariance_identity_status": "Algebra from rounded reported SDs; neither residual correlation nor a sampling CI",
+      "transport_status": "Selected older Beijing community sample with different selection/measurement; target transport unverified",
+      "packet_paths": [
+        "work/cross_model_api_pilot_2026-11-10/packets/PNS/evidence.json",
+        "work/economy_feedback_pilot_2026-11-10/packets/PNS/evidence.json"
+      ],
+      "original_paper_reauthenticated_for_this_map": false
+    }
+  },
+  "source_packet_sha256": "c6ccbfa4ace5e909c48a53114e59de47e42a12f22e38edc44ea80f45b84da81f",
+  "source_packets_identical": true,
+  "records": [
+    {
+      "round": "R1",
+      "version_id": "PNS_OA_ASTRA_C1",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_ASTRA",
+      "context": 1,
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/model_spec.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json",
+        "work/cross_model_api_pilot_2026-11-10/provenance_review/PNS_CORE_REVIEW.json"
+      ],
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": {
+            "sbp": 0.7754,
+            "dbp": 0.5967
+          },
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/model_spec.json#/model/source_calibration/intersalt_bmi_coefficient_per_kg_m2",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/6",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/8",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:28",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:30",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:32"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "order": [
+              "dbp",
+              "pulse_pressure"
+            ],
+            "distribution": "Independently centered and variance-standardized beta variables",
+            "beta_shapes": [
+              [
+                2,
+                5
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            "individual_sd_mmHg": [
+              9,
+              12
+            ],
+            "dependence": "The two innovations are independent of each other and of all covariates. SBP equals DBP plus pulse pressure, so SBP and DBP innovations are not independent.",
+            "combination": "DBP = mean_DBP + error_DBP; pulse pressure = mean_SBP - mean_DBP + error_PP; SBP = DBP + pulse pressure."
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Standardized independent beta DBP/PP errors with SDs 9/12; SBP error equals their sum.",
+          "transport_assumptions": [
+            "Homoscedastic error law and distribution family are assumptions.",
+            "The packet does not identify the chosen conditional covariance or individual SDs."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/model_spec.json#/model/innovations",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/9",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/10",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/11",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:34",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:41",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:43",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:44",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:45"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Cov(S,D)=81; SD(S)=15, SD(D)=9; requested rho=0.6. No literal SBP-DBP rho is supplied. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.6,
+          "validated_population_value": 0.6,
+          "validation_status": "exact_law",
+          "note": "Cov(S,D)=81; SD(S)=15, SD(D)=9; requested rho=0.6. No literal SBP-DBP rho is supplied."
+        }
+      },
+      "review_change": null,
+      "failure_reason": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Bounded covariates and beta errors; no outcome transformation after component addition."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_OA_ASTRA_C1"
+      },
+      "scientific_eligibility": "law_available",
+      "artifact_sha256": {
+        "model_spec.json": "8868cef0efe481f9d25951b49bd85c852969f4b33be2519e4dc87d823a9ee956",
+        "generator.py": "8fe655d300d829c3f4bdc6b492118a55d39a488f0f0fb920235a3ac637dbe454",
+        "decision_record.json": "e4b094dc1fed793603d2da5bb0eec01b36ccc846acd073f05f55383388a85064"
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          15,
+          9
+        ],
+        "covariance_mmHg2": [
+          [
+            225,
+            81
+          ],
+          [
+            81,
+            81
+          ]
+        ],
+        "rho": 0.6,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "mathematical_status": "Core final-law claims statically consistent, conditional on stated assumptions; floating-point numbers approximate analytic law."
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_DS_PRO_C1",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "DS_PRO",
+      "context": 1,
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json",
+        "work/cross_model_api_pilot_2026-11-10/provenance_review/PNS_CORE_REVIEW.json"
+      ],
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            3.877,
+            2.9835
+          ],
+          "unit": "mmHg per 5 kg/m2",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Source coefficients multiplied by five before storing the per-five inputs.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json#/model/linear_predictor/sbp/bmi_z",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json#/model/linear_predictor/dbp/bmi_z",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json#/parameter_provenance/4",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json#/parameter_provenance/5",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:20",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:21"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "family": "bivariate_normal",
+            "sbp_sd": 17.9863291885,
+            "dbp_sd": 10.348927211,
+            "correlation": 0.49151387,
+            "unit": "SDs in mmHg; correlation dimensionless"
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [
+            "S_BEIJING"
+          ],
+          "source_reported_value": {
+            "SBP_SD": 20.35,
+            "DBP_SD": 10.93,
+            "PP_SD": 17.2,
+            "group": "overall",
+            "unit": "mmHg, individual marginal SD"
+          },
+          "source_operator": "Beijing Table 1 overall: unadjusted individual SBP, DBP and pulse-pressure SDs; neither conditional SD nor requested residual rho.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Author subtracts assumed explained covariance from transported source marginal covariance, then stores rounded literal residual SD/rho. Program uses literals, not explanatory derived_marginal_moments.",
+          "transport_assumptions": [
+            "Homoscedastic error law and distribution family are assumptions.",
+            "Source marginal dispersion transfers across age, selection, geography and measurement.",
+            "Explained-covariance decomposition uses assumed covariate distributions and effects; rounded source moments treated as plug-in values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json#/model/residual",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json#/model/derived_marginal_moments",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json#/parameter_provenance/6",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json#/parameter_provenance/7",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:22",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:23",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:24"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "The actual final-law rho is the literal 0.49151387. Author declares 0.4915139, a rounded approximation. Derived metadata is not an executed calibration step. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.4915139,
+          "validated_population_value": 0.49151387,
+          "validation_status": "exact_law",
+          "note": "The actual final-law rho is the literal 0.49151387. Author declares 0.4915139, a rounded approximation. Derived metadata is not an executed calibration step."
+        }
+      },
+      "review_change": null,
+      "failure_reason": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Clipping age/BMI to their already-generated supports is an identity in the ideal law; normal BP errors are unbounded."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_DS_PRO_C1"
+      },
+      "scientific_eligibility": "law_available",
+      "artifact_sha256": {
+        "model_spec.json": "a14fe92b7a09aee8997c8b50277a75ba2c8a269121e85a945145f1828b9e6616",
+        "generator.py": "e551d2623e0d774dc2439763e956d58c6c214165dcaa587b309508d33db293f2",
+        "decision_record.json": "6e24cd3389ab04457687f37371d64bdb9bc1b40be4c8826c93b7217004c18740"
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          17.9863291885,
+          10.348927211
+        ],
+        "covariance_mmHg2": [
+          [
+            323.5080376770871,
+            91.4900042349986
+          ],
+          [
+            91.4900042349986,
+            107.10029441857623
+          ]
+        ],
+        "rho": 0.49151387,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "mathematical_status": "Core final-law claims statically consistent, conditional on stated assumptions; floating-point numbers approximate analytic law."
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_CL_FABLE_C1",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "CL_FABLE",
+      "context": 1,
+      "independent_author": true,
+      "artifact_status": "incomplete_response",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json"
+      ],
+      "parameters": [],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "bmi_dbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "residual_correlation": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        }
+      },
+      "review_change": null,
+      "failure_reason": "incomplete_response: max_tokens",
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_CL_FABLE_C1"
+      },
+      "scientific_eligibility": "not_delivered",
+      "execution_status": "candidate_unavailable"
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_GE_CARBON_C1",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "GE_CARBON",
+      "context": 1,
+      "independent_author": true,
+      "artifact_status": "incomplete_response",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json"
+      ],
+      "parameters": [],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "bmi_dbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "residual_correlation": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        }
+      },
+      "review_change": null,
+      "failure_reason": "incomplete_response: MAX_TOKENS",
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_GE_CARBON_C1"
+      },
+      "scientific_eligibility": "not_delivered",
+      "execution_status": "candidate_unavailable"
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_OA_SOL_C1",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_SOL",
+      "context": 1,
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json",
+        "work/cross_model_api_pilot_2026-11-10/provenance_review/PNS_CORE_REVIEW.json"
+      ],
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            3.877,
+            2.9835
+          ],
+          "unit": "mmHg per 5 kg/m2",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Source coefficients multiplied by five before storing the per-five inputs.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/bmi_slopes_per5",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/9",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:29"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "conditional_sd_mmHg": [
+              16,
+              10
+            ],
+            "residual_correlation": 0.55,
+            "innovation_beta_shapes": [
+              2,
+              5
+            ]
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Mix standardized independent beta factors using direct assumed rho 0.55; scale by SDs 16/10.",
+          "transport_assumptions": [
+            "Homoscedastic error law and distribution family are assumptions.",
+            "The packet does not identify the chosen conditional covariance or individual SDs."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/conditional_sd_mmHg",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/residual_correlation",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/innovation_beta_shapes",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/10",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/11",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/12",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:35",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:36",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:37"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Final covariance [[256,88],[88,100]]; no outcome clipping or rejection. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.55,
+          "validated_population_value": 0.55,
+          "validation_status": "exact_law",
+          "note": "Final covariance [[256,88],[88,100]]; no outcome clipping or rejection."
+        }
+      },
+      "review_change": null,
+      "failure_reason": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Bounded additive law; correct mean design means innovations equal population projection residuals."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_OA_SOL_C1"
+      },
+      "scientific_eligibility": "law_available",
+      "artifact_sha256": {
+        "model_spec.json": "4d61ec3f248e00fec1586778ead70f46be23b8609be2ae288a58711f1550fc9e",
+        "generator.py": "f9fa45e3fa4d1516c25c9e07a86f413df3dd87215c006f067531dc7f8771690f",
+        "decision_record.json": "93254ce6b1e07ed9ed0b2caac87d77c7d4266a13e764d832b7d770eaa75aef55"
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          16,
+          10
+        ],
+        "covariance_mmHg2": [
+          [
+            256,
+            88
+          ],
+          [
+            88,
+            100
+          ]
+        ],
+        "rho": 0.55,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "mathematical_status": "Core final-law claims statically consistent, conditional on stated assumptions; floating-point numbers approximate analytic law."
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_OA_ASTRA_C2",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_ASTRA",
+      "context": 2,
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json",
+        "work/cross_model_api_pilot_2026-11-10/provenance_review/PNS_CORE_REVIEW.json"
+      ],
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/outcome_model/bmi_anchor_per_kg_m2",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/6",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:18",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:47",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:36",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:39",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:49",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:53"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "calibration": {
+              "source_id": "S_BEIJING",
+              "group": "65plus",
+              "n": 791,
+              "male_n": 356,
+              "age_mean": 74.26,
+              "age_sd": 5.37,
+              "bp_mean": [
+                141.29,
+                75.63
+              ],
+              "bp_sd": [
+                20.98,
+                11.22
+              ],
+              "pp_sd": 17.59,
+              "age_female_covariance_years": 0.0,
+              "bmi_reference_rule": "use_the_generated_BMI_conditional_mean_and_innovation_variance",
+              "raw_covariance_rule": "Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2",
+              "innovation_covariance_rule": "subtract_assumed_reference_conditional_mean_covariance_from_raw_BP_covariance",
+              "reference_age_support_assumption": "all_reference_participants_are_at_or_above_hinge_age"
+            },
+            "hinge_coefficients": [
+              3.0,
+              -5.0
+            ],
+            "residual_law": {
+              "family": "uniform_on_centered_covariance_normalized_ellipse",
+              "standardized_disk_radius": 2.0,
+              "independent_of_covariates": true,
+              "constant_covariance_across_covariates": true,
+              "covariance_transfer_rule": "use_calibrated_innovation_covariance_at_all_target_ages"
+            }
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [
+            "S_BEIJING"
+          ],
+          "source_reported_value": {
+            "SBP_SD": 20.98,
+            "DBP_SD": 11.22,
+            "PP_SD": 17.59,
+            "group": "65plus",
+            "unit": "mmHg, individual marginal SD"
+          },
+          "source_operator": "Beijing Table 1 65plus: unadjusted individual SBP, DBP and pulse-pressure SDs; neither conditional SD nor requested residual rho.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Reconstruct source raw covariance; subtract hypothetical reference explained covariance; generate bounded elliptical errors. Requested OLS residuals additionally retain the age-65 hinge omitted from the analysis design.",
+          "transport_assumptions": [
+            "Homoscedastic error law and distribution family are assumptions.",
+            "Source marginal dispersion transfers across age, selection, geography and measurement.",
+            "Explained-covariance decomposition uses assumed covariate distributions and effects; rounded source moments treated as plug-in values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/calibration",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/residual_law",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/outcome_model/hinge_coefficients",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/7",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/8",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/9",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/10",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:27",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:28",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:29",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:30",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:31",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:32",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:33",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:34",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:36",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:39",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:49",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:53"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Innovation rho and requested OLS residual rho differ. FWL preserves BMI slopes because residualized BMI is independent of the hinge. See inherited reviewer algebra, not a new synthetic/clinical result. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "FWL: conditional BMI mean is affine in age/sex and its innovation is independent of age/sex/hinge; residualized BMI is orthogonal to the omitted hinge. The BMI projection slopes therefore remain the specified values."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "FWL: conditional BMI mean is affine in age/sex and its innovation is independent of age/sex/hinge; residualized BMI is orthogonal to the omitted hinge. The BMI projection slopes therefore remain the specified values."
+        },
+        "residual_correlation": {
+          "declared_population_value": null,
+          "validated_population_value": 0.5685432918552262,
+          "validation_status": "exact_law",
+          "note": "Innovation rho and requested OLS residual rho differ. FWL preserves BMI slopes because residualized BMI is independent of the hinge. See inherited reviewer algebra, not a new synthetic/clinical result."
+        }
+      },
+      "review_change": null,
+      "failure_reason": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "A nonlinear age hinge remains in the requested linear-regression residual; its covariance must be added to innovation covariance."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_OA_ASTRA_C2"
+      },
+      "scientific_eligibility": "law_available",
+      "artifact_sha256": {
+        "model_spec.json": "726ef968173b082f8cddfd67eb935057bcd5645546059d3085c576637f4ca8e5",
+        "generator.py": "064ab2d0e735fae6cb8710b06978173b306eb6b97818001df3f586515b35efb1",
+        "decision_record.json": "c2e7c7735db8d885dbc79efc518ec94791d39d109df56d37fe2b80bb04edc3bb"
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          20.079417984055475,
+          10.77660360476036
+        ],
+        "covariance_mmHg2": [
+          [
+            403.1830265784104,
+            123.02590503274236
+          ],
+          [
+            123.02590503274236,
+            116.135185254134
+          ]
+        ],
+        "rho": 0.5685432918552262,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates.",
+        "innovation_distinction": {
+          "innovation_covariance_mmHg2": [
+            [
+              402.5639635662579,
+              124.05767671966329
+            ],
+            [
+              124.05767671966329,
+              114.41556577593244
+            ]
+          ],
+          "innovation_SD_mmHg": [
+            20.06399669971708,
+            10.696521199714066
+          ],
+          "innovation_Pearson": 0.5780476497200118,
+          "residualized_hinge_variance": 0.06878477912806262,
+          "requested_OLS_residual_covariance_mmHg2": [
+            [
+              403.1830265784104,
+              123.02590503274236
+            ],
+            [
+              123.02590503274236,
+              116.135185254134
+            ]
+          ],
+          "requested_OLS_residual_SD_mmHg": [
+            20.079417984055475,
+            10.77660360476036
+          ],
+          "requested_OLS_residual_Pearson": 0.5685432918552262,
+          "status": "Reviewer algebra of the fixed assumed law, not a model response value or simulated/clinical result",
+          "derivation": "Uniform-disk radius2 gives identity covariance. Hypothetical65plus predictor covariance is subtracted from source raw covariance. Requested OLS omits the age65 hinge: residual covariance adds outer([3,-5],[3,-5])*V. V is14^3*45^3/(3*59^4*10^2). E[female|age] is affine and BMI adds an affine age/sex mean plus independent innovation, so these extra regressors do not alter the hinge projection."
+        }
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "mathematical_status": "Core final-law claims statically consistent, conditional on stated assumptions; floating-point numbers approximate analytic law."
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_DS_PRO_C2",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "DS_PRO",
+      "context": 2,
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json",
+        "work/cross_model_api_pilot_2026-11-10/provenance_review/PNS_CORE_REVIEW.json"
+      ],
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            3.877,
+            2.9835
+          ],
+          "unit": "mmHg per 5 kg/m2",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Source coefficients multiplied by five before storing the per-five inputs.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json#/model/bp/beta_sbp/bmi_c",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json#/model/bp/beta_dbp/bmi_c",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json#/parameter_provenance/3",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json#/parameter_provenance/4",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:38",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:39"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "residual_sd": {
+              "sbp": 13.0,
+              "dbp": 8.5,
+              "unit": "mmHg"
+            },
+            "residual_correlation": 0.5
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Direct assumed bivariate-normal outcome errors with SDs 13/8.5 and rho 0.5.",
+          "transport_assumptions": [
+            "Homoscedastic error law and distribution family are assumptions.",
+            "The packet does not identify the chosen conditional covariance or individual SDs."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json#/model/bp/residual_sd",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json#/model/bp/residual_correlation",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json#/parameter_provenance/5",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json#/parameter_provenance/6",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:41",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:42",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:43",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:45"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Age/BMI are generated by rejection, so their normal proposal means/SDs are not final truncated moments. BP is linear in the final observed covariates with independent errors; its requested slopes/rho remain valid. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.5,
+          "validated_population_value": 0.5,
+          "validation_status": "exact_law",
+          "note": "Age/BMI are generated by rejection, so their normal proposal means/SDs are not final truncated moments. BP is linear in the final observed covariates with independent errors; its requested slopes/rho remain valid."
+        }
+      },
+      "review_change": null,
+      "failure_reason": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Rejection changes covariate distributions only; no BP truncation/rejection is applied."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_DS_PRO_C2"
+      },
+      "scientific_eligibility": "law_available",
+      "artifact_sha256": {
+        "model_spec.json": "96151cf5b0b88bec57dfa98dca9c5f9e39b389179225c19facb696ca6706e165",
+        "generator.py": "791d7ff031958ff0dae75c0a8849d4a9429f161a273678846541c49954522651",
+        "decision_record.json": "da8181b1a9c69494b340979bab27226153d9b1ed0815adf75059161fb44c7d99"
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          13,
+          8.5
+        ],
+        "covariance_mmHg2": [
+          [
+            169,
+            55.25
+          ],
+          [
+            55.25,
+            72.25
+          ]
+        ],
+        "rho": 0.5,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "mathematical_status": "Core final-law claims statically consistent, conditional on stated assumptions; floating-point numbers approximate analytic law."
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_CL_FABLE_C2",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "CL_FABLE",
+      "context": 2,
+      "independent_author": true,
+      "artifact_status": "incomplete_response",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json"
+      ],
+      "parameters": [],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "bmi_dbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "residual_correlation": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        }
+      },
+      "review_change": null,
+      "failure_reason": "incomplete_response: max_tokens",
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_CL_FABLE_C2"
+      },
+      "scientific_eligibility": "not_delivered",
+      "execution_status": "candidate_unavailable"
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_GE_CARBON_C2",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "GE_CARBON",
+      "context": 2,
+      "independent_author": true,
+      "artifact_status": "incomplete_response",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json"
+      ],
+      "parameters": [],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "bmi_dbp": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        },
+        "residual_correlation": {
+          "declared_population_value": null,
+          "validated_population_value": null,
+          "validation_status": "unavailable",
+          "note": "No complete scientific artifact; do not infer parameters from partial output."
+        }
+      },
+      "review_change": null,
+      "failure_reason": "incomplete_response: MAX_TOKENS",
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_GE_CARBON_C2"
+      },
+      "scientific_eligibility": "not_delivered",
+      "execution_status": "candidate_unavailable"
+    },
+    {
+      "round": "R1",
+      "version_id": "PNS_OA_SOL_C2",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_SOL",
+      "context": 2,
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/cross_model_api_pilot_2026-11-10/CONSTRUCTION_OUTCOMES.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py",
+        "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json",
+        "work/cross_model_api_pilot_2026-11-10/provenance_review/PNS_CORE_REVIEW.json"
+      ],
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/bp/bmi_slope_per_kg_m2",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/13",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:36"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "shared_innovation_loadings": [
+              12,
+              6
+            ],
+            "specific_innovation_loadings": [
+              9,
+              8
+            ]
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Standardized shared/specific uniforms with shared loadings 12/6 and specific loadings 9/8.",
+          "transport_assumptions": [
+            "Homoscedastic error law and distribution family are assumptions.",
+            "The packet does not identify the chosen conditional covariance or individual SDs."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/bp/shared_innovation_loadings",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/bp/specific_innovation_loadings",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/innovations",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/14",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/15",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/16",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:39",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:40",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:41",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:42",
+            "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:43"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "SDs sqrt(12^2+9^2)=15 and sqrt(6^2+8^2)=10; covariance 72; rho=0.48. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "The BP means are exactly linear in the requested design and added errors have conditional mean zero; population OLS slopes equal the conditional coefficients."
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.48,
+          "validated_population_value": 0.48,
+          "validation_status": "exact_law",
+          "note": "SDs sqrt(12^2+9^2)=15 and sqrt(6^2+8^2)=10; covariance 72; rho=0.48."
+        }
+      },
+      "review_change": null,
+      "failure_reason": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Standardization and affine factor mixing; no outcome clipping or rejection."
+      ],
+      "results_join": {
+        "path": "work/cross_model_api_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_OA_SOL_C2"
+      },
+      "scientific_eligibility": "law_available",
+      "artifact_sha256": {
+        "model_spec.json": "6df46c00d98decfa3065e3528aa3544995b8c40c16912ca58b5d0a3618712a31",
+        "generator.py": "b3982e6f6882da05adc9399ac81bd476645872ff5377935f65ea1535a3dced10",
+        "decision_record.json": "5cbb3adccafa933a707e1459eb239a2e770e6494478ca49ce85bd219d3a8f579"
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          15,
+          10
+        ],
+        "covariance_mmHg2": [
+          [
+            225,
+            72
+          ],
+          [
+            72,
+            100
+          ]
+        ],
+        "rho": 0.48,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "mathematical_status": "Core final-law claims statically consistent, conditional on stated assumptions; floating-point numbers approximate analytic law."
+    },
+    {
+      "round": "R2",
+      "version_id": "PNS_SOL_A",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_SOL",
+      "context": "SOL_A",
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/economy_feedback_pilot_2026-11-10/calls/initial/PNS_SOL_A/artifact.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json"
+      ],
+      "artifact_sha256": {
+        "model_spec.json": "72a789a8f2275480a44e799c90e4eefb21357e7052c4b30a3cb40b2ef4679e8c",
+        "generator.py": "0892540bd5daeeadfe2feed59510b7120855e6e381ed109abd7286ca5ef274f2",
+        "decision_record.json": "e6e1f6b60ae71b06d5649365b60446df5aeb9d02f5be5f109df20a606244b24e"
+      },
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/transported_bmi_coefficients_per_kg_m2",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/5",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:26",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:27"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "residual_sd_mmHg": [
+              14,
+              9
+            ],
+            "residual_mixing_matrix": [
+              [
+                1,
+                0
+              ],
+              [
+                0.6,
+                0.8
+              ]
+            ],
+            "residual_latent_family": "two independent uniforms, centered and standardized to unit variance",
+            "residual_latent_uniform_support": [
+              -1,
+              1
+            ]
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Independent standardized uniforms mixed with rows [1,0] and [0.6,0.8], then scaled 14/9.",
+          "transport_assumptions": [
+            "Residual family/structure and homoscedasticity are assumptions.",
+            "No compatible source conditional covariance/SD estimate identifies these values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_sd_mmHg",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_mixing_matrix",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/6",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/7",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:20",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:29",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:30",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:31"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Correct additive final-law claims; bounded support already guarantees SBP>DBP. No seed-specific fitting. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.6,
+          "validated_population_value": 0.6,
+          "validation_status": "exact_law",
+          "note": "Correct additive final-law claims; bounded support already guarantees SBP>DBP. No seed-specific fitting."
+        }
+      },
+      "review_change": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/economy_feedback_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_SOL_A"
+      },
+      "scientific_eligibility": "law_available",
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          14,
+          9
+        ],
+        "covariance_mmHg2": [
+          [
+            196,
+            75.6
+          ],
+          [
+            75.6,
+            81
+          ]
+        ],
+        "rho": 0.6,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "execution_status_locator": "work/economy_feedback_pilot_2026-11-10/EVALUATION_CLOSURE.json#/records",
+      "mathematical_status": "Static final-law algebra valid; implementation delivery is separate."
+    },
+    {
+      "round": "R2",
+      "version_id": "PNS_DS",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "DS_PRO",
+      "context": "DS",
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/economy_feedback_pilot_2026-11-10/calls/initial/PNS_DS/artifact.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/model_spec.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json"
+      ],
+      "artifact_sha256": {
+        "model_spec.json": "4d57fa55605f8bf694ae170c20103124496f92505f07bf168cf01010c0c93dca",
+        "generator.py": "6d368fbee489a3a9b38f7746fe701443c5388b8984e7102b8474744d6461cf5f",
+        "decision_record.json": "0cdda1a977c3aec72cee671d926a68c324964ad5c9d324c5a9f83dfb8cd1631d"
+      },
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            3.877,
+            2.9835
+          ],
+          "unit": "mmHg per 5 kg/m2",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Source coefficients multiplied by five before storing the per-five inputs.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/model_spec.json#/model/outcome_model/linear_predictors",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/4",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/5",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:21",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:27"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "distribution": "bivariate_normal",
+            "sigma_sbp_mmHg": 15.0,
+            "sigma_dbp_mmHg": 9.0,
+            "correlation": 0.5,
+            "conditioning": "constant across covariates"
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Direct constant bivariate-normal residual law with SDs 15/9 and rho 0.5.",
+          "transport_assumptions": [
+            "Residual family/structure and homoscedasticity are assumptions.",
+            "No compatible source conditional covariance/SD estimate identifies these values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/model_spec.json#/model/outcome_model/residual",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/8",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/9",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/10",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/11",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:33",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:37",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:53"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Law claims are coherent, but author code returns df[task.columns] with descriptor dictionaries; all planned execution seeds failed. No delivered-data claim follows. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.5,
+          "validated_population_value": 0.5,
+          "validation_status": "exact_law",
+          "note": "Law claims are coherent, but author code returns df[task.columns] with descriptor dictionaries; all planned execution seeds failed. No delivered-data claim follows."
+        }
+      },
+      "review_change": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Author ABI defect: TypeError unhashable type dict; no host repair. Analytic values characterize the declared law, not a delivered dataset."
+      ],
+      "results_join": {
+        "path": "work/economy_feedback_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_DS"
+      },
+      "scientific_eligibility": "law_available",
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          15,
+          9
+        ],
+        "covariance_mmHg2": [
+          [
+            225,
+            67.5
+          ],
+          [
+            67.5,
+            81
+          ]
+        ],
+        "rho": 0.5,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "failed_all_planned_seeds",
+      "execution_status_locator": "work/economy_feedback_pilot_2026-11-10/EVALUATION_CLOSURE.json#/records",
+      "mathematical_status": "Static final-law algebra valid; implementation delivery is separate."
+    },
+    {
+      "round": "R2",
+      "version_id": "PNS_SOL_B",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_SOL",
+      "context": "SOL_B",
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/economy_feedback_pilot_2026-11-10/calls/initial/PNS_SOL_B/artifact.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/model_spec.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json"
+      ],
+      "artifact_sha256": {
+        "model_spec.json": "79f92205861416ec2507f83fc68ba4251b7fbfe39678e86e3086f04e8d0e1681",
+        "generator.py": "c0a1c60880721eac91b82d5d85b436c1f745a5995b65b7337e531247be31e055",
+        "decision_record.json": "9d4a51a5f80e2d103998c8220e768ac310e081b80551daf81d373d99a075b525"
+      },
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/model_spec.json#/model/bp_mean/bmi_effect_per_kg_m2",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json#/parameter_provenance/9",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:31",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:22",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:32"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "bp_dispersion_bridge": {
+              "source_group": "S_BEIJING overall",
+              "sbp_sd": 20.35,
+              "dbp_sd": 10.93,
+              "pulse_pressure_sd": 17.2,
+              "rule": "Transport the three source unadjusted centered second moments to the modeled target marginal BP distribution. Construct its SBP-DBP covariance using Var(S-D). Residual covariance equals this marginal covariance matrix minus the covariance of the modeled conditional means."
+            },
+            "bp_mean": {
+              "outcome_order": [
+                "sbp",
+                "dbp"
+              ],
+              "reference": [
+                125,
+                77
+              ],
+              "age_effect_per_standard_unit": [
+                5,
+                1
+              ],
+              "female_difference": [
+                -3,
+                -1
+              ],
+              "bmi_effect_per_kg_m2": [
+                0.7754,
+                0.5967
+              ],
+              "formula": "For each outcome, reference + age_effect*((age-age_center)/age_scale) + female_difference*(female-P(female=1)) + bmi_effect_per_kg_m2*(bmi-bmi_center)."
+            },
+            "covariates": {
+              "age": {
+                "family": "discrete_uniform",
+                "lower": 20,
+                "upper": 79
+              },
+              "female": {
+                "family": "bernoulli",
+                "probability": 0.5
+              },
+              "bmi": {
+                "family": "affine_shifted_beta",
+                "reference_mean": 27,
+                "age_effect_per_standard_unit": 0.5,
+                "female_difference": 1,
+                "beta_scale": 28,
+                "beta_shapes": [
+                  2,
+                  4
+                ]
+              },
+              "dependence": "Age, recorded female sex and the beta innovation are mutually independent roots. BMI depends on age and sex through its conditional mean."
+            },
+            "residual_law": {
+              "family": "uniform_ellipse",
+              "standard_disk_radius": 2,
+              "construction": "An independent point uniformly distributed over the radius-2 disk has covariance I. Left-multiply it by the Cholesky factor of the residual covariance matrix.",
+              "dependence": "The paired BP residual vector is independent of all covariates; its components are jointly elliptical, bounded, and dependent."
+            }
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [
+            "S_BEIJING"
+          ],
+          "source_reported_value": {
+            "SBP_SD": 20.35,
+            "DBP_SD": 10.93,
+            "PP_SD": 17.2,
+            "group": "overall",
+            "unit": "mmHg, individual marginal SD"
+          },
+          "source_operator": "Beijing Table 1 overall: unadjusted individual SBP, DBP and pulse-pressure SDs; neither conditional SD nor requested residual rho.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Reconstruct transported Beijing raw covariance, subtract analytic covariance of modeled conditional means, realize remainder with uniform radius-2 disk.",
+          "transport_assumptions": [
+            "Residual family/structure and homoscedasticity are assumptions.",
+            "Source marginal moments transfer and assumed mean/covariate law permits the subtraction."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/model_spec.json#/model/bp_dispersion_bridge",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/model_spec.json#/model/residual_law",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json#/parameter_provenance/10",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json#/parameter_provenance/11",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:36",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:37",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:41",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:47",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:48",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:51"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Numeric rho is reviewer scalar algebra of the author-supplied exact expression, not a new generator run; author supplied expression rather than numeric scalar. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "residual_correlation": {
+          "declared_population_value": null,
+          "validated_population_value": 0.4757204681702122,
+          "validation_status": "exact_law",
+          "note": "Numeric rho is reviewer scalar algebra of the author-supplied exact expression, not a new generator run; author supplied expression rather than numeric scalar."
+        }
+      },
+      "review_change": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/economy_feedback_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_SOL_B"
+      },
+      "scientific_eligibility": "law_available",
+      "static_derivation": {
+        "mean_covariance_K_mmHg2": [
+          [
+            103.25927971614722,
+            32.71944739308749
+          ],
+          [
+            32.71944739308749,
+            13.958107169397913
+          ]
+        ],
+        "reference_marginal_covariance_V_mmHg2": [
+          [
+            414.1225,
+            118.8737
+          ],
+          [
+            118.8737,
+            119.4649
+          ]
+        ],
+        "residual_covariance_formula": "R=V-K",
+        "scalar_algebra_only": true
+      },
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          17.631313628991254,
+          10.271649956584486
+        ],
+        "covariance_mmHg2": [
+          [
+            310.8632202838528,
+            86.15425260691251
+          ],
+          [
+            86.15425260691251,
+            105.50679283060208
+          ]
+        ],
+        "rho": 0.4757204681702122,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "execution_status_locator": "work/economy_feedback_pilot_2026-11-10/EVALUATION_CLOSURE.json#/records",
+      "mathematical_status": "Static final-law algebra valid; implementation delivery is separate."
+    },
+    {
+      "round": "R2",
+      "version_id": "PNS_ASTRA",
+      "case_id": "PNS",
+      "kind": "initial",
+      "parent_version_id": null,
+      "model_config": "OA_ASTRA",
+      "context": "ASTRA",
+      "independent_author": true,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/economy_feedback_pilot_2026-11-10/calls/initial/PNS_ASTRA/artifact.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json"
+      ],
+      "artifact_sha256": {
+        "model_spec.json": "fae844b80404e160ff575afb2b8d8b919fa08b6a3229f4b82ce513e18942edc5",
+        "generator.py": "51084c9d888e6ff48cafd02680ef2e8a4c23b96f3d4ae79e5a26251d04743e41",
+        "decision_record.json": "f85b3a8071668658f98471f2518e3025e08aad24b5fc4f3a4c8ed0aac285ec17"
+      },
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five. Adds assumed omitted-score conditional BMI mean 0.2 times outcome loadings 4/3, shifting requested slopes by 0.8/0.6.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "The omitted adjustment score and its BMI association/outcome effects are assumed, not source-estimated."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json#/model/bp/source_bmi_slopes_mmHg_per_kg_m2",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json#/model/bp/omitted_score_mean_coefficients",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/5",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/7",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/9",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:27",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:28",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:31",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:34"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "factor_loadings_mmHg": [
+              [
+                4,
+                12,
+                16,
+                0
+              ],
+              [
+                3,
+                9,
+                0,
+                12
+              ]
+            ],
+            "factor_support": [
+              -1,
+              1
+            ],
+            "factor_family": "independent_uniform",
+            "omitted_score_mean_coefficients": [
+              0,
+              0.15,
+              -0.1,
+              0.2
+            ]
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Four independent Uniform(-1,1) factors with loadings [4,12,16,0] / [3,9,0,12]; factor variance 1/3.",
+          "transport_assumptions": [
+            "Residual family/structure and homoscedasticity are assumptions.",
+            "No compatible source conditional covariance/SD estimate identifies these values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json#/model/bp/factor_loadings_mmHg",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json#/model/bp/factor_support",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/10",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/11",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:30",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:33",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:34"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Omitted-score conditional mean adds 0.8/0.6 to the source-scaled BMI slopes. Residual rho=5/13 follows from assumed factor loadings; neither correction is reported source evidence. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 4.677,
+          "validated_population_value": 4.677,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. Assumed omitted-score adjustment shifts the source anchor."
+        },
+        "bmi_dbp": {
+          "declared_population_value": 3.5835,
+          "validated_population_value": 3.5835,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. Assumed omitted-score adjustment shifts the source anchor."
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.38461538461538464,
+          "validated_population_value": 0.38461538461538464,
+          "validation_status": "exact_law",
+          "note": "Omitted-score conditional mean adds 0.8/0.6 to the source-scaled BMI slopes. Residual rho=5/13 follows from assumed factor loadings; neither correction is reported source evidence."
+        }
+      },
+      "review_change": null,
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed."
+      ],
+      "results_join": {
+        "path": "work/economy_feedback_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_ASTRA"
+      },
+      "scientific_eligibility": "law_available",
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          11.775681155103795,
+          8.831760866327848
+        ],
+        "covariance_mmHg2": [
+          [
+            138.66666666666666,
+            40
+          ],
+          [
+            40,
+            78
+          ]
+        ],
+        "rho": 0.38461538461538464,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "execution_status_locator": "work/economy_feedback_pilot_2026-11-10/EVALUATION_CLOSURE.json#/records",
+      "mathematical_status": "Static final-law algebra valid; implementation delivery is separate."
+    },
+    {
+      "round": "R2",
+      "version_id": "PNS_SOL_A_SECOND_LOOK",
+      "case_id": "PNS",
+      "kind": "review",
+      "parent_version_id": "PNS_SOL_A",
+      "model_config": "OA_SOL",
+      "context": "SOL_A",
+      "independent_author": false,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/economy_feedback_pilot_2026-11-10/calls/initial/PNS_SOL_A/artifact.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json",
+        "work/economy_feedback_pilot_2026-11-10/calls/review/PNS_SOL_A_SECOND_LOOK/artifact.json"
+      ],
+      "artifact_sha256": {
+        "model_spec.json": "72a789a8f2275480a44e799c90e4eefb21357e7052c4b30a3cb40b2ef4679e8c",
+        "generator.py": "0892540bd5daeeadfe2feed59510b7120855e6e381ed109abd7286ca5ef274f2",
+        "decision_record.json": "e6e1f6b60ae71b06d5649365b60446df5aeb9d02f5be5f109df20a606244b24e"
+      },
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/transported_bmi_coefficients_per_kg_m2",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/5",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:26",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:27"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "residual_sd_mmHg": [
+              14,
+              9
+            ],
+            "residual_mixing_matrix": [
+              [
+                1,
+                0
+              ],
+              [
+                0.6,
+                0.8
+              ]
+            ],
+            "residual_latent_family": "two independent uniforms, centered and standardized to unit variance",
+            "residual_latent_uniform_support": [
+              -1,
+              1
+            ]
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Independent standardized uniforms mixed with rows [1,0] and [0.6,0.8], then scaled 14/9.",
+          "transport_assumptions": [
+            "Residual family/structure and homoscedasticity are assumptions.",
+            "No compatible source conditional covariance/SD estimate identifies these values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_sd_mmHg",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_mixing_matrix",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/6",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/7",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:20",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:29",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:30",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:31"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Correct additive final-law claims; bounded support already guarantees SBP>DBP. No seed-specific fitting. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.6,
+          "validated_population_value": 0.6,
+          "validation_status": "exact_law",
+          "note": "Correct additive final-law claims; bounded support already guarantees SBP>DBP. No seed-specific fitting."
+        }
+      },
+      "review_change": "retained_noop: exact model dictionary and generator string unchanged; decision prose revised only",
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Review branch shares the same parent construction and must not be counted as an independent scientific author."
+      ],
+      "results_join": {
+        "path": "work/economy_feedback_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_SOL_A_SECOND_LOOK"
+      },
+      "scientific_eligibility": "law_available",
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          14,
+          9
+        ],
+        "covariance_mmHg2": [
+          [
+            196,
+            75.6
+          ],
+          [
+            75.6,
+            81
+          ]
+        ],
+        "rho": 0.6,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "execution_status_locator": "work/economy_feedback_pilot_2026-11-10/EVALUATION_CLOSURE.json#/records",
+      "mathematical_status": "Static final-law algebra valid; implementation delivery is separate.",
+      "arm": "second_look",
+      "review_artifact_sha256": "2d8830bc9063af6f3178de9d8f762642c2cf449dd0fd5e9dd22b3609004e2de3"
+    },
+    {
+      "round": "R2",
+      "version_id": "PNS_SOL_A_FEEDBACK",
+      "case_id": "PNS",
+      "kind": "review",
+      "parent_version_id": "PNS_SOL_A",
+      "model_config": "OA_SOL",
+      "context": "SOL_A",
+      "independent_author": false,
+      "artifact_status": "complete",
+      "artifact_paths": [
+        "work/economy_feedback_pilot_2026-11-10/calls/initial/PNS_SOL_A/artifact.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py",
+        "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json",
+        "work/economy_feedback_pilot_2026-11-10/calls/review/PNS_SOL_A_FEEDBACK/artifact.json"
+      ],
+      "artifact_sha256": {
+        "model_spec.json": "72a789a8f2275480a44e799c90e4eefb21357e7052c4b30a3cb40b2ef4679e8c",
+        "generator.py": "0892540bd5daeeadfe2feed59510b7120855e6e381ed109abd7286ca5ef274f2",
+        "decision_record.json": "e6e1f6b60ae71b06d5649365b60446df5aeb9d02f5be5f109df20a606244b24e"
+      },
+      "parameters": [
+        {
+          "parameter_id": "bmi_coefficients",
+          "name": "BMI association coefficients for SBP and DBP",
+          "value": [
+            0.7754,
+            0.5967
+          ],
+          "unit": "mmHg per kg/m2 (source-anchor scale)",
+          "source_ids": [
+            "S_INTERSALT"
+          ],
+          "source_reported_value": {
+            "SBP": 0.7754,
+            "DBP": 0.5967,
+            "unit": "mmHg per kg/m2"
+          },
+          "source_operator": "INTERSALT Table II p322: inverse-variance pooled within-centre raw BP-on-BMI coefficient, additionally adjusted for age, sex, urinary sodium/potassium and alcohol; ages 20-59; mean of two random-zero BP readings.",
+          "provenance_components": [
+            "reported",
+            "derived",
+            "assumed"
+          ],
+          "transformation": "Program multiplies the reported per-kg/m2 inputs by the requested BMI divisor of five.",
+          "transport_assumptions": [
+            "Source sodium/potassium/alcohol adjustment differs from requested age/sex adjustment.",
+            "Inverse-variance within-centre pooling is not the target weighted-mixture projection.",
+            "Source ages 20-59 are extended to target ages 20-79.",
+            "Population, measurement/device/reading aggregation, treatment and selection transport are unverified.",
+            "No net omitted-adjustment shift in the BMI projection is assumed."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/transported_bmi_coefficients_per_kg_m2",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/5",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:26",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:27"
+          ],
+          "analysis_ids": [
+            "bmi_sbp",
+            "bmi_dbp"
+          ],
+          "mathematical_note": "Final-law projection is derived under the completed joint model; the source alone does not identify the requested target projection."
+        },
+        {
+          "parameter_id": "residual_law",
+          "name": "Residual covariance and individual dispersion construction",
+          "value": {
+            "residual_sd_mmHg": [
+              14,
+              9
+            ],
+            "residual_mixing_matrix": [
+              [
+                1,
+                0
+              ],
+              [
+                0.6,
+                0.8
+              ]
+            ],
+            "residual_latent_family": "two independent uniforms, centered and standardized to unit variance",
+            "residual_latent_uniform_support": [
+              -1,
+              1
+            ]
+          },
+          "unit": "mixed: SD/loadings in mmHg; covariance in mmHg2; rho dimensionless; see fields",
+          "source_ids": [],
+          "source_reported_value": null,
+          "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+          "provenance_components": [
+            "assumed",
+            "derived"
+          ],
+          "transformation": "Independent standardized uniforms mixed with rows [1,0] and [0.6,0.8], then scaled 14/9.",
+          "transport_assumptions": [
+            "Residual family/structure and homoscedasticity are assumptions.",
+            "No compatible source conditional covariance/SD estimate identifies these values."
+          ],
+          "actual_code_use": "verified",
+          "locators": [
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_sd_mmHg",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_mixing_matrix",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/6",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/7",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:20",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:29",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:30",
+            "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:31"
+          ],
+          "analysis_ids": [
+            "residual_correlation",
+            "sbp.sd_population",
+            "dbp.sd_population"
+          ],
+          "mathematical_note": "Correct additive final-law claims; bounded support already guarantees SBP>DBP. No seed-specific fitting. Residual covariance also contributes to marginal BP SD diagnostics, but does not determine them alone: marginal variance includes modeled conditional-mean and covariate variability. The core map is not an exhaustive covariate-law audit."
+        }
+      ],
+      "endpoint_claims": {
+        "bmi_sbp": {
+          "declared_population_value": 3.877,
+          "validated_population_value": 3.877,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "bmi_dbp": {
+          "declared_population_value": 2.9835,
+          "validated_population_value": 2.9835,
+          "validation_status": "exact_law",
+          "note": "Exact additive completed-law coefficient; not an identified target coefficient. "
+        },
+        "residual_correlation": {
+          "declared_population_value": 0.6,
+          "validated_population_value": 0.6,
+          "validation_status": "exact_law",
+          "note": "Correct additive final-law claims; bounded support already guarantees SBP>DBP. No seed-specific fitting."
+        }
+      },
+      "review_change": "retained_noop: exact model dictionary and generator string unchanged; decision prose revised only",
+      "limitations": [
+        "Static law consistency is not source-to-target validity; target results are joined separately by the root task.",
+        "Fixed scientific parameters: seeds change individuals, not uncertainty about evidence, assumptions or transport.",
+        "Source coefficient SEs 0.0359/0.0257 are not individual SDs or transfer uncertainty.",
+        "Existing evidence packets were reused; no original-paper reauthentication was performed.",
+        "Review branch shares the same parent construction and must not be counted as an independent scientific author."
+      ],
+      "results_join": {
+        "path": "work/economy_feedback_pilot_2026-11-10/EVALUATION.json",
+        "id": "PNS_SOL_A_FEEDBACK"
+      },
+      "scientific_eligibility": "law_available",
+      "analytic_residual_moments": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "sd_mmHg": [
+          14,
+          9
+        ],
+        "covariance_mmHg2": [
+          [
+            196,
+            75.6
+          ],
+          [
+            75.6,
+            81
+          ]
+        ],
+        "rho": 0.6,
+        "scope": "Requested population OLS residuals under the fixed assumed law; not target or synthetic sample estimates."
+      },
+      "execution_status": "success_existing_frozen_evaluation",
+      "execution_status_locator": "work/economy_feedback_pilot_2026-11-10/EVALUATION_CLOSURE.json#/records",
+      "mathematical_status": "Static final-law algebra valid; implementation delivery is separate.",
+      "arm": "feedback",
+      "review_artifact_sha256": "bdfd2e577a32e751835b88261bd8e951b5776b8b75b03cdfe7acaab40e1ede3d"
+    }
+  ],
+  "endpoint_claim_semantics": "All numeric endpoint claims are static fixed-law values. They are not observed synthetic estimates or target values; mathematical precision is limited by stored decimal parameters. R1 Astra_C2 is inherited independently audited algebra; R2 Sol_B is scalar evaluation of its analytic expression.",
+  "no_original_paper_recertification": true,
+  "no_author_code_execution": true,
+  "no_api_calls": true
+}

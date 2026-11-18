@@ -1,0 +1,116 @@
+{
+  "structure": "Independent persons generated using independent standard-normal innovations Z, U, V. Set X=0.6Z+0.8U and Y=0.8Z+0.6(-0.25U+sqrt(0.9375)V). This satisfies the reported population means and variances while choosing an explicit, nonidentified dependence scenario.",
+  "parameter_provenance": [
+    {
+      "parameter": "means in X, Y, Z order",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means."
+    },
+    {
+      "parameter": "variances in X, Y, Z order",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances."
+    },
+    {
+      "parameter": "xz_loading",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen standardized X-on-Z coefficient; no cross-moment is supplied."
+    },
+    {
+      "parameter": "yz_loading",
+      "value": 0.8,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen standardized Y-on-Z coefficient; no cross-moment is supplied."
+    },
+    {
+      "parameter": "residual_xy_correlation",
+      "value": -0.25,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen correlation between the population linear-adjustment residuals."
+    },
+    {
+      "parameter": "innovation_distribution",
+      "value": "Independent standard-normal Z, U, V, independently sampled across persons",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Sampling-shape and independence assumptions for an executable joint generator."
+    },
+    {
+      "parameter": "covariance_matrix in X, Y, Z order",
+      "value": [
+        [
+          1.0,
+          0.36,
+          0.6
+        ],
+        [
+          0.36,
+          1.0,
+          0.8
+        ],
+        [
+          0.6,
+          0.8,
+          1.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Combines C's variances with the assumed dependence parameters: Cov(X,Y)=0.6*0.8+0.8*0.6*(-0.25)=0.36."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": -0.25,
+      "basis": "Population OLS residuals after intercept-and-Z adjustment are 0.8U and 0.6(-0.25U+sqrt(0.9375)V). Their Pearson correlation is -0.25. C supplies none of the required cross-moments."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "scenario",
+      "value": 0.36,
+      "basis": "Under the chosen dependence structure, Cov(X,Y)=0.48-0.12=0.36, and both variances are one. This correlation is not determined by C."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "The population OLS slope with intercept is Cov(X,Z)/Var(Z)=0.6/1. C does not determine Cov(X,Z)."
+    }
+  ],
+  "limitations": [
+    "None of the three requested functionals is identified by the supplied marginal moments alone; all reported point values describe the chosen scenario.",
+    "Gaussianity is an additional sampling-shape assumption, not evidence. The displayed second-moment formulas do not require Gaussianity.",
+    "Population constraints hold under the generating distribution; random finite samples will not have exactly zero means, unit variances, or the stated population estimands.",
+    "This artificial dependence model has no clinical or causal interpretation."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified Var(X)=0.36+0.64=1 and Var(Y)=0.64+0.36*(0.0625+0.9375)=1; all population means are zero.",
+    "Analytically verified the covariance matrix and residual-correlation formula: (0.36-0.6*0.8)/sqrt((1-0.6^2)*(1-0.8^2))=-0.25.",
+    "Analytically verified nonsingularity: the covariance determinant is (1-0.6^2)*(1-0.8^2)*(1-0.25^2)=0.216.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

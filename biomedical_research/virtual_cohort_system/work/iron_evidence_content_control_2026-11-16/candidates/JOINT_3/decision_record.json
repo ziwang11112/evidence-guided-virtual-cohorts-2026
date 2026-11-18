@@ -1,0 +1,187 @@
+{
+  "structure": "Use a Gaussian copula with a truncated-normal Hb marginal and a flexible, two-piece truncated-normal log-ferritin marginal. Calibrate population threshold probabilities to the four unadjusted source cells and population mean log-ferritin to log(17.4). The source is partially suitable: its threshold definitions and crude paired counts directly support source-population analyses, but its selected rural Chinese population does not identify the requested US survey domain. Their unchanged transport is an explicit modeling choice. Marginal spread, physiological supports, and the continuous copula family are assumptions. Rows are independent equal-weight virtual people; source counts are calibration summaries, not replicated evidence.",
+  "parameter_provenance": [
+    {
+      "parameter": "Source threshold table",
+      "value": {
+        "both_low": 173,
+        "only_hb_low": 85,
+        "only_ferritin_low": 331,
+        "neither_low": 1082,
+        "n": 1671
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010",
+        "PAIRED_THRESHOLD_COUNTS"
+      ],
+      "rationale": "Supplied aggregation of Table IV over folate and B12 categories. Usable for a source crude association without covariate adjustment."
+    },
+    {
+      "parameter": "Target-law threshold probabilities",
+      "value": {
+        "both_low": "173/1671",
+        "only_hb_low": "85/1671",
+        "only_ferritin_low": "331/1671",
+        "neither_low": "1082/1671",
+        "hb_low": "258/1671",
+        "ferritin_low": "504/1671"
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "PAIRED_THRESHOLD_COUNTS",
+        "HB_LOW",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "Transport the source proportions unchanged to the target law. The marginal counts verify the same table and are not independent evidence."
+    },
+    {
+      "parameter": "Measurement scales and thresholds",
+      "value": {
+        "hb_low": "hb_g_dl < 12",
+        "ferritin_low": "raw ferritin_ug_l < 15",
+        "hb_conversion": "g/L divided by 10"
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "Retain the admitted units and strict inequalities. No inflammation adjustment, CRP restriction, or covariate adjustment is introduced."
+    },
+    {
+      "parameter": "Source ferritin geometric mean",
+      "value": "17.4 ug/L",
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_GM"
+      ],
+      "rationale": "Usable as a source mean-log constraint after natural-log transformation; no concentration interval is interpreted as a standard deviation."
+    },
+    {
+      "parameter": "Target-law mean log ferritin",
+      "value": "E[log(ferritin_ug_l)] = log(17.4)",
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_GM"
+      ],
+      "rationale": "Transport the source geometric mean unchanged. This is not evidence that the target geometric mean is 17.4."
+    },
+    {
+      "parameter": "Hb marginal support and dispersion",
+      "value": {
+        "support_g_dl": [
+          3.0,
+          20.0
+        ],
+        "untruncated_sd_g_dl": 1.0,
+        "location": "The unique mu solving [Phi((12-mu)/1)-Phi((3-mu)/1)]/[Phi((20-mu)/1)-Phi((3-mu)/1)] = 258/1671."
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW"
+      ],
+      "rationale": "The SD, normal shape, and broad physiological bounds are assumptions. The location is derived conditional on them and the transported anemia probability. No omitted Hb location or spread is reconstructed."
+    },
+    {
+      "parameter": "Ferritin marginal shape and tails",
+      "value": {
+        "support_ug_l": [
+          0.2,
+          2000.0
+        ],
+        "lower_log_sd": 1.0,
+        "lower_mass": "504/1671",
+        "upper_log_sd": "Unique positive s satisfying (504/1671)*m_lower + (1167/1671)*m_upper(s) = log(17.4), using the stated truncated-normal conditional log means."
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_GM",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "Below and above log(15), conditional log-ferritin is normal centered at log(15), truncated to its respective support interval. Separate scales allow a broader depleted tail without imposing a single lognormal shape. The upper scale is derived conditional on the assumed lower scale and transported summaries. Bounds define the law rather than winsorizing generated rows."
+    },
+    {
+      "parameter": "Continuous dependence",
+      "value": {
+        "copula": "Gaussian",
+        "rho": "Root of Phi2(Phi_inverse(258/1671), Phi_inverse(504/1671); rho) = 173/1671.",
+        "population_spearman": "(6/pi)*asin(rho/2)"
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "PAIRED_THRESHOLD_COUNTS"
+      ],
+      "rationale": "The copula family is assumed; its latent correlation is derived from the transported threshold table. The table alone does not identify a continuous rank association. Raw covariance emerges from the copula and chosen marginals; no reported raw, adjusted, residual, or multilevel correlation is substituted."
+    },
+    {
+      "parameter": "Numerical calibration",
+      "value": {
+        "root_iterations": 70,
+        "quadrature": "Composite Simpson rule with 2048 intervals from -10 to Phi_inverse(258/1671).",
+        "endpoint_guard": "Inverse-normal arguments restricted to representable values strictly inside (0,1)."
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Deterministic numerical approximations to population equations, not fits to simulated rows. The omitted normal integration tail is below Phi(-10); no empirical accuracy test was run."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "The source crude odds ratio is (173*1082)/(85*331). The population odds ratio of the constructed law has the same expression, up to numerical calibration error, because the four source proportions are transported unchanged. A realized synthetic estimate fluctuates and must use the requested zero-cell rule.",
+      "expected_value": "Population estimand: 187186/28135; this is not the exact expectation of the finite-sample odds-ratio estimator.",
+      "key_unresolved_assumptions": [
+        "The crude source threshold association and both threshold prevalences transport unchanged to the target complete-measurement domain.",
+        "Assay, parity, postpartum, contraception, calendar-period, and population differences do not change these transported probabilities.",
+        "No causal interpretation or equivalence to an adjusted odds ratio is asserted."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "The source joint proportion is 173/1671. The model transports that probability directly, so the expected synthetic fraction is 173/1671, apart from numerical calibration error.",
+      "expected_value": "173/1671",
+      "key_unresolved_assumptions": [
+        "Source joint prevalence represents the target phlebotomy-weighted complete-measurement domain under the stated transport assumption.",
+        "Target pregnancy exclusion, measurement completeness, and positive-weight selection introduce no additional changes not represented by this law."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "No continuous rank coefficient is supplied. Under the assumed Gaussian copula and continuous monotone marginal transformations, population Spearman correlation is (6/pi)*asin(rho/2), with rho calibrated to the threshold table. This is a model implication, not an identified source or target rank correlation.",
+      "expected_value": "Population estimand: (6/pi)*asin(rho/2), where Phi2(Phi_inverse(258/1671), Phi_inverse(504/1671); rho)=173/1671.",
+      "key_unresolved_assumptions": [
+        "The Gaussian copula adequately describes dependence throughout both distributions, not only at the supplied thresholds.",
+        "Within-threshold and tail dependence, which are unreported, follow this copula.",
+        "Continuous measurement without assay rounding is adequate; any numerical ties in generated rows should still receive average ranks."
+      ]
+    }
+  ],
+  "limitations": [
+    "No target outcome summaries or individual measurements are available. Equal-weight virtual rows do not establish survey representativeness; they implement explicit transport assumptions.",
+    "The same 1671 source women contribute all admitted summaries. Neither multiple summaries nor 5000 generated rows increase the independent published evidence.",
+    "Source sampling uncertainty and transport uncertainty are not propagated. No identification or sampling intervals are claimed.",
+    "The selected source population excluded several conditions and exposures, whereas the target has no CRP restriction. Inflammation-related ferritin elevation and non-iron causes of anemia are not separately identified or modeled.",
+    "The assumed Hb scale and ferritin lower-tail scale are not supplied by the evidence. Omitted relationships are unknown, not assumed empirically absent.",
+    "The split log-ferritin density can have a kink at 15 ug/L. This is a distributional construction, not a biological discontinuity.",
+    "Bounded supports ensure positive concentrations and finite moments of all orders but exclude more extreme clinical values. These bounds are assumptions, not documented target exclusion criteria.",
+    "Different copulas can reproduce the same threshold table and yield different Spearman correlations. The continuous rank result is therefore substantially more structure-dependent than the two threshold estimands.",
+    "Generation uses no sample-wide recentering, reweighting, rejection of output tables, or seed selection. Realized sample summaries are not forced to equal calibration summaries.",
+    "The generator was not executed in this construction call."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic consistency: 173+85+331+1082=1671.",
+    "Arithmetic consistency: 173+85=258 and 173+331=504, matching the supplied marginal counts.",
+    "Analytical check: the threshold-table odds ratio is 187186/28135, using unadjusted cells only.",
+    "Analytical check: each marginal inverse CDF is monotone and continuous in probability; hence Gaussian-copula rank dependence is preserved by the marginal transformations.",
+    "Analytical check: the stated bounded positive supports imply finite relevant moments.",
+    "No code execution, simulated-summary check, empirical numerical-tolerance check, or target-data validation was performed."
+  ]
+}

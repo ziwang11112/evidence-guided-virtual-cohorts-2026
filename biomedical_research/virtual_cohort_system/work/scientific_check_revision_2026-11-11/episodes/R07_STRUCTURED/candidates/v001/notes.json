@@ -1,0 +1,46 @@
+{
+  "notes": "FICTIONAL DATA: revised from immutable v000; no recovered individuals, excluded-cohort measurements or target results used. All scientific parameters retained. Only implementation change: pairwise BP rejection now checks rounded half-mmHg values and repeats until admissible, rather than checking continuous BP with a 100-redraw cap and raising after invalid rounding. This conditions the aggregate lattice distribution on DBP>=.5 and SBP-DBP>=.5; it is a small but real distribution change, not a pressure correction. It removes a nonzero-probability rounding failure and finite-cap failure. No upper pressure or BMI cap is added. Positive finite lognormal BMI and Gaussian error moments support population OLS/Pearson operations; no source-fit or physiological certification is asserted.\n\nEvidence retained from v000 and checked during review: Ribeiro et al Nutrients2018;10:701 doi10.3390/nu10060701 PMC6024610 Table2: ELSA-Brasil employed/retired adults35-74 after analytical exclusions (including prior CVD), n12892. Dairy-group means/SDs are pooled with group-n weights. The within-group covariance identity Cov(S,D)=(Var(S)+Var(D)-Var(S-D))/2 and covariance of group means yield marginal BP covariance, NOT an adjusted residual correlation. Table final sex counts/percentages inconsistent; percentages used. Source seated 5min rest, three readings1min apart, mean last two; antihypertensive users retained. Printed-summary rounding and n/(n-1) differences ignored.\n\nLinderman et al JAMA Netw Open2018;1:e181271 doi10.1001/jamanetworkopen.2018.1271 PMC6324286: China-PEACE ages35-80 n1727411, convenience-selected screening sites. Reported multivariable BMI SBP coefficient1.15 (95%CI1.13-1.17) and DBP .75 (.74-.76) mmHg per kg/m2, principally linear over BMI18.5-30. These adjust age, sex, income, occupation, ethnicity, marital status, Hukou, province, education, smoking, stroke, treatment, NOT only age/sex. Using them in this Brazilian age/sex generator assumes transport across populations, adjustment sets, BMI tails, treatment composition and measurement regimes; this is unvalidated. Nominal conditional slopes5.75/3.75 per5 are assumptions for this population, not estimates from it. No causal interpretation. Source seated5min, two electronic right-arm readings1min apart, third for SBP discrepancy>10, last-two mean.\n\nPOF/National Dietary Survey2008-09 reported weighted adult mean age43.2/female50.9%, PMC5825129 doi10.11606/S1518-8787.2018052000082; ages>=20, pregnant/nursing excluded, no upper age cap. Transport to20-79 lab-weighted complete cases assumed. Maximum-entropy age PMF on20..79, sex age-log-odds gradient.008, BMI age/female mean changes.08/.4, lognormal CV, pressure age/sex coefficients, DBP quadratic, homogeneous BMI slopes and Gaussian homoscedastic errors are explicit unsupported structural assumptions. Reference normal-age/independent-sex moment subtraction is calibration bookkeeping, not the actual generated discrete-age law, nor a valid full lognormal-mean specification for every unbounded hypothetical normal age. Derived residual covariance depends on all chosen predictor covariances and pressure coefficients; no published residual correlation is claimed. No new evidence justifies changing those parameters during this review.\n\nMeasurement: ELSA-like last-two-integer-readings mean represented at .5mmHg resolution, not a recovered reading sequence. Source aggregate covariance already contains measurement variation; extra covariance zero is a default assumption, not estimated absence of measurement error. Unknown released final BP aggregation and baseline timing remain unresolved. Single-reading, device/rest/cuff, timing, medication and selection differences can materially change slopes/correlation.\n\n3000 complete equal-weight rows represent a hypothetical transported analytical distribution, not a nationally representative survey or weighted data recovery. No treatment, diabetes or hypertension restriction. Positive lab-weight/complete-case selection, reported-pregnancy exclusion and retaining unknown pregnancy are assumed represented rather than simulated; source studies cannot identify these selection effects. Height/weight dictionary compatibility cannot be verified from BMI alone.\n\nRequested analysis: OLS with intercept, age, female, bmi/5 for each pressure; coefficients in mmHg per5kg/m2. Pearson correlation of their residuals uses that same linear-age design. The assumed DBP age-square remains in residuals and can affect the slope and correlation; adding age-square is a distinct sensitivity analysis. Conditional error correlation is not the requested output correlation. Finite sample estimates need not equal nominal coefficients; no result forcing. Fictional regression CIs exclude source/transport/model uncertainty. generate(None,model_spec,seed) returns the actual cohort DataFrame in exact task order.",
+  "provenance": {
+    "parameters_changed": false,
+    "parent_candidate": "v000",
+    "review_search": "Two screened published-evidence searches did not establish a better directly applicable age/sex-only joint BMI-BP law; no new numerical source claims used.",
+    "revision_type": "implementation_issue_with_explicit_small_joint_distribution_change",
+    "used_sources": [
+      {
+        "doi": "10.3390/nu10060701",
+        "locators": [
+          "table-wrap_002",
+          "sec_002",
+          "sec_004"
+        ],
+        "pmcid": "PMC6024610",
+        "uses": [
+          "marginal BMI/BP scales",
+          "derived marginal BP covariance",
+          "measurement protocol"
+        ]
+      },
+      {
+        "doi": "10.1001/jamanetworkopen.2018.1271",
+        "locators": [
+          "full characters10000-22000"
+        ],
+        "pmcid": "PMC6324286",
+        "uses": [
+          "reported multi-adjusted BMI slopes; transported by assumption"
+        ]
+      },
+      {
+        "doi": "10.11606/s1518-8787.2018052000082",
+        "locators": [
+          "sec_010",
+          "sec_011"
+        ],
+        "pmcid": "PMC5825129",
+        "uses": [
+          "reported demographics; transported by assumption"
+        ]
+      }
+    ]
+  }
+}

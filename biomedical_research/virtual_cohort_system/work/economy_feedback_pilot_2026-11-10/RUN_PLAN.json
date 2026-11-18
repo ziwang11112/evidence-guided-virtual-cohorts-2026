@@ -1,0 +1,142 @@
+{
+  "created_utc": "2026-11-10T21:41:42.070450+00:00",
+  "status": "prepared",
+  "configs": {
+    "OA_ASTRA": {
+      "provider": "openai",
+      "model": "gpt-6-astra",
+      "input_rate": 10.0,
+      "output_rate": 50.0,
+      "cached_rate": 1.0,
+      "cache_write_rate": 12.5,
+      "effort": "high"
+    },
+    "OA_SOL": {
+      "provider": "openai",
+      "model": "gpt-6.1-sol",
+      "input_rate": 2.0,
+      "output_rate": 10.0,
+      "cached_rate": 0.1,
+      "cache_write_rate": 2.5,
+      "effort": "high"
+    },
+    "DS_PRO": {
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "input_rate": 1.32,
+      "output_rate": 3.96,
+      "cached_rate": 0.044,
+      "effort": "high"
+    }
+  },
+  "caps": {
+    "openai": 8.0,
+    "deepseek": 2.0
+  },
+  "max_output_tokens": 32768,
+  "maximum_calls": 12,
+  "maximum_repairs": 0,
+  "maximum_initial_calls": 8,
+  "maximum_review_calls": 4,
+  "parents": [
+    {
+      "parent_id": "PNS_SOL_A",
+      "case_id": "PNS",
+      "model_config": "OA_SOL",
+      "context": "SOL_A",
+      "role": "paired_parent",
+      "task_path": "packets/PNS/task.json",
+      "prompt_path": "packets/PNS/prompt.txt"
+    },
+    {
+      "parent_id": "LIPID_SOL_A",
+      "case_id": "lipids",
+      "model_config": "OA_SOL",
+      "context": "SOL_A",
+      "role": "paired_parent",
+      "task_path": "packets/LIPID/task.json",
+      "prompt_path": "packets/LIPID/prompt.txt"
+    },
+    {
+      "parent_id": "LIPID_DS",
+      "case_id": "lipids",
+      "model_config": "DS_PRO",
+      "context": "DS",
+      "role": "benchmark",
+      "task_path": "packets/LIPID/task.json",
+      "prompt_path": "packets/LIPID/prompt.txt"
+    },
+    {
+      "parent_id": "PNS_DS",
+      "case_id": "PNS",
+      "model_config": "DS_PRO",
+      "context": "DS",
+      "role": "benchmark",
+      "task_path": "packets/PNS/task.json",
+      "prompt_path": "packets/PNS/prompt.txt"
+    },
+    {
+      "parent_id": "PNS_SOL_B",
+      "case_id": "PNS",
+      "model_config": "OA_SOL",
+      "context": "SOL_B",
+      "role": "benchmark",
+      "task_path": "packets/PNS/task.json",
+      "prompt_path": "packets/PNS/prompt.txt"
+    },
+    {
+      "parent_id": "LIPID_SOL_B",
+      "case_id": "lipids",
+      "model_config": "OA_SOL",
+      "context": "SOL_B",
+      "role": "benchmark",
+      "task_path": "packets/LIPID/task.json",
+      "prompt_path": "packets/LIPID/prompt.txt"
+    },
+    {
+      "parent_id": "LIPID_ASTRA",
+      "case_id": "lipids",
+      "model_config": "OA_ASTRA",
+      "context": "ASTRA",
+      "role": "benchmark",
+      "task_path": "packets/LIPID/task.json",
+      "prompt_path": "packets/LIPID/prompt.txt"
+    },
+    {
+      "parent_id": "PNS_ASTRA",
+      "case_id": "PNS",
+      "model_config": "OA_ASTRA",
+      "context": "ASTRA",
+      "role": "benchmark",
+      "task_path": "packets/PNS/task.json",
+      "prompt_path": "packets/PNS/prompt.txt"
+    }
+  ],
+  "branches": [
+    {
+      "branch_id": "PNS_SOL_A_SECOND_LOOK",
+      "parent_id": "PNS_SOL_A",
+      "arm": "second_look"
+    },
+    {
+      "branch_id": "PNS_SOL_A_FEEDBACK",
+      "parent_id": "PNS_SOL_A",
+      "arm": "feedback"
+    },
+    {
+      "branch_id": "LIPID_SOL_A_FEEDBACK",
+      "parent_id": "LIPID_SOL_A",
+      "arm": "feedback"
+    },
+    {
+      "branch_id": "LIPID_SOL_A_SECOND_LOOK",
+      "parent_id": "LIPID_SOL_A",
+      "arm": "second_look"
+    }
+  ],
+  "policy_sha256": "15a19f77f97119d2bc11da86e85d8e8aa0e70cf766313fbbcb71e71b65ee45f5",
+  "protocol_sha256": "0b71a2e6077dc7c98e1de8722deb09ed9cdcc3e937da9a65f9c0a2b8828823b8",
+  "cost_scope": "usage-derived tariffs, not invoice; unknown usage retains reservation",
+  "api_context": "standalone request, no previous_response_id or other candidate; native high effort unchanged",
+  "authorization": "Latest user approves economy continuation; 8Sol+2Astra+2DS total12max calls, no other providers."
+}

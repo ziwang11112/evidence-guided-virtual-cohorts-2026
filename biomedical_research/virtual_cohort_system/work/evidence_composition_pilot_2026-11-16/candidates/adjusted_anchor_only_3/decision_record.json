@@ -1,0 +1,117 @@
+{
+  "structure": "Independent persons sampled from a centered trivariate Gaussian population. The population covariance satisfies both records. Unreported correlations with measured Z are completed by an explicitly assumed, positive-definite scenario. Adjustment means separate population OLS regressions of X and Y on an intercept and Z.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means in X, Y, Z order."
+    },
+    {
+      "parameter": "individual_variances",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population variances."
+    },
+    {
+      "parameter": "correlation_xy",
+      "value": 0.5,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Exact marginal Pearson correlation."
+    },
+    {
+      "parameter": "covariance_xy",
+      "value": 0.5,
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "Covariance equals correlation because both variances are one."
+    },
+    {
+      "parameter": "correlation_xz",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario relationship; not reported. Unit variances also make this covariance 0.6."
+    },
+    {
+      "parameter": "correlation_yz",
+      "value": 0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario relationship; not reported. Unit variances also make this covariance 0.5."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient joint shape for random sampling; Gaussianity is not required for the stated population Pearson and OLS formulas."
+    },
+    {
+      "parameter": "residual_moments",
+      "value": {
+        "variance_x_given_linear_z": 0.64,
+        "variance_y_given_linear_z": 0.75,
+        "residual_covariance_xy": 0.2
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "Conditional on the assumed Z correlations: residual variances are 1-0.6^2 and 1-0.5^2; residual covariance is 0.5-0.6*0.5."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": 0.2886751345948129,
+      "basis": "For a=Corr(X,Z) and b=Corr(Y,Z), the residual correlation is (0.5-a*b)/sqrt((1-a^2)*(1-b^2)). Records do not determine a or b. Choosing a=0.6 and b=0.5 gives the reported scenario value."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "identified",
+      "value": 0.5,
+      "basis": "Record A directly specifies this population Pearson correlation, independently of the chosen joint distribution."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z). Record C fixes Var(Z)=1, but the numerator is unreported and is chosen as 0.6."
+    }
+  ],
+  "limitations": [
+    "The Z relationships and adjusted correlation are scenario choices, not identified evidence-composition results.",
+    "The records do not determine distributional shape or higher moments.",
+    "Population standardization does not imply exact realized sample means, variances, or correlations; the generator performs no sample calibration or selection.",
+    "These artificial associations provide no causal interpretation or biomedical validation."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified unit diagonal and the required X-Y covariance of 0.5.",
+    "Analytically verified positive definiteness: the covariance matrix has leading principal minors 1, 0.75, and 0.44.",
+    "Analytically computed the residual variances, residual covariance, residual correlation, and X-on-Z slope.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

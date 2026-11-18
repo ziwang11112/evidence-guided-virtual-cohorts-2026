@@ -1,0 +1,40 @@
+{
+  "purpose": "Construct one joint cohort supporting SBP and DBP associations with BMI plus residual SBP–DBP dependence. Both regressions use [1,(age-50)/10,female,(bmi-25)/5]. Generated rows have equal weights; report BMI coefficients in mmHg per 5 kg/m^2 and Pearson correlation of paired centered regression residuals. These are association projections, not intervention effects. No target value or desired direction is supplied.",
+  "row_weighting": "equal weight, representing the declared weighted analytical population",
+  "design_columns": [
+    "1",
+    "(age-50)/10",
+    "female",
+    "(bmi-25)/5"
+  ],
+  "outcome_unit_conversion": {
+    "sbp": 1,
+    "dbp": 1
+  },
+  "analyses": [
+    {
+      "id": "bmi_sbp",
+      "outcome": "sbp",
+      "estimator": "unweighted OLS with intercept",
+      "quantity": "coefficient of (bmi-25)/5",
+      "unit": "mmHg per 5 kg/m^2"
+    },
+    {
+      "id": "bmi_dbp",
+      "outcome": "dbp",
+      "estimator": "unweighted OLS with intercept",
+      "quantity": "coefficient of (bmi-25)/5",
+      "unit": "mmHg per 5 kg/m^2"
+    },
+    {
+      "id": "residual_correlation",
+      "outcomes": [
+        "sbp",
+        "dbp"
+      ],
+      "estimator": "Pearson correlation of paired centered residuals from the two above regressions on the same rows",
+      "quantity": "residual Pearson correlation",
+      "unit": "1"
+    }
+  ]
+}

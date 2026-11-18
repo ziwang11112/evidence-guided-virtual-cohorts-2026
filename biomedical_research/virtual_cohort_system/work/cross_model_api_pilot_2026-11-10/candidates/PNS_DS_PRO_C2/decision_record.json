@@ -1,0 +1,151 @@
+{
+  "structure": "Sequential synthetic cohort model. Age is drawn independently from a truncated normal over [20,79]. Female sex is independent Bernoulli(0.55). BMI is truncated normal conditional on centered age and female, bounded [12,70]. SBP and DBP are bivariate normal with linear conditional means on [1,(age-50)/10,female,(bmi-25)/5], homoscedastic residual covariance matrix with residual SDs 13.0 and 8.5 mmHg and residual correlation 0.50. Generated rows are equal-weight draws from this population law. No treatment, hypertension, HbA1c, selection, or target PNS sampling process is modeled.",
+  "parameter_provenance": [
+    {
+      "path": "model_spec.age",
+      "meaning": "Marginal baseline age distribution; mean and SD are nominal untruncated normal parameters with truncation support.",
+      "conditioning_set": [],
+      "scale": "years",
+      "unit": "years",
+      "classification": "assumed",
+      "source_pointers": [
+        "task population age_years [20,79]",
+        "S_INTERSALT age_years [20,59]",
+        "S_BEIJING age_mean 69.16, age_SD 8.1"
+      ],
+      "derivation": "No target age distribution was supplied. A truncated normal with nominal mean 44 and SD 15 was chosen to span the stated target age support while concentrating mid-adult years.",
+      "unverified_assumptions": "Target age distribution, age-sex dependence, and age tails beyond the stated support are not in evidence."
+    },
+    {
+      "path": "model_spec.female.prob",
+      "meaning": "Bernoulli probability of recorded female sex, female=1.",
+      "conditioning_set": [],
+      "scale": "probability",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        "S_BEIJING overall male_percent 43.76, female 56.24%"
+      ],
+      "derivation": "Rounded to 0.55 from S_BEIJING female proportion because no target sex distribution was supplied.",
+      "unverified_assumptions": "Beijing older-community sex proportion is not a target PNS estimate; age dependence is not modeled."
+    },
+    {
+      "path": "model_spec.bmi",
+      "meaning": "BMI conditional mean and homoscedastic standard deviation vector: intercept at age 50 and male sex, linear age slope per 10 years, female shift, and truncation support.",
+      "conditioning_set": [
+        "(age-50)/10",
+        "female"
+      ],
+      "scale": "kg/m^2",
+      "unit": "kg/m^2",
+      "classification": "assumed",
+      "source_pointers": [
+        "S_INTERSALT illustrative BMI means 21.6-25.0 and averaged subgroup SDs 2.4-4.0"
+      ],
+      "derivation": "Central mean set to 25.0 and SD to 5.0, broadened beyond INTERSALT illustrative SDs for the adult lab-weighted target; linear age and female shifts were chosen for face validity.",
+      "unverified_assumptions": "Target BMI distribution, tails, age/female interaction, and measurement scale are not in evidence; truncation bounds are chosen to ensure finite positive BMI."
+    },
+    {
+      "path": "model_spec.bp.beta_sbp",
+      "meaning": "SBP conditional mean coefficients on design [1,(age-50)/10,female,(bmi-25)/5].",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "mmHg per unit for slopes; mmHg for intercept",
+      "unit": "mmHg per unit",
+      "classification": "mixed",
+      "source_pointers": [
+        "S_INTERSALT Table II p322 reported SBP BMI coefficient 0.7754 per kg/m2; derived per 5 kg/m2 value 3.877"
+      ],
+      "derivation": "bmi_c coefficient fixed to S_INTERSALT derived per-5 SBP coefficient 3.877. Intercept 121.0, age_c 5.0, and female -3.5 are assumed. The reported source SE 0.1795 was not transferred.",
+      "unverified_assumptions": "INTERSALT adjusted for age, sex, urinary sodium, urinary potassium, and alcohol; assuming the BMI coefficient is unchanged under the requested age/sex/BMI adjustment and target transfer is unverified. This is not a causal effect."
+    },
+    {
+      "path": "model_spec.bp.beta_dbp",
+      "meaning": "DBP conditional mean coefficients on design [1,(age-50)/10,female,(bmi-25)/5].",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "mmHg per unit for slopes; mmHg for intercept",
+      "unit": "mmHg per unit",
+      "classification": "mixed",
+      "source_pointers": [
+        "S_INTERSALT Table II p322 reported DBP BMI coefficient 0.5967 per kg/m2; derived per 5 kg/m2 value 2.9835"
+      ],
+      "derivation": "bmi_c coefficient fixed to S_INTERSALT derived per-5 DBP coefficient 2.9835. Intercept 73.0, age_c 2.5, and female -1.0 are assumed. The reported source SE 0.1285 was not transferred.",
+      "unverified_assumptions": "INTERSALT adjustment set and population are not target-equivalent; dropping sodium, potassium, and alcohol adjustment and transferring to PNS-like adults is unverified. This is not a causal effect."
+    },
+    {
+      "path": "model_spec.bp.residual_sd",
+      "meaning": "Residual SBP and DBP standard deviations after the specified linear adjustment.",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "mmHg",
+      "unit": "mmHg",
+      "classification": "assumed",
+      "source_pointers": [
+        "S_BEIJING overall SBP_SD 20.35, DBP_SD 10.93"
+      ],
+      "derivation": "Set to 13.0 and 8.5 as assumed residual dispersions after age/sex/BMI adjustment and broader age range; not algebraically derived from unconditional SDs.",
+      "unverified_assumptions": "No conditional variance or target dispersion source is supplied."
+    },
+    {
+      "path": "model_spec.bp.residual_correlation",
+      "meaning": "Population residual Pearson correlation between SBP and DBP after the same linear adjustment on the same rows.",
+      "conditioning_set": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "scale": "correlation",
+      "unit": "1",
+      "classification": "assumed",
+      "source_pointers": [
+        "S_BEIJING derived raw overall correlation 0.5344427684775355"
+      ],
+      "derivation": "Set to 0.50 as an explicit assumed residual value informed by the S_BEIJING raw overall correlation, while recognizing that raw and residual correlations differ and the Beijing cohort is not target-equivalent.",
+      "unverified_assumptions": "Raw-to-residual transport across population, age, BMI adjustment, and BP measurement is unsupported."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "bmi_sbp",
+      "exact_model_implied_value": 3.877,
+      "unit": "mmHg per 5 kg/m^2",
+      "derivation": "In the specified homoscedastic linear conditional mean for SBP, the population OLS coefficient on (bmi-25)/5 equals model_spec.bp.beta_sbp.bmi_c."
+    },
+    {
+      "id": "bmi_dbp",
+      "exact_model_implied_value": 2.9835,
+      "unit": "mmHg per 5 kg/m^2",
+      "derivation": "In the specified homoscedastic linear conditional mean for DBP, the population OLS coefficient on (bmi-25)/5 equals model_spec.bp.beta_dbp.bmi_c."
+    },
+    {
+      "id": "residual_correlation",
+      "exact_model_implied_value": 0.5,
+      "unit": "1",
+      "derivation": "The SBP and DBP models share the same design matrix and have independent, homoscedastic bivariate normal residuals with correlation model_spec.bp.residual_correlation; therefore the population residual Pearson correlation equals that parameter."
+    }
+  ],
+  "limitations": [
+    "No PNS or other target outcome data were available; this is a synthetic transport construction and should not be interpreted as a PNS estimate.",
+    "The BMI coefficients are taken from INTERSALT, which used different adjustment variables, age range, pooling, and measurement; they are not requested target conditional raw-scale statistics.",
+    "The residual SBP-DBP correlation is assumed; S_BEIJING provides only raw unadjusted correlations in an older Chinese cohort and no BMI.",
+    "Age, sex, BMI marginal/conditional distributions and BP residual dispersions are assumed.",
+    "Baseline BP timing and unknown final-reading aggregation are retained as limitations and not modeled.",
+    "Antihypertensive treatment, hypertension status, HbA1c, and selection/treatment mechanisms are not modeled.",
+    "Exact model-implied population estimands are reported, not finite-sample OLS estimates from the generated 3000 rows."
+  ],
+  "checks_actually_performed": []
+}

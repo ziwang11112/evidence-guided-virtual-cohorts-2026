@@ -1,0 +1,44 @@
+{
+  "notes": "Deliverable: fully synthetic, reproducible 3,000-row cohort; the seed determines every record. No real individuals, target measurements, target distributions, or fitted target coefficients were used. The user-supplied JSON is the complete protocol context available; no separate task.json file was accessed. Evidence is external and imperfectly transportable. Main distribution anchor: Physical activity energy expenditure and cardiometabolic health in three rural Kenyan populations (2019), DOI 10.1002/ajhb.23199, PMC6435188 version 1, Table 1 and Methods. Rural Luo/Kamba/Maasai sample n=1084, collected in 2005, not 2018-19. Table 1 Maasai F/M BMI 22.5(4.8)/21.0(4.8), TC 3.8(0.9)/4.0(1.1), HDL 1.2(0.3)/1.1(0.32) mmol/L; other rural groups show different values. Lipid intercepts at age40 and BMI22 use the Maasai lipid means as approximate conditional anchors, not exact marginal matches. Log-residual SDs approximate those dispersions while allowing covariate variation. No ethnicity is assigned to fictional records.\nAssociation anchor: The burden of dyslipidaemia and factors associated with lipid levels among adults in rural northern Ghana: An AWI-Gen sub-study (2018), DOI 10.1371/journal.pone.0206326, PMC6261546, statistical analyses, Tables 4-5, mean lipids section. n=1839 age40-60; pooled TC 3.23(0.92), HDL 1.14(0.38). Outcomes were log-transformed; natural log is an explicit modeling convention because the paper does not specify the base in the retrieved statistical text. Table5 univariate TC log-BMI slope 0.013/unit in each sex; multivariable male 0.010 and female -0.009 with simultaneous adiposity adjustment. These are not the requested age/sex-only estimands. The generator uses 0.012 as a rough external-evidence-informed TC coefficient, not a meta-analytic or directly estimated age/sex slope. Table4 male univariate HDL log-BMI -0.007, multivariable 0.001 (both uncertain), and no female BMI coefficient there. Use pooled -0.005 as an explicitly uncertain, weak inverse assumption rather than claim a proven female effect. Female TC log-age 0.004 is attenuated from Ghana 0.006-0.007/year; male 0.0015 and zero HDL age effect are assumptions. At the reference means the chosen log-slopes correspond roughly to TC +9 mg/dL and HDL -1.1 mg/dL per 5 BMI units, but raw-scale OLS results are generated-data properties, not fixed outputs.\nRecruitment assumptions: sex F probability .55, with recorded F/M only; ages independently floor(18+67*Beta(1.45,3.3)), supported 18-84; 75% active/rural-like and 25% settled/higher-BMI latent recruitment profiles, independent of age and sex. Group BMI means/SDs and mild age rise then late-life decline are assumed, loosely centered around the external Kenyan BMI range. A lognormal BMI produces positive, right-skewed values. Latent lifestyle affects lipid means through BMI only. Smoking, alcohol, diet, pregnancy, infections, medication and socioeconomic effects are not separately represented; there is no assumed disease or treatment prevalence. This is a stylized adult cohort, not a demographically representative reconstruction.\nDependence: no retrieved source reports the requested age/sex/BMI-adjusted TC-HDL residual correlation. A log-error correlation 0.35 is an assumption. A qualitative rationale is that TC contains HDL, and HDL SD about .3 vs TC SD about .9 suggests correlation about one-third if non-HDL variation were independent; this is not an empirical estimate. The resulting raw-scale adjusted residual correlation is not exactly the latent log correlation. Both lipids are sampled jointly, not independently. Conditional mean functions are loglinear with arithmetic-mean correction and sex-specific variances. Report analysis slopes as associative, not causal. Parameters are fixed scenario assumptions, not posterior draws; repeated seeds represent sampling variability only, not epistemic uncertainty. Correlation and HDL slope particularly warrant sensitivity analyses. Outputs have exactly the six requested columns, complete values, unique fictional IDs, positive finite BMI/lipids, and mmol/L lipids. Numerical exponent guards [-30,30] prevent floating-point overflow/underflow only and should never bind in ordinary samples. No TC-versus-HDL eligibility filter, clipping against the other lipid, row dropping, or post hoc coefficient targeting is used.",
+  "provenance": {
+    "assumption_parameters": [
+      "demographic and lifestyle mixture",
+      "BMI conditional distribution and age trajectory",
+      "transported conditional intercepts",
+      "attenuated BMI and age effects",
+      "log-error correlation",
+      "absence of direct latent-lifestyle lipid effect"
+    ],
+    "excluded_target_results_used": false,
+    "other_evidence_reviewed": {
+      "doi": "10.4314/mmj.v31i3.5",
+      "pmcid": "PMC6895384",
+      "section": "table-wrap_005",
+      "use": "Reviewed but not quantitatively parameterized; Nigerian hypertensive clinical population has near-zero unadjusted BMI-lipid correlations, supporting caution about transportability."
+    },
+    "retrieved_sources": [
+      {
+        "doi": "10.1002/ajhb.23199",
+        "pmcid": "PMC6435188",
+        "role": "Rural Kenyan BMI and lipid location/scale anchors; independent external population",
+        "sections": [
+          "table-wrap_001",
+          "sec_006"
+        ],
+        "version": 1
+      },
+      {
+        "doi": "10.1371/journal.pone.0206326",
+        "pmcid": "PMC6261546",
+        "role": "Rural Ghanaian log-lipid associations; clear estimand and transportability limitations",
+        "sections": [
+          "sec_010",
+          "sec_013",
+          "table-wrap_004",
+          "table-wrap_005"
+        ],
+        "version": 1
+      }
+    ]
+  }
+}

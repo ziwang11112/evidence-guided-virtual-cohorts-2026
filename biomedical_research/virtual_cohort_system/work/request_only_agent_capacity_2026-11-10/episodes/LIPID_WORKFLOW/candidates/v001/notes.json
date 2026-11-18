@@ -1,0 +1,136 @@
+{
+  "notes": "Fictional data, not recovered people or target-study results. Whole-cohort output has exactly 3,000 rows and the six contract columns. Units: age years, BMI kg/m^2, both lipids mmol/L. No missing data, row exclusions, lipid-order acceptance rule, fitted-slope forcing or post-generation coefficient calibration. TC is generated as positive HDL plus positive non-HDL, a physiological component model, not filtering on TC/HDL. Demographic/lifestyle assumptions: 55% probability recorded F; sex-independent age =18+67*Beta(1.5,3.5), mean 38.1, SD about 12.5; 70% rural/agropastoral-like and 30% transitioning/settled-like, independently sampled from age and sex. These are chosen scenario weights, not estimates of the requested population. Lifestyle labels are latent aggregate contexts, not measurements of diet, activity, alcohol, smoking, treatment or HIV. BMI has a scaled beta distribution on [12,60] with conditional SD 4.8 and mean increasing 0.035/year about sex-specific reference ages. Its support, distribution family and age dependence are assumptions. Rural sex-specific age/BMI/lipid reference means and marginal SDs use the Maasai subgroup of the external rural Kenyan study PMC6435188 v2, Table 1. Malawi PMC6747887 Table 2 supplies age-adjusted urban-minus-rural BMI/TC/HDL contrasts; these are transported as marginal context mean shifts, not causal settlement effects. Table 3 supplies sex/context-specific fully adjusted lipid differences per 1 SD BMI. We transport the per-SD response to a modeled 4.8 kg/m^2 SD, anchored to the Kenyan Maasai SD. This is NOT a recovered Malawian physical-unit slope; the Malawian BMI SD was not retrieved. Differences in target slopes follow from this explicit standardized-effect transport assumption. Source Table 3 adjusted for age, ethnicity, education, household assets, marital status, parity in women, lipid-lowering drugs, smoking, alcohol, activity and HIV/ART, so those coefficients are not directly the requested age/sex-only estimands. The model carries only age, sex and context; applying these coefficients without separately modeling the omitted confounders is an important transport approximation. Lipid means are linear in age and context-centered BMI, with context/sex-specific BMI slopes. Modest TC/HDL age coefficients 0.015/0.002 mmol/L/year are assumptions, qualitatively consistent with age patterns in PMC6897412 Table 4 (which reports LDL/HDL, not a TC age slope); do not interpret them as extracted regression estimates. Residual variances are derived by subtracting modeled mean variance from Kenyan marginal lipid variances, using the assumed BMI-age covariance; non-HDL residual variance = TC residual variance - HDL residual variance. Gamma components use these conditional variances and positive linear means. HDL and non-HDL errors are conditionally independent: this is a major unsupported dependence assumption. It gives positive TC--HDL residual covariance through their shared HDL component; residual Pearson correlation after age/sex/BMI adjustment is therefore model-implied, not a published estimate. Context omitted from the requested regression may also contribute covariance. Published data do not identify this residual correlation. Single-source moments and multi-population associations are not a fitted joint distribution; no claim of representativeness or causal identification. The common evaluator can fit TC or HDL on intercept, age, recorded sex and BMI; convert mmol/L-per-unit BMI to mg/dL-per-5 units by multiplying by 38.67*5. Seeded draws retain sampling variability in all analyses.",
+  "provenance": {
+    "major_assumptions": [
+      "scenario demographic/context weights and independence",
+      "BMI bounded beta family and within-person covariate structure",
+      "per-SD effect transport to 4.8 kg/m^2, with adjustment-set mismatch",
+      "TC and HDL age slopes",
+      "constant conditional variances, gamma shape and conditional HDL/non-HDL independence"
+    ],
+    "sources": [
+      {
+        "doi": "10.1002/ajhb.23199",
+        "limitation": "External agropastoral analogue; volunteer/healthy selection and different ethnicity/time; not representative target data. Only this paper from its cohort used; no double counting.",
+        "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6435188/",
+        "measurement": "Fasting plasma/serum total and HDL cholesterol mmol/L, BMI kg/m^2, age years; means and SDs, not regression effects.",
+        "population_and_selection": "2005 rural Kenyan volunteer survey; Luo, Kamba and Maasai; recruitment at village/community meetings; >=17 years; excluded pregnancy and illnesses including malaria, psychosis and locomotor disability; complete-data/activity analytic n=1,084. Maasai subgroup women n=170 and men n=161 used here.",
+        "reported_Maasai_F": {
+          "age_mean": 35.0,
+          "age_sd": 10.5,
+          "bmi_mean": 22.5,
+          "bmi_sd": 4.8,
+          "hdl_mean": 1.2,
+          "hdl_sd": 0.3,
+          "tc_mean": 3.8,
+          "tc_sd": 0.9
+        },
+        "reported_Maasai_M": {
+          "age_mean": 38.6,
+          "age_sd": 11.5,
+          "bmi_mean": 21.0,
+          "bmi_sd": 4.8,
+          "hdl_mean": 1.1,
+          "hdl_sd": 0.32,
+          "tc_mean": 4.0,
+          "tc_sd": 1.1
+        },
+        "title": "Physical activity energy expenditure and cardiometabolic health in three rural Kenyan populations.",
+        "used_sections": [
+          "Table 1 (ajhb23199-tbl-0001)",
+          "Methods (ajhb23199-sec-0006)"
+        ],
+        "version": 2
+      },
+      {
+        "derived_age_adjusted_urban_minus_rural_means": {
+          "F": {
+            "bmi": 2.5,
+            "hdl": 0.05,
+            "tc": 0.11
+          },
+          "M": {
+            "bmi": 1.1,
+            "hdl": 0.06,
+            "tc": 0.25
+          }
+        },
+        "doi": "10.1136/bmjgh-2019-001542",
+        "limitation": "Transported standardized effects and contextual contrasts, not equivalent to Kenyan physical-unit coefficients. SD 4.8 used for conversion is a Kenyan/model anchor, not a reported Malawian SD. No re-use of the same study's preprint as independent evidence. Reported confidence intervals retained as evidence uncertainty, not treated as individual variability or redrawn parameters.",
+        "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6747887/",
+        "measurement": "Age-adjusted means and fully adjusted linear-regression differences in mmol/L per 1 SD higher BMI, distinct operators; household-robust SEs. Effects fully adjusted as listed in notes, no adjustment of BMI effect for WHR.",
+        "population_and_selection": "2013-2017 MEIRU community household-based cross-sectional study, rural Karonga and urban Lilongwe, 24,943 with fasting lipids; excluded missing lipid measurements and reported nonfasting. Rural women/men n=7,096/5,000 and urban n=8,563/4,284; fully adjusted regression subset n=4,971/3,548/7,455/3,705.",
+        "reported_bmi_effects_per_SD": {
+          "rural_F": {
+            "hdl": -0.03,
+            "hdl_95CI": [
+              -0.04,
+              -0.02
+            ],
+            "tc": 0.23,
+            "tc_95CI": [
+              0.19,
+              0.26
+            ]
+          },
+          "rural_M": {
+            "hdl": -0.03,
+            "hdl_95CI": [
+              -0.04,
+              -0.02
+            ],
+            "tc": 0.2,
+            "tc_95CI": [
+              0.16,
+              0.23
+            ]
+          },
+          "urban_F": {
+            "hdl": -0.05,
+            "hdl_95CI": [
+              -0.05,
+              -0.04
+            ],
+            "tc": 0.13,
+            "tc_95CI": [
+              0.11,
+              0.15
+            ]
+          },
+          "urban_M": {
+            "hdl": -0.04,
+            "hdl_95CI": [
+              -0.05,
+              -0.04
+            ],
+            "tc": 0.15,
+            "tc_95CI": [
+              0.12,
+              0.18
+            ]
+          }
+        },
+        "title": "Sex and area differences in the association between adiposity and lipid profile in Malawi.",
+        "used_sections": [
+          "Table 2 (T2)",
+          "Table 3 (T3)",
+          "Study design (s2-1)",
+          "Statistical analysis (s2-4)"
+        ]
+      },
+      {
+        "doi": "10.1371/journal.pone.0223189",
+        "locator": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6897412/",
+        "population_and_operator": "Randomly selected community adults >=18, five urban/town/rural strata in each country, analytic n=1,957. Table 2 weighted survey means/CIs, not SDs. Table 4 staged multivariable LDL/HDL linear regressions with stratum/age/sex forced and other covariates retained by hierarchical significance criteria.",
+        "title": "Dyslipidemias and cardiovascular risk scores in urban and rural populations in north-western Tanzania and southern Uganda.",
+        "use": "Qualitative evidence of context heterogeneity and age gradients only. No TC age coefficient or TC-HDL residual correlation extracted. Chosen age slopes remain assumptions.",
+        "used_sections": [
+          "Table 2 (pone.0223189.t002)",
+          "Table 4 (pone.0223189.t004)",
+          "Statistical analysis (sec013)"
+        ]
+      }
+    ],
+    "target_data_used": false
+  }
+}

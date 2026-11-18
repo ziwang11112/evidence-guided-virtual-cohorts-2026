@@ -1,0 +1,51 @@
+{
+  "notes": "REVIEW DECISION: retain v000's scientific parameters and source transport assumptions; fix rounded BP pair validity. Every proposed SBP/DBP pair is now rounded before the positivity/ordering rejection test, including redraws. No clipping, sorting, forced moments or fitted target results. The original abort after post-rejection rounding could occur when rounding collapses a small positive pulse pressure. This is a reliability fix, not evidence that the scientific model is more accurate.\nFICTIONAL equal-weight complete records, ages 20-79, female=0 male/1 female. Whole-cohort output is an actual 3000-row DataFrame. No treatment, hypertension or HbA1c restriction. Pregnancy exclusion, pregnancy-unknown retention, dictionary-admissible anthropometry and positive finite lab-weight complete-case selection are assumed represented by transport, not reconstructed. No PNS evidence or results used; no national-representativeness claim. Source registration does not certify population applicability.\nEVIDENCE VERIFIED IN CAPTURED EXTERNAL PAPERS: Ribeiro et al. Nutrients 2018;10:701, DOI 10.3390/nu10060701, PMC6024610 Table 2 supplies four dairy-group n, age/BMI/BP means and SDs, PP SDs, and female percentages. ELSA-Brasil baseline civil servants 35-74, selected n=12892 with exclusions, not a target-population sample; antihypertensive users retained. Last-group sex counts inconsistent with n; printed percentages retained. Section 2.2: 5 minutes seated rest, three oscillometric readings 1 minute apart, mean of last two; PP=S-D. Linderman et al. JAMA Network Open 2018;1:e181271, DOI 10.1001/jamanetworkopen.2018.1271, PMC6324286 Methods and Results: China-PEACE convenience-selected sites, n=1727411 ages 35-80; adjusted slopes 1.15 SBP and .75 DBP mmHg per kg/m2. Their adjustment includes age, sex, income, occupation, ethnicity, marital status, Hukou, province, education, smoking, stroke and antihypertensive treatment. These are NOT age/sex-only estimates. The source reports positive linear associations over BMI 18.5-30; extending homogeneous linear coefficients to all generated BMI is an assumption. Treatment modifies associations; no causal effect claim. Source seated 5 minute rest, two electronic readings 1 minute apart, third if SBP difference >10, mean of last two. Association between excess weight and beverage portion size consumed in Brazil, Rev Saude Publica 2018;52:21, DOI 10.11606/S1518-8787.2018052000082, PMC5825129 Results supplies mean adult age 43.2 and female fraction .509; POF 2008-09 adult dietary subsample, pregnant/nursing excluded, no upper age cap. Transport of these demographics to age 20-79 and lab-weighted complete cases is unvalidated.\nDERIVATION: pool ELSA group moments with group-n weights including between-group terms. Marginal SBP-DBP covariance uses Cov(S,D)=(Var(S)+Var(D)-Var(S-D))/2 within groups plus between-group covariance. Ignore rounding uncertainty and small sample-vs-population corrections. This identity does NOT identify requested residual correlation. Use a normal reference age with pooled moments and independent sex, conditional linear BMI mean and constant lognormal CV to construct predictor covariance C. Subtract B C B' from marginal BP covariance and 2*q^2*Var(age)^2 for DBP quadratic. Positive definite residual covariance drives bivariate Gaussian errors. This is an assumption-dependent reference-moment closure; it does not reproduce reference conditional moments empirically and normal reference age is an approximation, not the generated bounded-age law. Derive lognormal CV from pooled BMI variance using same closure.\nASSUMED STRUCTURE UNCHANGED: integer age truncated-exponential maximum-entropy PMF matched to 43.2; age/sex logistic gradient .008 with intercept solved for .509. Conditional BMI mean +.08/year and +.4 female. SBP +.50/year, -7 female, +1.15/BMI. DBP +.06/year at reference age, -.006/year-squared, -4 female, +.75/BMI. Center on ELSA pooled means and quadratic reference variance. Age/sex effects, BMI shape, Gaussian homoscedastic residuals, treatment marginalization and extrapolation beyond source age/BMI ranges are not identified. Cross-country and adjustment-set transport of slopes is strong and unresolved; omitted source covariates are not proven independent or irrelevant. No parameter changes justified by review.\nMEASUREMENT: aggregate resting interview proxy, not untreated physiology. Half-mmHg resolution assumes a mean of two integer readings. Source aggregate covariance already includes measurement variability; no independent error added. Optional measurement_extra_cov is an assumed PSD sensitivity increment (zero here), not a measured error covariance. Baseline BP timing and unknown released final-reading aggregation remain unresolved; single-reading vs averaged measurement, cuff/device/rest and timing differences can change coefficients and residual correlation. Joint rejection conditions on rounded DBP>0 and SBP>DBP, so exact linear conditional laws and reference moments are only approximate at acceptance boundaries. Gaussian tails can still yield unusual low/high pressures; no source-supported clinical tail calibration is available.\nMATHEMATICS: generated age and sex bounded; BMI is a finite mixture of lognormals with positive bounded conditional means and fixed finite log variance, hence all positive integer moments exist. BP means are bounded age/sex polynomials plus linear BMI; Gaussian residuals have all moments. Under these coefficients, joint validity acceptance probability is uniformly bounded away from zero over BMI>0 (finite age/sex grid, positive probabilities, acceptance tends to 1 as BMI tends to infinity). Rounding and pairwise rejection preserve finite polynomial moments. The capped sampler can still explicitly fail after 100 redraws; finite diagnostics are not a proof of tails.\nANALYSES: separate OLS of SBP and DBP on intercept, age, female, bmi/5; BMI coefficients are mmHg per 5 kg/m2. Pearson correlation of both residual vectors from the same design. Include every row. The DBP age-squared term remains in a linear-age residual; flexible age adjustment is a sensitivity analysis, not this task's primary operator. Finite draws need not equal nominal slopes 5.75 and 3.75. Intervals if computed measure fictional sampling only, not parameter or transport uncertainty. Recipient can export generate(None, model_spec, seed) with DataFrame.to_csv(index=False).",
+  "provenance": {
+    "parent_candidate": "v000",
+    "review_evidence_access": "Frozen captured external articles only; no new provider searches or downloads and no excluded target results.",
+    "revision_scope": "Move half-mmHg rounding into joint BP pair-rejection acceptance. Scientific constants unchanged.",
+    "unresolved": [
+      "Target lab-weighted complete-case selection and pregnancy mechanism",
+      "Transport across country, time, age/BMI support and covariate adjustment sets",
+      "Source residual correlation not reported; model closure assumption only",
+      "Baseline timing and released final interview BP aggregation",
+      "Tails, treatment mixtures and heteroscedasticity"
+    ],
+    "used_sources": [
+      {
+        "doi": "10.3390/nu10060701",
+        "locators": [
+          "table-wrap_002",
+          "sec_004"
+        ],
+        "pmcid": "PMC6024610",
+        "uses": [
+          "marginal BMI/BP reference moments",
+          "algebraic marginal SBP-DBP covariance from PP variance",
+          "aggregate measurement protocol"
+        ]
+      },
+      {
+        "doi": "10.1001/jamanetworkopen.2018.1271",
+        "locators": [
+          "full characters 10000-20000",
+          "full characters around 20824"
+        ],
+        "pmcid": "PMC6324286",
+        "uses": [
+          "multi-adjusted SBP and DBP BMI coefficients, transported by assumption"
+        ]
+      },
+      {
+        "doi": "10.11606/S1518-8787.2018052000082",
+        "locators": [
+          "sec_011 opening paragraph"
+        ],
+        "pmcid": "PMC5825129",
+        "uses": [
+          "external age mean and female fraction, transported by assumption"
+        ]
+      }
+    ]
+  }
+}

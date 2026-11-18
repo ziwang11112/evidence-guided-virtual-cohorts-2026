@@ -1,0 +1,153 @@
+{
+  "structure": "Each person has an independent bivariate stable component and two independent, identically distributed bivariate visit deviations, independent of the stable component. Measurements are their sums. Gaussian vectors implement one point scenario consistent with the supplied population moments.",
+  "parameter_provenance": [
+    {
+      "parameter": "component_mean and deviation_mean",
+      "value": {
+        "component_mean": [
+          0.0,
+          0.0
+        ],
+        "deviation_mean": [
+          0.0,
+          0.0
+        ]
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Measurements and deviations have zero means, so stable components also have zero means."
+    },
+    {
+      "parameter": "between-person marginal variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact stable-component variances."
+    },
+    {
+      "parameter": "within-person marginal variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact visit-deviation variances."
+    },
+    {
+      "parameter": "same-visit measurement correlation",
+      "value": 0.52,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Exact Pearson correlation in the stipulated population."
+    },
+    {
+      "parameter": "same-visit measurement covariance",
+      "value": 2.6,
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "B"
+      ],
+      "basis": "Both measurement variances are 4+1=5; covariance is 0.52*5."
+    },
+    {
+      "parameter": "within_covariance",
+      "value": [
+        [
+          1.0,
+          0.6
+        ],
+        [
+          0.6,
+          1.0
+        ]
+      ],
+      "kind": "ASSUMED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Diagonal entries are reported; the off-diagonal covariance 0.6 is a freely chosen scenario, used at both visits."
+    },
+    {
+      "parameter": "between_covariance",
+      "value": [
+        [
+          4.0,
+          2.0
+        ],
+        [
+          2.0,
+          4.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "B"
+      ],
+      "basis": "Conditional on the chosen deviation covariance, stable covariance is 2.6-0.6=2.0. This decomposition is not identified by the records alone."
+    },
+    {
+      "parameter": "independence structure",
+      "value": "Independent persons; stable component independent of visit deviations; deviations independent across visits.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated controlled-task measurement model."
+    },
+    {
+      "parameter": "distribution and common joint deviation law",
+      "value": "Gaussian stable components and identically distributed Gaussian visit deviations",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient sampling choices; Gaussianity is not needed for the correlation calculations."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "Stable components cancel in changes. Each change variance is 2 and their covariance is 2*0.6=1.2, yielding 0.6. The deviation covariance is not separately identified."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "identified",
+      "value": 0.52,
+      "basis": "Directly specified by B. The scenario reproduces it as (2.0+0.6)/5=0.52 at either visit."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "scenario",
+      "value": 0.4,
+      "basis": "Cross-visit covariance equals stable covariance because visit deviations are independent. The scenario gives 2.0/5=0.4; stable covariance is not separately identified."
+    }
+  ],
+  "limitations": [
+    "The records constrain the sum of stable and same-visit deviation covariances, not their separate values. The two scenario estimands are linked, not independently chosen.",
+    "Under a common same-visit deviation covariance c, change correlation is c and cross-visit correlation is (2.6-c)/5. Any c between -1 and 1 gives a valid covariance decomposition, demonstrating nonidentification.",
+    "Gaussian shape and a common joint deviation distribution across visits are modeling choices, not reported biological facts.",
+    "The supplied units do not imply unit variance: each observed biomarker has population variance 5.",
+    "Finite samples will fluctuate around the population constraints. No realized-sample moment adjustment, sorting, rejection, or seed selection is performed.",
+    "This is an artificial mathematical population, not biomedical validation."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified that the between-component covariance matrix has eigenvalues 2 and 6, and the within-component covariance matrix has eigenvalues 0.4 and 1.6; both are positive definite.",
+    "Analytically verified measurement variances of 5, same-visit covariance of 2.6, cross-visit covariance of 2, and change covariance of 1.2.",
+    "Inspected the source for the required five-column wide layout, unique integer identifiers, independent-person sampling, and seeded randomness.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "cross_model_api_pilot_evaluation_protocol_v1",
+  "developmental": true,
+  "previously_exposed_references": true,
+  "n_rows": 3000,
+  "constructions": 20,
+  "model_configurations": 5,
+  "contexts": 2,
+  "seeds": [31001, 31003, 31007],
+  "max_tables": 60,
+  "mechanical_repairs_per_construction_maximum": 1,
+  "mechanical_repair_scope": "static syntax and schema only; before all-construction closure",
+  "scientific_feedback_during_construction": false,
+  "runtime_repairs": false,
+  "all_initial_and_final_artifacts_sealed_before_execution": true,
+  "analysis_after_all_execution_outcomes_sealed": true,
+  "backend": "unchanged cohort_harness.execution WSL Ubuntu-24.04 bubblewrap and unchanged _worker.py",
+  "fallback_allowed": false,
+  "cases": {
+    "PNS": {
+      "primary": ["bmi_sbp", "bmi_dbp", "residual_correlation"],
+      "units": ["mmHg per 5 kg/m^2", "mmHg per 5 kg/m^2", "1"],
+      "design": ["1", "(age-50)/10", "female", "(bmi-25)/5"],
+      "secondary": ["sbp.sd_population", "dbp.sd_population", "sbp_below_dbp_fraction"],
+      "sd_convention": "population ddof=0; normalized weighted reference, equal-weight generated",
+      "reference": "existing RESULTS.json reference_weighted plus supplied row-resampling metadata"
+    },
+    "lipids": {
+      "primary": ["K02-HDL-BMI", "K02-TC-BMI", "K02-LIPID-RESIDUAL"],
+      "units": ["mg/dL per 5 kg/m^2", "mg/dL per 5 kg/m^2", "1"],
+      "design": ["1", "(age-50)/10", "I(sex=='F')", "(bmi-25)/5"],
+      "unit_conversion": {"total_cholesterol": 38.67, "hdl_cholesterol": 38.67},
+      "secondary": ["total_cholesterol.sd_sample", "hdl_cholesterol.sd_sample", "hdl_above_total_fraction"],
+      "sd_convention": "sample ddof=1",
+      "reference": "existing PUBLISHABLE_AGGREGATES.json references.K02; lipid Q5 selected complete cases",
+      "unavailable_reference_diagnostics": ["hdl_above_total_fraction"]
+    }
+  },
+  "comparison": ["seed values", "signed difference", "absolute difference", "available-seed mean and range", "explicit availability denominators", "descriptive same-sign count"],
+  "new_acceptance_cutoff": null,
+  "pooled_cross_unit_score": false,
+  "patient_rows_read": false,
+  "new_reference_fits": false,
+  "invalid_data_policy": "no silent numeric coercion, imputation, row filtering, component repair or output replacement"
+}

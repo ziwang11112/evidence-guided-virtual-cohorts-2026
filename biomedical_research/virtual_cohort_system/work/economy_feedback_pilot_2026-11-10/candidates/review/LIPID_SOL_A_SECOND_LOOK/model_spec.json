@@ -1,0 +1,177 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "name": "sex_stratified_lognormal_gaussian_copula_scenario",
+    "sex": {
+      "codes": [
+        "M",
+        "F"
+      ],
+      "probabilities": [
+        0.5,
+        0.5
+      ]
+    },
+    "age": {
+      "family": "shifted_lognormal",
+      "lower_endpoint_year": 18.0,
+      "gap_arithmetic_mean_by_sex": [
+        24.0,
+        26.0
+      ],
+      "gap_arithmetic_sd_by_sex": [
+        16.0,
+        17.0
+      ]
+    },
+    "margins": {
+      "family": "lognormal",
+      "bmi": {
+        "arithmetic_mean_by_sex": [
+          20.87,
+          22.28
+        ],
+        "arithmetic_sd_by_sex": [
+          3.15,
+          3.85
+        ]
+      },
+      "total_cholesterol": {
+        "arithmetic_mean_by_sex": [
+          3.23,
+          3.23
+        ],
+        "arithmetic_sd_by_sex": [
+          0.92,
+          0.92
+        ]
+      },
+      "hdl_cholesterol": {
+        "arithmetic_mean_by_sex": [
+          1.14,
+          1.14
+        ],
+        "arithmetic_sd_by_sex": [
+          0.38,
+          0.38
+        ]
+      }
+    },
+    "dependence": {
+      "copula": "Gaussian conditional on recorded sex",
+      "block_order": [
+        "bmi",
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "pair_order": [
+        [
+          "bmi",
+          "total_cholesterol"
+        ],
+        [
+          "bmi",
+          "hdl_cholesterol"
+        ],
+        [
+          "total_cholesterol",
+          "hdl_cholesterol"
+        ]
+      ],
+      "conditional_spearman_parameters": [
+        0.212,
+        -0.1,
+        0.106
+      ],
+      "rank_to_latent_rule": "latent Pearson correlation = 2*sin(pi*Spearman/6)",
+      "age_bmi_latent_correlation": 0.3,
+      "age_latent_rule": "Z_age = loading*Z_bmi + sqrt(1-loading^2)*independent_standard_normal",
+      "between_row_dependence": "independent draws conditional on the fixed specification"
+    },
+    "uncertainty": {
+      "mode": "fixed_parameter_scenario",
+      "parameter_sampling": false,
+      "interpretation": "The seed controls individual variation only. Source estimation uncertainty and transport uncertainty are not represented as parameter distributions."
+    },
+    "measurement_and_selection": {
+      "representation": "Generated values represent recorded age, recorded sex, measured BMI and protocol-measured lipids, without an additional measurement-error layer.",
+      "lipid_output_unit": "mmol/L",
+      "source_to_target_measurement_bridge": "Direct numerical distributional transfer is assumed; assay equivalence is not established.",
+      "age_rounding": "none",
+      "additional_exclusions": "none",
+      "enforce_total_cholesterol_at_least_hdl": false,
+      "composition": "One selected-sample scenario; no explicit site, lifestyle, fasting, pregnancy, HIV or diabetes strata."
+    }
+  }
+}

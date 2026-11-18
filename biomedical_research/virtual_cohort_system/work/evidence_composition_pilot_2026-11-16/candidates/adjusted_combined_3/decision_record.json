@@ -1,0 +1,91 @@
+{
+  "structure": "Independent people sampled from a trivariate Gaussian population matching all supplied means, variances, and correlations. Gaussian shape is a modeling choice; all three requested population functionals are identified by the supplied second moments without it.",
+  "parameter_provenance": [
+    {
+      "parameter": "mean",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means in X, Y, Z order."
+    },
+    {
+      "parameter": "covariance_diagonal",
+      "value": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances."
+    },
+    {
+      "parameter": "covariance_XY",
+      "value": 0.5,
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "Covariance equals Pearson correlation times both standard deviations; both standard deviations are one."
+    },
+    {
+      "parameter": "covariances_XZ_YZ",
+      "value": [
+        0.6,
+        0.6
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "The reported correlations equal covariances because all variances are one."
+    },
+    {
+      "parameter": "distribution",
+      "value": "multivariate_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen joint shape for executable sampling; no record specifies higher moments or distributional shape. Independent people are stipulated by the task."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "identified",
+      "value": 0.21875,
+      "basis": "Population OLS slopes on Z are both 0.6 and intercepts are zero. Residual covariance is 0.5 - 0.6*0.6 = 0.14; each residual variance is 1 - 0.6^2 = 0.64. Their Pearson correlation is 0.14/0.64 = 0.21875."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "identified",
+      "value": 0.5,
+      "basis": "Record A directly supplies the marginal population Pearson correlation."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "identified",
+      "value": 0.6,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z) = 0.6/1."
+    }
+  ],
+  "limitations": [
+    "Gaussian shape is an unmeasured scenario choice, not an additional evidentiary finding.",
+    "Finite-sample means, variances, Pearson correlations, and fitted OLS quantities fluctuate randomly; the generator performs no realized-sample calibration.",
+    "Residual correlation describes separate linear adjustments for measured Z. It is not a causal effect, and its identification here does not imply identification of arbitrary conditional relationships."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked covariance positive definiteness: leading principal minors are 1, 0.75, and 0.39, all positive.",
+    "Analytically checked the residual covariance and variances, giving partial correlation 0.21875.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

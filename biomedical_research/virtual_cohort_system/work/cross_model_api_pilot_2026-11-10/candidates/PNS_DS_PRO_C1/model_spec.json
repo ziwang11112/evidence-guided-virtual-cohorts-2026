@@ -1,0 +1,156 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "covariate_distribution": {
+      "age": {
+        "family": "uniform",
+        "lower": 20,
+        "upper": 79,
+        "unit": "years at baseline",
+        "classification": "assumed"
+      },
+      "female": {
+        "family": "bernoulli",
+        "p": 0.5,
+        "unit": "1 female, 0 male",
+        "classification": "assumed"
+      },
+      "bmi": {
+        "family": "beta_bounded",
+        "lower": 14,
+        "upper": 60,
+        "mean": 25.0,
+        "sd": 5.0,
+        "alpha": 3.443478260869565,
+        "beta": 10.956521739130435,
+        "unit": "kg/m^2",
+        "classification": "mixed"
+      },
+      "independence": true
+    },
+    "linear_predictor": {
+      "design_columns": [
+        "1",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "age_center": 50,
+      "age_scale": 10,
+      "bmi_center": 25,
+      "bmi_scale": 5,
+      "sbp": {
+        "intercept": 125.0,
+        "age_z": 5.0,
+        "female": -3.5,
+        "bmi_z": 3.877,
+        "unit": "mmHg"
+      },
+      "dbp": {
+        "intercept": 78.0,
+        "age_z": 1.0,
+        "female": -1.5,
+        "bmi_z": 2.9835,
+        "unit": "mmHg"
+      }
+    },
+    "residual": {
+      "family": "bivariate_normal",
+      "sbp_sd": 17.9863291885,
+      "dbp_sd": 10.348927211,
+      "correlation": 0.49151387,
+      "unit": "SDs in mmHg; correlation dimensionless"
+    },
+    "derived_marginal_moments": {
+      "target_assumed_total": {
+        "sbp_sd": 20.35,
+        "dbp_sd": 10.93,
+        "raw_correlation": 0.5344427684775355,
+        "total_covariance": 118.8737,
+        "source": "S_BEIJING overall"
+      },
+      "covariate_contribution": {
+        "sbp_var": 90.614462333,
+        "dbp_var": 12.364605583,
+        "covariance": 27.383696167
+      },
+      "residual_derived": {
+        "sbp_var": 323.508037667,
+        "dbp_var": 107.100294417,
+        "covariance": 91.490003833,
+        "correlation": 0.49151387
+      }
+    }
+  }
+}

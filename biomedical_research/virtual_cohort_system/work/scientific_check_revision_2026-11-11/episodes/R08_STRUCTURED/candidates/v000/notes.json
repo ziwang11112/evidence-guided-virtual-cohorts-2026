@@ -1,0 +1,50 @@
+{
+  "notes": "Reproducible whole-cohort simulation, not recovery of real people or of the excluded study. Exactly 3,000 rows and the six requested columns; all numeric variables finite, BMI and both lipids strictly positive. Lipids are mmol/L, BMI kg/m^2 and age years. No TC-versus-HDL selection, swapping, clipping, exclusion or row removal. The tool executes generate(None, model_spec, seed) to materialize the actual fictional cohort.\n\nPopulation scenario (ASSUMPTIONS): 55% probability of recorded F, 30% urban-like and 70% rural-like, independently sampled. These are analyst-chosen demographic/lifestyle proxies, not estimates for the requested site or recruitment. Within a stratum all adults are independent. Other lifestyles, infection, diet, medication and genetics are marginalized into lipid variability rather than individually generated. No claim of national or protocol representativeness, causal BMI effects, longitudinal change or household sampling. Full age/sex/BMI relationships are transported, not validated locally.\n\nEVIDENCE: PMC6747887, Sex and area differences in the association between adiposity and lipid profile in Malawi (2019), doi:10.1136/bmjgh-2019-001542. Population-based cross-sectional adults >=18, rural Karonga and urban Lilongwe; 24,943 fasting lipid measurements. Table 1 gives sex/area age means and SDs. Table 2 gives age-standardized BMI and lipid means (mmol/L): stratum order rural F, rural M, urban F, urban M; BMI [23.3,21.6,25.8,22.7], TC [4.00,3.73,4.11,3.98], HDL [1.15,1.09,1.20,1.15]. Table 3 raw-lipid differences per 1 SD higher BMI: TC [.23,.20,.13,.15], HDL [-.03,-.03,-.05,-.04]. These regressions adjust for age, ethnicity, education, assets, marital status, parity in women, lipid medication, smoking, alcohol, activity and HIV/ART. They are NOT reported age/sex-only slopes. Results text says age-only patterns were similar, but I did not extract numerical age-only slopes. Assuming transport after marginalizing these omitted factors is a major approximation. No WHR coefficient is used or added to the BMI effect.\n\nDERIVED SCALE: PMC6005143, doi:10.1093/ije/dyy047, Table 1, related Malawi survey (27,880 adults), BMI IQRs by the same four sex/area strata: [20.4,25.3], [19.8,22.9], [21.5,28.3], [20.1,24.0]. Under an approximate lognormal shape, sigma_log=log(Q3/Q1)/(2*Phi^-1(.75)); SD_BMI=mean_BMI*sqrt(exp(sigma_log^2)-1). Slopes in mmol/L per BMI unit are the Table 3 differences divided by those derived SDs. The IQRs and means come from overlapping but not identical analysis subsets; these publications are NOT independent replications. Source SDs were not directly reported or inferred from lipid confidence intervals. This scale conversion is approximate, not an identified physical-unit coefficient. The common analysis conversion is slope*5*38.67 mg/dL per 5 kg/m^2.\n\nJOINT DISTRIBUTION: Arithmetic lipid means are linear functions of BMI and age in each sex/area stratum and centered at age 35.2, the donor pooled age mean. Conditional lipid values are these means times correlated mean-one lognormal multipliers. Thus raw-scale linear BMI slopes are preserved conditional on stratum, without discarding negative draws. Age uses a bounded beta on [18,90] matched to donor age means/SDs; the age bound and beta family are assumptions. BMI uses a conditional lognormal (donor IQR shape) bounded [12,55] by inverse-CDF sampling, with an assumed +0.03 kg/m^2 per year age trend. Within-age BMI variability is reduced to approximately retain the IQR-derived marginal SD; bounds slightly modify moments. The age-BMI trend, covariate bounds, functional forms and independence conditional on stratum are assumptions. Direct age standardization is approximated by centering linear terms at pooled mean age.\n\nDEPENDENCE PROXY: PMC7713018, Joint modelling of longitudinal lipids and time to coronary heart disease in the Jackson Heart Study (2020), doi:10.1186/s12874-020-01177-7, Table 2 and Results. African American adults in metropolitan Jackson, Mississippi, three exams 2000-2013; 4,232 baseline lipid/hsCRP observations, much older and more obese than the intended fictional scenario. Fitted log-lipid random-intercept models adjusted for baseline age, sex, diabetes, hypertension, measurement time, BMI, statin and smoking, jointly with CHD survival. Log random-intercept SDs: TC .1598, HDL .2153; log within-person error SDs .1206 and .1200; random-intercept correlation .2235. That .2235 is NOT a Pearson correlation of the requested raw-scale OLS residuals. Under the model assumption of independent cross-lipid within-person errors, log covariance=.2235*.1598*.2153 and log variances=.1598^2+.1206^2 and .2153^2+.12^2. Mean-one lognormal multiplier raw correlation follows (exp(cov)-1)/sqrt((exp(var_TC)-1)*(exp(var_HDL)-1)), about .153. Unmodeled lifestyle stratification and heteroskedastic conditional means alter the cohort's age/sex/BMI-adjusted raw residual correlation. Transporting this covariance is a weak, explicit assumption, not evidence identifying the requested correlation. The JHS log-age coefficients .0025 for TC and .0022 for HDL are used only as local fractional derivatives, multiplied by the African lipid anchor to produce additive raw-scale age slopes. JHS BMI/sex/intercept estimates are not used because the population and adjustment set differ.\n\nANALYSIS USE: Fit OLS lipid~BMI+age+sex for the first two questions and correlate the two residual vectors from those models for the third. The pooled age/sex-adjusted BMI effects need not equal a weighted mean of Table 3: latent residence is not in the requested adjustment set, differs in BMI/lipid levels, and the BMI slope varies by sex/area. No sample-level orthogonalization, coefficient forcing, residual correlation forcing or tuning to target measurements is performed. Scientific parameter uncertainty is not resampled; seed variation reflects fictional participant sampling only. Sensitivity analyses should especially vary mixture weights, the IQR-to-SD assumption, omitted-factor transport and lipid covariance.",
+  "provenance": {
+    "context_only_not_pooled": [
+      {
+        "locator": "Table 2",
+        "note": "Tanzania/Uganda survey confirms setting variation in levels; not numerically pooled with Malawi.",
+        "pmcid": "PMC6897412"
+      },
+      {
+        "locator": "Table 2",
+        "note": "2018 Maasai pastoralist survey BMI mean 21.9 SD3.9 and TC177.7 SD38.9 mg/dL; not used as interchangeable with Malawi fasting sex/area means.",
+        "pmcid": "PMC7263614"
+      }
+    ],
+    "excluded_measurements_used": false,
+    "used_sources": [
+      {
+        "doi": "10.1136/bmjgh-2019-001542",
+        "locators": [
+          "Table 1",
+          "Table 2",
+          "Table 3",
+          "Statistical analysis",
+          "Results"
+        ],
+        "pmcid": "PMC6747887",
+        "role": "African age/BMI/lipid anchors and sex/area-specific BMI-lipid associations"
+      },
+      {
+        "doi": "10.1093/ije/dyy047",
+        "locators": [
+          "Table 1"
+        ],
+        "pmcid": "PMC6005143",
+        "role": "Approximate BMI SD derivation from IQRs; overlapping Malawi participants"
+      },
+      {
+        "doi": "10.1186/s12874-020-01177-7",
+        "locators": [
+          "Table 2",
+          "Study data",
+          "Results"
+        ],
+        "pmcid": "PMC7713018",
+        "role": "Distant log-lipid covariance/variance proxy and local fractional age slopes"
+      }
+    ]
+  }
+}

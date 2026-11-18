@@ -1,0 +1,182 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "support": {
+      "age_years": [
+        20.0,
+        79.0
+      ],
+      "female_codes": [
+        0,
+        1
+      ],
+      "row_id_start": 1,
+      "continuous_variables_are_unrounded": true,
+      "outcome_clipping": false
+    },
+    "basis": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0,
+      "hinge_age": 65.0,
+      "hinge_scale": 10.0
+    },
+    "covariates": {
+      "age_family": "uniform_on_declared_support",
+      "female_probability_at_age_endpoints": [
+        0.48,
+        0.56
+      ],
+      "female_probability_rule": "linear_interpolation_in_age",
+      "bmi": {
+        "conditional_mean_intercept": 26.0,
+        "conditional_mean_age_coefficient": 0.7,
+        "conditional_mean_female_coefficient": 0.9,
+        "innovation_family": "centered_and_variance_standardized_beta",
+        "innovation_shapes": [
+          2.0,
+          5.0
+        ],
+        "innovation_sd": 4.8,
+        "innovation_independent_of_age_and_female": true
+      }
+    },
+    "outcome_model": {
+      "outcome_order": [
+        "sbp",
+        "dbp"
+      ],
+      "conditional_mean_rule": "intercept + age_coefficient*A + female_coefficient*F + bmi_coefficient*B + hinge_coefficient*H",
+      "age_coefficients": [
+        5.0,
+        1.5
+      ],
+      "female_coefficients": [
+        -4.0,
+        -2.0
+      ],
+      "hinge_coefficients": [
+        3.0,
+        -5.0
+      ],
+      "bmi_anchor_per_kg_m2": [
+        0.7754,
+        0.5967
+      ],
+      "bmi_anchor_SE_per_kg_m2": [
+        0.0359,
+        0.0257
+      ],
+      "bmi_transfer_rule": "multiply_source_coefficient_by_bmi_scale_without_further_adjustment",
+      "intercept_rule": "match_calibration_group_raw_BP_means_after_subtracting_assumed_predictor_mean_contributions"
+    },
+    "calibration": {
+      "source_id": "S_BEIJING",
+      "group": "65plus",
+      "n": 791,
+      "male_n": 356,
+      "age_mean": 74.26,
+      "age_sd": 5.37,
+      "bp_mean": [
+        141.29,
+        75.63
+      ],
+      "bp_sd": [
+        20.98,
+        11.22
+      ],
+      "pp_sd": 17.59,
+      "age_female_covariance_years": 0.0,
+      "bmi_reference_rule": "use_the_generated_BMI_conditional_mean_and_innovation_variance",
+      "raw_covariance_rule": "Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2",
+      "innovation_covariance_rule": "subtract_assumed_reference_conditional_mean_covariance_from_raw_BP_covariance",
+      "reference_age_support_assumption": "all_reference_participants_are_at_or_above_hinge_age"
+    },
+    "residual_law": {
+      "family": "uniform_on_centered_covariance_normalized_ellipse",
+      "standardized_disk_radius": 2.0,
+      "independent_of_covariates": true,
+      "constant_covariance_across_covariates": true,
+      "covariance_transfer_rule": "use_calibrated_innovation_covariance_at_all_target_ages"
+    },
+    "uncertainty": {
+      "mode": "fixed_assumption_scenario",
+      "source_coefficient_SE_role": "reported_metadata_only_not_individual_dispersion",
+      "source_moments_role": "rounded_point_anchors_without_sampling",
+      "transfer_uncertainty": "unquantified_and_not_sampled",
+      "seed_changes": "individual_draws_only"
+    }
+  }
+}

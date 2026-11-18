@@ -1,0 +1,35 @@
+{
+  "notes": "Complete fictional cohort generator; not an estimate or reconstruction of the excluded cohort. Exactly 3,000 independent adults and six requested columns, continuous age in years, BMI kg/m^2, lipids mmol/L. Use generate(None, model_spec, seed); the same seed reproduces the same dataset. Evidence retrieved: (1) Physical activity energy expenditure and cardiometabolic health in three rural Kenyan populations (2019), DOI 10.1002/ajhb.23199, PMC6435188 version 2, Table 1 and Methods. In the Maasai strata, female/male BMI means 22.5/21.0 (both SD 4.8), TC 3.8/4.0 (SD .9/1.1), HDL 1.2/1.1 (SD .3/.32), ages 35.0/38.6. These are external agro-pastoralist comparators, not population-identical measurements. Other rural Kenyan strata show BMI means 20.0-22.5 and HDL .9-1.2. Participants were volunteers from a 2005 survey with several health exclusions; selection and temporal differences limit transportability. (2) Dyslipidemias and cardiovascular risk scores in urban and rural populations in north-western Tanzania and southern Uganda (2019), DOI 10.1371/journal.pone.0223189, PMC6897412, Tables 2 and 4 and statistical analysis. Rural TC means 3.85/4.05 and HDL 1.01/1.16; municipality TC 4.72/4.57 and HDL 1.39/1.41. Table 4 adjusted BMI-category LDL differences normal to overweight/obese +.23/+.48 mmol/L, HDL -.06/-.15. Associations were adjusted for stratum, age, sex and upstream covariates, not identical to the user's adjustment set. No published continuous TC-on-BMI coefficient or adjusted TC-HDL residual correlation was obtained. Assumptions: 55% F and 25% town-linked, independently assigned, with 75% rural/active; these are scenario choices, not estimates for the target. The hidden town indicator represents broad diet/activity/access differences, not observed lifestyle measurements, and is intentionally absent from the required output. Conditional BMI means 20.8 rural male plus 1.2 female, 3.3 town-linked, and .025 per age-year around 38; shifted lognormal dispersion 3.3 rural/4.3 town. Continuous age uses 18+Gamma(2.2,9) truncated above 85. Lipid conditional means are log-linear, with local BMI slopes +.055 TC and -.012 HDL mmol/L per kg/m^2 at reference BMI22, age38. HDL slope is a rough continuous interpretation of external BMI-category results; TC slope is an assumed extrapolation informed by positive LDL category associations, not a directly reported estimate. Age/sex effects, town shifts, CVs and all distributional forms are pragmatic assumptions on an externally plausible scale. Bivariate lognormal errors have log-scale correlation .35: an explicit unmeasured covariance assumption motivated by HDL being a constituent of total cholesterol, not a published adjusted correlation. The requested residual correlation is therefore particularly assumption-dependent. The local conditional slopes are NOT the expected exact age/sex-only OLS coefficients because lifestyle mixing and nonlinearity affect those analyses. Strict positivity is achieved by construction without lipid clipping, any TC-vs-HDL exclusion, or row removal; TC and HDL are generated jointly rather than forcing a TC>HDL inequality. No missing values, treatment strata, household clustering, pregnancy, HIV, assay-batch errors or source-estimate uncertainty are modeled. Synthetic sampling variability is not uncertainty about transport to the target population. For analysis regress each lipid on intercept, age, F indicator and BMI; multiply BMI coefficient by 5*38.67 to express mg/dL per 5 kg/m^2, and correlate the two OLS residual vectors. Do not interpret any synthetic association as causal or as a recovered study result.",
+  "provenance": {
+    "policy": "Published external evidence only; no target measurements used.",
+    "sources": [
+      {
+        "doi": "10.1002/ajhb.23199",
+        "pmcid": "PMC6435188",
+        "retrieved_sections": [
+          "table-wrap_001",
+          "sec_006"
+        ],
+        "use": "External rural Kenyan age/BMI/lipid scale and dispersion; population and sampling limitations.",
+        "version": 2
+      },
+      {
+        "doi": "10.1371/journal.pone.0223189",
+        "pmcid": "PMC6897412",
+        "retrieved_sections": [
+          "table-wrap_002",
+          "table-wrap_004",
+          "sec_013"
+        ],
+        "use": "External East African rural-urban scale variation and adjusted categorical LDL/HDL associations.",
+        "version": 1
+      }
+    ],
+    "unidentified_parameters": [
+      "Target demographic and lifestyle proportions",
+      "Continuous adjusted TC-BMI slope",
+      "Target-specific transport effects",
+      "Adjusted lipid residual correlation"
+    ]
+  }
+}

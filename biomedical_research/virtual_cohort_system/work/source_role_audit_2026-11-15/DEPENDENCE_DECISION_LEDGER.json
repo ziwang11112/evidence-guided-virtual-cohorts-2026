@@ -1,0 +1,2446 @@
+[
+  {
+    "round": "R1",
+    "version_id": "PNS_OA_ASTRA_C1",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "order": [
+        "dbp",
+        "pulse_pressure"
+      ],
+      "distribution": "Independently centered and variance-standardized beta variables",
+      "beta_shapes": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "individual_sd_mmHg": [
+        9,
+        12
+      ],
+      "dependence": "The two innovations are independent of each other and of all covariates. SBP equals DBP plus pulse pressure, so SBP and DBP innovations are not independent.",
+      "combination": "DBP = mean_DBP + error_DBP; pulse pressure = mean_SBP - mean_DBP + error_PP; SBP = DBP + pulse pressure."
+    },
+    "source_to_model_operation": "Standardized independent beta DBP/PP errors with SDs 9/12; SBP error equals their sum.",
+    "transport_assumptions": [
+      "Homoscedastic error law and distribution family are assumptions.",
+      "The packet does not identify the chosen conditional covariance or individual SDs."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Independent DBP and pulse-pressure innovations induce SBP-DBP dependence; no source identifies these loadings.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "path": "$.model_spec.innovations.individual_sd_mmHg",
+          "meaning_and_operator": "Conditional individual residual SDs are 9 for DBP and 12 for pulse pressure, in the declared order.",
+          "conditioning_set": "Age, female and BMI.",
+          "scale": "Individual conditional standard deviations.",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "These are fixed completion parameters. With independent innovations, the implied SBP residual variance is 9^2+12^2, rather than a separately specified SBP variance.",
+          "unverified_assumptions": [
+            "The scales are homoskedastic.",
+            "They are not obtained from coefficient SEs, INTERSALT averaged subgroup SDs, or Beijing unadjusted SDs."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/11",
+        "entry": {
+          "path": "$.model_spec.innovations",
+          "meaning_and_operator": "DBP and pulse-pressure innovations are mutually independent and independent of covariates; SBP is constructed as their sum plus its mean.",
+          "conditioning_set": "Age, female and BMI.",
+          "scale": "Conditional dependence and outcome reconstruction.",
+          "unit": "BP in mmHg; correlations dimensionless.",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "Sharing the DBP innovation induces SBP-DBP residual covariance equal to the DBP innovation variance. With the specified bounded covariate and innovation supports, DBP and pulse pressure remain positive without clipping.",
+          "unverified_assumptions": [
+            "Conditional DBP-pulse-pressure innovation independence is an explicit parsimonious restriction, not a relationship identified by the packet.",
+            "The resulting SBP-DBP residual dependence is not calibrated to a source raw correlation.",
+            "No additional shared instrument or visit-level error is separately modeled."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/model_spec.json#/model/innovations",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/9",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/10",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/decision_record.json#/parameter_provenance/11",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:34",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:41",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:43",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:44",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C1/generator.py:45"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "PNS_DS_PRO_C1",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "marginal_covariance_decomposition",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "Beijing Table 1 overall: unadjusted individual SBP, DBP and pulse-pressure SDs; neither conditional SD nor requested residual rho.",
+    "source_ids": [
+      "S_BEIJING"
+    ],
+    "source_reported_value": {
+      "SBP_SD": 20.35,
+      "DBP_SD": 10.93,
+      "PP_SD": 17.2,
+      "group": "overall",
+      "unit": "mmHg, individual marginal SD"
+    },
+    "implemented_input": {
+      "family": "bivariate_normal",
+      "sbp_sd": 17.9863291885,
+      "dbp_sd": 10.348927211,
+      "correlation": 0.49151387,
+      "unit": "SDs in mmHg; correlation dimensionless"
+    },
+    "source_to_model_operation": "Author subtracts assumed explained covariance from transported source marginal covariance, then stores rounded literal residual SD/rho. Program uses literals, not explanatory derived_marginal_moments.",
+    "transport_assumptions": [
+      "Homoscedastic error law and distribution family are assumptions.",
+      "Source marginal dispersion transfers across age, selection, geography and measurement.",
+      "Explained-covariance decomposition uses assumed covariate distributions and effects; rounded source moments treated as plug-in values."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Transport Beijing marginal covariance, subtract the covariance of assumed means, then store fixed residual SD/rho. Arithmetic does not identify target applicability.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "path": "model_spec.residual",
+          "meaning": "Residual bivariate normal covariance of SBP and DBP after the specified linear predictors",
+          "conditioning_set": [
+            "1",
+            "(age-50)/10",
+            "female",
+            "(bmi-25)/5"
+          ],
+          "scale": "SDs in mmHg; correlation dimensionless",
+          "classification": "derived",
+          "source_pointers": [
+            "S_BEIJING Table 1 overall: SBP_SD 20.35, DBP_SD 10.93",
+            "reported_moment_algebra: raw SBP-DBP correlation 0.534442768"
+          ],
+          "derivation": "Assumed target total SDs and raw SBP-DBP correlation equal S_BEIJING overall. Covariate variances are age_z 2.900833, female 0.25, bmi_z 1. Covariate contributions: SBP variance 90.614462, DBP variance 12.364606, covariance 27.383696. Then residual SBP variance = 20.35^2 - 90.614462 = 323.508038; residual DBP variance = 10.93^2 - 12.364606 = 107.100294; residual covariance = 0.534442768*20.35*10.93 - 27.383696 = 91.490004; residual correlation = 91.490004 / sqrt(323.508038*107.100294) = 0.4915139.",
+          "unverified_assumptions": "Beijing older unadjusted second moments transfer to the target; rounded source SDs are not a sampling CI; homoscedasticity; no nonlinear BP-age structure."
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/7",
+        "entry": {
+          "path": "model_spec.derived_marginal_moments",
+          "meaning": "Bridge quantities documenting assumed marginal BP moments and derived residual moments",
+          "conditioning_set": "marginal BP and covariate contribution",
+          "scale": "mmHg^2 for variances/covariance; dimensionless for correlation",
+          "classification": "derived",
+          "source_pointers": [
+            "S_BEIJING overall Table 1",
+            "reported_moment_algebra",
+            "S_INTERSALT Table II p322"
+          ],
+          "derivation": "Total SBP SD 20.35, DBP SD 10.93, raw correlation 0.534442768; subtract covariate contributions from the assumed linear predictors and independent covariate variances as detailed in the residual record.",
+          "unverified_assumptions": "Same as residual record; decomposition depends on assumed age/female coefficients and covariate independence."
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json#/model/residual",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/model_spec.json#/model/derived_marginal_moments",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json#/parameter_provenance/6",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/decision_record.json#/parameter_provenance/7",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:22",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:23",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C1/generator.py:24"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "PNS_OA_SOL_C1",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "conditional_sd_mmHg": [
+        16,
+        10
+      ],
+      "residual_correlation": 0.55,
+      "innovation_beta_shapes": [
+        2,
+        5
+      ]
+    },
+    "source_to_model_operation": "Mix standardized independent beta factors using direct assumed rho 0.55; scale by SDs 16/10.",
+    "transport_assumptions": [
+      "Homoscedastic error law and distribution family are assumptions.",
+      "The packet does not identify the chosen conditional covariance or individual SDs."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Residual rho 0.55 is explicitly a scenario informed by context, not equality to a reported raw correlation.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "model_spec_path": "$.model_spec.bp.conditional_sd_mmHg",
+          "meaning_statistical_operator": "Conditional individual SDs of unexplained SBP and DBP, respectively.",
+          "conditioning_set": [
+            "age",
+            "female",
+            "bmi",
+            "Task eligibility and complete-case selection"
+          ],
+          "scale": "Raw-scale residual SD",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "packet_path": "source_evidence.sources[1]",
+              "source_id": "S_BEIJING",
+              "original_locator": "Methods 2-2.2 and Table 1"
+            }
+          ],
+          "derivation": "Values 16 and 10 are scenario choices, not estimates derived from the source. Beijing's overall unadjusted individual SDs were 20.35 and 10.93 mmHg in 1257 selected middle-aged/older community participants, with antihypertensive use retained and specified disease, refusal, and missingness exclusions. Those marginal SDs provide only contextual scale information. They are not conditional residual SDs. BP was the average of two seated Omron HEM-4021 readings after rest.",
+          "unverified_assumptions": [
+            "Conditional residual variance is constant across age, sex, and BMI.",
+            "The selected source's marginal dispersions do not identify target conditional scales; no variance subtraction or automatic marginal-to-conditional conversion is asserted.",
+            "INTERSALT averaged subgroup SDs are not treated as pooled SDs, and source coefficient SEs are not treated as individual dispersion."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/11",
+        "entry": {
+          "model_spec_path": "$.model_spec.bp.residual_correlation",
+          "meaning_statistical_operator": "Conditional Pearson correlation of the two BP errors, also their population regression-residual correlation under the specified linear means.",
+          "conditioning_set": [
+            "age",
+            "female",
+            "bmi",
+            "Task eligibility and complete-case selection"
+          ],
+          "scale": "Pearson correlation",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "packet_path": "source_evidence.sources[1].moments",
+              "source_id": "S_BEIJING",
+              "original_locator": "Table 1"
+            },
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "packet_path": "reported_moment_algebra",
+              "original_locator": "PMC9278591 Table 1, rounded SD algebra"
+            }
+          ],
+          "derivation": "The value 0.55 is an explicit residual-dependence scenario, contextually informed but not calibrated to Beijing's raw correlations. Beijing's rounded marginal SDs imply raw correlations 0.5344427684775355 overall, 0.6030316602292216 under 65, and 0.5451263744946805 at 65plus through Cov(S,D)=(Var(S)+Var(D)-Var(S-D))/2. None is an age/sex/BMI-adjusted residual correlation. No equality between any source raw correlation and this model parameter is asserted.",
+          "unverified_assumptions": [
+            "A constant positive residual correlation applies throughout the selected target population.",
+            "Beijing's nested overall and age-group summaries are dependent evidence, not independent replications.",
+            "The supplied rounding envelopes are neither sampling confidence intervals nor transfer-uncertainty intervals."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/12",
+        "entry": {
+          "model_spec_path": "$.model_spec.bp.innovation_beta_shapes",
+          "meaning_statistical_operator": "Common shape pair for each of two independent latent beta innovations, subsequently centered and standardized to variance one.",
+          "conditioning_set": [
+            "Independent of age, female, and bmi by assumption"
+          ],
+          "scale": "Beta shape parameters on the unit interval",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "For shapes alpha and beta, subtract alpha/(alpha+beta) and divide by sqrt(alpha*beta/((alpha+beta)^2*(alpha+beta+1))). DBP uses the first standardized innovation. SBP uses rho times the first plus sqrt(1-rho^2) times the second. Consequently the specified conditional SDs and correlation hold exactly.",
+          "unverified_assumptions": [
+            "Right-skewed bounded innovations are an adequate working distribution for raw BP residuals.",
+            "The shared-plus-SBP-specific factorization is not identified by the evidence and has no causal interpretation.",
+            "Innovation independence and independence from measured covariates are explicit completion assumptions.",
+            "There are no additional heavy-tailed, heteroskedastic, treatment-specific, digit-preference, or measurement-error components."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/conditional_sd_mmHg",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/residual_correlation",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/model_spec.json#/model/bp/innovation_beta_shapes",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/10",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/11",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/decision_record.json#/parameter_provenance/12",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:35",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:36",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C1/generator.py:37"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "PNS_OA_ASTRA_C2",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "marginal_covariance_decomposition",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "Beijing Table 1 65plus: unadjusted individual SBP, DBP and pulse-pressure SDs; neither conditional SD nor requested residual rho.",
+    "source_ids": [
+      "S_BEIJING"
+    ],
+    "source_reported_value": {
+      "SBP_SD": 20.98,
+      "DBP_SD": 11.22,
+      "PP_SD": 17.59,
+      "group": "65plus",
+      "unit": "mmHg, individual marginal SD"
+    },
+    "implemented_input": {
+      "calibration": {
+        "source_id": "S_BEIJING",
+        "group": "65plus",
+        "n": 791,
+        "male_n": 356,
+        "age_mean": 74.26,
+        "age_sd": 5.37,
+        "bp_mean": [
+          141.29,
+          75.63
+        ],
+        "bp_sd": [
+          20.98,
+          11.22
+        ],
+        "pp_sd": 17.59,
+        "age_female_covariance_years": 0.0,
+        "bmi_reference_rule": "use_the_generated_BMI_conditional_mean_and_innovation_variance",
+        "raw_covariance_rule": "Cov(S,D)=(SD_S^2+SD_D^2-SD_PP^2)/2",
+        "innovation_covariance_rule": "subtract_assumed_reference_conditional_mean_covariance_from_raw_BP_covariance",
+        "reference_age_support_assumption": "all_reference_participants_are_at_or_above_hinge_age"
+      },
+      "hinge_coefficients": [
+        3.0,
+        -5.0
+      ],
+      "residual_law": {
+        "family": "uniform_on_centered_covariance_normalized_ellipse",
+        "standardized_disk_radius": 2.0,
+        "independent_of_covariates": true,
+        "constant_covariance_across_covariates": true,
+        "covariance_transfer_rule": "use_calibrated_innovation_covariance_at_all_target_ages"
+      }
+    },
+    "source_to_model_operation": "Reconstruct source raw covariance; subtract hypothetical reference explained covariance; generate bounded elliptical errors. Requested OLS residuals additionally retain the age-65 hinge omitted from the analysis design.",
+    "transport_assumptions": [
+      "Homoscedastic error law and distribution family are assumptions.",
+      "Source marginal dispersion transfers across age, selection, geography and measurement.",
+      "Explained-covariance decomposition uses assumed covariate distributions and effects; rounded source moments treated as plug-in values."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Source raw covariance minus assumed reference mean covariance sets innovations. The omitted age hinge means innovation rho is not requested OLS residual rho.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/8",
+        "entry": {
+          "json_paths": [
+            "$.model_spec.calibration.age_female_covariance_years",
+            "$.model_spec.calibration.bmi_reference_rule",
+            "$.model_spec.calibration.reference_age_support_assumption"
+          ],
+          "meaning_statistical_operator": "Hypothetical reference covariate moments required to remove explained covariance: zero age–female covariance, generated BMI conditional moments, and a linear active hinge throughout the older group.",
+          "conditioning_set": "Beijing 65plus calibration population only.",
+          "scale": "Raw covariance and conditional moment bridge.",
+          "unit": "Age–female covariance in years times the binary indicator; BMI moments in kg/m^2 and squared kg/m^2.",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "source": "S_BEIJING",
+              "locator": "Table 1, 65plus group definition; BMI_reported=false in supplied packet"
+            }
+          ],
+          "derivation": "The source reports no BMI moments or age–sex covariance. Their values are completed explicitly rather than inferred from the absence of reporting.",
+          "unverified_assumptions": [
+            "Age and female have zero covariance in the source calibration group, although they are dependent in the target model.",
+            "The target BMI conditional mean and innovation variance also apply to this hypothetical older reference population.",
+            "BMI innovations have zero covariance with source age and sex."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/9",
+        "entry": {
+          "json_paths": [
+            "$.model_spec.outcome_model.intercept_rule",
+            "$.model_spec.calibration.raw_covariance_rule",
+            "$.model_spec.calibration.innovation_covariance_rule"
+          ],
+          "meaning_statistical_operator": "Derived BP intercept vector and conditional innovation covariance matrix.",
+          "conditioning_set": "Calibration removes the covariance of conditional means given source age, female and BMI; the resulting covariance is then used conditional on target covariates.",
+          "scale": "Raw conditional means and covariances, distinct from source marginal moments.",
+          "unit": "Intercepts in mmHg; covariance entries in mmHg^2.",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "source": "S_BEIJING",
+              "locator": "Table 1, 65plus SBP, DBP and pulse-pressure SDs"
+            },
+            {
+              "source": "reported_moment_algebra",
+              "locator": "groups[group=65plus]; formula"
+            }
+          ],
+          "derivation": "Let b be the rescaled BMI coefficient vector, a/f/h the age/female/hinge vectors, u/v the BMI age/female coefficients, s the BMI scale, and p the reference female probability. Above the hinge, q_A=a+h*age_scale/hinge_scale+b*u/s and q_F=f+b*v/s. The explained covariance is outer(q_A,q_A)*Var(A)+outer(q_F,q_F)*p*(1-p)+outer(b,b)*(BMI_innovation_SD/s)^2 plus the specified age–female cross term. Subtract it from the raw BP covariance recovered using pulse pressure. Intercepts are source BP means minus mean predictor contributions.",
+          "unverified_assumptions": [
+            "Pulse pressure equals SBP minus DBP on the same paired readings and analysis sample.",
+            "The raw covariance identity is exact apart from source rounding; it does not identify a residual correlation by itself.",
+            "The assumed reference predictor contribution, rather than evidence alone, determines the subtraction.",
+            "The generated constant innovation covariance and mean calibration transport across populations and protocols."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "json_path": "$.model_spec.residual_law",
+          "meaning_statistical_operator": "Independent-of-covariates BP innovation vector obtained by applying the derived covariance Cholesky factor to a uniform disk of radius two.",
+          "conditioning_set": "All generated age, sex and BMI values.",
+          "scale": "Bounded elliptical individual residual distribution with zero mean and constant covariance.",
+          "unit": "Standardized radius dimensionless; transformed innovations in mmHg.",
+          "classification": "mixed",
+          "source_pointers": [],
+          "derivation": "A uniform two-dimensional disk of radius two has identity covariance. Multiplication by the Cholesky factor therefore gives the calibrated innovation covariance without clipping.",
+          "unverified_assumptions": [
+            "Ellipse shape, bounded tails, homoscedasticity and covariate independence are author assumptions.",
+            "SBP and DBP innovations are jointly dependent; even their whitened disk coordinates are not independent.",
+            "There are no additional treatment, disease, measurement-error or outlier mixtures.",
+            "The innovation correlation is not equated to the requested regression-residual correlation."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/calibration",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/residual_law",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/model_spec.json#/model/outcome_model/hinge_coefficients",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/7",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/8",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/9",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/decision_record.json#/parameter_provenance/10",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:27",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:28",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:29",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:30",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:31",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:32",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:33",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:34",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:36",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:39",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:49",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_ASTRA_C2/generator.py:53"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "PNS_DS_PRO_C2",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "residual_sd": {
+        "sbp": 13.0,
+        "dbp": 8.5,
+        "unit": "mmHg"
+      },
+      "residual_correlation": 0.5
+    },
+    "source_to_model_operation": "Direct assumed bivariate-normal outcome errors with SDs 13/8.5 and rho 0.5.",
+    "transport_assumptions": [
+      "Homoscedastic error law and distribution family are assumptions.",
+      "The packet does not identify the chosen conditional covariance or individual SDs."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Residual rho 0.50 and SDs are disclosed choices contextualized by Beijing, not reported conditional estimates.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/5",
+        "entry": {
+          "path": "model_spec.bp.residual_sd",
+          "meaning": "Residual SBP and DBP standard deviations after the specified linear adjustment.",
+          "conditioning_set": [
+            "1",
+            "(age-50)/10",
+            "female",
+            "(bmi-25)/5"
+          ],
+          "scale": "mmHg",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": [
+            "S_BEIJING overall SBP_SD 20.35, DBP_SD 10.93"
+          ],
+          "derivation": "Set to 13.0 and 8.5 as assumed residual dispersions after age/sex/BMI adjustment and broader age range; not algebraically derived from unconditional SDs.",
+          "unverified_assumptions": "No conditional variance or target dispersion source is supplied."
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "path": "model_spec.bp.residual_correlation",
+          "meaning": "Population residual Pearson correlation between SBP and DBP after the same linear adjustment on the same rows.",
+          "conditioning_set": [
+            "1",
+            "(age-50)/10",
+            "female",
+            "(bmi-25)/5"
+          ],
+          "scale": "correlation",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [
+            "S_BEIJING derived raw overall correlation 0.5344427684775355"
+          ],
+          "derivation": "Set to 0.50 as an explicit assumed residual value informed by the S_BEIJING raw overall correlation, while recognizing that raw and residual correlations differ and the Beijing cohort is not target-equivalent.",
+          "unverified_assumptions": "Raw-to-residual transport across population, age, BMI adjustment, and BP measurement is unsupported."
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json#/model/bp/residual_sd",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/model_spec.json#/model/bp/residual_correlation",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json#/parameter_provenance/5",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/decision_record.json#/parameter_provenance/6",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:41",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:42",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:43",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_DS_PRO_C2/generator.py:45"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "PNS_OA_SOL_C2",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "shared_innovation_loadings": [
+        12,
+        6
+      ],
+      "specific_innovation_loadings": [
+        9,
+        8
+      ]
+    },
+    "source_to_model_operation": "Standardized shared/specific uniforms with shared loadings 12/6 and specific loadings 9/8.",
+    "transport_assumptions": [
+      "Homoscedastic error law and distribution family are assumptions.",
+      "The packet does not identify the chosen conditional covariance or individual SDs."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Shared and specific uniform factor loadings imply residual rho 0.48; the loadings are assumed.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/14",
+        "entry": {
+          "path": "model_spec.bp.shared_innovation_loadings",
+          "meaning_statistical_operator": "Loadings [12,6] of the common standardized innovation on residual [SBP,DBP].",
+          "conditioning_set": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "scale": "Additive residual-factor loadings.",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "A common component is introduced to represent residual co-fluctuation. It contributes covariance 12*6=72 mmHg^2 under unit innovation variance.",
+          "unverified_assumptions": [
+            "A single positive common component is sufficient.",
+            "The factor is independent of all covariates and does not represent a causal mechanism.",
+            "No supplied source identifies these loadings or the conditional covariance."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/15",
+        "entry": {
+          "path": "model_spec.bp.specific_innovation_loadings",
+          "meaning_statistical_operator": "Loadings [9,8] of separate standardized innovations on residual [SBP,DBP].",
+          "conditioning_set": [
+            "age",
+            "female",
+            "bmi"
+          ],
+          "scale": "Additive residual-component loadings.",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "Together with the common component, residual variances are 12^2+9^2=225 and 6^2+8^2=100 mmHg^2. These are assumed conditional variances, not source marginal variances.",
+          "unverified_assumptions": [
+            "Specific innovations are mutually independent and independent of the common innovation and covariates.",
+            "Residual covariance is homoskedastic across age, sex and BMI.",
+            "Separate measurement error, treatment heterogeneity and biological variation are not identified or separately modeled."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/16",
+        "entry": {
+          "path": "model_spec.innovations",
+          "meaning_statistical_operator": "Three independent Uniform(-1,1) draws are centered and divided by sqrt(1/3), producing zero-mean unit-variance innovations for one shared and two specific BP components.",
+          "conditioning_set": "Independent of age, female and BMI.",
+          "scale": "Standardized bounded residual innovations.",
+          "unit": "1",
+          "classification": "derived",
+          "source_pointers": [],
+          "derivation": "Uniform(-1,1) has mean zero and variance (1-(-1))^2/12=1/3. The distribution family, bounded support and independence are assumptions; its stated variance follows mathematically.",
+          "unverified_assumptions": [
+            "Bounded uniform tails adequately approximate individual conditional BP variation for this construction.",
+            "No heavy tails or additional outlier component is present.",
+            "Independent generated rows omit household, geographic and survey-cluster dependence."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/bp/shared_innovation_loadings",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/bp/specific_innovation_loadings",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/model_spec.json#/model/innovations",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/14",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/15",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/decision_record.json#/parameter_provenance/16",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:39",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:40",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:41",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:42",
+      "work/cross_model_api_pilot_2026-11-10/candidates/PNS_OA_SOL_C2/generator.py:43"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "PNS_SOL_A",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "residual_sd_mmHg": [
+        14,
+        9
+      ],
+      "residual_mixing_matrix": [
+        [
+          1,
+          0
+        ],
+        [
+          0.6,
+          0.8
+        ]
+      ],
+      "residual_latent_family": "two independent uniforms, centered and standardized to unit variance",
+      "residual_latent_uniform_support": [
+        -1,
+        1
+      ]
+    },
+    "source_to_model_operation": "Independent standardized uniforms mixed with rows [1,0] and [0.6,0.8], then scaled 14/9.",
+    "transport_assumptions": [
+      "Residual family/structure and homoscedasticity are assumptions.",
+      "No compatible source conditional covariance/SD estimate identifies these values."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "The fixed mixing rows imply rho 0.60; the source does not identify this conditional relationship.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "paths": [
+            "/model_spec/bp/residual_sd_mmHg"
+          ],
+          "meaning_statistical_operator": "Constant conditional residual SDs, 14 for SBP and 9 for DBP.",
+          "conditioning_set": [
+            "age",
+            "female",
+            "bmi",
+            "task eligibility"
+          ],
+          "scale": "Individual raw-scale conditional dispersion.",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "packet_path": "SOURCE_EVIDENCE_JSON.source_evidence.unidentified",
+              "original_locator": "Residual SBP-DBP correlation and conditional scales"
+            }
+          ],
+          "derivation": "The mixing rows have unit squared norm, so multiplying their standardized latent combinations by these values gives the stated conditional SDs.",
+          "unverified_assumptions": [
+            "Dispersion is constant across all covariates.",
+            "These are neither coefficient SEs nor the INTERSALT averaged subgroup SDs.",
+            "They are not estimated by transporting Beijing marginal SDs."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/7",
+        "entry": {
+          "paths": [
+            "/model_spec/bp/residual_latent_family",
+            "/model_spec/bp/residual_latent_uniform_support",
+            "/model_spec/bp/residual_mixing_matrix",
+            "/model_spec/bp/conditional_structure"
+          ],
+          "meaning_statistical_operator": "Two independent uniform latent variables are centered and divided by their uniform-distribution SD. SBP uses the first; DBP uses 0.6 times the first plus 0.8 times the second. All latent errors are independent of generated covariates.",
+          "conditioning_set": [
+            "age",
+            "female",
+            "bmi",
+            "task eligibility"
+          ],
+          "scale": "Standardized additive residual factors.",
+          "unit": "1 before multiplication by residual SD",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "packet_path": "SOURCE_EVIDENCE_JSON.source_evidence.unidentified",
+              "original_locator": "Residual SBP-DBP correlation and conditional scales; distributional tails"
+            }
+          ],
+          "derivation": "For independent unit-variance U,V, Var(U)=Var(0.6U+0.8V)=1 and Cov(U,0.6U+0.8V)=0.6. Uniform standardization uses Var(Uniform(l,h))=(h-l)^2/12, a mathematical identity rather than a fitted parameter.",
+          "unverified_assumptions": [
+            "Positive residual dependence is an explicit completion assumption, not an identified source relationship.",
+            "Uniform factors impose bounded, light tails and no residual skewness.",
+            "Residual dependence is constant and conditional means are correctly linear.",
+            "The same residual structure absorbs unrepresented treatment, measurement and selection heterogeneity."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_sd_mmHg",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/model_spec.json#/model/bp/residual_mixing_matrix",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/6",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/decision_record.json#/parameter_provenance/7",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:20",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:29",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:30",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_A/generator.py:31"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "PNS_DS",
+    "case_id": "PNS",
+    "law_delivery": "execution_failed",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "distribution": "bivariate_normal",
+      "sigma_sbp_mmHg": 15.0,
+      "sigma_dbp_mmHg": 9.0,
+      "correlation": 0.5,
+      "conditioning": "constant across covariates"
+    },
+    "source_to_model_operation": "Direct constant bivariate-normal residual law with SDs 15/9 and rho 0.5.",
+    "transport_assumptions": [
+      "Residual family/structure and homoscedasticity are assumptions.",
+      "No compatible source conditional covariance/SD estimate identifies these values."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Fixed bivariate normal error law is an assumption. Output indexing failed historically; this is not a delivered cohort.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/8",
+        "entry": {
+          "path": "model_spec.outcome_model.residual.sigma_sbp_mmHg",
+          "meaning": "Conditional SBP residual standard deviation after covariate adjustment",
+          "conditioning_set": "age, female, BMI",
+          "scale": "standard deviation",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": "S_BEIJING; PMC9278591 Table 1 overall SBP SD 20.35 mmHg",
+          "derivation": "Attenuated from the raw source SD to 15.0 because conditioning and a younger target age range may reduce dispersion, but no source residual SD was available.",
+          "unverified_assumptions": "Raw SD is not a residual SD; attenuation magnitude was assumed."
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/9",
+        "entry": {
+          "path": "model_spec.outcome_model.residual.sigma_dbp_mmHg",
+          "meaning": "Conditional DBP residual standard deviation after covariate adjustment",
+          "conditioning_set": "age, female, BMI",
+          "scale": "standard deviation",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": "S_BEIJING; PMC9278591 Table 1 overall DBP SD 10.93 mmHg",
+          "derivation": "Attenuated from the raw source SD to 9.0 because conditioning and a younger target age range may reduce dispersion, but no source residual SD was available.",
+          "unverified_assumptions": "Raw SD is not a residual SD; attenuation magnitude was assumed."
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "path": "model_spec.outcome_model.residual.correlation",
+          "meaning": "Conditional SBP-DBP residual correlation after adjustment for age, female, and BMI",
+          "conditioning_set": "age, female, BMI",
+          "scale": "Pearson correlation",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": "S_BEIJING; PMC9278591 Table 1 derived raw SBP-DBP correlation 0.534",
+          "derivation": "Set to 0.50. The source value is a raw correlation in an older Beijing cohort, not a residual correlation in the target conditioning set; only used as a loose anchor.",
+          "unverified_assumptions": "No source or target residual correlation was supplied. Constant residual correlation across covariate levels was assumed."
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/11",
+        "entry": {
+          "path": "model_spec.outcome_model.residual.distribution",
+          "meaning": "Distribution family of the residual errors",
+          "conditioning_set": "constant across covariates",
+          "scale": "bivariate normal residuals",
+          "unit": "mmHg",
+          "classification": "assumed",
+          "source_pointers": "none",
+          "derivation": "Bivariate normal chosen for analytic traceability and exact linear-model partial correlation representation.",
+          "unverified_assumptions": "Normality and homoscedasticity may not hold in the target distribution."
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/model_spec.json#/model/outcome_model/residual",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/8",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/9",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/10",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/decision_record.json#/parameter_provenance/11",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:33",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:37",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_DS/generator.py:53"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "PNS_SOL_B",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "marginal_covariance_decomposition",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "Beijing Table 1 overall: unadjusted individual SBP, DBP and pulse-pressure SDs; neither conditional SD nor requested residual rho.",
+    "source_ids": [
+      "S_BEIJING"
+    ],
+    "source_reported_value": {
+      "SBP_SD": 20.35,
+      "DBP_SD": 10.93,
+      "PP_SD": 17.2,
+      "group": "overall",
+      "unit": "mmHg, individual marginal SD"
+    },
+    "implemented_input": {
+      "bp_dispersion_bridge": {
+        "source_group": "S_BEIJING overall",
+        "sbp_sd": 20.35,
+        "dbp_sd": 10.93,
+        "pulse_pressure_sd": 17.2,
+        "rule": "Transport the three source unadjusted centered second moments to the modeled target marginal BP distribution. Construct its SBP-DBP covariance using Var(S-D). Residual covariance equals this marginal covariance matrix minus the covariance of the modeled conditional means."
+      },
+      "bp_mean": {
+        "outcome_order": [
+          "sbp",
+          "dbp"
+        ],
+        "reference": [
+          125,
+          77
+        ],
+        "age_effect_per_standard_unit": [
+          5,
+          1
+        ],
+        "female_difference": [
+          -3,
+          -1
+        ],
+        "bmi_effect_per_kg_m2": [
+          0.7754,
+          0.5967
+        ],
+        "formula": "For each outcome, reference + age_effect*((age-age_center)/age_scale) + female_difference*(female-P(female=1)) + bmi_effect_per_kg_m2*(bmi-bmi_center)."
+      },
+      "covariates": {
+        "age": {
+          "family": "discrete_uniform",
+          "lower": 20,
+          "upper": 79
+        },
+        "female": {
+          "family": "bernoulli",
+          "probability": 0.5
+        },
+        "bmi": {
+          "family": "affine_shifted_beta",
+          "reference_mean": 27,
+          "age_effect_per_standard_unit": 0.5,
+          "female_difference": 1,
+          "beta_scale": 28,
+          "beta_shapes": [
+            2,
+            4
+          ]
+        },
+        "dependence": "Age, recorded female sex and the beta innovation are mutually independent roots. BMI depends on age and sex through its conditional mean."
+      },
+      "residual_law": {
+        "family": "uniform_ellipse",
+        "standard_disk_radius": 2,
+        "construction": "An independent point uniformly distributed over the radius-2 disk has covariance I. Left-multiply it by the Cholesky factor of the residual covariance matrix.",
+        "dependence": "The paired BP residual vector is independent of all covariates; its components are jointly elliptical, bounded, and dependent."
+      }
+    },
+    "source_to_model_operation": "Reconstruct transported Beijing raw covariance, subtract analytic covariance of modeled conditional means, realize remainder with uniform radius-2 disk.",
+    "transport_assumptions": [
+      "Residual family/structure and homoscedasticity are assumptions.",
+      "Source marginal moments transfer and assumed mean/covariate law permits the subtraction."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "The pulse-pressure identity plus subtraction of modeled mean covariance is valid algebra under an explicit transport and composition assumption.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "model_spec_path": "$.model_spec.bp_dispersion_bridge",
+          "meaning_operator": "Source raw BP SD vector and assumed transport of its implied marginal covariance matrix.",
+          "conditioning_set": {
+            "source": "Unadjusted overall Beijing selected community sample",
+            "model": "Marginal over the entire generated analytical distribution"
+          },
+          "scale": "Individual raw-scale SDs; covariance reconstructed from pulse-pressure variance",
+          "unit": "SDs in mmHg; covariances in mmHg^2",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "supplied_object": "SOURCE_EVIDENCE_JSON",
+              "locator": "source_evidence.sources[id=S_BEIJING].moments[group=overall]",
+              "original_locator": "Zhang et al., Table 1"
+            },
+            {
+              "supplied_object": "SOURCE_EVIDENCE_JSON",
+              "locator": "reported_moment_algebra.groups[group=overall]",
+              "original_locator": "PMC9278591 Table 1"
+            }
+          ],
+          "derivation": "The reported individual SDs imply V_S=20.35^2=414.1225, V_D=10.93^2=119.4649 and C_SD=(V_S+V_D-17.2^2)/2=118.8737. With K=Cov(E[Y|age,female,BMI]), the model sets residual covariance R=[[V_S,C_SD],[C_SD,V_D]]-K. This is an explicit raw-to-conditional bridge, not direct transport of the reported raw correlation.",
+          "unverified_assumptions": [
+            "SBP, DBP and pulse-pressure SDs refer to the same observations and PP=SBP-DBP.",
+            "Rounded reported SDs are used as exact plug-in anchors.",
+            "Centered marginal BP dispersion transports despite different age composition, selection, location and measurement.",
+            "The three Beijing summaries from one cohort are dependent evidence. Under-65 and 65-plus summaries are not pooled as independent replications.",
+            "No sampling intervals for these moments are supplied; rounding envelopes are not sampling confidence intervals."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/11",
+        "entry": {
+          "model_spec_path": "$.model_spec.residual_law",
+          "meaning_operator": "Homoscedastic bivariate residual distribution with the derived covariance R.",
+          "conditioning_set": "The same law at every age, sex and BMI value",
+          "scale": "Raw BP errors",
+          "unit": "mmHg",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "supplied_object": "SOURCE_EVIDENCE_JSON",
+              "locator": "source_evidence.unidentified: Residual SBP-DBP correlation and conditional scales; Distributional tails, treatment and selection mechanisms"
+            }
+          ],
+          "derivation": "Radius 2 gives covariance I for a uniform two-dimensional disk: E(radius^2)=2 and each directional squared component has expectation 1/2. Multiplication by chol(R) therefore gives covariance R. R is derived from transported source dispersion and assumed conditional means; the uniform elliptical tail shape and covariate independence are assumptions.",
+          "unverified_assumptions": [
+            "Residual dispersion is constant across covariates.",
+            "There is no additional latent mixture, outlier component or heavy tail.",
+            "Bounded elliptical residuals are not identified by the supplied evidence.",
+            "The two residual components are not assumed independent."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/model_spec.json#/model/bp_dispersion_bridge",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/model_spec.json#/model/residual_law",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json#/parameter_provenance/10",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/decision_record.json#/parameter_provenance/11",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:36",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:37",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:41",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:47",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:48",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_SOL_B/generator.py:51"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "PNS_ASTRA",
+    "case_id": "PNS",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "residual_law",
+    "source_operator": "No admitted compatible conditional residual SD/correlation source; values or factor loadings are author assumptions.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "factor_loadings_mmHg": [
+        [
+          4,
+          12,
+          16,
+          0
+        ],
+        [
+          3,
+          9,
+          0,
+          12
+        ]
+      ],
+      "factor_support": [
+        -1,
+        1
+      ],
+      "factor_family": "independent_uniform",
+      "omitted_score_mean_coefficients": [
+        0,
+        0.15,
+        -0.1,
+        0.2
+      ]
+    },
+    "source_to_model_operation": "Four independent Uniform(-1,1) factors with loadings [4,12,16,0] / [3,9,0,12]; factor variance 1/3.",
+    "transport_assumptions": [
+      "Residual family/structure and homoscedasticity are assumptions.",
+      "No compatible source conditional covariance/SD estimate identifies these values."
+    ],
+    "requested_analysis": "residual_correlation",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Assumed shared factors imply rho 5/13; an additional omitted-score mean shifts BMI projections. Neither is reported target evidence.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "paths": [
+            "$.model_spec.bp.factor_names",
+            "$.model_spec.bp.factor_loadings_mmHg"
+          ],
+          "meaning_operator": "Rows are SBP and DBP; columns are omitted-score innovation, shared BP innovation, SBP-specific innovation and DBP-specific innovation. Each entry is an additive raw-BP loading.",
+          "conditioning_set": "Age, recorded sex and BMI after marginalizing the score mean.",
+          "scale": "Latent-factor residual dependence and individual dispersion.",
+          "unit": "mmHg per unit innovation.",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "With innovation covariance I/3, residual covariance is LL'/3: SBP variance 416/3, DBP variance 78 and covariance 40, all in mmHg^2.",
+          "unverified_assumptions": [
+            "All loadings, including the outcome-specific zero cross-loadings, are structural assumptions.",
+            "Residual sharing is positive through two factors; the correlation is not imported from a reported unadjusted BP correlation.",
+            "Common biological, treatment and measurement variation is represented only phenomenologically, not separated into authenticated components."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/11",
+        "entry": {
+          "paths": [
+            "$.model_spec.bp.factor_family",
+            "$.model_spec.bp.factor_support",
+            "$.model_spec.assumptions.bp_innovations",
+            "$.model_spec.assumptions.support"
+          ],
+          "meaning_operator": "Four independent Uniform(-1,1) innovations per row, independent of the covariates, each with mean zero and variance 1/3.",
+          "conditioning_set": "The same innovation law at every age, sex and BMI.",
+          "scale": "Bounded symmetric individual variation; constant conditional covariance.",
+          "unit": "Dimensionless primitive innovations.",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "Bounded factors and bounded covariates give finite BP support without clipping or rejection. The stated loading and mean specifications keep BP positive and SBP above DBP.",
+          "unverified_assumptions": [
+            "Independence of primitive innovations and absence of residual covariate dependence are deliberate completion assumptions.",
+            "Compact tails are not estimated from any source and can underrepresent extreme eligible values.",
+            "No normal-error assumption or source SE-to-dispersion conversion is made."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json#/model/bp/factor_loadings_mmHg",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/model_spec.json#/model/bp/factor_support",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/10",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/decision_record.json#/parameter_provenance/11",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:30",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:33",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/PNS_ASTRA/generator.py:34"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_OA_ASTRA_C1",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "gaussian_copula_rank_within_sex",
+    "original_parameter_map_entry": "core_2",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      }
+    },
+    "implemented_input": {
+      "TC_HDL_spearman": 0.106,
+      "age_latent_correlations": [
+        0.15,
+        0.2,
+        0.05
+      ]
+    },
+    "source_to_model_operation": "The lipid rank input0.106 maps to latent0.11094596005; age latent correlations are assumed. The resulting raw OLS residual correlation is unavailable, correctly left null by author. Do not pool this input with direct residual-rho choices.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Source pooled Spearman values are Gaussian-copula anchors within each sex. The within-sex transfer is explicitly assumed; raw adjusted rho is a different functional.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/8",
+        "entry": {
+          "path": "$.model_spec.dependence.bmi_tc_hdl_spearman",
+          "meaning_statistical_operator": "Spearman correlation matrix in BMI, TC, HDL order, used as the scenario's within-recorded-sex marginal rank correlations",
+          "conditioning_set": {
+            "source": [
+              "rural Ashanti community"
+            ],
+            "source_adjustment": [],
+            "model": [
+              "recorded sex"
+            ]
+          },
+          "scale": "Rank correlation, not Pearson correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "evidence_path": "$.sources[2].statistics[0]",
+              "statistic_id": "obirikorang_rural_bmi_tc",
+              "locator": "Table 7, lower-left rural triangle; BMI and TC"
+            },
+            {
+              "evidence_path": "$.sources[2].statistics[1]",
+              "statistic_id": "obirikorang_rural_bmi_hdl",
+              "locator": "Table 7, lower-left rural triangle; BMI and HDL"
+            },
+            {
+              "evidence_path": "$.sources[2].statistics[2]",
+              "statistic_id": "obirikorang_rural_tc_hdl",
+              "locator": "Table 7, lower-left rural triangle; TC and HDL"
+            }
+          ],
+          "source_population": "Jachie-Pramso rural Ashanti, Ghana, 2013; household recruitment; exclusions for prior hypertension, diabetes, coronary disease/treatment, pregnancy/lactation and disability. The inspected source age range was not established.",
+          "source_uncertainty": "Pair-specific Ns and correlation uncertainty are not reported. Significance stars are not converted into standard errors. The three correlations are dependent summaries from one community.",
+          "derivation": "Off-diagonal values are the supplied rural unadjusted rank statistics; the diagonal consists of correlation identities. The rural triple is chosen as one joint association scenario rather than pooling rural and urban triples.",
+          "unverified_assumptions": [
+            "Unadjusted, sex-pooled source rank relationships are assumed to hold within each recorded target sex category. That change of conditioning is not identified by the evidence.",
+            "The source rural community is not equated to a Turkana lifestyle class.",
+            "Equal weighting and continuous distributions without ties are operational assumptions.",
+            "Pooled target ranks need not equal these inputs because sex-specific margins differ."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/9",
+        "entry": {
+          "path": "$.model_spec.dependence.rank_bridge",
+          "related_paths": [
+            "$.model_spec.dependence.copula",
+            "$.model_spec.dependence.variable_order"
+          ],
+          "meaning_statistical_operator": "Gaussian-copula family and transformation from pairwise Spearman correlations to latent Gaussian correlations",
+          "conditioning_set": [
+            "recorded sex"
+          ],
+          "scale": "Latent standard-normal correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "evidence_path": "$.sources[2].operator",
+              "locator": "Statistical methods and Table 7: Spearman rank correlation by community"
+            }
+          ],
+          "derivation": "For continuous Gaussian-copula margins, Spearman rho=(6/pi)*asin(latent_rho/2). Invert this identity for the BMI/TC/HDL block. Standard-normal latent marginal scales and correlation diagonals are mathematical normalization conventions.",
+          "unverified_assumptions": [
+            "A Gaussian copula is assumed, including its tail-dependence structure.",
+            "The copula is identical across recorded sex categories.",
+            "This bridge does not convert a source rank statistic directly into an age/sex-adjusted raw-scale slope or residual Pearson correlation."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/10",
+        "entry": {
+          "path": "$.model_spec.dependence.age_latent_correlations",
+          "meaning_statistical_operator": "Latent correlations of age score with BMI, TC and HDL scores, respectively",
+          "conditioning_set": [
+            "recorded sex"
+          ],
+          "scale": "Pearson correlation of standard-normal copula scores",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "evidence_path": "$.population_metadata.composition.joint_covariate_distribution",
+              "locator": "Supplied population metadata: joint covariate distribution unspecified"
+            }
+          ],
+          "derivation": "Select distinct weak positive associations to complete the joint law without treating unidentified age relationships as automatically independent.",
+          "unverified_assumptions": [
+            "Magnitudes and signs are scenario choices, not estimates.",
+            "These are not correlations of raw age with the observed measurements.",
+            "No sex-specific modification of these latent correlations is modeled."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/model_spec.json#/model/dependence/bmi_tc_hdl_spearman",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/model_spec.json#/model/dependence/age_latent_correlations",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/generator.py:15",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/generator.py:16",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/generator.py:17",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/generator.py:18",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/generator.py:20",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C1/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_DS_PRO_C1",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "rank_to_residual_assumption",
+    "original_parameter_map_entry": "core_3",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes; OBIRI_URBAN: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      },
+      "OBIRI_URBAN": {
+        "BMI_TC": 0.293,
+        "BMI_HDL": -0.04,
+        "TC_HDL": 0.171
+      }
+    },
+    "implemented_input": 0.14,
+    "source_to_model_operation": "Midpoint(0.106,0.171)=0.1385 and rounding to0.14 are arithmetically valid. The switch from unadjusted Spearman to adjusted raw Pearson is unsupported by source identification. Code's Rademacher common factor gives exact rho0.14 under this fixed law.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Mean of two source Spearman values, rounded to 0.14, is assumed to be residual Pearson rho. The program implements that choice; the record acknowledges the unsupported bridge.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/14",
+        "entry": {
+          "path": "model_spec.joint_law.residual_dependency.pearson_correlation",
+          "meaning": "Population Pearson correlation between total cholesterol and HDL cholesterol residuals from the two requested models",
+          "operator": "Pearson correlation coefficient of the residual shocks",
+          "conditioning_set": [
+            "age",
+            "I(sex==F)",
+            "bmi"
+          ],
+          "scale": "correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "artifact": "OBIRIKORANG_2015_CURATOR_EXTRACTION.json",
+              "locator": "obirikorang_rural_tc_hdl estimate 0.106 and obirikorang_urban_tc_hdl estimate 0.171"
+            }
+          ],
+          "derivation": "Midpoint of the two reported Spearman correlations is 0.1385; rounded to 0.14 and used as residual Pearson correlation.",
+          "unverified_assumptions": "Spearman rank correlations are not Pearson; they are unadjusted and from Ghana, not Turkana. Using 0.14 for adjusted residual correlation is an explicit transfer assumption."
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/model_spec.json#/model/joint_law/residual_dependency/pearson_correlation",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:16",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:18",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:19",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:33",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:34",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:35",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:40",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/generator.py:41",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C1/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_CL_FABLE_C1",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "judgment_residual_or_component",
+    "original_parameter_map_entry": "core_3",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes; OBIRI_URBAN: Unadjusted community Spearman correlations, pooled sexes; GREINER_REGRESSIONS: Response/predictor transformations unresolved; unadjusted or adjusted for age/smoking/alcohol; cannot directly identify raw target partial slopes or residual correlations",
+    "source_ids": [
+      "obirikorang_2015_ashanti",
+      "greiner_2021"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      },
+      "OBIRI_URBAN": {
+        "BMI_TC": 0.293,
+        "BMI_HDL": -0.04,
+        "TC_HDL": 0.171
+      },
+      "GREINER_REGRESSIONS": {
+        "HDL_BMI_range": [
+          -0.007,
+          -0.004
+        ],
+        "HDL_nonHDL_range": [
+          0.041,
+          0.046
+        ]
+      }
+    },
+    "implemented_input": 0.35,
+    "source_to_model_operation": "Source quantities do not establish empirical conflict because operators differ. The0.35 compromise uses an assumed raw-scale Greiner reading, an assumed non-HDL SD and informal rank/adjustment bridges. Given this rho, code correctly solves latent normal r≈0.365219 and obtains raw shifted-lognormal rho0.35.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "A judgment compromise selects raw residual rho 0.35; the latent-normal conversion implements it. Differently defined source statistics do not by themselves establish a source conflict.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": "Different source operators are described as conflicting without an established common estimand.",
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/14",
+        "entry": {
+          "path": "/lipids/residual_pearson_correlation",
+          "meaning": "Pearson correlation of the TC and HDL additive errors (conditional on age, sex, BMI). The code solves the latent normal correlation as ln(1 + rho*cvT*cvH)/(sigmaT*sigmaH), with cv = residual_sd/shift",
+          "conditioning_set": "age, sex, bmi",
+          "scale": "Pearson correlation of raw-scale residuals",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[obirikorang_2015_ashanti].statistics[obirikorang_rural_tc_hdl, obirikorang_urban_tc_hdl]",
+              "locator": "Table 7 Spearman 0.106 (rural), 0.171 (urban), unadjusted"
+            },
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].reported_regressions_context_only.rows[greiner_table3_context_07..12]",
+              "locator": "DC2 Supplementary Table 3: HDL on non-HDL cholesterol 0.041 to 0.046, scale unresolved"
+            },
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[greiner_2021].derived_variable_definition.non_hdl_cholesterol",
+              "locator": "non-HDL = TC - HDL per row"
+            }
+          ],
+          "derivation": "The sources conflict. Obirikorang's unadjusted Spearman values are 0.11 to 0.17. If the Greiner coefficient is read as raw mmol/L HDL per mmol/L non-HDL (weakly positive) and TC = HDL + non-HDL, then with HDL SD about 0.33 and an assumed non-HDL SD about 0.8 the implied TC-HDL Pearson correlation is about 0.4 to 0.47. Chosen 0.35, tilted toward the larger East African source and the part-whole argument. Adjustment for age, sex and BMI is assumed to change the correlation little. Rough plausible range is 0.1 to 0.5.",
+          "unverified_assumptions": [
+            "Raw-scale reading of the Greiner coefficient and the assumed non-HDL SD are not supplied facts.",
+            "Spearman, Pearson and residual correlations are treated as informally comparable.",
+            "Independent device errors in point-of-care TC and HDL could attenuate the correlation; not modelled.",
+            "Correlation is constant across covariates.",
+            "Rows from the same source are dependent evidence and were not treated as independent studies."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/model_spec.json#/model/lipids/residual_pearson_correlation",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:32",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:33",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:34",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:35",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:36",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:37",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/generator.py:42",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C1/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_OA_SOL_C1",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "scenario_completion",
+    "original_parameter_map_entry": "core_2",
+    "source_operator": "No source statistic identifies these completion parameters.",
+    "source_ids": [],
+    "source_reported_value": null,
+    "implemented_input": {
+      "TC_loading": 0.5,
+      "HDL_loading": 0.3,
+      "implied_residual_rho": 0.15
+    },
+    "source_to_model_operation": "Independent unit-variance uniforms yield covariance product0.5×0.3=0.15. No source identifies the two loadings or rho; author correctly labels assumed. Loadings individually must not be pooled with rho.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "The source rank-to-residual substitution is explicitly rejected. Assumed loadings 0.5 and 0.3 nevertheless imply rho 0.15.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/9",
+        "entry": {
+          "paths": [
+            "$.lipids.shared_factor_loading"
+          ],
+          "meaning_statistical_operator": "TC and HDL loadings on a unit-variance common residual innovation.",
+          "conditioning_set": [
+            "age",
+            "recorded sex",
+            "bmi"
+          ],
+          "scale": "Standardized additive residual scale.",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "For lipid j, standardized residual Zj=lj*U0+sqrt(1-lj^2)*Uj with independent unit-variance innovations. Thus each residual variance is one before scaling and their covariance is lTC*lHDL. Distinct loadings 0.5 and 0.3 imply residual correlation 0.15.",
+          "unverified_assumptions": [
+            "This shared residual dependence is explicitly chosen; absence of an identified target residual correlation is not treated as independence.",
+            "The factor has no asserted physiological or causal interpretation.",
+            "No supplied Spearman or unresolved regression statistic is substituted for this conditional Pearson relationship."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/model_spec.json#/model/lipids/shared_factor_loading",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/generator.py:29",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/generator.py:33",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/generator.py:34",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C1/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_OA_ASTRA_C2",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "gaussian_copula_rank_within_sex",
+    "original_parameter_map_entry": "core_2",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      }
+    },
+    "implemented_input": {
+      "TC_HDL_spearman": 0.106,
+      "age_latent_correlations": [
+        0.15,
+        0.2,
+        0.05
+      ]
+    },
+    "source_to_model_operation": "Source rank input and assumed age dependence do not identify the requested full-design residual Pearson correlation; author correctly leaves numeric result null.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "The valid rank-to-latent identity is combined with an explicit pooled-to-within-sex transport assumption; adjusted projections remain separate.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/7",
+        "entry": {
+          "paths": [
+            "$.model_spec.dependence.within_sex_rank_template",
+            "$.model_spec.dependence.rank_bridge"
+          ],
+          "meaning_statistical_operator": "Rank-correlation template for BMI-TC, BMI-HDL and TC-HDL, and its conversion to Gaussian latent correlations.",
+          "conditioning_set": {
+            "source": [],
+            "model": [
+              "sex"
+            ],
+            "not_conditioned_on": [
+              "age"
+            ]
+          },
+          "scale": "Source Spearman correlations; model latent Pearson correlations",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "path": "/sources/2/statistics/0",
+              "id": "obirikorang_rural_bmi_tc",
+              "locator": "Table 7, lower-left rural triangle, BMI-TC"
+            },
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "path": "/sources/2/statistics/1",
+              "id": "obirikorang_rural_bmi_hdl",
+              "locator": "Table 7, lower-left rural triangle, BMI-HDL"
+            },
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "path": "/sources/2/statistics/2",
+              "id": "obirikorang_rural_tc_hdl",
+              "locator": "Table 7, lower-left rural triangle, TC-HDL"
+            }
+          ],
+          "derivation": "Apply the continuous Gaussian-copula identity R_ij=2*sin(pi*rho_S/6) to the three source numbers. This is a distributional bridge, not a rank-to-OLS unit conversion.",
+          "unverified_assumptions": [
+            "The rural triple is selected as one coherent same-community template; rural is not assigned as a Turkana lifestyle label.",
+            "Using pooled-sex source correlations within each modeled sex stratum is a strong additional invariance assumption. The model is not claimed to reproduce the source pooled-sex operator.",
+            "Source pair-specific counts, tie treatment and missing-pair policy are unresolved; continuous equal-weight rank correlations are assumed for this bridge.",
+            "The three same-cohort correlations are dependent evidence. No independent-study likelihood or significance-based weighting is used.",
+            "Unadjusted rank correlations do not identify the requested age/sex-adjusted slopes or residual Pearson correlation."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/8",
+        "entry": {
+          "paths": [
+            "$.model_spec.dependence.latent_order",
+            "$.model_spec.dependence.age_latent_correlations_with_remaining",
+            "$.model_spec.dependence.sex_invariance"
+          ],
+          "meaning_statistical_operator": "Conditional latent correlations of age with BMI, TC and HDL, respectively; common latent dependence matrix across sexes.",
+          "conditioning_set": [
+            "sex"
+          ],
+          "scale": "Gaussian latent Pearson correlation",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "document": "SOURCE_EVIDENCE_JSON",
+              "path": "/population_metadata/composition/joint_covariate_distribution",
+              "locator": "Target joint covariate distribution unspecified"
+            }
+          ],
+          "derivation": "These modest positive entries complete the latent matrix. They are not source raw-age correlations and are not regression coefficients.",
+          "unverified_assumptions": [
+            "Their magnitudes and signs are not identified by the supplied evidence.",
+            "A common matrix excludes sex-specific copula dependence and unmodeled subgroup-specific tail dependence.",
+            "Age, BMI and lipids remain dependent within sex; sex also changes their marginal distributions."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/model_spec.json#/model/dependence/within_sex_rank_template",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/model_spec.json#/model/dependence/age_latent_correlations_with_remaining",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:18",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:19",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:20",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:21",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:22",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:23",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/generator.py:24",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_ASTRA_C2/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_DS_PRO_C2",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "rank_to_residual_assumption",
+    "original_parameter_map_entry": "core_3",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes; OBIRI_URBAN: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      },
+      "OBIRI_URBAN": {
+        "BMI_TC": 0.293,
+        "BMI_HDL": -0.04,
+        "TC_HDL": 0.171
+      }
+    },
+    "implemented_input": 0.12,
+    "source_to_model_operation": "Selecting0.12 within source Spearman range does not derive an adjusted Pearson quantity. After acceptance conditioning, errors are no longer independent of covariates with constant covariance; output full-design residual rho is not proven0.12.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "A chosen rho 0.12 informs normal proposals. Outcome-dependent positive-pair rejection changes the final conditional law; the claimed exact final residual rho is not established.",
+    "mathematical_claim_issue": "postselection_endpoint_identity_not_established",
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "path": "model_spec.lipids_mmol_L.residual_sd_tc_mmol_L, model_spec.lipids_mmol_L.residual_sd_hdl_mmol_L, model_spec.lipids_mmol_L.residual_correlation_tc_hdl",
+          "meaning": "Bivariate normal residual standard deviations and Pearson correlation for TC and HDL after conditioning on age, I(sex=F), bmi",
+          "conditioning_set": "age, I(sex=F), bmi",
+          "scale": "raw mmol/L for residual SDs; dimensionless correlation",
+          "unit": "mmol/L; 1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "source": "agongo_2018_navrongo",
+              "locator": "Results pooled TC SD 0.92 mmol/L, HDL SD 0.38 mmol/L"
+            },
+            {
+              "source": "obirikorang_2015_ashanti",
+              "locator": "Table 7 Spearman correlations TC-HDL rural 0.106, urban 0.171"
+            }
+          ],
+          "derivation": "Residual SDs chosen below published marginal SDs to account for covariate variation. Residual correlation 0.12 is chosen within the source Spearman range but interpreted as Pearson correlation after covariate adjustment.",
+          "unverified_assumptions": "Spearman is not Pearson and the source is urban/rural Ghana, not the adjusted Turkana target residual; the supplied SDs may overstate Turkana residual dispersion."
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/model_spec.json#/model/lipids_mmol_L/residual_correlation_tc_hdl",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:27",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:28",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:29",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:30",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:34",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:35",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:46",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/generator.py:47",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_DS_PRO_C2/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication",
+    "unsupported_endpoint_claims": [
+      {
+        "id": "K02-HDL-BMI",
+        "model_implied_population_value": -1.5468,
+        "unit": "mg/dL per 5 kg/m^2",
+        "derivation": "Population OLS coefficient for bmi is hdl.beta_bmi_per_kgm2 = -0.008 mmol/L per kg/m^2. Requested quantity = 5 * (-0.008) * 38.67 = -1.5468 mg/dL per 5 kg/m^2. Exogeneity of covariates makes the structural coefficient equal the population OLS coefficient.",
+        "availability": "derived"
+      },
+      {
+        "id": "K02-TC-BMI",
+        "model_implied_population_value": 7.734,
+        "unit": "mg/dL per 5 kg/m^2",
+        "derivation": "Population OLS coefficient for bmi is tc.beta_bmi_per_kgm2 = 0.040 mmol/L per kg/m^2. Requested quantity = 5 * 0.040 * 38.67 = 7.734 mg/dL per 5 kg/m^2. Exogeneity of covariates makes the structural coefficient equal the population OLS coefficient.",
+        "availability": "derived"
+      },
+      {
+        "id": "K02-LIPID-RESIDUAL",
+        "model_implied_population_value": 0.12,
+        "unit": "1",
+        "derivation": "The requested residual Pearson correlation equals model_spec.lipids_mmol_L.residual_correlation_tc_hdl because both OLS models condition on age, I(sex=F), and bmi and the residual errors are independent of those covariates by construction.",
+        "availability": "derived"
+      }
+    ]
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_CL_FABLE_C2",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "judgment_residual_or_component",
+    "original_parameter_map_entry": "core_3",
+    "source_operator": "GREINER_REGRESSIONS: Response/predictor transformations unresolved; unadjusted or adjusted for age/smoking/alcohol; cannot directly identify raw target partial slopes or residual correlations; OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes; OBIRI_URBAN: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "greiner_2021",
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "GREINER_REGRESSIONS": {
+        "HDL_BMI_range": [
+          -0.007,
+          -0.004
+        ],
+        "HDL_nonHDL_range": [
+          0.041,
+          0.046
+        ]
+      },
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      },
+      "OBIRI_URBAN": {
+        "BMI_TC": 0.293,
+        "BMI_HDL": -0.04,
+        "TC_HDL": 0.171
+      }
+    },
+    "implemented_input": {
+      "HDL_nonHDL_residual_rho": 0,
+      "implied_TC_HDL_residual_rho": 0.38133092295289506
+    },
+    "source_to_model_operation": "Zero is a deliberate informal compromise with judgment weights and unresolved source scale/adjustment bridges. It is HDL–non-HDL rho, not TC–HDL rho. With independent component errors, requested TC–HDL rho=0.33/sqrt(0.33²+0.8²).",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Judgment selects zero HDL/non-HDL residual correlation. TC=HDL+non-HDL then has nonzero TC/HDL correlation; zero is not the requested analysis value.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": "Different source operators are described as conflicting without an established common estimand.",
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/9",
+        "entry": {
+          "path": "lipids.residual_pearson_correlation_hdl_nonhdl",
+          "meaning_operator": "Pearson correlation of the HDL and non-HDL errors given covariates; the Gaussian-copula latent correlation is solved from it in code",
+          "conditioning_set": "age, sex, BMI",
+          "scale": "correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            "greiner_2021 reported_regressions_context_only greiner_table3_context_07..12 (DC2 Supplementary Table 3; HDL on non_hdl_cholesterol 0.041-0.046)",
+            "obirikorang_2015_ashanti obirikorang_rural_tc_hdl 0.106, obirikorang_urban_tc_hdl 0.171 (Table 7, Spearman)"
+          ],
+          "derivation": "Read as raw or log-HDL per mmol/L of non-HDL, the Greiner coefficients imply rho of about 0.11-0.12 (0.045*0.80/0.33). Read as log-log, they imply about 0.045. Obirikorang TC-HDL Spearman values of 0.11-0.17 would imply rho of about -0.27 under the chosen SDs. Weighting the larger East African source at about 0.75-0.8 gives approximately 0. The value 0.0 is this deliberate compromise between conflicting evidence, not a default.",
+          "unverified_assumptions": "Greiner scale unresolved. Spearman, unadjusted and smoking/alcohol-adjusted statistics are bridged informally to an adjusted Pearson quantity. The weights are judgment. Independent CardioChek measurement errors could change the correlation in the target."
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/model_spec.json#/model/lipids/residual_pearson_correlation_hdl_nonhdl",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:43",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:44",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:45",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:46",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:47",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:48",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:49",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/generator.py:53",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_CL_FABLE_C2/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R1",
+    "version_id": "LIPID_OA_SOL_C2",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "gaussian_copula_rank_unconditional",
+    "original_parameter_map_entry": "core_2",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      }
+    },
+    "implemented_input": {
+      "TC_HDL_spearman": 0.106,
+      "age_TC_latent_rho": 0.15,
+      "age_HDL_latent_rho": 0.05,
+      "sex_TC_latent_rho": 0.1,
+      "sex_HDL_latent_rho": 0.08
+    },
+    "source_to_model_operation": "Seven demographic latent edges are assumptions. Thresholding latent sex induces raw dependence; requested residual Pearson rho is a separate projection expression, not0.106 or0.110946.",
+    "transport_assumptions": [
+      "External population/measurement transfer is unvalidated; the implemented conditioning and operator are those stated here.",
+      "Reported input values do not establish the final target-adjusted relationship; assumed components remain assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Reported unadjusted ranks constrain unconditional copula entries; assumed demographic edges determine adjusted projections. No direct rank-to-residual equality is asserted.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/0",
+        "entry": {
+          "path": "$.joint_family",
+          "also_covers": [
+            "$.latent_order",
+            "$.latent_standardization"
+          ],
+          "meaning_operator": "Joint dependence family and standard-normal latent identification convention. Natural logarithms parameterize the positive margins.",
+          "conditioning_set": [],
+          "scale": "Latent Gaussian copula and recorded-variable margins",
+          "unit": "Latent scores are dimensionless.",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "Monotone exponential transformations preserve continuous pairwise ranks. A thresholded normal score represents the categorical field.",
+          "unverified_assumptions": [
+            "One smooth Gaussian copula adequately represents the selected population, without explicit site or lifestyle mixture components.",
+            "Lognormal tails are acceptable for this construction; they are not established by the source moments.",
+            "The natural-log parameterization does not resolve or use the ambiguous log bases of any reported source regressions."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "path": "$.dependence.rank_links",
+          "also_covers": [
+            "$.dependence.rank_bridge"
+          ],
+          "meaning_operator": "Unadjusted rural source Spearman correlations: BMI–TC 0.212, BMI–HDL -0.1, TC–HDL 0.106. They anchor the target scenario's unconditional continuous-pair rank correlations, not adjusted raw-scale associations.",
+          "conditioning_set": [],
+          "scale": "Source Spearman rank correlation; derived latent Pearson correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "source_id": "obirikorang_2015_ashanti",
+              "statistic_ids": [
+                "obirikorang_rural_bmi_tc",
+                "obirikorang_rural_bmi_hdl",
+                "obirikorang_rural_tc_hdl"
+              ],
+              "original_locator": "Table 7, lower-left rural community entries; Methods, Statistical methods."
+            }
+          ],
+          "derivation": "Under a continuous Gaussian copula, rho_S=(6/pi)*asin(R_ij/2), hence R_ij=2*sin(pi*rho_S/6). This bridge specifies the full pairwise copula, after which lognormal raw moments and covariate-adjusted projections are calculated separately.",
+          "unverified_assumptions": [
+            "The Gaussian-copula bridge and exact use of rounded printed point estimates are modeling choices.",
+            "Source weighting, tie handling, missing-pair policy and pair-specific sample sizes are unresolved; a continuous equal-weight interpretation is assumed.",
+            "The rural Ashanti pooled rank structure is transferred across geography, selection, age composition and fasting serum Selectra Pro S measurement to the target recorded concentrations.",
+            "The three entries are dependent summaries from one community, not independent studies; no precision pooling or uncertainty calculation is performed."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/7",
+        "entry": {
+          "path": "$.dependence.latent_links",
+          "meaning_operator": "The seven named edges are assumed marginal Pearson correlations of standard-normal scores: age–sex 0.05, age–BMI 0.20, age–TC 0.15, age–HDL 0.05, sex–BMI 0.15, sex–TC 0.10 and sex–HDL 0.08.",
+          "conditioning_set": [],
+          "scale": "Marginal latent-score Pearson correlation, not partial correlation or raw observed-variable correlation",
+          "unit": "1",
+          "classification": "assumed",
+          "source_pointers": [
+            {
+              "supplied_path": "SOURCE_EVIDENCE_JSON.population_metadata.composition",
+              "original_locator": "Admitted population metadata: age, sex, BMI and joint covariate distributions unspecified."
+            }
+          ],
+          "derivation": "These complete every remaining off-diagonal pair in the latent correlation matrix. Their observed-scale implications follow from the lognormal and threshold transformations.",
+          "unverified_assumptions": [
+            "Weak positive demographic dependencies are chosen to complete a usable scenario; none is identified by admitted target evidence.",
+            "Positive sex-score correlations mean higher values tend to accompany the recorded F code, without claiming an authenticated biological interpretation.",
+            "No absent source relationship is silently equated to independence."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py",
+    "locators": [
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/model_spec.json#/model/dependence/rank_links",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/model_spec.json#/model/dependence/latent_links",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:13",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:14",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:15",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:18",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:19",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:20",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:21",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:22",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:24",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:35",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:36",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:37",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:38",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/generator.py:39",
+      "work/cross_model_api_pilot_2026-11-10/candidates/LIPID_OA_SOL_C2/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "LIPID_SOL_A",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "gaussian_copula_rank_within_sex",
+    "original_parameter_map_entry": "lipid_rank_block",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      }
+    },
+    "implemented_input": [
+      0.212,
+      -0.1,
+      0.106
+    ],
+    "source_to_model_operation": "For each continuous pair use latent r=2 sin(pi*Spearman/6). Rural ranks are 0.212, -0.100, 0.106 in BMI–TC, BMI–HDL, TC–HDL order.",
+    "transport_assumptions": [
+      "One source community supplies all three dependent summaries; Gaussian copula and source-to-target transport are assumptions.",
+      "Pooled-sex source ranks are applied within each target sex stratum."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "The source rural rank triple is transported into within-sex copulas; the extra conditioning assumption is explicit.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_A/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/8",
+        "entry": {
+          "path": "$.dependence.conditional_spearman_parameters",
+          "meaning_operator": "Within-recorded-sex rank parameters for BMI-TC, BMI-HDL and TC-HDL, in pair_order.",
+          "conditioning_set": [
+            "sex"
+          ],
+          "scale": "Spearman rank correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "evidence_path": "sources[curator_source_id=obirikorang_2015_ashanti].statistics[id=obirikorang_rural_bmi_tc]",
+              "locator": "Table 7, lower-left rural triangle, BMI-TC"
+            },
+            {
+              "evidence_path": "sources[curator_source_id=obirikorang_2015_ashanti].statistics[id=obirikorang_rural_bmi_hdl]",
+              "locator": "Table 7, lower-left rural triangle, BMI-HDL"
+            },
+            {
+              "evidence_path": "sources[curator_source_id=obirikorang_2015_ashanti].statistics[id=obirikorang_rural_tc_hdl]",
+              "locator": "Table 7, lower-left rural triangle, TC-HDL"
+            }
+          ],
+          "derivation": "Choose the rural-community triple as one dependence scenario. Convert each rank parameter to a Gaussian copula correlation using 2*sin(pi*r/6). The source statistics were unadjusted community-level rank correlations; applying them conditionally within target sex strata is an additional bridge.",
+          "unverified_assumptions": [
+            "Source unadjusted dependence transfers to within-sex target copulas.",
+            "Source age composition and health exclusions do not require changes to this dependence triple.",
+            "Continuous Gaussian-copula dependence is adequate despite unresolved source ties, weighting and pairwise missingness.",
+            "The three correlations are dependent summaries from one community, not independent studies.",
+            "Urban-community correlations are deliberately not averaged into this scenario."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_A/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_A/model_spec.json#/model",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_A/generator.py",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_A/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "LIPID_SOL_B",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "gaussian_copula_rank_unconditional",
+    "original_parameter_map_entry": "lipid_rank_block",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      }
+    },
+    "implemented_input": [
+      [
+        "bmi",
+        "total_cholesterol",
+        0.212
+      ],
+      [
+        "bmi",
+        "hdl_cholesterol",
+        -0.1
+      ],
+      [
+        "total_cholesterol",
+        "hdl_cholesterol",
+        0.106
+      ]
+    ],
+    "source_to_model_operation": "For each continuous pair use latent r=2 sin(pi*Spearman/6). Rural ranks are 0.212, -0.100, 0.106 in BMI–TC, BMI–HDL, TC–HDL order.",
+    "transport_assumptions": [
+      "One source community supplies all three dependent summaries; Gaussian copula and source-to-target transport are assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Unconditional source ranks become latent Gaussian entries; margins and demographic dependencies complete the target scenario.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_B/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/0",
+        "entry": {
+          "paths": [
+            "$.model_spec.latent.family",
+            "$.model_spec.latent.order",
+            "$.model_spec.latent.rank_bridge",
+            "$.model_spec.marginals.age.family",
+            "$.model_spec.marginals.bmi.family",
+            "$.model_spec.marginals.total_cholesterol.family",
+            "$.model_spec.marginals.hdl_cholesterol.family"
+          ],
+          "meaning_statistical_operator": "Gaussian-copula dependence with lognormal positive components. Standard-normal location zero and variance one are identifying normalizations, not biological measurements.",
+          "conditioning_set": "Unconditional joint row law",
+          "scale": "Latent normal coordinates; monotone transformations to raw observed continuous scales",
+          "unit": "Latent coordinates dimensionless; transformed units follow each variable",
+          "classification": "assumed",
+          "source_pointers": [],
+          "derivation": "For a positive component with arithmetic mean m and SD d, log variance is log(1+(d/m)^2) and log mean is log(m) minus half that variance. For continuous Gaussian-copula pairs, Spearman s corresponds to latent Pearson 2*sin(pi*s/6).",
+          "unverified_assumptions": [
+            "Lognormal shapes and unbounded right tails are modeling choices; source arithmetic moments do not establish them.",
+            "The target joint dependence is representable by one Gaussian copula.",
+            "The continuous-age idealization does not reconstruct interview rounding or reporting error."
+          ]
+        }
+      },
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "paths": [
+            "$.model_spec.latent.spearman_pairs"
+          ],
+          "meaning_statistical_operator": "Unadjusted continuous-pair Spearman settings: BMI-TC 0.212, BMI-HDL -0.100 and TC-HDL 0.106. These induce latent Gaussian correlations through the stated bridge.",
+          "conditioning_set": "Source and transported scenario ranks are unadjusted and pooled within the rural community, not age/sex-adjusted",
+          "scale": "Spearman rank correlation; subsequently transformed to latent Pearson correlation",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[curator_source_id=obirikorang_2015_ashanti].statistics[id=obirikorang_rural_bmi_tc]",
+              "original_locator": "Table 7, lower-left rural matrix; BMI versus TC"
+            },
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[curator_source_id=obirikorang_2015_ashanti].statistics[id=obirikorang_rural_bmi_hdl]",
+              "original_locator": "Table 7, lower-left rural matrix; BMI versus HDL-C"
+            },
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[curator_source_id=obirikorang_2015_ashanti].statistics[id=obirikorang_rural_tc_hdl]",
+              "original_locator": "Table 7, lower-left rural matrix; TC versus HDL-C"
+            },
+            {
+              "pointer": "SOURCE_EVIDENCE_JSON.sources[curator_source_id=obirikorang_2015_ashanti].operator",
+              "original_locator": "Statistical methods; Spearman rank correlation by community"
+            }
+          ],
+          "derivation": "The three reported rural point estimates are transported as unconditional target-scenario rank parameters. Gaussian-copula inversion then defines a continuous joint model. Raw-scale covariances and adjusted projections are computed conceptually from its moments, not equated to these ranks.",
+          "unverified_assumptions": [
+            "Unadjusted ranks from rural Jachie-Pramso, Ashanti, 2013 transport to this scenario. This does not assign target rows to a rural lifestyle class.",
+            "Source exclusions for prior hypertension, diabetes, coronary heart disease/treatment, pregnancy/lactation and disability are not target exclusions.",
+            "The source age range, pair-specific sample sizes, weighting, tie handling and missing-pair policy are unresolved; continuous equal-weight ranks are the model interpretation.",
+            "Fasting serum Selectra Pro S assays and target venous-EDTA CardioChek Plus measurements have no validated equivalence bridge.",
+            "These three same-community statistics are dependent evidence. Their estimation uncertainty was not reported and is not reconstructed from significance labels."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_B/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_B/model_spec.json#/model",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_B/generator.py",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_SOL_B/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  },
+  {
+    "round": "R2",
+    "version_id": "LIPID_ASTRA",
+    "case_id": "lipids",
+    "law_delivery": "delivered",
+    "unit": "one primary residual-dependence construction decision per complete initial artifact",
+    "method_group": "gaussian_copula_rank_unconditional",
+    "original_parameter_map_entry": "lipid_rank_block",
+    "source_operator": "OBIRI_RURAL: Unadjusted community Spearman correlations, pooled sexes",
+    "source_ids": [
+      "obirikorang_2015_ashanti"
+    ],
+    "source_reported_value": {
+      "OBIRI_RURAL": {
+        "BMI_TC": 0.212,
+        "BMI_HDL": -0.1,
+        "TC_HDL": 0.106
+      }
+    },
+    "implemented_input": [
+      {
+        "pair": [
+          "bmi",
+          "total_cholesterol"
+        ],
+        "spearman_rho": 0.212
+      },
+      {
+        "pair": [
+          "bmi",
+          "hdl_cholesterol"
+        ],
+        "spearman_rho": -0.1
+      },
+      {
+        "pair": [
+          "total_cholesterol",
+          "hdl_cholesterol"
+        ],
+        "spearman_rho": 0.106
+      }
+    ],
+    "source_to_model_operation": "For each continuous pair use latent r=2 sin(pi*Spearman/6). Rural ranks are 0.212, -0.100, 0.106 in BMI–TC, BMI–HDL, TC–HDL order.",
+    "transport_assumptions": [
+      "One source community supplies all three dependent summaries; Gaussian copula and source-to-target transport are assumptions."
+    ],
+    "requested_analysis": "K02-LIPID-RESIDUAL",
+    "directly_identified_by_admitted_evidence": false,
+    "assumption_or_gap_disclosed": true,
+    "disclosure_is_failure": false,
+    "source_and_transport_uncertainty_sampled_across_laws": false,
+    "fixed_scenario_allowed_by_original_task": true,
+    "target_agreement_judged_in_this_unit": false,
+    "root_reading": "Unconditional source ranks are preserved under continuous monotone margins; requested adjusted projections are explicitly different operators.",
+    "mathematical_claim_issue": null,
+    "comparability_wording_issue": null,
+    "decision_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_ASTRA/decision_record.json",
+    "decision_evidence": [
+      {
+        "pointer": "/parameter_provenance/6",
+        "entry": {
+          "path": "/copula/rank_correlations",
+          "meaning_operator": "Unadjusted Spearman vector: BMI-TC 0.212, BMI-HDL -0.1, TC-HDL 0.106",
+          "conditioning_set": "Source rural Ashanti community under its selection rules; no covariate adjustment. Transferred as unconditional generated-population rank correlations",
+          "scale": "Reported rank correlations; transformed to latent Gaussian Pearson correlations only through the stated bridge",
+          "unit": "1",
+          "classification": "mixed",
+          "source_pointers": [
+            {
+              "evidence_pointer": "/sources/2/statistics/0",
+              "source_id": "obirikorang_2015_ashanti",
+              "statistic_id": "obirikorang_rural_bmi_tc",
+              "original_locator": "Table 7, lower-left rural triangle; BMI and TC"
+            },
+            {
+              "evidence_pointer": "/sources/2/statistics/1",
+              "source_id": "obirikorang_2015_ashanti",
+              "statistic_id": "obirikorang_rural_bmi_hdl",
+              "original_locator": "Table 7, lower-left rural triangle; BMI and HDL"
+            },
+            {
+              "evidence_pointer": "/sources/2/statistics/2",
+              "source_id": "obirikorang_2015_ashanti",
+              "statistic_id": "obirikorang_rural_tc_hdl",
+              "original_locator": "Table 7, lower-left rural triangle; TC and HDL"
+            },
+            {
+              "evidence_pointer": "/sources/2/population",
+              "original_locator": "Methods, Study Population; Jachie-Pramso household recruitment, 2013; stated health, pregnancy/lactation and disability exclusions"
+            },
+            {
+              "evidence_pointer": "/sources/2/measurement",
+              "original_locator": "Methods, Biochemical Assays; 12-14 hour fasting venous serum, enzymatic Selectra Pro S assays"
+            }
+          ],
+          "derivation": "Under continuous Gaussian-copula margins, rho_S=(6/pi)*asin(r/2), so r=2*sin(pi*rho_S/6). Monotone marginal transformations preserve the resulting unconditional ranks. Age/sex-adjusted raw-scale projections are subsequently different operators.",
+          "unverified_assumptions": [
+            "Treat the three reported sample ranks as one fixed population-rank vector, not three independent studies.",
+            "Assume an equal-weight continuous-rank interpretation despite unresolved source weighting, ties and missing-pair policy.",
+            "Transport this vector across populations, demographic mixtures, health selection, specimen protocols and assays.",
+            "Assume that this rank vector can be combined with Navrongo's marginal moments; no individual-level cross-source compatibility evidence is available.",
+            "No confidence intervals or pair-specific sample sizes were supplied; significance markings are not used to manufacture uncertainty."
+          ]
+        }
+      }
+    ],
+    "code_path": "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_ASTRA/generator.py",
+    "locators": [
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_ASTRA/model_spec.json#/model",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_ASTRA/generator.py",
+      "work/economy_feedback_pilot_2026-11-10/candidates/initial/LIPID_ASTRA/decision_record.json#/parameter_provenance"
+    ],
+    "review_status": "root_code_and_record_audit_not_independent_human_adjudication"
+  }
+]

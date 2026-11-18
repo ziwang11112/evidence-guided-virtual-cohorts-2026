@@ -1,0 +1,17 @@
+# Repeatability figures: reporting definitions
+
+These captions define the figures before the new clinical-comparison dashboard is opened. The renderer consumes only the final aggregate evaluation, after all twelve author sessions have closed. It does not read individual target or generated records and cannot revise a generator.
+
+## Primary scientific analyses
+
+**Repeated autonomous construction across two research requests.** Each row is one fresh constructor; ordinary Agent and workflow receive the same GPT configuration, request and scientific tools, without prepared evidence papers or target estimates. Filled points show means over three prescribed simulation seeds, open points show individual seed estimates, and horizontal segments span those seeds. Seed variability includes all stochasticity encoded in the selected program: participant sampling and, where present, shared parameter/scenario draws. It is not necessarily fixed-parameter sampling variation and does not establish calibrated source or transport uncertainty. All six prespecified primary analyses are shown. BMI slopes adjust for linear age and recorded sex and are expressed per5 kg/m²; residual Pearson correlations adjust both outcomes for age, sex and BMI. Lipid slopes use the frozen conversion from mmol/L to mg/dL. Unavailable analyses remain visible as unavailable.
+
+Dashed lines denote previously exposed clinical sample references, not known population truths. Shading displays only the saved reference uncertainty when available: blood-pressure intervals describe conditional row-resampling stability and are not complex-survey population intervals; lipid coefficient intervals retain their conditional HC3 convention, and no residual-correlation interval is invented when absent. Interval overlap is not an equivalence criterion. Two contexts and three constructors per cell support a developmental repeatability assessment, not a task-general policy-superiority claim.
+
+## Delivery and resources
+
+**Output delivery and model-resource use for every assigned constructor.** The left panel retains the three planned final table slots per session and distinguishes delivered, failed and unavailable tables. Blue and orange identify ordinary Agent and workflow; colors do not classify scientific success. A delivered table has executed and met the shared output contract; this does not certify biological validity or analytical suitability. The middle panel counts reserved model calls, including any incomplete attempts. The right panel separates known tariff-based charges from conservative accounted cost if usage is unknown. The ledger applies the frozen long-context surcharge where appropriate; these are model-token estimates rather than invoices or full research costs. Three final tables from a law are simulation repetitions, not three clinical validations.
+
+## Reading both figures together
+
+Interpret delivery, analysis estimates, distribution/invariant diagnostics and audited scientific assumptions separately. Low cost or a completed program is not evidence of scientific accuracy. Close agreement on one coefficient does not certify an unexamined joint relationship. Conversely, a sample discrepancy does not by itself identify an implementation error: the source operator, target population, model structure and sample uncertainty must be considered. No composite quality score or result-dependent threshold is used.

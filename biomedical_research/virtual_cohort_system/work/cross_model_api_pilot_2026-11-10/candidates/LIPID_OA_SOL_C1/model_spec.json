@@ -1,0 +1,143 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "law": {
+      "sampling": "iid individuals with fixed parameters",
+      "age_distribution": "continuous uniform on stated support",
+      "sex_age_dependence": "independent",
+      "bmi_distribution": "linear age and centered recorded-sex effects plus independent standardized uniform noise",
+      "lipid_distribution": "raw-scale linear conditional means with bounded shared-factor uniform residuals",
+      "standardized_noise": "independent Uniform(-sqrt(3),sqrt(3)) innovations",
+      "interactions": "none",
+      "selection": "all generated individuals retained; no additional exclusions",
+      "measurement": "modeled recorded values; no separate measurement-error, rounding, fasting, or assay-bias layer",
+      "lipid_order": [
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ]
+    },
+    "sex": {
+      "probability_F": 0.5,
+      "codes": {
+        "F": "F",
+        "M": "M"
+      }
+    },
+    "age": {
+      "support_year": [
+        18,
+        90
+      ]
+    },
+    "bmi": {
+      "mean": 21.63,
+      "marginal_sd": 3.61,
+      "age_slope": 0.04,
+      "F_minus_M": 1.41
+    },
+    "lipids": {
+      "marginal_mean": [
+        3.23,
+        1.14
+      ],
+      "marginal_sd": [
+        0.92,
+        0.38
+      ],
+      "reference_log_bmi": [
+        0.013,
+        -0.007
+      ],
+      "raw_bmi_bridge": "marginal_mean times reference_log_bmi",
+      "age_slope": [
+        0.006,
+        0.001
+      ],
+      "F_minus_M": [
+        0.15,
+        0.05
+      ],
+      "shared_factor_loading": [
+        0.5,
+        0.3
+      ],
+      "residual_scale_rule": "subtract the variance of the linear conditional mean from the specified marginal variance"
+    },
+    "uncertainty": {
+      "parameter_treatment": "fixed plug-in scenario; no parameter or transport uncertainty draws",
+      "individual_variation": "bounded covariate and residual innovations",
+      "finite_sample_treatment": "ordinary iid sampling; no sample moment matching"
+    }
+  }
+}

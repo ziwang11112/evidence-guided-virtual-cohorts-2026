@@ -1,0 +1,136 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_evidence_content_control_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_name": "transported_association_model_with_conditional_physiological_support",
+    "population_interpretation": "An assumed equal-weight representation of the declared peso_lab-weighted complete-case analytical population, not a reconstruction or assertion of national representativeness.",
+    "age": {
+      "lower": 20.0,
+      "upper": 79.0,
+      "beta_alpha": 1.5,
+      "beta_beta": 2.0
+    },
+    "female_probability": 0.53,
+    "bmi": {
+      "lower_shift": 12.0,
+      "median_excess_at_reference": 14.0,
+      "log_excess_age_coefficient": 0.06,
+      "log_excess_age_squared_coefficient": -0.02,
+      "log_excess_female_coefficient": 0.03,
+      "log_excess_sd": 0.34,
+      "upper": 65.0
+    },
+    "conditional_bp": {
+      "sbp": {
+        "intercept": 126.0,
+        "age_per_decade": 5.5,
+        "female": -4.0,
+        "bmi_per5": 3.877
+      },
+      "dbp": {
+        "intercept": 78.0,
+        "age_per_decade": 2.0,
+        "female": -2.0,
+        "bmi_per5": 2.9835,
+        "age_hinge_start": 1.0,
+        "age_hinge_coefficient": -5.0
+      },
+      "sd_sbp": 15.0,
+      "sd_dbp": 10.0,
+      "error_correlation": 0.55
+    },
+    "bp_support": {
+      "sbp": [
+        70.0,
+        260.0
+      ],
+      "dbp": [
+        35.0,
+        150.0
+      ],
+      "pulse_pressure": [
+        10.0,
+        140.0
+      ]
+    },
+    "law_notes": [
+      "Define a=(age-50)/10 and b=(bmi-25)/5.",
+      "Age is a continuously scaled beta variate; recorded sex is independently Bernoulli.",
+      "Conditional BMI is a shifted lognormal, conditioned to be at most 65, with age and sex held fixed during rejection.",
+      "BP has additive bivariate-normal innovations, conditioned on the specified joint physiological support while holding age, sex and BMI fixed.",
+      "All population parameters are fixed assumptions or explicit transports; source standard errors are not used as transport uncertainty."
+    ]
+  }
+}

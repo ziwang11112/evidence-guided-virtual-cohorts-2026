@@ -1,0 +1,158 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "api_pilot_pns_whole_cohort_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "population_interpretation": "A fixed-parameter scenario for the declared peso_lab-weighted, complete-case, nonpregnant-or-pregnancy-unknown analytical distribution. Equal-weight generated rows represent that distribution by assumption, not by empirical calibration or a claim of national representativeness.",
+    "predictor_coding": {
+      "age_center": 50,
+      "age_scale": 10,
+      "bmi_center": 25,
+      "bmi_scale": 5
+    },
+    "covariates": {
+      "age": {
+        "family": "discrete_uniform",
+        "lower": 20,
+        "upper": 79
+      },
+      "female": {
+        "family": "bernoulli",
+        "probability": 0.5
+      },
+      "bmi": {
+        "family": "affine_shifted_beta",
+        "reference_mean": 27,
+        "age_effect_per_standard_unit": 0.5,
+        "female_difference": 1,
+        "beta_scale": 28,
+        "beta_shapes": [
+          2,
+          4
+        ]
+      },
+      "dependence": "Age, recorded female sex and the beta innovation are mutually independent roots. BMI depends on age and sex through its conditional mean."
+    },
+    "bp_mean": {
+      "outcome_order": [
+        "sbp",
+        "dbp"
+      ],
+      "reference": [
+        125,
+        77
+      ],
+      "age_effect_per_standard_unit": [
+        5,
+        1
+      ],
+      "female_difference": [
+        -3,
+        -1
+      ],
+      "bmi_effect_per_kg_m2": [
+        0.7754,
+        0.5967
+      ],
+      "formula": "For each outcome, reference + age_effect*((age-age_center)/age_scale) + female_difference*(female-P(female=1)) + bmi_effect_per_kg_m2*(bmi-bmi_center)."
+    },
+    "bp_dispersion_bridge": {
+      "source_group": "S_BEIJING overall",
+      "sbp_sd": 20.35,
+      "dbp_sd": 10.93,
+      "pulse_pressure_sd": 17.2,
+      "rule": "Transport the three source unadjusted centered second moments to the modeled target marginal BP distribution. Construct its SBP-DBP covariance using Var(S-D). Residual covariance equals this marginal covariance matrix minus the covariance of the modeled conditional means."
+    },
+    "residual_law": {
+      "family": "uniform_ellipse",
+      "standard_disk_radius": 2,
+      "construction": "An independent point uniformly distributed over the radius-2 disk has covariance I. Left-multiply it by the Cholesky factor of the residual covariance matrix.",
+      "dependence": "The paired BP residual vector is independent of all covariates; its components are jointly elliptical, bounded, and dependent."
+    },
+    "uncertainty": {
+      "treatment": "fixed_plugin",
+      "source_bmi_slope_SE_per_kg_m2": [
+        0.0359,
+        0.0257
+      ],
+      "interpretation": "The SE vector describes uncertainty in the reported INTERSALT coefficients, in SBP/DBP order. It is retained as provenance, not used as individual dispersion or as a transport-uncertainty distribution. Only finite-cohort Monte Carlo variability is generated."
+    },
+    "transport_assumptions": [
+      "All covariate parameters describe the selected, weighted analytical population directly; selection, pregnancy status, missingness and laboratory weights are not separately simulated.",
+      "The INTERSALT pooled, additionally adjusted BMI coefficients are imposed as the target age/sex-adjusted raw-scale projection coefficients. Equality across adjustment sets, centres, populations and ages is an explicit bridge assumption, not an evidence identification result.",
+      "The Beijing overall raw BP dispersion matrix is transported, but its age distribution, sex composition and BP means are not transported. Conditional residual covariance is obtained by subtraction, not by equating a raw correlation with a residual correlation.",
+      "Conditional BP means are linear and additive over the entire modeled age and BMI support, without age curvature, interactions or explicit treatment effects.",
+      "External BP and anthropometric measurements are treated as proxies for the released baseline measurements. No correction for device, repeated-reading aggregation, timing or measurement error is identified.",
+      "No additional hypertension, HbA1c or treatment exclusion is imposed. Unmodeled treatment and health heterogeneity are absorbed into the marginal association law."
+    ]
+  }
+}

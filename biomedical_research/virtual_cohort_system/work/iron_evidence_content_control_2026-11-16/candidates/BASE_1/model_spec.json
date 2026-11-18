@@ -1,0 +1,94 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_name": "bounded_latent_iron_scenario",
+    "interpretation": "An illustrative target-domain population law, not an evidence-identified reconstruction or calibrated estimate of the target population.",
+    "source_use": {
+      "ZHU2010": "Partial: usable for threshold definitions and measurement context; unsuitable for numerical distribution or association calibration because no marginal or joint statistics were supplied."
+    },
+    "iron_associated_component": {
+      "distribution": "Lognormal conditioned on lower <= S <= upper",
+      "untruncated_median_ug_l": 35.0,
+      "log_sd": 0.85,
+      "lower_ug_l": 0.5,
+      "upper_ug_l": 400.0
+    },
+    "inflammation_like_component": {
+      "probability": 0.1,
+      "ferritin_multiplier": 3.0,
+      "hb_shift_g_dl": -0.5
+    },
+    "other_hb_lowering_component": {
+      "probability": 0.06,
+      "hb_shift_g_dl": -1.6
+    },
+    "hemoglobin": {
+      "baseline_g_dl": 13.4,
+      "iron_depletion_amplitude_g_dl": 2.4,
+      "iron_depletion_half_scale_ug_l": 12.0,
+      "iron_depletion_power": 2.0,
+      "conditional_sd_g_dl": 0.8,
+      "lower_g_dl": 5.5,
+      "upper_g_dl": 18.5
+    },
+    "joint_law": {
+      "latent_independence": "S, inflammation-like indicator I, and other Hb-lowering indicator O are mutually independent before generating Hb.",
+      "ferritin": "F = S * 3**I",
+      "hb_location": "mu = 13.4 - 2.4/(1 + (S/12)**2) - 0.5*I - 1.6*O",
+      "hb_distribution": "Normal(mu, 0.8**2) conditioned on 5.5 <= Hb <= 18.5, separately for each person's fixed S, I and O.",
+      "sampling": "Independent virtual people; rejection sampling implements the stated conditional distributions without matching realized sample moments."
+    },
+    "analysis_thresholds": {
+      "hb_low_g_dl": 12.0,
+      "raw_ferritin_low_ug_l": 15.0,
+      "comparison": "strictly less than"
+    },
+    "transport_assumption": "The entire assumed law, including its latent mixture frequencies, represents the phlebotomy-weighted complete-measurement target domain when sampled with equal row weights. No source-to-target transfer function or selection correction is identified."
+  }
+}

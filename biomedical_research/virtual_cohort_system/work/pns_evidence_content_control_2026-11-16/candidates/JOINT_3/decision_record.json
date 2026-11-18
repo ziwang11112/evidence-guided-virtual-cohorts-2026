@@ -1,0 +1,255 @@
+{
+  "structure": "Generate independent virtual adults from an assumed age/sex/BMI law, then draw paired BP values from a covariate-specific truncated bivariate-t location model. INTERSALT supplies nominal BMI slopes; an algebraic age/BMI projection of BF2018 moments supplies the preconstraint error covariance. These are separate transport decisions, not estimates of a common source model. Physiological rejection preserves each person's covariates but can change conditional BP means and covariance, so final OLS coefficients and residual correlation are properties of the complete generated law rather than exactly fixed calibration targets.",
+  "parameter_provenance": [
+    {
+      "parameter": "Source BMI coefficients and their scale",
+      "status": "REPORTED",
+      "value": {
+        "sbp_per_kg_m2": 0.7754,
+        "dbp_per_kg_m2": 0.5967,
+        "source_SEs_per_kg_m2": [
+          0.0359,
+          0.0257
+        ]
+      },
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "source_suitability": "partial",
+      "rationale": "Within-centre coefficients pooled across centres, adjusted for age, sex, urinary sodium/potassium and alcohol. Ages 20–59 and the measurement protocol differ from the target. These are not target age/sex-only coefficients."
+    },
+    {
+      "parameter": "BMI unit conversion",
+      "status": "DERIVED",
+      "value": {
+        "sbp_per_5_kg_m2": "5 * 0.7754 = 3.877",
+        "dbp_per_5_kg_m2": "5 * 0.5967 = 2.9835"
+      },
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Only a unit conversion; it does not remove adjustment-set or population differences."
+    },
+    {
+      "parameter": "Transported nominal BMI location coefficients",
+      "status": "ASSUMED",
+      "value": {
+        "sbp": 3.877,
+        "dbp": 2.9835,
+        "unit": "mmHg per 5 kg/m^2"
+      },
+      "source_ids": [
+        "S_INTERSALT"
+      ],
+      "rationale": "Adopt the converted source coefficients as homogeneous preconstraint location slopes for the target scenario, including ages 60–79. This assumes that omitted source adjustments, between-centre structure, treatment mixture and transport do not require slope changes. Source SEs are not used as transfer uncertainty."
+    },
+    {
+      "parameter": "BF2018 joint-moment anchor",
+      "status": "REPORTED",
+      "value": {
+        "outcome_SDs_sbp_dbp": [
+          18.22,
+          10.98
+        ],
+        "bmi_SD": 3.9,
+        "r_sbp_dbp": 0.78,
+        "r_sbp_age": 0.21,
+        "r_dbp_age": 0.02,
+        "r_sbp_bmi": 0.12,
+        "r_dbp_bmi": 0.16,
+        "r_age_bmi": -0.17
+      },
+      "source_ids": [
+        "BF2018"
+      ],
+      "source_suitability": "transformed",
+      "rationale": "These common-sample unadjusted moments permit a source linear projection on age and BMI. Rural geography, partnered ages at least 40, medication exclusion, selection and measurement differ from the target. Multiple entries from this table are not independent studies."
+    },
+    {
+      "parameter": "Source age/BMI-projection residual covariance",
+      "status": "DERIVED",
+      "value": {
+        "formula": "C = D @ V @ D; V = Ryy - Ryx @ inverse(Rxx) @ Ryx.T",
+        "V_sbp_sbp": "1 - 0.067068/0.9711",
+        "V_dbp_dbp": "1 - 0.027088/0.9711",
+        "V_sbp_dbp": "0.78 - 0.02952/0.9711",
+        "residual_correlation": "V_sbp_dbp / sqrt(V_sbp_sbp * V_dbp_dbp), approximately 0.788",
+        "residual_SDs": [
+          "18.22 * sqrt(V_sbp_sbp)",
+          "10.98 * sqrt(V_dbp_dbp)"
+        ]
+      },
+      "source_ids": [
+        "BF2018"
+      ],
+      "rationale": "Algebra using rounded correlations and individual SDs. This is a source residual covariance after a linear age/BMI projection, not a reported sex-adjusted residual covariance or an estimate of a target conditional covariance. No residual-degrees-of-freedom correction or sampling interval is inferred."
+    },
+    {
+      "parameter": "BF2018 alternative source BMI projections",
+      "status": "DERIVED",
+      "value": {
+        "sbp_per_5_kg_m2": "5*(18.22/3.9)*(0.12 + 0.17*0.21)/0.9711, approximately 3.745",
+        "dbp_per_5_kg_m2": "5*(10.98/3.9)*(0.16 + 0.17*0.02)/0.9711, approximately 2.369"
+      },
+      "source_ids": [
+        "BF2018"
+      ],
+      "source_suitability": "partial",
+      "rationale": "Age-adjusted but not sex-adjusted source projections. They provide a distinct comparison, especially for DBP, rather than equivalent replications of INTERSALT. They are not pooled with INTERSALT or substituted for the chosen slopes."
+    },
+    {
+      "parameter": "Transported error distribution",
+      "status": "ASSUMED",
+      "value": {
+        "preconstraint_covariance": "C derived from BF2018 above",
+        "degrees_of_freedom": 8,
+        "scale_factor": "sqrt(6/chi_square(8))",
+        "dependence": "Shared t scale and correlated Gaussian components"
+      },
+      "source_ids": [
+        "BF2018"
+      ],
+      "rationale": "Use the source age/BMI-projection covariance as a constant sex-conditional target error covariance before support conditioning. This additionally assumes homoskedasticity and transports source residual variation that may include sex effects. The t law is an assumed moderately heavy-tailed alternative to Gaussian errors; its covariance exists and equals C before truncation."
+    },
+    {
+      "parameter": "Age and sex distribution",
+      "status": "ASSUMED",
+      "value": {
+        "age": "20 + 59*Beta(1.6,2.0)",
+        "female_probability": 0.53,
+        "age_sex_dependence": "independent"
+      },
+      "source_ids": [],
+      "rationale": "A smooth, working-age-weighted adult distribution on the required age interval. No supplied source identifies the target weighted age/sex distribution."
+    },
+    {
+      "parameter": "BMI distribution",
+      "status": "ASSUMED",
+      "value": {
+        "bounds": [
+          14,
+          52
+        ],
+        "conditional_mean": "26.5 + 0.25*((age-50)/10) + 0.8*female",
+        "beta_precision": 16,
+        "beta_mean": "(conditional_mean-14)/38"
+      },
+      "source_ids": [],
+      "rationale": "Positive, right-skewed bounded BMI with modest age/sex dependence and substantial individual variation. These choices are not source or target BMI estimates. Bounds are modeling limits, not reconstructed weight/height dictionary rules."
+    },
+    {
+      "parameter": "Other BP location coefficients",
+      "status": "ASSUMED",
+      "value": {
+        "sbp_intercept_age50_male_bmi25": 128,
+        "dbp_intercept_age50_male_bmi25": 80,
+        "sbp_age_per_decade": 4,
+        "dbp_age_per_decade": 0.4,
+        "sbp_female_difference": -4,
+        "dbp_female_difference": -2
+      },
+      "source_ids": [],
+      "rationale": "Working conditional locations, not transported marginal means. Linear age terms and constant sex differences avoid asserting unidentified nonlinearities or interactions; they are simplifications across ages 20–79."
+    },
+    {
+      "parameter": "Physiological support and rejection",
+      "status": "ASSUMED",
+      "value": {
+        "sbp_mmHg": [
+          70,
+          270
+        ],
+        "dbp_mmHg": [
+          40,
+          160
+        ],
+        "pulse_pressure_mmHg": [
+          10,
+          150
+        ],
+        "algorithm": "Condition paired errors on support separately at each fixed covariate vector"
+      },
+      "source_ids": [],
+      "rationale": "Exclude reversed pressures and extreme implausible tails without clipping. All released variables have bounded support and finite moments. Underlying t tails allow relatively extreme BP, but conditioning changes slopes and residual dependence from their nominal untruncated values."
+    },
+    {
+      "parameter": "Beijing raw-correlation comparison",
+      "status": "DERIVED",
+      "value": {
+        "overall_raw_r": 0.5344427684775355,
+        "under65_raw_r": 0.6030316602292216,
+        "age65plus_raw_r": 0.5451263744946805,
+        "formula": "(SD_S^2 + SD_D^2 - SD_PP^2)/(2*SD_S*SD_D)"
+      },
+      "source_ids": [
+        "S_BEIJING"
+      ],
+      "source_suitability": "partial",
+      "rationale": "Usable for illustrating source-population marginal dependence, not for identifying age/sex/BMI residual dependence. BMI moments are absent. These lower raw correlations are not averaged with the BF2018 partial correlation; rounded-SD envelopes are not sampling intervals."
+    },
+    {
+      "parameter": "INTERMAP contribution",
+      "status": "REPORTED",
+      "value": {
+        "BP_readings_averaged": 8,
+        "visits": 4,
+        "admitted_quantitative_BP_BMI_parameters": "none"
+      },
+      "source_ids": [
+        "S_INTERMAP_methods"
+      ],
+      "source_suitability": "unsuitable for quantitative calibration; usable for measurement context",
+      "rationale": "No admitted original coefficient or covariance table. Its repeated-visit protocol emphasizes measurement non-equivalence. Secondary INTERSALT tables are not independent evidence."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "bmi_sbp",
+      "support_basis": "Equal-weight OLS on the generated joint distribution using exactly the requested design. The nominal preconstraint BMI location slope is 3.877 mmHg per 5 kg/m^2, transported from INTERSALT; the final population projection need not equal it after physiological conditioning.",
+      "key_unresolved_assumptions": [
+        "Transport from within-centre, additionally adjusted ages 20–59 associations to the target age/sex-only projection.",
+        "Unidentified target covariate distribution, treatment mixture and complete-case selection.",
+        "Constant BMI slope across age and sex, with linear age adjustment.",
+        "Effect of the assumed tails and covariate-specific support conditioning."
+      ]
+    },
+    {
+      "id": "bmi_dbp",
+      "support_basis": "Equal-weight OLS on the same rows and design. The nominal preconstraint BMI location slope is 2.9835 mmHg per 5 kg/m^2. BF2018 yields a different age-only source projection, approximately 2.369, which is not treated as estimand-equivalent.",
+      "key_unresolved_assumptions": [
+        "Adjustment-set, population and measurement transport of the INTERSALT coefficient.",
+        "Unidentified DBP aging pattern, especially after age 60.",
+        "No modeled treatment or BMI-by-age interaction.",
+        "Final OLS may differ from the nominal location slope because of support conditioning."
+      ]
+    },
+    {
+      "id": "residual_correlation",
+      "support_basis": "Pearson correlation of paired centered residuals from the two requested OLS regressions. The preconstraint error correlation is approximately 0.788, derived from BF2018 after linear age/BMI projection and explicitly transported as an assumption, not equated to its raw correlation of 0.78.",
+      "key_unresolved_assumptions": [
+        "Missing source sex-specific joint moments prevent identification of sex-adjusted source residual covariance.",
+        "Transport of covariance across treatment eligibility, geography, age composition and BP protocols.",
+        "Homoskedastic shared-scale t errors are not identified by the supplied moments.",
+        "Truncation can alter residual covariance and introduce conditional-mean departures from the requested linear design."
+      ]
+    }
+  ],
+  "limitations": [
+    "The supplied evidence does not identify the peso_lab-weighted target distribution. This cohort is an evidence-informed scenario, not a validated representation of PNS or a nationally representative population.",
+    "Eligibility is treated as conditioning on the declared analytical population. Laboratory weights, pregnancy-report categories, weight/height admissions and complete-case selection are not reconstructed as latent individual records.",
+    "No HbA1c, hypertension or treatment exclusion is imposed on generated people. Treatment effects are absorbed into an assumed aggregate BP law rather than explicitly identified.",
+    "Baseline interview BP timing and the unknown released final-reading aggregation remain measurement limitations. None of the source protocols is assumed identical to the target protocol.",
+    "The t law, bounds, age distribution, BMI distribution and regression structure are consequential assumptions, particularly for tail prevalence and older adults.",
+    "Reported source quantities were supplied through evidence cards; original sources were not reauthenticated in this construction.",
+    "No identification or transfer-uncertainty interval is available. Generating 3000 people does not create additional empirical evidence or reduce transport uncertainty.",
+    "All requested coefficients are association projections, not intervention effects."
+  ],
+  "checks_actually_performed": [
+    "No execution tools were available. No generator run, simulated summary, fitted regression or empirical acceptance-rate check was performed.",
+    "Algebraic review: the BF2018 age/BMI predictor correlation matrix has determinant 0.9711. Its outcome Schur complement has positive diagonal entries and residual correlation approximately 0.788, hence a positive-definite two-outcome covariance.",
+    "Analytic review: the t multiplier sqrt((df-2)/chi_square(df)) preserves the specified covariance before truncation for df=8.",
+    "Support review: the BMI beta shape parameters remain positive throughout the permitted age/sex domain; conditional BP locations lie inside the specified acceptance region, giving positive rejection-sampling acceptance probability.",
+    "Artifact review: the generator uses only numpy and pandas, draws from the supplied seed, returns the six requested columns in order, assigns unique integer row_id values, and contains no sample-wide recentering, reweighting, table selection or seed selection.",
+    "Estimand review: source raw correlations, age/BMI-projection residual correlations, transported conditional covariance and final generated OLS residual correlation are explicitly distinguished."
+  ]
+}

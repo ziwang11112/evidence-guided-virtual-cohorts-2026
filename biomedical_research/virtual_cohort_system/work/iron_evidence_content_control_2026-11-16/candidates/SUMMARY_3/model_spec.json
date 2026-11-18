@@ -1,0 +1,80 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "schema_version": 1,
+    "population_law": "Independent draws from bounded continuous marginals joined by a Gaussian copula.",
+    "transport": "Directly transport the reported source anemia fraction, ferritin-deficiency fraction and ferritin geometric mean to the target complete-measurement domain. This is an explicit working assumption, not an identified source-to-target adjustment.",
+    "source_marginal_inputs": {
+      "denominator": 1671,
+      "hb_below_cutoff_count": 258,
+      "ferritin_below_cutoff_count": 504,
+      "ferritin_geometric_mean_ug_l": 17.4
+    },
+    "hb": {
+      "cutoff_g_dl": 12.0,
+      "lower_bound_g_dl": 3.0,
+      "upper_bound_g_dl": 20.0,
+      "logistic_scale": 0.27,
+      "location_rule": "log((cutoff-lower)/(upper-cutoff)) - logistic_scale*Phi_inverse(p_H)"
+    },
+    "ferritin": {
+      "cutoff_ug_l": 15.0,
+      "lower_bound_ug_l": 0.2,
+      "upper_bound_ug_l": 2000.0,
+      "below_log_distance_scale": 1.0,
+      "conditional_family": "The log-distance from the cutoff is half-normal, truncated at the corresponding support endpoint.",
+      "above_scale_rule": "Solve the population log-mean equation so that exp(E[log(ferritin)]) equals 17.4."
+    },
+    "dependence": {
+      "family": "Gaussian copula",
+      "latent_normal_pearson_rho": 0.4,
+      "status": "ASSUMED; no joint or continuous association estimate was supplied."
+    }
+  }
+}

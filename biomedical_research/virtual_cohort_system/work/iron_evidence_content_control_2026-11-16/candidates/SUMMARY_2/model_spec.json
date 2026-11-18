@@ -1,0 +1,88 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "model_id": "transported_marginals_gaussian_copula_v1",
+    "source_anchors": {
+      "source_id": "ZHU2010",
+      "denominator": 1671,
+      "hb_low_count": 258,
+      "hb_cutoff_g_dl": 12.0,
+      "ferritin_low_count": 504,
+      "ferritin_cutoff_ug_l": 15.0,
+      "ferritin_geometric_mean_ug_l": 17.4
+    },
+    "transport": {
+      "choice": "Transport both source threshold prevalences and the ferritin geometric mean unchanged to the target domain as explicit scenario assumptions.",
+      "interpretation": "Equal-weight independent virtual people from an assumed target population law, not reconstructed source participants or target survey records."
+    },
+    "hemoglobin": {
+      "family": "truncated_normal",
+      "lower_g_dl": 4.0,
+      "upper_g_dl": 20.0,
+      "parent_sd_g_dl": 1.2,
+      "parent_location_rule": "Solve P(Hb < 12) = 258/1671 under the truncated-normal distribution."
+    },
+    "ferritin": {
+      "family": "lognormal",
+      "log_location_rule": "log(17.4)",
+      "log_sd_rule": "log(15/17.4) / Phi_inverse(504/1671)",
+      "measurement_scale": "raw ferritin in ug/L; no inflammation adjustment"
+    },
+    "dependence": {
+      "family": "Gaussian copula",
+      "latent_normal_correlation": 0.35,
+      "interpretation": "Assumed latent correlation; neither a reported raw Pearson correlation nor a reported rank, adjusted, residual, or multilevel correlation."
+    },
+    "sampling": {
+      "independent_people": true,
+      "sample_moment_matching": false,
+      "assay_rounding": false
+    }
+  }
+}

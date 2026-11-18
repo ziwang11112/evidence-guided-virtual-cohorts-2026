@@ -1,0 +1,128 @@
+{
+  "structure": "For marker M and visit t, M_it = B_Mi + E_Mit. Stable vectors have covariance [[4, 3.2], [3.2, 4]]. Each visit-deviation vector has covariance [[1, 0.3], [0.3, 1]]. Stable and deviation blocks are independent; deviation vectors are independent across visits; persons are independent. Gaussian block distributions and a common within-visit deviation correlation of 0.3 complete an illustrative point scenario.",
+  "parameter_provenance": [
+    {
+      "parameter": "stable_means",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Measurement means are zero and visit deviations have mean zero, so stable-component means are zero."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact supplied stable-component variances."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact supplied visit-deviation variances."
+    },
+    {
+      "parameter": "stable_correlation",
+      "value": 0.8,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Exact Pearson correlation of stable X and Y components."
+    },
+    {
+      "parameter": "stable_component_covariance",
+      "value": 3.2,
+      "kind": "DERIVED",
+      "record_ids": [
+        "C",
+        "A"
+      ],
+      "basis": "0.8 * sqrt(4 * 4)."
+    },
+    {
+      "parameter": "within_visit_deviation_correlation",
+      "value": 0.3,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Illustrative unmeasured relationship, chosen equal at both visits. Independent visits do not imply independent markers within a visit."
+    },
+    {
+      "parameter": "distribution",
+      "value": "Gaussian independent latent blocks",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient sampling distribution; the records constrain moments and independence, not distributional shape."
+    },
+    {
+      "parameter": "independence_structure",
+      "value": "Stable-component vector independent of visit-deviation vectors; visit-deviation vectors mutually independent; persons independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated measurement-model independence assumptions."
+    },
+    {
+      "parameter": "measurement_variances",
+      "value": [
+        5.0,
+        5.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "At either visit, each marker has variance 4 + 1 = 5."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": 0.3,
+      "basis": "Stable components cancel in changes. Independent visits give change variances 2 and change covariance 0.3 + 0.3 = 0.6. Thus Pearson correlation is 0.6/2 = 0.3, conditional on the chosen within-visit deviation correlation."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "scenario",
+      "value": 0.7,
+      "basis": "At either visit, covariance is 3.2 + 0.3 = 3.5 and both variances are 5, giving 3.5/5 = 0.7. The deviation covariance is not supplied by the records."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "identified",
+      "value": 0.64,
+      "basis": "Independence removes cross-visit deviation covariance and all stable-deviation cross terms. Cov(X_visit1, Y_visit2) = 3.2, while both measurement variances equal 5; therefore correlation is 3.2/5 = 0.64, independently of Gaussian shape or within-visit deviation correlation."
+    }
+  ],
+  "limitations": [
+    "These are artificial population constraints and a mathematical scenario, not biomedical validation.",
+    "The records do not identify either visit's within-visit deviation covariance. Equality of those covariances across visits is also an assumption.",
+    "With a common deviation correlation r in [-1, 1], change correlation equals r and same-visit correlation equals (3.2 + r)/5. Thus their admissible ranges are [-1, 1] and [0.44, 0.84], respectively; cross-visit correlation remains 0.64.",
+    "The supplied units do not imply unit marginal variance: the records require measurement variance 5. No additional standardization is applied.",
+    "Finite random samples will fluctuate around the population quantities. The generator does not rescale, select, sort, or reject persons to enforce sample moments."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked covariance validity: stable-component covariance eigenvalues are 7.2 and 0.8; visit-deviation covariance eigenvalues are 1.3 and 0.7, all positive.",
+    "Algebraically checked measurement variances, change variances, and the three population Pearson correlations.",
+    "Inspected the source for one row per person, integer identifiers, exact requested column order, seeded randomness, and independent latent draws without sample-moment adjustment.",
+    "No code execution or empirical simulation checks were performed."
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "structure": "Independent persons follow a joint Gaussian scenario. For independent standard-normal Z, U and V, set X=0.6Z+0.8U and Y=0.8Z+0.6(-0.5U+sqrt(0.75)V). This gives positive marginal X-Y correlation but negative correlation after separate population OLS adjustments for an intercept and Z. The supplied record fixes marginal means and variances, not these associations.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact population means supplied in record C."
+    },
+    {
+      "parameter": "variances",
+      "value": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      },
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact individual population variances supplied in record C."
+    },
+    {
+      "parameter": "correlation_xz",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario association; no cross-variable covariance is supplied."
+    },
+    {
+      "parameter": "correlation_yz",
+      "value": 0.8,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen scenario association; no cross-variable covariance is supplied."
+    },
+    {
+      "parameter": "residual_correlation_xy",
+      "value": -0.5,
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Chosen correlation between the linear residual components of X and Y."
+    },
+    {
+      "parameter": "innovation_distribution",
+      "value": "independent_standard_normal",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient distributional completion with independent draws across persons; record C specifies no distributional shape."
+    },
+    {
+      "parameter": "scenario_covariance_matrix_X_Y_Z",
+      "value": [
+        [
+          1.0,
+          0.24,
+          0.6
+        ],
+        [
+          0.24,
+          1.0,
+          0.8
+        ],
+        [
+          0.6,
+          0.8,
+          1.0
+        ]
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Combining unit variances with the assumed associations gives Cov(X,Y)=0.6*0.8+0.8*0.6*(-0.5)=0.24. Off-diagonal entries are scenario-derived, not reported."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "partial_xy_given_z",
+      "status": "scenario",
+      "value": -0.5,
+      "basis": "The Pearson correlation of population OLS residuals is (0.24-0.6*0.8)/sqrt((1-0.6^2)*(1-0.8^2))=-0.5. Record C alone does not determine the covariances needed for this functional."
+    },
+    {
+      "name": "marginal_xy",
+      "status": "scenario",
+      "value": 0.24,
+      "basis": "Unit variances make Pearson correlation equal covariance, which is 0.24 under the assumed latent construction. The record does not specify Cov(X,Y)."
+    },
+    {
+      "name": "slope_x_on_z",
+      "status": "scenario",
+      "value": 0.6,
+      "basis": "The population OLS slope with an intercept is Cov(X,Z)/Var(Z)=0.6/1. The covariance is assumed, not identified by record C."
+    }
+  ],
+  "limitations": [
+    "None of the three requested association functionals is identified by the supplied marginal moments alone.",
+    "Gaussian shape is an additional assumption, but the scenario estimands follow from its covariance matrix and do not require Gaussianity.",
+    "The records also permit singular relationships for which an adjusted residual correlation could be undefined; this scenario deliberately has positive residual variances.",
+    "Reported constraints hold exactly for the generating population, not for each realized sample. No sample centering, rescaling, correlation forcing, sorting, rejection, or seed selection is performed.",
+    "This artificial associational scenario has no clinical validation or causal interpretation."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked that all generating means are zero and all marginal variances are one.",
+    "Analytically checked residual variances of 0.64 for X and 0.36 for Y, with residual covariance -0.24.",
+    "Analytically checked positive definiteness: the covariance determinant is (1-0.6^2)*(1-0.8^2)*(1-(-0.5)^2)=0.1728.",
+    "Analytically evaluated the three population Pearson/OLS estimands from the scenario covariance matrix.",
+    "No code execution or simulated-sample checks were performed."
+  ]
+}

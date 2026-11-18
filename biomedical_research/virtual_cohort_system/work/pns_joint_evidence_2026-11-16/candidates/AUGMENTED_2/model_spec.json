@@ -1,0 +1,134 @@
+{
+  "task": {
+    "schema_version": 1,
+    "mode": "whole_cohort",
+    "population": "The peso_lab-weighted complete-case adult distribution in the PNS 2013 laboratory-substudy release, not asserted to be nationally representative: baseline age 20–79, recorded sex 1/2, dictionary-admissible weight/height and final interview SBP/DBP, positive finite laboratory weight. Exclude reported baseline pregnancy; unknown/inapplicable pregnancy retained. No HbA1c, treatment or hypertension restriction. Generated equal-weight rows represent this defined analytical distribution under explicit transport assumptions. Baseline BP timing and unknown released final-reading aggregation must be retained as measurement limitations.",
+    "row_id": "row_id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "years at baseline",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 20,
+        "maximum": 79
+      },
+      {
+        "name": "female",
+        "kind": "category",
+        "unit": "recorded sex: 0 male, 1 female",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "sbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "dbp",
+        "kind": "number",
+        "unit": "mmHg",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "task_id": "pns_joint_evidence_followup_v1",
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "PNS",
+        "Pesquisa Nacional de Saude",
+        "National Health Survey Brazil",
+        "evidence-guided-virtual-cohorts",
+        "From Published Evidence to Analyzable Biomedical Cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "version": 1,
+    "population_interpretation": "An assumed distribution for the task-defined peso_lab-weighted complete-case adult analytical population. Equal-weight generated rows approximate this distribution under unvalidated transport assumptions; national representativeness is not asserted.",
+    "coordinates": {
+      "age_center": 50.0,
+      "age_scale": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0
+    },
+    "age": {
+      "lower": 20.0,
+      "upper": 79.0,
+      "beta_alpha": 1.3,
+      "beta_beta": 1.7
+    },
+    "female_probability": 0.53,
+    "bmi": {
+      "lower": 14.0,
+      "upper": 55.0,
+      "conditional_mean_at_age50_male": 26.5,
+      "age_effect_per_decade": 0.5,
+      "female_increment": 1.0,
+      "beta_concentration": 16.0
+    },
+    "bp": {
+      "coefficient_order": [
+        "intercept",
+        "(age-50)/10",
+        "female",
+        "(bmi-25)/5"
+      ],
+      "sbp_coefficients": [
+        128.0,
+        5.0,
+        -5.0,
+        3.877
+      ],
+      "dbp_coefficients": [
+        78.0,
+        1.5,
+        -3.0,
+        2.9835
+      ],
+      "residual": {
+        "sbp_sd": 16.0,
+        "dbp_sd": 10.0,
+        "correlation": 0.72,
+        "dbp_error_bounds": [
+          -20.0,
+          50.0
+        ],
+        "sbp_innovation_bounds": [
+          -20.0,
+          60.0
+        ]
+      }
+    }
+  }
+}

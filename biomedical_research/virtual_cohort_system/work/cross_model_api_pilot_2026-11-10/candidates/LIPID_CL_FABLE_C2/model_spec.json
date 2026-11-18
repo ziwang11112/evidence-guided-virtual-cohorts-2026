@@ -1,0 +1,138 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "schema": "turkana_lipid_joint_v1",
+    "covariates": {
+      "sex": {
+        "p_female": 0.57
+      },
+      "age": {
+        "distribution": "min_year + Gamma(shape, scale), truncated above at max_year",
+        "min_year": 18.0,
+        "max_year": 90.0,
+        "gamma_shape": 1.1,
+        "gamma_scale_year": 19.0
+      },
+      "bmi": {
+        "distribution": "lognormal given sex and age, truncated to [min, max]",
+        "geometric_mean_M": 21.4,
+        "geometric_mean_F": 23.2,
+        "log_sd_M": 0.16,
+        "log_sd_F": 0.19,
+        "log_slope_per_decade": 0.01,
+        "reference_age_year": 35.0,
+        "min": 13.0,
+        "max": 45.0
+      }
+    },
+    "design": {
+      "columns": [
+        "1",
+        "(age-50)/10",
+        "I(sex=='F')",
+        "(bmi-25)/5"
+      ],
+      "age_center_year": 50.0,
+      "age_scale_year": 10.0,
+      "bmi_center": 25.0,
+      "bmi_scale": 5.0
+    },
+    "lipids": {
+      "unit": "mmol/L",
+      "construction": "hdl = X.coef_hdl + sd_hdl*e1; non_hdl = X.coef_non_hdl + sd_non_hdl*e2; total_cholesterol = hdl + non_hdl; e1 and e2 are standardized shifted-lognormal errors (mean 0, variance 1, bounded below) coupled by a Gaussian copula solved to give the stated Pearson correlation; errors are independent of covariates",
+      "hdl": {
+        "coef": [
+          1.06,
+          0.0,
+          0.07,
+          -0.0275
+        ],
+        "residual_sd": 0.33,
+        "lognormal_shape": 0.4
+      },
+      "non_hdl": {
+        "coef": [
+          2.9,
+          0.08,
+          0.06,
+          0.2775
+        ],
+        "residual_sd": 0.8,
+        "lognormal_shape": 0.42
+      },
+      "residual_pearson_correlation_hdl_nonhdl": 0.0,
+      "positivity_floor_mmol_L": 0.01
+    }
+  }
+}

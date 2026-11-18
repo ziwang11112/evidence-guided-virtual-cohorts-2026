@@ -1,0 +1,115 @@
+{
+  "structure": "A Gaussian copula connects a bounded, approximately symmetric Hb marginal to a bounded, right-skewed raw-ferritin marginal. Both transformations are monotone. Positive dependence represents a possible shared iron-status contribution without asserting that all anemia is iron-related. The supplied evidence contains no numerical marginal or association estimates, so this is an explicit assumption-driven scenario. Equal-weight independent rows represent the specified target domain only if the chosen population law transports to that domain; no source-to-target transfer function is identified.",
+  "parameter_provenance": [
+    {
+      "parameter": "Evidence suitability",
+      "value": "ZHU2010 is partial: usable for threshold definitions and measurement/population context, unsuitable for numerical distribution or dependence calibration from the supplied extract.",
+      "status": "DERIVED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "The supplied marginal_statistics and joint_statistics arrays are empty, the Hb location is omitted, and no continuous rank coefficient is supplied. Tables I and IV concern the same women and cannot be counted as independent evidence."
+    },
+    {
+      "parameter": "Analysis thresholds and units",
+      "value": {
+        "hb_low": "Hb <12 g/dL",
+        "ferritin_low": "raw ferritin <15 ug/L"
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "Hb <120 g/L converts to <12 g/dL. Ferritin units follow the admitted explicit cutoff/table interpretation. These definitions agree with the requested analyses; they provide no prevalence estimate."
+    },
+    {
+      "parameter": "Hb marginal",
+      "value": "N(13.2, 1.1^2) g/dL, conditioned on 5 <= Hb <= 18.",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "An illustrative adult-woman Hb location and dispersion, not a reported source estimate or target summary. The normal location and scale are pre-truncation parameters, not exact moments after truncation."
+    },
+    {
+      "parameter": "Raw ferritin marginal",
+      "value": "log(F) ~ N(log(30), 0.95^2), conditioned on 1 <= F <= 1500 ug/L.",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A broad right-skewed scenario for raw ferritin. The untruncated median is 30 ug/L and the untruncated geometric SD is exp(0.95). These are not identified by the source. No inflammation correction is applied."
+    },
+    {
+      "parameter": "Log-ferritin location",
+      "value": "log(30) = 3.4011973816621555",
+      "status": "DERIVED",
+      "source_ids": [],
+      "rationale": "Natural-log transformation of the assumed untruncated ferritin median."
+    },
+    {
+      "parameter": "Dependence and scale",
+      "value": "Latent standard-normal correlation rho = 0.35 in a Gaussian copula.",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A modest positive unconditional association chosen for this scenario. It is neither an observed Hb–ferritin Pearson correlation nor an adjusted or residual coefficient. Marginal inverse-CDF transformations preserve ranks but do not preserve Pearson correlation or covariance."
+    },
+    {
+      "parameter": "Tail regularization",
+      "value": "Hb support [5,18] g/dL; raw ferritin support [1,1500] ug/L.",
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Fixed distributional truncation prevents negative Hb and arbitrarily extreme concentrations, ensuring finite moments. Bounds are imposed through marginal quantiles, not clipping or rejecting generated cohorts. They are modeling limits, not claims that more extreme clinical values cannot occur."
+    },
+    {
+      "parameter": "Population transport and sampling",
+      "value": "IID equal-weight draws from the stipulated target-domain law.",
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010"
+      ],
+      "rationale": "The source's rural Chinese, parous, postpartum, IUD-using population and exclusions do not identify the target's weighted complete-measurement distribution. No numerical source relationship is transported. The assumed law instead directly specifies a possible target distribution, without modeling individual selection or survey weights."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "The common thresholds are reported, but the crude association is supported only by the assumed joint law. Let pH=P(Hb<12), pF=P(F<15), and q=P(Hb<12,F<15). Its population odds ratio is q*(1-pH-pF+q)/((pH-q)*(pF-q)). Generated-sample analysis must use the requested cell counts and return not estimable if any cell is zero, without continuity correction.",
+      "key_unresolved_assumptions": [
+        "Both chosen marginals and their Gaussian copula apply to the weighted target domain.",
+        "A single unconditional dependence parameter adequately represents mixtures of iron-related anemia, other anemia, and inflammation-related ferritin elevation.",
+        "Assay and population differences do not require an unmodeled transformation."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "The threshold conjunction is well defined, but its frequency is not empirically identified here. Under the model, q = Phi_2(Phi_inverse(pH), Phi_inverse(pF); 0.35), where pH and pF are the specified truncated-marginal probabilities. The requested generated-sample estimate is a/n on the same rows used for the odds ratio.",
+      "key_unresolved_assumptions": [
+        "The assumed marginal locations, scales, and bounds yield appropriate low-Hb and low-ferritin probabilities for the target domain.",
+        "The Gaussian copula gives an adequate lower-tail joint probability.",
+        "Complete-measurement and positive-weight selection can be represented by the stipulated domain-level law."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "No source rank correlation is supplied. For the continuous Gaussian-copula law, population Spearman correlation is 6/pi * asin(0.35/2), approximately 0.336. This is a model implication, not an evidence-based target estimate. The generated-sample statistic uses average ranks for any numerical ties.",
+      "key_unresolved_assumptions": [
+        "The assumed latent correlation is appropriate for unconditional target-domain dependence.",
+        "A single Gaussian copula adequately describes rank association across the distribution.",
+        "Unmodeled assay rounding and heterogeneous inflammatory or hematologic processes do not materially alter ranks."
+      ]
+    }
+  ],
+  "limitations": [
+    "No supplied quantitative evidence identifies marginal concentrations, anemia prevalence, iron-deficiency prevalence, odds ratio, joint prevalence, or rank correlation. All numerical population results beyond the thresholds are scenario-dependent.",
+    "The source excludes several groups represented in the broader target domain. Parity, postpartum timing, contraception, geography, calendar time, and assay differences remain uncalibrated.",
+    "Raw ferritin can rise with inflammation. The model has no CRP restriction or correction, but also no explicitly identified inflammation component.",
+    "Fixed supports omit extremely severe anemia, very low ferritin, and marked hyperferritinemia. The Gaussian copula also lacks asymptotic tail dependence and may underrepresent disease mixtures.",
+    "Reported measurement units and thresholds are retained, but no assay error, duplicate-measurement process, or reporting-rounding model is identified.",
+    "The 5000 virtual rows reduce simulation noise only. They are not 5000 additional pieces of empirical evidence, and variation across generated cohorts does not quantify transport or model uncertainty.",
+    "No target sampling intervals or identification intervals are asserted."
+  ],
+  "checks_actually_performed": [
+    "Reviewed the supplied evidence fields: numerical marginal and joint statistics are absent, and source-table overlap is explicitly acknowledged.",
+    "Statically checked that the generator uses the supplied seed, reads n_rows from the task, and returns only the three requested columns in order with unique integer row IDs.",
+    "Analytically checked that inverse truncated-CDF transformations yield positive finite concentrations and bounded moments, while preserving the copula's rank ordering.",
+    "Statically checked that the generator has no sample-wide recentering, reweighting, cohort selection, or forced contingency-table counts.",
+    "No code execution, generated-data inspection, or numerical validation run was performed."
+  ]
+}

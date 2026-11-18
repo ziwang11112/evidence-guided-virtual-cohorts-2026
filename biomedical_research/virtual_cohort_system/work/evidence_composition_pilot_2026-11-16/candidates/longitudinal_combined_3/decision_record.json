@@ -1,0 +1,150 @@
+{
+  "structure": "Each person's measurements equal a shared bivariate stable component plus independent bivariate visit deviations. Gaussian distributions complete the generator; the requested correlations follow from the stipulated second moments without Gaussian assumptions.",
+  "parameter_provenance": [
+    {
+      "parameter": "means",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Biomarker population means are zero; visit deviations also have zero means."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stable-component variances."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Visit-deviation variances."
+    },
+    {
+      "parameter": "between_person_correlation",
+      "value": 0.8,
+      "kind": "REPORTED",
+      "record_ids": [
+        "A"
+      ],
+      "basis": "Pearson correlation between stable X and Y components."
+    },
+    {
+      "parameter": "same_visit_correlation",
+      "value": 0.52,
+      "kind": "REPORTED",
+      "record_ids": [
+        "B"
+      ],
+      "basis": "Pearson correlation between observed X and Y at a common visit."
+    },
+    {
+      "parameter": "stable_component_covariance",
+      "value": 3.2,
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "C"
+      ],
+      "basis": "0.8 * sqrt(4 * 4) = 3.2."
+    },
+    {
+      "parameter": "measurement_variances",
+      "value": [
+        5.0,
+        5.0
+      ],
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Independent component and deviation variances add: 4 + 1 = 5."
+    },
+    {
+      "parameter": "same_visit_measurement_covariance",
+      "value": 2.6,
+      "kind": "DERIVED",
+      "record_ids": [
+        "B",
+        "C"
+      ],
+      "basis": "0.52 * sqrt(5 * 5) = 2.6."
+    },
+    {
+      "parameter": "within_visit_deviation_correlation",
+      "value": -0.6,
+      "kind": "DERIVED",
+      "record_ids": [
+        "A",
+        "B",
+        "C"
+      ],
+      "basis": "Deviation covariance is 2.6 - 3.2 = -0.6. Both deviation variances are one, so their correlation is also -0.6."
+    },
+    {
+      "parameter": "component_and_visit_independence",
+      "value": "Stable components are independent of deviation vectors; deviation vectors are independent across visits; persons are independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated controlled-task measurement model."
+    },
+    {
+      "parameter": "distribution",
+      "value": "Multivariate Gaussian for the stable vector and each visit deviation vector",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "A convenient distributional completion, not a measured fact or a requirement for identifying the requested correlations."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "identified",
+      "value": -0.6,
+      "basis": "Stable components cancel in changes. Independent visits imply change variances of 2 and change covariance 2 * (-0.6) = -1.2, giving -1.2 / sqrt(2 * 2) = -0.6."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "identified",
+      "value": 0.52,
+      "basis": "Directly specified by B and reproduced at either visit by (3.2 - 0.6) / 5."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "identified",
+      "value": 0.64,
+      "basis": "For X_visit1 and Y_visit2, only stable components contribute covariance: 3.2. Each measurement has variance 5, giving 3.2 / 5 = 0.64."
+    }
+  ],
+  "limitations": [
+    "This is an artificial mathematical population, not biomedical validation.",
+    "Gaussian shapes and higher-order distributional features are assumptions; the identified correlations do not require Gaussianity.",
+    "Generated sample correlations fluctuate around the population values. No realized-sample centering, rescaling, correlation adjustment, sorting, or rejection is used.",
+    "The supplied standardized arbitrary units imply measurement variance 5 under C, not unit variance; the generator preserves those constraints."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified variance and covariance decompositions and all three population correlation formulas.",
+    "Analytically checked positive definiteness: stable covariance eigenvalues are 0.8 and 7.2; visit-deviation covariance eigenvalues are 0.4 and 1.6.",
+    "Reviewed the source for seed-controlled sampling, independent person-level draws, unique integer identifiers, and the required wide-format column order.",
+    "No code execution or empirical sample checks were performed."
+  ]
+}

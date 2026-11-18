@@ -1,0 +1,182 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "family": "Sex-stratified Gaussian copula with lognormal BMI and lipids and shifted-lognormal age",
+    "sex": {
+      "female_probability": 0.5,
+      "female_code": "F",
+      "male_code": "M"
+    },
+    "age": {
+      "lower_bound": 18,
+      "excess_mean_by_sex": {
+        "M": 22,
+        "F": 24
+      },
+      "excess_sd_by_sex": {
+        "M": 14,
+        "F": 14
+      }
+    },
+    "bmi": {
+      "arithmetic_mean_by_sex": {
+        "M": 20.87,
+        "F": 22.28
+      },
+      "arithmetic_sd_by_sex": {
+        "M": 3.15,
+        "F": 3.85
+      }
+    },
+    "lipids": {
+      "order": [
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "pooled_arithmetic_mean": [
+        3.23,
+        1.14
+      ],
+      "pooled_arithmetic_sd": [
+        0.92,
+        0.38
+      ],
+      "female_to_male_arithmetic_mean_ratio": [
+        1.08,
+        1.04
+      ],
+      "conditional_log_variance_rule": "For each lipid, choose one log variance shared across sexes so that the sex mixture has the specified pooled arithmetic mean and variance."
+    },
+    "dependence": {
+      "latent_order": [
+        "age",
+        "bmi",
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "age_latent_correlations_with_remaining": [
+        0.15,
+        0.2,
+        0.05
+      ],
+      "within_sex_rank_template": {
+        "pairs": [
+          [
+            "bmi",
+            "total_cholesterol"
+          ],
+          [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ]
+        ],
+        "spearman": [
+          0.212,
+          -0.1,
+          0.106
+        ]
+      },
+      "rank_bridge": "For a continuous Gaussian copula, latent Pearson correlation equals 2*sin(pi*Spearman/6).",
+      "sex_invariance": "The latent correlation matrix is shared across sexes; conditional marginal distributions differ by sex."
+    },
+    "parameter_uncertainty": {
+      "treatment": "Fixed plug-in scenario; no parameter draws or posterior interpretation.",
+      "source_intervals": "No confidence interval or standard error is converted into individual dispersion.",
+      "seed_role": "Controls individual sampling only."
+    },
+    "sampling": {
+      "row_law": "Independent identically distributed draws from the declared mixture.",
+      "weighting": "Equal",
+      "additional_filters": "None",
+      "latent_site_or_lifestyle_classes": "Not introduced; their unknown mixture is absorbed into the assumed joint distribution.",
+      "missingness": "No missing values are generated."
+    },
+    "measurement": {
+      "age": "Continuous representation of recorded interview age, without a separate reporting-error model.",
+      "sex": "Literal recorded F/M field; F is mapped to external female/women strata and M to male/men strata as an explicit assumption.",
+      "bmi": "Observed measured-weight/height BMI; no separate anthropometric-error layer.",
+      "lipids": "Observed lipid results represented in mmol/L. External source moments are used as numerical scenario anchors, without an estimated assay or fasting correction."
+    },
+    "support": {
+      "age": "Strictly above the lower bound, with no finite upper bound.",
+      "bmi_and_lipids": "Strictly positive, continuous and unbounded above.",
+      "tc_hdl_ordering": "No TC>=HDL constraint, clipping or rejection.",
+      "tail_family": "Lognormal conditional tails; age has an additive lower-bound shift."
+    }
+  }
+}

@@ -1,0 +1,132 @@
+You are an independent scientific Agent constructing a useful whole biomedical cohort from published evidence. You choose the scientific structure, parameters, distributions and transport assumptions. Use the supplied evidence, not undisclosed target results or other constructors. The purpose is scientific analysis, not recovery of individual measurements. No desired numerical answer is provided. Source-population and target-population quantities can differ. Decide whether each source is usable, partial, transformed or unsuitable; do not silently equate different adjustment sets or raw/multilevel/residual correlations. You may retain your assumptions if additional evidence is insufficient. There is no prescribed distribution or correlation to select.
+
+Return exactly one JSON object with model_spec, generator_py, decision_record. No markdown.
+model_spec is your freely designed parameter object. The runner passes {"task": task_contract, "model": model_spec} as spec.
+generator_py defines generate(observed, spec, seed), returning a pandas DataFrame. observed is None. n=spec["task"]["n_rows"]. Return exactly the columns in the task, in order; unique integer row_id. Use numpy, pandas and standard library only. No filesystem, network, processes, project imports, installation or execution claims. Randomness must use the supplied seed. Draw independent virtual people from your chosen law, rather than forcing realized moments through sample-wide recentering/reweighting, selecting seeds or selecting output tables. Physiological support and finite relevant moments matter; you choose and explain any bounds, transformations or rejection sampling as part of your population law. No silent post-hoc host repairs will occur. Do not multiply hypothetical evidence by the number of generated people.
+decision_record requires structure (string), parameter_provenance (array), requested_estimands (array), limitations (array) and checks_actually_performed (array). For material parameters give the actual value/expression, REPORTED/DERIVED/ASSUMED status, source IDs and concise derivation or rationale. Explicitly distinguish source estimates from transported choices. requested_estimands must contain exactly the three IDs in the request, each with id, support_basis and key_unresolved_assumptions (array). If useful provide an expected value, but do not invent identification or sampling intervals. Give concise scientific explanations, not private reasoning transcripts. Explain covariance/scale choices, source suitability, tail properties and any physiological constraints. You have no execution tools in this single construction call; do not claim actual runs.
+
+Task, requested analyses and evidence:
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "iron_evidence_content_control_v1",
+    "mode": "whole_cohort",
+    "population": "The phlebotomy-weighted complete-measurement domain of nonpregnant women aged 20–44 in NHANES August 2021–August 2023; RIDEXPRG=2, both measured hemoglobin and raw ferritin, positive phlebotomy weight. Pregnancy unknown/incomplete excluded; no CRP restriction. Equal-weight virtual rows represent this domain only under explicit transport assumptions. No individual measurements or target outcome summaries are supplied.",
+    "row_id": "row_id",
+    "n_rows": 5000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L raw ferritin",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "NHANES",
+        "National Health and Nutrition Examination Survey",
+        "evidence-guided-virtual-cohorts"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "requested_analyses": [
+    {
+      "id": "odds_ratio",
+      "question": "Crude odds ratio for Hb <12 g/dL among raw ferritin <15 ug/L versus ferritin >=15 ug/L; do not adjust for other variables.",
+      "operator": "For cells a=both low,b=Hb low only,c=ferritin low only,d=neither: (a*d)/(b*c). If any cell is zero, report not estimable with no continuity correction."
+    },
+    {
+      "id": "joint_prevalence",
+      "question": "What fraction has both Hb <12 g/dL and raw ferritin <15 ug/L?",
+      "operator": "a/n on exactly the same rows."
+    },
+    {
+      "id": "spearman",
+      "question": "How strongly do the continuous Hb and raw ferritin measurements rank together?",
+      "operator": "Spearman correlation with average ranks for ties on the same rows; constant ranks are not estimable."
+    }
+  ],
+  "approved_source_evidence": {
+    "context": {
+      "source_id": "ZHU2010",
+      "doi": "10.1024/0300-9831/a000014",
+      "title": "Iron, Folate, and B12 Deficiencies and their Associations with Anemia among Women of Childbearing Age in a Rural Area in Northern China",
+      "population": "Xianghe County, China, June 2004; 1671 nonpregnant/nonlactating parous women 2–4 years postpartum using IUD contraception. Chronic disease, prescription medications and recent multivitamin use excluded as specified in Methods.",
+      "n": 1671,
+      "overlap": "Tables I and IV describe the same women, not independent samples. Source study is not the NHANES target.",
+      "measurement": "Duplicate fasting venous HemoCue Hb; raw EDTA plasma ferritin by Randox immunoturbidimetry. Hb g/L divided by 10 gives g/dL. Ferritin ug/L is the admitted interpretation from the explicit Table I cutoff and Tables III/IV.",
+      "thresholds": {
+        "hb_low": "Hb <120 g/L (equivalently <12 g/dL)",
+        "ferritin_low": "raw ferritin <15 ug/L"
+      },
+      "caveats": [
+        "Source/target population, assay, parity, postpartum and contraceptive selection differ; no transfer function is identified.",
+        "Table I Hb location is inconsistently labelled mean/geometric mean; its numerical value is omitted. Ferritin header and one Methods cutoff contain unit-printing inconsistencies; admitted units follow explicit threshold/table labels.",
+        "Broad printed concentration intervals have unclear construction and are omitted; do not treat them as SD or SE.",
+        "Source sampling/weighting details do not identify target weights or target conditional relationships. Model and transport uncertainty are not sampling variation.",
+        "Only selected source fields are provided in this controlled experiment. Omitted relationships are unknown, not zero or independent. No continuous rank coefficient is supplied."
+      ]
+    },
+    "marginal_statistics": [
+      {
+        "id": "FERRITIN_GM",
+        "variable": "ferritin_ug_l",
+        "statistic": "geometric mean",
+        "value": 17.4,
+        "unit": "ug/L",
+        "n": 1671,
+        "locator": "Table I, PDF page 4",
+        "status": "REPORTED",
+        "uncertainty": "not supplied in this payload; no SD inferred"
+      },
+      {
+        "id": "HB_LOW",
+        "variable": "hb_g_dl",
+        "statistic": "count below strict cutoff",
+        "count": 258,
+        "denominator": 1671,
+        "threshold": 12,
+        "unit": "g/dL",
+        "locator": "Table I, PDF page 4",
+        "status": "REPORTED"
+      },
+      {
+        "id": "FERRITIN_LOW",
+        "variable": "ferritin_ug_l",
+        "statistic": "count below strict cutoff",
+        "count": 504,
+        "denominator": 1671,
+        "threshold": 15,
+        "unit": "ug/L",
+        "locator": "Table I, PDF page 4",
+        "status": "REPORTED"
+      }
+    ],
+    "joint_statistics": []
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "api_pilot_lipid_whole_cohort_v1",
+    "mode": "whole_cohort",
+    "population": "Adults aged at least 18 with recorded sex F or M in the selected Turkana 2018-2019 study-protocol target context; demographic and lifestyle mixture unspecified",
+    "row_id": "id",
+    "n_rows": 3000,
+    "columns": [
+      {
+        "name": "id",
+        "kind": "string",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "age",
+        "kind": "number",
+        "unit": "year",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 18
+      },
+      {
+        "name": "sex",
+        "kind": "category",
+        "unit": "literal F/M",
+        "role": "generated",
+        "nullable": false,
+        "categories": [
+          "F",
+          "M"
+        ]
+      },
+      {
+        "name": "bmi",
+        "kind": "number",
+        "unit": "kg/m^2",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "total_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      },
+      {
+        "name": "hdl_cholesterol",
+        "kind": "number",
+        "unit": "mmol/L",
+        "role": "generated",
+        "nullable": false,
+        "minimum": 0
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [
+        "Turkana 2018-2019 target outcomes"
+      ],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 0
+    }
+  },
+  "model": {
+    "family": "Gaussian copula with a thresholded-normal recorded-sex field and shifted-lognormal continuous margins",
+    "sampling": {
+      "rows": "Independent, identically distributed, equally weighted draws from one fixed scenario",
+      "selection": "Generate the declared adult F/M population directly; apply no health, fasting, lifestyle, outlier or TC-versus-HDL exclusions",
+      "site_and_lifestyle": "No explicit strata or mixture labels; unspecified heterogeneity is represented by the single joint law"
+    },
+    "sex": {
+      "column": "sex",
+      "latent": "sex_score",
+      "probability_above_threshold": 0.5,
+      "above_threshold_code": "F",
+      "otherwise_code": "M"
+    },
+    "marginals": [
+      {
+        "column": "age",
+        "latent": "age_excess",
+        "distribution": "shifted_lognormal",
+        "shift": 18,
+        "mean_above_shift": 22,
+        "sd_above_shift": 15,
+        "unit": "year"
+      },
+      {
+        "column": "bmi",
+        "latent": "bmi",
+        "distribution": "shifted_lognormal",
+        "shift": 0,
+        "mean_above_shift": 21.63,
+        "sd_above_shift": 3.61,
+        "unit": "kg/m^2"
+      },
+      {
+        "column": "total_cholesterol",
+        "latent": "total_cholesterol",
+        "distribution": "shifted_lognormal",
+        "shift": 0,
+        "mean_above_shift": 3.23,
+        "sd_above_shift": 0.92,
+        "unit": "mmol/L"
+      },
+      {
+        "column": "hdl_cholesterol",
+        "latent": "hdl_cholesterol",
+        "distribution": "shifted_lognormal",
+        "shift": 0,
+        "mean_above_shift": 1.14,
+        "sd_above_shift": 0.38,
+        "unit": "mmol/L"
+      }
+    ],
+    "copula": {
+      "latent_order": [
+        "sex_score",
+        "age_excess",
+        "bmi",
+        "total_cholesterol",
+        "hdl_cholesterol"
+      ],
+      "latent_margins": "Standard normal",
+      "rank_bridge": "For continuous Gaussian-copula margins, latent Pearson r = 2*sin(pi*Spearman_rho/6)",
+      "rank_correlations": [
+        {
+          "pair": [
+            "bmi",
+            "total_cholesterol"
+          ],
+          "spearman_rho": 0.212
+        },
+        {
+          "pair": [
+            "bmi",
+            "hdl_cholesterol"
+          ],
+          "spearman_rho": -0.1
+        },
+        {
+          "pair": [
+            "total_cholesterol",
+            "hdl_cholesterol"
+          ],
+          "spearman_rho": 0.106
+        }
+      ],
+      "latent_correlations": [
+        {
+          "pair": [
+            "sex_score",
+            "age_excess"
+          ],
+          "value": 0.1
+        },
+        {
+          "pair": [
+            "sex_score",
+            "bmi"
+          ],
+          "value": 0.2
+        },
+        {
+          "pair": [
+            "sex_score",
+            "total_cholesterol"
+          ],
+          "value": 0.08
+        },
+        {
+          "pair": [
+            "sex_score",
+            "hdl_cholesterol"
+          ],
+          "value": 0.06
+        },
+        {
+          "pair": [
+            "age_excess",
+            "bmi"
+          ],
+          "value": 0.15
+        },
+        {
+          "pair": [
+            "age_excess",
+            "total_cholesterol"
+          ],
+          "value": 0.25
+        },
+        {
+          "pair": [
+            "age_excess",
+            "hdl_cholesterol"
+          ],
+          "value": 0.05
+        }
+      ]
+    },
+    "measurement": {
+      "interpretation": "Model the recorded interview, anthropometry-derived and directly measured lipid fields, not latent error-free biological quantities",
+      "representation": "Continuous years, kg/m^2 and mmol/L; literal sex codes F and M",
+      "rounding_error_and_censoring": "No additional rounding, measurement-error or censoring layer",
+      "lipid_ordering": "No deterministic TC>=HDL restriction",
+      "assay_transfer": "External marginal and rank anchors are transferred without a validated assay bridge"
+    },
+    "uncertainty": {
+      "mode": "Fixed plug-in external anchors and fixed explicit completion assumptions",
+      "seed_variation": "Individual sampling variation only",
+      "epistemic_uncertainty": "Not assigned a probability distribution or propagated"
+    }
+  }
+}

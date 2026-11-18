@@ -1,0 +1,122 @@
+{
+  "structure": "For person i and visit t, (X_it,Y_it) = B_i + E_it. Stable vectors B_i, visit-deviation vectors E_i1 and E_i2, and different persons are mutually independent. Each vector is bivariate Gaussian. Cross-biomarker correlations are chosen scenario parameters: 0.6 for stable components and -0.3 for deviations at both visits. The generator returns independent people in wide format without sample-moment adjustment.",
+  "parameter_provenance": [
+    {
+      "parameter": "measurement_means",
+      "value": [
+        0.0,
+        0.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "C supplies zero population means. Mean-zero deviations imply the stable components also have zero means."
+    },
+    {
+      "parameter": "between_person_variances",
+      "value": [
+        4.0,
+        4.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact stable-component marginal variances supplied by C."
+    },
+    {
+      "parameter": "within_person_variances",
+      "value": [
+        1.0,
+        1.0
+      ],
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Exact visit-deviation marginal variances supplied by C."
+    },
+    {
+      "parameter": "independence_structure",
+      "value": "Stable components are independent of visit deviations; deviation vectors are independent across visits; persons are independent.",
+      "kind": "REPORTED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Stipulated measurement model in C, not an empirical biological claim."
+    },
+    {
+      "parameter": "between_person_correlation",
+      "value": 0.6,
+      "kind": "ASSUMED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "C does not specify the cross-biomarker association of stable components. This choice gives their covariance b = 2.4."
+    },
+    {
+      "parameter": "within_visit_correlations",
+      "value": [
+        -0.3,
+        -0.3
+      ],
+      "kind": "ASSUMED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "C does not specify within-visit cross-biomarker deviation associations or their equality across visits. Both are chosen here, giving deviation covariances w1 = w2 = -0.3."
+    },
+    {
+      "parameter": "latent_distribution",
+      "value": "Bivariate Gaussian for each independent latent block",
+      "kind": "ASSUMED",
+      "record_ids": [],
+      "basis": "Convenient sampling distribution; C supplies moments and independence but no distributional shape."
+    },
+    {
+      "parameter": "measurement_variances_and_change_variances",
+      "value": {
+        "measurement_variance_each": 5.0,
+        "change_variance_each": 2.0
+      },
+      "kind": "DERIVED",
+      "record_ids": [
+        "C"
+      ],
+      "basis": "Independent stable and deviation components give measurement variance 4+1. Stable components cancel in changes, whose variance is 1+1."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "change_correlation",
+      "status": "scenario",
+      "value": -0.3,
+      "basis": "Changes contain only visit deviations. Writing wt = Cov(E_Xt,E_Yt), independent visits imply Corr(delta X,delta Y) = (w1+w2)/2. C does not determine w1 or w2; the chosen values yield -0.3."
+    },
+    {
+      "name": "same_visit_correlation",
+      "status": "scenario",
+      "value": 0.42,
+      "basis": "At visit t the correlation is (b+wt)/5, where b is the stable cross-biomarker covariance. The scenario gives (2.4-0.3)/5 = 0.42 at each visit. C identifies neither this value nor equality of these correlations across visits."
+    },
+    {
+      "name": "cross_visit_correlation",
+      "status": "scenario",
+      "value": 0.48,
+      "basis": "Independent visit deviations leave Cov(X_visit1,Y_visit2) = b, so the correlation is b/5. The chosen stable covariance gives 2.4/5 = 0.48; C leaves b unspecified."
+    }
+  ],
+  "limitations": [
+    "None of the three requested correlations is identified by C alone. Their displayed values are population targets of the explicitly chosen scenario.",
+    "Gaussianity is not needed for the stated second-moment formulas; changing distributional shape while preserving the same moments and stipulated independence would preserve these correlations.",
+    "The reported units do not imply unit marginal variance: the supplied variance decomposition implies measurement variance 5.",
+    "Realized sample correlations and moments fluctuate randomly. No finite-sample exactness, clinical validity, or biological interpretation is claimed."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked positive definiteness: the stable covariance matrix has eigenvalues 6.4 and 1.6; each visit-deviation covariance matrix has eigenvalues 1.3 and 0.7.",
+    "Algebraically verified measurement variances of 5, change variances of 2, and scenario correlations -0.3, 0.42, and 0.48.",
+    "Reviewed the source for independent latent draws, the requested column order, unique integer identifiers, and absence of sample-based rescaling, sorting, or rejection.",
+    "No Python execution, seed search, or empirical finite-sample diagnostics were performed."
+  ]
+}

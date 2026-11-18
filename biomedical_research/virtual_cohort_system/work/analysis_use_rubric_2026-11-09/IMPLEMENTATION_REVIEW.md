@@ -1,0 +1,17 @@
+# Implementation review
+
+9 November 2026. The current implementation is ready for the fresh session lock. No unresolved blocking finding remains. This was a read-only code/interface/setup review; no generated rows or target-reference results were inspected for this unit.
+
+Two integration issues were found and corrected before launch. The evaluator now requires the unchanged baseline as the first submitted/evaluated stage, with a nonempty, distinct stage list within the cap; merely preserving baseline files was insufficient. The draft adapter configuration also pointed directly at a module with relative imports, which failed under v2's package-free `ModuleType`/`exec` loader. A work-local absolute-import wrapper now supplies the entrypoint, with the implementation module and dependencies pinned. The reviewer reproduced the original import failure and verified the wrapper loads.
+
+The current configuration hashes match all three generated-adapter files and all four use-adapter files. All nine copied baseline scientific files match their commitments. The two-adapter configuration allows twelve analysis actions across the six possible executions. AUTHOR_TASK preserves the unchanged baseline, requires both preflights and both adapter reports per successful seed, leaves an optional repair to the Agent, and excludes hidden draws, host generation and target matching.
+
+The adapter checks exact use IDs and estimand templates, exact rule coverage, candidate/execution identity and input hashes. Missing or malformed new author declarations remain explicit structured errors; host-policy and integrity failures halt. Numeric order/sum checks retain every row and distinguish missing values, nonfinite inputs and arithmetic overflow. Unresolved or inapplicable rules do not become consistency passes. Applicability, source context and basis remain declarations, not certified scientific evidence.
+
+The evaluator preserves all submitted stages, seeds, requested endpoints, failed-execution unavailable values and generated-analysis changes. It verifies baseline-first identity and scientific-file hashes. Neither the evaluator nor independent recomputation accepts a real-target input. The changed underlying-concentration interpretation and measured-source transfer assumptions remain explicit; the run cannot establish that all old measured-output deviations were biological impossibilities or that the repaired data are clinically more accurate.
+
+Reported validation comprises 30 module tests, 11 reporting tests and one actual v2 `_analysis` loader integration test using a verified invented table. Their source code was inspected; the reviewer did not repeat the full suites. The JSON companion distinguishes those reports from the reviewer's direct loader and hash checks.
+
+The copied independent recomputation covers the existing three analyses and 23 diagnostics. Root plans separate independent coherence arithmetic after closure; it is not yet a passed check. The coherence engine currently supports task kind `number`, matching this case; support for `integer` columns is outside this version. Any nested `validation_error` must remain visible even if its controller action completed successfully.
+
+No author-quality, clinical-validity or causal-benefit conclusion is made. Only this review's Markdown and JSON were written by the reviewer; old engines, baseline files, task/config/contract and author bundle remain unchanged.

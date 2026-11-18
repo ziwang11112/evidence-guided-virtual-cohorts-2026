@@ -1,0 +1,169 @@
+{
+  "structure": "ZHU2010 is partially usable: its threshold counts and ferritin geometric mean inform source marginals, but its population does not identify the requested target distribution. The model explicitly transports those three marginal quantities, supplies otherwise unidentified marginal shapes, and assumes a Gaussian copula with latent correlation 0.4. Hb is a bounded logistic transformation of a standard normal. Ferritin has separate truncated half-normal log-distances below and above 15 ug/L, with the upper scale calibrated to the geometric mean. All calibration concerns population parameters, never realized sample moments. Rows are independent virtual people. No adjusted association, residual correlation, multilevel correlation or published crude association is available or substituted.",
+  "parameter_provenance": [
+    {
+      "parameter": "Source Hb threshold count",
+      "value": {
+        "count": 258,
+        "denominator": 1671,
+        "cutoff_g_dl": 12
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW"
+      ],
+      "rationale": "Table I reports Hb below 120 g/L; division by 10 gives the requested 12 g/dL cutoff."
+    },
+    {
+      "parameter": "Source ferritin threshold count",
+      "value": {
+        "count": 504,
+        "denominator": 1671,
+        "cutoff_ug_l": 15
+      },
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "The admitted interpretation is raw ferritin in ug/L. No inflammation correction is applied."
+    },
+    {
+      "parameter": "Source ferritin geometric mean",
+      "value": 17.4,
+      "unit": "ug/L",
+      "status": "REPORTED",
+      "source_ids": [
+        "ZHU2010",
+        "FERRITIN_GM"
+      ],
+      "rationale": "Used as exp(E[log ferritin]); it is not an arithmetic mean, SD or SE."
+    },
+    {
+      "parameter": "Source marginal probabilities",
+      "value": {
+        "p_H": "258/1671",
+        "p_F": "504/1671"
+      },
+      "status": "DERIVED",
+      "source_ids": [
+        "HB_LOW",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "Count divided by the common source denominator. These are descriptive source proportions."
+    },
+    {
+      "parameter": "Transported target marginal constraints",
+      "value": {
+        "P(Hb<12)": "258/1671",
+        "P(ferritin<15)": "504/1671",
+        "exp(E[log ferritin])": 17.4
+      },
+      "status": "ASSUMED",
+      "source_ids": [
+        "ZHU2010",
+        "HB_LOW",
+        "FERRITIN_LOW",
+        "FERRITIN_GM"
+      ],
+      "rationale": "Numerical equality to the source quantities is a working transport choice, not evidence that source and target populations are exchangeable."
+    },
+    {
+      "parameter": "Hb support and dispersion",
+      "value": {
+        "lower_bound_g_dl": 3.0,
+        "upper_bound_g_dl": 20.0,
+        "logistic_scale": 0.27
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Broad positive physiological support and a regular continuous distribution. The dimensionless logistic scale controls dispersion; no source Hb location or dispersion was supplied."
+    },
+    {
+      "parameter": "Hb transformation location",
+      "value": "a_H = log((12-3)/(20-12)) - 0.27*Phi_inverse(258/1671); Hb = 3 + 17*logistic(a_H + 0.27*Z_H)",
+      "status": "DERIVED",
+      "source_ids": [
+        "HB_LOW"
+      ],
+      "rationale": "This monotone transformation makes the population probability of Hb below 12 exactly the transported marginal probability."
+    },
+    {
+      "parameter": "Ferritin support and lower-component shape",
+      "value": {
+        "lower_bound_ug_l": 0.2,
+        "upper_bound_ug_l": 2000.0,
+        "below_log_distance_scale": 1.0
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "Below 15, log(15/ferritin) follows a half-normal with scale 1, truncated at log(15/0.2). Above 15, log(ferritin/15) is truncated at log(2000/15). Bounds regularize unsupported extremes without adding a CRP exclusion."
+    },
+    {
+      "parameter": "Ferritin upper-component scale",
+      "value": "Let M(s,D)=s*sqrt(2/pi)*(1-exp(-D^2/(2*s^2)))/erf(D/(sqrt(2)*s)). Set D_L=log(15/0.2), D_U=log(2000/15). The positive s_U solves M(s_U,D_U)=[log(17.4/15)+(504/1671)*M(1,D_L)]/[1-504/1671].",
+      "status": "DERIVED",
+      "source_ids": [
+        "FERRITIN_GM",
+        "FERRITIN_LOW"
+      ],
+      "rationale": "The equation matches the geometric mean for the assumed two-piece shape. The below-cutoff mixture mass is 504/1671. The generator solves this deterministic parameter equation before generating people."
+    },
+    {
+      "parameter": "Dependence",
+      "value": {
+        "latent_normal_pearson_rho": 0.4,
+        "construction": "Z_F=E_1; Z_H=0.4*E_1+sqrt(1-0.4^2)*E_2; E_1,E_2 independent standard normal"
+      },
+      "status": "ASSUMED",
+      "source_ids": [],
+      "rationale": "A moderate positive association is a transparent working scenario, not a recovered source relationship. This parameter is a latent copula correlation, not Pearson correlation of Hb and raw ferritin, and not an adjusted or residual correlation."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "id": "odds_ratio",
+      "support_basis": "The source supplies both threshold marginals but no joint cells. Under the assumed Gaussian copula, let p_H=258/1671, p_F=504/1671 and a=Phi_2(Phi_inverse(p_H),Phi_inverse(p_F);0.4). The population crude OR is a*(1-p_H-p_F+a)/((p_H-a)*(p_F-a)). This is a model implication, not an identified source or target estimate. The requested empirical operator applies to generated rows without adjustment.",
+      "key_unresolved_assumptions": [
+        "The source marginal proportions are transportable to the target complete-measurement, phlebotomy-weighted domain.",
+        "The unreported threshold dependence is adequately represented by the assumed Gaussian copula and latent correlation 0.4.",
+        "A realized zero cell must be reported as not estimable, without a continuity correction."
+      ]
+    },
+    {
+      "id": "joint_prevalence",
+      "support_basis": "The source marginals imply only the Frechet bound 0 <= P(both low) <= 258/1671. The chosen model gives P(both low)=Phi_2(Phi_inverse(258/1671),Phi_inverse(504/1671);0.4). The requested estimate is the observed both-low fraction on the generated rows.",
+      "key_unresolved_assumptions": [
+        "Direct marginal transport is appropriate despite source and target selection differences.",
+        "The assumed copula supplies the unidentified overlap between anemia and low raw ferritin."
+      ]
+    },
+    {
+      "id": "spearman",
+      "support_basis": "No continuous rank coefficient is supplied. Because both marginal transformations are continuous and increasing, the model population Spearman correlation is 6/pi*asin(0.4/2), approximately 0.3846. This is entirely a dependence assumption expressed on the requested rank scale, not a published estimate.",
+      "key_unresolved_assumptions": [
+        "A Gaussian copula with latent correlation 0.4 adequately describes continuous dependence throughout both tails.",
+        "The raw measurements can be represented as continuous values without assay rounding, detection-limit ties or additional measurement error."
+      ]
+    }
+  ],
+  "limitations": [
+    "The source consists of selected rural Chinese parous women 2–4 years postpartum using IUD contraception in 2004. It does not establish representativeness for all nonpregnant women aged 20–44 in the requested 2021–2023 target domain.",
+    "No target individual measurements, outcome summaries, selection model or weighting transfer function are available. Equal-weight virtual rows represent the requested domain only under the explicit transport assumptions.",
+    "The reported source marginals do not identify any of the three requested joint estimands. In particular, the positive association is not established by the supplied evidence.",
+    "Ferritin assay, specimen, inflammatory burden and other population differences may alter both marginals and dependence. Raw ferritin is modeled without CRP restriction or inflammation adjustment.",
+    "The two-piece ferritin shape, its below-cutoff scale, Hb dispersion and support bounds are not estimated from evidence. The model does not represent ferritin outside 0.2–2000 ug/L or Hb outside 3–20 g/dL.",
+    "All modeled variables have finite moments because their supports are bounded. Ferritin is right-skewed on the raw scale; the bounds and assumed log-distance shapes determine tail behavior that the supplied geometric mean and cutoff count cannot identify.",
+    "No omitted Hb location, ambiguous concentration interval or unavailable correlation is reconstructed as if reported. The source's overlapping tables are not independent evidence.",
+    "Fixed model parameters omit source sampling uncertainty, transport uncertainty and structural uncertainty. Increasing the number of virtual rows reduces simulation noise only; it does not increase the amount of biomedical evidence."
+  ],
+  "checks_actually_performed": [
+    "Algebraic check: the Hb location rule makes Hb<12 equivalent to Z_H<Phi_inverse(258/1671).",
+    "Algebraic check: the ferritin mixture assigns probability 504/1671 below 15, and its conditional log-mean equation yields geometric mean 17.4.",
+    "Algebraic check: the selected copula correlation is strictly inside (-1,1), so its latent covariance matrix is positive definite.",
+    "Analytical support check: the parameterized transformations give positive bounded Hb and ferritin and hence finite relevant moments.",
+    "Static review: the generator uses only numpy, pandas and the standard library, seeds its sole random generator from the supplied seed, returns the required column order, and assigns unique integer row IDs.",
+    "No code was executed. Runtime behavior, realized moments, threshold cells and empirical rank correlations were not tested. Inverse-CDF endpoint guards address floating-point domain errors only; no sample-wide recentering, reweighting or table selection is used."
+  ]
+}
