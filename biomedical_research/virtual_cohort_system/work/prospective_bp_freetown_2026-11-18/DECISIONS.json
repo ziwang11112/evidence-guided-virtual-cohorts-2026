@@ -1,0 +1,76 @@
+{
+  "structure": {
+    "primary": "Let D denote DBP and P denote pulse pressure. Draw (D,P) from one correlated bivariate lognormal distribution, then set SBP=D+P. This gives a smooth, right-skewed joint population with positive pressures and SBP>DBP. Its five population calibration moments equal the five supplied central rounded values.",
+    "alternative": "Draw an independent latent class with probabilities 0.75 and 0.25, then draw (D,P) from a class-specific bivariate lognormal distribution. Class means for (SBP,DBP) are (116.22,76.54) and (152.22,92.54). Both classes share the same covariance matrix in (D,P) coordinates. The mixture preserves all five calibration moments but concentrates part of the population near or above both screening thresholds. It addresses unidentified latent heterogeneity and upper-right probability mass, rather than merely changing the correlation target. Classes are anonymous distributional devices, not diagnosed hypertension or treatment categories."
+  },
+  "parameter_provenance": [
+    {
+      "status": "reported",
+      "decision": "Use mean SBP 125.22, mean DBP 80.54, SD SBP 18.22, SD DBP 10.98, and unadjusted Pearson correlation 0.78 as working population calibration targets in both laws.",
+      "reason": "These are the five supplied rounded source sample estimates. Their use as population parameters is a construction decision, not evidence that the underlying source or target population moments are known exactly."
+    },
+    {
+      "status": "derived",
+      "decision": "Cov(SBP,DBP)=156.043368. In (DBP,pulse pressure) coordinates, the mean is (80.54,44.68) and covariance matrix is [[120.5604,35.482968],[35.482968,140.442064]].",
+      "reason": "These follow from covariance=correlation times both SDs and pulse pressure=SBP-DBP."
+    },
+    {
+      "status": "assumed",
+      "decision": "Use a single bivariate lognormal distribution in positive DBP and pulse-pressure coordinates for the primary law.",
+      "reason": "This parsimoniously enforces positive ordered pressures while allowing skewness and matching all five moments. The packet does not establish lognormality."
+    },
+    {
+      "status": "assumed",
+      "decision": "For the alternative, use weights (0.75,0.25) and (DBP,pulse-pressure) mean offsets (-4,-5) and (12,15) mmHg.",
+      "reason": "These introduce substantial but not deterministic latent separation relevant to joint threshold exceedance. Neither the weights nor the classes are reported source findings."
+    },
+    {
+      "status": "derived",
+      "decision": "The alternative's between-class covariance in (DBP,pulse pressure) is [[48,60],[60,75]]. Its shared within-class covariance is [[72.5604,-24.517032],[-24.517032,65.442064]].",
+      "reason": "Subtracting between-class covariance from total covariance preserves the complete calibrated covariance matrix. The negative within-class DBP–pulse-pressure covariance is a deliberate alternative to the primary's positive covariance."
+    },
+    {
+      "status": "derived",
+      "decision": "For each component with positive mean vector m and covariance W, use log covariance A_ij=log(1+W_ij/(m_i*m_j)) and log mean log(m_i)-A_ii/2.",
+      "reason": "These are the bivariate lognormal moment identities. All submitted component log-covariance matrices are positive definite."
+    },
+    {
+      "status": "assumed",
+      "decision": "Treat each row as an independent draw from the full marginal distribution of screened adults; retain continuous mmHg values.",
+      "reason": "No target covariates, subgroup frequencies, household structure, or individual-reading resolution are supplied. There is no sample centering, rescaling, clipping, rejection, or selection based on generated pressures."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Q1",
+      "source_status": "reported",
+      "transfer": "The packet directly reports source unadjusted Pearson(SBP,DBP)=0.78. Both submitted population laws therefore have correlation 0.78 by construction. Applying this to the target requires transport of the marginal covariance structure across population composition and measurement differences; the source does not establish target correlation.",
+      "sensitivity": "Population Q1 is stable across these two laws. Independently generated sample correlations will fluctuate and need not equal 0.78 or have expectation exactly 0.78. Their sampling distributions can differ because higher joint moments differ. Agreement here is imposed by calibration, not independent confirmation of transportability."
+    },
+    {
+      "name": "Q2",
+      "source_status": "underdetermined",
+      "transfer": "The source packet does not report the proportion with both SBP>=140 and DBP>=90. Five moments do not identify that joint-event probability. A generated sample proportion estimates its selected law's probability; interpreting it for the target requires both a joint-distribution decision and a transport assumption.",
+      "sensitivity": "Expect less stability than for Q1. The alternative allocates 25% to a class with mean SBP 152.22 and mean DBP 92.54, with narrower within-class variation and different dependence. This can materially change simultaneous exceedance despite identical five moments. The direction and magnitude of disagreement have not been numerically evaluated; neither law's Q2 is directly supported by a reported source count."
+    }
+  ],
+  "limitations": [
+    "Strong source support is limited to the reported rounded sample summaries and source measurement/population description. The packet supplies no row-level shape, joint threshold count, subgroup moments, joint sampling covariance matrix, or confidence intervals.",
+    "The source consists of partnered adults aged 40+ in mostly rural Nouna, Burkina Faso, during May–July 2018. An urban West African community sample covering all partnership categories may differ in age distribution, sex composition, treatment patterns, location, time, and other population characteristics. No quantitative transport adjustment is identifiable from the packet.",
+    "The source used an Omron Series 7 after at least 15 minutes of rest and averaged the last two of three readings. The target averages two seated electronic readings after 3–5 minutes of rest. Rest duration, reading sequence, and device differences could affect means, variances, correlation, and threshold classification; the packet does not quantify these effects.",
+    "Both laws represent already-averaged measured pressures. They do not separately identify usual pressure, medication effects, white-coat responses, or measurement error, and they do not simulate replicate readings.",
+    "Calibration uses the centers of rounded estimates without propagating source sampling uncertainty or rounding uncertainty. Independent samples are not forced to reproduce those values.",
+    "Both laws have unbounded upper tails and permit arbitrarily small positive DBP and pulse pressure. Thus sufficiently extreme draws can be physiologically questionable even though positivity and ordering hold mathematically. No unsupported physiological cutoffs or post-draw corrections are imposed.",
+    "The alternative can produce a shoulder or bimodality and assumes negative within-class DBP–pulse-pressure association. These features are plausible sensitivity choices, not established source findings or inferred biological subgroups.",
+    "All moments, including fourth moments, are finite under both laws, but matching the first two moments and correlation does not validate their tail probabilities.",
+    "These are descriptive marginal laws, not causal models, diagnostic rules, or evidence of subgroup-specific prevalence. No target observations or target feedback informed the decisions."
+  ],
+  "checks_actually_performed": [
+    "Analytic moment check: E(SBP)=E(DBP)+E(pulse pressure)=125.22, Var(SBP)=331.9684, Var(DBP)=120.5604, and Cov(SBP,DBP)=156.043368, yielding SDs 18.22 and 10.98 and correlation 0.78.",
+    "Analytic mixture check: weighted offsets are zero, and within-class plus between-class covariance equals the primary calibration covariance. Therefore both laws match all five working targets at the population level.",
+    "Mathematical validity check: the implied Gaussian log-space correlations are approximately 0.277 for the primary and -0.362 and -0.359 for the alternative components. Positive log variances and correlation magnitudes below one establish positive-definite component log-covariances.",
+    "Support and moment check: exponentiation makes DBP and pulse pressure strictly positive, and addition gives SBP>DBP. Finite mixtures of these lognormal components have finite means, variances, and fourth moments.",
+    "Construction inspection: randomness comes from the supplied seed, independent latent labels, and independent Gaussian vectors. All calibration occurs before sampling and uses model parameters only; output columns and person identifiers follow the requested contract.",
+    "No Python execution, empirical simulation checks, numerical Q2 integration, or target evaluation was performed."
+  ]
+}
