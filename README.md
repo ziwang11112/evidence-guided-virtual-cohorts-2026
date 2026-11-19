@@ -1,10 +1,10 @@
 # Evidence-guided virtual biomedical cohorts
 
-**From Fragmented Evidence to Analyzable Biomedical Cohorts with Scientific Agents**. KDD working manuscript v0.34, 18 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.35, 19 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v34_2026-11-18/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v34_2026-11-18/overleaf_v34.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Numerical checks](biomedical_research/virtual_cohort_system/work/manuscript_integration_v34_2026-11-18/QA.json)
+[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/overleaf_v35.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Verification](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/BUILD_CHECK.json)
 
 The index covers original-paper extraction, matched-size real and virtual analyses, controlled evidence comparisons, cross-model experiments and failures. It also identifies which artifacts are needed to recompute the public tables and figures.
 

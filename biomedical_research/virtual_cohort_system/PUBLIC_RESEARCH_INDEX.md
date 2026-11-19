@@ -1,10 +1,10 @@
 # Research index for the KDD working manuscript
 
-**From Fragmented Evidence to Analyzable Biomedical Cohorts with Scientific Agents**. Release of 18 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript, 19 November 2026.
 
-[Paper and supplement (PDF)](manuscript/kdd_draft_v34_2026-11-18/paper.pdf) · [Manuscript text](manuscript/DRAFT_v0_34.md) · [Overleaf project](manuscript/kdd_draft_v34_2026-11-18/overleaf_v34.zip) · [Numerical and build checks](work/manuscript_integration_v34_2026-11-18/QA.json)
+[Paper and supplement (PDF)](manuscript/kdd_draft_v35_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v35_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v35_2026-11-19/overleaf_v35.zip) · [Numerical and build checks](manuscript/kdd_draft_v35_2026-11-19/BUILD_CHECK.json)
 
-## Prospective validation after v0.34
+## Prospective validation in v0.35
 
 A new screening cohort from Freetown was held until the Agent's two laws and the statistical comparator were public. The two Agent laws matched the same source moments and implied different screening workloads. The released target shows zero discordant threshold pairs across 1,244 eligible people. [Results and two-panel figure](work/prospective_bp_freetown_2026-11-18/RESULTS.md) · [Reference field audit](work/prospective_bp_freetown_2026-11-18/REFERENCE_AUDIT.json)
 

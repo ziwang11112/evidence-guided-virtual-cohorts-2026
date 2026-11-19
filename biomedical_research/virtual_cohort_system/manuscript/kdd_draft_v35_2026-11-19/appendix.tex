@@ -1,0 +1,98 @@
+\section{Construction, data and reproducibility}
+\label{app:design}
+\paragraph{Original papers.}
+All six original-paper constructors used the requested and returned model identifier \texttt{gpt-6.1-sol}. Each had a fresh context and access to the task, the assigned article, supplementary search, the sampler contract and the generated-only inspection tool. The program, declared parameters and provenance notes were sealed before target comparison. The three final sampling seeds were 17121, 17123 and 17127. Each pressure draw had 3,000 rows and each iron draw 5,000. Estimators were also implemented independently using regression, counts and ranks. A target-family search preview in one pressure session contained survey identity, demographics and a qualitative topic. The session recorded and excluded it. The target slopes and paired correlation were withheld.
+
+\paragraph{Pressure reference.}
+The PNS operator uses the positive laboratory survey weight in a complete-case frame aged 20--79. It excludes recorded pregnancy. Unknown pregnancy status is retained under the frozen rule. The same rows enter both regressions. The design matrix contains an intercept, age, recorded sex and BMI in units of five kg/m$^2$. We correlate the residuals of the two pressure models. Synthetic records receive equal weights because the requested generator targets the weighted distribution. Five hundred row resamples retaining the survey weights gave conditional stability intervals of [2.96, 4.12] for the systolic slope, [1.93, 2.59] for the diastolic slope and [0.700, 0.734] for the residual correlation. The released workbook did not support a design-based cluster variance calculation.
+
+\paragraph{Iron reference.}
+NHANES August 2021--August 2023 supplies the measured hemoglobin, ferritin and survey-design variables. The eligible sample contains 979 nonpregnant women aged 20--44 with both measurements and positive phlebotomy weights. The frozen analysis uses raw ferritin with no inflammation adjustment. The three estimators are the weighted four-cell odds ratio, the weighted fraction with both markers low and a weighted Spearman correlation. A stratified delete-one-primary-sampling-unit calculation with 15 strata and 30 primary sampling units gave 95\% intervals of [9.28, 34.11] for the odds ratio, [6.07, 9.55]\% for both markers low and [0.318, 0.473] for the rank correlation.
+
+\paragraph{Controlled evidence.}
+The pressure and iron controls used nine fresh constructors each, with three seeded draws per constructor. The source block was masked before the modeling call. For pressure this hid or revealed six same-sample entries relating SBP, DBP, BMI and age. For iron it hid or revealed a paired contingency table. Neither experiment supplied the desired target result. The common base differed between cases, so cross-case comparisons of the base arm do not measure a shared zero-information condition. Both experiments used one model call per constructor, no feedback round and the same GPT identifier as the original-paper trials. Usage valued at the recorded tariffs was US\$0.92 for pressure and US\$0.68 for iron.
+
+\paragraph{What orchestration adds.}
+A separate developmental comparison started both an ordinary coding agent and a structured workflow from a research request. They had the same GPT model, search and runtime capabilities, and resource limits. Across 12 constructions and 36 seeded tables, the ordinary agent had smaller mean absolute discrepancies on four of the six focal analyses and the structured workflow on two. This result supports using a simple agent as a viable constructor. The source-to-code records serve the separate purpose of making each scientific choice inspectable.
+
+\paragraph{Use of generative AI.}
+The construction experiments used the model recorded above. OpenAI Codex also assisted in drafting the English manuscript, preparing the \LaTeX{} files and checking reported numerical results against the experimental artifacts.
+
+\section{Every original-paper outcome}
+\label{app:profiles}
+Table~\ref{tab:profile} preserves all three primary endpoints and the accompanying diagnostics in each case. Author numbers identify independent sessions within one task. The zero ordering violation rate follows from the positive pulse-pressure construction. Across the iron sessions, the two marginal deficiency fractions move in opposite directions relative to the US sample. The isolated threshold odds ratio is therefore an incomplete guide to biomedical utility.
+
+\begin{table}[htbp]
+\caption{All original-paper estimates. A1--A3 are constructor means over three seeded draws. The final column is the measured sample. Percentages use a 0--100 scale.}
+\label{tab:profile}
+\centering
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Analysis & A1 & A2 & A3 & Measured\\
+\midrule
+\multicolumn{5}{@{}l}{\emph{Brazilian blood pressure}}\\
+BMI--SBP slope & 3.642 & 3.402 & 3.804 & 3.524\\
+BMI--DBP slope & 2.285 & 2.402 & 2.350 & 2.260\\
+Residual correlation & .779 & .772 & .781 & .717\\
+SBP SD (mmHg) & 20.00 & 19.70 & 19.57 & 18.19\\
+DBP SD (mmHg) & 11.57 & 11.57 & 11.47 & 11.09\\
+SBP $<$ DBP (\%) & 0 & 0 & 0 & 0\\
+\midrule
+\multicolumn{5}{@{}l}{\emph{US iron status}}\\
+Threshold odds ratio & 7.141 & 6.348 & 6.625 & 17.790\\
+Both low (\%) & 5.180 & 4.673 & 5.847 & 7.630\\
+Spearman correlation & .329 & .197 & .307 & .398\\
+Low hemoglobin (\%) & 10.660 & 8.807 & 11.727 & 15.240\\
+Low ferritin (\%) & 15.680 & 18.513 & 17.487 & 12.153\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Two blood-pressure laws under the same constraints}
+\label{app:laws}
+Let $S$ and $D$ be systolic and diastolic pressure. Write $G=S-D$ for the pulse-pressure gap. From the five source statistics, calculate
+\begin{align*}
+\mathrm{E}[G] &= \mathrm{E}[S]-\mathrm{E}[D],\\
+\mathrm{Cov}(D,G) &= \mathrm{Cov}(S,D)-\mathrm{Var}(D),\\
+\mathrm{Var}(G) &= \mathrm{Var}(S)+\mathrm{Var}(D)-2\mathrm{Cov}(S,D).
+\end{align*}
+The primary program draws positive $(D,G)$ from a bivariate lognormal distribution with these moments. For a vector of positive means $m$ and covariance $V$, the log covariance entries are $\log(1+V_{ij}/(m_i m_j))$ and the log means are $\log m_i$ minus half the corresponding log variance. Here the resulting matrices are positive definite. Setting $S=D+G$ enforces the intended ordering in every row.
+
+The alternative program assigns probabilities 0.75 and 0.25 to components with means $(S,D)=(116.22,76.54)$ and $(152.22,92.54)$ mmHg. In $(D,G)$ coordinates, each component receives a common within-component covariance equal to the required total covariance minus the covariance of the component means. By the total covariance identity this gives the same unconditional first and second moments. The component probabilities and offsets are modeling choices. Conditional-normal quadrature for the event $\{D\geq90,\ D+G\geq140\}$ gives the probabilities in Section~\ref{sec:prospective}. Moments alone do not select either law.
+
+\paragraph{Pre-disclosure design and measurement.}
+The team screened eligibility, headers, uniqueness, measurement methods and field completeness before fixing the Freetown analysis. The target release identity and outcomes were withheld from the constructor. The primary, alternative, comparator, judgments and integration results were recorded before inspecting the measured joint outcomes. Construction took one recorded GPT call (US\$0.0845 at the recorded tariff). Each law generated three equal-sized draws of 10,000, including three for the independently implemented statistical comparator. The source protocol averaged the last two of three seated readings after at least 15 minutes' rest. Freetown averaged two readings following 3--5 minutes of rest. The source selected partnered rural adults, whereas the target was an urban community screening sample.
+
+The Freetown reference uses paired positive recorded pressure values in prespecified age categories covering adults 40 and older. We computed an unweighted sample correlation and exceedance fraction. Intervals use 2,000 bootstraps of participants within eight zones, conditional on those zones. Across the full release, the audit counted 871 records meeting both thresholds, 1,523 meeting neither and zero in either discordant cell. These counts refer to deposited values. Field-level provenance would be needed to explain the pattern.
+
+\balance
+\section{Matched-size lifestyle analysis}
+\label{app:lifestyle}
+The original Turkana regression compared three lifestyle groups, adjusting each trait for age and sex~\cite{lea}. Real and virtual samples were matched on six sex-by-lifestyle stratum sizes within each trait. There were 1,189 eligible BMI measurements, 400 total cholesterol measurements and 405 HDL measurements. Each of 500 repetitions drew two real samples from the same empirical pool and one sample from each fixed virtual table. The virtual samples shared the second real sample as their reference. This design conditions on sample size, available cases and stratum counts. It leaves age and the outcomes free to vary. The bootstrap uses participants and does not model household or site clustering.
+
+
+
+\begin{table}[htbp]
+\caption{Absolute discrepancies in matched-size lifestyle regressions. R and U denote rural and urban groups, and P denotes pastoralists. V--R gives the range across six fixed tables.}
+\label{tab:lifestyle}
+\centering
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Outcome & Contrast & Real--real & V--R\\
+\midrule
+BMI & R--P & .184 & .185--.380\\
+(kg/m$^2$) & U--P & .316 & .314--.428\\
+ & U--R & .291 & .277--.497\\
+\midrule
+Total cholesterol & R--P & 4.543 & 8.118--9.695\\
+(mg/dL) & U--P & 8.848 & 8.556--9.479\\
+ & U--R & 8.743 & 8.110--10.365\\
+\midrule
+HDL cholesterol & R--P & 2.363 & 4.195--6.242\\
+(mg/dL) & U--P & 4.375 & 3.807--4.818\\
+ & U--R & 4.362 & 4.029--4.851\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Only 37 urban participants contributed total cholesterol measurements and 38 contributed HDL measurements. This small group helps explain the wide real--real variation. The discrepancy estimates in Table~\ref{tab:lifestyle} describe the observed composition. Equivalence for a planning decision would require a tolerance justified for that decision.

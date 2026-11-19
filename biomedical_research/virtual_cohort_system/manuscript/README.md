@@ -1,6 +1,12 @@
 # Manuscript
 
-## Current KDD working manuscript v0.34 — 18 November 2026
+## Current KDD working manuscript v0.35, 19 November 2026
+
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** [Reading PDF](kdd_draft_v35_2026-11-19/paper.pdf) · [Editable LaTeX](kdd_draft_v35_2026-11-19/main.tex) · [Overleaf ZIP](kdd_draft_v35_2026-11-19/overleaf_v35.zip) · [Verification](kdd_draft_v35_2026-11-19/BUILD_CHECK.json).
+
+The ACM double-blind draft integrates the prospective Freetown case with the original-paper constructions, evidence controls and matched-size lifestyle analyses. Figures 1–4 show modeling decisions, analysis-level estimates, compatible screening laws and empirical sampling variation.
+
+## Previous working manuscript v0.34, 18 November 2026
 
 [Reading PDF](kdd_draft_v34_2026-11-18/paper.pdf) · [Editable manuscript](DRAFT_v0_34.md) · [Overleaf ZIP](kdd_draft_v34_2026-11-18/overleaf_v34.zip) · [Numerical and build audit](../work/manuscript_integration_v34_2026-11-18/QA.json).
 
