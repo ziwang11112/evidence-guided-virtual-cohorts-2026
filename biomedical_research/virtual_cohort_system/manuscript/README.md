@@ -1,6 +1,16 @@
 # Manuscript
 
-## Current KDD working manuscript v0.35, 19 November 2026
+## Current KDD working manuscript v0.37, 19 November 2026
+
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** [Reading PDF](kdd_draft_v37_2026-11-19/paper.pdf) · [Editable LaTeX](kdd_draft_v37_2026-11-19/main.tex) · [Overleaf ZIP](kdd_draft_v37_2026-11-19/overleaf_v37.zip) · [Verification](kdd_draft_v37_2026-11-19/BUILD_CHECK.json)
+
+Figure 1 compares the blood-pressure and iron analyses across measured and virtual samples. Figure 3 pairs revisions of the six CHNS constructors and shows the prespecified global rank outcome alongside the exploratory local contribution. [Reading guide](kdd_draft_v37_2026-11-19/README.md)
+
+## Previous KDD working manuscript v0.36, 19 November 2026
+
+The prospective iron experiment tests how compatible laws change a continuous association while preserving the source threshold table. [Manuscript and supplement](kdd_draft_v36_2026-11-19/paper.pdf) · [Experimental release and checks](kdd_draft_v36_2026-11-19/README.md)
+
+## Previous KDD working manuscript v0.35, 19 November 2026
 
 **Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** [Reading PDF](kdd_draft_v35_2026-11-19/paper.pdf) · [Editable LaTeX](kdd_draft_v35_2026-11-19/main.tex) · [Overleaf ZIP](kdd_draft_v35_2026-11-19/overleaf_v35.zip) · [Verification](kdd_draft_v35_2026-11-19/BUILD_CHECK.json).
 

@@ -1,18 +1,20 @@
 # Research index for the KDD working manuscript
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.37, 19 November 2026.
 
-[Paper and supplement (PDF)](manuscript/kdd_draft_v36_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v36_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v36_2026-11-19/overleaf_v36.zip) · [Numerical and build checks](manuscript/kdd_draft_v36_2026-11-19/BUILD_CHECK.json)
+[Paper and supplement (PDF)](manuscript/kdd_draft_v37_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v37_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v37_2026-11-19/overleaf_v37.zip) · [Numerical and build checks](manuscript/kdd_draft_v37_2026-11-19/BUILD_CHECK.json)
+
+Figure 1 compares the scientific analyses across cohorts. Figure 3 and Table 2 present all six paired CHNS revisions. [Figure source](reproducibility/plot_v37.py) · [Numerical verification](reproducibility/check_v37.py)
 
 The [v0.36 contribution review](work/kdd_v36_contribution_review_2026-11-19/REVIEW.md) places blood pressure and iron status side by side. A reproducible rearrangement of the frozen iron comparator shows how much rank correlation can change while all 16 reported source checks stay fixed.
 
 ## Conditional evidence in held-out CHNS communities
 
-Six initial authors and their matched revisions generated iron-status cohorts for two scientific analyses. Among 1,082 women in the sealed communities the Hb–ferritin rank correlation was 0.317. Adding a within-band statistic yielded 0.297–0.304 across six revised laws. All six met both planning tolerances. Neither arm met the prespecified threshold for incremental improvement. An exploratory decomposition traces where the new evidence changed the ranks. [Study and figure](work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md) · [Frozen design](work/chns_iron_conditional_holdout_2026-11-19/PROTOCOL.md) · [Independent verification](work/chns_iron_conditional_holdout_2026-11-19/VERIFICATION.json)
+Six initial authors and their matched revisions generated iron-status cohorts for two scientific analyses. Among 1,082 women in the sealed communities the Hb–ferritin rank correlation was 0.317. Adding a within-band statistic yielded 0.297–0.304 across six revised laws. All six met both planning tolerances. Neither arm met the prespecified threshold for incremental improvement. Only one of six revisions moved closer on the prespecified whole-cohort rank analysis. In the post hoc decomposition all six improved the middle band's contribution. [Study and figure](work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md) · [Frozen design](work/chns_iron_conditional_holdout_2026-11-19/PROTOCOL.md) · [Independent verification](work/chns_iron_conditional_holdout_2026-11-19/VERIFICATION.json)
 
 ## Prospective iron-status test from an original article
 
-Seven agent laws passed the 16 prespecified source checks after the recorded parameter-binding correction. The source threshold odds ratio stayed near 6.65 while continuous rank correlations ranged from −0.272 to +0.446. The external survey had 44 complete cases and no measured low-ferritin participant. Figure 4, Table 3 and the study report give all completed and incomplete arms. [Experimental report](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Model programs](work/original_paper_iron_sensitivity_2026-11-19/laws) · [Independent numerical review](work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_VERIFICATION.json)
+Seven agent laws passed the 16 prespecified source checks after the recorded parameter-binding correction. The source threshold odds ratio stayed near 6.65 while continuous rank correlations ranged from −0.272 to +0.446. The external survey had 44 complete cases and no measured low-ferritin participant. Appendix Figure 6, Table 4 and the study report give all completed and incomplete arms. [Experimental report](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Model programs](work/original_paper_iron_sensitivity_2026-11-19/laws) · [Independent numerical review](work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_VERIFICATION.json)
 
 ## Prospective validation in v0.35
 

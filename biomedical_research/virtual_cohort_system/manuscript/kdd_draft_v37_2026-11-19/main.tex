@@ -1,0 +1,186 @@
+% Based on the ACM SIG Proceedings sample. The KDD Research CFP specifies
+% sigconf,anonymous,review. Overleaf root document: main.tex.
+% The original vector overview is PDF 1.7.
+\ifdefined\pdfminorversion\pdfminorversion=7\relax\fi
+\documentclass[sigconf,anonymous,review]{acmart}
+\setcopyright{none}
+\acmDOI{}
+\acmISBN{}
+\acmConference[KDD 2027 Research Track]{KDD 2027 Research Track}{August 2027}{San Jose, CA, USA}
+\acmBooktitle{Manuscript prepared for the KDD 2027 Research Track}
+\acmYear{2027}
+\usepackage{amsmath}
+
+\begin{document}
+\title[Which Analyses Can Agent-Generated Cohorts Support?]{Which Scientific Analyses Can Agent-Gener\-ated Biomedical Cohorts Support?}
+\author{Anonymous Author(s)}
+
+\begin{abstract}
+Can a scientific agent turn published biomarker summaries into records that support a researcher's analysis? We ask agents to read studies, choose a joint probability law and write a sampler. We run the same analysis on its records and on measured cohorts. In Brazilian adults, three generators recovered the scale of the adjusted systolic blood-pressure association with BMI. In Freetown, two laws matching five source moments both understated the fraction crossing two pressure thresholds. In iron status, seven laws reproducing the reported summaries gave similar threshold odds ratios (6.55--6.86) and widely different continuous rank correlations ($-0.272$ to $0.446$). We then gave six constructors an external article and aggregate tables from one set of Chinese communities. In 1,082 women from held-out communities, the six final generators met both planning tolerances. They estimated rank correlations of 0.297--0.304 against a measured 0.317 and crude odds ratios of 4.99--5.12 against 4.22. Adding a narrow-band ferritin contrast improved the whole-cohort rank estimate for one of six authors. A post hoc decomposition found that all six improved the targeted band's contribution. These results identify scientific uses for virtual cohorts and show why a more accurate local relationship can leave a population-wide analysis unimproved.
+\end{abstract}
+
+\ccsdesc[500]{Computing methodologies~Modeling and simulation}
+\ccsdesc[300]{Applied computing~Life and medical sciences}
+\keywords{scientific agents, synthetic biomedical data, joint distributions, evidence synthesis, analysis utility}
+\maketitle
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.98\textwidth]{figures/analysis-support.pdf}
+\caption{What the virtual cohorts support when the scientific analysis stays fixed. Each circle is one agent-authored law. Diamonds and bars show measured estimates and their 95\% intervals. (A) Three constructors recover the scale of the adjusted Brazilian blood-pressure slopes. (B) Two laws that share five source moments both understate the Freetown joint screening rate. (C, D) Each iron cohort supplies both a threshold odds ratio and a continuous rank correlation. Burkina Faso has no low-ferritin cases. In CHNS the six final laws meet both prespecified planning tolerances. Brazil and the US are development comparisons. Freetown and Burkina Faso are external assessments. CHNS B comprises communities held out within a survey. The Brazilian bars describe row-resampling stability.}
+\Description{Four panels compare modeled and measured quantities in their native units. Blood-pressure slopes are close in Brazil. The Freetown joint rate is much higher in the release. Iron models preserve the source odds ratio in the US and Burkina Faso tasks while continuous ranks vary. Both CHNS analyses show positive associations near the held-out estimates.}
+\label{fig:support}
+\end{figure*}
+
+\section{Introduction}
+A study in rural northern China reports anemia counts across eight combinations of iron, folate and vitamin B$_{12}$ status~\cite{zhu}. A researcher with no access to those individual records wants a virtual cohort of US women. She intends to use the same records for two questions. How much higher are the odds of anemia among women with low ferritin? How closely do hemoglobin and ferritin track each other across their continuous ranges? An agent can answer the first question \emph{for the source study} by collapsing the eight rows into four cells. Any assignment of continuous measurements within those cells preserves that answer. Many such assignments give different answers to the second question. Moving from the Chinese study to the US population introduces a further uncertainty, even for the first question.
+
+This example motivates an evaluation of scientific agents in which the deliverable is a dataset. A researcher specifies a population, measurements and intended analyses. The agent reads the evidence, chooses how to model the relationships that the publications leave open, and delivers a program that can draw complete records. The researcher can then run regressions, compare subgroups or apply screening rules. These are concrete uses when records are costly to collect or unavailable. Their value depends on the analysis one plans to perform.
+
+Previous work has shown how to generate synthetic cohorts using shared fitted models, aggregate tabulations, trial curves and published covariates~\cite{filshtein,llmsynthor,synthipd,kmgen}. Our question concerns the point where scientific modeling discretion enters this process. Two agents can reproduce the same table by writing different sampling laws. A single law can reproduce a regression slope and miss the dependence that governs a screening rule. We therefore evaluate one \emph{analysis in one population} at a time. We keep the analysis code fixed when changing its input and trace the resulting estimate back to the article and the authored program.
+
+Our contributions concern three decisions a researcher faces when using a virtual cohort (Figure~\ref{fig:support}).
+\begin{enumerate}
+\item \textbf{What did the agent supply?} We trace original-paper constructions from an extracted table, through a reported, derived or assumed dependence parameter, to an executable sampling law. Reapplying the requested estimator gives an auditable test of each scientific use.
+\item \textbf{Which conclusions depend on the choice of law?} Evidence controls and prospective alternatives in blood pressure and iron status show which estimates persist across compatible models. A published threshold association can survive substantial changes in the ordering of continuous measurements.
+\item \textbf{Does a closer local fit improve the final analysis?} A sealed community split tests two iron analyses and compares matched revisions of each generator. We quantify final analysis accuracy, the incremental effect of a new conditional statistic, and, separately, an exploratory explanation of where the resulting change occurred.
+\end{enumerate}
+
+\section{From a research request to executable records}
+\label{sec:method}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.96\textwidth]{figures/method.pdf}
+\caption{The researcher supplies a target population, measurements and analyses. The agent reads and interprets evidence, chooses a joint law and authors the sampler. The execution service draws the records. A separate evaluator runs the requested analyses. In the whole-cohort experiments, the individual-record input on the left is empty.}
+\Description{Left to right, a research request specifies a population, variables and analyses. A scientific agent interprets studies and produces a sampling program. The program produces virtual records for scientific analyses.}
+\label{fig:method}
+\end{figure*}
+
+\paragraph{Scientific contract.}
+A request names the unit of observation, population, measurement units and intended analyses. For example, the iron request calls for continuous hemoglobin and ferritin in nonpregnant US women aged 20--44. We disclose the analyses to the constructor so it can seek appropriate evidence. The measured target records and their analysis results stay with the evaluator. Figure~\ref{fig:method} also covers enrichment of existing records. All experiments here generate whole records. In the community holdout, constructors also see tables newly calculated in the evidence communities. Individual measurements from either half remain unavailable to them.
+
+Write $s_j(P_j)$ for a statistic evaluated under the population, measurement and adjustment rules of source study $j$. A paper reports a rounded estimate of this quantity. The researcher's question is an analysis $a(P_T)$ in target population $T$. Even exact knowledge of $s_j(P_j)$ generally leaves open both the shape of the source distribution and the correspondence between $P_j$ and $P_T$. We use this distinction in two ways. We compare a generated estimate of $a$ with the same estimate in a measured sample. Where source summaries permit several laws, we can also ask whether varying the law changes $a$ while preserving those summaries.
+
+\paragraph{Agent and execution service.}
+In the initial original-paper experiments (Section~\ref{sec:original}), each fresh model session received a starting paper, the request, tools for reading and supplementary retrieval, an output schema and an execution budget. The agent could inspect source tables and methods, resolve units, propose a dependence structure, and choose numerical parameters. It returned an executable sampler, its parameters and a record of consequential choices. It could inspect a trial draw and submit a revision. The execution service validated the interface, ran the submitted program in isolation and recorded its identity and seeds. The coordinator supplied the task and starting article. The constructor selected the scientific law. The final rows were sampled from that law. The study therefore tests authorship of a reusable generator from an assigned paper. Each of the two articles was assigned to three sessions.
+
+\paragraph{Audit of a modeling decision.}
+For each quantity we record what the source reported, how the agent transformed it and how the code used it. We separately record any change of population or statistical definition. For example, a partial correlation can be exactly derived from a source matrix while its use as a residual correlation after additional adjustment remains an assumption. We check the submitted program against the account of the model choice and independently recompute scientific estimates. This audit can establish that a model implements its stated choice. Only evidence on the requested analysis can establish how useful that choice was.
+
+\paragraph{Evaluation.}
+Each constructor commits its program before the final draws. Draws with different seeds measure variation conditional on that program. Separate constructors can express different modeling choices. For each task we run a single estimator implementation on generated records and the measured reference under the relevant sampling design. For the published lifestyle analysis, this is a reimplementation of the reported regression. A reference value estimates a quantity in a measured sample and carries uncertainty. The community holdout specifies planning tolerances and a minimum worthwhile change before generation. Elsewhere we report discrepancies in native units. All scores here describe group analyses. We did not evaluate individual-level prediction.
+
+\section{Can the agent model what the paper reports?}
+\label{sec:original}
+We ran three fresh sessions on each of two requests using the same recorded GPT configuration. All six located the relevant table in the assigned original article, performed a numerical derivation, authored a whole-cohort generator, inspected one simulated trial and retained the first candidate. Each law produced three final draws. The 18 tables contain 72,000 simulated records. Independent computation reproduced all 99 draw-level analysis and diagnostic estimates to within $7.6\times10^{-14}$. Construction used 142 model calls at an estimated token tariff of US\$1.51. These counts describe six modeling decisions.
+
+
+\paragraph{Blood pressure.}
+The assigned article studied partnered adults aged at least 40 in rural Burkina Faso~\cite{jaspert}. Its correlation matrix gives the associations of age, body mass index (BMI), systolic blood pressure (SBP) and diastolic blood pressure (DBP). Each agent combined its entries to obtain the source age- and BMI-adjusted residual correlation, approximately 0.788. The source also reports BMI regression coefficients from a more extensively adjusted model. The agents used positive diastolic and pulse pressures and summed them to obtain systolic pressure. They chose different demographic distributions and conditional pressure levels. This construction enforces the physical ordering of the two pressures for every draw.
+
+We applied the target regressions to virtual records and compared them with estimates from 8,352 eligible participants in the Brazilian National Health Survey (PNS)~\cite{pns}. The age- and sex-adjusted systolic slope ranged from 3.40 to 3.80 mmHg per five BMI units, bracketing the measured 3.52. The corresponding diastolic slopes were 2.29--2.40 versus 2.26. The pressure correlation after adjusting for age, sex and BMI was 0.772--0.781 versus 0.717. All three laws also yielded wider pressure distributions than the measured sample (Appendix~\ref{app:profiles}). Thus a user could recover the direction and approximate scale of these BMI associations while overestimating dependence between the paired measurements.
+
+\paragraph{Iron status.}
+Of the women in the source table, 173 had both markers low, 85 had only low hemoglobin, 331 had only low ferritin and 1,082 had neither~\cite{zhu}. Each agent computed the crude odds ratio, $(173\times1082)/(85\times331)=6.65$, and distinguished it from the paper's adjusted odds ratio of 6.448. One agent then used a Clayton copula to couple continuous biomarker values. Another modeled two latent iron-store components and a change in hemoglobin response below a threshold. The third used a saturating response with inflammatory and other-anemia components. Supplementary evidence informed marginal assumptions. All three authors noted an ambiguity in the source's ferritin labeling.
+
+We evaluated crude threshold odds, joint prevalence and rank correlation against survey-weighted US National Health and Nutrition Examination Survey (NHANES) estimates from 979 eligible women~\cite{nhanes}. The thresholds were hemoglobin $<12$ g/dL and ferritin $<15$ $\mu$g/L. Generated odds ratios were 6.35--7.14, close to the source's 6.65. The measured US odds ratio was 17.79. All three programs preserved a positive association and substantially understated its strength in this comparison. For the same records, the prevalence of both low markers was 4.67--5.85\% versus 7.63\%, and Spearman correlation ranged from 0.197 to 0.329 versus 0.398 (Figure~\ref{fig:original}). A correct table extraction can therefore coexist with appreciable error after population transfer.
+
+\paragraph{What does direct arithmetic already give the researcher?}
+Five times the published BMI coefficients gives 3.75 mmHg for SBP and 2.20 mmHg for DBP in the source's fully adjusted model. Those two numbers provide informative comparisons with the Brazilian slopes, even before simulation. Likewise, the four iron counts yield the crude odds ratio and a joint-low prevalence of 10.35\% for the Chinese study. They supply no continuous rank correlation. For that question, choosing how to populate the four cells with continuous values is the scientific modeling step. Comparing the three authored programs makes that choice visible.
+
+\section{What changes when the agent gets joint evidence?}
+\label{sec:controlled}
+We held the research request and modeling interface fixed within each task and changed the supplied evidence. Three fresh constructors worked in each of three conditions per case, with three final seeds per constructor. The first condition provided the common base. For pressure, this already contained previously published relationship evidence. For iron status, it supplied study context. The second condition added single-variable summaries from the selected source. The third added a joint block \emph{from the same source sample}. This consisted of six pairwise correlations for pressure, or the paired low-marker counts for iron. The latter two conditions differed only in that block. No target feedback or programmed numerical relationship entered these comparisons.
+
+\begin{table}[t]
+\caption{Mean absolute discrepancy by evidence condition. The last two columns differ only in the joint source block. Lower is closer to the measured sample within each row.}
+\label{tab:evidence}
+\centering
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Requested analysis & Base & Marginal & Joint\\
+\midrule
+BP residual correlation & .1632 & .1633 & \textbf{.0350}\\
+BMI--SBP slope & .1934 & .3396 & .5091\\
+BMI--DBP slope & .7276 & .7378 & .7550\\
+Iron log odds ratio & 1.5495 & 1.7620 & \textbf{.9373}\\
+Both markers low (pp) & 1.7903 & .5187 & 2.5940\\
+Iron rank correlation & .0769 & .0447 & .1736\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:evidence} reports discrepancies for every requested analysis. We computed the absolute error for each draw and averaged first across seeds, then equally across constructors. The two pressure slopes are in mmHg per five BMI units. The iron odds ratio is evaluated on the natural-log scale. Adding the matrix reduced residual-correlation error from 0.1633 to 0.0350. Adding the four-cell table reduced log-odds-ratio error from 1.7620 to 0.9373. The two other pressure estimates and the two other iron estimates moved farther from their respective sample references. In particular, the joint table identifies a threshold association in its source sample but gives neither the target prevalence nor the within-cell ordering needed for continuous ranks. These results identify the change across the tested evidence conditions. Their magnitude is descriptive across three constructors per condition.
+
+\section{Can the same pressure moments predict joint screening?}
+\label{sec:prospective}
+Before inspecting paired outcome values in a new Freetown screening release~\cite{freetown,freetowndata}, we specified two analyses: the unadjusted Pearson correlation of SBP and DBP, and the fraction simultaneously reaching 140 mmHg systolic \emph{and} 90 mmHg diastolic. The latter is a conjunction of two thresholds. It has a different interpretation from a clinical hypertension diagnosis. The agent received five rounded source summaries from the rural Burkina Faso study~\cite{jaspert}, comprising means 125.22 and 80.54 mmHg, standard deviations 18.22 and 10.98 mmHg, and raw correlation 0.78. It also received the target sampling context. This experiment starts from extracted summaries. The earlier experiments in Section~\ref{sec:original} test original-paper reading.
+
+
+One fresh agent was asked to propose a primary and an alternative law and state which analyses the source constrained. Before disclosure, it identified the correlation as reported, the joint threshold as underdetermined and the application to a new population as uncertain. Its primary model coupled positive DBP and pulse pressure with a bivariate lognormal law. A statistical comparator specified in advance from the same five numbers independently used this family. The agent's alternative was a 75:25 mixture. It separated the component means and subtracted their between-component contribution from the within-component covariance. These are hypothetical population structures. Both laws preserve all five working moments, including an exact population correlation of 0.780.
+
+Independent numerical integration of the fixed programs gave joint threshold probabilities of 11.9449\% and 15.0851\%. These two examples establish a 3.14 percentage-point difference consistent with the five summaries. They give a lower bound on the range of answers permitted by those constraints. The full range may be wider. A separately prespecified finite-draw criterion asked whether the simulated gap, after subtracting four times the sum of Monte Carlo standard errors, exceeded two percentage points. The adjusted gap was 1.60 points, below the criterion. We report both results because they answer different questions.
+
+After the freeze we analyzed the deposited fields of 1,244 eligible screening participants aged 40 or older. Their correlation was 0.859 (within-zone bootstrap 95\% interval 0.847--0.872), and 44.21\% met both thresholds (41.64--46.79\%). All three simulated arms were far below the released joint rate (Figure~\ref{fig:support}B and Appendix Figure~\ref{fig:freetown}). A post-disclosure count clarified how to interpret that difference. Of the eligible records, 550 met both thresholds, 694 met neither, and neither isolated exceedance occurred. The same pattern held across all 2,394 released records. The codebook identifies the component fields as added variables. Their pairing history remains unresolved. The measured discrepancy applies to the deposited fields. The unresolved pairing limits its biological interpretation.
+
+
+\section{Which iron analyses survive a change of model?}
+\label{sec:ironpros}
+We repeated the prospective test from the full Chinese iron-status article~\cite{zhu}. This time the target was adult nonpregnant, nonlactating mothers in rural Burkina Faso~\cite{burkina_iron}. Three fresh GPT sessions each submitted a primary generator. For each primary, two further sessions received the same article, research request and sealed program. One was asked for a second defensible model. The other was asked for a model that would expose the sensitivity of a requested analysis. A fixed statistical comparator independently sampled within the published categories. All constructors could see the scientific questions. The Burkina Faso measurements stayed with the evaluator.
+
+The paper also reports ferritin geometric means and depletion frequencies across three hemoglobin bands. All three primary authors extracted the four crude counts correctly. All seven completed authors predicted that the source odds ratio was determined and that the rank correlation was sensitive. After a documented parameter-interface correction, the seven laws passed all 16 prespecified source checks (Appendix~\ref{app:ironpros}). Across the same virtual records, the odds ratio stayed near 6.65, while choices about ordering people within hemoglobin bands changed the continuous correlation. Four of six planned primary--alternative pairs completed. In all four, the rank gap exceeded its estimated simulation noise. Only one primary yielded both alternatives, which limits the prompt comparison.
+
+
+For one parent the ordinary alternative changed the rank correlation from $0.217$ to $-0.272$. Its author chose a within-band Gaussian copula parameter of $-0.75$, an explicit sensitivity assumption with no measured support in the source. Two positive-dependence alternatives for another parent moved its correlation from $0.226$ to $0.426$ and $0.413$. Even the positive scenarios gave different effect sizes. Appendix~\ref{app:ironproof} shows why this freedom survives the group summaries.
+
+After all draws and source checks were sealed, 44 women had complete paired measurements across 23 villages. The measured survey-weighted rank correlation was 0.069 (95\% village-bootstrap interval $-0.198$ to $0.389$). No participant met the ferritin threshold, and 18 met the hemoglobin threshold. The external odds ratio was unestimable. Both thresholds agreed with the release's own flags in all 44 records. Figure~\ref{fig:support}C--D compares these analyses across populations. Appendix Figure~\ref{fig:ironpros} identifies the individual laws. The source odds ratio was reproducible, several continuous relationships remained possible, and the new sample distinguished them imprecisely.
+
+\section{Can the same virtual cohort support two held-out iron analyses?}
+\label{sec:chns}
+The external Burkina Faso sample had too few low-ferritin observations to evaluate the threshold analysis. For a test with information from the target population, we used the 2009 China Health and Nutrition Survey (CHNS)~\cite{chnsbio,chnsind}. We split whole communities within nine provinces before scoring. The evidence half (A) comprised 1,123 women in 110 communities. The held-out half (B) comprised 1,082 women in 107 other communities. All were aged 18--49 with paired central hemoglobin (Hb) and serum ferritin measurements. The halves shared no people, households or communities. The survey family had been used in development. The partition and its iron endpoint were new.
+
+\paragraph{An identical starting point for each pair of revisions.}
+Three ordinary coding agents and three agents given scientific modeling guidance used the same GPT configuration. Each received the Zhu article and two tables newly computed from A, one reporting joint threshold counts and the other summarizing ferritin by Hb band. Each chose its own law and parameters. Two further sessions independently reviewed each sealed law with the same feedback on its generated records and the original evidence. Only one received a new A statistic. Within Hb 12--$<14$ g/dL, geometric mean ferritin was 1.215 times as high at Hb 13--$<14$ as at 12--$<13$ g/dL (95\% interval 1.061--1.398). Neither branch received a whole-cohort rank correlation. We sealed all programs and outputs before opening B.
+
+\paragraph{Final utility on the two prespecified analyses.}
+We ran the same unweighted rank and threshold estimators on virtual and measured records. B's Spearman correlation was 0.317 (95\% community-bootstrap interval 0.259--0.373). All six augmented laws gave 0.297--0.304, within the prespecified absolute tolerance of 0.10. For low Hb ($<12$ g/dL) comparing low ferritin ($<15$ $\mu$g/L) with higher ferritin, the six crude odds ratios were 4.990--5.124. B's estimate was 4.218 (2.979--6.042). All six preserved the positive threshold association and met the factor-of-1.50 tolerance, while overstating its magnitude by 18--22\%. The A threshold table already implied an odds ratio of 5.083. The global rank analysis tests a relationship absent from the supplied tables. Both conclusions concern planning with these measured populations.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.98\textwidth]{figures/chns-revision.pdf}
+\caption{What changed when a constructor received one extra conditional contrast? Each row pairs two revisions of the same parent. Leftward movement means smaller absolute error against CHNS B. (A) On the prespecified whole-cohort rank correlation, one of six moves closer. (B) In a post hoc decomposition, all six move closer on the middle Hb band's weighted contribution to the global correlation. The two panels use the same scale. The B reference is a sample estimate.}
+\Description{Paired error plots for three ordinary and three workflow constructors. Additional evidence lowers whole-cohort rank error for the first workflow constructor. It reduces the error in the middle-band contribution for every constructor.}
+\label{fig:revision}
+\end{figure*}
+
+\paragraph{Incremental effect on the prespecified whole-cohort analysis.}
+The revisions using only the original evidence reproduced all 18 initial tables byte for byte at the three shared seeds. Five of six augmented laws came closer to the supplied A contrast on the log scale. In B only one came closer on whole-cohort rank correlation (Figure~\ref{fig:revision}A). Median reductions in absolute rank error were $-0.0037$ for ordinary and $-0.0035$ for guided constructors. The prespecified material gain was 0.05. The largest control error against B was 0.024, already below that benchmark. Even a perfect revision at the observed B estimate could therefore have gained at most 0.024.
+
+\paragraph{Exploratory explanation of the local change.}
+After opening B, we partitioned the covariance of standardized global midranks by Hb band. The middle band's probability-weighted within-band contribution to the whole-cohort correlation was 0.03429. All six augmented laws estimated this particular component more closely (Figure~\ref{fig:revision}B). Its median absolute error fell from 0.01064 to 0.00155. The between-band component was larger, 0.27054 in B, and stayed near 0.24--0.25 in both revisions. Guided constructor 3 kept its marginal distributions and used numerical integration to calibrate its middle-band dependence parameter to the new A ratio. Its middle-band contribution moved from 0.05726 to 0.03702, while its overall correlation moved from 0.320 to 0.298 against a measured 0.317. Errors in different components had partly canceled. Appendix~\ref{app:chns} gives the decomposition and every paired result.
+
+\section{How large is the gap relative to sampling variation?}
+\label{sec:lifestyle}
+Two real samples from the same study need not give the same regression coefficient. We used that observation to interpret a source-rich reconstruction of the Turkana lifestyle study~\cite{lea,leadata}. Two independent agents generated age, sex, lifestyle, BMI, total cholesterol and high-density lipoprotein (HDL) cholesterol, with three draws of 1,226 rows each. We reimplemented the original age- and sex-adjusted comparison once and applied it to both measured and virtual records. The same study supplied the evidence and the measured reference, making this an analysis-reconstruction experiment.
+
+In 500 repetitions, we drew two real resamples and one resample from each of the six saved virtual tables, matching trait-specific sample sizes and counts by sex and lifestyle. For urban versus pastoralist BMI, the mean absolute difference between real resamples was 0.316 kg/m$^2$. Across the six virtual tables, virtual--real differences were 0.314--0.428 kg/m$^2$. For the rural versus pastoralist comparison, the virtual effect was too small by 7.80--9.55 mg/dL for total cholesterol and by 4.07--6.21 mg/dL for HDL. The measured cholesterol standard deviations were 42.81 and 20.23 mg/dL. Virtual-resample means were 31.49--32.67 and 14.50--14.89. A researcher rehearsing the urban BMI contrast would thus get a recognizable result. A researcher planning a study whose precision depends on lipid variability would be relying on distributions that were too narrow. Figure~\ref{fig:lifestyle} shows all nine contrasts. Appendix~\ref{app:lifestyle} gives their numerical values.
+
+
+\section{Related work}
+G-Sim uses an LLM to propose and revise simulators with numerical calibration~\cite{gsim}. LLMSynthor constructs micro-records aligned with macro statistics using discrepancy-guided generation~\cite{llmsynthor}. Filshtein et al.\ generate synthetic cohorts by sharing fitted models~\cite{filshtein}. SynthIPD reconstructs individual trial data from reports, and KMGen uses a skill-based agent for synthetic patient data from survival and adverse-event evidence~\cite{synthipd,kmgen}. SynthCraft supports healthcare data access and augmentation~\cite{synthcraft}. These works establish substantial prior art for both agentic simulation and generation from publications. Our experiments follow an agent's scientific choices into several estimands on the same output and compare each with an independently computed measured-sample analysis. The experiments supply a task-specific comparison of laws under identical information in Sections~\ref{sec:prospective} and~\ref{sec:ironpros}.
+
+Statistical approaches can incorporate external summary information from heterogeneous populations~\cite{syndi}. The fact that moments leave other functionals partially identified has a long history~\cite{bounds}. Our prospective experiment uses an agent to construct and execute two examples and asks what this ambiguity means for a specific screening analysis. Work on inferential utility also shows that treating synthetic observations as measured records can understate uncertainty~\cite{inferential}. Here the virtual rows approximate the consequences of an assumed law. Model choice, source sampling variation and population transfer remain separate sources of uncertainty.
+
+\section{Discussion}
+The strongest evidence for the agent's contribution is in the executable model choices. The agents recovered source quantities from original tables, combined them with explicit assumptions about continuous dependence, and produced records on which a researcher could run several analyses. Some conclusions can be obtained more cheaply from the published cells alone. The additional scientific use comes from applying a second analysis, inspecting the assumptions it requires and checking its output where paired measurements exist.
+
+Three uses have different levels of support. The Brazilian regressions reproduce the approximate scale of a BMI association. The Freetown and Burkina Faso experiments expose how far a screening rate or continuous association can move across laws compatible with the supplied evidence. The CHNS holdout supports two associations at prespecified planning tolerances in a single survey. A better middle-band estimate did little to improve whole-cohort rank accuracy there. Figure~\ref{fig:revision} illustrates why improving source fit and improving a requested target analysis deserve separate measurements.
+
+The Brazilian and US targets were exposed during development. One pressure session saw and excluded a same-survey search preview. Freetown's field pairing remains unresolved. Burkina Faso had 44 complete cases and no low-ferritin participant. CHNS used same-survey aggregate evidence, six parents, one partition and one GPT configuration. Its intervals reflect sampling of communities conditional on the sealed laws. Generalization across populations or agent models, individual-level prediction and clinical use remain open. For each scientific use we would release the generator, its evidence and assumptions, and the estimate and uncertainty from an appropriate measured comparison.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+\appendix
+\input{appendix}
+\end{document}
