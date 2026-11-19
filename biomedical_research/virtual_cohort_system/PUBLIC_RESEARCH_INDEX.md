@@ -6,6 +6,10 @@
 
 The [v0.36 contribution review](work/kdd_v36_contribution_review_2026-11-19/REVIEW.md) places blood pressure and iron status side by side. A reproducible rearrangement of the frozen iron comparator shows how much rank correlation can change while all 16 reported source checks stay fixed.
 
+## Conditional evidence in held-out CHNS communities
+
+Six initial authors and their matched revisions generated iron-status cohorts for two scientific analyses. Among 1,082 women in the sealed communities the Hb–ferritin rank correlation was 0.317. Adding a within-band statistic yielded 0.297–0.304 across six revised laws. All six met both planning tolerances. Neither arm met the prespecified threshold for incremental improvement. An exploratory decomposition traces where the new evidence changed the ranks. [Study and figure](work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md) · [Frozen design](work/chns_iron_conditional_holdout_2026-11-19/PROTOCOL.md) · [Independent verification](work/chns_iron_conditional_holdout_2026-11-19/VERIFICATION.json)
+
 ## Prospective iron-status test from an original article
 
 Seven agent laws passed the 16 prespecified source checks after the recorded parameter-binding correction. The source threshold odds ratio stayed near 6.65 while continuous rank correlations ranged from −0.272 to +0.446. The external survey had 44 complete cases and no measured low-ferritin participant. Figure 4, Table 3 and the study report give all completed and incomplete arms. [Experimental report](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Model programs](work/original_paper_iron_sensitivity_2026-11-19/laws) · [Independent numerical review](work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_VERIFICATION.json)
