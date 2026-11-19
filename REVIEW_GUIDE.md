@@ -1,13 +1,15 @@
 # Reviewer guide
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.35, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.36, 19 November 2026.
 
-1. Read the [manuscript and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/paper.pdf).
+1. Read the [manuscript and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v36_2026-11-19/paper.pdf).
 2. Open the [experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) to locate the protocol, aggregate data, model programs and failures for each study.
 3. Follow the [original-paper audit](biomedical_research/virtual_cohort_system/work/original_paper_capability_2026-11-17/SOURCE_MODEL_AUDIT.md) from a reported statistic to a modeling decision and its downstream estimate.
 4. Check the [matched-size comparison](biomedical_research/virtual_cohort_system/work/matched_size_utility_2026-11-17/RESULTS.md) and the [figure and table verification](biomedical_research/virtual_cohort_system/work/manuscript_integration_v34_2026-11-18/QA.json).
 
 5. Inspect the [prospective freeze and external comparison](biomedical_research/virtual_cohort_system/work/prospective_bp_freetown_2026-11-18/RESULTS.md) and the [deposited-field audit](biomedical_research/virtual_cohort_system/work/prospective_bp_freetown_2026-11-18/REFERENCE_AUDIT.json).
+
+[Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Replay the published numerical results
 

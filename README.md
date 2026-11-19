@@ -1,14 +1,16 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.35, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.36, 19 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/overleaf_v35.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Verification](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v35_2026-11-19/BUILD_CHECK.json)
+[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v36_2026-11-19/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v36_2026-11-19/overleaf_v36.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Verification](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v36_2026-11-19/BUILD_CHECK.json)
 
 The index covers original-paper extraction, matched-size real and virtual analyses, controlled evidence comparisons, cross-model experiments and failures. It also identifies which artifacts are needed to recompute the public tables and figures.
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
+
+[Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Earlier releases
 

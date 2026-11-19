@@ -2,7 +2,11 @@
 
 **Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript, 19 November 2026.
 
-[Paper and supplement (PDF)](manuscript/kdd_draft_v35_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v35_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v35_2026-11-19/overleaf_v35.zip) · [Numerical and build checks](manuscript/kdd_draft_v35_2026-11-19/BUILD_CHECK.json)
+[Paper and supplement (PDF)](manuscript/kdd_draft_v36_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v36_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v36_2026-11-19/overleaf_v36.zip) · [Numerical and build checks](manuscript/kdd_draft_v36_2026-11-19/BUILD_CHECK.json)
+
+## Prospective iron-status test from an original article
+
+Seven agent laws passed the 16 prespecified source checks after the recorded parameter-binding correction. The source threshold odds ratio stayed near 6.65 while continuous rank correlations ranged from −0.272 to +0.446. The external survey had 44 complete cases and no measured low-ferritin participant. Figure 4, Table 3 and the study report give all completed and incomplete arms. [Experimental report](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Model programs](work/original_paper_iron_sensitivity_2026-11-19/laws) · [Independent numerical review](work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_VERIFICATION.json)
 
 ## Prospective validation in v0.35
 
