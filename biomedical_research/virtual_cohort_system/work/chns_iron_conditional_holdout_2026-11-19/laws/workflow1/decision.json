@@ -1,0 +1,84 @@
+{
+  "structure": "One fixed stochastic law generates independent measurement pairs. Hb-band probabilities come from CHNS evidence-community counts. Below 12, Hb is 12 minus a Weibull gap conditioned on positive Hb; above 14, Hb is 14 plus a Weibull gap. The middle band uses a truncated normal. Within each band, correlated normal scores connect the Hb quantile to log ferritin. Log ferritin is a continuous, increasing, two-piece affine transformation of its normal score, anchored at 15 micrograms/L. Its two slopes are solved from the reported geometric mean, geometric SD and depletion probability. These are population-level parameter calculations, not finite-sample adjustments.",
+  "parameter_provenance": [
+    {
+      "parameters": [
+        "band_n",
+        "ferritin_depleted_n",
+        "hb_cutpoints_g_dl",
+        "ferritin_cutpoint_ug_l"
+      ],
+      "source": "Supplied CHNS A-only tables 1 and 2",
+      "population": "Evidence communities: 1,123 linked complete-case women aged 18–49, regardless of pregnancy or inflammation; one paired measurement per person.",
+      "measurement": "Central whole-blood Hb in g/dL and uncorrected serum ferritin in micrograms/L.",
+      "reported_and_derived": "Reported band counts are 206, 619 and 298; depletion counts are 123, 148 and 59. These define population mixture and conditional depletion probabilities. Table 1 implies a source crude odds ratio of (123*710)/(207*83), approximately 5.083.",
+      "adjustment_and_uncertainty": "Unweighted and unadjusted. No confidence intervals are supplied. Counts are treated as plug-in estimates, not known target-population probabilities."
+    },
+    {
+      "parameters": [
+        "hb_tail_gap_mean_g_dl",
+        "hb_tail_gap_sd_g_dl",
+        "hb_middle_normal_location_g_dl",
+        "hb_middle_normal_scale_g_dl"
+      ],
+      "source": "Supplied CHNS A-only table 2, Hb mean and sample SD within each band",
+      "reported_and_derived": "Lower-band gap mean is 12-10.676=1.324 with SD 1.303; upper-band gap mean is 15.348-14=1.348 with SD 1.794. Weibull parameters are derived from these moments. The middle truncated-normal location 13.0205 and scale 0.911 approximately reproduce the reported conditional mean 13.007 and SD 0.532; location and scale are not themselves those conditional moments.",
+      "assumptions": "Weibull gaps and a truncated-normal middle band are modeling choices. Conditioning the lower tail on positive Hb slightly changes its fitted moments.",
+      "adjustment_and_uncertainty": "Descriptive, unadjusted moments; sampling and distributional uncertainty are not propagated."
+    },
+    {
+      "parameters": [
+        "ferritin_gm_ug_l",
+        "ferritin_gsd"
+      ],
+      "source": "Supplied CHNS A-only table 2, ferritin summaries by Hb band",
+      "reported_and_derived": "Geometric means 11.349, 27.212 and 32.035 micrograms/L; geometric SDs 3.607, 2.445 and 2.636. Their logarithms supply means and SDs of log ferritin. Together with depletion probabilities, they determine the two positive log-scale slopes in each band.",
+      "assumptions": "The two-piece-normal quantile family is assumed. It matches these ferritin summaries in the population law without interpreting geometric SD as arithmetic SD.",
+      "adjustment_and_uncertainty": "Uncorrected ferritin, unweighted descriptive summaries; no reported uncertainty intervals."
+    },
+    {
+      "parameters": [
+        "within_band_latent_normal_correlation"
+      ],
+      "source": "Explicit assumptions informed qualitatively by Zhu et al., 2010, DOI 10.1024/0300-9831/a000014, Table III, page 150",
+      "population": "Separate 2004 Xianghe County, Hebei sample of 1,671 selected nonpregnant, nonlactating, parous women using IUD contraception, with supplement and disease exclusions.",
+      "measurement": "HemoCue Hb and plasma ferritin, rather than the CHNS central Hb and serum ferritin measurements.",
+      "reported_and_assumed": "Zhu reports ferritin geometric means of 1.3, 5.9 and 22.3 micrograms/L across Hb <10, 10–<12 and >=12 g/dL, supporting a stronger gradient at low Hb. Latent correlations 0.5, 0.1 and 0.1 are assumed, not extracted correlations or fitted CHNS within-band effects.",
+      "adjustment_and_uncertainty": "Table III is descriptive. Its reported intervals were not converted into individual SDs. Zhu's Table V adjusted OR of 6.448, adjusted for folate, B12, BMI, age and education, is not substituted for the requested crude OR or pooled with CHNS."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Crude low-Hb odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by the corresponding odds among ferritin_ug_l >=15, using the same generated people and no weights or covariate adjustment.",
+      "support": "The population law reproduces the A-only 2x2 probabilities, implying approximately 5.083 before sampling variation. This is an evidence-community transport assumption, not a validated estimate for other communities. Small generated samples may have zero cells."
+    },
+    {
+      "name": "Spearman rank correlation",
+      "definition": "Ordinary unweighted Spearman correlation between continuous hb_g_dl and continuous, uncorrected ferritin_ug_l over the whole generated cohort.",
+      "support": "Emerges jointly from the band contrasts, ferritin marginals and assumed within-band copulas. It is not identified by the supplied aggregates and is not replaced by Pearson correlation."
+    }
+  ],
+  "limitations": [
+    "The most consequential unidentified assumption is the within-band rank dependence: the supplied CHNS tables do not determine it, and Zhu supports its qualitative pattern rather than its numerical values. This particularly limits the Spearman analysis.",
+    "All A-only band and depletion probabilities are transported unchanged to other CHNS-design communities. Shared design does not establish exchangeability across communities.",
+    "The banded construction permits conditional-distribution changes at Hb 12 and 14; the ferritin transformation has a density kink at 15. These are approximation devices, not biological discontinuities.",
+    "Tail forms are weakly identified. The upper Hb tail is unbounded and can occasionally produce extreme measurements; no favorable-sample filtering is applied.",
+    "Pregnancy, inflammation, age composition and community clustering are not explicitly modeled. Their aggregate contributions in A are absorbed into the measurement distribution.",
+    "Parameters are fixed plug-in values. Repeated seeds express individual sampling variation, not uncertainty about source estimates, scientific structure or transport. The output supports assumption-dependent research planning, not causal inference or validated clinical prediction."
+  ],
+  "checks_actually_performed": [
+    {
+      "check": "Manual source-table arithmetic",
+      "result": "Table 1 totals 1,123 people, 206 with low Hb and 330 with low ferritin. Table 2 counts sum to 1,123 and its depletion counts sum to 330; its nonanemic depletion count is 148+59=207. These agree with Table 1."
+    },
+    {
+      "check": "Analytical construction review",
+      "result": "Positive ferritin slopes make its transformation monotone, preserving the chosen copula and placing the depletion probability at the specified normal quantile. The moment equations target mean and variance of log ferritin, not arithmetic ferritin."
+    },
+    {
+      "check": "Execution status",
+      "result": "No execution, validate adapter, source-check adapter or source replay was available in the supplied interface. The generator has not been run, and no generated-data checks or simulated estimand estimates are claimed."
+    }
+  ]
+}

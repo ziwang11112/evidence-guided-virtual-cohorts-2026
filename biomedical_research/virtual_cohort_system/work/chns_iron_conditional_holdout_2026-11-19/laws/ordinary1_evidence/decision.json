@@ -1,0 +1,56 @@
+{
+  "structure": "Revised once: retain the primary mixture law and marginal calibrations, but replace the assumed middle-band copula correlation with deterministic calibration to the additional CHNS geometric-mean ratio. Independent people receive paired continuous measurements. Calibration uses population integrals, never realized sample moments.",
+  "parameter_provenance": [
+    {
+      "parameters": "Band probabilities, depletion probabilities, Hb means and SDs, ferritin geometric means and geometric SDs",
+      "source": "CHNS evidence-community Tables 1 and 2",
+      "use": "Primary quantitative calibration; rounded summaries are treated as population values."
+    },
+    {
+      "parameters": "Middle-band ferritin geometric-mean ratio 1.215",
+      "source": "Additional CHNS evidence-community aggregate",
+      "use": "Calibrates the middle-band Gaussian copula correlation through conditional mean log ferritin above versus below Hb 13. The reported bootstrap interval 1.061–1.398 describes evidence uncertainty but is not sampled as person-level variation."
+    },
+    {
+      "parameters": "Low- and high-Hb copula correlations 0.50 and 0.05",
+      "source": "Author assumptions, qualitatively informed by Zhu et al. Table III",
+      "use": "Retain stronger positive dependence at low Hb and weak dependence at high Hb. These numerical correlations are not reported study estimates."
+    },
+    {
+      "parameters": "Bounded-power Hb and two-slope lognormal ferritin families",
+      "source": "Author-selected distributional assumptions",
+      "use": "Match band moments and depletion probabilities with positive continuous measurements."
+    },
+    {
+      "parameters": "External-study contribution",
+      "source": "Zhu et al., separate Hebei population",
+      "use": "Qualitative support for positive, severity-dependent association only. Neither its marginal levels nor its adjusted OR is pooled with CHNS."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of Hb <12 among ferritin <15 divided by the corresponding odds among ferritin >=15.",
+      "population_implication": "The calibrated population table implies (123*710)/(83*207), approximately 5.083. Generated sample estimates fluctuate."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected Hb and ferritin on the same generated people.",
+      "population_implication": "Determined by between-band differences and within-band copulas. The additional aggregate constrains middle-band dependence but does not identify the overall rank correlation."
+    }
+  ],
+  "limitations": [
+    "Most consequential remaining assumption: dependence within the low- and high-Hb bands follows the nominated copulas. This remains unidentified by the available aggregates and materially affects Spearman correlation without changing the calibrated crude OR.",
+    "Transport to other CHNS-design communities assumes the same joint population law. Community heterogeneity, clustering, aggregate-estimation uncertainty, and transport uncertainty are not simulated.",
+    "The cohort represents complete-case women aged 18–49 regardless of pregnancy or inflammation. No weighting, inflammation correction, altitude adjustment, or pregnancy exclusion is introduced.",
+    "Tail shapes are planning assumptions. Hb has approximate support 7.6–20.7 g/dL, and ferritin tail behavior is not established by the supplied summaries."
+  ],
+  "checks_actually_performed": [
+    "Checked count consistency: band counts total 1,123 and depleted counts total 330; the upper bands reproduce 207 depleted and 710 nondepleted women.",
+    "Calculated the evidence-community crude OR as approximately 5.083.",
+    "Reviewed the supplied generated-only checks for the previous law: threshold-cell fractions differed from A by at most approximately 0.00135, with band summaries close to their calibration values.",
+    "Analytically checked that changing the middle-band copula preserves all calibrated band marginal distributions and threshold-cell probabilities.",
+    "The revised calibration equates the conditional mean-log-ferritin difference to log(1.215), using the analytic conditional expectation of the piecewise-linear Gaussian transformation and deterministic quadrature.",
+    "No revised-code execution or revised generated-cohort checks were performed in this interface."
+  ]
+}

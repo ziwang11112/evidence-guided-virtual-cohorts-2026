@@ -1,0 +1,63 @@
+{
+  "structure": "One fixed stochastic law generates independent paired measurements for the same cohort. CHNS band probabilities and conditional marginal summaries anchor the law. Correlated latent normals provide positive dependence within bands, strongest at low Hb. Moment fitting concerns population distributions, never realized sample moments.",
+  "parameter_provenance": [
+    {
+      "parameters": [
+        "band_n",
+        "depleted_n"
+      ],
+      "source": "CHNS A-only Tables 1–2",
+      "use": "Determine band probabilities and conditional ferritin-depletion probabilities; reproduce the supplied 2-by-2 probabilities in expectation."
+    },
+    {
+      "parameters": [
+        "hb_mean_g_dl",
+        "hb_sd_g_dl",
+        "hb_cutpoints_g_dl"
+      ],
+      "source": "CHNS A-only Table 2",
+      "use": "Set conditional Hb population moments and supports. Published sample SDs are used as plug-in population SDs."
+    },
+    {
+      "parameters": [
+        "ferritin_gm_ug_l",
+        "ferritin_gsd",
+        "ferritin_cutoff_ug_l"
+      ],
+      "source": "CHNS A-only Tables 1–2 and requested cutoff",
+      "use": "Determine conditional log-ferritin means, variances and threshold probabilities through an increasing two-slope normal transformation."
+    },
+    {
+      "parameters": [
+        "within_band_gaussian_rho"
+      ],
+      "source": "Author-specified, informed qualitatively by Zhu et al., particularly Table III",
+      "use": "Represent a strong low-Hb iron association and attenuation at higher Hb. These correlations are assumptions, not published estimates. Zhu's separate Hebei sample is not pooled with CHNS, and its adjusted OR is not substituted for the requested crude OR."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of Hb <12 g/dL for ferritin <15 µg/L divided by those odds for ferritin >=15 µg/L.",
+      "model_population_value": 5.08294046
+    },
+    {
+      "name": "Unweighted Spearman correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected Hb and ferritin across all generated people.",
+      "model_population_value": "Determined jointly by the nominated mixture and copulas; not numerically evaluated here."
+    }
+  ],
+  "most_consequential_remaining_assumption": "Within-band dependence is not identified by the supplied CHNS aggregates. The chosen declining copula correlations materially determine Spearman correlation while leaving the population crude OR unchanged.",
+  "limitations": [
+    "Transferring evidence-community marginal distributions and dependence to other CHNS-design communities assumes exchangeability; community heterogeneity and sampling clusters are not simulated.",
+    "The target includes pregnancy and inflammation regardless of status. Measurements remain uncorrected, and Zhu's restricted population supplies only qualitative dependence evidence.",
+    "Band boundaries and the ferritin transformation kink are reconstruction devices, not biological discontinuities.",
+    "Conditional tail shapes and fixed plug-in parameters are assumptions; evidence-estimation uncertainty is not propagated."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic consistency: 206 + 619 + 298 = 1123, and 123 + 148 + 59 = 330 depleted women.",
+    "Computed the CHNS crude cross-product OR as (123 × 710)/(83 × 207) = approximately 5.083.",
+    "Analytically checked that the ferritin transformation preserves its specified threshold probability and log-scale moments, and that all measurement supports are positive.",
+    "Static interface review only; no code execution or generated-cohort empirical checks were performed."
+  ]
+}

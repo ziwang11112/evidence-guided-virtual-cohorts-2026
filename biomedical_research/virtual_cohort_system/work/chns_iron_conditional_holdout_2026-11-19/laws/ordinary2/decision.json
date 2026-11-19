@@ -1,0 +1,50 @@
+{
+  "structure": "One primary iid mixture law generates both measurements for each woman. Hb bands are sampled, not assigned fixed sample counts. Hb uses a reversed Weibull below 12, a bounded probit-normal between 12 and 14, and a shifted Weibull above 14. Conditional log ferritin is a continuous, increasing, two-slope transformation of a normal variable, matching each band's depletion probability, geometric mean, and geometric SD. Gaussian copulas supply within-band dependence.",
+  "parameter_provenance": [
+    {
+      "parameters": "Hb band probabilities, means, and SDs",
+      "source": "CHNS A-only Table 2",
+      "use": "Primary marginal calibration. The lower-band Weibull deficit is conditioned on Hb being positive, causing a small departure from its untruncated moment calibration."
+    },
+    {
+      "parameters": "Ferritin geometric means, geometric SDs, and depleted counts",
+      "source": "CHNS A-only Table 2, consistent with Table 1",
+      "use": "Population-level conditional calibration; no generated sample is adjusted to reproduce the aggregates exactly."
+    },
+    {
+      "parameters": "Within-band Gaussian copula correlations: 0.55, 0.15, 0.05",
+      "source": "Scientific assumptions informed qualitatively by Zhu et al. Table III",
+      "use": "A substantial positive gradient within low Hb, weakening toward iron-replete Hb levels. Zhu's ferritin contrast below 10 versus 10–11.9 g/dL supports the direction and concentration of dependence, but does not identify these numerical correlations."
+    },
+    {
+      "parameters": "Population transport",
+      "source": "Target definition and distinction between the two evidence populations",
+      "use": "CHNS aggregates provide the quantitative anchors. Hebei participants are not pooled with CHNS, and Zhu's adjusted odds ratio is not substituted for the requested crude odds ratio."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by those odds among ferritin_ug_l >=15.",
+      "anchor": "The CHNS evidence table gives (123*710)/(83*207) = approximately 5.083. The law preserves these population cell probabilities while allowing ordinary sampling variation."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of the ranks of continuous, uncorrected hb_g_dl and ferritin_ug_l in the same generated people.",
+      "anchor": "Between-band dependence is constrained by CHNS aggregates; within-band rank dependence is assumed rather than identified. No numerical Spearman estimate was supplied or independently validated."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is the within-band dependence: the chosen copula correlations materially affect Spearman correlation but are not identified by the A-only tables.",
+    "Transport assumes the evidence-community distribution is suitable for other same-design CHNS communities; geographic heterogeneity is not separately estimated.",
+    "Pregnancy and inflammation remain implicit in the CHNS complete-case mixture. Neither Hb nor ferritin is corrected, and no causal interpretation is intended.",
+    "Band boundaries introduce distributional approximations. The broad upper-Hb tail follows the reported dispersion and has no physiological upper bound.",
+    "The law treats tabulated summaries as fixed calibration inputs and does not propagate their estimation uncertainty or clustered-design uncertainty."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic reconciliation: Hb band counts sum to 1123; depleted counts sum to 330; the low-Hb band contains 206 women.",
+    "Reconstructed the four CHNS cells as 123, 83, 207, and 710 and calculated their crude odds ratio as approximately 5.083.",
+    "Analytically checked that the two-slope log-ferritin construction matches its specified depletion probability and first two log moments.",
+    "Reviewed the code against the requested model lookup, output column order, independent-person sampling, and seed interface. No generator execution or generated-only Monte Carlo checks were performed."
+  ]
+}

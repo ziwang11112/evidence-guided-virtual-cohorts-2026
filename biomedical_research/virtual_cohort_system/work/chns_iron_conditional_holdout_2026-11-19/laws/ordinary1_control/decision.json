@@ -1,0 +1,57 @@
+{
+  "structure": "Retain the previously sealed scientific model and implementation unchanged. Draw independent people from one fixed, unweighted mixture law: select an Hb band, then generate continuous paired measurements using its Gaussian copula and calibrated marginal quantiles. Calibration applies to population quantities, not realized sample moments. The supplied generated-only checks support retaining the implementation; they do not identify the missing within-band dependence.",
+  "parameter_provenance": [
+    {
+      "parameters": "Hb-band probabilities and ferritin depletion probabilities",
+      "source": "CHNS evidence-community Tables 1 and 2",
+      "use": "Normalize the Hb counts [206,619,298] and use depleted counts [123,148,59] within those bands. This reproduces the evidence-community threshold table in the model population."
+    },
+    {
+      "parameters": "Hb means and SDs; ferritin geometric means and geometric SDs",
+      "source": "CHNS evidence-community Table 2",
+      "use": "Treat the reported rounded summaries as population calibration values for the conditional marginal distributions."
+    },
+    {
+      "parameters": "Within-band Gaussian copula correlations [0.50,0.15,0.05]",
+      "source": "Author-nominated assumptions, qualitatively informed by Zhu et al. Table III",
+      "use": "Represent stronger positive association at low Hb and attenuation at higher Hb. These numerical correlations are not reported estimates from either population."
+    },
+    {
+      "parameters": "Bounded-power Hb quantiles and two-slope lognormal ferritin quantiles",
+      "source": "Author-selected distribution families",
+      "use": "Provide positive continuous measurements matching the supplied conditional moments and ferritin depletion probabilities."
+    },
+    {
+      "parameters": "External evidence contribution",
+      "source": "Zhu et al., separate 2004 Hebei population",
+      "use": "Inform association direction and severity dependence only. Do not pool its biomarker levels with CHNS or substitute its adjusted OR for the requested crude OR."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by the corresponding odds among ferritin_ug_l >=15.",
+      "population_implication": "The calibrated population OR is (123*710)/(83*207), approximately 5.083. Generated sample estimates fluctuate."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected hb_g_dl and ferritin_ug_l across all generated people.",
+      "population_implication": "Determined by the calibrated between-band differences and nominated within-band copulas; not identified by the supplied aggregates alone."
+    }
+  ],
+  "limitations": [
+    "Most consequential remaining assumption: the nominated within-band copulas describe the unobserved continuous dependence. They materially affect Spearman correlation while leaving the calibrated crude OR unchanged.",
+    "Transport assumes evidence-community band frequencies and conditional distributions apply to other communities sampled under the same CHNS design. Community heterogeneity and survey clustering are not modeled.",
+    "The target includes complete-case women regardless of pregnancy or inflammation. No pregnancy exclusions, inflammation corrections, altitude adjustments, or survey weights are introduced.",
+    "Hb tail shapes are planning assumptions, with approximate overall support 7.6–20.7 g/dL. Ferritin tail shape is also assumed; neither is validated for extreme-tail clinical analyses.",
+    "Fixed calibration parameters omit uncertainty in the aggregate estimates and their transport. The external Hebei study does not resolve these uncertainties."
+  ],
+  "checks_actually_performed": [
+    "Checked count consistency: Hb-band counts total 1,123, depleted counts total 330, and the upper two bands reproduce the 207 depleted and 710 nondepleted women without low Hb.",
+    "Calculated the evidence-community crude OR from Table 1 as approximately 5.083.",
+    "Algebraically checked the Hb quantile moment equations and the ferritin threshold and log-moment calibration equations.",
+    "Reviewed the supplied worker-generated checks: all four threshold-cell fractions differed from A by less than 0.0014; Hb-band means and SDs and ferritin geometric summaries remained close to their calibration values.",
+    "Noted the largest displayed ferritin geometric-SD discrepancy was 3.684 generated versus 3.607 in the low-Hb band. No parameters or seeds were changed to chase that finite-sample discrepancy.",
+    "No additional code execution, new generated-cohort testing, or evaluation-data access was performed in this review."
+  ]
+}

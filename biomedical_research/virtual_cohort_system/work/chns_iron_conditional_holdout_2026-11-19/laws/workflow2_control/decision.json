@@ -1,0 +1,195 @@
+{
+  "structure": "One fixed iid mixture law generates both measurements for each woman. CHNS Hb-band frequencies, Hb moments, ferritin log moments and depletion probabilities determine the marginals. Bounded-beta Hb distributions and monotone two-slope Gaussian transformations for log ferritin match the supplied summaries in population. A Gaussian copula supplies within-band dependence. Finite-sample counts and moments fluctuate naturally.",
+  "revision": {
+    "decision": "Retain the sealed scientific specification and generator unchanged.",
+    "reason": "The supplied generated-only report shows close agreement with all checked A-table summaries. The discrepancies are compatible with Monte Carlo variation and provide no concrete reason to revise the marginal construction. No new statistic identifies within-band dependence, so the report does not justify tuning the copula or the unreported Spearman correlation."
+  },
+  "parameter_provenance": [
+    {
+      "source": "Supplied CHNS A-only supplement, Tables 1 and 2",
+      "population": "Evidence-community linked complete-case women aged 18–49, regardless of pregnancy or inflammation; one measurement pair per woman",
+      "measurement": "Central whole-blood Hb in g/dL and uncorrected serum ferritin in micrograms/L",
+      "parameters": "Band weights 206:619:298, depleted counts 123:148:59, and thresholds Hb <12 and ferritin <15",
+      "adjustment": "None; unweighted",
+      "uncertainty": "Aggregate counts are treated as fixed population anchors; sampling and community-transport uncertainty are not propagated."
+    },
+    {
+      "source": "Supplied CHNS A-only supplement, Table 2",
+      "population": "Same CHNS evidence cohort, not independent evidence from Table 1",
+      "parameters": "All band-specific Hb means and sample SDs and ferritin geometric means and geometric SDs in model_spec",
+      "derivation": "Hb beta parameters follow from reported moments and assumed supports. Ferritin slopes follow from each band's depletion probability, mean log ferritin and SD log ferritin, using SD(log ferritin) = log(geometric SD).",
+      "adjustment": "None; descriptive within-Hb-band summaries",
+      "uncertainty": "Rounded sample summaries are used as population targets, not enforced on generated finite samples."
+    },
+    {
+      "source": "Zhu et al., 2010, DOI 10.1024/0300-9831/a000014, Methods pp.145–146 and Tables III and V",
+      "population": "Separate June 2004 rural Hebei sample of 1,671 selected nonpregnant, nonlactating, parous IUD users; not CHNS",
+      "measurement": "Hemocue Hb in g/L and plasma ferritin in micrograms/L",
+      "evidence": "Table III reports increasing ferritin geometric means across Hb strata: 1.3, 5.9 and 22.3 micrograms/L. Table V reports adjusted anemia OR 6.448, 95% CI 4.827–8.615, for ferritin <15.",
+      "adjustment": "Table III is descriptive by Hb stratum; Table V includes age, BMI, education, folate deficiency and B12 deficiency.",
+      "use": "Qualitative support for positive dependence and a stronger iron-related gradient at low Hb. These findings do not identify within-CHNS-band correlations. The adjusted OR and Hebei marginal distributions are not imposed on CHNS.",
+      "uncertainty": "The reported OR interval describes that source analysis, not uncertainty in the nominated copula correlations."
+    },
+    {
+      "source": "Explicit modeling assumptions",
+      "parameters": "Within-band latent Gaussian correlations 0.30, 0.15 and 0.10; Hb beta supports 0–12, 12–14 and 14–24 g/dL; two-slope log-ferritin shapes",
+      "rationale": "Allow modest positive residual dependence, strongest in the anemia band, while preserving the closer CHNS aggregates.",
+      "uncertainty": "Neither these correlations nor the tail shapes and support endpoints are identified by the supplied evidence."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Crude unweighted odds ratio",
+      "definition": "Odds of Hb <12 g/dL among women with ferritin <15 micrograms/L divided by those odds among other women, using the same generated people.",
+      "model_anchor": "The transported population table implies (123 × 710)/(83 × 207) = approximately 5.083. This is derived from A-only evidence, not an estimate from unseen communities."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation between ranks of continuous, uncorrected Hb and ferritin across the same generated women.",
+      "model_anchor": "Determined by the observed between-band differences plus assumed within-band copula dependence; not identified by the supplied summaries."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is the within-band dependence: the nominated copula correlations directly affect Spearman correlation but are not measured in the supplied evidence.",
+    "Transporting the A-community joint distribution to other communities under the same CHNS design is unverified; identical sampling design does not ensure identical biomarker distributions.",
+    "Hb beta shapes, the 24 g/dL upper support and ferritin tail shapes remain unverified. This is a descriptive joint law, not a causal model of iron treatment.",
+    "Pregnancy, inflammation, age composition, assay effects and community clustering are not modeled separately. Ferritin remains uncorrected as requested.",
+    "The supplied checks assess reproduction of fitted A summaries, not target validity or unreported within-band association. Repeated seeds capture individual sampling variation under fixed parameters, not evidence or structural uncertainty."
+  ],
+  "checks_actually_performed": [
+    {
+      "check": "Manual aggregate reconciliation",
+      "result": "Table 1 totals 1,123 women, including 206 with low Hb and 330 with low ferritin. Table 2 has the same total; its nonanemic depleted counts sum to 148 + 59 = 207."
+    },
+    {
+      "check": "Manual crude-OR derivation",
+      "result": "(123 × 710)/(83 × 207) is approximately 5.083."
+    },
+    {
+      "check": "Review of controller-supplied generated-only feedback for the sealed candidate",
+      "scope": "Original A-table threshold cells, Hb-band frequencies, within-band depletion fractions, Hb means and SDs, and ferritin geometric means and geometric SDs. Execution was supplied by the controller; its seed and sample size were not explicitly reported.",
+      "interpretation": "Close numerical reproduction of the fitted summaries; remaining differences are compatible with sampling variation. This report contains no held-out estimates and no Spearman source statistic.",
+      "report_columns": [
+        "label",
+        "observed_A",
+        "virtual"
+      ],
+      "report": [
+        [
+          "threshold_cell_fraction_1",
+          0.10952804986642921,
+          0.10872222222222222
+        ],
+        [
+          "threshold_cell_fraction_2",
+          0.07390917186108638,
+          0.07355555555555555
+        ],
+        [
+          "threshold_cell_fraction_3",
+          0.18432769367764915,
+          0.18319444444444444
+        ],
+        [
+          "threshold_cell_fraction_4",
+          0.6322350845948352,
+          0.6345277777777778
+        ],
+        [
+          "band_1_fraction",
+          0.1834372217275156,
+          0.1822777777777778
+        ],
+        [
+          "band_1_depletion_fraction",
+          0.5970873786407767,
+          0.5964644925327645
+        ],
+        [
+          "band_1_hb_mean",
+          10.676,
+          10.664347252477814
+        ],
+        [
+          "band_1_hb_sd",
+          1.303,
+          1.3070525249528249
+        ],
+        [
+          "band_1_ferritin_gm",
+          11.349,
+          11.195037943783566
+        ],
+        [
+          "band_1_ferritin_gsd",
+          3.607,
+          3.633802302577422
+        ],
+        [
+          "band_2_fraction",
+          0.5512021371326803,
+          0.5550555555555555
+        ],
+        [
+          "band_2_depletion_fraction",
+          0.23909531502423265,
+          0.23826443799419478
+        ],
+        [
+          "band_2_hb_mean",
+          13.007,
+          13.007908749738807
+        ],
+        [
+          "band_2_hb_sd",
+          0.532,
+          0.5329589919242999
+        ],
+        [
+          "band_2_ferritin_gm",
+          27.212,
+          27.44258764982575
+        ],
+        [
+          "band_2_ferritin_gsd",
+          2.445,
+          2.440042163636051
+        ],
+        [
+          "band_3_fraction",
+          0.2653606411398041,
+          0.26266666666666666
+        ],
+        [
+          "band_3_depletion_fraction",
+          0.19798657718120805,
+          0.19395093062605753
+        ],
+        [
+          "band_3_hb_mean",
+          15.348,
+          15.357047711127553
+        ],
+        [
+          "band_3_hb_sd",
+          1.794,
+          1.7940372530785986
+        ],
+        [
+          "band_3_ferritin_gm",
+          32.035,
+          32.35119385697306
+        ],
+        [
+          "band_3_ferritin_gsd",
+          2.636,
+          2.6523306143036427
+        ]
+      ]
+    },
+    {
+      "check": "Additional execution and validation",
+      "result": "None performed in this review. No executable adapter or additional source statistic was supplied; no new execution, automated validation or source replay is claimed."
+    }
+  ]
+}

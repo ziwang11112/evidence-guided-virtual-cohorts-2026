@@ -1,0 +1,55 @@
+{
+  "structure": "Revise only the middle-band copula calibration using the additional CHNS aggregate. Retain one primary iid law: randomly sampled Hb bands; reversed-Weibull, bounded-probit, and shifted-Weibull Hb margins; continuous two-slope normal transformations for log ferritin; and Gaussian copulas within bands. The middle-band correlation is now derived deterministically from the specified geometric-mean ratio, without adjusting generated samples.",
+  "parameter_provenance": [
+    {
+      "parameters": "Hb band probabilities, means, and SDs",
+      "source": "CHNS A-only Table 2",
+      "use": "Primary Hb marginal calibration. Conditioning the lower-band Weibull on positive Hb slightly changes its unconditioned moment targets."
+    },
+    {
+      "parameters": "Ferritin geometric means, geometric SDs, and depleted counts",
+      "source": "CHNS A-only Table 2, reconciled with Table 1",
+      "use": "Match each band's population depletion probability and first two log-ferritin moments."
+    },
+    {
+      "parameters": "Middle-band ferritin geometric-mean ratio 1.215 at Hb split 13 g/dL",
+      "source": "Additional CHNS evidence-community aggregate",
+      "use": "Replace the previous assumed middle-band correlation of 0.15 with a numerical calibration to this ratio. Deterministic quadrature integrates conditional log ferritin over the two Hb intervals. The bootstrap interval 1.061–1.398 describes uncertainty but is not sampled in this primary law."
+    },
+    {
+      "parameters": "Lower- and upper-band Gaussian copula correlations 0.55 and 0.05",
+      "source": "Scientific assumptions, qualitatively informed by Zhu et al. Table III",
+      "use": "Retain stronger positive dependence within low Hb and weak dependence at high Hb. Zhu's pronounced ferritin contrast across lower Hb strata supports the direction, not these numerical values."
+    },
+    {
+      "parameters": "Transport to other CHNS communities",
+      "source": "Target definition and evidence-population distinction",
+      "use": "Use CHNS quantitatively. Do not pool the separate Hebei population or substitute Zhu's adjusted odds ratio for a crude association."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by the corresponding odds among ferritin_ug_l >=15.",
+      "anchor": "CHNS Table 1 gives (123*710)/(83*207), approximately 5.083. These population cell probabilities are unchanged by the revision; finite samples fluctuate naturally."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected Hb and ferritin in the same generated people.",
+      "anchor": "Between-band association follows CHNS summaries, and middle-band dependence now uses the additional geometric-mean contrast. Remaining within-band rank structure is model-dependent."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is the copula structure, particularly the retained lower-band correlation of 0.55. The new middle-band contrast does not identify dependence throughout the cohort, so Spearman correlation remains sensitive to this assumption.",
+    "Transport treats evidence-community distributions as applicable to other same-design CHNS communities; geographic heterogeneity is not separately estimated.",
+    "Pregnancy, inflammation, and other causes of anemia are implicit in the complete-case mixture. Both biomarkers remain uncorrected, and associations are not causal effects.",
+    "Hb-band boundaries and parametric tails are approximations. The upper-Hb distribution has no physiological upper bound.",
+    "The primary law treats aggregate estimates as fixed and does not propagate parameter uncertainty or reproduce clustered sampling."
+  ],
+  "checks_actually_performed": [
+    "Reconciled band counts to 1123 and depleted counts to 330, recovering the four threshold cells 123, 83, 207, and 710.",
+    "Reviewed the supplied worker checks for the previous law: threshold cell fractions differed from A by at most approximately 0.00145, and conditional ferritin geometric means were within approximately 1%. These checks do not validate the revised dependence calibration.",
+    "Analytically checked the two-slope log-ferritin moment construction and the conditional-normal expectation used to calibrate the new geometric-mean ratio.",
+    "Reviewed seed handling, spec['model'] lookup, iid sampling, output schema, and absence of sample-moment enforcement or seed selection. No revised-generator execution or new Monte Carlo checks were performed."
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "structure": "Retain the sealed scientific model and generator unchanged. Independent people are drawn from three Hb bands using CHNS A-only proportions. Hb uses Weibull gaps below 12 and above 14 g/dL, with the lower gap conditioned on positive Hb; the middle band uses a truncated normal. Within-band Gaussian copulas connect Hb ranks to continuous, two-piece-normal log ferritin. Ferritin slopes are calculated from each band's depletion probability, geometric mean and geometric SD. These are population-parameter calculations, not finite-sample corrections. The supplied generated-only feedback shows close reproduction of the fitted aggregates and supplies no new evidence identifying within-band dependence.",
+  "parameter_provenance": [
+    {
+      "parameters": [
+        "band_n",
+        "ferritin_depleted_n",
+        "hb_cutpoints_g_dl",
+        "ferritin_cutpoint_ug_l"
+      ],
+      "source_locator": "Supplied CHNS A-only tables 1 and 2",
+      "population_selection": "1,123 linked complete-case women aged 18–49 in evidence communities, regardless of pregnancy or inflammation; one measurement pair per person.",
+      "measurement_units": "Central whole-blood Hb, g/dL; uncorrected serum ferritin, micrograms/L.",
+      "reported_and_derived": "Reported band counts 206, 619 and 298 determine mixture probabilities. Depletion counts 123, 148 and 59 determine conditional probabilities. Table 1 implies crude OR=(123*710)/(207*83), approximately 5.083.",
+      "adjustment_uncertainty_transport": "Unweighted and unadjusted. No intervals supplied. Counts are fixed plug-in estimates, transported unchanged to other communities under the same design; exchangeability is assumed."
+    },
+    {
+      "parameters": [
+        "hb_tail_gap_mean_g_dl",
+        "hb_tail_gap_sd_g_dl",
+        "hb_middle_normal_location_g_dl",
+        "hb_middle_normal_scale_g_dl"
+      ],
+      "source_locator": "Supplied CHNS A-only table 2, conditional Hb means and sample SDs",
+      "population_measurement": "Same CHNS evidence cohort and Hb measurement as above.",
+      "reported_and_derived": "Lower gap mean=12-10.676=1.324, SD=1.303; upper gap mean=15.348-14=1.348, SD=1.794. Weibull parameters follow from these moments. Middle normal location 13.0205 and scale 0.911 approximately reproduce the truncated mean 13.007 and SD 0.532.",
+      "assumptions_uncertainty": "Weibull and truncated-normal forms are assumptions. Positive-Hb conditioning slightly changes lower-band moments. Descriptive sampling uncertainty is not propagated."
+    },
+    {
+      "parameters": [
+        "ferritin_gm_ug_l",
+        "ferritin_gsd"
+      ],
+      "source_locator": "Supplied CHNS A-only table 2, ferritin distributions by Hb band",
+      "population_measurement": "Same CHNS cohort; uncorrected serum ferritin in micrograms/L.",
+      "reported_and_derived": "Reported geometric means are 11.349, 27.212 and 32.035; geometric SDs are 3.607, 2.445 and 2.636. Their logarithms specify means and SDs of log ferritin. Together with depletion probabilities, these determine two positive slopes around the normal quantile corresponding to ferritin 15.",
+      "assumptions_uncertainty": "The continuous two-piece-normal log-ferritin family is assumed. Geometric SDs are not treated as arithmetic SDs. No uncertainty intervals are supplied."
+    },
+    {
+      "parameters": [
+        "within_band_latent_normal_correlation"
+      ],
+      "source_locator": "Explicit assumptions, qualitatively informed by Zhu et al., 2010, DOI 10.1024/0300-9831/a000014, Table III, page 150",
+      "population_selection": "Separate June 2004 Xianghe County, Hebei sample: 1,671 selected nonpregnant, nonlactating, parous women using IUD contraception, with disease, medication and supplement exclusions.",
+      "measurement_units": "HemoCue Hb, converted from g/L to g/dL for threshold comparison; plasma ferritin, micrograms/L.",
+      "reported_and_assumed": "Ferritin geometric means of 1.3, 5.9 and 22.3 across Hb <10, 10–<12 and >=12 g/dL support a stronger gradient at low Hb. Latent correlations 0.5, 0.1 and 0.1 are assumptions, not reported correlations.",
+      "adjustment_uncertainty_transport": "Table III is descriptive and provides no within-band rank correlation. Its intervals were not converted into individual SDs. Table V's adjusted OR 6.448 (95% CI 4.827–8.615), controlling for folate, B12, BMI, age and education, is not substituted for the crude OR. Hebei and CHNS are not pooled or treated as overlapping cohorts."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Crude low-Hb odds ratio",
+      "definition": "Unweighted odds of hb_g_dl <12 among ferritin_ug_l <15 divided by those among ferritin_ug_l >=15, using the same generated people.",
+      "support": "The population law matches A-only threshold probabilities, implying approximately 5.083 before sampling variation. Transfer to other communities is assumed, not validated. Small samples can have zero cells."
+    },
+    {
+      "name": "Spearman rank correlation",
+      "definition": "Unweighted Spearman correlation between continuous hb_g_dl and continuous, uncorrected ferritin_ug_l across the whole generated cohort.",
+      "support": "Determined jointly by band contrasts, conditional marginals and assumed within-band copulas. The supplied aggregates do not identify it; no Pearson correlation is substituted."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is within-band rank dependence. The CHNS aggregates do not identify it, and Zhu provides only qualitative support for the chosen pattern. The feedback cannot validate the resulting Spearman correlation.",
+    "Transporting A-only distributions unchanged assumes exchangeability across communities; shared sampling design alone does not establish this.",
+    "Conditional distributions can change at Hb 12 and 14; ferritin density has a kink at 15. These are statistical approximations, not biological discontinuities.",
+    "Tail shapes are weakly identified. The unbounded upper Hb tail can produce extreme measurements, and supplied checks do not assess tail realism.",
+    "Pregnancy, inflammation, age composition and community clustering are absorbed into aggregate distributions rather than explicitly modeled. Independent draws do not represent cluster-level sampling variation.",
+    "Fixed parameters omit evidence, structural and transport uncertainty. Repeated seeds represent individual sampling variation, not new clinical evidence. Intended use is assumption-dependent research planning, not causal inference or validated prediction."
+  ],
+  "checks_actually_performed": [
+    {
+      "check": "Manual source-table consistency",
+      "result": "Table 1 totals 1,123 people, 206 with Hb <12 and 330 with ferritin <15. Table 2 band counts total 1,123; depletion counts total 330; nonanemic depletion counts total 148+59=207, agreeing with table 1."
+    },
+    {
+      "check": "Controller-supplied generated-only comparison against A tables",
+      "scope": "Feedback from execution of the sealed candidate; no held-out estimates. Seed and execution settings were not supplied. This report is retained below, not represented as a new local execution.",
+      "report": [
+        {
+          "label": "threshold_cell_fraction_1",
+          "observed_A": 0.10952804986642921,
+          "virtual": 0.10888888888888888
+        },
+        {
+          "label": "threshold_cell_fraction_2",
+          "observed_A": 0.07390917186108638,
+          "virtual": 0.07338888888888889
+        },
+        {
+          "label": "threshold_cell_fraction_3",
+          "observed_A": 0.18432769367764915,
+          "virtual": 0.18375
+        },
+        {
+          "label": "threshold_cell_fraction_4",
+          "observed_A": 0.6322350845948352,
+          "virtual": 0.6339722222222223
+        },
+        {
+          "label": "band_1_fraction",
+          "observed_A": 0.1834372217275156,
+          "virtual": 0.1822777777777778
+        },
+        {
+          "label": "band_1_depletion_fraction",
+          "observed_A": 0.5970873786407767,
+          "virtual": 0.5973788479122218
+        },
+        {
+          "label": "band_1_hb_mean",
+          "observed_A": 10.676,
+          "virtual": 10.66709194707646
+        },
+        {
+          "label": "band_1_hb_sd",
+          "observed_A": 1.303,
+          "virtual": 1.3201008726113097
+        },
+        {
+          "label": "band_1_ferritin_gm",
+          "observed_A": 11.349,
+          "virtual": 11.238849116933851
+        },
+        {
+          "label": "band_1_ferritin_gsd",
+          "observed_A": 3.607,
+          "virtual": 3.6283779047887856
+        },
+        {
+          "label": "band_2_fraction",
+          "observed_A": 0.5512021371326803,
+          "virtual": 0.5550555555555555
+        },
+        {
+          "label": "band_2_depletion_fraction",
+          "observed_A": 0.23909531502423265,
+          "virtual": 0.23711340206185566
+        },
+        {
+          "label": "band_2_hb_mean",
+          "observed_A": 13.007,
+          "virtual": 13.005933239097846
+        },
+        {
+          "label": "band_2_hb_sd",
+          "observed_A": 0.532,
+          "virtual": 0.5301878490264547
+        },
+        {
+          "label": "band_2_ferritin_gm",
+          "observed_A": 27.212,
+          "virtual": 27.226921140948132
+        },
+        {
+          "label": "band_2_ferritin_gsd",
+          "observed_A": 2.445,
+          "virtual": 2.4406662129137944
+        },
+        {
+          "label": "band_3_fraction",
+          "observed_A": 0.2653606411398041,
+          "virtual": 0.26266666666666666
+        },
+        {
+          "label": "band_3_depletion_fraction",
+          "observed_A": 0.19798657718120805,
+          "virtual": 0.19849830795262266
+        },
+        {
+          "label": "band_3_hb_mean",
+          "observed_A": 15.348,
+          "virtual": 15.360313958551044
+        },
+        {
+          "label": "band_3_hb_sd",
+          "observed_A": 1.794,
+          "virtual": 1.816503284411953
+        },
+        {
+          "label": "band_3_ferritin_gm",
+          "observed_A": 32.035,
+          "virtual": 32.33253777335603
+        },
+        {
+          "label": "band_3_ferritin_gsd",
+          "observed_A": 2.636,
+          "virtual": 2.6350530754429653
+        }
+      ],
+      "assessment": "All reported discrepancies are small and compatible with sampling variation plus rounded or approximate moment calibration. The report supplies no evidence of extraction error or a material mismatch in these aggregates. Without execution settings or replicate uncertainty, no formal Monte Carlo test is claimed. These fitted-summary checks do not distinguish alternative within-band copulas or establish target validity; retain rather than tune."
+    },
+    {
+      "check": "Additional execution and source-check status",
+      "result": "No new execution, validation adapter, source-check adapter or source replay was available to this author in this round. No additional source statistic was supplied. No new generated-data result or held-out validation is claimed."
+    }
+  ]
+}

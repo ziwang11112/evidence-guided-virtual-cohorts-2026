@@ -1,0 +1,51 @@
+{
+  "structure": "Retained the primary scientific law and parameters unchanged. Each independent woman receives a randomly sampled Hb band and paired continuous measurements. Hb uses a positive-conditioned reversed Weibull below 12, bounded probit-normal between 12 and 14, and shifted Weibull above 14. Conditional log ferritin is an increasing two-slope transformation of a normal variable; Gaussian copulas provide within-band dependence. Supplied generated-only checks support retaining the aggregate calibration but do not validate the assumed within-band dependence.",
+  "parameter_provenance": [
+    {
+      "parameters": "Hb band probabilities, means, and SDs",
+      "source": "CHNS A-only Table 2",
+      "use": "Counts normalized into population band probabilities; reported moments calibrate continuous Hb distributions. Conditioning the lowest band's Hb on positivity slightly changes its nominal moments."
+    },
+    {
+      "parameters": "Ferritin geometric means, geometric SDs, and depletion probabilities by Hb band",
+      "source": "CHNS A-only Table 2, reconciled with Table 1",
+      "use": "The two-slope log-ferritin distribution matches each band's depletion probability and first two log moments at the population level."
+    },
+    {
+      "parameters": "Within-band Gaussian copula correlations of 0.55, 0.15, and 0.05",
+      "source": "Scientific assumptions, qualitatively informed by Zhu et al. Table III",
+      "use": "Assumes positive dependence concentrated at low Hb and weakening at higher Hb. Zhu's severe-anemia ferritin gradient supports the qualitative pattern, not these numerical values."
+    },
+    {
+      "parameters": "Distributional transport to other same-design CHNS communities",
+      "source": "Target definition and separation of the evidence populations",
+      "use": "CHNS provides quantitative calibration. Hebei observations are not pooled with CHNS, and Zhu's adjusted odds ratio is not used as the requested crude odds ratio."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by those odds among ferritin_ug_l >=15.",
+      "population_anchor": "The model's threshold probabilities reproduce CHNS cells proportional to 123, 83, 207, and 710, implying OR = (123*710)/(83*207), approximately 5.083. Finite samples fluctuate naturally."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation between ranks of continuous, uncorrected hb_g_dl and ferritin_ug_l in the same generated women.",
+      "population_anchor": "Between-band dependence follows the CHNS conditional ferritin distributions; within-band dependence follows the nominated copulas. No observed Spearman estimate is available."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is within-band dependence. Its numerical copula correlations are not identified by the supplied aggregates and materially affect Spearman correlation; matching the tables cannot resolve this.",
+    "Transport assumes the evidence communities adequately represent other communities under the same CHNS design. Community heterogeneity is not separately estimated.",
+    "Pregnancy and inflammation remain implicit in the complete-case mixture. Measurements are uncorrected, and associations have no causal interpretation.",
+    "Band-specific distribution shapes are approximations. The broad upper-Hb tail follows the reported SD and has no physiological upper bound.",
+    "Calibration summaries are treated as fixed; their estimation uncertainty and clustered-design uncertainty are not propagated. People are sampled independently as requested."
+  ],
+  "checks_actually_performed": [
+    "Reconciled counts: Hb bands total 1123; depleted counts total 330; threshold cells reconstruct as 123, 83, 207, and 710.",
+    "Checked the population calibration algebra: the ferritin transformation fixes its threshold quantile and first two log moments; threshold cells imply a crude odds ratio of approximately 5.083.",
+    "Reviewed the supplied worker's generated-only results: all four threshold cell fractions differ from A by less than 0.0015, and all Hb band fractions differ by less than 0.0039.",
+    "Reviewed the supplied worker's conditional summaries: Hb means differ by less than 0.009 g/dL, Hb SDs by less than 0.054 g/dL, ferritin geometric means by less than 0.31 micrograms/L, and ferritin geometric SDs by less than 0.017.",
+    "Reviewed the model lookup, seed-based independent sampling, unique integer row IDs, positive measurements, and required column order. No additional code execution, seed selection, held-out comparison, or empirical Spearman validation was performed in this review."
+  ]
+}

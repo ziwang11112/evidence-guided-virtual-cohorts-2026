@@ -1,0 +1,171 @@
+{
+  "structure": "Revised once: retain the previous marginal distributions and low/high-band copulas, but replace the assumed middle-band correlation with deterministic population-level calibration to the newly supplied ferritin geometric-mean ratio. Each person independently receives an Hb band and two correlated normal scores. Hb uses a reversed Weibull gap below 12, a truncated normal between 12 and 14, and a Weibull gap above 14. Log ferritin is an increasing two-piece affine transformation of its normal score, anchored at ferritin 15. Its slopes match each band's depletion probability, geometric mean and geometric SD. Calibration uses quadrature of conditional expected log ferritin, not generated sample moments. The null middle correlation denotes this calibrated parameter, not independence.",
+  "parameter_provenance": [
+    {
+      "parameters": [
+        "band_n",
+        "ferritin_depleted_n",
+        "hb_cutpoints_g_dl",
+        "ferritin_cutpoint_ug_l"
+      ],
+      "source": "Supplied CHNS A-only tables 1 and 2.",
+      "population_and_measurement": "1,123 linked complete-case women aged 18–49 in evidence communities, regardless of pregnancy or inflammation; central whole-blood Hb in g/dL and uncorrected serum ferritin in micrograms/L.",
+      "reported_and_derived": "Reported band counts 206, 619, 298 and depletion counts 123, 148, 59 define mixture and conditional depletion probabilities. The resulting source crude OR is (123*710)/(207*83), approximately 5.083.",
+      "adjustment_and_uncertainty": "Unweighted, unadjusted; confidence intervals were not supplied. Source proportions are fixed plug-in estimates transported to other CHNS-design communities."
+    },
+    {
+      "parameters": [
+        "hb_tail_gap_mean_g_dl",
+        "hb_tail_gap_sd_g_dl",
+        "hb_middle_normal_location_g_dl",
+        "hb_middle_normal_scale_g_dl"
+      ],
+      "source": "CHNS A-only table 2, conditional Hb means and sample SDs.",
+      "reported_and_derived": "Lower gap mean 12-10.676=1.324 and SD 1.303; upper gap mean 15.348-14=1.348 and SD 1.794. Weibull shapes and scales are solved from these moments. Middle truncated-normal location 13.0205 and scale 0.911 approximately reproduce conditional mean 13.007 and SD 0.532.",
+      "assumptions_and_uncertainty": "Distribution families are assumptions. Conditioning lower-band Hb to be positive slightly changes its moments. Sampling uncertainty is not propagated."
+    },
+    {
+      "parameters": [
+        "ferritin_gm_ug_l",
+        "ferritin_gsd"
+      ],
+      "source": "CHNS A-only table 2, ferritin summaries by Hb band.",
+      "reported_and_derived": "Geometric means 11.349, 27.212, 32.035 micrograms/L and geometric SDs 3.607, 2.445, 2.636. Their logarithms determine means and SDs of log ferritin; depletion probabilities provide a third constraint for the two-piece-normal construction.",
+      "assumptions_and_uncertainty": "The monotone two-piece-normal family is assumed. These are unweighted, uncorrected descriptive summaries without supplied uncertainty intervals; geometric SD is not treated as arithmetic SD."
+    },
+    {
+      "parameters": [
+        "middle_ferritin_contrast_hb_split_g_dl",
+        "middle_ferritin_upper_to_lower_gm_ratio",
+        "within_band_latent_normal_correlation[1]"
+      ],
+      "source": "Additional aggregate from the same CHNS evidence communities: GM ferritin at Hb 13–<14 divided by GM ferritin at Hb 12–<13.",
+      "reported_and_derived": "Reported ratio 1.215, with province-stratified community-bootstrap 95% interval 1.061–1.398. The middle-band Gaussian copula correlation is solved so the difference in expected log ferritin across these subbands equals log(1.215). The subband probabilities are implied by the fitted Hb marginal because observed subband counts were not supplied.",
+      "adjustment_and_uncertainty": "Central measurements, no covariate adjustment. This overlaps the A tables and is not independent replication. The point estimate is used; the bootstrap interval is not converted to individual variation or propagated."
+    },
+    {
+      "parameters": [
+        "within_band_latent_normal_correlation[0]",
+        "within_band_latent_normal_correlation[2]"
+      ],
+      "source": "Explicit numerical assumptions, qualitatively informed by Zhu et al., 2010, DOI 10.1024/0300-9831/a000014, Table III, page 150.",
+      "population_and_measurement": "Separate 2004 Hebei sample of 1,671 selected nonpregnant, nonlactating, parous women using IUD contraception, with disease and supplement exclusions; HemoCue Hb and plasma ferritin.",
+      "reported_and_assumed": "Ferritin geometric means 1.3, 5.9 and 22.3 micrograms/L across Hb <10, 10–<12 and >=12 g/dL support a stronger low-Hb gradient qualitatively. Correlations 0.5 and 0.1 remain assumptions, not reported correlations.",
+      "adjustment_and_uncertainty": "Table III is descriptive. Its reported intervals are not used as individual SDs. Table V's adjusted OR 6.448, controlling for folate, B12, BMI, age and education, is not substituted for a crude CHNS OR. The populations are not pooled."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Crude low-Hb odds ratio",
+      "definition": "Unweighted odds of hb_g_dl <12 among ferritin_ug_l <15 divided by those odds among ferritin_ug_l >=15, using all generated people.",
+      "support": "The population threshold probabilities retain the A-only OR of approximately 5.083. Middle-copula calibration does not change them. Finite samples fluctuate and can contain zero cells."
+    },
+    {
+      "name": "Spearman rank correlation",
+      "definition": "Unweighted Spearman correlation between continuous Hb and continuous, uncorrected ferritin in the same generated cohort.",
+      "support": "Arises from band contrasts and within-band copulas. The new aggregate constrains middle-band dependence under the nominated law, but does not identify the whole-cohort rank correlation without structural assumptions."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is the within-band dependence structure, especially the low-Hb correlation of 0.5. The new middle-band contrast does not identify low-Hb dependence, and a geometric-mean contrast does not uniquely determine a copula. This chiefly limits Spearman planning.",
+    "A-only measurement distributions and associations are transported unchanged to other communities. Common CHNS design does not establish community exchangeability.",
+    "The banded construction permits distributional changes at Hb 12 and 14 and a ferritin density kink at 15. Tail shapes are weakly identified; upper Hb is unbounded and can occasionally be extreme.",
+    "Pregnancy, inflammation, age composition and community clustering are absorbed into aggregate marginals rather than modeled explicitly. People are generated independently as requested.",
+    "Fixed parameters and repeated seeds represent individual sampling variation, not uncertainty about evidence, model form or transport. These are assumption-dependent planning data, not validated clinical or causal evidence."
+  ],
+  "checks_actually_performed": [
+    {
+      "check": "Manual source-table consistency review",
+      "result": "Table 1 totals 1,123 people, 206 with low Hb and 330 with low ferritin. Table 2 agrees: band counts total 1,123, depletion counts total 330, and nonanemic depletion counts total 148+59=207."
+    },
+    {
+      "check": "Controller-supplied generated-only report for the previously sealed model",
+      "scope": "Original A-table summaries only; no held-out estimates. Execution seed and run size were not supplied. The following preserves the supplied numerical feedback in grouped form.",
+      "report": {
+        "threshold_cell_order": [
+          "Hb<12,F<15",
+          "Hb<12,F>=15",
+          "Hb>=12,F<15",
+          "Hb>=12,F>=15"
+        ],
+        "threshold_cells_A": [
+          0.10952804986642921,
+          0.07390917186108638,
+          0.18432769367764915,
+          0.6322350845948352
+        ],
+        "threshold_cells_virtual": [
+          0.10888888888888888,
+          0.07338888888888889,
+          0.18375,
+          0.6339722222222223
+        ],
+        "band_metric_order": [
+          "fraction",
+          "depletion_fraction",
+          "hb_mean",
+          "hb_sd",
+          "ferritin_gm",
+          "ferritin_gsd"
+        ],
+        "bands_A": [
+          [
+            0.1834372217275156,
+            0.5970873786407767,
+            10.676,
+            1.303,
+            11.349,
+            3.607
+          ],
+          [
+            0.5512021371326803,
+            0.23909531502423265,
+            13.007,
+            0.532,
+            27.212,
+            2.445
+          ],
+          [
+            0.2653606411398041,
+            0.19798657718120805,
+            15.348,
+            1.794,
+            32.035,
+            2.636
+          ]
+        ],
+        "bands_virtual": [
+          [
+            0.1822777777777778,
+            0.5973788479122218,
+            10.66709194707646,
+            1.3201008726113097,
+            11.238849116933851,
+            3.6283779047887856
+          ],
+          [
+            0.5550555555555555,
+            0.23711340206185566,
+            13.005933239097846,
+            0.5301878490264547,
+            27.226921140948132,
+            2.4406662129137944
+          ],
+          [
+            0.26266666666666666,
+            0.19849830795262266,
+            15.360313958551044,
+            1.816503284411953,
+            32.33253777335603,
+            2.6350530754429653
+          ]
+        ]
+      },
+      "interpretation": "Discrepancies are small and compatible with Monte Carlo variation plus marginal approximation; the report alone cannot partition these causes. No marginal retuning was made. The substantive revision is tied to the newly available dependence evidence."
+    },
+    {
+      "check": "Revision execution status",
+      "result": "The revised generator and its deterministic correlation calibration have not been executed here. No validate, source-check or source-replay adapter was available. The previous generated-only report does not verify the revised code or its new subband contrast."
+    }
+  ]
+}

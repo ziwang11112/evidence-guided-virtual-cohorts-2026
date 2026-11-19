@@ -1,0 +1,57 @@
+{
+  "structure": "One fixed, iid mixture law generates both measurements for each woman. CHNS band frequencies, Hb moments, ferritin log moments and depletion probabilities determine the marginals. Beta Hb distributions match reported means and SDs in population. A monotone two-slope transformation of Gaussian ferritin scores matches each band's geometric mean, geometric SD and depletion probability in population. A Gaussian copula supplies residual within-band dependence. Sample counts and moments fluctuate naturally.",
+  "parameter_provenance": [
+    {
+      "source": "Supplied CHNS A-only supplement, Tables 1 and 2",
+      "population": "Evidence-community complete-case women aged 18–49, regardless of pregnancy or inflammation; one paired observation per woman",
+      "measurement": "Central whole-blood Hb in g/dL and uncorrected serum ferritin in micrograms/L",
+      "parameters": "Band weights 206:619:298 and depleted counts 123, 148, 59",
+      "adjustment": "None; unweighted",
+      "uncertainty": "Observed aggregate counts; transport and sampling uncertainty are not propagated"
+    },
+    {
+      "source": "Supplied CHNS A-only supplement, Table 2",
+      "parameters": "All band-specific Hb means and SDs and ferritin geometric means and geometric SDs",
+      "derivation": "Beta parameters are solved from Hb moments and assumed supports. Ferritin slopes are solved from depletion probability, mean log ferritin and SD log ferritin; SD log ferritin equals log geometric SD.",
+      "uncertainty": "Rounded reported summaries are used as fixed population targets, not exact finite-sample constraints"
+    },
+    {
+      "source": "Zhu et al., 2010, DOI 10.1024/0300-9831/a000014, Methods pp.145–146 and Tables III and V",
+      "population": "Separate June 2004 rural Hebei sample of 1,671 selected nonpregnant, nonlactating, parous IUD users; not CHNS",
+      "measurement": "Hemocue Hb in g/L and plasma ferritin in micrograms/L",
+      "evidence": "Table III shows lower ferritin with more severe anemia. Table V reports adjusted anemia OR 6.448, 95% CI 4.827–8.615, for ferritin below 15.",
+      "adjustment": "Table V includes age, BMI, education, folate deficiency and B12 deficiency",
+      "use": "Qualitative support for positive, stronger low-Hb dependence only. Neither its adjusted OR nor its marginal distributions are imposed on CHNS."
+    },
+    {
+      "source": "Explicit modeling assumptions",
+      "parameters": "Within-band latent Gaussian correlations 0.30, 0.15 and 0.10; beta Hb supports 0–12, 12–14 and 14–24 g/dL",
+      "rationale": "Allow modest residual positive association, strongest in the anemia band, while matching the closer CHNS aggregates. The supports are modeling choices, not reported extrema.",
+      "uncertainty": "These choices are not identified by the supplied aggregates; no numerical Spearman estimate was reported"
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Crude unweighted anemia odds ratio",
+      "definition": "Odds of Hb <12 g/dL among ferritin <15 micrograms/L divided by the corresponding odds among other women",
+      "model_anchor": "The transported population table implies OR = (123 × 710)/(83 × 207), approximately 5.083. This is derived from A-only evidence, not an estimate for unseen communities."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected Hb and ferritin across the same generated women",
+      "model_anchor": "Determined jointly by observed between-band differences and assumed within-band copula dependence; not identified by the tables alone"
+    }
+  ],
+  "limitations": [
+    "The most consequential assumption for Spearman correlation is the unreported within-band dependence. The nominated correlations are scientific assumptions, not fitted or externally validated estimates.",
+    "Transporting A-community distributions to other communities under the same survey design remains unverified; identical design does not guarantee identical biomarker distributions.",
+    "Bandwise beta shapes, the 24 g/dL upper support and ferritin tail shapes are unverified. The law is a descriptive joint distribution, not a causal iron-response model.",
+    "Pregnancy, inflammation, age composition, assay differences and community clustering are not modeled separately. Ferritin is deliberately left uncorrected.",
+    "Repeated seeds represent individual sampling variation under fixed parameters, not uncertainty about evidence, transport or model structure."
+  ],
+  "checks_actually_performed": [
+    "Manual aggregate reconciliation: Table 1 totals 1,123 women, including 206 with low Hb and 330 with low ferritin; Table 2 totals the same, with 148 + 59 = 207 depleted women outside the low-Hb band.",
+    "Manual derivation of the A-only crude odds ratio from its four cells.",
+    "No generator execution, numerical source replay or automated validation was performed: no execution or validation adapter was supplied."
+  ]
+}

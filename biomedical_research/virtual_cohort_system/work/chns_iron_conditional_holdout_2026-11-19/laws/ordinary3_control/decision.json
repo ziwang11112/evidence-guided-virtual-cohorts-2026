@@ -1,0 +1,64 @@
+{
+  "structure": "Retained the scientific model unchanged. Independent people receive paired measurements from one fixed mixture law. CHNS aggregates anchor band probabilities and conditional margins; Gaussian copulas supply within-band dependence. Population-moment fitting never modifies realized samples or selects seeds.",
+  "parameter_provenance": [
+    {
+      "parameters": [
+        "band_n",
+        "depleted_n"
+      ],
+      "source": "CHNS A-only Tables 1–2",
+      "use": "Set band probabilities and conditional depletion probabilities, reproducing the supplied threshold-cell probabilities in expectation."
+    },
+    {
+      "parameters": [
+        "hb_cutpoints_g_dl",
+        "hb_mean_g_dl",
+        "hb_sd_g_dl"
+      ],
+      "source": "CHNS A-only Table 2",
+      "use": "Set conditional Hb supports and population moments, using reported sample SDs as plug-in population SDs."
+    },
+    {
+      "parameters": [
+        "ferritin_cutoff_ug_l",
+        "ferritin_gm_ug_l",
+        "ferritin_gsd"
+      ],
+      "source": "Requested cutoff and CHNS A-only Tables 1–2",
+      "use": "Set conditional depletion probabilities and log-ferritin moments through increasing two-slope normal transformations."
+    },
+    {
+      "parameters": [
+        "within_band_gaussian_rho"
+      ],
+      "source": "Author assumptions, informed qualitatively by Zhu et al. Table III",
+      "use": "Assume stronger positive dependence at low Hb and attenuation at higher Hb. These numerical correlations are not published estimates. The separate Hebei population is not pooled with CHNS, and its adjusted OR is not used as the crude OR."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of Hb <12 g/dL among women with ferritin <15 µg/L divided by those odds among other women.",
+      "model_population_value": 5.08294046,
+      "basis": "(123 × 710)/(83 × 207); finite-cohort estimates fluctuate."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected Hb and ferritin across the same generated people.",
+      "model_population_value": "Implied by the nominated mixture and copulas; not numerically evaluated."
+    }
+  ],
+  "most_consequential_remaining_assumption": "Within-band Hb–ferritin dependence is not identified by the supplied aggregates. The assumed copula correlations materially determine Spearman correlation while leaving the population threshold OR unchanged; the supplied checks do not validate these correlations.",
+  "limitations": [
+    "Transport to other CHNS-design communities assumes exchangeability with the evidence communities. Community heterogeneity, clustering and parameter uncertainty are not simulated.",
+    "Pregnancy and inflammation remain implicit in the CHNS complete-case mixture; no measurement corrections or exclusions are imposed. Zhu's more restricted population provides only qualitative guidance.",
+    "Conditional tail shapes, Hb-band boundaries and ferritin-transformation kinks are reconstruction assumptions rather than established biology.",
+    "A finite generated cohort can have empty threshold cells, particularly at small n, making its empirical crude OR undefined."
+  ],
+  "checks_actually_performed": [
+    "Reviewed count consistency: band counts sum to 1123 and depleted counts sum to 330; verified the crude cross-product OR is approximately 5.083.",
+    "Reviewed the supplied worker's generated-only checks: all four threshold-cell fractions differ from A by less than 0.0014, supporting retention of the threshold calibration.",
+    "Reviewed supplied conditional-moment checks. The largest reported Hb-SD discrepancy is 1.888 versus 1.794 in the highest band; this single check does not establish a systematic mismatch warranting revision.",
+    "Reviewed the population transformation algebra and output interface. No new code execution, independent rerun or numerical Spearman evaluation was performed."
+  ]
+}

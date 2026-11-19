@@ -1,0 +1,89 @@
+{
+  "task": {
+    "schema_version": 1,
+    "task_id": "chns_iron_conditional_holdout",
+    "mode": "whole_cohort",
+    "population": "CHNS 2009 women age 18–49 with paired central Hb and uncorrected ferritin",
+    "row_id": "row_id",
+    "n_rows": 12000,
+    "columns": [
+      {
+        "name": "row_id",
+        "kind": "integer",
+        "unit": "",
+        "role": "identifier",
+        "nullable": false
+      },
+      {
+        "name": "hb_g_dl",
+        "kind": "number",
+        "unit": "g/dL",
+        "role": "generated",
+        "nullable": false
+      },
+      {
+        "name": "ferritin_ug_l",
+        "kind": "number",
+        "unit": "ug/L",
+        "role": "generated",
+        "nullable": false
+      }
+    ],
+    "information_policy": {
+      "mode": "published_evidence",
+      "excluded_cohorts": [],
+      "allowed_tools": []
+    },
+    "budget": {
+      "source_queries": 0,
+      "source_downloads": 0,
+      "revisions": 1
+    }
+  },
+  "model": {
+    "primary_law": "IID three-band Hb mixture with beta or shifted-gamma Hb, threshold-anchored two-piece-normal log ferritin, and within-band Sarmanov dependence.",
+    "ferritin_cutoff_ug_l": 15.0,
+    "calibration_quadrature_nodes": 128,
+    "calibration_normal_bound": 10.0,
+    "bands": [
+      {
+        "count": 206,
+        "depleted": 123,
+        "hb_family": "beta",
+        "hb_lower": 0.0,
+        "hb_upper": 12.0,
+        "hb_mean": 10.676,
+        "hb_sd": 1.303,
+        "ferritin_gm": 11.349,
+        "ferritin_gsd": 3.607,
+        "hb_score_power": 8,
+        "dependence_theta": 0.9
+      },
+      {
+        "count": 619,
+        "depleted": 148,
+        "hb_family": "beta",
+        "hb_lower": 12.0,
+        "hb_upper": 14.0,
+        "hb_mean": 13.007,
+        "hb_sd": 0.532,
+        "ferritin_gm": 27.212,
+        "ferritin_gsd": 2.445,
+        "hb_score_power": 1,
+        "dependence_hb_split": 13.0,
+        "dependence_gm_ratio_upper_lower": 1.215
+      },
+      {
+        "count": 298,
+        "depleted": 59,
+        "hb_family": "shifted_gamma",
+        "hb_lower": 14.0,
+        "hb_mean": 15.348,
+        "hb_sd": 1.794,
+        "ferritin_gm": 32.035,
+        "ferritin_gsd": 2.636,
+        "dependence_theta": 0.2
+      }
+    ]
+  }
+}

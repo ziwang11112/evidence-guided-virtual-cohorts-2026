@@ -1,0 +1,59 @@
+{
+  "structure": "One fixed primary stochastic law generates both measurements on each independent person. CHNS evidence-community aggregates determine mixture probabilities and marginal parameters. Population-level matching is analytical, not finite-sample enforcement. Rejection sampling implements the joint density without seed selection or sample-moment adjustment.",
+  "parameter_provenance": [
+    {
+      "source": "Supplied CHNS A-only supplement, population description and Tables 1–2",
+      "population": "Linked complete-case women aged 18–49 in evidence communities, regardless of pregnancy or inflammation; distinct from Zhu et al.",
+      "measurement": "Central whole-blood Hb in g/dL and uncorrected serum ferritin in micrograms/L; unweighted and unadjusted.",
+      "reported_values_used": "Band counts 206, 619, 298; depleted counts 123, 148, 59; all six Hb means/SDs and all six ferritin GMs/GSDs in Table 2.",
+      "use": "Counts determine band and depletion probabilities. Beta parameters match bounded-band Hb means and variances; shifted-gamma parameters match the upper-band mean and variance. Two positive log-ferritin scales match each band's log mean, log variance and depletion probability.",
+      "uncertainty": "Reported sample SDs are treated as population plug-in SDs. Aggregate parameter uncertainty is not propagated; the supplement supplies no uncertainty for the joint distribution."
+    },
+    {
+      "source": "Zhu et al., 2010, DOI 10.1024/0300-9831/a000014, Methods pp. 145–146 and Table III p. 150",
+      "population": "Separate June 2004 rural Hebei sample: 1,671 selected nonpregnant, nonlactating mothers, predominantly aged 25–35, using IUD contraception and subject to health and supplement exclusions.",
+      "measurement": "Hemocue Hb and plasma ferritin; Hb bands below 100, 100–119 and at least 120 g/L.",
+      "reported_values_used": "Ferritin GMs 1.3, 5.9 and 22.3 micrograms/L across increasing Hb bands.",
+      "use": "Qualitative support for positive Hb–ferritin dependence, especially among women with low Hb. No pooling with CHNS and no numerical transport of the adjusted anemia OR.",
+      "uncertainty": "Population selection and assays differ. Reported intervals are not used as individual-level SDs or calibration weights."
+    },
+    {
+      "source": "Explicit scientific assumptions",
+      "parameters": "Within-band dependence coefficients 0.9, 0.6, 0.2; bounded beta-score powers 8 and 1; upper-band centered exponential Hb score; tanh normal-latent score.",
+      "use": "Adds positive residual association that weakens at higher Hb while preserving every fitted marginal. These coefficients are density-kernel parameters, not correlations or odds ratios.",
+      "uncertainty": "Not identified by the supplied aggregates. They represent one nominated law, not evidence-estimated precision."
+    },
+    {
+      "source": "Explicit distributional and transport assumptions",
+      "parameters": "Scaled-beta Hb below 14, shifted-gamma Hb above 14, and threshold-anchored two-piece-normal log ferritin.",
+      "use": "Positive continuous measurements with evidence-based band moments and ferritin threshold probabilities; evidence-community parameters are transported unchanged to other communities under the same CHNS design.",
+      "uncertainty": "Distribution tails, within-band shapes and transportability are unverified."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by the corresponding odds among ferritin_ug_l >=15.",
+      "support": "The primary law's population OR is the Table 1 plug-in value 123*710/(83*207), approximately 5.083. Realized finite-sample ORs vary and can be undefined in small cohorts."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected hb_g_dl and ferritin_ug_l on the same generated people.",
+      "support": "Partly informed by CHNS between-band differences; within-band ranks depend on the nominated association kernel. No Spearman estimate is reported in the supplied evidence or claimed as validated."
+    }
+  ],
+  "limitations": [
+    "The most consequential remaining assumption is within-band dependence: many joint laws share all supplied aggregates yet yield different Spearman correlations. The chosen positive, weakening association is scientifically motivated but not identified.",
+    "Transport from evidence communities to other CHNS communities is assumed; community heterogeneity and clustering are not modeled.",
+    "Pregnancy, inflammation, age, geography and other causes of anemia are not explicitly generated. Their aggregate effects are absorbed into the fitted two-variable law.",
+    "Band boundaries create artificial changes in density, and extrapolated tails are unverified. No inflammation or altitude correction is applied.",
+    "Repeated simulated cohorts quantify sampling variation under this fixed law, not uncertainty about transport or model structure; neither estimand is causal."
+  ],
+  "checks_actually_performed": [
+    "Manual count reconciliation: 206+619+298=1123; 123+148+59=330; nonanemic depleted count 148+59=207 and nonanemic nondepleted count 710 agree with Table 1.",
+    "Manual arithmetic: the Table 1 crude OR is approximately 5.083.",
+    "Analytical construction check: centered bounded Hb scores and the odd tanh normal score preserve both marginal distributions under the stated rejection density; coefficients have absolute value below one.",
+    "Static interface review: generate reads spec['model'] and spec['task']['n_rows'], ignores observed for whole-cohort synthesis, uses only allowed dependencies, and returns the three requested columns.",
+    "No execution, generated-only validation, source-check adapter or network retrieval was available or performed."
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "structure": "Retain the primary mixture law and all marginal parameters. Revise only the middle-band copula correlation from 0.20 to 0.137 using the additional CHNS aggregate. Each independent person receives paired continuous measurements; both analyses use this same unweighted cohort.",
+  "parameter_provenance": [
+    {
+      "parameters": [
+        "band_n",
+        "depleted_n"
+      ],
+      "source": "CHNS A-only Tables 1–2",
+      "use": "Set band probabilities and conditional depletion probabilities, reproducing the supplied threshold-cell probabilities in expectation."
+    },
+    {
+      "parameters": [
+        "hb_cutpoints_g_dl",
+        "hb_mean_g_dl",
+        "hb_sd_g_dl"
+      ],
+      "source": "CHNS A-only Table 2",
+      "use": "Set conditional Hb supports and population moments. Reported sample SDs are plug-in population SDs."
+    },
+    {
+      "parameters": [
+        "ferritin_cutoff_ug_l",
+        "ferritin_gm_ug_l",
+        "ferritin_gsd"
+      ],
+      "source": "CHNS A-only Tables 1–2 and requested cutoff",
+      "use": "Set conditional depletion probabilities and log-ferritin moments through increasing two-slope normal transformations."
+    },
+    {
+      "parameters": [
+        "within_band_gaussian_rho[1]"
+      ],
+      "source": "Additional CHNS geometric-mean ratio: 1.215 for Hb 13–<14 versus 12–<13; bootstrap interval 1.061–1.398",
+      "use": "First-order Gaussian-copula calibration gives rho approximately 0.137. The nearly central Hb split implies a log-GM contrast approximately 1.596 times rho times the mean log-ferritin transformation slope, approximately 0.894. This is approximate calibration, not an exact numerical fit."
+    },
+    {
+      "parameters": [
+        "within_band_gaussian_rho[0]",
+        "within_band_gaussian_rho[2]"
+      ],
+      "source": "Author assumptions, qualitatively informed by Zhu et al., especially Table III",
+      "use": "Retain stronger positive dependence below Hb 12 and weak dependence above Hb 14. Zhu's restricted Hebei population is not pooled with CHNS; its adjusted OR is not used as the requested crude OR."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of Hb <12 g/dL among women with ferritin <15 µg/L divided by those odds among other women.",
+      "model_population_value": 5.08294046,
+      "revision_effect": "Unchanged: revising within-band dependence preserves all threshold-cell probabilities."
+    },
+    {
+      "name": "Unweighted Spearman rank correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected Hb and ferritin across the entire generated cohort.",
+      "model_population_value": "Implied by the fixed mixture and copulas; not numerically evaluated.",
+      "revision_effect": "The reduced middle-band dependence lowers its within-band contribution."
+    }
+  ],
+  "most_consequential_remaining_assumption": "Dependence within the low-Hb band remains weakly identified. Retaining rho=0.60 there, and transporting this dependence to other CHNS-design communities, materially affects Spearman correlation without affecting the population crude OR.",
+  "limitations": [
+    "Evidence-community distributions are assumed transportable to other communities under the same design. Community heterogeneity, clustering and survey weights are not simulated.",
+    "Pregnancy and inflammation are not separately modeled; the target includes both regardless of status, and measurements remain uncorrected.",
+    "Conditional tail shapes, band boundaries and the ferritin transformation kink are reconstruction assumptions rather than biological discontinuities.",
+    "Parameters are fixed plug-in values. Evidence-estimation uncertainty, including the additional ratio's bootstrap uncertainty, is not propagated."
+  ],
+  "checks_actually_performed": [
+    "Reviewed the supplied generated-only checks for the previous submission: each threshold-cell fraction differed from A by less than 0.00135, and conditional marginal summaries were close to their targets.",
+    "Confirmed the aggregate arithmetic: 1123 women, 330 depleted, and crude OR=(123×710)/(83×207), approximately 5.083.",
+    "Analytically verified that changing only the middle-band Gaussian correlation preserves its normal ferritin latent marginal and therefore all targeted conditional marginal summaries and threshold-cell probabilities.",
+    "Used a first-order population contrast calculation to revise the middle-band correlation. No new code execution, revised-cohort simulation or exact numerical ratio check was performed."
+  ]
+}

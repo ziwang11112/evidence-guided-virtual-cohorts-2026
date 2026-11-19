@@ -1,0 +1,51 @@
+{
+  "structure": "Generate independent paired measurements from one fixed, unweighted population law. First draw an Hb band, then use correlated Gaussian latent variables to generate continuous Hb and ferritin within that band. The ferritin transformation preserves positivity and matches each band's depletion probability, mean log ferritin, and log-ferritin variance. Hb quantile functions match the supplied band means and SDs in the population, without adjusting realized samples.",
+  "parameter_provenance": [
+    {
+      "parameters": "Hb-band probabilities, ferritin depletion probabilities, Hb means and SDs, and ferritin geometric means and geometric SDs",
+      "source": "CHNS evidence-community Tables 1 and 2",
+      "use": "Primary quantitative calibration. Counts imply 1,123 women, 206 with low Hb, and 330 with low ferritin. Rounded reported moments are treated as population calibration values."
+    },
+    {
+      "parameters": "Within-band Gaussian copula correlations [0.50, 0.15, 0.05]",
+      "source": "Author-nominated dependence assumptions, qualitatively informed by Zhu et al. Table III",
+      "use": "Assume stronger positive association at low Hb and attenuation at higher Hb. These numerical correlations are not reported estimates from either study."
+    },
+    {
+      "parameters": "Bounded-power Hb quantiles and two-slope lognormal ferritin quantiles",
+      "source": "Author-selected distribution families",
+      "use": "Provide continuous paired measurements while retaining the CHNS band summaries and threshold counts."
+    },
+    {
+      "parameters": "Role of the external publication",
+      "source": "Zhu et al., separate Hebei population",
+      "use": "Supports direction and severity dependence only. Its biomarker levels and adjusted OR are not pooled with CHNS or substituted for the requested crude OR."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Unweighted crude odds ratio",
+      "definition": "Odds of hb_g_dl <12 among ferritin_ug_l <15 divided by the corresponding odds among ferritin_ug_l >=15.",
+      "population_implication": "The calibrated population table gives (123*710)/(83*207), approximately 5.083. Realized sample estimates fluctuate."
+    },
+    {
+      "name": "Unweighted Spearman correlation",
+      "definition": "Correlation of ranks of continuous, uncorrected hb_g_dl and ferritin_ug_l across all generated women.",
+      "population_implication": "Determined jointly by observed between-band differences and nominated within-band copulas; not identified by the supplied aggregates alone."
+    }
+  ],
+  "limitations": [
+    "Most consequential remaining assumption: the unobserved within-band dependence is represented by the nominated copula correlations. These materially affect Spearman correlation while leaving the calibrated crude OR unchanged.",
+    "Transport assumes the evidence-community band frequencies and conditional biomarker distributions apply to other communities under the same design. Community heterogeneity and survey clustering are not modeled.",
+    "The target includes complete-case women regardless of pregnancy or inflammation. No pregnancy exclusions, inflammation corrections, altitude adjustments, or weighting are introduced.",
+    "Hb tail shapes are planning assumptions. The bounded-power law has an approximate overall support of 7.6–20.7 g/dL and should not be used for extreme-tail clinical analyses.",
+    "Ferritin distribution shape beyond the supplied summaries is assumed. Fixed calibration parameters omit aggregate-estimation and transport uncertainty."
+  ],
+  "checks_actually_performed": [
+    "Checked arithmetic consistency: Hb-band counts sum to 1,123; depleted band counts sum to 330; the two non-low-Hb bands reproduce Table 1's 207 depleted and 710 other women.",
+    "Calculated the evidence-community crude OR directly from Table 1 as approximately 5.083.",
+    "Algebraically checked that the Hb quantile formulas reproduce the nominated band means and variances.",
+    "Algebraically checked that the ferritin slope equations impose the nominated threshold probabilities and first two log-scale moments.",
+    "No code execution or generated-cohort tests were performed in this interface."
+  ]
+}
