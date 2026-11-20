@@ -50,7 +50,7 @@ The standalone LuaLaTeX ZIP compiles with the same text and links as the reading
 
 **Integrated methods working draft v0.31, 11 November 2026.**
 
-**Current biomedical-review packet:** [four-page brief](../deliverables/Biomedical_Use_Review_v31_2026-11-11/01_REVIEW_BRIEF.pdf), [review-friendly ZIP](../deliverables/Biomedical_Use_Review_v31_2026-11-11.zip) and [blank feedback form](../deliverables/Biomedical_Use_Review_v31_2026-11-11/02_REVIEW_FORM.md). Includes the lifestyle application, complete selected aggregates, source/assumption mappings and optional earlier cases. No human response has yet been collected; the manuscript itself remains unchanged.
+**Current biomedical-review packet:** [four-page brief](../deliverables/Biomedical_Use_Review_v31_2026-11-11/01_REVIEW_BRIEF.pdf), [review packet files](../deliverables/Biomedical_Use_Review_v31_2026-11-11) and [blank feedback form](../deliverables/Biomedical_Use_Review_v31_2026-11-11/02_REVIEW_FORM.md). Includes the lifestyle application, complete selected aggregates, source/assumption mappings and optional earlier cases. No human response has yet been collected; the manuscript itself remains unchanged.
 
 
 [Reading PDF](methods_draft_v31_2026-11-11/paper.pdf) · [Overleaf ZIP](methods_draft_v31_2026-11-11/overleaf_v31.zip) · [Editable manuscript](DRAFT_v0_31.md) · [Build QA](methods_draft_v31_2026-11-11/BUILD_QA.json)
@@ -65,9 +65,9 @@ The reading edition has 33 main pages and 78 total pages, 19 figures, 32 tables 
 
 [Story, evidence map and remaining decisions](../work/manuscript_integration_v31_2026-11-11/STORY_AND_GAP_DECISION.md) · [Integration record](../work/manuscript_integration_v31_2026-11-11/RESULTS.md) · [Numerical/content audit](../work/manuscript_integration_v31_2026-11-11/CONTENT_AUDIT.json)
 
-[Lifestyle application report](../work/lifestyle_application_2026-11-11/report/index.html) · [Existing-table reuse report](../work/published_analysis_replay_2026-11-11/index.html) · [System/results HTML](../docs/research-report.html)
+[Lifestyle application report](../work/lifestyle_application_2026-11-11/report/index.html) · [Existing-table reuse report](../work/published_analysis_replay_2026-11-11/RESULTS.md) · [System/results HTML](../docs/research-report.html)
 
-The earlier [biomedical collaborator brief](../deliverables/Biomedical_Use_Review_v30_2026-11-11/01_REVIEW_BRIEF.pdf) and [aggregate-only ZIP](../deliverables/Biomedical_Use_Review_v30_2026-11-11.zip) remain available but predate the lifestyle addition. No human response has been collected. Author details, declarations, biomedical interpretation and venue formatting remain open. This is an expanded local working draft, not a submitted manuscript or an online Overleaf project.
+The earlier [biomedical collaborator brief](../deliverables/Biomedical_Use_Review_v30_2026-11-11/01_REVIEW_BRIEF.pdf) and [aggregate review files](../deliverables/Biomedical_Use_Review_v30_2026-11-11) remain available but predate the lifestyle addition. No human response has been collected. Author details, declarations, biomedical interpretation and venue formatting remain open. This is an expanded local working draft, not a submitted manuscript or an online Overleaf project.
 
 This editorial integration ran no API calls, generators, patient analyses or new data acquisition and made no public synchronization. No new paid batch or data campaign is queued.
 
@@ -81,7 +81,7 @@ This editorial integration ran no API calls, generators, patient analyses or new
 
 - [v0.28](DRAFT_v0_28.md), [reading PDF](methods_draft_v28_2026-11-10/paper.pdf), [Overleaf ZIP](methods_draft_v28_2026-11-10/overleaf_v28.zip) and [independent content review](../work/manuscript_revision_v28_2026-11-10/INDEPENDENT_REVIEW.md).
 
-- [v0.27](DRAFT_v0_27.md), [reading PDF](methods_draft_v27_2026-11-09/paper.pdf), [Overleaf ZIP](methods_draft_v27_2026-11-09/overleaf_v27.zip) and [review response](../work/manuscript_revision_v27_2026-11-09/REVIEW_RESPONSE.md).
+- [v0.27](DRAFT_v0_27.md), [reading PDF](methods_draft_v27_2026-11-09/paper.pdf), [Overleaf ZIP](methods_draft_v27_2026-11-09/overleaf_v27.zip) and [review response](../reports/manuscript_revision_v27_2026-11-09/REVIEW_RESPONSE.md).
 
 
 - [v0.26](DRAFT_v0_26.md), [reading PDF](methods_draft_v26_2026-11-09/paper.pdf) and [Overleaf ZIP](methods_draft_v26_2026-11-09/overleaf_v26.zip).
@@ -105,7 +105,7 @@ This editorial integration ran no API calls, generators, patient analyses or new
 - [v0.17](DRAFT_v0_17.md) and [earlier reading copy](conference_draft_v17_2026-11-05/paper.pdf)
 
 - [v0.16](DRAFT_v0_16.md) and [earlier reading copy](conference_draft_v16_2026-11-05/paper.pdf)
-- [v0.15](DRAFT_v0_15.md), [earlier reading copy](conference_draft_v15_2026-11-05/paper.pdf), [content review](../work/manuscript_refinement_v15_2026-11-05/INDEPENDENT_CONTENT_REVIEW.md) and [venue audit](../work/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md)
+- [v0.15](DRAFT_v0_15.md), [earlier reading copy](conference_draft_v15_2026-11-05/paper.pdf), [content review](../reports/manuscript_refinement_v15_2026-11-05/INDEPENDENT_CONTENT_REVIEW.md) and [venue audit](../reports/manuscript_refinement_v15_2026-11-05/VENUE_AND_STORY_AUDIT.md)
 - [v0.14](DRAFT_v0_14.md) and [reading copy](conference_draft_v14_2026-11-05/paper.pdf)
 - [v0.13.1](DRAFT_v0_13_1.md), [v0.13](DRAFT_v0_13.md), [v0.12](DRAFT_v0_12.md)
 - [Historical findings](SUPPLEMENT_HISTORICAL_RESULTS_v05.md)

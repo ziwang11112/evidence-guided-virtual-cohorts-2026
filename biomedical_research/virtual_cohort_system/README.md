@@ -1,8 +1,8 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.36, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.38, 19 November 2026.
 
-[Paper and supplement](manuscript/kdd_draft_v36_2026-11-19/paper.pdf) · [Overleaf source](manuscript/kdd_draft_v36_2026-11-19/overleaf_v36.zip) · [Experiment index](PUBLIC_RESEARCH_INDEX.md) · [New iron-status study](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md)
+[Manuscript and supplement](manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Editable Overleaf source](manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [External review guide](../../REVIEW_GUIDE.md) · [Experiment and result index](PUBLIC_RESEARCH_INDEX.md)
 
 The index covers original-paper extraction, matched-size real and virtual analyses, controlled evidence comparisons, cross-model experiments and failures. It also identifies which artifacts are needed to recompute the public tables and figures.
 
