@@ -1,0 +1,65 @@
+{
+  "structure": "Use one Gaussian rank copula within each of the three fixed Hb bands, with a single shared positive latent correlation rho. Calibrate rho to the reported middle-band geometric-mean ferritin ratio: the predicted difference in conditional mean log ferritin above versus below Hb 13 is log(1.215). Calibration uses midpoint quadrature over the supplied source-generated middle-band ferritin margin and the supplied fraction below Hb 13; it does not use target observations. Pairing then normal-scores Hb ranks, adds seeded Gaussian residual variation, and assigns sorted ferritin values in latent-score order. The same rho is extrapolated to the lower and upper Hb bands and transported unchanged to southern Nigerian mothers. This is a scale-free dependence assumption, not evidence that the conditional geometric-mean ratio is identical elsewhere. The source contrast is matched in the copula approximation, not forced exactly in each stochastic cohort.",
+  "parameter_provenance": [
+    {
+      "status": "directly_reported",
+      "quantity": "CHNS A band counts, depleted counts, and marginal summaries",
+      "use": "The host supplies their reconstructed marginal values. The generator preserves those values and band memberships without refitting them."
+    },
+    {
+      "status": "directly_reported",
+      "quantity": "Middle-band conditional geometric-mean ratio 1.215; bootstrap 95% interval 1.061–1.398",
+      "use": "The point estimate is the sole within-band dependence calibration target. The interval is acknowledged but is not treated as independent data or sampled as parameter uncertainty."
+    },
+    {
+      "status": "inferred_under_model",
+      "quantity": "Shared Gaussian copula correlation rho",
+      "use": "Numerically inferred from the conditional log-mean contrast and the source-derived finite margins. No numerical fitted rho is asserted before execution."
+    },
+    {
+      "status": "assumed",
+      "quantity": "Common Gaussian copula across bands and populations",
+      "use": "Provides a parsimonious extrapolation where band-specific dependence and Nigerian measurements are unavailable."
+    },
+    {
+      "status": "directly_reported_and_assumed",
+      "quantity": "Fallback middle-band ferritin GSD 2.445 and lower-subgroup fraction 0.5",
+      "use": "The GSD is reported; the approximately balanced split is assumed. Their Gaussian/lognormal approximation supplies rho only if the finite middle margin cannot support calibration."
+    },
+    {
+      "status": "numerical_setting",
+      "quantity": "rho ceiling 0.999 and 48 bisection iterations",
+      "use": "Avoids a singular copula and controls numerical calibration. An unattainable positive contrast is capped rather than changing any marginal value."
+    },
+    {
+      "status": "evidence_boundary",
+      "quantity": "CHNS A tables and conditional contrast describe the same evidence communities",
+      "use": "They are not counted as independent replications. Zhu et al. is separate contextual evidence; its selected population, plasma ferritin summaries, prevalence estimates, and adjusted odds ratio are not calibration targets."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "estimand": "Unweighted population-level Spearman correlation",
+      "definition": "Pearson correlation of average ranks of continuous Hb and uncorrected serum ferritin, pooling all three bands without survey weights.",
+      "evaluation": "To be evaluated by the host from each generated pairing. The supplied summaries do not uniquely identify it; no numerical target-population correlation is asserted."
+    },
+    {
+      "estimand": "Crude odds ratio for Hb <12 comparing ferritin <15 with ferritin >=15",
+      "definition": "For cells a=(Hb<12, ferritin<15), b=(Hb<12, ferritin>=15), c=(Hb>=12, ferritin<15), d=(Hb>=12, ferritin>=15), OR=a*d/(b*c), without covariate adjustment or continuity correction.",
+      "evaluation": "With the reported CHNS A counts, OR=(123*710)/(83*207)=5.08294. Every allowable within-band pairing leaves this OR unchanged. Each supplied finite cohort therefore has its own fixed threshold-table OR, which need not equal the reported-count value exactly."
+    }
+  ],
+  "limitations": [
+    "This is a source-anchored virtual cohort scenario, not an identified or validated estimate for southern Nigerian mothers. Source-to-target differences in pregnancy, inflammation, infection, age composition, and other causes of anemia cannot be learned from this packet.",
+    "A single subgroup geometric-mean contrast does not identify a copula, tail dependence, or band-specific associations. The Gaussian family and shared rho are explicit assumptions.",
+    "The point-estimate calibration omits source-estimation and transport uncertainty. Seed variation represents stochastic pairing conditional on the model, not total scientific uncertainty.",
+    "Quadrature and finite-sample reranking approximate the copula contrast; realized subgroup ratios can differ from 1.215, particularly with small bands.",
+    "The band-conditioned construction can introduce dependence discontinuities at Hb 12 and 14. Ferritin remains uncorrected for inflammation, and neither estimand is causal."
+  ],
+  "checks_actually_performed": [
+    "Checked aggregate arithmetic: 206+619+298=1123; 148+59=207 nonanemic depleted participants; (619-148)+(298-59)=710 nonanemic nondepleted participants. Thus the two CHNS A tables reconcile.",
+    "Calculated the reported-count crude odds ratio as 87330/17181=5.08294.",
+    "Analytically verified that a ferritin-index permutation confined to each Hb band preserves both continuous marginal arrays and all four Hb<12 by ferritin<15 threshold cells.",
+    "No code execution, numerical copula calibration, seed runs, external search, or target validation was performed for this submission."
+  ]
+}

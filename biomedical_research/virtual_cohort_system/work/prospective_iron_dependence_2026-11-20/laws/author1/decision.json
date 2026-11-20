@@ -1,0 +1,27 @@
+{
+  "structure": "Use one Gaussian rank-copula model within each Hb band. Calibrate its common positive latent correlation to the CHNS A middle-band geometric-mean ratio using deterministic empirical-quantile quadrature over the supplied source-derived margins. Then draw fresh Gaussian residuals using the supplied seed and assign sorted ferritin values by latent-score order. Calibration targets the working-model expected contrast, not an exact contrast in every generated cohort. Apply the same latent correlation to the other bands and the Nigerian virtual population. No marginal values or band memberships are changed.",
+  "parameter_provenance": [
+    "Directly reported: CHNS A conditional ferritin geometric-mean ratio 1.215 for Hb 13–<14 versus 12–<13 g/dL; its reported bootstrap interval is 1.061–1.398.",
+    "Directly reported: middle-band ferritin geometric SD 2.445. It is used only for a degenerate-split fallback based on a balanced Hb split and Gaussian log ferritin.",
+    "Inferred: the common latent Gaussian correlation is obtained at execution from the reported contrast and the supplied source-derived middle-band marginal values; it is not a published correlation.",
+    "Assumed: homogeneous positive rank dependence across Hb bands, Gaussian copula shape, and transportability of that dependence to southern Nigerian mothers. The numerical search ceiling 0.995 is an implementation assumption.",
+    "Fixed by the task: band frequencies and finite-sample marginal values. The two CHNS tables and conditional contrast describe the same source communities and are not treated as independent studies.",
+    "Zhu et al. is contextual only. Its separately selected population and adjusted anemia odds ratio are not used as CHNS calibration data or as the requested crude odds ratio."
+  ],
+  "requested_estimands": [
+    "Unweighted whole-cohort Spearman correlation between continuous Hb and uncorrected ferritin, using average ranks for ties. Its generated value depends on the selected pairing structure; no target value is supplied or imposed.",
+    "Crude odds ratio for Hb <12 comparing ferritin <15 with ferritin >=15: n(Hb<12,F<15) * n(Hb>=12,F>=15) / [n(Hb<12,F>=15) * n(Hb>=12,F<15)]. This is invariant to all permitted within-band permutations. The nominal source-table value is approximately 5.083; each execution uses its supplied threshold counts."
+  ],
+  "limitations": [
+    "One conditional geometric-mean ratio does not identify the complete joint distribution, tail dependence, or dependence in the other bands. The submitted copula and extrapolation are modeling assumptions.",
+    "The fixed source-derived margins and dependence transport are not estimates validated for Nigerian mothers. Pregnancy, inflammation, infection, hemoglobinopathies, and other population differences cannot be represented with this interface.",
+    "Ferritin remains uncorrected; the model does not interpret elevated ferritin as iron sufficiency in every individual.",
+    "Quadrature and rank assignment approximate the conditional contrast in finite samples. If a finite realization cannot attain the contrast within the chosen family, calibration uses the upper endpoint; if a calibration subgroup is absent, it uses the source-normal approximation.",
+    "Seed variation represents pairing Monte Carlo variation, not source-estimation or transport uncertainty. The published bootstrap interval is acknowledged but is not sampled.",
+    "No code execution, achieved-contrast verification, seed comparison, or simulated Spearman calculation was performed before submission. Runtime validation is included in the generator."
+  ],
+  "checks_actually_performed": [
+    "Verified the supplied count identities: 206+619+298=1123; 123+148+59=330; 148+59=207; and (619-148)+(298-59)=710.",
+    "Verified algebraically that the nominal crude odds ratio is (123*710)/(83*207), approximately 5.083, and cannot change under within-band ferritin permutations because Hb<12 is constant within every band."
+  ]
+}

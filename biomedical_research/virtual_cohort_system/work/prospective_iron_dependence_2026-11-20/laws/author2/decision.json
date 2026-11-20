@@ -1,0 +1,32 @@
+{
+  "structure": "Use a positive Gaussian rank copula separately within each Hb band. Calibrate its single shared latent correlation to the CHNS A middle-band geometric-mean ratio using deterministic normal-score quadrature over the supplied source-derived margins. Then draw independent Gaussian residuals and assign the existing ferritin order statistics by the resulting score ranks. Calibration concerns the expected conditional contrast, not an exact constraint on each realized cohort. The same latent correlation is transported to the other bands and to southern Nigeria. No marginal values, band memberships, or threshold counts are changed.",
+  "parameter_provenance": [
+    "Directly reported: the CHNS A conditional geometric-mean ratio is 1.215 for Hb 13 to <14 versus 12 to <13; its community-bootstrap 95% interval is 1.061–1.398. The primary model uses the point estimate only.",
+    "Directly reported: CHNS A Table 2 gives middle-band ferritin geometric SD 2.445. This is used only for an approximate fallback calibration when the supplied middle band cannot identify the subgroup contrast.",
+    "Inferred inputs: the supplied Hb and ferritin arrays are source-summary-based marginal reconstructions, not observed individual measurements. Their empirical middle-band subgroup frequency and ferritin log-order statistics implement the source-contrast calibration.",
+    "Inferred parameter: the latent Gaussian correlation is obtained by numerical inversion of the expected log-geometric-mean contrast. It is neither a reported Pearson correlation nor the requested overall Spearman correlation.",
+    "Assumed: Gaussian within-band dependence, one shared latent correlation across bands, and unchanged dependence on transport to southern Nigerian mothers. These assumptions are not established by the aggregate evidence.",
+    "Assumed numerical safeguards: constrain the latent correlation to [0, 0.95], use 48 bisection steps, and use a balanced-subgroup lognormal approximation if middle-band calibration is unavailable. An unattainable contrast is clipped to the nearest correlation bound.",
+    "Zhu et al. is a distinct northern Chinese study, not another CHNS A table. Its adjusted anemia odds ratio is not used to calibrate the crude odds ratio or the continuous dependence."
+  ],
+  "requested_estimands": [
+    "Unweighted overall Spearman rank correlation between continuous Hb and uncorrected ferritin across all paired rows, using average ranks for any ties. No numerical correlation is claimed before execution.",
+    "Crude odds ratio for Hb <12 comparing ferritin <15 against ferritin >=15: n(anemic,depleted) * n(nonanemic,nondepleted) / [n(anemic,nondepleted) * n(nonanemic,depleted)]. This is fixed by the supplied threshold counts, independently of pairing. The original CHNS A counts imply 87330/17181, approximately 5.083; the executed cohort uses its supplied finite-sample counts."
+  ],
+  "limitations": [
+    "A single conditional geometric-mean ratio does not identify a copula, tail dependence, or band-specific correlations. The chosen Gaussian copula is a parsimonious primary assumption.",
+    "The conditional contrast is calibrated approximately in expectation. Midpoint quadrature and finite-sample rank assignment can introduce discrepancies, and stochastic realizations need not reproduce 1.215 exactly.",
+    "The source bootstrap interval is acknowledged but not propagated; seed variation is not a complete representation of scientific uncertainty.",
+    "Homogeneous dependence across Hb bands is an extrapolation. Bandwise modeling can create changes in the conditional ferritin distribution at Hb band boundaries.",
+    "CHNS A includes complete-case women regardless of pregnancy or inflammation. Its composition and dependence may not transport to community-survey mothers in southern Nigeria.",
+    "Ferritin remains uncorrected for inflammation. No inflammatory state, pregnancy status, causal iron effect, or covariate adjustment is inferred.",
+    "The fixed source-derived margins impose anemia and depletion frequencies. Neither the resulting odds ratio nor the simulated correlation is a validated estimate for the Nigerian population.",
+    "The code includes execution-time validation, but no code execution or three-seed simulation was performed during preparation."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic consistency check: CHNS A band counts sum to 206 + 619 + 298 = 1123; depleted counts sum to 123 + 148 + 59 = 330.",
+    "Arithmetic consistency check: nonanemic depleted counts are 148 + 59 = 207, and nonanemic nondepleted counts are (619 - 148) + (298 - 59) = 710, matching Table 1.",
+    "Algebraic check: the source crude odds ratio is (123 * 710) / (83 * 207) = 87330/17181.",
+    "Structural check: because Hb <12 consists exactly of the first band, permutations confined to each band preserve all four Hb <12 by ferritin <15 cells while allowing the continuous rank correlation to vary."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "structure": "Primary model: a Gaussian rank copula within each Hb band, with one shared latent correlation. Fixed Hb normal scores plus independent Gaussian noise determine the ordering of the supplied ferritin values. The correlation is calibrated to the source middle-band geometric-mean ratio: the expected log-ferritin difference between Hb 13–<14 and 12–<13 is log(1.215). Numerical integration uses the empirical source-derived ferritin quantile function and the supplied middle-band fraction below Hb 13. The calibrated correlation is then transported unchanged to the other bands and southern Nigerian mothers. This is a parsimonious dependence assumption, not an identified biological law. Each realized cohort is a stochastic permutation; its subgroup ratio is not forced to equal the source estimate exactly.",
+  "parameter_provenance": [
+    "Directly reported, CHNS A: band counts 206, 619 and 298; depleted counts 123, 148 and 59; and the supplied band-specific Hb and ferritin summaries. These define the host-generated margins, not additional observations to be independently weighted.",
+    "Directly reported, same CHNS A communities: middle-band geometric-mean ratio 1.215, with bootstrap interval 1.061–1.398. The point estimate calibrates dependence; the interval is acknowledged but is not sampled or treated as independent evidence.",
+    "Inferred under the chosen copula: the common latent correlation, obtained numerically from the source contrast and source-derived finite margins. The fitted correlation is not a reported Spearman correlation.",
+    "Assumed: Gaussian dependence, equal latent correlation across Hb bands, and transport of this dependence to the new population without demographic or inflammation adjustment.",
+    "Assumed numerical safeguards: correlation bounds 0–0.95, eight-point quadrature per empirical ferritin quantile interval and 42 bisection steps. An infeasible contrast is clipped to the nearest correlation bound.",
+    "Inferred fallback for an uninformative finite middle margin: log(1.215)/(log(2.445)*sqrt(8/pi)), approximately 0.137, using a symmetric lognormal approximation and the directly reported middle-band ferritin GSD.",
+    "Zhu et al. is a separate population and assay context. Its adjusted odds ratio and its Hb-stratified ferritin summaries are not used as numerical calibration targets or pooled with CHNS A."
+  ],
+  "requested_estimands": [
+    "Unweighted population-level Spearman correlation: Pearson correlation of pooled Hb and ferritin midranks across all three bands, not an average of within-band correlations. A numerical value requires the supplied margins and realized permutation.",
+    "Crude anemia odds ratio comparing ferritin <15 with ferritin >=15: (anemic depleted × nonanemic nondepleted)/(anemic nondepleted × nonanemic depleted). Pairing cannot change this estimand with the stipulated bands and margins. The original CHNS A table gives 123×710/(83×207) = approximately 5.08294; execution uses the actual supplied finite-margin counts."
+  ],
+  "limitations": [
+    "No target measurements or validation outcomes are available. The cohort is a source-anchored virtual population, not an empirically validated reconstruction of southern Nigerian mothers.",
+    "The single conditional geometric-mean contrast does not identify the copula family, tail dependence or dependence in the other Hb bands. Their specification is assumed.",
+    "Calibration concerns the population-copula expected contrast evaluated on empirical source-derived margins. Finite rank reordering, numerical integration and stochastic pairing can produce a different realized contrast.",
+    "The supplied margins already impose band frequencies and threshold associations. This interface cannot adapt anemia prevalence, ferritin depletion prevalence or their crude odds ratio to the new population.",
+    "Ferritin remains uncorrected. Inflammation, pregnancy, infection, hemoglobinopathies and other causes of anemia are not modeled explicitly; neither association is interpreted causally.",
+    "Source sampling uncertainty, marginal-fitting uncertainty and transport uncertainty are not propagated. Seed variation represents pairing variation only.",
+    "Python execution, predeclared-seed runs, numerical calibration checks and empirical Spearman calculations were not performed during authoring. Runtime validation guards are included in the generator."
+  ],
+  "checks_actually_performed": [
+    "Manual arithmetic reconciliation: 206+619+298=1123; 123+148+59=330 depleted; 148+59=207 nonanemic depleted; and (619−148)+(298−59)=710 nonanemic nondepleted.",
+    "Algebraic invariance check: permuting ferritin within these Hb bands preserves every Hb <12 by ferritin <15 cell, hence preserves the crude odds ratio.",
+    "Manual source odds-ratio calculation: numerator 87330, denominator 17181, ratio approximately 5.08294.",
+    "Analytical calibration check: at zero copula correlation the expected subgroup log-ferritin contrast is zero; a positive source contrast therefore selects positive dependence within the stipulated family when feasible."
+  ]
+}

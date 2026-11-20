@@ -1,0 +1,49 @@
+{
+  "structure": "Use a Gaussian rank copula separately within each Hb band. Calibrate its common latent correlation to the CHNS A middle-band geometric-mean ratio, then apply that correlation in all three bands. Ferritin ranks follow noisy Hb normal scores; no supplied marginal value is changed. Calibration matches an approximate expected contrast, not each realization's contrast. The source tables and conditional ratio are complementary summaries of the same communities, not independent studies. Zhu et al. is contextual evidence only and supplies no numerical calibration.",
+  "parameter_provenance": [
+    {
+      "quantity": "Band counts and marginal summaries",
+      "status": "Directly reported in CHNS A",
+      "details": "Counts are 206, 619 and 298; depleted counts are 123, 148 and 59. The host supplies finite marginal values reconstructed from the reported summaries. The generator does not refit or alter them."
+    },
+    {
+      "quantity": "Middle-band conditional ferritin contrast",
+      "status": "Directly reported in CHNS A",
+      "details": "GM ferritin at Hb 13 to <14 divided by GM ferritin at Hb 12 to <13 is 1.215; bootstrap 95% interval is 1.061–1.398. The primary model uses the point estimate without treating the interval as additional observations."
+    },
+    {
+      "quantity": "Common latent Gaussian correlation",
+      "status": "Inferred under the selected copula",
+      "details": "Numerically calibrated from log(1.215), the supplied middle-band ferritin values and the proportion of middle-band Hb values below 13. Midpoint normal-score quadrature approximates the expected subgroup contrast."
+    },
+    {
+      "quantity": "Dependence shape and extrapolation",
+      "status": "Assumed",
+      "details": "Gaussian rank dependence, one common within-band correlation, and unchanged transport to southern Nigerian mothers are modeling assumptions. The conditional contrast does not identify dependence in the other bands."
+    },
+    {
+      "quantity": "Numerical bounds and exceptional fallback",
+      "status": "Assumed computational choices",
+      "details": "Correlation is bounded at 0–0.99 and calibrated with 55 bisection steps. If either middle subgroup is absent, use the median-split lognormal approximation based on the directly reported middle-band ferritin GSD of 2.445. Unattainable contrasts use the nearest endpoint."
+    }
+  ],
+  "requested_estimands": [
+    "Unweighted whole-cohort Spearman correlation: Pearson correlation of average ranks of continuous Hb and paired ferritin. Its value is model- and seed-dependent; no source Spearman correlation is supplied or imposed.",
+    "Crude anemia odds ratio comparing ferritin <15 with ferritin >=15: OR = n(Hb<12,Fe<15) * n(Hb>=12,Fe>=15) / [n(Hb<12,Fe>=15) * n(Hb>=12,Fe<15)]. Original CHNS A counts give 87330/17181, approximately 5.083. For each supplied finite cohort, this OR is determined entirely by its fixed threshold counts and cannot be changed by within-band pairing."
+  ],
+  "limitations": [
+    "One conditional geometric-mean ratio does not identify the full bivariate distribution or population Spearman correlation. Alternative copulas could satisfy the same source summaries.",
+    "Common dependence across Hb bands is an extrapolation; stronger low-Hb dependence, saturation and nonmonotonic associations remain possible.",
+    "Midpoint quadrature and finite-sample rank reassignment make contrast matching approximate. Stochastic realizations need not reproduce 1.215 exactly.",
+    "Seed variation describes pairing variability, not source sampling uncertainty or uncertainty about transportability and copula structure.",
+    "CHNS A includes complete-case Chinese women regardless of pregnancy or inflammation. Its margins and dependence are not validated measurements for Nigerian mothers.",
+    "Ferritin remains uncorrected. Inflammation and other causes of anemia are not represented separately; neither estimand has a causal interpretation.",
+    "Zhu et al.'s selected northern Chinese population and adjusted odds ratio are not interchangeable with CHNS A or with the requested crude odds ratio."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic reconciliation of reported CHNS A counts: 206+619+298=1123; 123+148+59=330; 148+59=207; and (619-148)+(298-59)=710.",
+    "Algebraic verification that within-band ferritin permutations preserve every supplied marginal value and all four Hb<12 by ferritin<15 threshold cells.",
+    "Calculated the original-source crude OR as (123*710)/(83*207), approximately 5.083.",
+    "No code execution, calibration convergence test, predeclared-seed runs or target-data comparisons were performed."
+  ]
+}
