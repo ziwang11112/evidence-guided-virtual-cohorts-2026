@@ -2,7 +2,7 @@
 
 **Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.38, 19 November 2026.
 
-[Paper and supplement (PDF)](manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v38_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Numerical and build checks](manuscript/kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
+[PDF for external review](manuscript/kdd_draft_v38_2026-11-19/external_review.pdf) · [Reviewer guide](../../REVIEW_GUIDE.md) · [External review Overleaf ZIP](manuscript/kdd_draft_v38_2026-11-19/overleaf_external_review_v38.zip) · [Anonymous manuscript](manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v38_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Numerical and build checks](manuscript/kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
 
 Figure 1 compares the scientific analyses across cohorts. Table 2 on page 6 examines the original evidence, a statistical comparator and the six original-evidence agent laws. Figure 3 and Appendix Table 3 show the paired revisions given one extra statistic. [Figure source](reproducibility/plot_v37.py) · [Numerical verification](reproducibility/check_v38.py)
 

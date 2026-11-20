@@ -2,7 +2,7 @@
 
 ## Current KDD working manuscript v0.38, 19 November 2026
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** [Reading PDF](kdd_draft_v38_2026-11-19/paper.pdf) · [Editable LaTeX](kdd_draft_v38_2026-11-19/main.tex) · [Overleaf ZIP](kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Verification](kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** [External review PDF](kdd_draft_v38_2026-11-19/external_review.pdf) · [External review Overleaf ZIP](kdd_draft_v38_2026-11-19/overleaf_external_review_v38.zip) · [Anonymous PDF](kdd_draft_v38_2026-11-19/paper.pdf) · [Anonymous Overleaf ZIP](kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Verification](kdd_draft_v38_2026-11-19/EXTERNAL_REVIEW_CHECK.json)
 
 Table 2 on page 6 compares the A threshold arithmetic, an independently specified statistical model, and the six original-evidence agent laws with and without their within-band pairing. The shared scientific estimators give a retrospective comparison on the earlier CHNS split. [Reading guide](kdd_draft_v38_2026-11-19/README.md) · [Protocol and independent numerical checks](../work/chns_statistical_comparator_2026-11-19/RESULTS.md)
 

@@ -4,7 +4,7 @@
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Verification](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/overleaf_external_review_v38.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
 
 Table 2 on page 6 separates the CHNS threshold association implied by the A counts from the continuous correlation supplied by each generator. With the original evidence, six agent laws gave ranks of 0.293–0.320 against 0.317 measured in B. A statistical model with independent draws within each Hb band gave 0.237. Both passed the planning margins. Figure 3 gives the original paired test of adding a within-band statistic. [Retrospective comparison and replay](biomedical_research/virtual_cohort_system/work/chns_statistical_comparator_2026-11-19/RESULTS.md)
 

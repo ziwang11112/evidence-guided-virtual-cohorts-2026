@@ -1,6 +1,8 @@
 # Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?
 
-KDD Research working manuscript v0.38, 19 November 2026. [Paper and supplement](paper.pdf) · [Editable Overleaf project](overleaf_v38.zip) · [Build verification](BUILD_CHECK.json)
+KDD Research working manuscript v0.38, 19 November 2026. [External review PDF](external_review.pdf) · [External review Overleaf ZIP](overleaf_external_review_v38.zip) · [Anonymous manuscript](paper.pdf) · [Anonymous Overleaf project](overleaf_v38.zip)
+
+The external review copy adds four clickable first-page links. Its reviewer guide, experiment index and table checker point to the same fixed Git commit. The scientific text, tables, figures and page numbers match the anonymous manuscript. Compile `external_review.tex` beside `main.tex` for this edition, or compile `main.tex` in the external review ZIP. [Linked-edition verification](EXTERNAL_REVIEW_CHECK.json) · [Scientific build verification](BUILD_CHECK.json)
 
 ## Reading the paper
 
