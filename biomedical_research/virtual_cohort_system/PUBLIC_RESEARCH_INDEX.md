@@ -1,10 +1,14 @@
 # Research index for the KDD working manuscript
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.38, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.39, 20 November 2026.
 
-[PDF for external review](manuscript/kdd_draft_v38_2026-11-19/external_review.pdf) · [Reviewer guide](../../REVIEW_GUIDE.md) · [External review Overleaf ZIP](manuscript/kdd_draft_v38_2026-11-19/overleaf_external_review_v38.zip) · [Anonymous manuscript](manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v38_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Numerical and build checks](manuscript/kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
+[PDF for external review](manuscript/kdd_draft_v39_2026-11-20/external_review.pdf) · [Reviewer guide](../../REVIEW_GUIDE.md) · [External review Overleaf ZIP](manuscript/kdd_draft_v39_2026-11-20/overleaf_external_review_v39.zip) · [Anonymous manuscript](manuscript/kdd_draft_v39_2026-11-20/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v39_2026-11-20/main.tex) · [Overleaf project](manuscript/kdd_draft_v39_2026-11-20/overleaf_v39.zip) · [Numerical and build checks](manuscript/kdd_draft_v39_2026-11-20/BUILD_CHECK.json)
 
-Figure 1 compares the scientific analyses across cohorts. Table 2 on page 6 examines the original evidence, a statistical comparator and the six original-evidence agent laws. Figure 3 and Appendix Table 3 show the paired revisions given one extra statistic. [Figure source](reproducibility/plot_v37.py) · [Numerical verification](reproducibility/check_v38.py)
+Figure 1 links the CHNS A threshold counts, the choice of continuous pairs and their scientific consequences to a prospective external comparison. Table 2 and Figure 3 retain the separate CHNS comparisons. Appendix Table 7 reports all six new constructors. [Editable main figure](manuscript/kdd_draft_v39_2026-11-20/figures/evidence-and-pairing.drawio) · [Numerical verification](reproducibility/check_v39.py)
+
+## Prospective test in Nigeria
+
+With identical source evidence and virtual marginal values, the six fresh agents chose the same within-band copula family as the pre-specified statistical generator. Measured rank in 603 mothers was 0.010, versus 0.308 and 0.303. [Frozen design](work/prospective_iron_dependence_2026-11-20/PROTOCOL.md) · [Pre-disclosure observations](work/prospective_iron_dependence_2026-11-20/CLOSURE_NOTE.md) · [Results and verification](work/prospective_iron_dependence_2026-11-20/RESULTS.md)
 
 ## What the A tables and within-band pairing each contribute
 

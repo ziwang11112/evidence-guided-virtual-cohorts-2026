@@ -1,18 +1,20 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.38, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.39, 20 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/overleaf_external_review_v38.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/overleaf_external_review_v39.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
 
-Table 2 on page 6 separates the CHNS threshold association implied by the A counts from the continuous correlation supplied by each generator. With the original evidence, six agent laws gave ranks of 0.293–0.320 against 0.317 measured in B. A statistical model with independent draws within each Hb band gave 0.237. Both passed the planning margins. Figure 3 gives the original paired test of adding a within-band statistic. [Retrospective comparison and replay](biomedical_research/virtual_cohort_system/work/chns_statistical_comparator_2026-11-19/RESULTS.md)
+Figure 1 traces a threshold result to source counts and a continuous association to the agent's pairing decision. In the prospective Nigerian comparison the source-calibrated agent and statistical laws yielded ranks of 0.308 and 0.303, against 0.010 measured in 603 mothers. Both yielded a threshold odds ratio of 5.39, against 1.20 measured. [Prospective experiment](biomedical_research/virtual_cohort_system/work/prospective_iron_dependence_2026-11-20/RESULTS.md) · [Source evidence and retrospective CHNS comparison](biomedical_research/virtual_cohort_system/work/chns_statistical_comparator_2026-11-19/RESULTS.md)
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
 
 [Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Earlier releases
+
+[19 November manuscript v0.38](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/README.md)
 
 **New paired blood-pressure validation, 9 November 2026.** Five fresh authors generated fifteen complete 3,000-row cohorts without target individual inputs, then all were sealed before comparison with 8,352 eligible PNS records. BMI–SBP effects were 3.081–4.276 versus 3.524 mmHg per5kg/m²; BMI–DBP effects were higher than the reference (2.886–3.691 versus2.260), and residual BP correlations lower (0.466–0.646 versus0.717). All outcomes and dispersion diagnostics remain visible. Independent selection and numerical recomputation passed; no post-reveal regeneration occurred. This is a new prespecified task in an already used PNS family, not a new cohort. All authors retained their initial construction; no feedback-benefit claim is added. [All results](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/RESULTS.md) · [Figure](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/figures/pns_bp_analysis_utility.png) · [Independent recomputation](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/INDEPENDENT_RESULTS_REVIEW.md) · [Manuscript insert](biomedical_research/virtual_cohort_system/reports/next_case_validation_2026-11-09/MANUSCRIPT_INSERT.md). The existing v0.27 PDF is preserved; the new result is prepared as a separate insert.
 
