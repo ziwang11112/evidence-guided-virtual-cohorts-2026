@@ -1,12 +1,12 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.37, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.38, 19 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v37_2026-11-19/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v37_2026-11-19/overleaf_v37.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Verification](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v37_2026-11-19/BUILD_CHECK.json)
+[Paper and supplement](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Experiment and result index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md) · [Verification](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
 
-Figure 1 compares requested analyses across blood-pressure and iron cohorts. Figure 3 pairs CHNS revisions and distinguishes whole-cohort rank accuracy from the post hoc middle-band contribution. The index covers original-paper extraction, matched-size real and virtual analyses, controlled evidence comparisons, cross-model experiments and failures. It also identifies which artifacts are needed to recompute the public tables and figures.
+Table 2 on page 6 separates the CHNS threshold association implied by the A counts from the continuous correlation supplied by each generator. With the original evidence, six agent laws gave ranks of 0.293–0.320 against 0.317 measured in B. A statistical model with independent draws within each Hb band gave 0.237. Both passed the planning margins. Figure 3 gives the original paired test of adding a within-band statistic. [Retrospective comparison and replay](biomedical_research/virtual_cohort_system/work/chns_statistical_comparator_2026-11-19/RESULTS.md)
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
 

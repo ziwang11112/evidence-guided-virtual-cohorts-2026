@@ -1,10 +1,14 @@
 # Research index for the KDD working manuscript
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.37, 19 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.38, 19 November 2026.
 
-[Paper and supplement (PDF)](manuscript/kdd_draft_v37_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v37_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v37_2026-11-19/overleaf_v37.zip) · [Numerical and build checks](manuscript/kdd_draft_v37_2026-11-19/BUILD_CHECK.json)
+[Paper and supplement (PDF)](manuscript/kdd_draft_v38_2026-11-19/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v38_2026-11-19/main.tex) · [Overleaf project](manuscript/kdd_draft_v38_2026-11-19/overleaf_v38.zip) · [Numerical and build checks](manuscript/kdd_draft_v38_2026-11-19/BUILD_CHECK.json)
 
-Figure 1 compares the scientific analyses across cohorts. Figure 3 and Table 2 present all six paired CHNS revisions. [Figure source](reproducibility/plot_v37.py) · [Numerical verification](reproducibility/check_v37.py)
+Figure 1 compares the scientific analyses across cohorts. Table 2 on page 6 examines the original evidence, a statistical comparator and the six original-evidence agent laws. Figure 3 and Appendix Table 3 show the paired revisions given one extra statistic. [Figure source](reproducibility/plot_v37.py) · [Numerical verification](reproducibility/check_v38.py)
+
+## What the A tables and within-band pairing each contribute
+
+A statistical model reproducing the CHNS A summaries gave a pooled Hb–ferritin rank correlation of 0.237, compared with 0.317 in the B communities. The six original-evidence agents gave 0.293–0.320. Re-pairing each agent's records within Hb band gave expected correlations of 0.244–0.249 and preserved every threshold count. The study used one conventional law and three new 12,000-row draws after B had been disclosed. [All estimates and checks](work/chns_statistical_comparator_2026-11-19/RESULTS.md) · [Fixed comparator specification](work/chns_statistical_comparator_2026-11-19/PROTOCOL.md)
 
 The [v0.36 contribution review](work/kdd_v36_contribution_review_2026-11-19/REVIEW.md) places blood pressure and iron status side by side. A reproducible rearrangement of the frozen iron comparator shows how much rank correlation can change while all 16 reported source checks stay fixed.
 
@@ -14,7 +18,7 @@ Six initial authors and their matched revisions generated iron-status cohorts fo
 
 ## Prospective iron-status test from an original article
 
-Seven agent laws passed the 16 prespecified source checks after the recorded parameter-binding correction. The source threshold odds ratio stayed near 6.65 while continuous rank correlations ranged from −0.272 to +0.446. The external survey had 44 complete cases and no measured low-ferritin participant. Appendix Figure 6, Table 4 and the study report give all completed and incomplete arms. [Experimental report](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Model programs](work/original_paper_iron_sensitivity_2026-11-19/laws) · [Independent numerical review](work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_VERIFICATION.json)
+Seven agent laws passed the 16 prespecified source checks after the recorded parameter-binding correction. The source threshold odds ratio stayed near 6.65 while continuous rank correlations ranged from −0.272 to +0.446. The external survey had 44 complete cases and no measured low-ferritin participant. Appendix Figure 6, Table 5 and the study report give all completed and incomplete arms. [Experimental report](work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Model programs](work/original_paper_iron_sensitivity_2026-11-19/laws) · [Independent numerical review](work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_VERIFICATION.json)
 
 ## Prospective validation in v0.35
 
