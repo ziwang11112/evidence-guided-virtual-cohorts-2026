@@ -1,0 +1,20 @@
+\section{One lipid generator, two independent samples}
+\label{sec:nonhdl}
+For a researcher planning a screening study, mean non-HDL cholesterol and the number of people with an elevated value answer different questions. We fixed both analyses before reading either measured outcome. The two references were adult residents of Mekelle and permanent employees of Haramaya University, separately recruited in northern and eastern Ethiopia~\cite{mekelle,haramaya}. Both measured total cholesterol (TC) and HDL in fasting venous serum. We analyzed the complete paired records of participants aged 20 or older, including people taking medication. Our cutoff of 160 mg/dL defines the laboratory finding used for this comparison.
+
+\paragraph{What was supplied?}
+Both methods received the same published entries for 170 municipal adults in Mwanza, Tanzania~\cite{kavishe}. The source reports weighted means of 4.72 mmol/L for TC and 1.39 for HDL, hence 3.33 for non-HDL. It also gives the mean of individual TC/HDL ratios (3.66) and two single-marker threshold frequencies. We fitted common positive lognormal margins to the reported means and frequencies. The order statistics for both markers were identical across methods and sites. Any permutation therefore preserves the mean difference exactly. The proportion with TC minus HDL at least 160 still depends on which values are paired.
+
+\paragraph{What did the agent choose?}
+One fresh GPT session received the research request and source extract. It derived a Gaussian copula parameter from the published mean ratio and wrote a sampler that assigns HDL ranks conditionally on TC ranks. An independently specified statistical generator chose the same family and moment. The agent had no access to that implementation. They gave different individual assignments. Their mean ratios over three draws were 3.659 and 3.658, close to the reported 3.66. The raw interface rejected the field names in the agent's decision record. Before accessing either target, we registered a translation of metadata keys and executed the original code and scientific parameters in isolation. The comparison below concerns that execution.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.91\textwidth]{figures/nonhdl-two-cohorts.pdf}
+\caption{The same virtual lipid tables compared with two independently recruited samples. The reference points show empirical estimates and 95\% age-stratified bootstrap intervals. Synthetic points are pooled over three draws per method; the same estimates appear on both rows. (A) Shared marginal means determine both synthetic means. (B) The two methods independently chose similar pairing rules and placed about one quarter above the cutoff. The observed fraction was close to one fifth at both sites.}
+\Description{For Mekelle and Haramaya the generated mean is 128.77 mg/dL, compared with measured means of 125.12 and 123.58. The virtual threshold percentages are 25.53 and 25.52, compared with 21.18 and 20.96 measured.}
+\label{fig:nonhdl}
+\end{figure*}
+
+\paragraph{Which use transferred?}
+The common virtual mean was 128.77 mg/dL, 3.65 above the Mekelle estimate and 5.19 above Haramaya (Figure~\ref{fig:nonhdl}A). We did not assign a pass criterion to the mean. The primary threshold fraction was 25.53\% for the agent and 25.52\% for the statistical generator. In Mekelle 68 of 321 participants reached the cutoff (21.18\%); in Haramaya 244 of 1,164 did (20.96\%). We had defined a study-planning tolerance of 20 additional people per 1,000. For the agent, the interval for the excess was $-0.02$ to 8.70 percentage points in Mekelle and 2.33 to 6.89 in Haramaya. The community result is unresolved under this rule. The employee result exceeds its upper limit. The statistical arm gave the same classifications. Both rates are sample estimates; the two recruitment frames afford separate checks within one country. The design compares transport of the complete laws. It cannot attribute the overestimate to pairing alone.
