@@ -1,0 +1,18 @@
+# Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?
+
+KDD Research working manuscript v0.45, 21 November 2026. A researcher has published evidence and a question but lacks individual participant records. The agent constructs a sampler and delivers a virtual dataset. The researcher changes the input to a fixed analysis and checks what happens to the association, its magnitude and the scientific conclusion. [External review PDF](external_review.pdf) · [Anonymous PDF](paper.pdf) · [External review Overleaf ZIP](overleaf_external_review_v45.zip) · [Anonymous Overleaf ZIP](overleaf_v45.zip)
+
+## The two main tests
+
+| Where in the paper | What the agent knew | Analysis and evidence |
+|---|---|---|
+| Pages 2–3, Figure 2 | Lea et al.'s Kenyan study, published lifestyle findings, permitted external sources, and the request for complete participant records. | Both generators reproduced the positive urban–pastoralist BMI difference at approximately the measured scale. Urban total cholesterol was higher in the virtual records but by a smaller amount in mg/dL. The figure shows all nine prespecified contrasts, with both authors and the measured intervals. |
+| Pages 4–5, Figure 3A | An external iron-status article and summaries from CHNS source communities. The held-out communities' measurements and overall rank correlation were absent. | Six final models gave hemoglobin–ferritin correlations of 0.297–0.304 against 0.317 in 1,082 women in held-out communities. Threshold counts supplied a direct source anchor for a different analysis on those same records. A separate Nigerian sample shows how the association can change when the source is transferred to another population. |
+
+[Data-substitution replay and results in native units](../../work/kdd_v45_build_2026-11-21/ANALYSIS_REPLAY.md) · [All nine pooled lifestyle contrasts](../../work/kdd_v45_build_2026-11-21/ANALYSIS_SUBSTITUTION.json) · [CHNS design and results](../../work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md) · [External iron results](../../work/prospective_iron_dependence_2026-11-20/RESULTS.md)
+
+## How to read the supporting experiments
+
+Figure 1 (p. 2) traces a published count through an agent's modeling choice to two different uses of the data. Figure 3B (p. 5) isolates how much within-group age pairing contributes to the Kenyan regressions. Figure 4 (p. 7) shows how lipid screening estimates can differ even when agents preserve the same published measurements. Appendix Figures 10–11 and Table 6 (p. 16) provide the real–real and virtual–real comparisons at matched sample sizes. Historical US lipid means and bilateral grip remain supporting transfer cases in Figures 16–18 and Tables 8–9. These examples explain observed differences in scientific use. [Lipid pairing tests](../../work/kdd_v40_pairing_review_2026-11-20/REVIEW.md) · [Historical lipid comparison](../../work/lipid_population_anchors_2026-11-21/RESULTS.md) · [Handgrip comparison](../../work/bilateral_grip_transfer_2026-11-21/RESULTS.md)
+
+This release reanalyzes frozen outputs and reorganizes the manuscript. From the project root run `python -B work/kdd_v45_build_2026-11-21/analysis_substitution.py` for the public effect comparison and `python -B work/chns_iron_conditional_holdout_2026-11-19/public_replay.py` for the holdout. No new model calls or cohort recruitment entered the revision. The scientific PDF has 23 pages including references starting on page 7 and an appendix beginning on page 9. Both ZIPs compile from `main.tex`. The linked edition adds four links in the first-page margin. [Build checks](BUILD_CHECK.json) · [External-edition checks](EXTERNAL_REVIEW_CHECK.json) · [Previous v0.44 manuscript](../kdd_draft_v44_2026-11-21/README.md)
