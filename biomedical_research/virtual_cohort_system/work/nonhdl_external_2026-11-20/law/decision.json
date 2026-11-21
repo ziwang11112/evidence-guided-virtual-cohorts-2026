@@ -1,0 +1,62 @@
+{
+  "choice_and_evidence": {
+    "choice": "Use a source-ratio-calibrated Gaussian copula, implemented as a randomized rank permutation of the supplied HDL array.",
+    "rationale": "The published mean of individual TC/HDL ratios is the only supplied nonlinear joint statistic. It directly informs dependence, whereas marginal means and the mean non-HDL do not. A one-parameter Gaussian copula uses this information parsimoniously, but its family is an explicit assumption rather than an identified biological mechanism.",
+    "source_interpretation": "Treat the design-weighted Mwanza estimates as population moment constraints. Equal-probability synthetic records approximate that weighted population; they do not reproduce the original survey design, weights or clustering."
+  },
+  "calibration": {
+    "marginal_equation": "For each margin, z = Phi^-1(F(threshold)) and sigma solves sigma^2/2 - z*sigma + log(threshold/mean) = 0. Use the smallest positive root.",
+    "approximate_log_scale_sd": {
+      "tc": 0.29867,
+      "hdl": 0.28267
+    },
+    "joint_equation": "For jointly lognormal T,H, E(T/H) = (mean_T/mean_H) * exp(sigma_H^2 - rho*sigma_T*sigma_H). Equating this to 3.66 determines rho.",
+    "approximate_latent_correlation": 0.059,
+    "interpretation": "Within this assumed family the source ratio implies weak positive dependence. It does not establish weak dependence among all possible joint distributions.",
+    "confidence_intervals": "No reported confidence interval is used as interindividual spread or to infer covariance. Source-estimation uncertainty is not propagated by this frozen point-calibrated generator."
+  },
+  "source_fit": {
+    "continuous_reference_model": {
+      "tc_mean_mmol_l": 4.72,
+      "hdl_mean_mmol_l": 1.39,
+      "tc_at_least_6_2_mmol_l_pct": 14.4,
+      "hdl_below_1_mmol_l_pct": 15.3,
+      "mean_individual_tc_hdl_ratio": 3.66,
+      "mean_nonhdl_mmol_l": 3.33
+    },
+    "redundancy": "The non-HDL mean is already implied by 4.72 - 1.39 = 3.33; it supplies no additional dependence constraint. The ratio of marginal means is approximately 3.396, not the reported mean individual ratio of 3.66.",
+    "finite_array_fit": "Every supplied TC and HDL value is retained exactly once. Midpoint discretization, marginal rescaling and random rank assignment mean that finite-array marginal threshold frequencies and mean individual ratio need not equal their continuous reference values exactly. The source joint moment is matched analytically in the continuous model and approached by this rank construction as array length increases; it is not forced exactly for each sample."
+  },
+  "pairing_assumptions": [
+    "The supplied lognormal marginal construction is accepted, including its root selection and finite-array rescaling.",
+    "Dependence is Gaussian on latent normal scales, with no additional mixtures, nonlinear structure or tail-dependence parameters.",
+    "TC rank is represented by its deterministic midpoint normal score. A conditional Gaussian HDL score is generated for each TC row, and its rank selects the supplied HDL order statistic.",
+    "The same source-derived correlation is used at every sample size and in both samples. There is no fitting to supplied array values, target outcomes or resulting prevalence.",
+    "Distinct seeds give independent coupling randomizations conditional on the fixed arrays. Records within one output are not independent draws because all marginal order statistics must be used exactly once."
+  ],
+  "physiological_implications": {
+    "positive_concentrations": "Both marginal concentrations remain positive.",
+    "support_limitation": "The model does not enforce HDL <= TC. Its continuous reference distribution assigns approximately 0.11% probability to HDL > TC and therefore negative calculated non-HDL, which is impossible for true component concentrations. Finite outputs can contain such pairs.",
+    "handling": "No clipping, rejection or repair is performed: those operations would change the specified joint model and require recalibration. This is an aggregate approximation, not a physiologically exact clinical-record simulator.",
+    "unmodeled_features": "The table cannot validate Gaussian tail behavior, conditional heterogeneity or a measurement-error explanation for inconsistent concentrations."
+  },
+  "scientific_uses": {
+    "already_determined_by_margins": {
+      "sample_mean_identity": "For every permutation, mean(TC - HDL) = mean(TC) - mean(HDL).",
+      "tc_mean_mg_dl": 182.5224,
+      "hdl_mean_mg_dl": 53.7513,
+      "nonhdl_mean_mg_dl": 128.7711,
+      "pooled_mean": "If both supplied samples have the stated exact marginal means, their pooled mean non-HDL is also 128.7711 mg/dL regardless of pairing or seed. This does not establish the actual target-population mean or its sampling uncertainty."
+    },
+    "pairing_dependent": {
+      "threshold_statistic": "For a generated sample, calculate 100 * mean(TC[i] - HDL[hdl_index[i]] >= 160). Pool counts and denominators across samples rather than averaging percentages unless sample sizes are equal.",
+      "remaining_uncertainty": "The threshold percentage is not determined by the margins or by a single mean-ratio constraint. Other copulas can satisfy those constraints yet produce different percentages. This generator provides one assumption-dependent value, not an identified prevalence.",
+      "replication": "Repeating with preselected seeds measures conditional permutation variability only; it does not quantify source uncertainty, copula-family uncertainty or transport error."
+    }
+  },
+  "transfer_limits": [
+    "Transport assumes the source adult association and marginal model apply to both independently recruited East African samples despite possible differences in place, calendar time, age, sex, metabolic risk, treatment, fasting status or assay conditions.",
+    "No target-specific adjustment is possible or performed because no target evidence is available.",
+    "The two outputs share the same source assumptions and calibration uncertainty. Independent seeds do not make their transport errors independent, and pooling does not remove shared model error."
+  ]
+}

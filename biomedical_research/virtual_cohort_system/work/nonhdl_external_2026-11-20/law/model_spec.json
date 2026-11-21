@@ -1,0 +1,39 @@
+{
+  "name": "source_ratio_gaussian_rank_copula_v1",
+  "source": {
+    "article": "Kavishe et al., PLOS ONE 2019",
+    "doi": "10.1371/journal.pone.0223189",
+    "stratum": "Mwanza, Tanzania; 170 community adults aged 18+; 2012–13",
+    "specimen": "Nonfasting venous serum",
+    "estimand": "Design-weighted population moments"
+  },
+  "calibration": {
+    "unit": "mmol/L",
+    "tc": {
+      "mean": 4.72,
+      "threshold": 6.2,
+      "cdf_at_threshold": 0.856
+    },
+    "hdl": {
+      "mean": 1.39,
+      "threshold": 1.0,
+      "cdf_at_threshold": 0.153
+    },
+    "mean_individual_tc_hdl_ratio": 3.66,
+    "log_scale_root_rule": "smallest_positive",
+    "cholesterol_mg_dl_per_mmol_l": 38.67
+  },
+  "dependence": {
+    "family": "Gaussian copula",
+    "calibration_operator": "E(TC/HDL), not E(TC)/E(HDL)",
+    "latent_correlation_formula": "(sigma_H^2 - log(mean_ratio * mean_H / mean_T)) / (sigma_T * sigma_H)",
+    "finite_array_pairing": "Conditional Gaussian latent scores followed by HDL rank assignment",
+    "support_policy": "Positive margins without an additional TC >= HDL constraint"
+  },
+  "execution_policy": {
+    "observed": "Ignored; no target fitting or feedback",
+    "calibration": "Use only the frozen published source constants, not finite-array summaries",
+    "seeds": "Supply a distinct, preselected nonnegative integer seed for each independently generated sample; never select seeds by resulting outcomes",
+    "threshold_nonhdl_mg_dl": 160.0
+  }
+}
