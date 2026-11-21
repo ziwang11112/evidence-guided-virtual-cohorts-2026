@@ -1,0 +1,17 @@
+# Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?
+
+KDD Research working manuscript v0.41. The four-author lipid experiment and the lifestyle re-pairing analysis were frozen and verified on November 20, 2026 (US Central). [External review PDF](external_review.pdf) · [Anonymous PDF](paper.pdf) · [Overleaf ZIP](overleaf_v41.zip) · [External review Overleaf ZIP](overleaf_external_review_v41.zip) · [Reviewer assessment of v0.40 and all new results](../../work/kdd_v40_pairing_review_2026-11-20/REVIEW.md)
+
+## Read the main figures
+
+| Figure | Scientific question | Result to examine |
+|---|---|---|
+| 1, page 2 | Which measurements does a scientific agent decide to put in the same virtual person? | Four source cells determine the threshold odds ratio. Several executable pairings preserve it and give different continuous correlations. |
+| 2, page 3 | Can a researcher rerun the lifestyle analysis on virtual participants? | Compare urban–pastoralist BMI and rural–pastoralist total cholesterol with their own real–real resampling discrepancies. All nine scientific contrasts appear in the supplement. |
+| 3, page 6 | Where did the agent's pairing make a measurable difference? | Random re-pairing worsened the continuous iron correlation for all six CHNS laws. Age pairing contributed little to the adjusted lifestyle BMI contrast. Both ablations were specified after the original comparators had been opened. |
+| 4, page 8 | If a statistical model agrees with the agent, is the lipid screening percentage determined? | The original estimates were 25.53% and 25.52%. Four fresh agents supplied two different executable pairings each. These changed the screening percentage by 16.37–29.35 points within author under the same source constraints. |
+| 12, page 17 | What changed inside the virtual records? | Eight rank-density maps use the same empirical marginal values. The orange curve shows where the screening rule changes. The complete set of authors is shown on the first predeclared seed. |
+
+The strongest measured pairing contribution was local to CHNS. The prospectively evaluated Nigerian comparison gave correlations of 0.3082 for the median agent, 0.3031 for a dependent statistical comparator and 0.0103 in the measured sample. The four new lipid models used one source packet and one GPT configuration. They establish the ability to construct source-compatible alternatives. The key remaining validation is a pre-reveal decision about which analyses will transfer within their stated tolerance. [CHNS results](../../work/chns_statistical_comparator_2026-11-19/RESULTS.md) · [Nigeria results](../../work/prospective_iron_dependence_2026-11-20/RESULTS.md) · [Source-only lipid results](../../work/kdd_v40_pairing_review_2026-11-20/SENSITIVITY.json)
+
+Compile either Overleaf ZIP with main.tex as the root. From the project directory, run `python -B reproducibility/check_v40.py` to check the inherited results and `python -B work/kdd_v40_pairing_review_2026-11-20/public_check.py` for the new figures and summaries. The independent full-output check ran locally with the sealed draws. The public scripts and aggregates are sufficient to verify the published tabulations. [Build receipt](BUILD_CHECK.json) · [External edition render checks](EXTERNAL_REVIEW_CHECK.json) · [Sealed author code](../../work/kdd_v40_pairing_review_2026-11-20/laws) · [Previous manuscript](../kdd_draft_v40_2026-11-20/README.md)
