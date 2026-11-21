@@ -1,18 +1,20 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.43, 21 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.44, 21 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v43_2026-11-21/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v43_2026-11-21/overleaf_external_review_v43.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v43_2026-11-21/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/overleaf_external_review_v44.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
 
-Figures 1–5 trace published summaries, individual pairing choices and the analyses that change with them. Figure 6 follows the same frozen lipid models into two later US survey periods. The original virtual mean individual TC/HDL ratio met its planning margin in both. Adding two historical national marker means increased screening error by 8.72 percentage points on the original pairing in both periods. On the eight earlier alternatives, the same change improved four and worsened four at both measured points. [Figure guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v43_2026-11-21/README.md) · [All six US analyses and nine pairings](biomedical_research/virtual_cohort_system/work/lipid_population_anchors_2026-11-21/RESULTS.md) · [Earlier Virginia decisions](biomedical_research/virtual_cohort_system/work/prospective_lipid_use_2026-11-21/RESULTS.md)
+Figure 6 isolates what a scientific agent contributes when a paper reports each hand separately. The agents estimated a mean 3.81 kg within-person gap compared with 3.30 kg measured in the US and 3.78 kg in rural South Africa. Independent pairing gave 7.93 kg from exactly the same values. The same virtual table overestimated South African mean grip strength by 7.81 kg. Figure 5 shows how an update to the marginal distributions interacts with the pairing in lipid screening. [Figure guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/README.md) · [All measured and virtual grip results](biomedical_research/virtual_cohort_system/work/bilateral_grip_transfer_2026-11-21/RESULTS.md) · [Historical lipid comparisons](biomedical_research/virtual_cohort_system/work/lipid_population_anchors_2026-11-21/RESULTS.md)
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
 
 [Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Earlier releases
+
+[21 November manuscript v0.43, with the two US lipid periods](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v43_2026-11-21/README.md)
 
 [21 November manuscript v0.42, with the Virginia prioritization study](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v42_2026-11-21/README.md) · [20 November manuscript v0.41, with the pairing experiments](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v41_2026-11-20/README.md)
 
