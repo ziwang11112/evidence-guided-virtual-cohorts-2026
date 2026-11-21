@@ -1,18 +1,20 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.44, 21 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.45, 21 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/overleaf_external_review_v44.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/overleaf_external_review_v45.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
 
-Figure 6 isolates what a scientific agent contributes when a paper reports each hand separately. The agents estimated a mean 3.81 kg within-person gap compared with 3.30 kg measured in the US and 3.78 kg in rural South Africa. Independent pairing gave 7.93 kg from exactly the same values. The same virtual table overestimated South African mean grip strength by 7.81 kg. Figure 5 shows how an update to the marginal distributions interacts with the pairing in lipid screening. [Figure guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/README.md) · [All measured and virtual grip results](biomedical_research/virtual_cohort_system/work/bilateral_grip_transfer_2026-11-21/RESULTS.md) · [Historical lipid comparisons](biomedical_research/virtual_cohort_system/work/lipid_population_anchors_2026-11-21/RESULTS.md)
+Figure 2 runs the same published-style analysis on measured Kenyan participants and two agent-generated cohorts. Both models reproduced the urban BMI contrast at a similar magnitude. Both gave a smaller urban cholesterol contrast in mg/dL. A separate CHNS community holdout tests whether these data can support an association absent from the supplied source summaries. The individual pairing and cross-population cases explain why some conclusions carry over. [Paper and figure guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/README.md) · [Data substitution and all nine effects](biomedical_research/virtual_cohort_system/work/kdd_v45_build_2026-11-21/ANALYSIS_REPLAY.md) · [Community holdout](biomedical_research/virtual_cohort_system/work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md)
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
 
 [Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Earlier releases
+
+[21 November v0.44 with bilateral grip in three recruitment settings](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v44_2026-11-21/README.md)
 
 [21 November manuscript v0.43, with the two US lipid periods](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v43_2026-11-21/README.md)
 
