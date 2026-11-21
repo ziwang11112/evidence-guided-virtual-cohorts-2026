@@ -1,0 +1,46 @@
+{
+  "name": "Historical-US-mean anchoring with source marginal shapes retained",
+  "version": "1.0",
+  "interpretation": "Exploratory transport scenario for later US adults aged 20+, not an identified estimate of the later surveillance distribution.",
+  "transformation": {
+    "family": "Separate positive multiplicative rescaling",
+    "tc_mg_dl": "y_i = x_i * tc_reference_mean_mg_dl / arithmetic_mean(x)",
+    "hdl_mg_dl": "y_i = x_i * hdl_reference_mean_mg_dl / arithmetic_mean(x)",
+    "grid_weights": "Equal weights, 1/n, for each marginal grid",
+    "rank_constraint": "Preserve the supplied order separately within each biomarker; never infer pairings from common row positions.",
+    "retained_features": [
+      "Each supplied marginal's relative quantile spacing and coefficient of variation",
+      "The supplied smaller-root lognormal shape for each biomarker, subject to finite-grid representation",
+      "Within-biomarker ranks"
+    ]
+  },
+  "constants": {
+    "tc_reference_mean_mg_dl": {
+      "value": 196.0,
+      "unit": "mg/dL",
+      "provenance": "Carroll et al., JAMA 2012, Table 1, 2007–2010, age-standardized US adults aged 20+",
+      "applicability": "Used fully as an earlier-US reference mean because geography, adult age definition and age standard match the intended population more closely than Mwanza. Persistence into the later period is an explicit scenario assumption."
+    },
+    "hdl_reference_mean_mg_dl": {
+      "value": 52.5,
+      "unit": "mg/dL",
+      "provenance": "Carroll et al., JAMA 2012, Table 1, 2007–2010, age-standardized US adults aged 20+",
+      "applicability": "Used fully as an earlier-US reference mean, with the same unverified temporal-transport assumption as TC."
+    }
+  },
+  "age_standardization": {
+    "reference": "Projected US 2000 distribution, ages 20–39, 40–59 and 60+",
+    "implementation": "Interpret the equal-weight output grids as reference-standardized marginal distributions. The reference means were standardized; no individual ages or age-specific distributions are available to perform or verify direct standardization of the output distributions."
+  },
+  "source_shape_transfer": {
+    "decision": "Retain as a working assumption, not as validated US evidence",
+    "rationale": "No target dispersion or tail information is supplied. Keeping the existing shapes avoids inventing new dispersion coefficients, but does not establish that the source shapes describe US adults.",
+    "not_transferred_as_constraints": [
+      "Mwanza arithmetic means",
+      "Mwanza cutoff frequencies",
+      "Mwanza mean individual TC/HDL ratio",
+      "Mwanza mean non-HDL",
+      "Mwanza confidence intervals"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Historical-US-mean anchoring with source-relative-shape retention",
+  "version": "1.0",
+  "mapping": "For each marginal separately, y_i = target_mean_mg_dl * x_i / arithmetic_mean(x).",
+  "target_mean_mg_dl": {
+    "tc_mg_dl": 196.0,
+    "hdl_mg_dl": 52.5
+  },
+  "coefficient_provenance": {
+    "target_mean_mg_dl": {
+      "units": "mg/dL",
+      "source": "Carroll et al., JAMA 2012, doi:10.1001/jama.2012.13260, Table 1, 2007–2010, age-standardized US adults aged 20+",
+      "applicability": "Both historical US means are transferred as provisional reference anchors, not as measurements of the unspecified later surveillance period."
+    },
+    "marginal_multiplier": {
+      "units": "dimensionless",
+      "definition": "The corresponding historical US mean divided by the arithmetic mean of the supplied marginal grid.",
+      "provenance": "Deterministic finite-grid calibration; no target-period fitting."
+    }
+  },
+  "shape_policy": {
+    "source": "Executor-supplied ordered grids based on the smaller admissible single-marker lognormal scales from Kavishe et al., Mwanza.",
+    "retained": "Each marginal's relative shape, coefficient of variation, quantile ratios and ordering.",
+    "changed": "Each marginal's arithmetic mean and absolute dispersion through a positive multiplicative factor.",
+    "rationale": "The evidence supplies US location anchors but no US dispersion or tail constraints. Retaining source relative shapes is a parsimonious, explicitly uncertain transport assumption, not evidence that Tanzanian and US distributions have equal shapes."
+  },
+  "population_interpretation": {
+    "intended_population": "US adults aged 20+, standardized to the US 2000 age distribution",
+    "grid_weights": "Equal weight per output row",
+    "age_standardization_assumption": "The generated marginal grids represent the standardized population mixture. No age-specific reweighting can be performed with these inputs.",
+    "time_transfer_assumption": "Use 2007–2010 US means without an extrapolated secular trend because no numerical later-period evidence is supplied."
+  },
+  "joint_policy": "Do not interpret matching row positions as people. Apply historical rank pairings afterwards; do not estimate or alter the pairing here.",
+  "uncertainty_policy": "Deterministic working scenario. Published confidence intervals concern population means or frequencies and are not person-level standard deviations. No uncertainty distribution is inferred from them.",
+  "seed_policy": "Unused; transformation is deterministic."
+}

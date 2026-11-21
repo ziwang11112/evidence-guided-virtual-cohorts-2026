@@ -1,0 +1,28 @@
+{
+  "structure": "Independently rescale both ordered marginals to historical age-standardized US means; retain source relative shapes as a working assumption and leave pairing untouched.",
+  "parameter_provenance": [
+    "TC anchor: 196 mg/dL, Carroll et al. Table 1, 2007–2010. Its 195–198 mg/dL confidence interval describes uncertainty in the population mean, not individual variability.",
+    "HDL anchor: 52.5 mg/dL, the same US table and population. Its 51.8–53.2 mg/dL confidence interval likewise concerns the mean.",
+    "Both US anchors match the requested age threshold and standardization better than the Mwanza means. Their historical period is accepted provisionally; neither a trend nor an unsupported temporal discount is introduced.",
+    "The supplied Mwanza grids determine relative marginal dispersion and tail shape. Positive multiplication preserves their smaller admissible lognormal scales rather than refitting those scales from confidence intervals.",
+    "Mwanza includes adults aged 18+ in a different country and case mix. Its absolute means, cutoff frequencies, non-HDL mean and mean individual ratio are not imposed as US constraints.",
+    "Normalization uses each supplied grid's mean, rather than the published source mean, so finite-grid discretization does not shift the chosen US mean anchors."
+  ],
+  "requested_estimands": [
+    "Primary: after applying historical rank pairings, estimate the fraction with TC minus HDL at least 160 mg/dL using the paired rows. Side-by-side marginal rows must not be used for this calculation.",
+    "Mean non-HDL: under equal row weights, the construction implies 196 minus 52.5 = 143.5 mg/dL, up to floating-point precision, independently of pairing.",
+    "Mean individual TC/HDL: calculate the average of paired individual ratios afterwards. The ratio of anchored means, approximately 3.7333, is not that estimand. The Mwanza mean individual ratio of 3.66 supplies no new US joint information.",
+    "Single-marker cutoff rates: calculate from each transformed marginal using the requested threshold and inequality. These rates do not depend on pairing.",
+    "Rank correlation: after pairing, Spearman correlation is unchanged by these strictly increasing transformations. Pearson correlation of the two markers is also unchanged by positive marginal scaling."
+  ],
+  "limitations": [
+    "The later-period target distribution is not identified by these data. This is a historical-US-anchored working scenario, not a validated estimate of later surveillance.",
+    "The primary non-HDL tail probability depends on both marginal tail shapes and pairing. Historical US means alone cannot identify it.",
+    "Retaining Mwanza relative shapes is the weakest transport assumption here. Country, age composition, medication use, survey design and other case-mix differences may change dispersion or tails.",
+    "Age-standardized means do not identify age-specific distributions or the full standardized mixture. No actual age reweighting is possible without ages or stratum-specific evidence.",
+    "The alternative admissible source lognormal scale is not explored in this single deterministic specification.",
+    "No biological joint support constraint, such as TC exceeding HDL for every pair, is imposed. Applying pairings may reveal violations; repairing them would require a separate joint-model decision.",
+    "The generator includes input and numerical validity guards, but no execution on the original grids or empirical validation is claimed."
+  ],
+  "checks_actually_performed": []
+}

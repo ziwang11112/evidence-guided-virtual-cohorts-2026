@@ -1,0 +1,39 @@
+{
+  "name": "historical_US_mean_anchored_marginals",
+  "version": 1,
+  "transformation": "For each marginal independently, y_i = anchor_mean_mg_dl * x_i / arithmetic_mean(x).",
+  "parameters": {
+    "tc_anchor_mean_mg_dl": 196.0,
+    "hdl_anchor_mean_mg_dl": 52.5,
+    "shape_power_dimensionless": 1.0
+  },
+  "parameter_metadata": {
+    "tc_anchor_mean_mg_dl": {
+      "units": "mg/dL",
+      "provenance": "Carroll et al., JAMA 2012, doi:10.1001/jama.2012.13260, Table 1, 2007–2010, age-standardized US adults aged 20+.",
+      "applicability": "Historical US reference scenario; closer geography, adult eligibility and standardization than Mwanza, but not a measured later-period mean."
+    },
+    "hdl_anchor_mean_mg_dl": {
+      "units": "mg/dL",
+      "provenance": "Same Carroll et al. table, population and period.",
+      "applicability": "Historical US reference scenario, with no assumed temporal trend."
+    },
+    "shape_power_dimensionless": {
+      "units": "dimensionless",
+      "provenance": "Analyst-selected identity shape transfer.",
+      "applicability": "Retains the supplied smaller-scale lognormal marginal shapes because no target dispersion evidence is available; this is a provisional assumption, not evidence of cross-country shape equivalence."
+    }
+  },
+  "normalization": "Use each supplied finite grid's arithmetic mean, rather than its theoretical source mean, so the returned equal-weight grid has the specified anchor mean.",
+  "retained_source_information": [
+    "Each biomarker's ordering and relative marginal shape, including its coefficient of variation.",
+    "The executor's smaller admissible lognormal-scale branch."
+  ],
+  "not_transferred": [
+    "Mwanza absolute means and cutoff prevalences.",
+    "Mwanza mean individual TC/HDL as a target constraint.",
+    "Any within-person pairing inferred from side-by-side marginal grids."
+  ],
+  "target_interpretation": "A historical-US-mean-anchored sensitivity scenario for a later US age-standardized population, not an identified estimate of that later population.",
+  "randomness": "None; observed and seed are unused."
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Historical-US-mean-anchored marginal transport",
+  "interpretation": "A conditional reference scenario for later US adults, not an identified estimate of their lipid distributions.",
+  "mapping": "For marker j, y_j[i] = anchor_j * x_j[i] / arithmetic_mean(x_j). Apply separately to the ordered marginal columns; do not interpret matching row positions as people.",
+  "anchors": {
+    "tc_mg_dl": {
+      "value": 196.0,
+      "unit": "mg/dL",
+      "provenance": "Carroll et al., JAMA 2012, Table 1, 2007–2010, age-standardized US adults aged 20+, both sexes, all race/ethnicity groups and medication statuses.",
+      "applicability_rationale": "Transfer the earlier US mean as a reference level because its geography, adult eligibility and standardization match the intended population more closely than Mwanza. Assume no subsequent change in the mean for this scenario; this is not evidence that no change occurred."
+    },
+    "hdl_mg_dl": {
+      "value": 52.5,
+      "unit": "mg/dL",
+      "provenance": "Carroll et al., JAMA 2012, Table 1, 2007–2010, age-standardized US adults aged 20+, both sexes, all race/ethnicity groups and medication statuses.",
+      "applicability_rationale": "Transfer the earlier US mean under the same explicit no-period-change reference assumption as TC."
+    }
+  },
+  "scale_coefficients": {
+    "tc": "196.0 / arithmetic_mean(spec['tc_mg_dl'])",
+    "hdl": "52.5 / arithmetic_mean(spec['hdl_mg_dl'])",
+    "unit": "dimensionless",
+    "provenance": "Calculated deterministically from the supplied marginal grids and the historical US anchors."
+  },
+  "shape_policy": {
+    "retained": "Within-marker rank, normalized quantile shape, coefficient of variation and log-scale dispersion of each supplied source grid.",
+    "replaced": "Each source arithmetic mean.",
+    "rationale": "Positive multiplicative transport changes location without introducing an unsupported new dispersion or tail parameter. The smaller admissible source lognormal scales are retained only as a provisional shape assumption, not as established US variability.",
+    "not_transferred": "Mwanza joint ratio information, joint pairing, and source absolute cutoff frequencies are not calibration targets."
+  },
+  "grid_interpretation": "Rows are equally weighted marginal quantile representatives. Exact mean anchoring refers to their discrete arithmetic means. Later pairings must preserve these marginal weights.",
+  "age_standardization": "Anchors are already standardized to the projected US 2000 age distribution. Without ages or age-specific distributions, no additional direct standardization is possible; treating the transported aggregate shapes as standardized target marginal shapes is an assumption.",
+  "uncertainty_policy": "No confidence interval is used as a person-level standard deviation. This deterministic reference scenario does not propagate mean-estimation uncertainty, temporal transport uncertainty or source-shape uncertainty.",
+  "seed_policy": "Ignored; transformation is deterministic."
+}
