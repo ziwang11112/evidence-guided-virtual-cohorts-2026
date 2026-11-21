@@ -36,7 +36,9 @@ def check_target(suffix, reference):
     for stub,role in [("DEMO","demographics"),("TCHOL","total"),("HDL","hdl")]:
         path=ROOT/"private/reference"/f"{stub}_{suffix}.xpt"
         assert sha(path)==reference["qc"]["files"][role]["sha256"]
-        data[stub]=pyreadstat.read_xport(str(path))[0].set_index("SEQN",verify_integrity=True)
+        frame,_=pyreadstat.read_xport(str(path),encoding="WINDOWS-1252")
+        data[stub]=frame.set_index("SEQN")
+        assert data[stub].index.is_unique and data[stub].index.notna().all()
     cohort=data["DEMO"].loc[lambda d:d.WTMEC2YR>0]
     unit=cohort.groupby("SDMVSTRA")["SDMVPSU"].unique()
     keep=data["TCHOL"][["LBXTC"]].join(data["HDL"][["LBDHDD"]],how="inner")
@@ -165,6 +167,29 @@ def check_public():
             equal([min(all_eval),max(all_eval)],sc["primary"]["range_over_reference_95ci_pp"])
             gains[period]=gov(y["estimate"])
         equal(abs(base-y["estimate"])-abs(pts["statistical"][k]-y["estimate"]),sc["statistical_gain_pp"])
+    audit_file=ROOT/"PAIRING_DIAGNOSTIC.json"
+    if audit_file.exists():
+        audit=read(audit_file)
+        multipliers=np.divide(preds["statistical"]["marginal_means"],preds["base"]["marginal_means"])
+        equal(multipliers,[audit["tc_multiplier"],audit["hdl_multiplier"]])
+        for law,row in audit["by_pairing"].items():
+            first=preds["base"]["pairings"][law]["values"]
+            updated=preds["statistical"]["pairings"][law]["values"]
+            equal(updated["mean_ratio"],first["mean_ratio"]*multipliers[0]/multipliers[1])
+            equal(updated["rank_tc_hdl"],first["rank_tc_hdl"])
+            equal([first["nonhdl160"],updated["nonhdl160"]],[row["before_pct"],row["after_pct"]])
+            equal(row["switched_pct"],row["after_pct"]-row["before_pct"])
+            assert sum(q["entered"] for q in row["runs"])==row["entered"] and not any(q["left"] for q in row["runs"])
+            equal(row["switched_pct"],100*row["entered"]/row["n"])
+            for key,y in result["reference"].items():
+                real=y["estimates"]["nonhdl160"]
+                change=lambda q:abs(first["nonhdl160"]-q)-abs(updated["nonhdl160"]-q)
+                equal(change(real["estimate"]),row["gain"][key]["gain_pp"])
+                lo,hi=real["ci"]
+                values=[change(x) for x in (lo,hi,first["nonhdl160"],updated["nonhdl160"]) if lo<=x<=hi]
+                equal([min(values),max(values)],row["gain"][key]["range_over_ci_pp"])
+        for place,rec in audit["measured_component_means"].items():
+            equal(rec["tc"]-rec["hdl"],result["reference"][place]["estimates"]["mean_nonhdl"]["estimate"])
     return result,preds,sum(charges),gains
 
 
