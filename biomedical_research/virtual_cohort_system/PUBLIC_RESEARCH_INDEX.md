@@ -1,5 +1,7 @@
 # Research index for the KDD working manuscript
 
+**KDD v0.41.** The new tests isolate within-group pairing in CHNS and Turkana, and assess whether four fresh GPT sessions can construct source-compatible lipid models with materially different screening rates. [Manuscript, figures and Overleaf source](manuscript/kdd_draft_v41_2026-11-20/README.md) · [All cases and reviewer assessment](work/kdd_v40_pairing_review_2026-11-20/REVIEW.md) · [New results checker](work/kdd_v40_pairing_review_2026-11-20/public_check.py)
+
 **KDD v0.40.** The new paper follows the source counts, the agent’s pairing choice, the Kenyan lifestyle regressions and two independent lipid comparisons in Ethiopia. [Manuscript and figures](manuscript/kdd_draft_v40_2026-11-20/README.md) · [Full external results](work/nonhdl_external_2026-11-20/RESULTS.md) · [Aggregate checker](reproducibility/check_v40.py)
 
 **Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.39, 20 November 2026.
