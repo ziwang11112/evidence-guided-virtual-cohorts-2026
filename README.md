@@ -1,18 +1,20 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.39, 20 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.40, 20 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/overleaf_external_review_v39.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v40_2026-11-20/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v40_2026-11-20/overleaf_external_review_v40.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v40_2026-11-20/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
 
-Figure 1 traces a threshold result to source counts and a continuous association to the agent's pairing decision. In the prospective Nigerian comparison the source-calibrated agent and statistical laws yielded ranks of 0.308 and 0.303, against 0.010 measured in 603 mothers. Both yielded a threshold odds ratio of 5.39, against 1.20 measured. [Prospective experiment](biomedical_research/virtual_cohort_system/work/prospective_iron_dependence_2026-11-20/RESULTS.md) · [Source evidence and retrospective CHNS comparison](biomedical_research/virtual_cohort_system/work/chns_statistical_comparator_2026-11-19/RESULTS.md)
+Figure 1 follows the source counts and the agent's decision about how to pair measurements. Figure 2 reruns the Kenyan lifestyle regressions on virtual and measured participants. In Figure 3, a fresh agent and a statistical generator each estimated about 25.5% of participants would reach a non-HDL cutoff of 160 mg/dL. The two independent Ethiopian study samples gave 21.18% in Mekelle and 20.96% at Haramaya University. Both methods used identical Tanzanian summaries and marginal values. [Read the manuscript by figure](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v40_2026-11-20/README.md) · [Sealed comparison and results](biomedical_research/virtual_cohort_system/work/nonhdl_external_2026-11-20/RESULTS.md) · [Pre-disclosure interface correction](biomedical_research/virtual_cohort_system/work/nonhdl_external_2026-11-20/INTERFACE_ADDENDUM.md)
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
 
 [Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Earlier releases
+
+[20 November manuscript v0.39, with the prospective Nigerian iron comparison](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v39_2026-11-20/README.md)
 
 [19 November manuscript v0.38](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v38_2026-11-19/README.md)
 

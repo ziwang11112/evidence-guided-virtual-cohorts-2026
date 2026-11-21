@@ -1,5 +1,7 @@
 # Research index for the KDD working manuscript
 
+**KDD v0.40.** The new paper follows the source counts, the agent’s pairing choice, the Kenyan lifestyle regressions and two independent lipid comparisons in Ethiopia. [Manuscript and figures](manuscript/kdd_draft_v40_2026-11-20/README.md) · [Full external results](work/nonhdl_external_2026-11-20/RESULTS.md) · [Aggregate checker](reproducibility/check_v40.py)
+
 **Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.39, 20 November 2026.
 
 [PDF for external review](manuscript/kdd_draft_v39_2026-11-20/external_review.pdf) · [Reviewer guide](../../REVIEW_GUIDE.md) · [External review Overleaf ZIP](manuscript/kdd_draft_v39_2026-11-20/overleaf_external_review_v39.zip) · [Anonymous manuscript](manuscript/kdd_draft_v39_2026-11-20/paper.pdf) · [Manuscript text](manuscript/kdd_draft_v39_2026-11-20/main.tex) · [Overleaf project](manuscript/kdd_draft_v39_2026-11-20/overleaf_v39.zip) · [Numerical and build checks](manuscript/kdd_draft_v39_2026-11-20/BUILD_CHECK.json)
