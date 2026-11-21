@@ -1,5 +1,7 @@
 # Research index for the KDD working manuscript
 
+**KDD v0.42.** Eight pre-disclosure advisers ranked six uses of the same frozen lipid records. One new US community study supplied 400 eligible paired measurements. Comparing the complete rankings with measured discrepancies identifies where seeing alternative models changed the decision and where all methods agreed on a poor first choice. [Manuscript and figure guide](manuscript/kdd_draft_v42_2026-11-21/README.md) · [Prospective results and retrospective bounds](work/prospective_lipid_use_2026-11-21/RESULTS.md) · [Public-only reproduction](work/prospective_lipid_use_2026-11-21/verify.py)
+
 **KDD v0.41.** The new tests isolate within-group pairing in CHNS and Turkana, and assess whether four fresh GPT sessions can construct source-compatible lipid models with materially different screening rates. [Manuscript, figures and Overleaf source](manuscript/kdd_draft_v41_2026-11-20/README.md) · [All cases and reviewer assessment](work/kdd_v40_pairing_review_2026-11-20/REVIEW.md) · [New results checker](work/kdd_v40_pairing_review_2026-11-20/public_check.py)
 
 **KDD v0.40.** The new paper follows the source counts, the agent’s pairing choice, the Kenyan lifestyle regressions and two independent lipid comparisons in Ethiopia. [Manuscript and figures](manuscript/kdd_draft_v40_2026-11-20/README.md) · [Full external results](work/nonhdl_external_2026-11-20/RESULTS.md) · [Aggregate checker](reproducibility/check_v40.py)
