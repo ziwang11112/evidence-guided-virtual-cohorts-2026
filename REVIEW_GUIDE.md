@@ -1,4 +1,8 @@
-# External review guide for the KDD v0.45 manuscript
+# External review guide for the KDD v0.46 manuscript
+
+Page 6 compares clinical reanalysis, reconstruction from summaries, and patient-agent generation. The accompanying note identifies the closest completed clinical studies and an ongoing trial-transport protocol. Figures 2 and 3 contain the measured-data comparisons that support the paper's contribution. [External review manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/external_review.pdf) · [Primary sources and comparison](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/RELATED_WORK.md)
+
+## Archived v0.45 review guide
 
 The scientific question is whether a researcher can use a literature-derived virtual cohort in an actual biomedical analysis. Start with Figure 2 (p. 3). It shows all three requested biomarkers, all three lifestyle contrasts, the measured effects in original units and two independent author means. The original study's group-level findings were available. Pages 4–5 then distinguish that reconstruction from iron-status models tested in 1,082 women in held-out communities. Figure 3 isolates the role of the constructed pairings. The external Nigerian result shows the limit of transferring the same kind of evidence to a different recruitment population. [External review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/external_review.pdf) · [Manuscript, figure guide and Overleaf ZIPs](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/README.md)
 
