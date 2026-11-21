@@ -1,0 +1,37 @@
+{
+  "structure": "One primary Gaussian rank-coupling law is specified. The Adelaide evidence fixes the marginal location, scale, anatomical labels and measurement operator, but not the pairing. Dependence is supplied by an explicit working assumption: transport the external study's relative ratio dispersion and use a first-order ratio approximation to obtain a separate Gaussian correlation parameter for each target cell. This generates plausible individual virtual pairs, not recovered participants or an identified joint distribution. No target outcomes or evaluator feedback were used.",
+  "parameter_provenance": [
+    "The four cell means and SDs are the supplied, rounded Adelaide Table 1 values. Normal marginal shape follows the supplied description and marginal-grid construction.",
+    "Equal cell weights are specified by the task, not estimated from Adelaide sample counts. The conflicting analytic sample counts are not used.",
+    "The values 0.9534 and 0.11 are the supplied external individual nondominant/dominant ratio mean and SD. Their quotient is used only as a relative-dispersion anchor.",
+    "Transporting that anchor across instruments, populations, ages, sexes and hand labels is a modeling assumption, not a source finding.",
+    "The first-order ratio calibration and Gaussian dependence structure are author choices. Neither paper supplies the target within-cell correlations.",
+    "The reported 89% right-handed fraction is not converted into a handedness mixture: no handedness-specific joint laws or cell proportions are available.",
+    "The seed governs simulated latent ranks only. The marginal grids are retained exactly."
+  ],
+  "requested_estimands": [
+    "Mean absolute difference: compute the equally weighted mean of |R-L| over all generated pairs, in kg. This is dependence-sensitive.",
+    "Percentage differing by at least 5 kg: compute 100 times the equally weighted mean of the indicator |R-L| >= 5, including equality. This is dependence-sensitive.",
+    "Mean of both hands: compute the mean of (R+L)/2. Pairing cannot change this statistic. Using the reported cell means gives an equal-cell nominal value of 33.375 kg; the actual finite-grid value follows the supplied arrays.",
+    "Average within-cell rank correlation: compute Spearman correlation separately in each cell, using average ranks for any tied hand values, then take the arithmetic mean of the four correlations. Do not substitute a pooled correlation. Under continuous ideal Gaussian margins, the cell population value is (6/pi)*asin(rho/2), not rho itself."
+  ],
+  "limitations": [
+    "The absolute-difference summaries and rank correlations are not identified by the Adelaide marginal summaries. Their numerical values are conditional on the chosen dependence law.",
+    "The external ratio dispersion pools both sexes and ages 21–88 in healthy non-left-handed adults. It need not describe any particular target sex/age cell.",
+    "Rubber-ball pressure in kPa and Jamar force in kg can have different relative measurement errors. Being dimensionless does not establish transportability of a ratio distribution.",
+    "Dominant/nondominant and anatomical right/left are not interchangeable. The anchor does not impose the external ratio mean on target anatomical hands.",
+    "The ratio calibration is a first-order approximation. Exact ratio moments under untruncated Gaussian hand distributions are not well-behaved near a zero denominator; no exact normal-ratio moment claim is made.",
+    "Normal marginal tails can include physiologically implausible strengths. This generator cannot truncate or otherwise repair those tails without violating the requirement to preserve the supplied grids.",
+    "The source excludes upper-limb symptoms or arthritis. Its margins and this assumed dependence should not be treated as representative of unselected community recruitment, clinical populations, or other recruitment settings without validation.",
+    "Finite grids and seed variation cause realized correlations and difference summaries to fluctuate. Dependence-parameter uncertainty and uncertainty in rounded source moments are not estimated.",
+    "A cell with one observation or constant hand values has undefined sample rank correlation, even though a valid permutation can still be generated."
+  ],
+  "checks_actually_performed": [
+    "Analytical check: assigning the ranks 0 through m-1 to the latent left ordering makes each output cell block a permutation and therefore preserves both marginal arrays.",
+    "Analytical check: the sequential row offsets produce row_id values 0 through N-1 in group order, with right-array order unchanged.",
+    "Analytical check: averaging the eight reported hand means gives the pairing-invariant nominal both-hand mean of 33.375 kg.",
+    "Analytical check: substituting the supplied moments into the calibration gives admissible positive correlations in all four cells.",
+    "No Python execution, empirical simulation, external retrieval, or comparison with evaluator targets was performed. Input-validation checks are implemented in the code but have not been executed here.",
+    "Proposed, not executed: test reproducibility, integer dtypes and per-cell permutation integrity across several grid lengths and seeds; compare large-grid rank correlations with the Gaussian-copula formula and summarize finite-seed variation in the dependence-sensitive estimands."
+  ]
+}

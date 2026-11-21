@@ -1,0 +1,37 @@
+{
+  "structure": "Use one common Gaussian copula to pair the supplied marginal grids within each stratum. Calibrate its correlation through an explicitly assumed transfer of external relative ratio dispersion, giving rho approximately 0.851. This is a transparent working generator, not an identified reconstruction of the Adelaide participants. The external study provides a weak dependence anchor rather than direct kg-scale validation. No alternative law, target-value search, or feedback calibration is used.",
+  "parameter_provenance": [
+    "Massy-Westropp supplies the four anatomical-hand means and SDs and describes the cell distributions as normal. These summaries concern means of three trials per hand, not individual attempts.",
+    "The supplied marginal grids are retained exactly. Their finite-grid means and SDs, rather than the rounded publication summaries, determine the realized marginal statistics.",
+    "Equal cell weights are imposed by the requested virtual study, not estimated from either publication.",
+    "Wunderle supplies the individual nondominant/dominant ratio mean 0.9534 and SD 0.11. Neither number is an inter-hand correlation or a ratio of marginal means.",
+    "The lognormal moment conversion, first-order log-ratio variance approximation, transfer from pooled ratios to within-cell dispersion, and common copula correlation are modeling assumptions.",
+    "The external ratio mean is used only to express relative dispersion. It does not replace the target anatomical-side means.",
+    "The Gaussian copula and its lack of additional tail dependence are assumptions. The source supplies no within-cell pairings, subgroup correlations, joint threshold probabilities, or copula parameters.",
+    "The seed controls independent latent residual draws. No trial-level error model is added because the requested hand values already average repeated attempts."
+  ],
+  "requested_estimands": [
+    "Mean absolute difference: average abs(right-left) over all generated pairs. This depends on the assumed pairing and equals an equal-weight average of the four cell means.",
+    "Percentage differing by at least 5 kg: 100 times the average indicator abs(right-left)>=5. This includes equality at 5 kg and is especially sensitive to the assumed joint distribution.",
+    "Mean of both hands: average (right+left)/2 over people. This is invariant to the permutations. The rounded source summaries imply 33.375 kg under equal cell weights; the supplied arrays determine the exact finite-grid result.",
+    "Average within-cell rank correlation: calculate Spearman correlation separately in each cell, using average ranks for ties, then average the four correlations equally. Do not calculate a pooled correlation across sex and age. With continuous margins and large cells, the model population value is 6/pi*asin(rho/2); finite-grid realizations fluctuate. A cell of size one or a constant margin has undefined rank correlation."
+  ],
+  "limitations": [
+    "The Adelaide summaries alone do not identify any of the pairing-dependent estimands. Other dependence structures can preserve every supplied marginal and produce different differences and threshold rates.",
+    "The external ratio study used a rubber-ball pressure instrument in kPa, pooled ages 21–88 and both sexes, and excluded left-handed participants. Transport to Jamar kg measurements and these four cells is not established.",
+    "Dominant/nondominant is not identical to anatomical right/left. Adelaide was 89% right-handed overall; that percentage does not identify cell-specific handedness or a mixture law. No unsupported handedness reassignment is made.",
+    "Pooled ratio dispersion can contain between-group variation. Treating it as common within-cell relative dispersion may overstate or understate discordance. The approximate calibration does not claim to reproduce either the external ratio mean or SD exactly.",
+    "The common correlation excludes possible sex, age, strength-dependent and recruitment-specific dependence differences. The threshold estimand may be sensitive to departures from the Gaussian copula.",
+    "Rounded summaries, normal-grid approximation, fixed margins and finite-cell simulation introduce discrepancies from an unrestricted population model. No truncation or alteration of supplied values is performed.",
+    "Applicability is closest to community adults without the excluded upper-limb symptoms or arthritis, measured using the specified protocol. Clinical, rehabilitation, symptomatic, occupational, volunteer-selected or differently screened samples require new justification; neither margins nor dependence are automatically transferable.",
+    "Source analytic sample counts differ between abstract and body. No count is resolved or used, and equal virtual representation should not be interpreted as population prevalence weighting.",
+    "Proposed, not executed here: run multiple seeds and cell sizes; verify marginal preservation and output invariants; quantify Monte Carlo variation; inspect cell-specific difference distributions, rank correlations and joint extremes; and assess sensitivity to plausible dependence strength before substantive use."
+  ],
+  "checks_actually_performed": [
+    "Reviewed the supplied evidence boundary: neither source supplies a within-cell right-left correlation for the target population.",
+    "Algebraically checked that the calibration equates equal-weight approximate log-ratio variance to the transferred dispersion, and that the supplied constants give an admissible correlation of approximately 0.851.",
+    "Algebraically checked the pairing-invariant equal-weight bilateral mean: (44+39+27+23.5)/4=33.375 kg.",
+    "Inspected the permutation construction: assigning ranks through the ascending latent-score order uses every local left index exactly once without changing either marginal.",
+    "No Python execution, empirical simulation checks, external retrieval, or validation against participant-level data was performed. Input validation and permutation assertions are included for execution by the worker."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Gaussian rank coupling with a transported relative-asymmetry anchor",
+  "version": 1,
+  "cell_order": [
+    "M50",
+    "M60",
+    "F50",
+    "F60"
+  ],
+  "cell_weights": [
+    0.25,
+    0.25,
+    0.25,
+    0.25
+  ],
+  "marginal_operator": "Anatomical-hand strength in kg, each hand being the mean of three trials. Preserve the supplied marginal arrays exactly; do not add trial-level noise.",
+  "primary_law": "Within each cell, couple the supplied normal-quantile marginal grids using the ranks of a bivariate standard normal sample with cell-specific Pearson parameter rho. Cells share one relative-asymmetry anchor but need not share rho.",
+  "dependence_anchor": {
+    "ratio_mean": 0.9534,
+    "ratio_sd": 0.11,
+    "relative_ratio_sd": "ratio_sd / ratio_mean",
+    "interpretation": "A working scale for individual relative inter-hand dispersion, transported from the external study. It is not an observed correlation in the target population."
+  },
+  "rho_rule": {
+    "formula": "rho = (a*a + b*b - c*c) / (2*a*b), where a=right_sd/right_mean, b=left_sd/left_mean, and c=ratio_sd/ratio_mean",
+    "derivation": "First-order propagation for Q=L/R gives Var(Q)/E(Q)^2 approximately a^2+b^2-2*rho*a*b.",
+    "scope": "This is an approximate dependence calibration, not an exact fit to normal-ratio moments. The external ratio mean normalizes its SD; it does not replace the target cells' left/right mean ratios.",
+    "out_of_range_policy": "Raise an error if the implied rho is outside [-1,1]; do not silently clip."
+  },
+  "cells": [
+    {
+      "cell": "M50",
+      "right_mean": 45,
+      "right_sd": 8.4,
+      "left_mean": 43,
+      "left_sd": 8.3
+    },
+    {
+      "cell": "M60",
+      "right_mean": 40,
+      "right_sd": 8.3,
+      "left_mean": 38,
+      "left_sd": 8
+    },
+    {
+      "cell": "F50",
+      "right_mean": 28,
+      "right_sd": 6.3,
+      "left_mean": 26,
+      "left_sd": 5.7
+    },
+    {
+      "cell": "F60",
+      "right_mean": 24,
+      "right_sd": 5.3,
+      "left_mean": 23,
+      "left_sd": 5
+    }
+  ],
+  "finite_grid_algorithm": "Draw m independent latent normal pairs per cell, sort pairs by the first coordinate, and use the ranks of the associated second coordinates as local left indices. This preserves both grids exactly and approximates the stated joint law as grid size increases.",
+  "randomness": "Use numpy.random.default_rng(seed), processing cells in the specified order."
+}

@@ -1,0 +1,52 @@
+{
+  "name": "common_gaussian_rank_copula",
+  "version": 1,
+  "population": "An equally weighted synthetic mixture of M50, M60, F50 and F60 community-adult strata, using the supplied anatomical-hand marginal values.",
+  "pairing_law": "Within each cell, draw independent latent bivariate standard-normal pairs with common Pearson correlation rho. Associate the supplied right and left order statistics according to the corresponding latent ranks. Draw independently across cells.",
+  "dependence_parameter": {
+    "type": "common_latent_normal_correlation",
+    "rule": "For each reference cell let a=right_sd/right_mean, b=left_sd/left_mean and c=ratio_sd/ratio_mean. Calculate rho_cell=(a*a+b*b-c*c)/(2*a*b). Set rho to the arithmetic mean of the four rho_cell values.",
+    "approximate_value": 0.8476,
+    "interpretation": "A working calibration obtained by transporting relative individual-ratio dispersion and using a first-order delta approximation. It is not an observed inter-hand correlation.",
+    "ratio_mean": 0.9534,
+    "ratio_sd": 0.11,
+    "reference_cells": [
+      {
+        "cell": "M50",
+        "right_mean": 45,
+        "right_sd": 8.4,
+        "left_mean": 43,
+        "left_sd": 8.3
+      },
+      {
+        "cell": "M60",
+        "right_mean": 40,
+        "right_sd": 8.3,
+        "left_mean": 38,
+        "left_sd": 8
+      },
+      {
+        "cell": "F50",
+        "right_mean": 28,
+        "right_sd": 6.3,
+        "left_mean": 26,
+        "left_sd": 5.7
+      },
+      {
+        "cell": "F60",
+        "right_mean": 24,
+        "right_sd": 5.3,
+        "left_mean": 23,
+        "left_sd": 5
+      }
+    ]
+  },
+  "cell_order": [
+    "M50",
+    "M60",
+    "F50",
+    "F60"
+  ],
+  "marginal_policy": "Preserve every supplied marginal value exactly. Do not rescale, truncate, add trial-level error, or reinterpret anatomical side as dominance.",
+  "finite_sample_policy": "Use ranks from an iid latent Gaussian sample rather than forcing an exact empirical correlation. The permutation distribution, not each realized empirical correlation, follows the specified law."
+}

@@ -1,0 +1,63 @@
+{
+  "name": "common_gaussian_copula_with_explicit_ratio_dispersion_transfer",
+  "version": 1,
+  "cell_order": [
+    "M50",
+    "M60",
+    "F50",
+    "F60"
+  ],
+  "cell_weights": [
+    0.25,
+    0.25,
+    0.25,
+    0.25
+  ],
+  "marginal_policy": "Preserve every supplied marginal value exactly; generate only the within-cell permutation.",
+  "calibration_cells": [
+    {
+      "cell": "M50",
+      "right_mean": 45,
+      "right_sd": 8.4,
+      "left_mean": 43,
+      "left_sd": 8.3
+    },
+    {
+      "cell": "M60",
+      "right_mean": 40,
+      "right_sd": 8.3,
+      "left_mean": 38,
+      "left_sd": 8
+    },
+    {
+      "cell": "F50",
+      "right_mean": 28,
+      "right_sd": 6.3,
+      "left_mean": 26,
+      "left_sd": 5.7
+    },
+    {
+      "cell": "F60",
+      "right_mean": 24,
+      "right_sd": 5.3,
+      "left_mean": 23,
+      "left_sd": 5
+    }
+  ],
+  "external_ratio_summary": {
+    "mean": 0.9534,
+    "sd": 0.11
+  },
+  "dependence": {
+    "family": "Gaussian copula",
+    "parameter": "One common latent Pearson correlation rho across all four cells.",
+    "calibration_rule": "Set tau2=log(1+(ratio_sd/ratio_mean)^2). For each cell set a=right_sd/right_mean and b=left_sd/left_mean. Set rho=(mean(a*a+b*b)-tau2)/mean(2*a*b), using equal cell weights.",
+    "approximate_rho": 0.851,
+    "interpretation": "A working dependence assumption, not a correlation estimated by either source.",
+    "transport_assumption": "Treat the external pooled relative ratio dispersion as an approximate common within-cell log-ratio dispersion for the target hand-level measurements.",
+    "approximation": "The external ratio is moment-matched to a lognormal solely to obtain tau2. A first-order delta approximation then gives Var(log(left)-log(right)) approximately a*a+b*b-2*rho*a*b. No exact distribution or moments of a ratio of Gaussian hands are asserted."
+  },
+  "pairing_algorithm": "For a cell of size m, assign ascending right ranks fixed normal scores Phi_inverse((i+0.5)/m). Draw independent standard normal residuals and form left latent scores rho*z_right+sqrt(1-rho^2)*residual. Associate the ascending left marginal values with the ascending ranks of these latent scores.",
+  "measurement_unit": "kg; each hand value is the mean of three trials",
+  "hand_labels": "Anatomical right and left, not dominant and nondominant"
+}

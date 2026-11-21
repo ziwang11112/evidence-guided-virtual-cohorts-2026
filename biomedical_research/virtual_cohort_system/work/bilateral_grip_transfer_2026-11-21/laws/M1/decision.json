@@ -1,0 +1,34 @@
+{
+  "structure": "Pair only within sex/age cells using a Gaussian rank copula with latent correlation 0.8. This gives a simple, positively associated bilateral model while preserving every supplied marginal value. Positive dependence is a scientific working judgment about two hands of the same person; neither its magnitude nor the Gaussian copula is established by the supplied evidence. The value 0.8 is chosen as a transparent working parameter, not fitted, optimized, or claimed uniquely preferable. The source does not identify the requested difference estimands or within-cell rank correlations. No supplied target values, identities, or evaluator feedback were used.",
+  "parameter_provenance": [
+    "Source-reported right/left mean and SD in kg: M50 (45, 8.4)/(43, 8.3); M60 (40, 8.3)/(38, 8); F50 (28, 6.3)/(26, 5.7); F60 (24, 5.3)/(23, 5). These summaries are rounded.",
+    "The source describes cell distributions as normal. The supplied arrays approximate these normal marginals; the generator preserves those arrays rather than enforcing new distributional parameters.",
+    "The source measured anatomical right and left hands, using the mean of three attempts per hand with a seated Jamar analogue dynamometer.",
+    "Latent Gaussian correlation 0.8, its constancy across cells, independent residual draws across virtual people, and the Gaussian copula are modeling assumptions. No inter-hand correlation or participant pairing is supplied.",
+    "Equal cell weights of one quarter come from the requested design, not source sample counts. The conflicting analytic counts are not used.",
+    "The source's 89% overall right-handedness does not identify handedness-specific marginals or dependence. No dominance relabeling or handedness mixture is introduced."
+  ],
+  "requested_estimands": [
+    "Mean absolute difference: average abs(R-L) across all emitted pairs, equally weighting the four cells. This depends on the assumed coupling.",
+    "Percentage differing by at least 5 kg: 100 times the average indicator abs(R-L) >= 5 across emitted pairs. The threshold is inclusive and applies to hand means, not individual attempts.",
+    "Mean of both hands: average (R+L)/2 across emitted pairs. This is exactly invariant to every valid within-cell permutation. The rounded source means imply an equal-cell benchmark of 33.375 kg; the exact generated result follows the actual array means.",
+    "Average within-cell rank correlation: compute Spearman correlation separately in each cell and take their unweighted arithmetic mean. Use average ranks for tied values. Do not substitute a pooled correlation. The continuous population Gaussian-copula benchmark is (6/pi)*asin(0.8/2), approximately 0.786; finite grids and random permutations need not attain it.",
+    "Under ideal normal marginals, the working model implies D=R-L is normal within each cell with mean mu_R-mu_L and variance sd_R^2+sd_L^2-2*0.8*sd_R*sd_L. Folded-normal moments and normal tail probabilities provide population checks for the first two estimands, not exact finite-grid targets."
+  ],
+  "limitations": [
+    "The supplied marginal summaries cannot determine bilateral pairing. Consequently, difference statistics and rank correlations are model-dependent synthetic outputs, not empirical estimates recovered from the paper.",
+    "A single seed supplies one realization; variation across seeds measures generator randomness conditional on the chosen law, not uncertainty about the correct dependence law or source parameters.",
+    "Gaussian dependence excludes asymmetric dependence, special tail coupling, and latent subgroups. Its clinical adequacy cannot be assessed from the supplied information.",
+    "The source excluded participants with upper-limb symptoms or arthritis. Applicability to symptomatic adults, clinical recruitment, different devices or protocols, other geographic populations, or other age ranges is not established. Equal sex/age representation also differs from many recruitment settings.",
+    "No additional trial-level measurement noise is added: the marginal SDs concern person-level hand means. Trial-to-trial variance and measurement-error correlation are not supplied.",
+    "Normal marginal approximations are unbounded. The generator does not clip negative values because clipping would change the supplied marginals; any such values warrant an upstream marginal-model review.",
+    "For a cell of size one, the permutation is valid but its rank correlation is undefined. Constant arrays likewise cannot support a defined rank correlation.",
+    "Proposed, not executed: run repeated-seed simulations over several cell sizes, verify permutation integrity and marginal preservation, examine difference distributions, compare large-grid results with the normal-theory benchmarks, and assess substantive dependence sensitivity before scientific interpretation."
+  ],
+  "checks_actually_performed": [
+    "Algebraically checked that within-cell permutations preserve both marginal arrays and therefore preserve the mean of both hands.",
+    "Calculated the equal-cell mean benchmark directly from the supplied rounded means: (44+39+27+23.5)/4 = 33.375 kg.",
+    "Checked the permutation construction logically: assigning ranks through a sorted index order uses each local index exactly once, while cumulative offsets produce consecutive global row IDs.",
+    "No Python execution, simulation, external retrieval, empirical calibration, or numerical validation of generated estimands was performed."
+  ]
+}

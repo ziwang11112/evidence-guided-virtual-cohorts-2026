@@ -1,0 +1,36 @@
+{
+  "structure": "The primary generator is a Gaussian rank copula with one shared dependence parameter, calibrated by an explicitly approximate transfer of relative ratio dispersion. The Adelaide evidence determines marginal reference summaries, not individual pairing. The German evidence provides an indirect dependence anchor, not identification. Fixed marginal grids are paired without replacement within cells; no participants are linked across cells. This is a single working scientific model, not a uniquely determined reconstruction of either study.",
+  "parameter_provenance": [
+    "Adelaide supplies the four anatomical-right and anatomical-left means and SDs and describes cell distributions as normal. These rounded summaries support the supplied marginal grids but do not determine a joint distribution.",
+    "Equal cell weights are required by this task, not estimated from Adelaide recruitment counts. Neither conflicting analytic counts nor German sample sizes are used as mixture weights.",
+    "The German study supplies an individual nondominant/dominant ratio mean of 0.9534 and SD of 0.11. Neither statistic is treated as an inter-hand correlation, a ratio of marginal means, or a kg-scale SD.",
+    "The calibration assumes that the pooled German ratio coefficient of variation, 0.11/0.9534, is a useful proxy for within-cell relative ratio dispersion in this application. For Q=L/R, first-order propagation gives Var(Q)/E(Q)^2 approximately CV_L^2+CV_R^2-2*rho*CV_L*CV_R. This motivates the specified correlation rule.",
+    "Averaging the four implied correlations gives a common latent correlation of approximately 0.8476. Equal averaging, common dependence across cells, Gaussian copula shape and transfer of ratio dispersion are modeling assumptions, not source findings.",
+    "The German ratio mean is used only to normalize its SD. The generator does not fit that mean as an anatomical left/right ratio and does not claim to reproduce the German ratio distribution.",
+    "The approximation is used as a calibration heuristic, not as an exact moment identity for ratios of normal random variables. No target estimands, paired identities or evaluator feedback are used."
+  ],
+  "requested_estimands": [
+    "Mean absolute bilateral difference: average |R-L| in kg over all generated pairs. This depends on the assumed pairing law.",
+    "Percentage differing by at least 5 kg: 100 times the average indicator of |R-L| >= 5. The threshold includes equality and the result depends on pairing.",
+    "Mean of both hands: average (R+L)/2 over people. This is exactly invariant to every valid within-cell permutation. With the stated population marginal means and equal weights it is 33.375 kg; finite-grid values follow the supplied arrays.",
+    "Average within-cell rank correlation: calculate Spearman correlation separately in each of the four cells and average them equally. Do not substitute a pooled correlation. For continuous Gaussian-copula margins, the population value in each cell is (6/pi)*asin(rho/2); finite-sample values fluctuate. Use midranks if supplied strengths contain ties. A cell with one person or a constant margin has undefined empirical rank correlation."
+  ],
+  "limitations": [
+    "The Adelaide marginals alone do not identify any of the dependence-sensitive estimands. The primary law should not be described as an estimated Adelaide inter-hand association.",
+    "Transport from a rubber-ball pressure instrument in kPa to Jamar force in kg assumes comparable relative ratio dispersion despite potentially different measurement error and hand mechanics. A dimensionless ratio does not establish instrument equivalence.",
+    "German participants were healthy, non-left-handed and aged 21–88 with sexes and ages pooled. Adelaide uses anatomical sides and includes left-handed people. Relative-ratio variability may reflect pooled heterogeneity as well as within-cell variability.",
+    "The normal copula assumes symmetric dependence and no special mixture for handedness, injury, extreme asymmetry or discordant tails. Marginal normality does not imply this copula.",
+    "Hand readings already average three attempts. Adding independent trial-level error would change the measurement operator and is not done.",
+    "Adelaide excluded upper-limb symptoms or arthritis. Application to unselected community recruitment, symptomatic populations, clinical recruitment or different handedness composition requires additional transport assumptions; this generator is not validated for those settings.",
+    "Rounded marginal parameters, finite quantile grids and unspecified dependence uncertainty are not represented as parameter uncertainty. No confidence or credible interval follows from this single-law simulation.",
+    "Supplied marginal values are preserved even if a normal approximation produces an implausible tail value. Rank pairing cannot repair marginal-model defects."
+  ],
+  "checks_actually_performed": [
+    "Analytical check: a permutation preserves both marginal samples and therefore preserves the mean of both hands exactly.",
+    "Arithmetic check: equal weighting of the eight supplied hand means gives 267/8 = 33.375 kg.",
+    "Formula review: the relative-ratio delta approximation gives a common correlation of approximately 0.8476, inside the admissible interval.",
+    "Static code review: latent ranks produce one local permutation per group; concatenation traverses the required cell order and produces exactly the two requested integer columns.",
+    "No Python execution, Monte Carlo validation or comparison with paired observations was performed here. The generator includes input and permutation checks that execute when called.",
+    "Proposed, not performed: run several seeds and group sizes to verify reproducibility, marginal preservation, convergence of within-cell Spearman correlations, and Monte Carlo stability of the absolute-difference estimands. Such checks would verify implementation, not validate the transported dependence assumption."
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "structure": "Use one positively associated Gaussian-copula law, separately within each sex/age cell. The source marginals do not determine a joint distribution, so the dependence parameter is an explicit scientific assumption rather than a recovered result. A latent correlation of 0.85 represents strong but imperfect bilateral association without forcing equal ranks or a fixed difference. The supplied arrays are already person-level hand means; no additional trial noise is added. No handedness mixture is introduced because anatomical-side marginals and overall handedness prevalence do not identify handedness-specific joint distributions.",
+  "parameter_provenance": [
+    {
+      "parameter": "Marginal means and SDs, in kg",
+      "provenance": "Supplied Massy-Westropp table: M50 right 45/8.4 and left 43/8.3; M60 right 40/8.3 and left 38/8; F50 right 28/6.3 and left 26/5.7; F60 right 24/5.3 and left 23/5. Values are rounded mean/SD summaries."
+    },
+    {
+      "parameter": "Approximately normal marginal shapes",
+      "provenance": "Normality was described by the source, and the supplied grids approximate matching normal quantiles. Pairing uses ranks and preserves the grids rather than fitting new marginals."
+    },
+    {
+      "parameter": "Gaussian copula and latent Pearson correlation 0.85 in all four cells",
+      "provenance": "Author-selected working assumptions. Neither study supplies an applicable within-cell inter-hand correlation. Equality of dependence across cells is also assumed."
+    },
+    {
+      "parameter": "German individual nondominant/dominant ratio mean 0.9534 and SD 0.11",
+      "provenance": "External contextual evidence only; not used as a correlation, as a ratio of marginal means, or as a quantitative calibration target. Transporting these ratio moments would require additional assumptions about instrument error, anatomical versus dominance labels, and pooling across age and sex."
+    },
+    {
+      "parameter": "Equal cell weights",
+      "provenance": "Specified by the requested virtual study, not estimated from source sample counts. The conflicting reported analytic counts are not used."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Mean absolute anatomical right-left difference, kg",
+      "definition": "Across all generated people, mean(abs(right-left)).",
+      "interpretation": "Depends on the assumed copula. Under ideal normal marginals, each cell's signed difference is normal with mean mu_R-mu_L and variance sd_R^2+sd_L^2-2*rho*sd_R*sd_L."
+    },
+    {
+      "name": "Percentage differing by at least 5 kg",
+      "definition": "100 times mean(abs(right-left) >= 5).",
+      "interpretation": "A dependence-sensitive model prediction, not a reported source rate. With ideal normal marginals it is obtained from both tails of the cell-specific signed-difference distribution, then averaged equally over cells."
+    },
+    {
+      "name": "Mean of both hands, kg",
+      "definition": "Mean((right+left)/2) across generated people.",
+      "interpretation": "Exactly invariant to the pairing for fixed marginal arrays. The supplied rounded population means imply 33.375 kg under equal cell weights; the actual grid-based result follows the supplied grid means."
+    },
+    {
+      "name": "Average within-cell rank correlation",
+      "definition": "Compute Spearman correlation between paired right and left strengths separately in each cell, using average ranks for ties, then take the unweighted mean of the four correlations.",
+      "interpretation": "For continuous population Gaussian copulas, each cell has Spearman correlation (6/pi)*asin(rho/2), approximately 0.838 at rho=0.85. This is not the latent Pearson parameter and is not a pooled correlation. Finite grids and random permutations produce departures; degenerate cells have undefined correlations."
+    }
+  ],
+  "limitations": [
+    "The first study identifies marginal summaries, not individual pairing, within-cell correlation, absolute-difference distributions, or threshold rates. Many incompatible joint laws share these marginals.",
+    "The chosen dependence strength and Gaussian dependence shape are not empirically validated here. Conditional model outputs must not be presented as uniquely evidence-determined estimates.",
+    "The German ratio moments do not identify the target kg-scale joint distribution. They describe another instrument, dominance labeling, recruitment restriction, and pooled population.",
+    "Applicability is closest to community adults measured with a comparable protocol and exclusions. Recruitment including upper-limb symptoms, arthritis, clinical referrals, occupational selection, or substantially different handedness composition may change both marginals and dependence; transport is not established.",
+    "Equal representation is a study-design standardization, not the demographic composition of Northwest Adelaide or another community.",
+    "Rounded normal summaries omit tail details and may allow implausible extreme strengths. The generator deliberately preserves supplied values rather than silently truncating them.",
+    "Finite-grid rank matching fixes both empirical marginals and introduces permutation constraints; it is not an unconstrained iid sample of bivariate-normal observations.",
+    "Proposed validation, not executed: run multiple seeds and grid sizes; verify every block is a permutation; compare simulated estimands with Gaussian population formulas and check finite-grid convergence. Alternative dependence assumptions would require a separate sensitivity analysis rather than being treated as identified alternatives within this primary law."
+  ],
+  "checks_actually_performed": [
+    "Arithmetic check using the eight supplied means: their sum is 267 kg, yielding an equal-cell bilateral mean of 267/8 = 33.375 kg.",
+    "Mathematical check: assigning left_index[argsort(left_scores)] = 0,...,m-1 creates a local permutation and preserves the entire left marginal in every block.",
+    "Code inspection: row identifiers traverse cells in the specified order and ascending supplied right-hand order; the returned frame has only row_id and left_index, both explicitly integer-valued.",
+    "Code inspection: randomness is drawn only from the seed-initialized NumPy generator; no external retrieval, SciPy dependency, target fitting, or evaluator feedback is used.",
+    "No Python execution, empirical simulation checks, or numerical calibration was performed."
+  ]
+}

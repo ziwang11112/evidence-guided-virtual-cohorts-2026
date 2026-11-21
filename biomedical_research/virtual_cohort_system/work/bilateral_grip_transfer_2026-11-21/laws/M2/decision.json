@@ -1,0 +1,72 @@
+{
+  "structure": "Use one positively dependent Gaussian-copula law within each sex/age cell, independently across cells. Anatomical sides remain distinct. A latent correlation of 0.8 represents a substantial shared person-level strength component while retaining meaningful bilateral variation. This is an explicit modeling judgment, not a result determined by the source. Rank assignment preserves both supplied marginal grids exactly. The dependence concerns mean-of-three hand measurements, not individual attempts. No handedness class, injury class, or additional measurement-error layer is inferred.",
+  "parameter_provenance": [
+    {
+      "quantity": "Cell marginal means and SDs",
+      "status": "Source supplied",
+      "detail": "Right/left mean and SD in kg: M50 (45, 8.4)/(43, 8.3); M60 (40, 8.3)/(38, 8); F50 (28, 6.3)/(26, 5.7); F60 (24, 5.3)/(23, 5). These are rounded summaries. The generator preserves the evaluator's grids rather than fitting them again."
+    },
+    {
+      "quantity": "Approximately normal marginal distributions",
+      "status": "Source description and task input construction",
+      "detail": "The authors described cell distributions as normal, and the supplied grids approximate normal quantiles. This does not establish joint bivariate normality."
+    },
+    {
+      "quantity": "Gaussian copula and latent correlation 0.8",
+      "status": "Uncalibrated assumption",
+      "detail": "Neither the copula family nor the correlation is supplied or identified by separate hand summaries. The value is chosen to express strong but imperfect bilateral concordance. It is not estimated from handedness prevalence, marginal SDs, or sex/age differences."
+    },
+    {
+      "quantity": "Equal cell weights",
+      "status": "Task design",
+      "detail": "Each cell contributes one quarter of the synthetic population. No study cell-size weights or disputed analytic sample count are used."
+    },
+    {
+      "quantity": "Measurement and eligibility",
+      "status": "Source supplied",
+      "detail": "Seated Jamar analogue measurements, mean of three attempts per anatomical hand; upper-limb symptoms or arthritis excluded. Overall right-handed prevalence was 89%, but no handedness-specific joint distributions were supplied."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "name": "Mean absolute right-left difference",
+      "definition": "Across all generated pairs, mean(abs(R-L)), in kg.",
+      "identification": "Depends on the assumed pairing.",
+      "population_model_reference": "For cell c, let d_c=mu_Rc-mu_Lc and s_c^2=sd_Rc^2+sd_Lc^2-2*0.8*sd_Rc*sd_Lc. Under exact normal marginals, its expectation is s_c*sqrt(2/pi)*exp(-d_c^2/(2*s_c^2)) + d_c*(2*Phi(d_c/s_c)-1). Average these four cell expectations equally."
+    },
+    {
+      "name": "Percentage differing by at least 5 kg",
+      "definition": "100*mean(abs(R-L)>=5), including equality.",
+      "identification": "Depends on the assumed pairing, especially its difference-tail behavior.",
+      "population_model_reference": "Under exact normal marginals, the cell probability is Phi((-5-d_c)/s_c)+1-Phi((5-d_c)/s_c). Average equally across cells and multiply by 100."
+    },
+    {
+      "name": "Mean of both hands",
+      "definition": "mean((R+L)/2), in kg.",
+      "identification": "Exactly invariant to every within-cell permutation of the supplied grids.",
+      "population_model_reference": "Using the rounded source means and equal weights gives 33.375 kg. The realized result is determined exactly by the supplied grid means and may differ slightly from this reference."
+    },
+    {
+      "name": "Average within-cell rank correlation",
+      "definition": "Compute Spearman correlation between paired R and L separately in each cell, then take their unweighted arithmetic mean; do not use pooled ranks.",
+      "identification": "Depends on the assumed pairing.",
+      "population_model_reference": "For continuous marginals, the Gaussian-copula limit in every cell is (6/pi)*asin(0.8/2). Finite-grid realized correlations fluctuate. Use average ranks if supplied values tie; correlation is undefined in a cell with fewer than two observations or a constant margin."
+    }
+  ],
+  "limitations": [
+    "Separate marginal measurements do not identify individual bilateral differences, threshold prevalence, or within-cell correlation. These three outputs are model-conditional synthetic quantities, not reconstructed study findings.",
+    "The Gaussian copula imposes symmetric dependence without a separate discordant-hand subgroup or tail-dependence parameter. Neither those features nor their absence were established by the source.",
+    "Normal marginal approximations and rounded summaries do not resolve distributional tails. The generator intentionally retains the supplied grids, including any unusually low values, rather than silently altering their marginals.",
+    "The fixed correlation has no evidence-based confidence interval here. Variation across seeds describes conditional pairing variability, not uncertainty about the chosen dependence law or the source estimates.",
+    "The source's symptom/arthritis exclusions limit transportability. Unselected community recruitment, clinical populations, occupational samples, or different handedness mixtures may have different marginals and bilateral dependence; this generator is not validated for those settings.",
+    "Equal sex/age representation is a synthetic design choice and need not match either the original study or another recruitment population.",
+    "For very small cells, stratified latent scores and discrete ranks can depart substantially from population copula formulas. The generator permits a one-person cell, but its rank correlation is undefined."
+  ],
+  "checks_actually_performed": [
+    "Analytically verified permutation invariance of mean((R+L)/2) and calculated the equally weighted rounded-mean reference: (44+39+27+23.5)/4 = 33.375 kg.",
+    "By construction, assigning ranks 0 through m-1 to the latent-score ordering yields each local left index exactly once; sequential row IDs follow the required group and ascending-right order.",
+    "No Python execution, simulation calibration, external retrieval, or numerical performance testing was performed for this response.",
+    "The delivered code includes runtime checks for group order, equal positive cell sizes, sorted finite marginal arrays, and each generated permutation. These are implemented checks, not checks already executed.",
+    "Proposed before analysis, not executed: run multiple seeds and cell sizes; verify exact marginal preservation, output schema and reproducibility; compare large-cell summaries with the stated population formulas; examine how dependence uncertainty affects conclusions."
+  ]
+}

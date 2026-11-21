@@ -1,0 +1,33 @@
+{
+  "structure": "One primary law is supplied: a common within-cell Gaussian copula with latent correlation 0.8, implemented through stochastic rank pairing. No pairing crosses sex/age cells. The source determines marginal summaries, not bilateral dependence. Consequently, the pairing-sensitive outputs are conditional scenario estimates, not quantities recovered from this study. Proposed runtime checks, not executed here: verify reproducibility for a fixed seed, exact local permutations, unchanged marginal values, and convergence over larger grids and repeated seeds.",
+  "parameter_provenance": [
+    "Source: Massy-Westropp et al. (2011), supplied Table 1 and measurement-method description; no external retrieval was used.",
+    "Source rounded right/left mean and SD, in kg: M50 (45, 8.4)/(43, 8.3); M60 (40, 8.3)/(38, 8.0); F50 (28, 6.3)/(26, 5.7); F60 (24, 5.3)/(23, 5.0). The generator preserves supplied arrays rather than refitting these summaries.",
+    "Source: seated Jamar analogue measurements, three trials averaged per anatomical hand; described cell distributions were normal.",
+    "Source: no within-cell paired observations or inter-hand correlation were supplied. The reported 89% right-handed fraction does not identify anatomical-side dependence or justify reconstructing handedness-specific distributions.",
+    "Design: equal cell weights and equal supplied array lengths come from the requested virtual study, not inferred source recruitment counts.",
+    "Assumptions: Gaussian copula, latent correlation 0.8 in every cell, independent innovations across individuals and cells, and no additional handedness or trial-level mixture."
+  ],
+  "requested_estimands": [
+    "Mean absolute bilateral difference: average abs(right-left) over all virtual individuals. It depends on the assumed pairing.",
+    "Percentage differing by at least 5 kg: 100 times the average of the indicator abs(right-left) >= 5. It depends on the assumed pairing.",
+    "Mean of both hands: average (right+left)/2 over all virtual individuals. It is invariant to every permissible pairing. Using the rounded source means and equal weights gives 33.375 kg; the actual arrays determine the exact finite-grid value.",
+    "Average within-cell rank correlation: compute Spearman correlation separately in M50, M60, F50 and F60, using average ranks for tied strengths, then average the four correlations equally. Do not substitute a pooled correlation. With continuous normal margins, the population value under this copula is (6/pi)*asin(0.8/2), approximately 0.786; finite-grid realizations need not equal it."
+  ],
+  "limitations": [
+    "The marginal evidence cannot identify mean absolute difference, the >=5 kg percentage, or within-cell rank correlations. Other dependence assumptions preserving every supplied marginal value can produce materially different answers.",
+    "The selected correlation is neither validated nor uniquely supported. One seed represents Monte Carlo variation conditional on this assumption, not uncertainty about the assumption itself.",
+    "Gaussian dependence imposes a homogeneous, symmetric association and does not explicitly represent unilateral impairment, handedness subgroups, or dependence that changes with strength.",
+    "Finite marker grids and rank assignment approximate the specified continuous copula; they preserve marginals exactly but do not enforce an exact realized correlation. Tied values can further affect realized rank correlations.",
+    "The supplied means and SDs are rounded, and normal marginal grids may include implausible tail values. The generator does not clip or otherwise alter them.",
+    "The source excluded upper-limb symptoms or arthritis. Neither its marginals nor this assumed dependence can be presumed applicable to unselected community recruitment, clinical populations, or different measurement protocols.",
+    "Equal weighting defines a standardized four-cell population, not necessarily the sex/age distribution of another recruitment setting. Conflicting source analytic counts are not resolved or used.",
+    "For a cell with fewer than two observations, or a constant hand array, its rank correlation is undefined even though the permutation generator remains valid."
+  ],
+  "checks_actually_performed": [
+    "Analytical arithmetic check: equal-weight cell means of both hands are 44, 39, 27 and 23.5 kg, yielding 33.375 kg overall.",
+    "Analytical invariance check: permuting left indices cannot change either marginal distribution or the overall mean of both hands.",
+    "Static algorithm review: assigning ranks through left_index[score_order] produces each local integer exactly once; cumulative offsets produce consecutive global row_id values.",
+    "No Python execution, simulation-based calibration, empirical fit assessment, or external-source verification was performed."
+  ]
+}

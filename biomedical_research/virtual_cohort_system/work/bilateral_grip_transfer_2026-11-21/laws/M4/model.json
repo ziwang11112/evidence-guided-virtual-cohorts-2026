@@ -1,0 +1,22 @@
+{
+  "name": "within_cell_gaussian_copula",
+  "version": 1,
+  "cell_order": [
+    "M50",
+    "M60",
+    "F50",
+    "F60"
+  ],
+  "population": "Equal mixture of the four supplied sex/age cells; anatomical right and left hands; each hand value is the mean of three trials.",
+  "marginal_handling": "Preserve every supplied right and left marker exactly. Change only their within-cell pairing.",
+  "dependence": {
+    "family": "Gaussian copula",
+    "latent_correlation": 0.8,
+    "common_across_cells": true,
+    "status": "Explicit modeling assumption, not estimated or identified by the source.",
+    "rationale": "A positive association represents shared person-level strength. The value 0.8 is a transparent strong-positive working assumption, not an empirically calibrated coefficient."
+  },
+  "pairing_algorithm": "Within each cell, assign midpoint normal scores to ascending right ranks. Generate independent standard-normal innovations and form left scores as 0.8 times the right score plus sqrt(1-0.8^2) times the innovation. Assign ascending supplied left values to ascending left scores. Draw innovations independently across cells.",
+  "trial_handling": "Do not simulate individual attempts or average additional trials: the supplied marginal strengths already represent three-trial hand means.",
+  "weighting": "Each cell receives weight one quarter. No source sample-size weights are inferred."
+}
