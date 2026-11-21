@@ -1,0 +1,54 @@
+{
+  "structure": "Both scenarios reassign only HDL indices. Starting from the same ratio-calibrated feasible permutation, scenario a favors threshold-avoiding swaps and scenario b favors threshold-enriching swaps. Tail-neutral swaps permit further rearrangement. A narrow ratio band is maintained during the search, followed by tighter calibration. Each invocation constructs both scenarios so their contrast is available in DataFrame attributes.",
+  "parameter_provenance": [
+    {
+      "parameter": "Fixed marginal arrays",
+      "provenance": "Supplied midpoint-quantile lognormal arrays, already rescaled and fitted as specified by the researcher. They are neither regenerated nor rescaled."
+    },
+    {
+      "parameter": "Mean individual TC/HDL ratio = 3.66",
+      "provenance": "Published weighted mean of individual ratios, not the ratio of published means. Using mg/dL for both markers leaves this ratio unchanged."
+    },
+    {
+      "parameter": "HDL <= TC",
+      "provenance": "Required record-level constraint."
+    },
+    {
+      "parameter": "160 mg/dL threshold and consequential difference exceeding 0.04",
+      "provenance": "Researcher's analysis and decision rule. No threshold fraction is specified or fitted."
+    },
+    {
+      "parameter": "Opposing threshold-occupancy objectives",
+      "provenance": "Author-selected mathematical stress scenarios that expose dependence discretion left by the marginal and ratio constraints."
+    },
+    {
+      "parameter": "160 optimization sweeps, 0.15 neutral-swap probability, 0.001 ratio half-band, and 0.000001 final ratio tolerance",
+      "provenance": "Author-selected computational settings, not estimated biological parameters. The final tolerance is much tighter than the requested tolerances: if three invocations succeed, their mean ratios necessarily average within [3.655, 3.665)."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "estimand": "Mean non-HDL in mg/dL",
+      "sensitivity": "Exactly invariant to pairing, apart from floating-point rounding.",
+      "explanation": "Mean(TC - HDL) = mean(TC) - mean(HDL). With the stated rescaled means, this is (4.72 - 1.39) × 38.67 = 128.7711 mg/dL in both scenarios. This is an identity for the synthetic marginals, not a target-population prediction."
+    },
+    {
+      "estimand": "Fraction with non-HDL at least 160 mg/dL",
+      "sensitivity": "Pairing-sensitive: the constraints do not identify this nonlinear joint-distribution functional.",
+      "explanation": "Reassigning HDL can move records across the threshold while preserving both marginals and the mean ratio. The program reports both fractions and whether their absolute difference strictly exceeds four percentage points. No numerical fraction or consequential contrast is claimed without execution."
+    }
+  ],
+  "limitations": [
+    "These are deliberately contrasting assignment assumptions, not evidence that either dependence structure occurs clinically in Mwanza or elsewhere.",
+    "Threshold-directed construction is appropriate for a mathematical sensitivity analysis, not for selecting a preferred synthetic cohort or estimating a population prevalence.",
+    "The search uses local swaps and does not certify global minimum or maximum fractions. Failure to exceed four percentage points would not establish robustness over all feasible pairings.",
+    "Final ratio calibration preferentially uses threshold-neutral swaps but can fall back to unrestricted feasible swaps. Diagnostics describe the final assignments, after calibration.",
+    "The program raises an error rather than returning a pairing that misses its calibration tolerance. Successful completion and the size of the contrast have not been verified here.",
+    "The fixed lognormal marginals, including their tails and smaller-width branch choices, are modeling assumptions beyond the published summary evidence.",
+    "Equal-weight synthetic records approximate weighted source summaries; they do not recover the survey's individual weights, clustering, measurement error, or sampling uncertainty.",
+    "The source confidence intervals are uncertainty intervals for survey estimates, not individual standard deviations. Matching rounded source means and a ratio does not recover the original joint distribution.",
+    "Nonfasting measurements and the source's setting and period limit transportability. No target-population inference is made.",
+    "Three-seed execution remains necessary to inspect contrast stability. The tight per-invocation ratio requirement mathematically ensures the requested three-seed average ratio interval for successful runs, but does not ensure stable threshold fractions."
+  ],
+  "checks_actually_performed": []
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Calibrated opposite-direction rank cycles",
+  "version": 1,
+  "scenarios": {
+    "a": {
+      "direction": 1,
+      "description": "Forward HDL-rank cycle: most ranks are locally concordant, but the upper-TC group wraps around to low HDL ranks."
+    },
+    "b": {
+      "direction": -1,
+      "description": "Backward HDL-rank cycle: a lower-TC group receives high HDL ranks, while the upper-TC group remains paired with relatively high HDL."
+    }
+  },
+  "local_rank_shuffle_block_size": 64,
+  "ratio_target": 3.66,
+  "maximum_absolute_ratio_error": 0.004,
+  "calibration": "For each direction, bracket and bisect the integer cycle displacement using the empirical mean TC/HDL after enforcing HDL <= TC. Select the closest ratio among the evaluated displacements and nearby integer displacements. Non-HDL threshold fractions are not calibration objectives.",
+  "constraint_repair": "Process TC in ascending order. If its assigned HDL exceeds TC, exchange that HDL with the smallest HDL still assigned to an unprocessed row.",
+  "audit_seeds": [
+    101,
+    202,
+    303
+  ],
+  "nonhdl_threshold_mg_dl": 160.0,
+  "consequential_absolute_fraction_difference": 0.04,
+  "interpretation": "Two deliberately stylized latent-group assignment assumptions, not clinically validated dependence models. Both preserve the supplied marginal arrays exactly."
+}

@@ -1,0 +1,53 @@
+{
+  "structure": "Both scenarios permute only the HDL indices. Scenario a favors assignments avoiding the non-HDL threshold; scenario b favors assignments concentrating people above it. Feasible disjoint swaps preserve the two input arrays exactly and enforce HDL<=TC. Ratio calibration and ratio-balanced optimization retain the same published joint moment. These are deliberately contrasting assignment assumptions, rather than two fitted clinical copulas.",
+  "parameter_provenance": [
+    {
+      "parameter": "Fixed TC and HDL marginals",
+      "provenance": "Supplied midpoint-quantile arrays; their lognormal widths, smaller-root choice, and rescaling are accepted as inputs, not re-estimated."
+    },
+    {
+      "parameter": "Mean individual TC/HDL ratio = 3.66",
+      "provenance": "Published design-weighted joint moment. The unit conversion cancels in this ratio."
+    },
+    {
+      "parameter": "Non-HDL threshold = 160 mg/dL; consequential difference >4 percentage points",
+      "provenance": "Researcher's specified analysis and decision rule."
+    },
+    {
+      "parameter": "Threshold-avoiding versus threshold-concentrating objectives",
+      "provenance": "Author-chosen mathematical stress assumptions. Neither specifies a target prevalence or claims to reproduce biological dependence."
+    },
+    {
+      "parameter": "500 optimization sweeps, 16 initialization sweeps, 160 calibration sweeps, neutral-move probability 0.05, optimization ratio band 0.0005",
+      "provenance": "Author-chosen computational settings for bounded-memory stochastic local search."
+    },
+    {
+      "parameter": "Final ratio tolerance 0.00001",
+      "provenance": "Author-chosen numerical tolerance, stricter than requested. Every successful invocation has ratio within this tolerance of 3.66, so any three successful seeds also satisfy both requested individual-seed and three-seed-average ratio requirements."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "estimand": "Mean non-HDL in mg/dL",
+      "sensitivity": "Exactly invariant to pairing, apart from floating-point rounding: mean(TC-HDL)=mean(TC)-mean(HDL).",
+      "evidence_based_value": "The supplied means imply (4.72-1.39)*38.67 = 128.7711 mg/dL. This is a consequence of the fixed source-calibrated marginals, not an imputed target-population result."
+    },
+    {
+      "estimand": "Fraction with non-HDL >=160 mg/dL",
+      "sensitivity": "Not determined by separate marginals and one mean-ratio constraint. Pairing changes which records cross the threshold, even when all supplied constraints remain satisfied.",
+      "decision_rule": "The returned diagnostics compare the two scenario fractions and flag an absolute difference strictly greater than 4 percentage points. No numerical gap or consequentiality finding is asserted without execution."
+    }
+  ],
+  "limitations": [
+    "The program has not been executed in this session. No achieved fractions, three-seed results, or observed threshold differences are claimed.",
+    "This is a heuristic search, not a proof of attainable global minimum and maximum prevalence. A gap exceeding 4 percentage points would demonstrate consequential discretion; a smaller gap would not establish identification or robustness.",
+    "The scenarios are threshold-focused mathematical sensitivity assignments, not clinically validated variation. Their dependence can be irregular because threshold membership is explicitly favored or discouraged.",
+    "The published joint moment is survey-weighted. Treating it as an equally weighted moment of synthetic records assumes those records represent the weighted source distribution.",
+    "The 16,000 records are a synthetic representation, not 16,000 observed participants. They do not increase the study's information beyond its 170 source adults.",
+    "The fixed lognormal marginals are assumptions. Published confidence intervals are uncertainty about source estimates, not individual standard deviations; neither those intervals nor uncertainty in the marginal fits is propagated here.",
+    "The separately reported non-HDL mean is consistent with the difference of the rounded marker means. It adds no independent pairing constraint.",
+    "HDL<=TC is enforced exactly, but that constraint and the mean ratio do not establish clinically plausible conditional distributions, covariate relationships, transportability, or target-population prevalence.",
+    "Final ratio calibration may slightly change the optimized threshold count. Diagnostics describe the final returned assignments, not the pre-calibration search state."
+  ],
+  "checks_actually_performed": []
+}

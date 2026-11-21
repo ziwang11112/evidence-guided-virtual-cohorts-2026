@@ -1,0 +1,45 @@
+{
+  "structure": "Two oppositely directed constrained pairing searches preserve both supplied marginal arrays exactly. Scenario a preferentially places HDL values to prevent crossing the non-HDL threshold; scenario b preferentially places them to promote crossing. Both retain HDL <= TC and the same mean individual TC/HDL ratio. These are interpretable allocation stress tests, not two clinically established dependence models. Each invocation computes both scenarios and returns the requested scenario's index permutation; DataFrame attributes report their comparison.",
+  "parameter_provenance": [
+    {
+      "parameter": "Fixed TC and HDL marginals",
+      "provenance": "Supplied midpoint-quantile arrays, including their selected log-width branches and mean rescaling. The program neither refits nor changes their values."
+    },
+    {
+      "parameter": "Mean individual TC/HDL = 3.66",
+      "provenance": "Published weighted joint summary. The search confines each output mean to approximately 3.6598–3.6602, tighter than either requested acceptance condition. Consequently, the average over any three successful invocations also satisfies the requested interval."
+    },
+    {
+      "parameter": "Non-HDL threshold 160 mg/dL and consequential difference exceeding 4 percentage points",
+      "provenance": "User-defined analysis and decision rule, not calibration targets."
+    },
+    {
+      "parameter": "HDL <= TC",
+      "provenance": "Required record-level constraint; enforced on every accepted swap."
+    },
+    {
+      "parameter": "Opposite count objectives, search budgets, neutral-swap probability, and suggested seeds",
+      "provenance": "Author-selected sensitivity-analysis and numerical-search choices. No threshold fraction is supplied or fitted."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "estimand": "Mean non-HDL in mg/dL",
+      "sensitivity": "Invariant to pairing: mean(TC - HDL) = mean(TC) - mean(HDL). With the stated mean rescaling, both scenarios give approximately 128.7711 mg/dL, from (4.72 - 1.39) × 38.67."
+    },
+    {
+      "estimand": "Fraction with non-HDL >=160 mg/dL",
+      "sensitivity": "Depends on joint assignment, not just the marginals or mean ratio. HDL assigned to TC records near the threshold can move records across it while compensating swaps preserve the ratio. The executable reports the scenario difference in percentage points and whether its absolute value exceeds 4. No numerical difference is asserted without execution; a smaller observed gap would not establish identification because this finite search does not prove bounds."
+    }
+  ],
+  "limitations": [
+    "The source supplies one joint moment, not the full dependence structure. Matching that moment does not identify the non-HDL distribution or threshold fraction.",
+    "The lognormal marginal shapes and the smaller-width branch selection are supplied modeling assumptions, not observed empirical distributions. Other marginal assumptions would create additional discretion outside this exercise.",
+    "The source summaries are design-weighted estimates from 170 community adults. Equal-weight synthetic quantiles are assumed to represent that weighted distribution; 16,000 generated records do not constitute 16,000 independent study observations.",
+    "Threshold-directed assignments deliberately expose mathematical sensitivity. They are not evidence that either assignment is clinically plausible in detail, nor are they validated biological mechanisms.",
+    "The search is stochastic and finite. Results can vary by seed, and neither scenario is certified as a global extremum.",
+    "The published confidence intervals concern source estimates, not individual standard deviations. They are not used as individual-level dispersion parameters or propagated as survey uncertainty.",
+    "No target-population transport, patient-level inference, outcome relationship, or target fraction is estimated. The observed argument is intentionally unused because the stipulated arrays and constraints supply the available inputs."
+  ],
+  "checks_actually_performed": []
+}

@@ -1,0 +1,52 @@
+{
+  "structure": "Two opposite-direction, locally shuffled rank cycles concentrate discordant TC–HDL assignments in different parts of the TC distribution. Cycle displacement is fitted separately to the same mean individual ratio. A feasibility repair enforces HDL <= TC. Both scenarios retain every supplied TC and HDL value exactly once.",
+  "parameter_provenance": [
+    {
+      "parameter": "Marginal arrays",
+      "provenance": "Supplied fixed midpoint-quantile lognormal arrays; neither their fitting nor their values are changed."
+    },
+    {
+      "parameter": "Mean individual TC/HDL = 3.66",
+      "provenance": "Published design-weighted source estimate. The empirical calibration uses the mean of individual ratios, not the ratio of marginal means."
+    },
+    {
+      "parameter": "Opposite cycle directions and block size 64",
+      "provenance": "Author-chosen sensitivity assumptions, unsupported as clinical dependence estimates. Local shuffling softens exact within-group rank ordering without changing either marginal."
+    },
+    {
+      "parameter": "Cycle displacements",
+      "provenance": "Determined inside generate solely from the empirical ratio constraint after feasibility repair. Neither displacement is selected to obtain a particular non-HDL fraction or scenario difference."
+    },
+    {
+      "parameter": "Ratio error tolerance 0.004",
+      "provenance": "Numerical acceptance rule stricter than requested. Every successful invocation has ratio in [3.656, 3.664], so any three successful invocations also average within [3.655, 3.665)."
+    },
+    {
+      "parameter": "HDL <= TC, threshold 160 mg/dL, consequential difference >4 percentage points",
+      "provenance": "Task requirements."
+    }
+  ],
+  "requested_estimands": [
+    {
+      "estimand": "Mean non-HDL in mg/dL",
+      "pairing_sensitivity": "None, apart from floating-point rounding: mean(TC - HDL) = mean(TC) - mean(HDL) for every permutation.",
+      "value_from_fixed_means": 128.7711,
+      "interpretation": "This equals 3.33 mmol/L multiplied by 38.67. It is a property of the supplied source-calibrated arrays, not an imputed target-population result."
+    },
+    {
+      "estimand": "Fraction with non-HDL >=160 mg/dL",
+      "pairing_sensitivity": "Sensitive to the joint assignment. Scenario a places low HDL with an upper-TC group; scenario b places relatively higher HDL with upper TC. The same average ratio can therefore conceal different threshold-crossing patterns.",
+      "evaluation": "Each invocation attaches both scenario fractions, their absolute percentage-point difference, and a flag for a difference strictly exceeding 4 percentage points in DataFrame.attrs['diagnostics']. No executed numerical fraction or claim that the consequentiality criterion was met is supplied here."
+    }
+  ],
+  "limitations": [
+    "The published marginals and one mean ratio do not identify the joint distribution or the non-HDL threshold fraction. These two assignments illustrate discretion; they do not bound all feasible assignments.",
+    "Rank cycles imply sharp latent-group transitions and strong within-group ordering. They are interpretable mathematical sensitivity scenarios, not clinically validated alternatives.",
+    "Feasibility repair modifies the ideal rank-cycle pattern. Its swap count is reported, and ratio calibration is performed after repair.",
+    "Treating equal-weight synthetic records as representing weighted source estimates is an approximation. The generator does not reconstruct survey weights, sampling clusters, or individual source records.",
+    "The supplied lognormal marginals and smaller-width fitting choice are maintained assumptions. Source confidence intervals are not individual standard deviations and are not propagated here.",
+    "Matching 3.66 as a calibration value does not eliminate source-estimation uncertainty. No target-population inference or clinical outcome interpretation follows.",
+    "The program raises an error rather than returning an uncalibrated pairing if bracketing or acceptance fails. Its diagnostics and three-seed behavior should be inspected when run; no code was executed in this session."
+  ],
+  "checks_actually_performed": []
+}
