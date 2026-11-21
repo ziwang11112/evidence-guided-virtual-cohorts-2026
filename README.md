@@ -1,20 +1,22 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.46, 21 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.47, 21 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/overleaf_external_review_v46.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/overleaf_external_review_v47.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
 
-The related-work audit compares the evidence available to each generator, the source of its reference records and the analysis the authors evaluated. [Read the comparison with primary sources](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/RELATED_WORK.md)
+Five scientific analyses draw on measured samples from twelve study families in nine countries. The new handgrip figure holds the component measurements fixed and shows how the agent's pairing affects the mean difference between hands and the fraction of adults whose hands differ by at least 5 kg. It reports US and rural South African measurements together and displays all four sex-by-decade groups. [Figure, evaluation and inventory](biomedical_research/virtual_cohort_system/work/kdd_v47_scale_2026-11-21/RESULTS.md) · [Closest methods and primary sources](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/RELATED_WORK.md)
 
-Figure 2 runs the same published-style analysis on measured Kenyan participants and two agent-generated cohorts. Both models reproduced the urban BMI contrast at a similar magnitude. Both gave a smaller urban cholesterol contrast in mg/dL. A separate CHNS community holdout tests whether agent-generated iron-status records support an association absent from the supplied source summaries. The individual pairing and cross-population cases explain why some conclusions carry over. [Paper and figure guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/README.md) · [Data substitution and all nine effects](biomedical_research/virtual_cohort_system/work/kdd_v45_build_2026-11-21/ANALYSIS_REPLAY.md) · [Community holdout](biomedical_research/virtual_cohort_system/work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md)
+Figure 2 repeats nine Kenyan lifestyle contrasts on virtual and measured participants. Figure 3 tests whether changing an agent's pairing of ferritin and hemoglobin alters an iron-status estimate in held-out Chinese communities. Figure 4 shows where the handgrip estimates transfer. [Paper and figure guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/README.md) · [Data substitution and all nine effects](biomedical_research/virtual_cohort_system/work/kdd_v45_build_2026-11-21/ANALYSIS_REPLAY.md) · [Community holdout](biomedical_research/virtual_cohort_system/work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md)
 
 [Repository guide as of 9 November 2026](https://github.com/ziwang11112/evidence-guided-virtual-cohorts-2026/blob/9b8920d87c3ad4cfda9e05da91e40d4570b4ae34/README.md)
 
 [Original-paper iron experiment and measured survey](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/RESULTS.md) · [Checks before opening the reference](biomedical_research/virtual_cohort_system/work/original_paper_iron_sensitivity_2026-11-19/SCIENTIFIC_RESULTS.json)
 
 ## Earlier releases
+
+[21 November v0.46 with the clinical literature comparison](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/README.md)
 
 [21 November v0.45 with the frozen Kenyan reanalysis and CHNS holdout](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v45_2026-11-21/README.md)
 

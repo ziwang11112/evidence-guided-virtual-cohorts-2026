@@ -1,4 +1,8 @@
-# External review guide for the KDD v0.46 manuscript
+# External review guide for the KDD v0.47 manuscript
+
+Table 1 on page 2 counts measured samples by scientific use. Figures 2–4 apply the same scientific estimator to measured and virtual participants, isolate a within-person modeling choice, and trace that choice into subgroup and threshold estimates. Figure 4 is on page 6. The two pooled primary grip predictions were sealed prospectively. The subgroup analysis in v0.47 used those frozen models after the pooled outcomes were known. Page 24 gives all twelve group estimates, including the Brazilian measurement stress test and the statistical rule with access to the German ratio evidence. [External review manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/external_review.pdf) · [Figure, all subgroup results and scale accounting](biomedical_research/virtual_cohort_system/work/kdd_v47_scale_2026-11-21/RESULTS.md)
+
+## Archived v0.46 review guide
 
 Page 6 compares clinical reanalysis, reconstruction from summaries, and patient-agent generation. The accompanying note identifies the closest completed clinical studies and an ongoing trial-transport protocol. Figures 2 and 3 contain the measured-data comparisons that support the paper's contribution. [External review manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/external_review.pdf) · [Primary sources and comparison](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v46_2026-11-21/RELATED_WORK.md)
 
