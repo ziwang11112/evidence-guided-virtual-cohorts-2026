@@ -1,0 +1,24 @@
+# A numerical control for the Polish lung-function experiment
+
+A deterministic assignment procedure constructed two virtual cohorts in which **1.18125%** and **52.46250%** of individuals had FEV1/FVC below 0.70. Both cohorts use exactly the same 8,000 FEV1 values and 8,000 FVC values per sex. They pass the published rounding checks, preserve FEV1 ≤ FVC for every individual and yield the identical ratio of sex-standardized mean volumes, **76.2368421%**. The **51.28125 percentage-point** difference exceeds the five-point scientific-use margin. These are two attainable assignments under the chosen grids. They quantify how widely the requested analysis can differ at fixed inputs. The corresponding prevalence in actual adults remains unknown. [Original design and article](../article_lung_pairing_2026-11-22/PROTOCOL.md) · [Numerical control design](DESIGN.md)
+
+| Assignment | Women below 0.70, of 8,000 | Men below 0.70, of 8,000 | Equal-sex fraction below 0.70 | Fraction within [0.695, 0.705) |
+|---|---:|---:|---:|---:|
+| Low-screening example | 88 | 101 | 1.18125% | 7.94375% |
+| High-screening example | 4,027 | 4,367 | 52.46250% | 39.35625% |
+
+## What the calculation received
+
+This was an exploratory check after the three-article comparison and its threshold-concentration audit had been disclosed. The solver received the investigator's structured numerical source ledger, the original sex-specific finite grids, the scientific-use threshold and the admissibility rules. The earlier Agent experiment supplied the original article and required each author to extract the quantities. This numerical control isolates the computational search once the extraction and constraints are available. It provides no reading, provenance or autonomous modeling benchmark. No author-generated sampler, patient observations or API calls entered the numerical search. [Original matched study](../article_lung_pairing_2026-11-22/RESULTS.md)
+
+## How it worked
+
+Within each sex, each interleaved rank block contains 80 distinct FEV1 ranks and 80 FVC ranks among the same 8,000 positions. For each block, a linear assignment algorithm generated physically permissible pairings favoring a high or low screen-positive count while varying a covariance penalty. A second, integer optimization selected one pairing per block to maintain the registered sex-specific covariance and optimize the total count. A greedy selector was also attempted: it reached the narrow covariance band in the male searches and failed in both female searches. The integer selector returned a proven optimum over its finite menu in all four sex-by-direction searches. The separate menus restrict which permutations are explored, so **global prevalence bounds have not been established**. The female/male Pearson correlations were 0.95910/0.96484 at the low assignment and 0.95909/0.96483 at the high assignment. All marginal moments, slopes, intercepts, correlations and R² fell in their original registered rounding bins. [Search implementation](control.py) · [All moments, failure records and solver statuses](RESULTS.json)
+
+The matched Agent study tested how often a fresh second author found a different answer. The numerical control instead returns one constructed pair for a high and a low objective. It has no equivalent of 12 author blocks or independent simulation seeds. Its width and the Agent arms' median change estimate different quantities. The high numerical witness put 39.36% of records within half a percentage point of the cutoff, providing a concrete example of how optimizing a screening statistic can concentrate mass at that boundary even with no language model involved. This experiment verifies scientific sensitivity on the supplied constraints and leaves the biological plausibility of the extreme pairings open.
+
+## Verification and replay
+
+The first complete numerical search took 2.12 seconds once Python imports had completed, using SciPy 1.17.1 and 6,800 small linear assignments in total. Timing describes this machine and excludes original source curation, software construction and independent verification. A fresh process repeated all four searches in 2.08 seconds. It reproduced the optimizer choices, all aggregate numbers and both assignment-file SHA-256 digests exactly. The original results receipt retains the first run's timings. A separate implementation reconstructed the grids, read the saved permutations and independently recalculated their admissibility and both screening estimates. [Independent verification](VERIFICATION.json) · [Verification code](verify.py)
+
+Run `python -B control.py --replay` in this folder to compare the recomputation with the receipt and, when missing, recreate the hash-matched assignments under the local private folder. Public outputs contain the method, summary statistics and file digests.
