@@ -1,0 +1,3 @@
+# Fixture verification before protocol publication
+
+The first local preflight imported the older handgrip fixture suite through a shared module search path. The isolated spirometry interface test ran, but the earlier result did not attest to the new study's scientific fixtures. The first receipt is retained byte-for-byte as PREPUBLIC_PREFLIGHT.json (SHA-256 43bb0a59a4cad8bca0292d6f035cb2c89ea7ba633ecf044b0e1fb627d84bea4f). This was detected before public protocol registration, any API request or any paired target read. The shared mathematics is now loaded by an explicit file path. The protocol freeze asserts the new fixture's location and runs the new domain, bootstrap and design tests. The evaluator also checks the location of its controller before reference access.
