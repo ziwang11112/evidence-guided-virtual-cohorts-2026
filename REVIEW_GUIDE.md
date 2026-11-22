@@ -1,4 +1,10 @@
-# External review guide for the KDD v0.49 manuscript
+# External review guide for the KDD v0.50 manuscript
+
+Figure 1 follows a published table to three different scientific models authored by the same GPT in separate sessions. Figure 2 asks whether a second agent-authored dataset, constrained by the same study, changes the answer to a particular analysis. Twelve starting models per paper allow a paired comparison of the two author instructions. Figures 3–5 address sample agreement explicitly. [Review copy](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/external_review.pdf) · [Claims, evidence and limits](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/REVIEWER_QUESTIONS.md)
+
+The iron and lung cases illustrate what is possible once the source is translated into numerical constraints. In iron, rank sorting gives exact conditional endpoints. In lung function a conventional solver found two materially different screening rates with the same regressions on the same grid. These tests help distinguish paper-to-code authorship, alternative construction, and external accuracy. [Numerical lung control](biomedical_research/virtual_cohort_system/work/lung_pairing_numerical_control_2026-11-22/RESULTS.md) · [Matched study](biomedical_research/virtual_cohort_system/work/article_portfolio_2026-11-22/RESULTS.md)
+
+## Archived v0.49 review guide
 
 Start on page 2. Figure 1 follows a published iron table to three distinct joint models. The plotted odds ratios and rank correlations come from the three authors' generated records and the same US survey analysis. Table 1 identifies the decisions owned by the investigator, agent and execution service in each design. [External review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v49_2026-11-21/external_review.pdf) · [Figure, programs and numerical audit trail](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v49_2026-11-21/README.md)
 
