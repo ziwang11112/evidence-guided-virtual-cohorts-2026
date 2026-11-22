@@ -1,0 +1,29 @@
+{
+  "structure": "Use strong positive rank dependence, separately within sex, while enforcing the individual volume inequality without changing either marginal. This is an explicit working model, not a dependence estimate from the supplied study. The finite-step algorithm is fully specified and seed-reproducible; it does not require host projection when a feasible permutation exists.",
+  "parameter_provenance": [
+    "The supplied Table 1 provides sex-specific arithmetic volume moments and participant counts, but no paired-volume dependence or ratio distribution.",
+    "rho=0.90 in both sexes is a modeling assumption favoring similar volume ranks. It is neither estimated nor validated by the excerpts. A common value avoids inventing an unsupported sex difference.",
+    "The 200-sweep budget and ascending initialization are computational choices, not biomedical evidence. No convergence guarantee is claimed.",
+    "Equal sex weights follow the task; source participant counts are not used as population weights."
+  ],
+  "requested_estimands": [
+    "Mean individual ratio: compute mean(FEV1/FVC) within each paired sex block, then average the two sex-specific means.",
+    "Ratio of population means: divide 0.5*(mean_F(FEV1)+mean_M(FEV1)) by 0.5*(mean_F(FVC)+mean_M(FVC)). This is pairing-invariant and is approximately 0.7632 using the supplied rounded means.",
+    "Fraction strictly below 0.70: compute mean(FEV1/FVC < 0.70) within each sex, then average those fractions. Do not count equality.",
+    "Within-sex volume correlation: compute Pearson correlation separately in F and M. If an equal-sex summary is wanted, report their arithmetic average explicitly as a summary, not as pooled correlation. Correlation is undefined for singleton or zero-variance blocks."
+  ],
+  "limitations": [
+    "Marginal moments do not identify individual ratios, the below-0.70 fraction, or within-sex correlation. Their modeled values should not be presented as recovered target estimates.",
+    "The external participants were healthy never-smokers aged 18–85; the requested populations are aged 18–79 and include a broader health mix. No evidence supplied here supports a numerical transport correction.",
+    "No bronchodilator intervention is described, but the excerpt does not independently document a standardized pre-bronchodilator protocol.",
+    "Age and stature effects are not separately modeled. The prescribed marginal grids and their rounded source moments are taken as fixed.",
+    "The finite chain can retain initialization effects. Its output Pearson correlation need not equal 0.90, even at equilibrium.",
+    "If ascending paired marginals violate FEV1 <= FVC anywhere, no all-feasible permutation exists; the generator raises rather than silently modifying the columns."
+  ],
+  "checks_actually_performed": [
+    "Reviewed the supplied excerpts for dependence information; none is supplied.",
+    "Computed the equal-sex ratio of marginal means as (2.4+3.4)/(3.1+4.5).",
+    "Verified algebraically that the swap acceptance exponent equals the change in the stated Gaussian-rank score.",
+    "No executable run, target validation, sensitivity analysis, or convergence assessment was performed. The code includes runtime checks for input validity, feasibility, and permutation integrity."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "structure": "Use one stochastic, positively dependent rank law anchored to the reported within-sex Pearson correlation. Incorporate feasibility into assignment rather than relying on host projection. Assignment takes O(N log N) time and O(N) memory. Do not add an unsupported disease-mixture parameter or fit the regression and correlation as independent evidence.",
+  "parameter_provenance": [
+    "The female and male Pearson anchors of 0.96 come directly from Table 2 for the same participants as the supplied marginal moments.",
+    "Sex-specific arithmetic means and SDs from Table 1 determine the approximate lognormal-to-Gaussian correlation conversion; they do not replace the supplied marginal arrays.",
+    "Gaussian dependence, independent latent noise, and the feasible priority assignment are modeling choices, not findings reported by the source.",
+    "The rounded regression coefficients are supporting descriptions of the same dependence, not individual identities or additional calibration targets.",
+    "Equal female and male weights come from the task; source sample sizes are not used as population weights."
+  ],
+  "requested_estimands": [
+    "Mean individual ratio: calculate the within-sex mean of FEV1/FVC on the generated pairs, then average the two sex-specific means with weights 0.5 and 0.5.",
+    "Ratio of population means: divide the equally sex-weighted FEV1 mean by the equally sex-weighted FVC mean. This quantity is fixed by the supplied columns and is unaffected by pairing.",
+    "Fraction strictly below 0.70: calculate mean(FEV1/FVC < 0.70) within each sex, then average with equal sex weights.",
+    "Within-sex volume correlation: calculate Pearson correlation separately for F and M on the generated pairs. If a single equal-sex summary is required, average these two correlations rather than using a pooled-sex correlation. Correlation is undefined for a constant or singleton margin."
+  ],
+  "limitations": [
+    "Healthy never-smokers are not representative of a broader population including smokers or respiratory illness. Transporting their dependence is an explicit working assumption.",
+    "The source age range is 18–85, whereas the requested range is 18–79. Individual age and stature are unavailable, so neither age restriction nor covariate adjustment can be reproduced.",
+    "No bronchodilator intervention is described, supporting use as a pre-bronchodilator proxy but not establishing a documented pre-bronchodilator protocol.",
+    "Marginal moments and Pearson correlation do not identify the ratio distribution or its lower tail. The fraction below 0.70 is especially dependent on the chosen law.",
+    "Finite grids, random ranks, and feasibility assignment can move the achieved Pearson correlation away from 0.96. It is an anchor, not an exact output constraint.",
+    "If the sorted margins themselves fail FEV1 <= FVC elementwise, no feasible permutation exists; the generator raises an error rather than modifying either column.",
+    "Seed variation measures simulation variability under this law, not uncertainty about transportability or the dependence family."
+  ],
+  "checks_actually_performed": [
+    "Analytical feasibility check: sorted elementwise FEV1 <= FVC is necessary and sufficient for a feasible permutation.",
+    "Analytical assignment check: at FVC index j, sorted feasibility guarantees at least j+1 eligible FEV1 values, of which only j have already been assigned; therefore the priority queue cannot be empty.",
+    "The executable includes runtime validation of inputs, permutation completeness, and every resulting volume inequality. These runtime checks have not been executed here.",
+    "No numerical simulation, achieved-correlation assessment, or target validation was performed; no target observations or execution tools were supplied."
+  ]
+}

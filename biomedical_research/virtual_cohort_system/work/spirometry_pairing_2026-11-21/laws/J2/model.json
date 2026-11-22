@@ -1,0 +1,25 @@
+{
+  "name": "source_anchored_gaussian_rank_copula_with_feasible_assignment",
+  "pearson_anchor": {
+    "F": 0.96,
+    "M": 0.96
+  },
+  "source_moments_l": {
+    "F": {
+      "fev1_mean": 2.4,
+      "fev1_sd": 0.7,
+      "fvc_mean": 3.1,
+      "fvc_sd": 0.8
+    },
+    "M": {
+      "fev1_mean": 3.4,
+      "fev1_sd": 1.0,
+      "fvc_mean": 4.5,
+      "fvc_sd": 1.2
+    }
+  },
+  "latent_correlation": "rho_z = log(1 + r*CV_FEV1*CV_FVC) / sqrt(log(1 + CV_FEV1^2)*log(1 + CV_FVC^2)), using the source moments and Pearson anchor.",
+  "primary_law": "Within each sex, give ascending FEV1 ranks standard-normal midquantile scores z. Generate priority scores rho_z*z + sqrt(1-rho_z^2)*epsilon with independent standard-normal epsilon. Assign FVC values in ascending order, each time selecting the smallest-priority unassigned FEV1 whose volume does not exceed that FVC. Break priority ties by FEV1 index.",
+  "constraint": "FEV1 <= FVC, including equality. Assignment preserves both supplied columns exactly.",
+  "interpretation": "A source-anchored dependence scenario, not a target-calibrated estimate. The lognormal correlation conversion is approximate for affinely standardized finite grids, and the feasibility constraint can change the achieved correlation."
+}

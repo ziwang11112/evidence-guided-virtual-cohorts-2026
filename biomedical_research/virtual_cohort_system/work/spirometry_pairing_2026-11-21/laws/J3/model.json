@@ -1,0 +1,26 @@
+{
+  "law": "Sex-specific Gaussian rank copula followed by deterministic feasibility repair",
+  "reference_pearson": {
+    "F": 0.96,
+    "M": 0.96
+  },
+  "reference_moments_l": {
+    "F": {
+      "fev1_mean": 2.4,
+      "fev1_sd": 0.7,
+      "fvc_mean": 3.1,
+      "fvc_sd": 0.8
+    },
+    "M": {
+      "fev1_mean": 3.4,
+      "fev1_sd": 1.0,
+      "fvc_mean": 4.5,
+      "fvc_sd": 1.2
+    }
+  },
+  "latent_correlation_rule": "For each sex, let a=FEV1_SD/FEV1_mean and b=FVC_SD/FVC_mean. Set rho=log1p(reference_pearson*a*b)/sqrt(log1p(a*a)*log1p(b*b)). This calibrates Pearson correlation for ideal lognormal marginals before feasibility repair.",
+  "pairing_rule": "Generate independent bivariate normal draws using rho. Associate the ascending ranks of the first coordinate with ascending supplied FEV1 and assign the ranks of the second coordinate as FVC indices.",
+  "feasibility_rule": "Process FEV1 rows from largest to smallest. Assign the unused, feasible FVC index nearest the proposed index; break distance ties toward the smaller index. An already feasible proposal is unchanged. Reject marginal arrays for which no feasible permutation exists.",
+  "sex_weighting": "Use weight 0.5 for each sex when calculating population summaries, regardless of supplied block sizes.",
+  "parameter_status": "The source correlation is a working transport assumption, not an identified target-population correlation. No target-specific dependence adjustment is estimated."
+}

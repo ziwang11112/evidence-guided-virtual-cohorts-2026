@@ -1,0 +1,29 @@
+{
+  "name": "Source-anchored Gaussian rank copula with feasibility repair",
+  "primary_law": "Within each sex, generate conditional Gaussian FVC rank scores from normal FEV1 midranks, then assign the sorted FVC column by those scores. Enforce FEV1 <= FVC by a deterministic eligible-row priority assignment.",
+  "source_pearson_anchor": {
+    "F": 0.96,
+    "M": 0.96
+  },
+  "source_moments_l": {
+    "F": {
+      "fev1_mean": 2.4,
+      "fev1_sd": 0.7,
+      "fvc_mean": 3.1,
+      "fvc_sd": 0.8
+    },
+    "M": {
+      "fev1_mean": 3.4,
+      "fev1_sd": 1.0,
+      "fvc_mean": 4.5,
+      "fvc_sd": 1.2
+    }
+  },
+  "latent_correlation": "For each sex, rho = log(1 + r*CV_FEV1*CV_FVC) / sqrt(log(1+CV_FEV1^2)*log(1+CV_FVC^2)), using the source moments and r=0.96.",
+  "constraint_rule": "Visit FVC values in ascending order. Among unassigned FEV1 rows not exceeding the current FVC, choose the row with the earliest proposed FVC rank; break ties by row index.",
+  "infeasible_marginals_rule": "If any ascending FEV1 exceeds the correspondingly ranked FVC, no fully feasible permutation exists. Return the identity permutation for that sex, exposing the incompatibility rather than changing either column.",
+  "sex_weighting_for_analysis": {
+    "F": 0.5,
+    "M": 0.5
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "structure": "Use one stochastic positive-dependence law separately within sex, retaining every supplied marginal value exactly. The reported Pearson correlation informs the copula rather than imposing the regression as an individual identity. A descending-row nearest-rank repair enforces FEV1 <= FVC whenever a feasible permutation exists. Pairing is not identified by marginal moments alone; these are synthetic individual pairs, not recovered participants.",
+  "parameter_provenance": [
+    "The working volume correlation is 0.96 for each sex, directly from the supplied Table 2 excerpt.",
+    "Latent correlations are computed using the supplied marginal CVs and the lognormal correlation identity. Affine standardization and finite grids make this approximate.",
+    "The regression slopes, intercepts and R-squared values describe the same source dependence and are not treated as independent evidence or additional exact constraints.",
+    "The Gaussian copula and feasibility-repair rule are modeling choices, not source findings.",
+    "No target dependence parameter or health-mixture adjustment is estimated; none is identified by the available evidence."
+  ],
+  "requested_estimands": [
+    "Mean individual ratio: compute mean(FEV1/FVC) within each sex, then average the two sex means with weights 0.5 and 0.5.",
+    "Ratio of population means: divide 0.5*mean(FEV1_F) + 0.5*mean(FEV1_M) by 0.5*mean(FVC_F) + 0.5*mean(FVC_M). This is fixed by the supplied columns, not by pairing.",
+    "Fraction below 0.70: compute mean(FEV1/FVC < 0.70) within each sex, then average with equal sex weights. Do not use <=.",
+    "Within-sex volume correlation: report Pearson correlation separately for F and M. If a single summary is required, label the equal-weight average explicitly rather than substituting a pooled correlation."
+  ],
+  "limitations": [
+    "Healthy never-smoker source dependence may not transport to populations containing smokers or respiratory illness. Retaining 0.96 is a transparent baseline, not validated target calibration.",
+    "The source spans ages 18–85, whereas the requested population spans 18–79; individual age and height are unavailable for adjustment.",
+    "No bronchodilator intervention is described, but the excerpts do not establish a detailed pre-bronchodilator testing protocol.",
+    "Gaussian dependence does not identify the true low-ratio tail. The individual-ratio mean and especially the below-0.70 fraction remain model-dependent.",
+    "Feasibility repair changes the rank-copula law and may change the achieved Pearson correlation. The algorithm does not guarantee a final correlation of exactly 0.96.",
+    "Source rounding, finite grids and stochastic variation preclude exact simultaneous matching of all displayed source statistics.",
+    "No uncertainty interval for target dependence or target estimands is supported by these excerpts."
+  ],
+  "checks_actually_performed": [
+    "Reviewed the supplied excerpts for direct dependence evidence; both sexes have a reported unadjusted Pearson correlation of 0.96.",
+    "Analytically checked that changing only the permutation preserves all marginal summaries and the ratio of population means.",
+    "Analytically checked feasibility: for sorted equal-length arrays, a feasible permutation exists exactly when FEV1[i] <= FVC[i] for every index. Descending-row assignment to any available feasible value preserves feasibility for the remaining rows.",
+    "No code execution, numerical target validation or seed-based diagnostic experiment was performed. The executable includes runtime permutation and feasibility checks."
+  ]
+}

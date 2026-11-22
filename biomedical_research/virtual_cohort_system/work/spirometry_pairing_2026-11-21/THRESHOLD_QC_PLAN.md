@@ -1,0 +1,5 @@
+# Secondary endpoint arithmetic check
+
+Before disclosure, a test with 601 artificial pairs whose decimal ratio is exactly 0.70 exposed seven cases classified below 0.70 by ordinary floating-point division. The frozen trial and its three other scientific estimands retain their original definitions and programs. For the threshold endpoint, the report will give both the original implementation and the strict decimal interpretation of the same protocol cutoff in each measured release.
+
+Represent the released volumes in integer nanolitres after validating their recorded precision. Use 10 × FEV1 < 7 × FVC, with equality excluded. Count boundary records and changed classifications, recalculate the point estimate and its registered design interval under decimal arithmetic, and use the decimal calculation when describing the scientific cutoff. For near-boundary virtual pairs independently check the exact stored floating-point operands with decimal arithmetic. This audit was written while authors were running, before any prediction results or target endpoint had been evaluated.

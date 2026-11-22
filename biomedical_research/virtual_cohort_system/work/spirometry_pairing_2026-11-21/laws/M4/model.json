@@ -1,0 +1,15 @@
+{
+  "name": "feasibility_constrained_gaussian_rank_pairing",
+  "version": 1,
+  "primary_law": "Within each sex, generate Gaussian rank-priority scores with latent correlation 0.90. Traverse FVC in ascending order, adding all still-unassigned FEV1 rows satisfying FEV1 <= current FVC to a priority queue. Assign the eligible row with the smallest score. Without binding feasibility constraints this is Gaussian rank-copula pairing; with binding constraints it is the explicitly defined constrained allocation law.",
+  "latent_rho_by_sex": {
+    "F": 0.9,
+    "M": 0.9
+  },
+  "score_construction": "For m rows, draw m independent standard normals and sort them to obtain z. Independently draw m standard normals e. The score for ascending FEV1 row i is rho*z[i] + sqrt(1-rho^2)*e[i].",
+  "constraint": "FEV1 <= assigned FVC, with equality allowed and no numerical tolerance.",
+  "tie_breaking": "Equal priority scores are ordered by ascending within-sex FEV1 row index.",
+  "infeasible_marginals": "Raise ValueError if any ascending FEV1 exceeds the corresponding ascending FVC. In that case no permutation can satisfy the constraint while preserving both columns.",
+  "population_weighting": "Give each sex total weight 0.5, irrespective of block sizes. Within each sex give every row equal weight.",
+  "interpretation": "An assumption-based synthetic pairing law, not an estimated source dependence or a validated model of the broader target population."
+}

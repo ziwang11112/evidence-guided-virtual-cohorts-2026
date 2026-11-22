@@ -1,0 +1,29 @@
+{
+  "structure": "Preserve the supplied sex-specific marginals exactly and model only their pairing. Use one common, positively associated rank-priority law with explicit feasibility enforcement. The source identifies marginal moments but not dependence; consequently the selected dependence is a transparent working assumption. No target observations, target estimates, or feedback were used.",
+  "parameter_provenance": [
+    "The supplied source reports female FEV1 2.4 ± 0.7 L and FVC 3.1 ± 0.8 L, and male FEV1 3.4 ± 1.0 L and FVC 4.5 ± 1.2 L. The evaluator, not this generator, constructs the marginal grids.",
+    "Latent rho = 0.90 for both sexes is an author-selected strong-positive-dependence assumption. It is neither reported by the source nor estimated from marginal SDs, sample sizes, age, or height.",
+    "The same dependence assumption is used for both sexes because the supplied evidence does not support sex-specific dependence parameters. The realized Pearson correlations need not equal 0.90.",
+    "Equal sex weighting and the non-strict volume constraint come from the task. The obstruction threshold is strictly below 0.70."
+  ],
+  "requested_estimands": [
+    "Mean individual ratio: compute the mean of FEV1/assigned FVC separately within each sex, then average those two means. This depends on the pairing.",
+    "Ratio of population means: divide the equal-sex-weighted mean FEV1 by the equal-sex-weighted mean FVC. This is invariant to pairing. Using the published rounded means gives 5.8/7.6, approximately 0.7632; compute the actual result from the supplied arrays.",
+    "Fraction strictly below 0.70: compute each sex's mean indicator of FEV1/assigned FVC < 0.70, then average the two fractions. This is dependence-sensitive and is not identified by the source moments.",
+    "Within-sex volume correlation: compute Pearson correlation between FEV1 and assigned FVC separately for F and M. If a single equal-sex summary is required, report their arithmetic average alongside the two correlations. Correlation is undefined for a block with fewer than two rows or zero variance."
+  ],
+  "limitations": [
+    "Healthy never-smokers selected for acceptable spirometry do not establish a dependence law or obstruction prevalence for broader populations including smokers or respiratory illness.",
+    "The source spans ages 18–85, not precisely 18–79. Aggregate age and stature descriptors cannot support age restriction, adjustment, or reconstruction of their joint effects.",
+    "No bronchodilator intervention is described; this supports only describing the supplied measurements as having no reported bronchodilator intervention, rather than a verified standardized pre-bronchodilator protocol.",
+    "Lognormal marginal shape and affine standardization are evaluator assumptions. Preserving these columns cannot correct target-source differences in marginal distributions.",
+    "Feasibility allocation changes the unconstrained copula law and can create ratios equal or close to one. Its induced dependence and ratio tails require inspection.",
+    "The generated pairs are illustrative synthetic individuals, not reconstructed source participants or validated target draws. Sampling more rows does not resolve dependence or transport uncertainty."
+  ],
+  "checks_actually_performed": [
+    "No code execution, empirical correlation calculation, or target validation was performed; no arrays or execution tools were supplied.",
+    "Analytically checked feasibility: for equal-length sorted arrays, a feasible permutation exists exactly when FEV1[i] <= FVC[i] for every i.",
+    "Analytically checked the allocation invariant: at ascending FVC step j, sorted feasibility guarantees at least j+1 eligible FEV1 rows in total, of which only j have previously been assigned. Thus the queue cannot be empty for feasible inputs.",
+    "The executable includes runtime checks for input validity, sorted feasibility, permutation completeness, and every output pair's volume constraint. These checks have not been executed here."
+  ]
+}

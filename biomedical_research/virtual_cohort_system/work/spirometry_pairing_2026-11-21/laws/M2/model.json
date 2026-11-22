@@ -1,0 +1,14 @@
+{
+  "name": "finite_step_feasible_gaussian_rank_permutation",
+  "version": 1,
+  "rho_by_sex": {
+    "F": 0.9,
+    "M": 0.9
+  },
+  "sweeps": 200,
+  "initialization": "ascending-rank pairing",
+  "support": "Within-sex permutations satisfying FEV1 <= FVC for every pair.",
+  "law": "For each sex, let z_i = Phi_inverse((i+0.5)/m). Start with permutation pi(i)=i. Perform sweeps*m random transposition proposals, choosing both indices independently and uniformly. Reject infeasible swaps; otherwise accept with probability min(1, exp(beta*Delta)), where beta=rho/(1-rho^2) and Delta is the change in sum_i z_i*z_pi(i). The primary operational law is this finite-step chain. Its invariant distribution assigns feasible permutations probability proportional to exp(beta*sum_i z_i*z_pi(i)).",
+  "interpretation": "rho is an assumed latent Gaussian rank-dependence parameter, not the resulting Pearson volume correlation. Feasibility conditioning and finite iteration alter the resulting dependence.",
+  "sex_weighting": "Pair within sex. For combined estimands, give each sex weight 0.5 regardless of block size."
+}

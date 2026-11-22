@@ -1,0 +1,31 @@
+{
+  "structure": "Use one stochastic, source-anchored dependence law rather than treating the regression as an individual identity. The Gaussian rank copula provides strong positive association with individual variation. Its latent correlation is calibrated to the reported Pearson correlation under ideal lognormal margins. A deterministic repair enforces the physical ordering whenever the supplied columns admit it. This is a working transport assumption, not an identified target dependence model.",
+  "parameter_provenance": [
+    "Pearson r=0.96 for each sex comes directly from the supplied Table 2 excerpt.",
+    "The latent-correlation conversion uses the sex-specific arithmetic means and SDs in the supplied Table 1 excerpt.",
+    "The Gaussian copula shape and deterministic feasibility repair are modeling choices, not reported source findings.",
+    "The regression slopes, intercepts and R-squared values are related summaries from the same participants, not additional independent calibration constraints. They are not imposed alongside rounded moments.",
+    "No dependence adjustment for smoking, illness, age restriction or selection was estimated: the supplied evidence does not identify one."
+  ],
+  "requested_estimands": [
+    "Mean individual FEV1/FVC: calculate within each sex from the generated pairs, then average the two sex-specific means with weights 0.5 and 0.5.",
+    "Ratio of population means: divide the equally sex-weighted FEV1 mean by the equally sex-weighted FVC mean. This is fixed by the supplied columns and does not depend on pairing; it is not the average of the two sex-specific ratios.",
+    "Fraction strictly below 0.70: calculate mean(FEV1/FVC < 0.70) within each sex, then average with equal sex weights.",
+    "Within-sex volume correlation: calculate Pearson correlation separately for F and M. The source value is an anchor, not a guaranteed realized correlation after finite-grid ranking and feasibility repair."
+  ],
+  "limitations": [
+    "Healthy never-smokers aged 18–85 are not representative evidence for the dependence or obstruction tail in broader community populations aged 18–79.",
+    "Marginal moments and Pearson correlation do not identify the individual ratio distribution or its lower tail. The copula choice remains consequential.",
+    "Affine-standardized finite grids are not exactly ideal lognormal populations. Rank assignment and feasibility repair can change the correlation and ratio tail relative to the unconstrained copula.",
+    "No individual age or height is available, so neither adjustment nor age-range reweighting is supported.",
+    "The excerpts describe no bronchodilator intervention; they do not independently establish a standardized pre-bronchodilator protocol.",
+    "Some positive sorted columns can be mutually incompatible with FEV1 <= FVC. Neither this generator nor a host permutation repair can eliminate violations when the ascending-order feasibility test fails.",
+    "Published SDs are participant dispersion, not uncertainty in the moments. No target-calibrated uncertainty intervals are justified here."
+  ],
+  "checks_actually_performed": [
+    "Analytically checked that sorted x[i] <= y[i] for every i is necessary and sufficient for a fully feasible permutation.",
+    "Analytically checked that the eligible-row assignment uses every FVC index once and cannot exhaust eligible rows when that feasibility condition holds.",
+    "Reviewed the estimand definitions to distinguish mean individual ratio from ratio of means and to preserve strict inequality at 0.70.",
+    "No numerical execution, target comparison or empirical performance validation was performed. The executable includes input validation, permutation checks and a conditional feasibility assertion."
+  ]
+}
