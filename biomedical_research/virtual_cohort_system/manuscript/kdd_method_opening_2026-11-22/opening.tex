@@ -1,0 +1,49 @@
+% A standalone candidate opening for discussion alongside KDD draft v0.49.
+\documentclass[sigconf,anonymous,nonacm]{acmart}
+\settopmatter{printacmref=false,printccs=false,printfolios=false}
+\setcopyright{none}
+\hypersetup{bookmarks=false,pdfsubject={Candidate KDD manuscript opening, November 2026}}
+\begin{document}
+\title{Generating Biomedical Cohorts from Partial Evidence with Scientific Agents}
+\author{Anonymous Author(s)}
+
+\begin{abstract}
+Published studies often describe each measurement more precisely than they describe how measurements vary together in one person. This leaves a choice when generating a cohort for a new analysis. We present a method for constructing virtual biomedical cohorts with a scientific agent and testing the consequences of that choice. Given a research request and a source article, the agent extracts the evidence, specifies a joint model, and writes a sampler with a record of its assumptions. In controlled pairing experiments we fix the individual measurement values, change how they are assigned to the same person, and repeat the requested analysis. In a lipid study, four agents each constructed two models consistent with the same source summaries. The mean non-HDL cholesterol was identical across models, yet the fraction above a screening cutoff differed by 16.37--29.35 percentage points within author. In a prospective handgrip study, an agent-selected pairing predicted a mean absolute difference of 3.81 kg between hands, compared with measured estimates of 3.30 kg in US adults and 3.78 kg in rural South Africa. Together these tests locate a consequential modeling assumption and evaluate its implications for a specific use.
+\end{abstract}
+\maketitle
+\raggedbottom
+\pagestyle{empty}
+\thispagestyle{empty}
+
+\section{Introduction}
+A researcher planning a cholesterol screening study needs the fraction of adults whose non-HDL cholesterol reaches 160 mg/dL. A source article reports total and HDL cholesterol summaries, including the mean of the individual total-to-HDL ratios. An agent and a statistical generator given these summaries initially produced almost identical screening estimates, 25.53\% and 25.52\%. How much of that agreement does the article actually require?
+
+Non-HDL cholesterol is total cholesterol minus HDL. Once the two columns of measurements have been chosen, their means determine mean non-HDL. The screening fraction depends on which two values occur in the same person. In our source-only experiment, even the closest pair of deliberately different models among four authors gave 9.80\% and 26.17\% above the cutoff (Table~\ref{tab:lipid}). Both honored the same reported mean ratio at its published precision. An author can therefore supply a complete table and also show which scientific answer depends on an assumption introduced while building it.
+
+Prior work establishes synthesis from aggregate constraints (\href{https://arxiv.org/html/2505.14752v4}{Tang et al., KDD 2026}) and agent-assisted construction of trial records from publications (\href{https://proceedings.mlr.press/v340/jiang26a.html}{Jiang et al., MLHC 2026}). Classical dependence bounds explain why a distribution of sums can vary at fixed margins (\href{https://doi.org/10.1137/1126086}{Makarov, 1982}). We ask the agent to construct an explicit alternative under the biomedical source constraints. A researcher can then see how far a particular analysis moves and, with measured data, check how a frozen choice transfers.
+
+\section{Cohort construction and analysis}
+\paragraph{Construct a joint model.}
+In the original-paper experiments, the researcher supplies the population, variables, analyses, and a starting article. The agent can retrieve additional studies. It documents which quantities were reported, which it calculated and which it assumed. It submits an executable sampling program. The host executes the frozen program to produce virtual records. The iron-status authors, for example, derived the same threshold odds ratio from published counts and wrote three different continuous joint models.
+
+\paragraph{Vary a specific modeling choice.}
+The paired-measurement experiments supply extracted summaries and fixed columns. An admissible assignment preserves the specified margins, source constraints at the stated tolerances, and relevant physiological restrictions. Apply the same estimator to two admissible assignments. Their difference measures the effect of that choice in the units of the analysis. A pair with a large difference demonstrates sensitivity. A small difference describes only the tested alternatives.
+
+\begin{table}[h]
+\centering\small
+\caption{Two virtual cohorts from one author's lipid models. Estimates average three draws per model.}
+\label{tab:lipid}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Quantity & Model A & Model B\\
+\midrule
+Mean individual total/HDL ratio & 3.66 & 3.66\\
+Mean non-HDL cholesterol (mg/dL) & 128.77 & 128.77\\
+Non-HDL at or above 160 mg/dL (\%) & 9.80 & 26.17\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Evaluate the intended use.}
+For external accuracy, apply the same estimator to virtual and measured records under the target sampling design where applicable. In handgrip, independent pairing of the same left- and right-hand values predicted a 7.93 kg mean absolute difference. The frozen agent choice brought this to 3.81 kg before the paired measurements in either primary cohort were disclosed. In the original lipid comparison, two separately recruited Ethiopian samples gave screening estimates of 21.18\% and 20.96\%. Both were lower than the roughly 25.5\% predicted by the two generators. This empirical comparison addresses transfer. The deliberately different lipid models establish sensitivity to assumptions using the source information alone.
+\end{document}
