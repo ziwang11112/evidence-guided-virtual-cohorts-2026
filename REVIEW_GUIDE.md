@@ -1,4 +1,8 @@
-# External review guide for the KDD v0.47 manuscript
+# External review guide for the KDD v0.48 manuscript
+
+Start with Figure 4 on page 6 for a measured improvement from an agent's choice of pairing. Compare Figure 20 on page 25 for a prospective test in another domain. Four authors saw only component-level information and four also saw the source's joint evidence. Predictions and controls were published before outcomes from 3,945 US and 586 Malawian adults were evaluated. The full-evidence models gave a closer low-ratio fraction at both measured points, lost agreement on the mean individual ratio, and essentially matched a statistical rule with the same evidence. [External review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v48_2026-11-21/external_review.pdf) · [Results, tolerances and independent check](biomedical_research/virtual_cohort_system/work/spirometry_pairing_2026-11-21/RESULTS.md) · [Current manuscript guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v48_2026-11-21/README.md)
+
+## Archived v0.47 review guide
 
 Table 1 on page 2 counts measured samples by scientific use. Figures 2–4 apply the same scientific estimator to measured and virtual participants, isolate a within-person modeling choice, and trace that choice into subgroup and threshold estimates. Figure 4 is on page 6. The two pooled primary grip predictions were sealed prospectively. The subgroup analysis in v0.47 used those frozen models after the pooled outcomes were known. Page 24 gives all twelve group estimates, including the Brazilian measurement stress test and the statistical rule with access to the German ratio evidence. [External review manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v47_2026-11-21/external_review.pdf) · [Figure, all subgroup results and scale accounting](biomedical_research/virtual_cohort_system/work/kdd_v47_scale_2026-11-21/RESULTS.md)
 
