@@ -1,4 +1,10 @@
-# External review guide for the KDD v0.48 manuscript
+# External review guide for the KDD v0.49 manuscript
+
+Start on page 2. Figure 1 follows a published iron table to three distinct joint models. The plotted odds ratios and rank correlations come from the three authors' generated records and the same US survey analysis. Table 1 identifies the decisions owned by the investigator, agent and execution service in each design. [External review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v49_2026-11-21/external_review.pdf) · [Figure, programs and numerical audit trail](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v49_2026-11-21/README.md)
+
+For the contribution of a particular decision, Figure 3 (p. 5) isolates the assignment of measurements to individuals. Figures 4 and 21 (pp. 6 and 25) evaluate pairing in handgrip and lung function against measured samples, including statistical controls. The latter comparison reports both the improvement in the low-ratio fraction and the loss of agreement on the mean individual ratio. [Chinese community holdout](biomedical_research/virtual_cohort_system/work/chns_iron_conditional_holdout_2026-11-19/RESULTS.md) · [Prospective lung-function comparison](biomedical_research/virtual_cohort_system/work/spirometry_pairing_2026-11-21/RESULTS.md)
+
+## Archived v0.48 review guide
 
 Start with Figure 4 on page 6 for a measured improvement from an agent's choice of pairing. Compare Figure 20 on page 25 for a prospective test in another domain. Four authors saw only component-level information and four also saw the source's joint evidence. Predictions and controls were published before outcomes from 3,945 US and 586 Malawian adults were evaluated. The full-evidence models gave a closer low-ratio fraction at both measured points, lost agreement on the mean individual ratio, and essentially matched a statistical rule with the same evidence. [External review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v48_2026-11-21/external_review.pdf) · [Results, tolerances and independent check](biomedical_research/virtual_cohort_system/work/spirometry_pairing_2026-11-21/RESULTS.md) · [Current manuscript guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v48_2026-11-21/README.md)
 
