@@ -1,0 +1,1 @@
+This public edition of AUTHOR_AUDIT.json omits 16 opaque provider response identifiers. The model names, dispositions, usage estimates, scientific results and artifact digests are retained. The original receipt audit and frozen files reside in the local research archive.

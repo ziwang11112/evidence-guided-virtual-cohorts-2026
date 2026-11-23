@@ -1,10 +1,16 @@
 # Evidence-guided virtual biomedical cohorts
 
-**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.50, 22 November 2026.
+**Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.51, 23 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
 
-[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [External review Overleaf ZIP](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/overleaf_external_review_v50.zip) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/paper.pdf) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+[PDF for external review](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v51_2026-11-23/external_review.pdf) · [Reviewer guide](REVIEW_GUIDE.md) · [Anonymous manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v51_2026-11-23/paper.pdf) · [Download anonymous Overleaf package](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v51_2026-11-23/overleaf_v51.zip) · [Download external-review Overleaf package](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v51_2026-11-23/overleaf_external_review_v51.zip) · [Full experiment index](biomedical_research/virtual_cohort_system/PUBLIC_RESEARCH_INDEX.md)
+
+In a study chosen by the agent from two screened publications, 151 of 2,758 eligible Malaysian adults (5.475%) underreported BMI by more than 2 kg/m². Five of six assigned GPT sessions met the prespecified margin for the mean BMI difference. Zero of six met the margin for large underreports. The five sessions that delivered models predicted 13.06–17.06% across their primary seed medians. [Paired BMI validation](biomedical_research/virtual_cohort_system/work/autonomous_paired_validation_2026-11-23/RESULTS.md) · [Result figure](biomedical_research/virtual_cohort_system/work/autonomous_paired_validation_2026-11-23/FIGURE.pdf)
+
+## Archived v0.50 manuscript
+
+[v0.50 release and editable source](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/README.md)
 
 The three full-article experiments used 36 assigned starts. An ordinary second model and a targeted search changed the intended analysis in 0/12 vs 11/12 lipid blocks, 6/12 vs 11/12 lung blocks, and 12/12 vs 12/12 iron blocks. A conventional numerical solver given the extracted lung constraints also exhibited two admissible screening estimates, 1.18% and 52.46%. [Method contribution and reviewer questions](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/REVIEWER_QUESTIONS.md) · [Numerical control](biomedical_research/virtual_cohort_system/work/lung_pairing_numerical_control_2026-11-22/RESULTS.md)
 

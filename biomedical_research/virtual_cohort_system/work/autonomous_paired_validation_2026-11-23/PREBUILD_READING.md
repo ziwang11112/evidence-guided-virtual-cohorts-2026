@@ -1,0 +1,18 @@
+# Independent reading before model construction
+
+23 November 2026. The selection was accepted for the frozen BMI question. This review used the exact text and metadata delivered to the search model and the selected article bundle. No evaluation workbook was opened by this reviewer.
+
+## What the model received
+
+Five recorded search decisions contain two queries, two aggregate article opens and one selection. The first query returned a network failure. The second returned the bibliographic metadata of both registered articles. The agent opened the Malaysian and Australian papers and selected PMC9844876. The five model request bodies carry their previous actions as text and expose no workbook bytes, supplement calls or scatter-plot pixels. Their study-selection rationale contains no numerical answer to the threshold question. The Malaysian article projection retained 33 of 47 blocks and five tables. The selected text has SHA-256 `0993e949e42dfc07510d86306e566ec104aa806f73e783ea2e3f883d969e3ff2`. Article-level findings below refer to what was delivered. The registered choice set was determined by an availability screen. The GPT choice within that set was autonomous.
+
+## Population and endpoints
+
+The paper's 2018 community blood-pressure screening programme invited adults aged 18 years or older. Among 5,172 screening attendees, the analytic group comprised 2,781 participants with reported and measured height and weight. The questionnaire preceded researcher measurements. The paper defines BMI using weight in kilograms divided by squared height in metres. The target is this paired sample. Gender-specific entries cover 2,778 and cannot silently replace the all-participant denominator. [Original article](https://doi.org/10.1371/journal.pone.0280483)
+
+| Requested analysis | Available before constructing any model | Independent interpretation |
+|---|---|---|
+| Mean self-reported minus measured BMI | Table 2 shows 25.2 kg/m² on each side, to one decimal, for all 2,781. The corresponding SDs are 5.6 reported and 5.5 measured. | In the same complete pairs, the mean of the differences equals the difference of the means. Both displayed figures round to the same value. Their difference is approximately zero with up to about 0.10 kg/m² uncertainty from the printed precision. Its exact sign and magnitude remain open. |
+| Fraction with self-reported BMI strictly more than 2 kg/m² below measured BMI | Table 3 supplies a paired cross-tabulation of four BMI categories. Table 2 supplies grouped moments and an all-participant BMI ICC of 0.9289. Table 4 reports under- and overreporting by 5% of height or weight. The figure captions describe height and weight agreement. | Neither projected paper nor any other delivered action reports the requested count, percentage or exact algebraic equivalent. Participants can cross the two-unit difference threshold within a category or cross a category boundary by less than two units. The cross-tabulation and ICC constrain possible distributions; they do not determine this tail. The ICC definition must be checked before using it as a Pearson correlation. |
+
+The Australian pre-exercise article contains objective risk factors, comparisons of online and face-to-face questionnaires, and obesity-category classifications. These also supply no answer for the selected Malaysian cohort. The separate workbook remains necessary to calculate the registered individual-level event. This is a same-study empirical evaluation with source-supported companion analysis. A potential pretraining exposure cannot be observed in the recorded search calls.

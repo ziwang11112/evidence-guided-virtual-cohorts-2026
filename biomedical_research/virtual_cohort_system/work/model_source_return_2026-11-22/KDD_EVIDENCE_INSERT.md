@@ -1,0 +1,17 @@
+# What the virtual measurements can support
+
+Working text for the KDD draft, 23 November 2026.
+
+## Proposed Results text
+
+A paper can constrain the difference between two measurements while leaving a threshold-crossing rate open. In a development study of corneal thickness, the agent selected Hong et al. from a literature search. When offered the four published table captions, it requested the device-agreement table and used the retrieved limits to revise the spread of its paired measurements. The resulting virtual eyes reproduced the published mean difference of −3.6 µm. Both instruments’ absolute means were about 16 µm above the study values. A common offset cancels in the paired contrast. The estimated proportion of absolute differences above 20 µm was 0.21% under a normal difference distribution and 0.87% under a heavier-tailed distribution with the same mean and variance. The study provides no observed proportion for that comparison. [Source return and independent reanalysis](RESULTS.md)
+
+In a separate eye-pressure study we supplied the article and withheld the measurement spreadsheet. Before opening the spreadsheet, we froze the generator and its analysis of paired left-eye readings. The primary virtual cohort gave a mean Pascal-minus-Goldmann difference of 1.83 mmHg and placed 30.83–30.98% of eyes strictly above a signed difference of 3 mmHg. Applying the same analysis to 100 measured pairs gave 1.8321 mmHg and 29%. Only the primary model met all prespecified source and plausibility checks. This same-study comparison provides a measured reference for one threshold prediction. The interval across the virtual runs describes variation across seeds. [Frozen case and evaluation](../prospective_article_iop_2026-11-22/RESULTS.md)
+
+## Where these examples belong
+
+The main controlled result remains the comparison on three articles and 36 matched starts. For lipids, ordinary and targeted requests found two admissible pairings with a materially different threshold fraction in 0/12 and 11/12 starts. The corresponding counts were 6/12 and 11/12 for lung function, and 12/12 in both arms for the continuous iron association. These comparisons measure the ability to expose the consequences of a modeling choice. Accuracy against measured data requires a separate comparison. Use the corneal thickness example to illustrate an actual source-to-parameter decision and the eye-pressure example to illustrate such a measured comparison. [Controlled comparisons](../article_portfolio_2026-11-22/RESULTS.md)
+
+## Remaining decision
+
+If the headline includes measured utility **after autonomous source selection**, the missing observation is one run exhibiting both features on the same request. Before constructing models or inspecting outcomes, register a research request, a source-supported contrast, a scientifically meaningful endpoint withheld from the author, its numerical tolerance and rationale, and how sampling uncertainty will be presented. Confirm that an independent evaluator can access the necessary paired data and use the same estimator. Keep row-level supplements and the endpoint answer outside the author's search results; log accidental exposure and downgrade that endpoint if it occurs. An eligible study may yield poor agreement. Report it at the frozen stopping point. If the input and evaluation cannot be separated, proceed with the narrower manuscript claim supported above.

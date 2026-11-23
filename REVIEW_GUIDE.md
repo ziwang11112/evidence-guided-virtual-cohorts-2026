@@ -1,4 +1,10 @@
-# External review guide for the KDD v0.50 manuscript
+# External review guide for the KDD v0.51 manuscript
+
+Figure 2 on page 4 compares the ordinary and targeted requests across three biomedical articles. Page 5 then asks how well the generated data answer two questions about BMI in the same people. Five of six assigned authors met the mean-error margin. Zero of six met the three-percentage-point margin for large underreports. One session reached its output limit. The appendix documents the population filter and the independent workbook calculation. [v0.51 external review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v51_2026-11-23/external_review.pdf) · [Download external-review Overleaf package](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v51_2026-11-23/overleaf_external_review_v51.zip) · [All six assigned models](biomedical_research/virtual_cohort_system/work/autonomous_paired_validation_2026-11-23/RESULTS.md)
+
+Two earlier eye-measurement studies clarify the information supplied to the agent. In the corneal-thickness study the author chose a paper and consulted an original table. In the eye-pressure study the author received the paper, generated paired records, and its frozen primary model predicted 30.83–30.98% above a signed 3 mmHg threshold. The withheld workbook gave 29/100. [Source-table retrieval](biomedical_research/virtual_cohort_system/work/model_source_return_2026-11-22/RESULTS.md) · [Eye-pressure validation](biomedical_research/virtual_cohort_system/work/prospective_article_iop_2026-11-22/RESULTS.md)
+
+## Archived v0.50 review guide
 
 Figure 1 follows a published table to three different scientific models authored by the same GPT in separate sessions. Figure 2 asks whether a second agent-authored dataset, constrained by the same study, changes the answer to a particular analysis. Twelve starting models per paper allow a paired comparison of the two author instructions. Figures 3–5 address sample agreement explicitly. [Review copy](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/external_review.pdf) · [Claims, evidence and limits](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v50_2026-11-22/REVIEWER_QUESTIONS.md)
 

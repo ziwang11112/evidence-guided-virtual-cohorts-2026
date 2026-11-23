@@ -1,5 +1,19 @@
 # Dataset exposure: cross-project admission entry point
 
+## Malaysian self-reported and measured BMI, 23 November 2026
+
+Two independent public studies were screened for paired measurements. The search agent opened Chia et al. (PMC9844876, Malaysia) and Norton et al. (PMC6019396, Australia). It chose the Malaysian study. Its abstract, source tables, group counts and modeling decisions are exposed. The selected workbook's age-eligible paired endpoints were revealed after sealing all six construction slots, measurement mappings and scoring protocol. This study is closed to reuse as fresh validation on these endpoints. The unselected Australian article was seen by the searcher; its workbook was inspected for header roles only. [Frozen boundaries](../work/autonomous_paired_validation_2026-11-23/PREREVEAL.json) · [Results](../work/autonomous_paired_validation_2026-11-23/RESULTS.md)
+
+## Hong et al. paired corneal thickness, 22 November 2026
+
+A request-only search opened PMC4472076, PMC3343442 and PMC3672133. Hong et al. (PMC3343442, DOI 10.3349/ymj.2012.53.3.634) was the sole selected modeling source. Its narrative, the separate independent reading of its aggregate image tables, and all final virtual analyses are now exposed. No paired participant-level threshold reference was available in this run. Do not reuse these material and outcomes as a new prospective source test. [Selection trace](../work/search_to_model_2026-11-22/SEARCH_AUDIT.json) · [Results](../work/search_to_model_2026-11-22/RESULTS.md)
+
+The subsequent development run gave the author the four table captions. It requested the Visante minus slit-lamp ultrasound row of Table 3 and received its transcription. Table 1 remained an evaluator reference. [Return-to-source results](../work/model_source_return_2026-11-22/RESULTS.md)
+
+## UNSW Pye left-eye tonometry, 22 November 2026
+
+Pye 2020 (10.1371/journal.pone.0224824), its text and table constraints, and its paired subject-level S1 reference are now exposed. One author independently constructed three models before the 100 measured left-eye pairs were analyzed. The same-study signed mean, one-sided threshold, absolute tail and source/workbook discrepancies are closed to further tuning and to reuse as a fresh confirmation. Individual data and full paper remain local. [Precall freeze](../work/prospective_article_iop_2026-11-22/PRECALL.json) · [Pre-reveal close](../work/prospective_article_iop_2026-11-22/PREREVEAL.json) · [Results](../work/prospective_article_iop_2026-11-22/RESULTS.md)
+
 ## Bilateral handgrip in US NHANES, South African HAALSI and Brazilian EDOC — 21 November 2026
 
 The 2011–2012 US NHANES exam and rural HAALSI baseline v3.0 supplied 1,423 and 2,434 eligible adults aged 50–69. Both families had been used for other outcomes. This was their first registered bilateral grip comparison. The separately recruited Rio Branco EDOC sample supplied 464 eligible adults for a maximum-of-three stress test. During admission the investigator saw the Brazilian source paper's ancillary single-hand information. Paired target values, target estimates and single-hand target distributions were withheld from every constructor. The design was fixed in `cbf1778` and every program, permutation hash and numerical prediction in `c7c9aa3` before opening the three paired comparisons. All four analyses, the separate-margins diagnostic and the subsequent correlation sensitivity are now exposed for these three samples. [Protocol](../work/bilateral_grip_transfer_2026-11-21/PROTOCOL.md) · [Sealed predictions](../work/bilateral_grip_transfer_2026-11-21/BEFORE_DISCLOSURE.md) · [Results](../work/bilateral_grip_transfer_2026-11-21/RESULTS.md)
