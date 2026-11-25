@@ -2,6 +2,14 @@
 
 **Same Evidence, Different Estimates: How Modeling Choices Shape Analyses of Agent-Generated Biomedical Data**
 
+KDD Research working manuscript v0.54 · 25 November 2026
+
+What does a publication tell us about a new analysis, and what does the agent decide when it constructs individual records? The paper tests this by having an agent produce another model that satisfies the same evidence and changes the estimate. In the Australian BMI study, two programs reproduced exactly the same counts above and below the obesity cutoff at each seed, but estimated substantial BMI underreporting at 5.70% and 7.48%. The measured estimate was 4 of 90 (4.44%).
+
+[Read v0.54](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v54_2026-11-25/paper.pdf) · [Editable Overleaf source](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v54_2026-11-25/overleaf_v54.zip) · [Australian BMI experiment and model code](biomedical_research/virtual_cohort_system/work/evidence_choice_apss_2026-11-25/RESULTS.md) · [Reviewer guide](REVIEW_GUIDE.md)
+
+## Archived v0.52 manuscript
+
 KDD Research working manuscript v0.52 · 25 November 2026
 
 An agent reads published biomedical findings, chooses a joint model and writes a program that samples individual records. We study how much a scientific conclusion can change when two such programs agree with the same published evidence. In the opening example, the same cholesterol measurements can be paired to give screening rates of 9.80% and 26.17%. Both pairings have the same mean non-HDL cholesterol and reproduce the published mean individual cholesterol ratio. Measured samples provide a separate test of which analyses carry over in practice.

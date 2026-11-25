@@ -1,5 +1,9 @@
 # Dataset exposure: cross-project admission entry point
 
+## Australian paired BMI in exercise screening, 25 November 2026
+
+Norton et al. (PMC6019396) was previously screened and the workbook headers had been inspected. Eight new programs and their 24 draws were sealed before the measured file was opened. Two masked AI reviewers completed source-use coding before scoring. Fractional age required a documented interpretation before BMI endpoints were calculated. The adult complete-pair analysis yielded 4 of 90 with online BMI more than 2 kg/m² below objectively measured BMI. The strict age sensitivity yielded 4 of 89. The reference is from the publication's own participants. Both measured analyses and the accompanying diagnostics are now exposed and closed to reuse as fresh validation. [Design](../work/evidence_choice_apss_2026-11-25/PROTOCOL.md) · [Pre-score eligibility decision](../work/evidence_choice_apss_2026-11-25/ELIGIBILITY_RECONCILIATION.md) · [Results and independent recalculation](../work/evidence_choice_apss_2026-11-25/RESULTS.md)
+
 ## Malaysian self-reported and measured BMI, 23 November 2026
 
 Two independent public studies were screened for paired measurements. The search agent opened Chia et al. (PMC9844876, Malaysia) and Norton et al. (PMC6019396, Australia). It chose the Malaysian study. Its abstract, source tables, group counts and modeling decisions are exposed. The selected workbook's age-eligible paired endpoints were revealed after sealing all six construction slots, measurement mappings and scoring protocol. This study is closed to reuse as fresh validation on these endpoints. The unselected Australian article was seen by the searcher; its workbook was inspected for header roles only. [Frozen boundaries](../work/autonomous_paired_validation_2026-11-23/PREREVEAL.json) · [Results](../work/autonomous_paired_validation_2026-11-23/RESULTS.md)

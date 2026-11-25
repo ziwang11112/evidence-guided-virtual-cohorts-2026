@@ -1,4 +1,8 @@
-# External review guide for the KDD v0.52 manuscript
+# External review guide for the KDD v0.54 manuscript
+
+Figure 1 and Section 2 introduce the agent's search for two joint sampling programs compatible with the same evidence. Figure 3 compares ordinary and targeted requests for a second model. Section 3.1 and Figure 4 (p. 5) ask whether an agent can discover and implement a consequential published constraint when supplied the article and the scientific question. All eight programs ran. Four evidence-directed authors identified the relationship, two implemented it, and the two arms showed little difference in error on the unreported BMI outcome. The Australian measured reference came from the source study. [Manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v54_2026-11-25/paper.pdf) · [Editable source](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v54_2026-11-25/overleaf_v54.zip) · [Experiment, programs and measured evaluation](biomedical_research/virtual_cohort_system/work/evidence_choice_apss_2026-11-25/RESULTS.md)
+
+## Archived review guide for v0.52
 
 **Same Evidence, Different Estimates** investigates which scientific analyses depend on the choices an agent makes when constructing individual records from a published article. [External-review PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v52_2026-11-25/external_review.pdf) · [Source, figure guide and build checks](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v52_2026-11-25/README.md)
 

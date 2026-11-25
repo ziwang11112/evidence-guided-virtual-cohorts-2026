@@ -1,0 +1,216 @@
+{
+  "b01_ordinary": {
+    "generator_py": "import numpy as np\nimport pandas as pd\n\n\ndef generate(observed, spec, seed):\n    \"\"\"Generate paired synthetic online and objectively measured adult BMI.\"\"\"\n    if observed is not None:\n        raise ValueError('This generator expects observed=None.')\n    n = int(spec['n'])\n    if n < 0 or n != spec['n']:\n        raise ValueError('n must be a nonnegative integer.')\n\n    means = np.array([spec['reported_mean'], spec['measured_mean']], dtype=float)\n    sds = np.array([spec['reported_sd'], spec['measured_sd']], dtype=float)\n    rms = float(spec['paired_rms_difference'])\n    if not (np.all(np.isfinite(means)) and np.all(means > 0)\n            and np.all(np.isfinite(sds)) and np.all(sds > 0)\n            and np.isfinite(rms) and rms > 0):\n        raise ValueError('Invalid BMI distribution parameters.')\n\n    # E[(R-M)^2] = Var(R) + Var(M) - 2 Cov(R,M) + (E[R]-E[M])^2.\n    covariance = (np.sum(sds**2) + (means[0] - means[1])**2 - rms**2) / 2.0\n    log_variances = np.log1p((sds / means)**2)\n    log_means = np.log(means) - 0.5 * log_variances\n    scaled_covariance = covariance / np.prod(means)\n    if scaled_covariance <= -1.0:\n        raise ValueError('Requested covariance is incompatible with lognormal marginals.')\n    log_covariance = np.log1p(scaled_covariance)\n    log_rho = log_covariance / np.sqrt(np.prod(log_variances))\n    if not np.isfinite(log_rho) or abs(log_rho) >= 1.0:\n        raise ValueError('Requested moments do not define a nonsingular joint lognormal.')\n\n    rng = np.random.default_rng(seed)\n    z = rng.standard_normal((n, 2))\n    reported_log = log_means[0] + np.sqrt(log_variances[0]) * z[:, 0]\n    measured_log = log_means[1] + np.sqrt(log_variances[1]) * (\n        log_rho * z[:, 0] + np.sqrt(1.0 - log_rho**2) * z[:, 1]\n    )\n    bmi = np.exp(np.column_stack((reported_log, measured_log)))\n    if not np.all(np.isfinite(bmi) & (bmi > 0)):\n        raise FloatingPointError('Generated BMI must be finite and positive.')\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': bmi[:, 0],\n        'measured_bmi': bmi[:, 1]\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "joint_distribution": "Bivariate lognormal, calibrated to marginal arithmetic means and standard deviations and an assumed paired root-mean-square difference.",
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "missingness": "None; generate complete BMI pairs.",
+      "n": 10000,
+      "paired_rms_difference": 1.3,
+      "population": "Synthetic adult volunteers resembling the Australian APSS pre-exercise screening convenience sample: adults aged 18–75 recruited through a fitness centre and amateur sports club. Each row pairs online self-reported BMI with objectively measured BMI for the same person approximately one day later. This is not a representative general adult population.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9
+    }
+  },
+  "b01_targeted": {
+    "generator_py": "import numpy as np\nimport pandas as pd\n\n\ndef generate(observed, spec, seed):\n    \"\"\"Generate independent people with dependent paired BMI measurements.\"\"\"\n    if observed is not None:\n        raise ValueError('This aggregate-evidence generator requires observed=None.')\n    n = int(spec['n'])\n    if n < 0 or n != spec['n']:\n        raise ValueError('n must be a nonnegative integer.')\n\n    mean = np.array([spec['reported_mean'], spec['measured_mean']], dtype=float)\n    sd = np.array([spec['reported_sd'], spec['measured_sd']], dtype=float)\n    rms = float(spec['paired_difference_rms'])\n    if not (np.all(np.isfinite(mean)) and np.all(mean > 0)\n            and np.all(np.isfinite(sd)) and np.all(sd > 0)\n            and np.isfinite(rms) and rms > 0):\n        raise ValueError('Invalid moment parameters.')\n\n    # E[(R-M)^2] = Var(R) + Var(M) - 2 Cov(R,M) + (E[R]-E[M])^2.\n    covariance = (sd[0]**2 + sd[1]**2 + (mean[0]-mean[1])**2 - rms**2) / 2.0\n\n    # Exact raw-scale to log-scale moment conversion for a bivariate lognormal.\n    log_variance = np.log1p((sd / mean)**2)\n    covariance_argument = 1.0 + covariance / (mean[0] * mean[1])\n    if covariance_argument <= 0:\n        raise ValueError('Requested covariance is incompatible with lognormal moments.')\n    log_covariance = np.log(covariance_argument)\n    log_cov = np.array([[log_variance[0], log_covariance],\n                        [log_covariance, log_variance[1]]])\n    if np.min(np.linalg.eigvalsh(log_cov)) <= 0:\n        raise ValueError('Requested moments do not define a positive-definite log covariance.')\n    log_mean = np.log(mean) - log_variance / 2.0\n\n    rng = np.random.default_rng(seed)\n    standard = rng.standard_normal((n, 2))\n    paired = np.exp(log_mean + standard @ np.linalg.cholesky(log_cov).T)\n    if not np.all(np.isfinite(paired) & (paired > 0)):\n        raise FloatingPointError('Generated BMI values must be finite and positive.')\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': paired[:, 0],\n        'measured_bmi': paired[:, 1]\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "joint_family": "bivariate_lognormal",
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "n": 10000,
+      "paired_difference_rms": 1.3,
+      "parameter_uncertainty": false,
+      "population": "Virtual adults resembling the Australian convenience sample aged 18–75 recruited from a fitness centre and amateur sports club for APSS pre-exercise screening. Each row pairs online self-reported BMI with objectively measured BMI for the same person on the following day; this is not a representative general-adult population.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9,
+      "rms_interpretation": "Assume the Stage 3 BMI RMS is sqrt(E[(reported_bmi-measured_bmi)^2])."
+    }
+  },
+  "b02_ordinary": {
+    "generator_py": "import numpy as np\nimport pandas as pd\n\n\ndef generate(observed, spec, seed):\n    if observed is not None:\n        raise ValueError('This generator expects observed=None.')\n    n = int(spec['n'])\n    if n < 1 or n != spec['n']:\n        raise ValueError('n must be a positive integer.')\n\n    means = np.array([spec['reported_mean'], spec['measured_mean']], dtype=float)\n    sds = np.array([spec['reported_sd'], spec['measured_sd']], dtype=float)\n    rms = float(spec['paired_difference_rms'])\n    if not (np.all(np.isfinite(means)) and np.all(means > 0)\n            and np.all(np.isfinite(sds)) and np.all(sds > 0)\n            and np.isfinite(rms) and rms > 0):\n        raise ValueError('Invalid moment parameters.')\n\n    # E[(R-M)^2] = Var(R) + Var(M) - 2*Cov(R,M) + (E[R]-E[M])^2.\n    covariance = (np.sum(sds ** 2) + (means[0] - means[1]) ** 2 - rms ** 2) / 2.0\n    natural_cov = np.array([[sds[0] ** 2, covariance],\n                            [covariance, sds[1] ** 2]])\n\n    # Convert natural-scale moments to joint Gaussian parameters on the log scale.\n    log_arguments = 1.0 + natural_cov / np.outer(means, means)\n    if np.any(log_arguments <= 0):\n        raise ValueError('Moments are incompatible with a lognormal model.')\n    log_cov = np.log(log_arguments)\n    if np.min(np.linalg.eigvalsh(log_cov)) <= 0:\n        raise ValueError('Log-scale covariance must be positive definite.')\n    log_mean = np.log(means) - 0.5 * np.diag(log_cov)\n\n    rng = np.random.default_rng(seed)\n    log_pairs = rng.multivariate_normal(log_mean, log_cov, size=n)\n    pairs = np.exp(log_pairs)\n    if not np.all(np.isfinite(pairs) & (pairs > 0)):\n        raise FloatingPointError('Generated BMI values must be finite and positive.')\n\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': pairs[:, 0],\n        'measured_bmi': pairs[:, 1]\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "distribution": "bivariate_lognormal",
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "n": 10000,
+      "paired_difference_rms": 1.3,
+      "parameter_order": [
+        "reported_bmi",
+        "measured_bmi"
+      ],
+      "population": "Synthetic adults resembling the study's Australian convenience sample of volunteers aged 18–75 recruited through a fitness centre and amateur sports club. Each row pairs online self-reported BMI with objectively measured BMI for the same person, assessed approximately one day later.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9
+    }
+  },
+  "b02_targeted": {
+    "generator_py": "import numpy as np\nimport pandas as pd\n\n\ndef generate(observed, spec, seed):\n    \"\"\"Generate complete, person-linked online and objective BMI pairs.\"\"\"\n    if observed is not None:\n        raise ValueError('This unconditional generator requires observed=None.')\n    n = int(spec['n'])\n    if n < 0 or n != spec['n']:\n        raise ValueError('n must be a nonnegative integer.')\n\n    means = np.array([spec['reported_mean'], spec['measured_mean']], dtype=float)\n    sds = np.array([spec['reported_sd'], spec['measured_sd']], dtype=float)\n    rmse = float(spec['paired_difference_rmse'])\n    if not (np.all(np.isfinite(means)) and np.all(means > 0)\n            and np.all(np.isfinite(sds)) and np.all(sds > 0)\n            and np.isfinite(rmse) and rmse > 0):\n        raise ValueError('Invalid moment parameters.')\n\n    # E[(R-M)^2] = Var(R) + Var(M) - 2 Cov(R,M) + (E[R]-E[M])^2.\n    covariance = (np.sum(sds**2) + (means[0] - means[1])**2 - rmse**2) / 2.0\n    log_variances = np.log1p((sds / means)**2)\n    cross_argument = 1.0 + covariance / np.prod(means)\n    if cross_argument <= 0:\n        raise ValueError('Moments are incompatible with a bivariate lognormal.')\n    log_covariance = np.log(cross_argument)\n    log_cov = np.array([[log_variances[0], log_covariance],\n                        [log_covariance, log_variances[1]]])\n    if np.min(np.linalg.eigvalsh(log_cov)) <= 0:\n        raise ValueError('Latent covariance must be positive definite.')\n    log_means = np.log(means) - 0.5 * log_variances\n\n    rng = np.random.default_rng(seed)\n    z = rng.standard_normal((n, 2))\n    paired_bmi = np.exp(log_means + z @ np.linalg.cholesky(log_cov).T)\n    if not (np.all(np.isfinite(paired_bmi)) and np.all(paired_bmi > 0)):\n        raise FloatingPointError('Generated BMI values must be finite and positive.')\n\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': paired_bmi[:, 0],\n        'measured_bmi': paired_bmi[:, 1]\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "calibration": "Population moments, not exact finite-sample moment matching.",
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "joint_family": "bivariate_lognormal",
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "n": 10000,
+      "paired_difference_rmse": 1.3,
+      "population": "Synthetic adults aged 18–75 resembling the Australian fitness-centre and amateur-sports-club volunteers in the supplied APSS study, with complete paired online self-reported and objectively measured BMI. This is not a representative general-adult population.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9,
+      "rmse_interpretation": "Working interpretation of the Stage 3 BMI RMS as sqrt(E[(reported_bmi-measured_bmi)^2])."
+    }
+  },
+  "b03_ordinary": {
+    "generator_py": "import numpy as np\nimport pandas as pd\n\n\ndef generate(observed, spec, seed):\n    if observed is not None:\n        raise ValueError('This generator expects observed=None.')\n    n = int(spec['n'])\n    if n < 0 or n != spec['n']:\n        raise ValueError('n must be a nonnegative integer.')\n\n    means = np.array([spec['reported_mean'], spec['measured_mean']], dtype=float)\n    sds = np.array([spec['reported_sd'], spec['measured_sd']], dtype=float)\n    rms = float(spec['paired_difference_rms'])\n    if not (np.all(np.isfinite(means)) and np.all(means > 0)\n            and np.all(np.isfinite(sds)) and np.all(sds > 0)\n            and np.isfinite(rms) and rms > 0):\n        raise ValueError('Invalid moment parameters.')\n\n    # E[D^2] = Var(R) + Var(M) - 2 Cov(R,M) + E[D]^2.\n    difference_variance = rms**2 - (means[0] - means[1])**2\n    if difference_variance <= 0:\n        raise ValueError('RMS is incompatible with the specified mean difference.')\n    covariance = (sds[0]**2 + sds[1]**2 - difference_variance) / 2.0\n\n    # Exact conversion of natural-scale moments to joint lognormal parameters.\n    log_variances = np.log1p((sds / means)**2)\n    covariance_argument = covariance / np.prod(means)\n    if covariance_argument <= -1:\n        raise ValueError('Invalid lognormal covariance.')\n    log_covariance = np.log1p(covariance_argument)\n    log_cov = np.array([[log_variances[0], log_covariance],\n                        [log_covariance, log_variances[1]]])\n    if np.min(np.linalg.eigvalsh(log_cov)) <= 0:\n        raise ValueError('Moment parameters do not define a positive-definite model.')\n    log_means = np.log(means) - 0.5 * log_variances\n\n    rng = np.random.default_rng(seed)\n    z = rng.standard_normal((n, 2))\n    paired_bmi = np.exp(log_means + z @ np.linalg.cholesky(log_cov).T)\n    if not np.all(np.isfinite(paired_bmi) & (paired_bmi > 0)):\n        raise FloatingPointError('Generated BMI values must be finite and positive.')\n\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': paired_bmi[:, 0],\n        'measured_bmi': paired_bmi[:, 1]\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "distribution": "Bivariate lognormal with moment-calibrated log-scale dependence",
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "n": 10000,
+      "paired_difference_rms": 1.3,
+      "parameter_uncertainty": "Parameters are fixed; generated rows represent individual-level variation, not uncertainty in the article's estimates.",
+      "population": "Synthetic complete-pair adult volunteers resembling the Australian APSS pre-exercise screening convenience sample recruited from a fitness centre and amateur sports club, ages 18–75 years. Each row pairs online self-reported BMI with BMI calculated from objectively measured anthropometry the following day.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9,
+      "rms_interpretation": "Square root of E[(reported_bmi - measured_bmi)^2]"
+    }
+  },
+  "b03_targeted": {
+    "generator_py": "import numpy as np\nimport pandas as pd\nfrom scipy.optimize import minimize, least_squares\nfrom scipy.special import logsumexp\n\n\ndef generate(observed, spec, seed):\n    if observed is not None:\n        raise ValueError('This generator requires observed=None.')\n    n = int(spec['n'])\n    if n < 0 or n != spec['n']:\n        raise ValueError('n must be a nonnegative integer.')\n    rng = np.random.default_rng(seed)\n    lo = float(spec['bmi_lower_bound'])\n    hi = float(spec['bmi_upper_bound'])\n    h = float(spec['grid_width'])\n    threshold = float(spec['obesity_threshold'])\n    bins = int(round((hi - lo) / h))\n    if lo <= 0 or h <= 0 or not np.isclose(lo + bins*h, hi):\n        raise ValueError('Invalid grid.')\n    if not np.isclose((threshold-lo)/h, round((threshold-lo)/h)):\n        raise ValueError('The obesity threshold must be a grid edge.')\n    centers = lo + h * (np.arange(bins) + 0.5)\n    rr, mm = np.meshgrid(centers, centers, indexing='ij')\n    r, m = rr.ravel(), mm.ravel()\n    masks = [\n        (r < threshold) & (m < threshold),\n        (r < threshold) & (m >= threshold),\n        (r >= threshold) & (m >= threshold),\n        (r >= threshold) & (m < threshold)\n    ]\n    names = ['both_below', 'reported_below_measured_obese',\n             'both_obese', 'reported_obese_measured_below']\n    counts = np.array([spec['classification_counts'][k] for k in names], dtype=float)\n    if np.any(counts < 0) or counts.sum() <= 0:\n        raise ValueError('Invalid classification counts.')\n    weights = counts / counts.sum()\n    mu_r, mu_m = float(spec['reported_mean']), float(spec['measured_mean'])\n    sd_r, sd_m = float(spec['reported_sd']), float(spec['measured_sd'])\n    rms = float(spec['paired_rms_difference'])\n    bias = mu_r - mu_m\n    jitter_var = h*h/12.0\n    target = np.array([0.0, 0.0,\n                       1.0-jitter_var/sd_r**2,\n                       1.0-jitter_var/sd_m**2,\n                       (rms*rms-bias*bias-2*jitter_var)/(rms*rms)])\n    groups = []\n    for w, mask in zip(weights, masks):\n        if w == 0:\n            continue\n        rg, mg = r[mask], m[mask]\n        x, y = (rg-mu_r)/sd_r, (mg-mu_m)/sd_m\n        z = (rg-mg-bias)/rms\n        features = np.column_stack((x, y, x*x, y*y, z*z))\n        groups.append((w, rg, mg, features))\n\n    def evaluate(theta, covariance=False):\n        objective = -float(theta @ target)\n        mean = np.zeros(5)\n        jacobian = np.zeros((5, 5))\n        for w, rg, mg, features in groups:\n            logits = features @ theta\n            normalizer = logsumexp(logits)\n            p = np.exp(logits-normalizer)\n            local_mean = p @ features\n            objective += w*normalizer\n            mean += w*local_mean\n            if covariance:\n                centered = features-local_mean\n                jacobian += w*((centered.T*p) @ centered)\n        return objective, mean-target, jacobian\n\n    def objective(theta):\n        value, gradient, _ = evaluate(theta)\n        return value, gradient\n\n    fit = minimize(objective, np.zeros(5), jac=True, method='BFGS',\n                   options={'gtol': 1e-9, 'maxiter': 1000})\n    theta = fit.x\n    if np.max(np.abs(evaluate(theta)[1])) > 1e-7:\n        refined = least_squares(\n            lambda t: evaluate(t)[1], theta,\n            jac=lambda t: evaluate(t, covariance=True)[2],\n            xtol=1e-12, ftol=1e-12, gtol=1e-12, max_nfev=500)\n        theta = refined.x\n    if np.max(np.abs(evaluate(theta)[1])) > float(spec['moment_tolerance']):\n        raise RuntimeError('Joint-distribution moment calibration failed.')\n\n    group_weights = np.array([g[0] for g in groups])\n    assignments = rng.choice(len(groups), size=n, p=group_weights/group_weights.sum())\n    reported = np.empty(n)\n    measured = np.empty(n)\n    for j, (w, rg, mg, features) in enumerate(groups):\n        rows = np.flatnonzero(assignments == j)\n        logits = features @ theta\n        p = np.exp(logits-logsumexp(logits))\n        selected = rng.choice(len(rg), size=len(rows), p=p/p.sum())\n        reported[rows] = rg[selected] + rng.uniform(-h/2, h/2, len(rows))\n        measured[rows] = mg[selected] + rng.uniform(-h/2, h/2, len(rows))\n    return pd.DataFrame({'row_id': np.arange(n, dtype=np.int64),\n                         'reported_bmi': reported,\n                         'measured_bmi': measured},\n                        columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "bmi_lower_bound": 12.0,
+      "bmi_upper_bound": 60.0,
+      "classification_counts": {
+        "both_below": 79,
+        "both_obese": 8,
+        "reported_below_measured_obese": 4,
+        "reported_obese_measured_below": 0
+      },
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "grid_width": 0.25,
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "model": "Maximum-entropy joint BMI distribution on a bounded two-dimensional grid, constrained by published marginal moments, paired RMS difference, and obesity classification counts; independent within-cell uniform jitter makes both measurements continuous.",
+      "moment_tolerance": 2e-06,
+      "n": 10000,
+      "obesity_threshold": 30.0,
+      "paired_rms_difference": 1.3,
+      "population": "Virtual adults resembling the Australian convenience sample aged 18–75 years recruited through a fitness centre and amateur sports club for paired online APSS screening and next-day objective assessment. This is not a representative general-adult population.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9
+    }
+  },
+  "b04_ordinary": {
+    "generator_py": "import numpy as np\nimport pandas as pd\n\n\ndef generate(observed, spec, seed):\n    \"\"\"Generate complete paired BMI values; no observed records are used.\"\"\"\n    if observed is not None:\n        raise ValueError('This generator requires observed=None.')\n    n = int(spec['n'])\n    if n < 0 or n != spec['n']:\n        raise ValueError('n must be a nonnegative integer.')\n\n    means = np.array([spec['reported_mean'], spec['measured_mean']], dtype=float)\n    sds = np.array([spec['reported_sd'], spec['measured_sd']], dtype=float)\n    rms = float(spec['paired_difference_rms'])\n    if not (np.all(np.isfinite(means)) and np.all(means > 0)\n            and np.all(np.isfinite(sds)) and np.all(sds > 0)\n            and np.isfinite(rms) and rms > 0):\n        raise ValueError('Invalid BMI moment parameters.')\n\n    # E[(R-M)^2] = Var(R) + Var(M) - 2*Cov(R,M) + (E[R]-E[M])^2.\n    covariance = (np.sum(sds ** 2) + (means[0] - means[1]) ** 2 - rms ** 2) / 2.0\n    log_variances = np.log1p((sds / means) ** 2)\n    cross_argument = covariance / np.prod(means)\n    if cross_argument <= -1:\n        raise ValueError('Infeasible lognormal covariance.')\n    log_covariance = np.log1p(cross_argument)\n    log_cov = np.array([[log_variances[0], log_covariance],\n                        [log_covariance, log_variances[1]]])\n    if np.min(np.linalg.eigvalsh(log_cov)) <= 0:\n        raise ValueError('Moment parameters do not define a positive-definite model.')\n    log_means = np.log(means) - log_variances / 2.0\n\n    rng = np.random.default_rng(seed)\n    paired_logs = rng.multivariate_normal(log_means, log_cov, size=n)\n    paired_bmi = np.exp(paired_logs)\n    if not np.all(np.isfinite(paired_bmi) & (paired_bmi > 0)):\n        raise FloatingPointError('Generated BMI values are not finite and positive.')\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': paired_bmi[:, 0],\n        'measured_bmi': paired_bmi[:, 1]\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "distribution": "bivariate_lognormal",
+      "measured_mean": 25.4,
+      "measured_sd": 6.2,
+      "n": 10000,
+      "paired_difference_rms": 1.3,
+      "population": "Synthetic adults aged 18–75 resembling the Australian fitness-centre and amateur-sports-club volunteers in the supplied APSS study, with complete paired online self-reported and objectively measured BMI. This is not a representative general-adult population.",
+      "reported_mean": 25.3,
+      "reported_sd": 5.9
+    }
+  },
+  "b04_targeted": {
+    "generator_py": "import numpy as np\nimport pandas as pd\nfrom scipy.optimize import least_squares\nfrom scipy.stats import truncnorm\nfrom numpy.polynomial.legendre import leggauss\n\n\ndef generate(observed, spec, seed):\n    if observed is not None:\n        raise ValueError('This generator requires observed=None.')\n    rng = np.random.default_rng(seed)\n    n = int(spec['n'])\n    if n < 0:\n        raise ValueError('n must be nonnegative.')\n    lo = float(spec['bmi_lower_bound'])\n    cut = float(spec['obesity_threshold'])\n    hi = float(spec['bmi_upper_bound'])\n    pr = float(spec['reported_obesity_probability'])\n    pm = float(spec['measured_obesity_probability'])\n    if not (0 < lo < cut < hi and 0 < pr < pm < 1):\n        raise ValueError('Invalid bounds or obesity probabilities.')\n\n    def fit_margin(mean, sd, p):\n        def summaries(theta):\n            loc, log_scale = theta\n            scale = np.exp(log_scale)\n            ab = [(lo, cut), (cut, hi)]\n            means = []\n            seconds = []\n            for left, right in ab:\n                a = (left - loc) / scale\n                b = (right - loc) / scale\n                m, v = truncnorm.stats(a, b, loc=loc, scale=scale, moments='mv')\n                means.append(float(m))\n                seconds.append(float(v + m * m))\n            mu = (1-p)*means[0] + p*means[1]\n            second = (1-p)*seconds[0] + p*seconds[1]\n            return mu, np.sqrt(max(second-mu*mu, 1e-12))\n\n        def residual(theta):\n            mu, sigma = summaries(theta)\n            return np.array([(mu-mean)/sd, (sigma-sd)/sd])\n\n        fits = []\n        for start_loc, start_scale in [(mean, sd), (30.0, 8.0), (35.0, 12.0)]:\n            fit = least_squares(\n                residual, [start_loc, np.log(start_scale)],\n                bounds=([-50.0, np.log(0.5)], [100.0, np.log(80.0)]),\n                xtol=1e-11, ftol=1e-11, gtol=1e-11, max_nfev=500\n            )\n            fits.append(fit)\n        best = min(fits, key=lambda x: np.sum(x.fun**2))\n        if np.max(np.abs(best.fun)) > 1e-6:\n            raise ValueError('Marginal calibration did not converge.')\n        return float(best.x[0]), float(np.exp(best.x[1]))\n\n    mr = float(spec['reported_mean'])\n    sr = float(spec['reported_sd'])\n    mm = float(spec['measured_mean'])\n    sm = float(spec['measured_sd'])\n    rloc, rscale = fit_margin(mr, sr, pr)\n    mloc, mscale = fit_margin(mm, sm, pm)\n\n    def quantile(u, loc, scale, p):\n        u = np.asarray(u, dtype=float)\n        result = np.empty_like(u)\n        lower = u < (1-p)\n        for mask, left, right, offset, mass in [\n            (lower, lo, cut, 0.0, 1-p),\n            (~lower, cut, hi, 1-p, p)\n        ]:\n            if np.any(mask):\n                q = (u[mask]-offset)/mass\n                q = np.clip(q, 1e-14, 1-1e-14)\n                result[mask] = truncnorm.ppf(\n                    q, (left-loc)/scale, (right-loc)/scale,\n                    loc=loc, scale=scale\n                )\n        return result\n\n    def qr(u):\n        return quantile(u, rloc, rscale, pr)\n\n    def qm(u):\n        return quantile(u, mloc, mscale, pm)\n\n    # Rank strata: neither obese; measured-only obese; both obese.\n    edges = np.array([0.0, 1-pm, 1-pr, 1.0])\n    weights = np.diff(edges)\n    nodes, quad_w = leggauss(int(spec['quadrature_nodes_per_stratum']))\n    t = (nodes+1)/2\n    quad_w = quad_w/2\n    cross_independent = 0.0\n    cross_shared = 0.0\n    for j, weight in enumerate(weights):\n        u = edges[j] + weight*t\n        r = qr(u)\n        m = qm(u)\n        cross_independent += weight*np.dot(quad_w, r)*np.dot(quad_w, m)\n        cross_shared += weight*np.dot(quad_w, r*m)\n\n    target_second_difference = float(spec['paired_rms_difference'])**2\n    target_cross = (\n        sr*sr + mr*mr + sm*sm + mm*mm - target_second_difference\n    )/2\n    span = cross_shared-cross_independent\n    if span <= 0:\n        raise ValueError('Invalid attainable covariance interval.')\n    shared_probability = float(np.clip(\n        (target_cross-cross_independent)/span, 0.0, 1.0\n    ))\n\n    group = rng.choice(3, size=n, p=weights)\n    u = rng.random(n)\n    v = rng.random(n)\n    shared = rng.random(n) < shared_probability\n    v = np.where(shared, u, v)\n    r_rank = edges[group] + weights[group]*u\n    m_rank = edges[group] + weights[group]*v\n    reported = qr(r_rank)\n    measured = qm(m_rank)\n    if not (np.all(np.isfinite(reported)) and np.all(np.isfinite(measured))\n            and np.all(reported > 0) and np.all(measured > 0)):\n        raise ValueError('Nonfinite or nonpositive generated BMI.')\n    return pd.DataFrame({\n        'row_id': np.arange(n, dtype=np.int64),\n        'reported_bmi': reported,\n        'measured_bmi': measured\n    }, columns=['row_id', 'reported_bmi', 'measured_bmi'])\n",
+    "model_spec": {
+      "bmi_lower_bound": 12.0,
+      "bmi_upper_bound": 70.0,
+      "calibration_policy": "Fit population moments, not realized sample summaries. If the requested RMS is outside the attainable range of the selected joint family, use its nearest attainable value.",
+      "columns": [
+        {
+          "name": "reported_bmi",
+          "unit": "kg/m2"
+        },
+        {
+          "name": "measured_bmi",
+          "unit": "kg/m2"
+        }
+      ],
+      "joint_family": "Common obesity-rank strata with a mixture of shared and independent uniform ranks within each stratum. The mixture weight is calibrated to the paired RMS difference.",
+      "marginal_family": "A bounded normal density separately normalized below and above BMI 30, with the mass above 30 fixed to the published obesity proportion. Parent location and scale are calibrated to the published marginal mean and SD.",
+      "measured_mean": 25.4,
+      "measured_obesity_probability": 0.13186813186813187,
+      "measured_sd": 6.2,
+      "n": 10000,
+      "obesity_threshold": 30.0,
+      "paired_rms_difference": 1.3,
+      "population": "Virtual adults resembling the Australian convenience sample aged 18–75 years recruited from a fitness centre and amateur sports club for APSS screening. Each row pairs online self-reported BMI with next-day objectively measured BMI for the same person; this is not a representative general adult population.",
+      "quadrature_nodes_per_stratum": 256,
+      "reported_mean": 25.3,
+      "reported_obesity_probability": 0.08791208791208792,
+      "reported_sd": 5.9
+    }
+  }
+}
