@@ -1,5 +1,15 @@
 # Evidence-guided virtual biomedical cohorts
 
+**Same Evidence, Different Estimates: How Modeling Choices Shape Analyses of Agent-Generated Biomedical Data**
+
+KDD Research working manuscript v0.52 · 25 November 2026
+
+An agent reads published biomedical findings, chooses a joint model and writes a program that samples individual records. We study how much a scientific conclusion can change when two such programs agree with the same published evidence. In the opening example, the same cholesterol measurements can be paired to give screening rates of 9.80% and 26.17%. Both pairings have the same mean non-HDL cholesterol and reproduce the published mean individual cholesterol ratio. Measured samples provide a separate test of which analyses carry over in practice.
+
+[Read the paper](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v52_2026-11-25/external_review.pdf) · [Figure and source guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v52_2026-11-25/README.md) · [Reviewer guide](REVIEW_GUIDE.md) · [Anonymous PDF](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v52_2026-11-25/paper.pdf) · [Editable source for Overleaf](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v52_2026-11-25/overleaf_v52.zip)
+
+## Archived v0.51 manuscript
+
 **Which Scientific Analyses Can Agent-Generated Biomedical Cohorts Support?** KDD Research working manuscript v0.51, 23 November 2026.
 
 A scientific Agent reads published studies, selects a joint model and writes a sampling program. We run the same requested scientific analyses on virtual and measured cohorts to determine which conclusions the generated data support.
