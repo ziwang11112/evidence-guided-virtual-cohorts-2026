@@ -2,6 +2,14 @@
 
 **Same Evidence, Different Estimates: How Modeling Choices Shape Analyses of Agent-Generated Biomedical Data**
 
+KDD Research working manuscript v0.55 · 25 November 2026
+
+The method produces a scientific sampling program from published evidence, then tests a pairing assumption by asking the agent for another source-compatible program that changes the requested analysis. Section 2 specifies the source semantics, authored choices, execution interface and independently recomputed decision rule. Figures 2–3 show the whole-record system and the paired-column test. Algorithm 1 describes the implemented method.
+
+[Read v0.55](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/paper.pdf) · [Method and implementation guide](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/README.md) · [Overleaf source](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/overleaf_v55.zip) · [Overall system](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/figures/evidence-to-analysis-system.drawio.png) · [Pairing mechanism](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/figures/analysis-conditioned-generation.drawio.png)
+
+## Archived v0.54 manuscript
+
 KDD Research working manuscript v0.54 · 25 November 2026
 
 What does a publication tell us about a new analysis, and what does the agent decide when it constructs individual records? The paper tests this by having an agent produce another model that satisfies the same evidence and changes the estimate. In the Australian BMI study, two programs reproduced exactly the same counts above and below the obesity cutoff at each seed, but estimated substantial BMI underreporting at 5.70% and 7.48%. The measured estimate was 4 of 90 (4.44%).

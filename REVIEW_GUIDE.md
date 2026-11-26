@@ -1,4 +1,10 @@
-# External review guide for the KDD v0.54 manuscript
+# External review guide for the KDD v0.55 manuscript
+
+Start with the method on pages 2–4. Figure 2 shows the whole-record authoring interface. Figure 3 and Algorithm 1 specify the conditional pairing test. The appendix maps the method to released functions and agent-written programs. In the matched test, the investigator registers the marginal conventions and source checks, while the agent extracts the values and authors the assignment algorithm. The ordinary follow-up in the experiment supplies a control for the targeted request.
+
+Figure 4 gives the three-article matched comparison. Figure 5 reports the Australian evidence-use pilot. Figures 6–7 retain the lifestyle and pairing attribution analyses. The updated source includes actual HDL exchange and circular rank strategies used by authors. [Paper](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/paper.pdf) · [Method-to-code links](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/README.md) · [Portable source](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v55_2026-11-25/overleaf_v55.zip)
+
+## Archived review guide for v0.54
 
 Figure 1 and Section 2 introduce the agent's search for two joint sampling programs compatible with the same evidence. Figure 3 compares ordinary and targeted requests for a second model. Section 3.1 and Figure 4 (p. 5) ask whether an agent can discover and implement a consequential published constraint when supplied the article and the scientific question. All eight programs ran. Four evidence-directed authors identified the relationship, two implemented it, and the two arms showed little difference in error on the unreported BMI outcome. The Australian measured reference came from the source study. [Manuscript](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v54_2026-11-25/paper.pdf) · [Editable source](biomedical_research/virtual_cohort_system/manuscript/kdd_draft_v54_2026-11-25/overleaf_v54.zip) · [Experiment, programs and measured evaluation](biomedical_research/virtual_cohort_system/work/evidence_choice_apss_2026-11-25/RESULTS.md)
 
